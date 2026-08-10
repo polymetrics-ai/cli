@@ -1,0 +1,34 @@
+{
+  "operations": [
+    {
+      "id": "pexels-api.get.v1-photos-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/photos/{id}",
+      "description": "single-photo detail lookup by id; no list endpoint enumerates arbitrary photo ids independent of a search/curated query already covered by the photos/curated_photos streams, so there is no server-side id source to drive this as a syncable stream without an id supplied from outside the sync",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/photos/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pexels-api.get.v1-videos-videos-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/videos/videos/{id}",
+      "description": "single-video detail lookup by id; no list endpoint enumerates arbitrary video ids independent of a search/popular query already covered by the videos/popular_videos streams, so there is no server-side id source to drive this as a syncable stream without an id supplied from outside the sync",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/videos/videos/{id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,623 @@
+{
+  "operations": [
+    {
+      "id": "formbricks.post.api-v1-client-workspaceid-displays",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/client/{workspaceId}/displays",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/client/{workspaceId}/displays",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-client-workspaceid-environment",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/client/{workspaceId}/environment",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/client/{workspaceId}/environment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.post.api-v1-client-workspaceid-responses",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/client/{workspaceId}/responses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/client/{workspaceId}/responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.put.api-v1-client-workspaceid-responses-responseid",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/client/{workspaceId}/responses/{responseId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/client/{workspaceId}/responses/{responseId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.post.api-v1-client-workspaceid-user",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/client/{workspaceId}/user",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/client/{workspaceId}/user",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-management-action-classes",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/action-classes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/action-classes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.post.api-v1-management-action-classes",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/management/action-classes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/management/action-classes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-management-action-classes-actionclassid",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/action-classes/{actionClassId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/action-classes/{actionClassId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.delete.api-v1-management-action-classes-actionclassid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/management/action-classes/{actionClassId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/management/action-classes/{actionClassId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-management-contact-attribute-keys",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/contact-attribute-keys",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/contact-attribute-keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-management-contact-attribute-keys-contactattributekeyid",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/contact-attribute-keys/{contactAttributeKeyId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/contact-attribute-keys/{contactAttributeKeyId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-management-contact-attributes",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/contact-attributes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/contact-attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-management-contacts",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-management-contacts-contactid",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/contacts/{contactId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/contacts/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-management-me",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/me",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-management-responses",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/responses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.post.api-v1-management-responses",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/management/responses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/management/responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-management-responses-responseid",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/responses/{responseId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/responses/{responseId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.put.api-v1-management-responses-responseid",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/management/responses/{responseId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/management/responses/{responseId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.delete.api-v1-management-responses-responseid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/management/responses/{responseId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/management/responses/{responseId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.post.api-v1-management-storage",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/management/storage",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/management/storage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-management-surveys",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/surveys",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/surveys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.post.api-v1-management-surveys",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/management/surveys",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/management/surveys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-management-surveys-surveyid",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/surveys/{surveyId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/surveys/{surveyId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.put.api-v1-management-surveys-surveyid",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/management/surveys/{surveyId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/management/surveys/{surveyId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.delete.api-v1-management-surveys-surveyid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/management/surveys/{surveyId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/management/surveys/{surveyId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-management-surveys-surveyid-singleuseids",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/management/surveys/{surveyId}/singleUseIds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/management/surveys/{surveyId}/singleUseIds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.post.api-v1-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.api-v1-webhooks-webhookid",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/webhooks/{webhookId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/webhooks/{webhookId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.delete.api-v1-webhooks-webhookid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/webhooks/{webhookId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/webhooks/{webhookId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.health",
+      "kind": "rest_read",
+      "summary": "GET /health",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/health",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.post.client-workspaceid-displays",
+      "kind": "rest_write",
+      "summary": "POST client/{workspaceId}/displays",
+      "description": "Public Client API SDK event endpoint, not the authenticated Management API surface for this connector.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "client/{workspaceId}/displays",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.client-workspaceid-environment",
+      "kind": "rest_read",
+      "summary": "GET client/{workspaceId}/environment",
+      "description": "Public Client API SDK workspace-state endpoint; it requires a client workspace id rather than the management API-key connector model.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "client/{workspaceId}/environment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.post.client-workspaceid-responses",
+      "kind": "rest_write",
+      "summary": "POST client/{workspaceId}/responses",
+      "description": "Public Client API response submission endpoint, separate from the authenticated Management API response mutation covered by create_response.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "client/{workspaceId}/responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.put.client-workspaceid-responses-responseid",
+      "kind": "rest_write",
+      "summary": "PUT client/{workspaceId}/responses/{responseId}",
+      "description": "Public Client API response update endpoint, separate from the authenticated Management API response mutation covered by update_response.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "client/{workspaceId}/responses/{responseId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.post.client-workspaceid-user",
+      "kind": "rest_write",
+      "summary": "POST client/{workspaceId}/user",
+      "description": "Public Client API identify endpoint, not part of the management API-key connector surface.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "client/{workspaceId}/user",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.health-2",
+      "kind": "rest_read",
+      "summary": "GET health",
+      "description": "Operational health check; no connector records or reverse ETL action.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "health",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.management-surveys-surveyid-singleuseids",
+      "kind": "rest_read",
+      "summary": "GET management/surveys/{surveyId}/singleUseIds",
+      "description": "GET endpoint generates new single-use survey links; it is a side-effecting helper, not a persisted collection read.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "management/surveys/{surveyId}/singleUseIds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "formbricks.get.me",
+      "kind": "rest_read",
+      "summary": "GET me",
+      "description": "Legacy API-key test helper page; the current Management API account metadata endpoint is covered by the me stream at management/me.",
+      "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "me",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

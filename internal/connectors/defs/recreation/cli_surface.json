@@ -1,0 +1,1427 @@
+{
+  "tagline": "Run Recreation.gov's declared streams and reverse-ETL actions.",
+  "usage": "pm recreation \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "activities list",
+        "api get activities activityid",
+        "api get campsites campsiteid",
+        "api get campsites campsiteid attributes",
+        "api get events",
+        "api get events eventid",
+        "api get facilities facilityid",
+        "api get facilities facilityid activities",
+        "api get facilities facilityid activities activityid",
+        "api get facilities facilityid campsites",
+        "api get facilities facilityid campsites campsiteid",
+        "api get facilities facilityid events",
+        "api get facilities facilityid events eventid",
+        "api get facilities facilityid facilityaddresses",
+        "api get facilities facilityid facilityaddresses facilityaddressid",
+        "api get facilities facilityid links",
+        "api get facilities facilityid links linkid",
+        "api get facilities facilityid media",
+        "api get facilities facilityid media mediaid",
+        "api get facilities facilityid permitentrances",
+        "api get facilities facilityid permitentrances permitentranceid",
+        "api get facilities facilityid tours",
+        "api get facilities facilityid tours tourid",
+        "api get facilities id",
+        "api get facilities id campsites",
+        "api get facilities id events",
+        "api get facilities id media",
+        "api get facilityaddresses",
+        "api get facilityaddresses facilityaddressid",
+        "api get linkinfo",
+        "api get links",
+        "api get links linkid",
+        "api get media",
+        "api get media mediaid",
+        "api get organizations orgid",
+        "api get organizations orgid facilities",
+        "api get organizations orgid facilities facilityid",
+        "api get organizations orgid recareas",
+        "api get organizations orgid recareas recareaid",
+        "api get permitentrances",
+        "api get permitentrances permitentranceid",
+        "api get permitentrances permitentranceid attributes",
+        "api get permitentrances permitentranceid zones",
+        "api get permitentrances permitentranceid zones zoneid",
+        "api get recareaaddresses",
+        "api get recareaaddresses recareaaddressid",
+        "api get recareas id activities",
+        "api get recareas recareaid",
+        "api get recareas recareaid activities",
+        "api get recareas recareaid activities activityid",
+        "api get recareas recareaid events",
+        "api get recareas recareaid events eventid",
+        "api get recareas recareaid facilities",
+        "api get recareas recareaid facilities facilityid",
+        "api get recareas recareaid links",
+        "api get recareas recareaid links linkid",
+        "api get recareas recareaid media",
+        "api get recareas recareaid media mediaid",
+        "api get recareas recareaid recareaaddresses",
+        "api get recareas recareaid recareaaddresses recareaaddressid",
+        "api get reservations",
+        "api get tours",
+        "api get tours tourid",
+        "api get tours tourid attributes",
+        "campsites list",
+        "facilities list",
+        "organizations list",
+        "recareas list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "activities list",
+      "summary": "Run the activities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activities",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation activities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities"
+        }
+      ]
+    },
+    {
+      "path": "api get activities activityid",
+      "summary": "Documented GET /activities/{activityId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get activities activityid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities/{activityId}"
+        }
+      ],
+      "operation": "recreation.get.activities-activityid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campsites campsiteid",
+      "summary": "Documented GET /campsites/{campsiteId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get campsites campsiteid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campsites/{campsiteId}"
+        }
+      ],
+      "operation": "recreation.get.campsites-campsiteid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campsites campsiteid attributes",
+      "summary": "Documented GET /campsites/{campsiteId}/attributes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get campsites campsiteid attributes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campsites/{campsiteId}/attributes"
+        }
+      ],
+      "operation": "recreation.get.campsites-campsiteid-attributes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events",
+      "summary": "Documented GET /events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ],
+      "operation": "recreation.get.events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events eventid",
+      "summary": "Documented GET /events/{eventId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get events eventid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{eventId}"
+        }
+      ],
+      "operation": "recreation.get.events-eventid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid",
+      "summary": "Documented GET /facilities/{facilityId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid activities",
+      "summary": "Documented GET /facilities/{facilityId}/activities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid activities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/activities"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-activities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid activities activityid",
+      "summary": "Documented GET /facilities/{facilityId}/activities/{activityId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid activities activityid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/activities/{activityId}"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-activities-activityid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid campsites",
+      "summary": "Documented GET /facilities/{facilityId}/campsites (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid campsites --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/campsites"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-campsites",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid campsites campsiteid",
+      "summary": "Documented GET /facilities/{facilityId}/campsites/{campsiteId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid campsites campsiteid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/campsites/{campsiteId}"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-campsites-campsiteid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid events",
+      "summary": "Documented GET /facilities/{facilityId}/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/events"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid events eventid",
+      "summary": "Documented GET /facilities/{facilityId}/events/{eventId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid events eventid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/events/{eventId}"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-events-eventid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid facilityaddresses",
+      "summary": "Documented GET /facilities/{facilityId}/facilityaddresses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid facilityaddresses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/facilityaddresses"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-facilityaddresses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid facilityaddresses facilityaddressid",
+      "summary": "Documented GET /facilities/{facilityId}/facilityaddresses/{facilityAddressId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid facilityaddresses facilityaddressid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/facilityaddresses/{facilityAddressId}"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-facilityaddresses-facilityaddressid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid links",
+      "summary": "Documented GET /facilities/{facilityId}/links (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/links"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-links",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid links linkid",
+      "summary": "Documented GET /facilities/{facilityId}/links/{linkId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid links linkid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/links/{linkId}"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-links-linkid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid media",
+      "summary": "Documented GET /facilities/{facilityId}/media (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid media --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/media"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-media",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid media mediaid",
+      "summary": "Documented GET /facilities/{facilityId}/media/{mediaId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid media mediaid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/media/{mediaId}"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-media-mediaid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid permitentrances",
+      "summary": "Documented GET /facilities/{facilityId}/permitentrances (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid permitentrances --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/permitentrances"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-permitentrances",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid permitentrances permitentranceid",
+      "summary": "Documented GET /facilities/{facilityId}/permitentrances/{permitEntranceId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid permitentrances permitentranceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/permitentrances/{permitEntranceId}"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-permitentrances-permitentranceid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid tours",
+      "summary": "Documented GET /facilities/{facilityId}/tours (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid tours --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/tours"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-tours",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities facilityid tours tourid",
+      "summary": "Documented GET /facilities/{facilityId}/tours/{tourId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities facilityid tours tourid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{facilityId}/tours/{tourId}"
+        }
+      ],
+      "operation": "recreation.get.facilities-facilityid-tours-tourid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities id",
+      "summary": "Documented GET /facilities/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{id}"
+        }
+      ],
+      "operation": "recreation.get.facilities-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities id campsites",
+      "summary": "Documented GET /facilities/{id}/campsites (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities id campsites --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{id}/campsites"
+        }
+      ],
+      "operation": "recreation.get.facilities-id-campsites",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities id events",
+      "summary": "Documented GET /facilities/{id}/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities id events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{id}/events"
+        }
+      ],
+      "operation": "recreation.get.facilities-id-events",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilities id media",
+      "summary": "Documented GET /facilities/{id}/media (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilities id media --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities/{id}/media"
+        }
+      ],
+      "operation": "recreation.get.facilities-id-media",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilityaddresses",
+      "summary": "Documented GET /facilityaddresses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilityaddresses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilityaddresses"
+        }
+      ],
+      "operation": "recreation.get.facilityaddresses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get facilityaddresses facilityaddressid",
+      "summary": "Documented GET /facilityaddresses/{facilityAddressId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get facilityaddresses facilityaddressid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilityaddresses/{facilityAddressId}"
+        }
+      ],
+      "operation": "recreation.get.facilityaddresses-facilityaddressid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get linkinfo",
+      "summary": "Documented GET /linkinfo (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get linkinfo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/linkinfo"
+        }
+      ],
+      "operation": "recreation.get.linkinfo",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get links",
+      "summary": "Documented GET /links (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/links"
+        }
+      ],
+      "operation": "recreation.get.links",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get links linkid",
+      "summary": "Documented GET /links/{linkId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get links linkid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/links/{linkId}"
+        }
+      ],
+      "operation": "recreation.get.links-linkid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get media",
+      "summary": "Documented GET /media (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get media --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/media"
+        }
+      ],
+      "operation": "recreation.get.media",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get media mediaid",
+      "summary": "Documented GET /media/{mediaId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get media mediaid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/media/{mediaId}"
+        }
+      ],
+      "operation": "recreation.get.media-mediaid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations orgid",
+      "summary": "Documented GET /organizations/{orgId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get organizations orgid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{orgId}"
+        }
+      ],
+      "operation": "recreation.get.organizations-orgid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations orgid facilities",
+      "summary": "Documented GET /organizations/{orgId}/facilities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get organizations orgid facilities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{orgId}/facilities"
+        }
+      ],
+      "operation": "recreation.get.organizations-orgid-facilities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations orgid facilities facilityid",
+      "summary": "Documented GET /organizations/{orgId}/facilities/{facilityId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get organizations orgid facilities facilityid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{orgId}/facilities/{facilityId}"
+        }
+      ],
+      "operation": "recreation.get.organizations-orgid-facilities-facilityid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations orgid recareas",
+      "summary": "Documented GET /organizations/{orgId}/recareas (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get organizations orgid recareas --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{orgId}/recareas"
+        }
+      ],
+      "operation": "recreation.get.organizations-orgid-recareas",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations orgid recareas recareaid",
+      "summary": "Documented GET /organizations/{orgId}/recareas/{recAreaId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get organizations orgid recareas recareaid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{orgId}/recareas/{recAreaId}"
+        }
+      ],
+      "operation": "recreation.get.organizations-orgid-recareas-recareaid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get permitentrances",
+      "summary": "Documented GET /permitentrances (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get permitentrances --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/permitentrances"
+        }
+      ],
+      "operation": "recreation.get.permitentrances",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get permitentrances permitentranceid",
+      "summary": "Documented GET /permitentrances/{permitentranceId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get permitentrances permitentranceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/permitentrances/{permitentranceId}"
+        }
+      ],
+      "operation": "recreation.get.permitentrances-permitentranceid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get permitentrances permitentranceid attributes",
+      "summary": "Documented GET /permitentrances/{permitEntranceId}/attributes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get permitentrances permitentranceid attributes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/permitentrances/{permitEntranceId}/attributes"
+        }
+      ],
+      "operation": "recreation.get.permitentrances-permitentranceid-attributes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get permitentrances permitentranceid zones",
+      "summary": "Documented GET /permitentrances/{permitEntranceId}/zones (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get permitentrances permitentranceid zones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/permitentrances/{permitEntranceId}/zones"
+        }
+      ],
+      "operation": "recreation.get.permitentrances-permitentranceid-zones",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get permitentrances permitentranceid zones zoneid",
+      "summary": "Documented GET /permitentrances/{permitEntranceId}/zones/{zoneId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get permitentrances permitentranceid zones zoneid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/permitentrances/{permitEntranceId}/zones/{zoneId}"
+        }
+      ],
+      "operation": "recreation.get.permitentrances-permitentranceid-zones-zoneid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareaaddresses",
+      "summary": "Documented GET /recareaaddresses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareaaddresses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareaaddresses"
+        }
+      ],
+      "operation": "recreation.get.recareaaddresses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareaaddresses recareaaddressid",
+      "summary": "Documented GET /recareaaddresses/{recAreaAddressId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareaaddresses recareaaddressid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareaaddresses/{recAreaAddressId}"
+        }
+      ],
+      "operation": "recreation.get.recareaaddresses-recareaaddressid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas id activities",
+      "summary": "Documented GET /recareas/{id}/activities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas id activities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{id}/activities"
+        }
+      ],
+      "operation": "recreation.get.recareas-id-activities",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas recareaid",
+      "summary": "Documented GET /recareas/{recAreaId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas recareaid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{recAreaId}"
+        }
+      ],
+      "operation": "recreation.get.recareas-recareaid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas recareaid activities",
+      "summary": "Documented GET /recareas/{recAreaId}/activities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas recareaid activities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{recAreaId}/activities"
+        }
+      ],
+      "operation": "recreation.get.recareas-recareaid-activities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas recareaid activities activityid",
+      "summary": "Documented GET /recareas/{recAreaId}/activities/{activityId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas recareaid activities activityid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{recAreaId}/activities/{activityId}"
+        }
+      ],
+      "operation": "recreation.get.recareas-recareaid-activities-activityid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas recareaid events",
+      "summary": "Documented GET /recareas/{recAreaId}/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas recareaid events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{recAreaId}/events"
+        }
+      ],
+      "operation": "recreation.get.recareas-recareaid-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas recareaid events eventid",
+      "summary": "Documented GET /recareas/{recAreaId}/events/{eventId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas recareaid events eventid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{recAreaId}/events/{eventId}"
+        }
+      ],
+      "operation": "recreation.get.recareas-recareaid-events-eventid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas recareaid facilities",
+      "summary": "Documented GET /recareas/{recAreaId}/facilities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas recareaid facilities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{recAreaId}/facilities"
+        }
+      ],
+      "operation": "recreation.get.recareas-recareaid-facilities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas recareaid facilities facilityid",
+      "summary": "Documented GET /recareas/{recAreaId}/facilities/{facilityId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas recareaid facilities facilityid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{recAreaId}/facilities/{facilityId}"
+        }
+      ],
+      "operation": "recreation.get.recareas-recareaid-facilities-facilityid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas recareaid links",
+      "summary": "Documented GET /recareas/{recAreaId}/links (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas recareaid links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{recAreaId}/links"
+        }
+      ],
+      "operation": "recreation.get.recareas-recareaid-links",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas recareaid links linkid",
+      "summary": "Documented GET /recareas/{recAreaId}/links/{linkId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas recareaid links linkid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{recAreaId}/links/{linkId}"
+        }
+      ],
+      "operation": "recreation.get.recareas-recareaid-links-linkid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas recareaid media",
+      "summary": "Documented GET /recareas/{recAreaId}/media (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas recareaid media --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{recAreaId}/media"
+        }
+      ],
+      "operation": "recreation.get.recareas-recareaid-media",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas recareaid media mediaid",
+      "summary": "Documented GET /recareas/{recAreaId}/media/{mediaId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas recareaid media mediaid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{recAreaId}/media/{mediaId}"
+        }
+      ],
+      "operation": "recreation.get.recareas-recareaid-media-mediaid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas recareaid recareaaddresses",
+      "summary": "Documented GET /recareas/{recAreaId}/recareaaddresses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas recareaid recareaaddresses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{recAreaId}/recareaaddresses"
+        }
+      ],
+      "operation": "recreation.get.recareas-recareaid-recareaaddresses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recareas recareaid recareaaddresses recareaaddressid",
+      "summary": "Documented GET /recareas/{recAreaId}/recareaaddresses/{recAreaAddressId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get recareas recareaid recareaaddresses recareaaddressid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas/{recAreaId}/recareaaddresses/{recAreaAddressId}"
+        }
+      ],
+      "operation": "recreation.get.recareas-recareaid-recareaaddresses-recareaaddressid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get reservations",
+      "summary": "Documented GET /reservations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get reservations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reservations"
+        }
+      ],
+      "operation": "recreation.get.reservations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tours",
+      "summary": "Documented GET /tours (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get tours --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tours"
+        }
+      ],
+      "operation": "recreation.get.tours",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tours tourid",
+      "summary": "Documented GET /tours/{tourId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get tours tourid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tours/{tourId}"
+        }
+      ],
+      "operation": "recreation.get.tours-tourid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tours tourid attributes",
+      "summary": "Documented GET /tours/{tourId}/attributes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation api get tours tourid attributes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tours/{tourId}/attributes"
+        }
+      ],
+      "operation": "recreation.get.tours-tourid-attributes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "campsites list",
+      "summary": "Run the campsites ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campsites",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation campsites list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campsites"
+        }
+      ]
+    },
+    {
+      "path": "facilities list",
+      "summary": "Run the facilities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "facilities",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation facilities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/facilities"
+        }
+      ]
+    },
+    {
+      "path": "organizations list",
+      "summary": "Run the organizations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organizations",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation organizations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations"
+        }
+      ]
+    },
+    {
+      "path": "recareas list",
+      "summary": "Run the recareas ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "recareas",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "examples": [
+        "pm recreation recareas list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recareas"
+        }
+      ]
+    }
+  ]
+}

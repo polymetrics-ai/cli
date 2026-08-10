@@ -1,11 +1,67 @@
 {
-  "api": "News API (https://newsapi.org/v2)",
+  "api": "News API (https://newsapi.org/v2); provider artifact version: News API v2",
   "docs": "https://newsapi.org/docs",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 migration: the 3 legacy-parity read streams only",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 3 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: wave2 migration: the 3 legacy-parity read streams only",
+  "artifacts": [
+    {
+      "id": "news-api-artifact-2026-08-09",
+      "url": "https://newsapi.org/docs/endpoints",
+      "kind": "html_reference",
+      "version": "News API v2",
+      "retrieved_at": "2026-08-09",
+      "sha256": "8419fb21490ce1ef3e8ab915d64964ae0f333e9e5d0367c8e5591b978620f7b9"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/v2/everything", "covered_by": { "stream": "everything" } },
-    { "method": "GET", "path": "/v2/top-headlines", "covered_by": { "stream": "top_headlines" } },
-    { "method": "GET", "path": "/v2/top-headlines/sources", "covered_by": { "stream": "sources" } }
+    {
+      "method": "GET",
+      "path": "/v2/everything",
+      "provenance": {
+        "artifact": "news-api-artifact-2026-08-09",
+        "source_url": "https://newsapi.org/docs/endpoints",
+        "source_kind": "html_reference",
+        "version": "News API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8419fb21490ce1ef3e8ab915d64964ae0f333e9e5d0367c8e5591b978620f7b9",
+        "coordinate": "existing-complete-surface[GET /v2/everything]"
+      },
+      "covered_by": {
+        "stream": "everything"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/top-headlines",
+      "provenance": {
+        "artifact": "news-api-artifact-2026-08-09",
+        "source_url": "https://newsapi.org/docs/endpoints",
+        "source_kind": "html_reference",
+        "version": "News API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8419fb21490ce1ef3e8ab915d64964ae0f333e9e5d0367c8e5591b978620f7b9",
+        "coordinate": "existing-complete-surface[GET /v2/top-headlines]"
+      },
+      "covered_by": {
+        "stream": "top_headlines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/top-headlines/sources",
+      "provenance": {
+        "artifact": "news-api-artifact-2026-08-09",
+        "source_url": "https://newsapi.org/docs/endpoints",
+        "source_kind": "html_reference",
+        "version": "News API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8419fb21490ce1ef3e8ab915d64964ae0f333e9e5d0367c8e5591b978620f7b9",
+        "coordinate": "existing-complete-surface[GET /v2/top-headlines/sources]"
+      },
+      "covered_by": {
+        "stream": "sources"
+      }
+    }
   ]
 }

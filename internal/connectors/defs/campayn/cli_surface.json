@@ -1,0 +1,267 @@
+{
+  "tagline": "Run Campayn's declared streams and reverse-ETL actions.",
+  "usage": "pm campayn \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get contacts contact-id json",
+        "api get lists list-id forms form-id json",
+        "contacts list",
+        "emails list",
+        "forms list",
+        "lists list",
+        "reports list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add contact apply",
+        "api post signup",
+        "unsubscribe contact apply",
+        "update contact apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add contact apply",
+      "summary": "Plan and execute the add contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_contact",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "list_id",
+          "type": "string",
+          "summary": "Required list id record field.",
+          "maps_to": "record.list_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm campayn add contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lists/{list_id}/contacts.json"
+        }
+      ],
+      "risk": "adds a new contact to a Campayn subscriber list; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "api get contacts contact-id json",
+      "summary": "Documented GET /contacts/{contact_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "examples": [
+        "pm campayn api get contacts contact-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}.json"
+        }
+      ],
+      "operation": "campayn.get.contacts-contact-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get lists list-id forms form-id json",
+      "summary": "Documented GET /lists/{list_id}/forms/{form_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "examples": [
+        "pm campayn api get lists list-id forms form-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists/{list_id}/forms/{form_id}.json"
+        }
+      ],
+      "operation": "campayn.get.lists-list-id-forms-form-id-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post signup",
+      "summary": "Documented POST /signup (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "examples": [
+        "pm campayn api post signup --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/signup"
+        }
+      ],
+      "operation": "campayn.post.signup",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "examples": [
+        "pm campayn contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists/{list_id}/contacts.json"
+        }
+      ]
+    },
+    {
+      "path": "emails list",
+      "summary": "Run the emails ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "emails",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "examples": [
+        "pm campayn emails list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/emails.json"
+        }
+      ]
+    },
+    {
+      "path": "forms list",
+      "summary": "Run the forms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "forms",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "examples": [
+        "pm campayn forms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists/{list_id}/forms.json"
+        }
+      ]
+    },
+    {
+      "path": "lists list",
+      "summary": "Run the lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lists",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "examples": [
+        "pm campayn lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists.json"
+        }
+      ]
+    },
+    {
+      "path": "reports list",
+      "summary": "Run the reports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reports",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "examples": [
+        "pm campayn reports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/calendar.json"
+        }
+      ]
+    },
+    {
+      "path": "unsubscribe contact apply",
+      "summary": "Plan and execute the unsubscribe contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "unsubscribe_contact",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "flags": [
+        {
+          "name": "list_id",
+          "type": "string",
+          "summary": "Required list id record field.",
+          "maps_to": "record.list_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm campayn unsubscribe contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lists/{list_id}/unsubscribe.json"
+        }
+      ],
+      "risk": "unsubscribes a contact from a list by id (single contact) or email (every contact on the list sharing that email address); the docs note neither path shows up in Reporting; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm campayn update contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}.json"
+        }
+      ],
+      "risk": "replaces a contact's full field set (the upstream API's own docs warn any field not sent in the body is removed); external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    }
+  ]
+}

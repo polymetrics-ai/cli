@@ -1,0 +1,497 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-007-manifest.json",
+  "candidates": 40,
+  "included": [
+    {
+      "connector": "n8n",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+        "version": "n8n Public API 1.1.1 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2a70080918e31c5c318033eda7376946d46a909eedc3350b4eb62308fd064ac5"
+      },
+      "artifact_operations": 109,
+      "declared_operations": 176,
+      "operation_split": {
+        "executable": 50,
+        "provider_blocked": 54,
+        "excluded": 72
+      },
+      "cli_commands": 176,
+      "implemented_commands": 42,
+      "named_dependency_commands": 134,
+      "flagged_discrepancies": 67,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 126
+    },
+    {
+      "connector": "railz",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "version": "FIS Accounting Data as a Service API v2; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699"
+      },
+      "artifact_operations": 145,
+      "declared_operations": 150,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 88,
+        "excluded": 57
+      },
+      "cli_commands": 150,
+      "implemented_commands": 5,
+      "named_dependency_commands": 145,
+      "flagged_discrepancies": 5,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 145
+    },
+    {
+      "connector": "iterable",
+      "artifact": {
+        "kind": "swagger",
+        "url": "https://api.iterable.com/api-docs",
+        "version": "Iterable API v1.8; Swagger 2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "afaab604b58c4942ae80486118d2a000f53d01f85b9f924a921611ae098283f9"
+      },
+      "artifact_operations": 148,
+      "declared_operations": 152,
+      "operation_split": {
+        "executable": 3,
+        "provider_blocked": 64,
+        "excluded": 85
+      },
+      "cli_commands": 152,
+      "implemented_commands": 3,
+      "named_dependency_commands": 149,
+      "flagged_discrepancies": 4,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 149
+    },
+    {
+      "connector": "vercel",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://openapi.vercel.sh/",
+        "version": "OpenAPI 3.0.3; Vercel API info.version 0.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61d1ba3f6dac97d985ed9877ee7a87ad703241a7a705774e4b6a85bab187cb46"
+      },
+      "artifact_operations": 378,
+      "declared_operations": 400,
+      "operation_split": {
+        "executable": 27,
+        "provider_blocked": 41,
+        "excluded": 332
+      },
+      "cli_commands": 400,
+      "implemented_commands": 25,
+      "named_dependency_commands": 375,
+      "flagged_discrepancies": 22,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 373
+    },
+    {
+      "connector": "codefresh",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://g.codefresh.io/api/openapi.json",
+        "version": "Codefresh API; OpenAPI 3.0.0; info.version 0.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ac630afcd915c8c8359f728a4b7ce2b95800b8b43712bb6d4691ca23247d2caa"
+      },
+      "artifact_operations": 430,
+      "declared_operations": 430,
+      "operation_split": {
+        "executable": 20,
+        "provider_blocked": 5,
+        "excluded": 405
+      },
+      "cli_commands": 430,
+      "implemented_commands": 17,
+      "named_dependency_commands": 413,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 410
+    },
+    {
+      "connector": "chargebee",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_api_v2_pc_v2_spec.json",
+        "version": "Product Catalog 2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bb1894004fea7d88ed13f7fb3e6196ddd59920e24ffb3cdd0900f3ffbad51ae"
+      },
+      "artifact_operations": 665,
+      "declared_operations": 1093,
+      "operation_split": {
+        "executable": 68,
+        "provider_blocked": 135,
+        "excluded": 890
+      },
+      "cli_commands": 1093,
+      "implemented_commands": 68,
+      "named_dependency_commands": 1025,
+      "flagged_discrepancies": 428,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 1025
+    },
+    {
+      "connector": "auth0",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://auth0.com/docs/oas/management/v2/management-api-oas.json",
+        "version": "Management API v2.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8401090dadcdfcfa2a99a682fd1c2a99539eb5571c0a3e160d909dacc613608e"
+      },
+      "artifact_operations": 468,
+      "declared_operations": 543,
+      "operation_split": {
+        "executable": 15,
+        "provider_blocked": 275,
+        "excluded": 253
+      },
+      "cli_commands": 543,
+      "implemented_commands": 15,
+      "named_dependency_commands": 528,
+      "flagged_discrepancies": 75,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 528
+    },
+    {
+      "connector": "insightly",
+      "artifact": {
+        "kind": "swagger",
+        "url": "https://api.na1.insightly.com/v3.1/swagger/docs/v3.1",
+        "version": "Insightly API v3.1; Swagger 2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ca0a41a3f12aae0e9147c3b47ddc197d9879bb64ec6c3c25caff293429428cc9"
+      },
+      "artifact_operations": 527,
+      "declared_operations": 527,
+      "operation_split": {
+        "executable": 6,
+        "provider_blocked": 320,
+        "excluded": 201
+      },
+      "cli_commands": 527,
+      "implemented_commands": 6,
+      "named_dependency_commands": 521,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 521
+    },
+    {
+      "connector": "stripe",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3653ad45bbec54fcbe461c541c908355b715018bdf455a0e11b27bedb2cbdee5"
+      },
+      "artifact_operations": 589,
+      "declared_operations": 589,
+      "operation_split": {
+        "executable": 8,
+        "provider_blocked": 567,
+        "excluded": 14
+      },
+      "cli_commands": 589,
+      "implemented_commands": 8,
+      "named_dependency_commands": 581,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 581
+    },
+    {
+      "connector": "metricool",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://app.metricool.com/api/swagger.json",
+        "version": "Metricool API 2.0.0 (OpenAPI 3.0.1)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "11b2f3729829d0d63cd3e477bbef310132c71be7b609d9d7b603db7282bf864e"
+      },
+      "artifact_operations": 610,
+      "declared_operations": 610,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 453,
+        "excluded": 152
+      },
+      "cli_commands": 610,
+      "implemented_commands": 5,
+      "named_dependency_commands": 605,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 605
+    },
+    {
+      "connector": "zendesk-support",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "version": "current oas.yaml",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd4282f3d16b146b6cbcb924e99d86112ed0e17758cc6123e555e87e6d195c0"
+      },
+      "artifact_operations": 625,
+      "declared_operations": 631,
+      "operation_split": {
+        "executable": 122,
+        "provider_blocked": 509,
+        "excluded": 0
+      },
+      "cli_commands": 631,
+      "implemented_commands": 39,
+      "named_dependency_commands": 592,
+      "flagged_discrepancies": 6,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 1023
+    },
+    {
+      "connector": "metabase",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://www.metabase.com/docs/latest/api.json",
+        "version": "Metabase latest API documentation (OpenAPI 3.1.0; no provider info.version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9737bb9c2564f614a50689cf5d9a669a69d319ccc73257ec035786ae921770ba"
+      },
+      "artifact_operations": 667,
+      "declared_operations": 672,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 374,
+        "excluded": 293
+      },
+      "cli_commands": 672,
+      "implemented_commands": 5,
+      "named_dependency_commands": 667,
+      "flagged_discrepancies": 5,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 667
+    },
+    {
+      "connector": "okta",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+        "version": "2026.07.3 (commit 73499da2c4fb93ac18fa9cdd1e08ff4892d430f0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d4aa60c963ee44d128622e470520374f23edbf93746829bd988a5534cdfa32ff"
+      },
+      "artifact_operations": 734,
+      "declared_operations": 734,
+      "operation_split": {
+        "executable": 713,
+        "provider_blocked": 2,
+        "excluded": 19
+      },
+      "cli_commands": 734,
+      "implemented_commands": 696,
+      "named_dependency_commands": 38,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 21
+    },
+    {
+      "connector": "commercetools",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
+        "version": "commercetools Composable Commerce HTTP API v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8c08b52144b506b140015eea5d26ab0b83bd886122fa438240630e3916958987"
+      },
+      "artifact_operations": 810,
+      "declared_operations": 810,
+      "operation_split": {
+        "executable": 3,
+        "provider_blocked": 569,
+        "excluded": 238
+      },
+      "cli_commands": 810,
+      "implemented_commands": 3,
+      "named_dependency_commands": 807,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 807
+    },
+    {
+      "connector": "cisco-meraki",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://api.meraki.com/api/v1/openapiSpec",
+        "version": "Meraki Dashboard API v1; info.version 1.0.0-streaming; dated 2026-08-05 by the artifact",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dbdb4302f28d6835377381451b1cc9a34fc6059ccd28c286b4b5a8770321c34f"
+      },
+      "artifact_operations": 992,
+      "declared_operations": 993,
+      "operation_split": {
+        "executable": 24,
+        "provider_blocked": 574,
+        "excluded": 395
+      },
+      "cli_commands": 993,
+      "implemented_commands": 24,
+      "named_dependency_commands": 969,
+      "flagged_discrepancies": 1,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 969
+    },
+    {
+      "connector": "github",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d"
+      },
+      "artifact_operations": 1220,
+      "declared_operations": 1228,
+      "operation_split": {
+        "executable": 440,
+        "provider_blocked": 492,
+        "excluded": 296
+      },
+      "cli_commands": 1056,
+      "implemented_commands": 267,
+      "named_dependency_commands": 789,
+      "flagged_discrepancies": 8,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 1129
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "todoist",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 14: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "lob",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 42: found character that cannot start any token"
+    },
+    {
+      "connector": "brex",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no brex.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "rocketlane",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developer.rocketlane.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "statuspage",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 23: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "secoda",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: did not find expected comment or line break), and official reference fallback \"https://docs.secoda.co/api/authentication.md\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "7shifts",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "lokalise",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 53: did not find expected \u003cdocument start\u003e"
+    },
+    {
+      "connector": "clockify",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "recurly",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "kisi",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 21: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "toggl",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 25: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "box",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "box-data-extract",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "invoiceninja",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "prestashop",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://devdocs.prestashop-project.org/9/webservice/\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "sendgrid",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://www.twilio.com/docs/sendgrid/api-reference\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "pagerduty",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation POST /extensions contains callbacks that cannot be represented as provider request paths), and official reference fallback \"https://developer.pagerduty.com/api-reference/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "firehydrant",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "freshservice",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "high-level",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://marketplace.gohighlevel.com/docs/ghl/contacts/get-contact\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "sendpulse",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact has no HTTP or webhook operations), and official reference fallback \"https://sendpulse.com/integrations/api\" failed: fetch artifact: provider returned HTTP 403"
+    },
+    {
+      "connector": "fastly",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (Postman collection has no request items), and official reference fallback \"https://www.fastly.com/documentation/reference/api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "genesys",
+      "stage": "artifact_fetch",
+      "reason": "/Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-007-artifacts/genesys.json exceeds 16777216-byte artifact limit"
+    }
+  ]
+}

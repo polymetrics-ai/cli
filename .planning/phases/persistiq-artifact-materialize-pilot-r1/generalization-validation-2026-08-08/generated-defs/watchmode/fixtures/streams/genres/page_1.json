@@ -1,0 +1,10 @@
+{
+  "request": { "method": "GET", "path": "/v1/genres/" },
+  "response": {
+    "status": 200,
+    "body": [
+      { "id": 4, "name": "Comedy", "tmdb_id": 35 },
+      { "id": 12, "name": "Horror", "tmdb_id": 27 }
+    ]
+  }
+}

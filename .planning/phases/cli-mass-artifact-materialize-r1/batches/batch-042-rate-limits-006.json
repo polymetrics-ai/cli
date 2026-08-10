@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "source_ledger": ".planning/phases/cli-mass-artifact-materialize-r1/RATE-LIMIT-SOURCE-LEDGER.json",
+  "offset": 200,
+  "requested_size": 40,
+  "entries": [
+    {
+      "connector": "kisi",
+      "state": "unknown",
+      "file": "internal/connectors/defs/kisi/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "kissmetrics",
+      "state": "unknown",
+      "file": "internal/connectors/defs/kissmetrics/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "klarna",
+      "state": "unknown",
+      "file": "internal/connectors/defs/klarna/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "klaviyo",
+      "state": "unknown",
+      "file": "internal/connectors/defs/klaviyo/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "launchdarkly",
+      "state": "unknown",
+      "file": "internal/connectors/defs/launchdarkly/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "leadfeeder",
+      "state": "unknown",
+      "file": "internal/connectors/defs/leadfeeder/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "lemlist",
+      "state": "unknown",
+      "file": "internal/connectors/defs/lemlist/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "less-annoying-crm",
+      "state": "unknown",
+      "file": "internal/connectors/defs/less-annoying-crm/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "lever-hiring",
+      "state": "unknown",
+      "file": "internal/connectors/defs/lever-hiring/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "linkrunner",
+      "state": "unknown",
+      "file": "internal/connectors/defs/linkrunner/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "lob",
+      "state": "unknown",
+      "file": "internal/connectors/defs/lob/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "lokalise",
+      "state": "unknown",
+      "file": "internal/connectors/defs/lokalise/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "looker",
+      "state": "unknown",
+      "file": "internal/connectors/defs/looker/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "luma",
+      "state": "unknown",
+      "file": "internal/connectors/defs/luma/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mailchimp",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mailchimp/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mailerlite",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mailerlite/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mailersend",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mailersend/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mailgun",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mailgun/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mailjet-mail",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mailjet-mail/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mailjet-sms",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mailjet-sms/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mailosaur",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mailosaur/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mailtrap",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mailtrap/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "marketo",
+      "state": "unknown",
+      "file": "internal/connectors/defs/marketo/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "marketstack",
+      "state": "unknown",
+      "file": "internal/connectors/defs/marketstack/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mendeley",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mendeley/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mention",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mention/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "merge",
+      "state": "unknown",
+      "file": "internal/connectors/defs/merge/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "metabase",
+      "state": "unknown",
+      "file": "internal/connectors/defs/metabase/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "metricool",
+      "state": "unknown",
+      "file": "internal/connectors/defs/metricool/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "miro",
+      "state": "unknown",
+      "file": "internal/connectors/defs/miro/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "missive",
+      "state": "unknown",
+      "file": "internal/connectors/defs/missive/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mixmax",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mixmax/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mixpanel",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mixpanel/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mode",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mode/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "monday",
+      "state": "unknown",
+      "file": "internal/connectors/defs/monday/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "mux",
+      "state": "unknown",
+      "file": "internal/connectors/defs/mux/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "n8n",
+      "state": "unknown",
+      "file": "internal/connectors/defs/n8n/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "navan",
+      "state": "unknown",
+      "file": "internal/connectors/defs/navan/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "nebius-ai",
+      "state": "unknown",
+      "file": "internal/connectors/defs/nebius-ai/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "news-api",
+      "state": "unknown",
+      "file": "internal/connectors/defs/news-api/rate_limits.json",
+      "status": "written"
+    }
+  ],
+  "counts": {
+    "declared": 0,
+    "unknown": 40,
+    "not_applicable": 0,
+    "file_total": 40
+  }
+}

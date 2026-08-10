@@ -1,0 +1,469 @@
+{
+  "operations": [
+    {
+      "id": "mailosaur.get.analysis-spam-id",
+      "kind": "rest_read",
+      "summary": "GET /analysis/spam/{id}",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analysis/spam/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.api-analysis-deliverability-id",
+      "kind": "rest_read",
+      "summary": "GET /api/analysis/deliverability/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/analysis/deliverability/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.api-devices",
+      "kind": "rest_read",
+      "summary": "GET /api/devices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/devices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.post.api-devices",
+      "kind": "rest_write",
+      "summary": "POST /api/devices",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/devices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.delete.api-devices-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/devices/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/devices/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.api-devices-id-otp",
+      "kind": "rest_read",
+      "summary": "GET /api/devices/:id/otp",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/devices/:id/otp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.post.api-devices-otp",
+      "kind": "rest_write",
+      "summary": "POST /api/devices/otp",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/devices/otp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.api-files-attachments-id",
+      "kind": "rest_read",
+      "summary": "GET /api/files/attachments/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/files/attachments/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.api-files-email-id",
+      "kind": "rest_read",
+      "summary": "GET /api/files/email/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/files/email/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.api-messages",
+      "kind": "rest_read",
+      "summary": "GET /api/messages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.post.api-messages",
+      "kind": "rest_write",
+      "summary": "POST /api/messages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.delete.api-messages",
+      "kind": "rest_write",
+      "summary": "DELETE /api/messages",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.api-messages-id",
+      "kind": "rest_read",
+      "summary": "GET /api/messages/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/messages/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.delete.api-messages-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/messages/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/messages/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.post.api-messages-id-forward",
+      "kind": "rest_write",
+      "summary": "POST /api/messages/:id/forward",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/messages/:id/forward",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.post.api-messages-id-reply",
+      "kind": "rest_write",
+      "summary": "POST /api/messages/:id/reply",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/messages/:id/reply",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.post.api-messages-search",
+      "kind": "rest_write",
+      "summary": "POST /api/messages/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/messages/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.api-servers",
+      "kind": "rest_read",
+      "summary": "GET /api/servers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/servers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.post.api-servers",
+      "kind": "rest_write",
+      "summary": "POST /api/servers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/servers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.api-servers-id",
+      "kind": "rest_read",
+      "summary": "GET /api/servers/:id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/servers/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.put.api-servers-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/servers/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/servers/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.delete.api-servers-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/servers/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/servers/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.api-servers-id-password",
+      "kind": "rest_read",
+      "summary": "GET /api/servers/:id/password",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/servers/:id/password",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.api-usage-limits",
+      "kind": "rest_read",
+      "summary": "GET /api/usage/limits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/usage/limits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.api-usage-transactions",
+      "kind": "rest_read",
+      "summary": "GET /api/usage/transactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/usage/transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.messages-id",
+      "kind": "rest_read",
+      "summary": "GET /messages/{id}",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/messages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.delete.messages-id",
+      "kind": "rest_write",
+      "summary": "DELETE /messages/{id}",
+      "description": "message deletion is a destructive mutation, not a read stream",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/messages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.post.servers",
+      "kind": "rest_write",
+      "summary": "POST /servers",
+      "description": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/servers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.delete.servers-id",
+      "kind": "rest_write",
+      "summary": "DELETE /servers/{id}",
+      "description": "server deletion is a destructive mutation, not a read stream",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/servers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailosaur.get.usage-limits",
+      "kind": "rest_read",
+      "summary": "GET /usage/limits",
+      "description": "account plan/limit snapshot, not a syncable object stream",
+      "source_url": "https://mailosaur.com/docs/api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/usage/limits",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

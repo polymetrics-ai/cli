@@ -1,0 +1,529 @@
+{
+  "schema_version": 1,
+  "batch": "batch-018",
+  "manifest": "batches/batch-018-reference-machine-manifest.json",
+  "execution": "interrupted",
+  "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+  "outcomes": [
+    {
+      "connector": "qualaroo",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "qualaroo",
+        "status": "fetched",
+        "bytes": 103974
+      }
+    },
+    {
+      "connector": "gnews",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "gnews",
+        "status": "fetched",
+        "bytes": 19706
+      }
+    },
+    {
+      "connector": "gutendex",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "gutendex",
+        "status": "fetched",
+        "bytes": 10372
+      }
+    },
+    {
+      "connector": "pypi",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "pypi",
+        "status": "fetched",
+        "bytes": 112286
+      }
+    },
+    {
+      "connector": "news-api",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "news-api",
+        "status": "fetched",
+        "bytes": 17208
+      }
+    },
+    {
+      "connector": "mailjet-sms",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "mailjet-sms",
+        "status": "fetched",
+        "bytes": 16768
+      }
+    },
+    {
+      "connector": "plausible",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "plausible",
+        "status": "fetched",
+        "bytes": 117221
+      }
+    },
+    {
+      "connector": "searxng",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "searxng",
+        "status": "fetched",
+        "bytes": 46384
+      }
+    },
+    {
+      "connector": "buzzsprout",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "buzzsprout",
+        "status": "fetched",
+        "bytes": 256230
+      }
+    },
+    {
+      "connector": "openweather",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "openweather",
+        "status": "fetched",
+        "bytes": 958787
+      }
+    },
+    {
+      "connector": "the-guardian-api",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "the-guardian-api",
+        "status": "fetched",
+        "bytes": 5610
+      }
+    },
+    {
+      "connector": "weatherstack",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "weatherstack",
+        "status": "fetched",
+        "bytes": 82569
+      }
+    },
+    {
+      "connector": "exchange-rates",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "exchange-rates",
+        "status": "fetched",
+        "bytes": 185721
+      }
+    },
+    {
+      "connector": "cimis",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "cimis",
+        "status": "fetched",
+        "bytes": 70487
+      }
+    },
+    {
+      "connector": "open-exchange-rates",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "open-exchange-rates",
+        "status": "fetched",
+        "bytes": 132965
+      }
+    },
+    {
+      "connector": "marketstack",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "marketstack",
+        "status": "fetched",
+        "bytes": 190924
+      }
+    },
+    {
+      "connector": "pexels-api",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "artifact_fetch",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "pexels-api",
+        "status": "failed",
+        "bytes": 0
+      }
+    },
+    {
+      "connector": "rentcast",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "rentcast",
+        "status": "fetched",
+        "bytes": 142863
+      }
+    },
+    {
+      "connector": "campayn",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "campayn",
+        "status": "fetched",
+        "bytes": 260777
+      }
+    },
+    {
+      "connector": "ebay-finance",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "artifact_fetch",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "ebay-finance",
+        "status": "failed",
+        "bytes": 0
+      }
+    },
+    {
+      "connector": "hugging-face-datasets",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "hugging-face-datasets",
+        "status": "fetched",
+        "bytes": 95723
+      }
+    },
+    {
+      "connector": "countercyclical",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "countercyclical",
+        "status": "fetched",
+        "bytes": 408162
+      }
+    },
+    {
+      "connector": "ticketmaster",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "ticketmaster",
+        "status": "fetched",
+        "bytes": 1417565
+      }
+    },
+    {
+      "connector": "simfin",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "simfin",
+        "status": "fetched",
+        "bytes": 2656
+      }
+    },
+    {
+      "connector": "ebay-fulfillment",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "artifact_fetch",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "ebay-fulfillment",
+        "status": "failed",
+        "bytes": 0
+      }
+    },
+    {
+      "connector": "stockdata",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "stockdata",
+        "status": "fetched",
+        "bytes": 224874
+      }
+    },
+    {
+      "connector": "freshcaller",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "freshcaller",
+        "status": "fetched",
+        "bytes": 200517
+      }
+    },
+    {
+      "connector": "kissmetrics",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "kissmetrics",
+        "status": "fetched",
+        "bytes": 135528
+      }
+    },
+    {
+      "connector": "linkrunner",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "linkrunner",
+        "status": "fetched",
+        "bytes": 593765
+      }
+    },
+    {
+      "connector": "poplar",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "poplar",
+        "status": "fetched",
+        "bytes": 10050
+      }
+    },
+    {
+      "connector": "datascope",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "datascope",
+        "status": "fetched",
+        "bytes": 209165
+      }
+    },
+    {
+      "connector": "savvycal",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "savvycal",
+        "status": "fetched",
+        "bytes": 16073
+      }
+    },
+    {
+      "connector": "smaily",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "smaily",
+        "status": "fetched",
+        "bytes": 203904
+      }
+    },
+    {
+      "connector": "smartreach",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "smartreach",
+        "status": "fetched",
+        "bytes": 50339
+      }
+    },
+    {
+      "connector": "appsflyer",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "appsflyer",
+        "status": "fetched",
+        "bytes": 973498
+      }
+    },
+    {
+      "connector": "giphy",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "giphy",
+        "status": "fetched",
+        "bytes": 173068
+      }
+    },
+    {
+      "connector": "mailosaur",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "mailosaur",
+        "status": "fetched",
+        "bytes": 498494
+      }
+    },
+    {
+      "connector": "clazar",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "clazar",
+        "status": "fetched",
+        "bytes": 2804
+      }
+    },
+    {
+      "connector": "customerly",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "customerly",
+        "status": "fetched",
+        "bytes": 46609
+      }
+    },
+    {
+      "connector": "eventee",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
+      "primary_retrieval": {
+        "connector": "eventee",
+        "status": "fetched",
+        "bytes": 5691
+      }
+    }
+  ]
+}

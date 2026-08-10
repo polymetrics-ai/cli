@@ -330,6 +330,9 @@ func (s *goScanner) scanStringLiteral(lit *ast.BasicLit) {
 	if err != nil {
 		return
 	}
+	if isStaticAssetReferenceLiteral(value) {
+		return
+	}
 	matches := s.lexicon.literalMatches(value, context.isConnectorIdentity(), s.pathClass.DocsOutput)
 	if s.pathClass.DocsOutput {
 		seenConnectors := map[string]bool{}
@@ -348,6 +351,33 @@ func (s *goScanner) scanStringLiteral(lit *ast.BasicLit) {
 		rule := s.ruleFor(match, context)
 		s.addFinding(rule, match.Connector, lit.Pos(), match.Match, messageForRule(rule, match), remediationForRule(rule, match))
 	}
+}
+
+// isStaticAssetReferenceLiteral identifies bare asset suffixes and root feed
+// filenames before connector token matching. A token inside .rss or /rss.xml
+// describes an asset type, not a connector identity; treating it as the latter
+// turns shared source-discovery policy into a false boundary violation.
+func isStaticAssetReferenceLiteral(value string) bool {
+	value = strings.ToLower(strings.TrimSpace(value))
+	if value == "" || strings.ContainsAny(value, " \t\r\n") {
+		return false
+	}
+	if cut := strings.IndexAny(value, "?#"); cut >= 0 {
+		value = value[:cut]
+	}
+	if !strings.HasPrefix(value, ".") || strings.Contains(value, "/") {
+		return value == "/rss.xml" || value == "/atom.xml"
+	}
+	for _, suffix := range []string{
+		".css", ".js", ".mjs", ".map", ".png", ".jpg", ".jpeg", ".gif",
+		".svg", ".webp", ".ico", ".woff", ".woff2", ".ttf", ".eot",
+		".rss", ".atom",
+	} {
+		if value == suffix {
+			return true
+		}
+	}
+	return false
 }
 
 func (s *goScanner) scanIdentifier(ident *ast.Ident) {

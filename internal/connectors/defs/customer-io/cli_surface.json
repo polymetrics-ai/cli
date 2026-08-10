@@ -1,0 +1,3600 @@
+{
+  "tagline": "Run Customer.io's declared streams and reverse-ETL actions.",
+  "usage": "pm customer-io \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "activities list",
+        "api get v1 assets",
+        "api get v1 assets files id",
+        "api get v1 assets folders",
+        "api get v1 assets folders id",
+        "api get v1 broadcasts broadcast-id",
+        "api get v1 broadcasts broadcast-id actions",
+        "api get v1 broadcasts broadcast-id actions action-id",
+        "api get v1 broadcasts broadcast-id actions action-id language language",
+        "api get v1 broadcasts broadcast-id actions action-id metrics",
+        "api get v1 broadcasts broadcast-id actions action-id metrics links",
+        "api get v1 broadcasts broadcast-id messages",
+        "api get v1 broadcasts broadcast-id metrics",
+        "api get v1 broadcasts broadcast-id metrics links",
+        "api get v1 broadcasts broadcast-id triggers",
+        "api get v1 campaigns broadcast-id triggers trigger-id",
+        "api get v1 campaigns broadcast-id triggers trigger-id errors",
+        "api get v1 campaigns campaign-id",
+        "api get v1 campaigns campaign-id actions",
+        "api get v1 campaigns campaign-id actions action-id",
+        "api get v1 campaigns campaign-id actions action-id language language",
+        "api get v1 campaigns campaign-id actions action-id metrics",
+        "api get v1 campaigns campaign-id actions action-id metrics links",
+        "api get v1 campaigns campaign-id journey-metrics",
+        "api get v1 campaigns campaign-id messages",
+        "api get v1 campaigns campaign-id metrics",
+        "api get v1 campaigns campaign-id metrics links",
+        "api get v1 collections collection-id",
+        "api get v1 collections collection-id content",
+        "api get v1 customers",
+        "api get v1 customers customer-id activities",
+        "api get v1 customers customer-id attributes",
+        "api get v1 customers customer-id messages",
+        "api get v1 customers customer-id optouts",
+        "api get v1 customers customer-id relationships",
+        "api get v1 customers customer-id segments",
+        "api get v1 customers customer-id subscription-preferences",
+        "api get v1 design-studio components",
+        "api get v1 design-studio components id",
+        "api get v1 design-studio emails",
+        "api get v1 design-studio emails id",
+        "api get v1 design-studio emails id languages",
+        "api get v1 design-studio emails id languages language",
+        "api get v1 design-studio folders",
+        "api get v1 design-studio folders id",
+        "api get v1 esp domains domain-name suppression suppression-type",
+        "api get v1 esp search-suppression email-address",
+        "api get v1 esp suppression suppression-type",
+        "api get v1 exports export-id",
+        "api get v1 exports export-id download",
+        "api get v1 imports import-id",
+        "api get v1 info ip-addresses",
+        "api get v1 live-notifications instance-id",
+        "api get v1 messages message-id",
+        "api get v1 messages message-id archived-message",
+        "api get v1 newsletters newsletter-id",
+        "api get v1 newsletters newsletter-id contents",
+        "api get v1 newsletters newsletter-id contents content-id",
+        "api get v1 newsletters newsletter-id contents content-id metrics",
+        "api get v1 newsletters newsletter-id contents content-id metrics links",
+        "api get v1 newsletters newsletter-id language language",
+        "api get v1 newsletters newsletter-id messages",
+        "api get v1 newsletters newsletter-id metrics",
+        "api get v1 newsletters newsletter-id metrics links",
+        "api get v1 newsletters newsletter-id test-group test-group-id language language",
+        "api get v1 newsletters newsletter-id test-groups",
+        "api get v1 objects object-type-id object-id attributes",
+        "api get v1 objects object-type-id object-id relationships",
+        "api get v1 optouts",
+        "api get v1 reporting-webhooks webhook-id",
+        "api get v1 segments segment-id",
+        "api get v1 segments segment-id customer-count",
+        "api get v1 segments segment-id membership",
+        "api get v1 segments segment-id used-by",
+        "api get v1 sender-identities sender-id",
+        "api get v1 sender-identities sender-id used-by",
+        "api get v1 subscription-center customer-id token",
+        "api get v1 transactional transactional-id",
+        "api get v1 transactional transactional-id contents",
+        "api get v1 transactional transactional-id language language",
+        "api get v1 transactional transactional-id messages",
+        "api get v1 transactional transactional-id metrics",
+        "api get v1 transactional transactional-id metrics links",
+        "api webhook reportingwebhook-post",
+        "broadcasts list",
+        "campaigns list",
+        "collections list",
+        "exports list",
+        "messages list",
+        "newsletters list",
+        "object types list",
+        "reporting webhooks list",
+        "segments list",
+        "sender identities list",
+        "snippets list",
+        "subscription channels list",
+        "subscription topics list",
+        "transactional list",
+        "workspaces list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v1 assets files id",
+        "api delete v1 assets folders id",
+        "api delete v1 collections collection-id",
+        "api delete v1 design-studio components id",
+        "api delete v1 design-studio emails id",
+        "api delete v1 design-studio emails id languages language",
+        "api delete v1 design-studio folders id",
+        "api delete v1 esp suppression suppression-type email-address",
+        "api delete v1 newsletters newsletter-id",
+        "api delete v1 newsletters newsletter-id language language",
+        "api delete v1 newsletters newsletter-id test-group test-group-id language language",
+        "api post v1 assets files",
+        "api post v1 assets folders",
+        "api post v1 collections",
+        "api post v1 customers",
+        "api post v1 customers attributes",
+        "api post v1 data-index attributes",
+        "api post v1 data-index events",
+        "api post v1 design-studio components",
+        "api post v1 design-studio emails",
+        "api post v1 design-studio emails id languages",
+        "api post v1 design-studio folders",
+        "api post v1 esp suppression suppression-type email-address",
+        "api post v1 exports customers",
+        "api post v1 exports deliveries",
+        "api post v1 imports",
+        "api post v1 live-notifications end",
+        "api post v1 live-notifications start",
+        "api post v1 live-notifications update",
+        "api post v1 newsletters",
+        "api post v1 newsletters newsletter-id language",
+        "api post v1 newsletters newsletter-id schedule",
+        "api post v1 newsletters newsletter-id send",
+        "api post v1 newsletters newsletter-id test-group test-group-id language",
+        "api post v1 newsletters newsletter-id test-groups",
+        "api post v1 objects",
+        "api post v1 send in-app",
+        "api post v1 send inbox-message",
+        "api post v1 send push",
+        "api post v1 send sms",
+        "api put v1 assets files id",
+        "api put v1 assets folders id",
+        "api put v1 broadcasts broadcast-id actions action-id",
+        "api put v1 broadcasts broadcast-id actions action-id language language",
+        "api put v1 campaigns campaign-id actions action-id",
+        "api put v1 campaigns campaign-id actions action-id language language",
+        "api put v1 collections collection-id",
+        "api put v1 collections collection-id content",
+        "api put v1 customers customer-id optouts",
+        "api put v1 design-studio components id",
+        "api put v1 design-studio emails id",
+        "api put v1 design-studio emails id languages language",
+        "api put v1 design-studio folders id",
+        "api put v1 newsletters newsletter-id contents content-id",
+        "api put v1 newsletters newsletter-id language language",
+        "api put v1 newsletters newsletter-id test-group test-group-id language language",
+        "api put v1 transactional transactional-id content content-id",
+        "api put v1 transactional transactional-id language language",
+        "create manual segment apply",
+        "create reporting webhook apply",
+        "create snippet apply",
+        "delete manual segment apply",
+        "delete reporting webhook apply",
+        "delete snippet apply",
+        "send email apply",
+        "trigger broadcast apply",
+        "update reporting webhook apply",
+        "update snippet apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "activities list",
+      "summary": "Run the activities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activities",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io activities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/activities"
+        }
+      ]
+    },
+    {
+      "path": "api delete v1 assets files id",
+      "summary": "Documented DELETE /v1/assets/files/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api delete v1 assets files id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/assets/files/{id}"
+        }
+      ],
+      "operation": "customer-io.delete.v1-assets-files-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 assets folders id",
+      "summary": "Documented DELETE /v1/assets/folders/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api delete v1 assets folders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/assets/folders/{id}"
+        }
+      ],
+      "operation": "customer-io.delete.v1-assets-folders-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 collections collection-id",
+      "summary": "Documented DELETE /v1/collections/{collection_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api delete v1 collections collection-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/collections/{collection_id}"
+        }
+      ],
+      "operation": "customer-io.delete.v1-collections-collection-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 design-studio components id",
+      "summary": "Documented DELETE /v1/design_studio/components/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api delete v1 design-studio components id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/design_studio/components/{id}"
+        }
+      ],
+      "operation": "customer-io.delete.v1-design-studio-components-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 design-studio emails id",
+      "summary": "Documented DELETE /v1/design_studio/emails/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api delete v1 design-studio emails id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/design_studio/emails/{id}"
+        }
+      ],
+      "operation": "customer-io.delete.v1-design-studio-emails-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 design-studio emails id languages language",
+      "summary": "Documented DELETE /v1/design_studio/emails/{id}/languages/{language} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api delete v1 design-studio emails id languages language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/design_studio/emails/{id}/languages/{language}"
+        }
+      ],
+      "operation": "customer-io.delete.v1-design-studio-emails-id-languages-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 design-studio folders id",
+      "summary": "Documented DELETE /v1/design_studio/folders/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api delete v1 design-studio folders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/design_studio/folders/{id}"
+        }
+      ],
+      "operation": "customer-io.delete.v1-design-studio-folders-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 esp suppression suppression-type email-address",
+      "summary": "Documented DELETE /v1/esp/suppression/{suppression_type}/{email_address} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api delete v1 esp suppression suppression-type email-address --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/esp/suppression/{suppression_type}/{email_address}"
+        }
+      ],
+      "operation": "customer-io.delete.v1-esp-suppression-suppression-type-email-address",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 newsletters newsletter-id",
+      "summary": "Documented DELETE /v1/newsletters/{newsletter_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api delete v1 newsletters newsletter-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/newsletters/{newsletter_id}"
+        }
+      ],
+      "operation": "customer-io.delete.v1-newsletters-newsletter-id",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api delete v1 newsletters newsletter-id language language",
+      "summary": "Documented DELETE /v1/newsletters/{newsletter_id}/language/{language} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api delete v1 newsletters newsletter-id language language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/newsletters/{newsletter_id}/language/{language}"
+        }
+      ],
+      "operation": "customer-io.delete.v1-newsletters-newsletter-id-language-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 newsletters newsletter-id test-group test-group-id language language",
+      "summary": "Documented DELETE /v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api delete v1 newsletters newsletter-id test-group test-group-id language language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}"
+        }
+      ],
+      "operation": "customer-io.delete.v1-newsletters-newsletter-id-test-group-test-group-id-language-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v1 assets",
+      "summary": "Documented GET /v1/assets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 assets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/assets"
+        }
+      ],
+      "operation": "customer-io.get.v1-assets",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 assets files id",
+      "summary": "Documented GET /v1/assets/files/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 assets files id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/assets/files/{id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-assets-files-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 assets folders",
+      "summary": "Documented GET /v1/assets/folders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 assets folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/assets/folders"
+        }
+      ],
+      "operation": "customer-io.get.v1-assets-folders",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 assets folders id",
+      "summary": "Documented GET /v1/assets/folders/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 assets folders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/assets/folders/{id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-assets-folders-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 broadcasts broadcast-id",
+      "summary": "Documented GET /v1/broadcasts/{broadcast_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 broadcasts broadcast-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/broadcasts/{broadcast_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-broadcasts-broadcast-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 broadcasts broadcast-id actions",
+      "summary": "Documented GET /v1/broadcasts/{broadcast_id}/actions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 broadcasts broadcast-id actions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/broadcasts/{broadcast_id}/actions"
+        }
+      ],
+      "operation": "customer-io.get.v1-broadcasts-broadcast-id-actions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 broadcasts broadcast-id actions action-id",
+      "summary": "Documented GET /v1/broadcasts/{broadcast_id}/actions/{action_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 broadcasts broadcast-id actions action-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-broadcasts-broadcast-id-actions-action-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 broadcasts broadcast-id actions action-id language language",
+      "summary": "Documented GET /v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 broadcasts broadcast-id actions action-id language language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}"
+        }
+      ],
+      "operation": "customer-io.get.v1-broadcasts-broadcast-id-actions-action-id-language-language",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 broadcasts broadcast-id actions action-id metrics",
+      "summary": "Documented GET /v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 broadcasts broadcast-id actions action-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics"
+        }
+      ],
+      "operation": "customer-io.get.v1-broadcasts-broadcast-id-actions-action-id-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 broadcasts broadcast-id actions action-id metrics links",
+      "summary": "Documented GET /v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics/links (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 broadcasts broadcast-id actions action-id metrics links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics/links"
+        }
+      ],
+      "operation": "customer-io.get.v1-broadcasts-broadcast-id-actions-action-id-metrics-links",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 broadcasts broadcast-id messages",
+      "summary": "Documented GET /v1/broadcasts/{broadcast_id}/messages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 broadcasts broadcast-id messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/broadcasts/{broadcast_id}/messages"
+        }
+      ],
+      "operation": "customer-io.get.v1-broadcasts-broadcast-id-messages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 broadcasts broadcast-id metrics",
+      "summary": "Documented GET /v1/broadcasts/{broadcast_id}/metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 broadcasts broadcast-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/broadcasts/{broadcast_id}/metrics"
+        }
+      ],
+      "operation": "customer-io.get.v1-broadcasts-broadcast-id-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 broadcasts broadcast-id metrics links",
+      "summary": "Documented GET /v1/broadcasts/{broadcast_id}/metrics/links (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 broadcasts broadcast-id metrics links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/broadcasts/{broadcast_id}/metrics/links"
+        }
+      ],
+      "operation": "customer-io.get.v1-broadcasts-broadcast-id-metrics-links",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 broadcasts broadcast-id triggers",
+      "summary": "Documented GET /v1/broadcasts/{broadcast_id}/triggers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 broadcasts broadcast-id triggers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/broadcasts/{broadcast_id}/triggers"
+        }
+      ],
+      "operation": "customer-io.get.v1-broadcasts-broadcast-id-triggers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns broadcast-id triggers trigger-id",
+      "summary": "Documented GET /v1/campaigns/{broadcast_id}/triggers/{trigger_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 campaigns broadcast-id triggers trigger-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{broadcast_id}/triggers/{trigger_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-campaigns-broadcast-id-triggers-trigger-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns broadcast-id triggers trigger-id errors",
+      "summary": "Documented GET /v1/campaigns/{broadcast_id}/triggers/{trigger_id}/errors (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 campaigns broadcast-id triggers trigger-id errors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{broadcast_id}/triggers/{trigger_id}/errors"
+        }
+      ],
+      "operation": "customer-io.get.v1-campaigns-broadcast-id-triggers-trigger-id-errors",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns campaign-id",
+      "summary": "Documented GET /v1/campaigns/{campaign_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 campaigns campaign-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{campaign_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-campaigns-campaign-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns campaign-id actions",
+      "summary": "Documented GET /v1/campaigns/{campaign_id}/actions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 campaigns campaign-id actions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{campaign_id}/actions"
+        }
+      ],
+      "operation": "customer-io.get.v1-campaigns-campaign-id-actions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns campaign-id actions action-id",
+      "summary": "Documented GET /v1/campaigns/{campaign_id}/actions/{action_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 campaigns campaign-id actions action-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{campaign_id}/actions/{action_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-campaigns-campaign-id-actions-action-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns campaign-id actions action-id language language",
+      "summary": "Documented GET /v1/campaigns/{campaign_id}/actions/{action_id}/language/{language} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 campaigns campaign-id actions action-id language language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}"
+        }
+      ],
+      "operation": "customer-io.get.v1-campaigns-campaign-id-actions-action-id-language-language",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns campaign-id actions action-id metrics",
+      "summary": "Documented GET /v1/campaigns/{campaign_id}/actions/{action_id}/metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 campaigns campaign-id actions action-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/metrics"
+        }
+      ],
+      "operation": "customer-io.get.v1-campaigns-campaign-id-actions-action-id-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns campaign-id actions action-id metrics links",
+      "summary": "Documented GET /v1/campaigns/{campaign_id}/actions/{action_id}/metrics/links (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 campaigns campaign-id actions action-id metrics links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/metrics/links"
+        }
+      ],
+      "operation": "customer-io.get.v1-campaigns-campaign-id-actions-action-id-metrics-links",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns campaign-id journey-metrics",
+      "summary": "Documented GET /v1/campaigns/{campaign_id}/journey_metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 campaigns campaign-id journey-metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{campaign_id}/journey_metrics"
+        }
+      ],
+      "operation": "customer-io.get.v1-campaigns-campaign-id-journey-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns campaign-id messages",
+      "summary": "Documented GET /v1/campaigns/{campaign_id}/messages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 campaigns campaign-id messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{campaign_id}/messages"
+        }
+      ],
+      "operation": "customer-io.get.v1-campaigns-campaign-id-messages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns campaign-id metrics",
+      "summary": "Documented GET /v1/campaigns/{campaign_id}/metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 campaigns campaign-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{campaign_id}/metrics"
+        }
+      ],
+      "operation": "customer-io.get.v1-campaigns-campaign-id-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns campaign-id metrics links",
+      "summary": "Documented GET /v1/campaigns/{campaign_id}/metrics/links (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 campaigns campaign-id metrics links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{campaign_id}/metrics/links"
+        }
+      ],
+      "operation": "customer-io.get.v1-campaigns-campaign-id-metrics-links",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 collections collection-id",
+      "summary": "Documented GET /v1/collections/{collection_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 collections collection-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/collections/{collection_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-collections-collection-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 collections collection-id content",
+      "summary": "Documented GET /v1/collections/{collection_id}/content (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 collections collection-id content --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/collections/{collection_id}/content"
+        }
+      ],
+      "operation": "customer-io.get.v1-collections-collection-id-content",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 customers",
+      "summary": "Documented GET /v1/customers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/customers"
+        }
+      ],
+      "operation": "customer-io.get.v1-customers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 customers customer-id activities",
+      "summary": "Documented GET /v1/customers/{customer_id}/activities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 customers customer-id activities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/customers/{customer_id}/activities"
+        }
+      ],
+      "operation": "customer-io.get.v1-customers-customer-id-activities",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 customers customer-id attributes",
+      "summary": "Documented GET /v1/customers/{customer_id}/attributes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 customers customer-id attributes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/customers/{customer_id}/attributes"
+        }
+      ],
+      "operation": "customer-io.get.v1-customers-customer-id-attributes",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 customers customer-id messages",
+      "summary": "Documented GET /v1/customers/{customer_id}/messages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 customers customer-id messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/customers/{customer_id}/messages"
+        }
+      ],
+      "operation": "customer-io.get.v1-customers-customer-id-messages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 customers customer-id optouts",
+      "summary": "Documented GET /v1/customers/{customer_id}/optouts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 customers customer-id optouts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/customers/{customer_id}/optouts"
+        }
+      ],
+      "operation": "customer-io.get.v1-customers-customer-id-optouts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 customers customer-id relationships",
+      "summary": "Documented GET /v1/customers/{customer_id}/relationships (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 customers customer-id relationships --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/customers/{customer_id}/relationships"
+        }
+      ],
+      "operation": "customer-io.get.v1-customers-customer-id-relationships",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 customers customer-id segments",
+      "summary": "Documented GET /v1/customers/{customer_id}/segments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 customers customer-id segments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/customers/{customer_id}/segments"
+        }
+      ],
+      "operation": "customer-io.get.v1-customers-customer-id-segments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 customers customer-id subscription-preferences",
+      "summary": "Documented GET /v1/customers/{customer_id}/subscription_preferences (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 customers customer-id subscription-preferences --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/customers/{customer_id}/subscription_preferences"
+        }
+      ],
+      "operation": "customer-io.get.v1-customers-customer-id-subscription-preferences",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 design-studio components",
+      "summary": "Documented GET /v1/design_studio/components (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 design-studio components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/design_studio/components"
+        }
+      ],
+      "operation": "customer-io.get.v1-design-studio-components",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 design-studio components id",
+      "summary": "Documented GET /v1/design_studio/components/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 design-studio components id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/design_studio/components/{id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-design-studio-components-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 design-studio emails",
+      "summary": "Documented GET /v1/design_studio/emails (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 design-studio emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/design_studio/emails"
+        }
+      ],
+      "operation": "customer-io.get.v1-design-studio-emails",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 design-studio emails id",
+      "summary": "Documented GET /v1/design_studio/emails/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 design-studio emails id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/design_studio/emails/{id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-design-studio-emails-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 design-studio emails id languages",
+      "summary": "Documented GET /v1/design_studio/emails/{id}/languages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 design-studio emails id languages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/design_studio/emails/{id}/languages"
+        }
+      ],
+      "operation": "customer-io.get.v1-design-studio-emails-id-languages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 design-studio emails id languages language",
+      "summary": "Documented GET /v1/design_studio/emails/{id}/languages/{language} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 design-studio emails id languages language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/design_studio/emails/{id}/languages/{language}"
+        }
+      ],
+      "operation": "customer-io.get.v1-design-studio-emails-id-languages-language",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 design-studio folders",
+      "summary": "Documented GET /v1/design_studio/folders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 design-studio folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/design_studio/folders"
+        }
+      ],
+      "operation": "customer-io.get.v1-design-studio-folders",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 design-studio folders id",
+      "summary": "Documented GET /v1/design_studio/folders/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 design-studio folders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/design_studio/folders/{id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-design-studio-folders-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 esp domains domain-name suppression suppression-type",
+      "summary": "Documented GET /v1/esp/domains/{domain_name}/suppression/{suppression_type} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 esp domains domain-name suppression suppression-type --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/esp/domains/{domain_name}/suppression/{suppression_type}"
+        }
+      ],
+      "operation": "customer-io.get.v1-esp-domains-domain-name-suppression-suppression-type",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 esp search-suppression email-address",
+      "summary": "Documented GET /v1/esp/search_suppression/{email_address} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 esp search-suppression email-address --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/esp/search_suppression/{email_address}"
+        }
+      ],
+      "operation": "customer-io.get.v1-esp-search-suppression-email-address",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 esp suppression suppression-type",
+      "summary": "Documented GET /v1/esp/suppression/{suppression_type} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 esp suppression suppression-type --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/esp/suppression/{suppression_type}"
+        }
+      ],
+      "operation": "customer-io.get.v1-esp-suppression-suppression-type",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exports export-id",
+      "summary": "Documented GET /v1/exports/{export_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 exports export-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exports/{export_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-exports-export-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exports export-id download",
+      "summary": "Documented GET /v1/exports/{export_id}/download (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 exports export-id download --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exports/{export_id}/download"
+        }
+      ],
+      "operation": "customer-io.get.v1-exports-export-id-download",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 imports import-id",
+      "summary": "Documented GET /v1/imports/{import_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 imports import-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/imports/{import_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-imports-import-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 info ip-addresses",
+      "summary": "Documented GET /v1/info/ip_addresses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 info ip-addresses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/info/ip_addresses"
+        }
+      ],
+      "operation": "customer-io.get.v1-info-ip-addresses",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 live-notifications instance-id",
+      "summary": "Documented GET /v1/live_notifications/{instance_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 live-notifications instance-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/live_notifications/{instance_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-live-notifications-instance-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 messages message-id",
+      "summary": "Documented GET /v1/messages/{message_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 messages message-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/messages/{message_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-messages-message-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 messages message-id archived-message",
+      "summary": "Documented GET /v1/messages/{message_id}/archived_message (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 messages message-id archived-message --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/messages/{message_id}/archived_message"
+        }
+      ],
+      "operation": "customer-io.get.v1-messages-message-id-archived-message",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 newsletters newsletter-id",
+      "summary": "Documented GET /v1/newsletters/{newsletter_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 newsletters newsletter-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/newsletters/{newsletter_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-newsletters-newsletter-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 newsletters newsletter-id contents",
+      "summary": "Documented GET /v1/newsletters/{newsletter_id}/contents (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 newsletters newsletter-id contents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/newsletters/{newsletter_id}/contents"
+        }
+      ],
+      "operation": "customer-io.get.v1-newsletters-newsletter-id-contents",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 newsletters newsletter-id contents content-id",
+      "summary": "Documented GET /v1/newsletters/{newsletter_id}/contents/{content_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 newsletters newsletter-id contents content-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-newsletters-newsletter-id-contents-content-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 newsletters newsletter-id contents content-id metrics",
+      "summary": "Documented GET /v1/newsletters/{newsletter_id}/contents/{content_id}/metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 newsletters newsletter-id contents content-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}/metrics"
+        }
+      ],
+      "operation": "customer-io.get.v1-newsletters-newsletter-id-contents-content-id-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 newsletters newsletter-id contents content-id metrics links",
+      "summary": "Documented GET /v1/newsletters/{newsletter_id}/contents/{content_id}/metrics/links (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 newsletters newsletter-id contents content-id metrics links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}/metrics/links"
+        }
+      ],
+      "operation": "customer-io.get.v1-newsletters-newsletter-id-contents-content-id-metrics-links",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 newsletters newsletter-id language language",
+      "summary": "Documented GET /v1/newsletters/{newsletter_id}/language/{language} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 newsletters newsletter-id language language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/newsletters/{newsletter_id}/language/{language}"
+        }
+      ],
+      "operation": "customer-io.get.v1-newsletters-newsletter-id-language-language",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 newsletters newsletter-id messages",
+      "summary": "Documented GET /v1/newsletters/{newsletter_id}/messages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 newsletters newsletter-id messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/newsletters/{newsletter_id}/messages"
+        }
+      ],
+      "operation": "customer-io.get.v1-newsletters-newsletter-id-messages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 newsletters newsletter-id metrics",
+      "summary": "Documented GET /v1/newsletters/{newsletter_id}/metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 newsletters newsletter-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/newsletters/{newsletter_id}/metrics"
+        }
+      ],
+      "operation": "customer-io.get.v1-newsletters-newsletter-id-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 newsletters newsletter-id metrics links",
+      "summary": "Documented GET /v1/newsletters/{newsletter_id}/metrics/links (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 newsletters newsletter-id metrics links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/newsletters/{newsletter_id}/metrics/links"
+        }
+      ],
+      "operation": "customer-io.get.v1-newsletters-newsletter-id-metrics-links",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 newsletters newsletter-id test-group test-group-id language language",
+      "summary": "Documented GET /v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 newsletters newsletter-id test-group test-group-id language language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}"
+        }
+      ],
+      "operation": "customer-io.get.v1-newsletters-newsletter-id-test-group-test-group-id-language-language",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 newsletters newsletter-id test-groups",
+      "summary": "Documented GET /v1/newsletters/{newsletter_id}/test_groups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 newsletters newsletter-id test-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/newsletters/{newsletter_id}/test_groups"
+        }
+      ],
+      "operation": "customer-io.get.v1-newsletters-newsletter-id-test-groups",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 objects object-type-id object-id attributes",
+      "summary": "Documented GET /v1/objects/{object_type_id}/{object_id}/attributes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 objects object-type-id object-id attributes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/objects/{object_type_id}/{object_id}/attributes"
+        }
+      ],
+      "operation": "customer-io.get.v1-objects-object-type-id-object-id-attributes",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 objects object-type-id object-id relationships",
+      "summary": "Documented GET /v1/objects/{object_type_id}/{object_id}/relationships (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 objects object-type-id object-id relationships --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/objects/{object_type_id}/{object_id}/relationships"
+        }
+      ],
+      "operation": "customer-io.get.v1-objects-object-type-id-object-id-relationships",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 optouts",
+      "summary": "Documented GET /v1/optouts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 optouts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/optouts"
+        }
+      ],
+      "operation": "customer-io.get.v1-optouts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 reporting-webhooks webhook-id",
+      "summary": "Documented GET /v1/reporting_webhooks/{webhook_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 reporting-webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/reporting_webhooks/{webhook_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-reporting-webhooks-webhook-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 segments segment-id",
+      "summary": "Documented GET /v1/segments/{segment_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 segments segment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/segments/{segment_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-segments-segment-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 segments segment-id customer-count",
+      "summary": "Documented GET /v1/segments/{segment_id}/customer_count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 segments segment-id customer-count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/segments/{segment_id}/customer_count"
+        }
+      ],
+      "operation": "customer-io.get.v1-segments-segment-id-customer-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 segments segment-id membership",
+      "summary": "Documented GET /v1/segments/{segment_id}/membership (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 segments segment-id membership --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/segments/{segment_id}/membership"
+        }
+      ],
+      "operation": "customer-io.get.v1-segments-segment-id-membership",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 segments segment-id used-by",
+      "summary": "Documented GET /v1/segments/{segment_id}/used_by (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 segments segment-id used-by --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/segments/{segment_id}/used_by"
+        }
+      ],
+      "operation": "customer-io.get.v1-segments-segment-id-used-by",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 sender-identities sender-id",
+      "summary": "Documented GET /v1/sender_identities/{sender_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 sender-identities sender-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/sender_identities/{sender_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-sender-identities-sender-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 sender-identities sender-id used-by",
+      "summary": "Documented GET /v1/sender_identities/{sender_id}/used_by (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 sender-identities sender-id used-by --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/sender_identities/{sender_id}/used_by"
+        }
+      ],
+      "operation": "customer-io.get.v1-sender-identities-sender-id-used-by",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 subscription-center customer-id token",
+      "summary": "Documented GET /v1/subscription_center/{customer_id}/token (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 subscription-center customer-id token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/subscription_center/{customer_id}/token"
+        }
+      ],
+      "operation": "customer-io.get.v1-subscription-center-customer-id-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 transactional transactional-id",
+      "summary": "Documented GET /v1/transactional/{transactional_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 transactional transactional-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/transactional/{transactional_id}"
+        }
+      ],
+      "operation": "customer-io.get.v1-transactional-transactional-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 transactional transactional-id contents",
+      "summary": "Documented GET /v1/transactional/{transactional_id}/contents (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 transactional transactional-id contents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/transactional/{transactional_id}/contents"
+        }
+      ],
+      "operation": "customer-io.get.v1-transactional-transactional-id-contents",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 transactional transactional-id language language",
+      "summary": "Documented GET /v1/transactional/{transactional_id}/language/{language} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 transactional transactional-id language language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/transactional/{transactional_id}/language/{language}"
+        }
+      ],
+      "operation": "customer-io.get.v1-transactional-transactional-id-language-language",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 transactional transactional-id messages",
+      "summary": "Documented GET /v1/transactional/{transactional_id}/messages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 transactional transactional-id messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/transactional/{transactional_id}/messages"
+        }
+      ],
+      "operation": "customer-io.get.v1-transactional-transactional-id-messages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 transactional transactional-id metrics",
+      "summary": "Documented GET /v1/transactional/{transactional_id}/metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 transactional transactional-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/transactional/{transactional_id}/metrics"
+        }
+      ],
+      "operation": "customer-io.get.v1-transactional-transactional-id-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 transactional transactional-id metrics links",
+      "summary": "Documented GET /v1/transactional/{transactional_id}/metrics/links (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api get v1 transactional transactional-id metrics links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/transactional/{transactional_id}/metrics/links"
+        }
+      ],
+      "operation": "customer-io.get.v1-transactional-transactional-id-metrics-links",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post v1 assets files",
+      "summary": "Documented POST /v1/assets/files (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 assets files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/assets/files"
+        }
+      ],
+      "operation": "customer-io.post.v1-assets-files",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 assets folders",
+      "summary": "Documented POST /v1/assets/folders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 assets folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/assets/folders"
+        }
+      ],
+      "operation": "customer-io.post.v1-assets-folders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 collections",
+      "summary": "Documented POST /v1/collections (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 collections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/collections"
+        }
+      ],
+      "operation": "customer-io.post.v1-collections",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 customers",
+      "summary": "Documented POST /v1/customers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/customers"
+        }
+      ],
+      "operation": "customer-io.post.v1-customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 customers attributes",
+      "summary": "Documented POST /v1/customers/attributes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 customers attributes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/customers/attributes"
+        }
+      ],
+      "operation": "customer-io.post.v1-customers-attributes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 data-index attributes",
+      "summary": "Documented POST /v1/data_index/attributes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 data-index attributes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/data_index/attributes"
+        }
+      ],
+      "operation": "customer-io.post.v1-data-index-attributes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 data-index events",
+      "summary": "Documented POST /v1/data_index/events (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 data-index events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/data_index/events"
+        }
+      ],
+      "operation": "customer-io.post.v1-data-index-events",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 design-studio components",
+      "summary": "Documented POST /v1/design_studio/components (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 design-studio components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/design_studio/components"
+        }
+      ],
+      "operation": "customer-io.post.v1-design-studio-components",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 design-studio emails",
+      "summary": "Documented POST /v1/design_studio/emails (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 design-studio emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/design_studio/emails"
+        }
+      ],
+      "operation": "customer-io.post.v1-design-studio-emails",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 design-studio emails id languages",
+      "summary": "Documented POST /v1/design_studio/emails/{id}/languages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 design-studio emails id languages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/design_studio/emails/{id}/languages"
+        }
+      ],
+      "operation": "customer-io.post.v1-design-studio-emails-id-languages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 design-studio folders",
+      "summary": "Documented POST /v1/design_studio/folders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 design-studio folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/design_studio/folders"
+        }
+      ],
+      "operation": "customer-io.post.v1-design-studio-folders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 esp suppression suppression-type email-address",
+      "summary": "Documented POST /v1/esp/suppression/{suppression_type}/{email_address} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 esp suppression suppression-type email-address --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/esp/suppression/{suppression_type}/{email_address}"
+        }
+      ],
+      "operation": "customer-io.post.v1-esp-suppression-suppression-type-email-address",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 exports customers",
+      "summary": "Documented POST /v1/exports/customers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 exports customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/exports/customers"
+        }
+      ],
+      "operation": "customer-io.post.v1-exports-customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 exports deliveries",
+      "summary": "Documented POST /v1/exports/deliveries (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 exports deliveries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/exports/deliveries"
+        }
+      ],
+      "operation": "customer-io.post.v1-exports-deliveries",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 imports",
+      "summary": "Documented POST /v1/imports (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 imports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/imports"
+        }
+      ],
+      "operation": "customer-io.post.v1-imports",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 live-notifications end",
+      "summary": "Documented POST /v1/live_notifications/end (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 live-notifications end --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/live_notifications/end"
+        }
+      ],
+      "operation": "customer-io.post.v1-live-notifications-end",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 live-notifications start",
+      "summary": "Documented POST /v1/live_notifications/start (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 live-notifications start --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/live_notifications/start"
+        }
+      ],
+      "operation": "customer-io.post.v1-live-notifications-start",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 live-notifications update",
+      "summary": "Documented POST /v1/live_notifications/update (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 live-notifications update --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/live_notifications/update"
+        }
+      ],
+      "operation": "customer-io.post.v1-live-notifications-update",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 newsletters",
+      "summary": "Documented POST /v1/newsletters (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 newsletters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/newsletters"
+        }
+      ],
+      "operation": "customer-io.post.v1-newsletters",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api post v1 newsletters newsletter-id language",
+      "summary": "Documented POST /v1/newsletters/{newsletter_id}/language (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 newsletters newsletter-id language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/newsletters/{newsletter_id}/language"
+        }
+      ],
+      "operation": "customer-io.post.v1-newsletters-newsletter-id-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 newsletters newsletter-id schedule",
+      "summary": "Documented POST /v1/newsletters/{newsletter_id}/schedule (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 newsletters newsletter-id schedule --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/newsletters/{newsletter_id}/schedule"
+        }
+      ],
+      "operation": "customer-io.post.v1-newsletters-newsletter-id-schedule",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 newsletters newsletter-id send",
+      "summary": "Documented POST /v1/newsletters/{newsletter_id}/send (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 newsletters newsletter-id send --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/newsletters/{newsletter_id}/send"
+        }
+      ],
+      "operation": "customer-io.post.v1-newsletters-newsletter-id-send",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 newsletters newsletter-id test-group test-group-id language",
+      "summary": "Documented POST /v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 newsletters newsletter-id test-group test-group-id language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language"
+        }
+      ],
+      "operation": "customer-io.post.v1-newsletters-newsletter-id-test-group-test-group-id-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 newsletters newsletter-id test-groups",
+      "summary": "Documented POST /v1/newsletters/{newsletter_id}/test_groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 newsletters newsletter-id test-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/newsletters/{newsletter_id}/test_groups"
+        }
+      ],
+      "operation": "customer-io.post.v1-newsletters-newsletter-id-test-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 objects",
+      "summary": "Documented POST /v1/objects (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 objects --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/objects"
+        }
+      ],
+      "operation": "customer-io.post.v1-objects",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 send in-app",
+      "summary": "Documented POST /v1/send/in_app (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 send in-app --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/send/in_app"
+        }
+      ],
+      "operation": "customer-io.post.v1-send-in-app",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 send inbox-message",
+      "summary": "Documented POST /v1/send/inbox_message (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 send inbox-message --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/send/inbox_message"
+        }
+      ],
+      "operation": "customer-io.post.v1-send-inbox-message",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 send push",
+      "summary": "Documented POST /v1/send/push (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 send push --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/send/push"
+        }
+      ],
+      "operation": "customer-io.post.v1-send-push",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 send sms",
+      "summary": "Documented POST /v1/send/sms (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api post v1 send sms --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/send/sms"
+        }
+      ],
+      "operation": "customer-io.post.v1-send-sms",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 assets files id",
+      "summary": "Documented PUT /v1/assets/files/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 assets files id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/assets/files/{id}"
+        }
+      ],
+      "operation": "customer-io.put.v1-assets-files-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 assets folders id",
+      "summary": "Documented PUT /v1/assets/folders/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 assets folders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/assets/folders/{id}"
+        }
+      ],
+      "operation": "customer-io.put.v1-assets-folders-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 broadcasts broadcast-id actions action-id",
+      "summary": "Documented PUT /v1/broadcasts/{broadcast_id}/actions/{action_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 broadcasts broadcast-id actions action-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}"
+        }
+      ],
+      "operation": "customer-io.put.v1-broadcasts-broadcast-id-actions-action-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 broadcasts broadcast-id actions action-id language language",
+      "summary": "Documented PUT /v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 broadcasts broadcast-id actions action-id language language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}"
+        }
+      ],
+      "operation": "customer-io.put.v1-broadcasts-broadcast-id-actions-action-id-language-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 campaigns campaign-id actions action-id",
+      "summary": "Documented PUT /v1/campaigns/{campaign_id}/actions/{action_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 campaigns campaign-id actions action-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/campaigns/{campaign_id}/actions/{action_id}"
+        }
+      ],
+      "operation": "customer-io.put.v1-campaigns-campaign-id-actions-action-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 campaigns campaign-id actions action-id language language",
+      "summary": "Documented PUT /v1/campaigns/{campaign_id}/actions/{action_id}/language/{language} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 campaigns campaign-id actions action-id language language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}"
+        }
+      ],
+      "operation": "customer-io.put.v1-campaigns-campaign-id-actions-action-id-language-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 collections collection-id",
+      "summary": "Documented PUT /v1/collections/{collection_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 collections collection-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/collections/{collection_id}"
+        }
+      ],
+      "operation": "customer-io.put.v1-collections-collection-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 collections collection-id content",
+      "summary": "Documented PUT /v1/collections/{collection_id}/content (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 collections collection-id content --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/collections/{collection_id}/content"
+        }
+      ],
+      "operation": "customer-io.put.v1-collections-collection-id-content",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 customers customer-id optouts",
+      "summary": "Documented PUT /v1/customers/{customer_id}/optouts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 customers customer-id optouts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/customers/{customer_id}/optouts"
+        }
+      ],
+      "operation": "customer-io.put.v1-customers-customer-id-optouts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 design-studio components id",
+      "summary": "Documented PUT /v1/design_studio/components/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 design-studio components id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/design_studio/components/{id}"
+        }
+      ],
+      "operation": "customer-io.put.v1-design-studio-components-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 design-studio emails id",
+      "summary": "Documented PUT /v1/design_studio/emails/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 design-studio emails id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/design_studio/emails/{id}"
+        }
+      ],
+      "operation": "customer-io.put.v1-design-studio-emails-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 design-studio emails id languages language",
+      "summary": "Documented PUT /v1/design_studio/emails/{id}/languages/{language} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 design-studio emails id languages language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/design_studio/emails/{id}/languages/{language}"
+        }
+      ],
+      "operation": "customer-io.put.v1-design-studio-emails-id-languages-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 design-studio folders id",
+      "summary": "Documented PUT /v1/design_studio/folders/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 design-studio folders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/design_studio/folders/{id}"
+        }
+      ],
+      "operation": "customer-io.put.v1-design-studio-folders-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 newsletters newsletter-id contents content-id",
+      "summary": "Documented PUT /v1/newsletters/{newsletter_id}/contents/{content_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 newsletters newsletter-id contents content-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}"
+        }
+      ],
+      "operation": "customer-io.put.v1-newsletters-newsletter-id-contents-content-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 newsletters newsletter-id language language",
+      "summary": "Documented PUT /v1/newsletters/{newsletter_id}/language/{language} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 newsletters newsletter-id language language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/newsletters/{newsletter_id}/language/{language}"
+        }
+      ],
+      "operation": "customer-io.put.v1-newsletters-newsletter-id-language-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 newsletters newsletter-id test-group test-group-id language language",
+      "summary": "Documented PUT /v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 newsletters newsletter-id test-group test-group-id language language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}"
+        }
+      ],
+      "operation": "customer-io.put.v1-newsletters-newsletter-id-test-group-test-group-id-language-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 transactional transactional-id content content-id",
+      "summary": "Documented PUT /v1/transactional/{transactional_id}/content/{content_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 transactional transactional-id content content-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/transactional/{transactional_id}/content/{content_id}"
+        }
+      ],
+      "operation": "customer-io.put.v1-transactional-transactional-id-content-content-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 transactional transactional-id language language",
+      "summary": "Documented PUT /v1/transactional/{transactional_id}/language/{language} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api put v1 transactional transactional-id language language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/transactional/{transactional_id}/language/{language}"
+        }
+      ],
+      "operation": "customer-io.put.v1-transactional-transactional-id-language-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api webhook reportingwebhook-post",
+      "summary": "Documented WEBHOOK reportingWebhook#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io api webhook reportingwebhook-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "reportingWebhook#POST"
+        }
+      ],
+      "operation": "customer-io.webhook.reportingwebhook-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "broadcasts list",
+      "summary": "Run the broadcasts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "broadcasts",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io broadcasts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/broadcasts"
+        }
+      ]
+    },
+    {
+      "path": "campaigns list",
+      "summary": "Run the campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns"
+        }
+      ]
+    },
+    {
+      "path": "collections list",
+      "summary": "Run the collections ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collections",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io collections list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/collections"
+        }
+      ]
+    },
+    {
+      "path": "create manual segment apply",
+      "summary": "Plan and execute the create manual segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_manual_segment",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io create manual segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/segments"
+        }
+      ],
+      "risk": "external mutation; creates a new manual segment in the live workspace",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create reporting webhook apply",
+      "summary": "Plan and execute the create reporting webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_reporting_webhook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "endpoint",
+          "type": "string",
+          "summary": "Required endpoint record field.",
+          "maps_to": "record.endpoint",
+          "required": true
+        },
+        {
+          "name": "events",
+          "type": "string_array",
+          "summary": "Required events record field.",
+          "maps_to": "record.events",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customer-io create reporting webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/reporting_webhooks"
+        }
+      ],
+      "risk": "external mutation; registers a new reporting webhook that will deliver live workspace event data to the given endpoint URL",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create snippet apply",
+      "summary": "Plan and execute the create snippet reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_snippet",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customer-io create snippet apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/snippets"
+        }
+      ],
+      "risk": "external mutation; creates a reusable content snippet referenced by live messages/newsletters",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete manual segment apply",
+      "summary": "Plan and execute the delete manual segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_manual_segment",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customer-io delete manual segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/segments/{segment_id}"
+        }
+      ],
+      "risk": "external mutation; permanently removes a manual segment; irreversible, any campaign/newsletter targeting it loses that audience slice immediately; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete reporting webhook apply",
+      "summary": "Plan and execute the delete reporting webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_reporting_webhook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customer-io delete reporting webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/reporting_webhooks/{webhook_id}"
+        }
+      ],
+      "risk": "external mutation; permanently removes a reporting webhook; event delivery to its target URL stops immediately; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete snippet apply",
+      "summary": "Plan and execute the delete snippet reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_snippet",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customer-io delete snippet apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/snippets/{snippet_name}"
+        }
+      ],
+      "risk": "external mutation; permanently removes a snippet; irreversible, breaks any message/newsletter still referencing it; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "exports list",
+      "summary": "Run the exports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "exports",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io exports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exports"
+        }
+      ]
+    },
+    {
+      "path": "messages list",
+      "summary": "Run the messages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "messages",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io messages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/messages"
+        }
+      ]
+    },
+    {
+      "path": "newsletters list",
+      "summary": "Run the newsletters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "newsletters",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io newsletters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/newsletters"
+        }
+      ]
+    },
+    {
+      "path": "object types list",
+      "summary": "Run the object types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "object_types",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io object types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/object_types"
+        }
+      ]
+    },
+    {
+      "path": "reporting webhooks list",
+      "summary": "Run the reporting webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reporting_webhooks",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io reporting webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/reporting_webhooks"
+        }
+      ]
+    },
+    {
+      "path": "segments list",
+      "summary": "Run the segments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segments",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io segments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/segments"
+        }
+      ]
+    },
+    {
+      "path": "send email apply",
+      "summary": "Plan and execute the send email reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "send_email",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "to",
+          "type": "string",
+          "summary": "Required to record field.",
+          "maps_to": "record.to",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customer-io send email apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/send/email"
+        }
+      ],
+      "risk": "sends a live transactional email to the given recipient on the workspace's behalf; irreversible once delivered",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "sender identities list",
+      "summary": "Run the sender identities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sender_identities",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io sender identities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/sender_identities"
+        }
+      ]
+    },
+    {
+      "path": "snippets list",
+      "summary": "Run the snippets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "snippets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io snippets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/snippets"
+        }
+      ]
+    },
+    {
+      "path": "subscription channels list",
+      "summary": "Run the subscription channels ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscription_channels",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io subscription channels list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/subscription_channels"
+        }
+      ]
+    },
+    {
+      "path": "subscription topics list",
+      "summary": "Run the subscription topics ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscription_topics",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io subscription topics list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/subscription_topics"
+        }
+      ]
+    },
+    {
+      "path": "transactional list",
+      "summary": "Run the transactional ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transactional",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io transactional list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/transactional"
+        }
+      ]
+    },
+    {
+      "path": "trigger broadcast apply",
+      "summary": "Plan and execute the trigger broadcast reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "trigger_broadcast",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "broadcast_id",
+          "type": "integer",
+          "summary": "Required broadcast id record field.",
+          "maps_to": "record.broadcast_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customer-io trigger broadcast apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/campaigns/{broadcast_id}/triggers"
+        }
+      ],
+      "risk": "triggers a live API-triggered broadcast to its default audience; sends real messages to recipients, irreversible once delivered",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update reporting webhook apply",
+      "summary": "Plan and execute the update reporting webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_reporting_webhook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "endpoint",
+          "type": "string",
+          "summary": "Required endpoint record field.",
+          "maps_to": "record.endpoint",
+          "required": true
+        },
+        {
+          "name": "events",
+          "type": "string_array",
+          "summary": "Required events record field.",
+          "maps_to": "record.events",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customer-io update reporting webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/reporting_webhooks/{webhook_id}"
+        }
+      ],
+      "risk": "external mutation; changes a live reporting webhook's target endpoint/event selection or enables/disables delivery",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update snippet apply",
+      "summary": "Plan and execute the update snippet reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_snippet",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customer-io update snippet apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/snippets"
+        }
+      ],
+      "risk": "external mutation; overwrites the content of a live snippet, changing every message/newsletter that references it",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "workspaces list",
+      "summary": "Run the workspaces ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workspaces",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "examples": [
+        "pm customer-io workspaces list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/workspaces"
+        }
+      ]
+    }
+  ]
+}

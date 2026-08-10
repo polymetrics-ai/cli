@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-005-manifest.json",
+  "candidates": 40,
+  "included": [
+    {
+      "connector": "perigon",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://api.perigon.io/v1/openapi/public",
+        "version": "Perigon API 1.0.0; OpenAPI 3.0.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "af62bebfe5cf9b604bfd4d3f44050856b459249cd1b13e9eaba034959b9a9334"
+      },
+      "artifact_operations": 45,
+      "declared_operations": 45,
+      "operation_split": {
+        "executable": 7,
+        "provider_blocked": 23,
+        "excluded": 15
+      },
+      "cli_commands": 45,
+      "implemented_commands": 7,
+      "named_dependency_commands": 38,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 38
+    },
+    {
+      "connector": "drip",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developer.drip.com/",
+        "version": "Drip REST API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "be32d76cb4e525d6d02b5c3c4db5bc79e9cf9707fdf3576509667e9a5b5c272d"
+      },
+      "artifact_operations": 57,
+      "declared_operations": 109,
+      "operation_split": {
+        "executable": 20,
+        "provider_blocked": 28,
+        "excluded": 61
+      },
+      "cli_commands": 109,
+      "implemented_commands": 13,
+      "named_dependency_commands": 96,
+      "flagged_discrepancies": 52,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 89
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "smartreach",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://help.smartreach.io/reference/getprospects\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "appsflyer",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://dev.appsflyer.com/hc/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "giphy",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 4 operation(s), below the ledger's 24"
+    },
+    {
+      "connector": "mailosaur",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "clazar",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://developers.clazar.io/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "uppromote",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://aff-api.uppromote.com/docs/v2/api-overview-1615961m0\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "customerly",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://docs.customerly.io/en/collections/5530-api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "eventee",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "smartwaiver",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "tvmaze-schedule",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "formbricks",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "intruder",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "blogger",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developers.google.com/blogger/docs/3.0/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "convertkit",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developers.kit.com/sitemap.xml\" failed: artifact operation inventory is unknown: official reference \"https://developers.kit.com/sitemap.xml\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document"
+    },
+    {
+      "connector": "emailoctopus",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a malformed selected link"
+    },
+    {
+      "connector": "sharetribe",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "strava",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference \"https://developers.strava.com/reference.css\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document"
+    },
+    {
+      "connector": "imagga",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "mention",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 2 operation(s), below the ledger's 36"
+    },
+    {
+      "connector": "chargedesk",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://chargedesk.com/api-docs\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "glassfrog",
+      "stage": "artifact_parse",
+      "reason": "decode Postman collection: invalid character '\u003c' looking for beginning of value"
+    },
+    {
+      "connector": "openaq",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://docs.openaq.org/sitemap-0.xml\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document), and official reference fallback \"https://docs.openaq.org/api\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "drift",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://devdocs.drift.com/docs/platform-apis\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "appfollow",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 39 operation(s), below the ledger's 43; official reference fallback \"https://docs.api.appfollow.io/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "missive",
+      "stage": "artifact_fetch",
+      "reason": "/Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-005-artifacts/missive.json exceeds 16777216-byte artifact limit"
+    },
+    {
+      "connector": "finnworlds",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 26: did not find expected \u003cdocument start\u003e"
+    },
+    {
+      "connector": "feishu",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "polygon-stock-api",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "shipstation",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "appfigures",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link that failed URL admission), and official reference fallback \"https://docs.appfigures.com/\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "beamer",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://www.getbeamer.com/api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "onesignal",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "scryfall",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://scryfall.com/settings/preferences\" could not be fetched: fetch artifact: Get \"https://scryfall.com/signin?return_path=%2Fsettings%2Fpreferences\u0026status=303\": artifact reference query must use only non-sensitive parameters), and official reference fallback \"https://scryfall.com/docs/api/cards\" failed: artifact operation inventory is unknown: official reference link \"https://scryfall.com/settings/preferences\" could not be fetched: fetch artifact: Get \"https://scryfall.com/signin?return_path=%2Fsettings%2Fpreferences\u0026status=303\": artifact reference query must use only non-sensitive parameters"
+    },
+    {
+      "connector": "stigg",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "typeform",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://www.typeform.com/developers/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "canny",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "jotform",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "coassemble",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://developers.coassemble.com/_nuxt/ApiEndpoint.vFRDU_QL.css\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document), and official reference fallback \"https://developers.coassemble.com/api/courses\" failed: artifact operation inventory is unknown: official reference \"https://developers.coassemble.com/_nuxt/ApiEndpoint.vFRDU_QL.css\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document"
+    }
+  ]
+}

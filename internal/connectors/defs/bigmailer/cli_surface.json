@@ -1,0 +1,2059 @@
+{
+  "tagline": "Run BigMailer's declared streams and reverse-ETL actions.",
+  "usage": "pm bigmailer \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v1 brands brand-id",
+        "api get v1 brands brand-id bulk-campaigns campaign-id",
+        "api get v1 brands brand-id contacts batches batch-id",
+        "api get v1 brands brand-id contacts contact-id",
+        "api get v1 brands brand-id fields field-id",
+        "api get v1 brands brand-id lists list-id",
+        "api get v1 brands brand-id message-types message-type-id",
+        "api get v1 brands brand-id properties",
+        "api get v1 brands brand-id properties brand-property-id",
+        "api get v1 brands brand-id rss-campaigns campaign-id",
+        "api get v1 brands brand-id rss-campaigns parent-id updates",
+        "api get v1 brands brand-id rss-campaigns parent-id updates campaign-id",
+        "api get v1 brands brand-id segments segment-id",
+        "api get v1 brands brand-id senders sender-id",
+        "api get v1 brands brand-id suppression-lists suppression-list-id",
+        "api get v1 brands brand-id templates template-id",
+        "api get v1 brands brand-id test-campaigns campaign-id",
+        "api get v1 brands brand-id transactional-campaigns campaign-id",
+        "api get v1 connections connection-id",
+        "api get v1 users user-id",
+        "brands list",
+        "bulk campaigns list",
+        "connections list",
+        "contacts list",
+        "fields list",
+        "lists list",
+        "message types list",
+        "rss campaigns list",
+        "segments list",
+        "senders list",
+        "suppression lists list",
+        "templates list",
+        "test campaigns list",
+        "transactional campaigns list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v1 brands brand-id properties brand-property-id",
+        "api post v1 brands brand-id bulk-campaigns",
+        "api post v1 brands brand-id bulk-campaigns campaign-id",
+        "api post v1 brands brand-id contacts batches",
+        "api post v1 brands brand-id properties",
+        "api post v1 brands brand-id properties brand-property-id",
+        "api post v1 brands brand-id rss-campaigns",
+        "api post v1 brands brand-id rss-campaigns campaign-id",
+        "api post v1 brands brand-id rss-campaigns campaign-id pause",
+        "api post v1 brands brand-id rss-campaigns campaign-id unpause",
+        "api post v1 brands brand-id senders sender-id bounce-domains",
+        "api post v1 brands brand-id senders sender-id bounce-domains verify",
+        "api post v1 brands brand-id senders sender-id verify",
+        "api post v1 brands brand-id suppression-lists",
+        "api post v1 brands brand-id test-campaigns",
+        "api post v1 brands brand-id transactional-campaigns",
+        "api post v1 brands brand-id transactional-campaigns campaign-id",
+        "api post v1 brands brand-id transactional-campaigns campaign-id send",
+        "create brand apply",
+        "create contact apply",
+        "create field apply",
+        "create list apply",
+        "create message type apply",
+        "create segment apply",
+        "create sender apply",
+        "create template apply",
+        "create user apply",
+        "delete contact apply",
+        "delete field apply",
+        "delete list apply",
+        "delete message type apply",
+        "delete segment apply",
+        "delete sender apply",
+        "delete template apply",
+        "delete user apply",
+        "update brand apply",
+        "update contact apply",
+        "update field apply",
+        "update list apply",
+        "update message type apply",
+        "update segment apply",
+        "update sender apply",
+        "update template apply",
+        "update user apply",
+        "upsert contact apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v1 brands brand-id properties brand-property-id",
+      "summary": "Documented DELETE /v1/brands/{brand_id}/properties/{brand_property_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api delete v1 brands brand-id properties brand-property-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/brands/{brand_id}/properties/{brand_property_id}"
+        }
+      ],
+      "operation": "bigmailer.delete.v1-brands-brand-id-properties-brand-property-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v1 brands brand-id",
+      "summary": "Documented GET /v1/brands/{brand_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id bulk-campaigns campaign-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/bulk-campaigns/{campaign_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id bulk-campaigns campaign-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/bulk-campaigns/{campaign_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-bulk-campaigns-campaign-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id contacts batches batch-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/contacts/batches/{batch_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id contacts batches batch-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/contacts/batches/{batch_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-contacts-batches-batch-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id contacts contact-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/contacts/{contact_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id contacts contact-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/contacts/{contact_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-contacts-contact-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id fields field-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/fields/{field_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id fields field-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/fields/{field_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-fields-field-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id lists list-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/lists/{list_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id lists list-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/lists/{list_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-lists-list-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id message-types message-type-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/message-types/{message_type_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id message-types message-type-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/message-types/{message_type_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-message-types-message-type-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id properties",
+      "summary": "Documented GET /v1/brands/{brand_id}/properties (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id properties --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/properties"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-properties",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id properties brand-property-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/properties/{brand_property_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id properties brand-property-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/properties/{brand_property_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-properties-brand-property-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id rss-campaigns campaign-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/rss-campaigns/{campaign_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id rss-campaigns campaign-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/rss-campaigns/{campaign_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-rss-campaigns-campaign-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id rss-campaigns parent-id updates",
+      "summary": "Documented GET /v1/brands/{brand_id}/rss-campaigns/{parent_id}/updates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id rss-campaigns parent-id updates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/rss-campaigns/{parent_id}/updates"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-rss-campaigns-parent-id-updates",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id rss-campaigns parent-id updates campaign-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/rss-campaigns/{parent_id}/updates/{campaign_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id rss-campaigns parent-id updates campaign-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/rss-campaigns/{parent_id}/updates/{campaign_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-rss-campaigns-parent-id-updates-campaign-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id segments segment-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/segments/{segment_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id segments segment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/segments/{segment_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-segments-segment-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id senders sender-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/senders/{sender_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id senders sender-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/senders/{sender_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-senders-sender-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id suppression-lists suppression-list-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/suppression-lists/{suppression_list_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id suppression-lists suppression-list-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/suppression-lists/{suppression_list_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-suppression-lists-suppression-list-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id templates template-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/templates/{template_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id templates template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/templates/{template_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-templates-template-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id test-campaigns campaign-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/test-campaigns/{campaign_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id test-campaigns campaign-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/test-campaigns/{campaign_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-test-campaigns-campaign-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 brands brand-id transactional-campaigns campaign-id",
+      "summary": "Documented GET /v1/brands/{brand_id}/transactional-campaigns/{campaign_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 brands brand-id transactional-campaigns campaign-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/transactional-campaigns/{campaign_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-brands-brand-id-transactional-campaigns-campaign-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 connections connection-id",
+      "summary": "Documented GET /v1/connections/{connection_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 connections connection-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/connections/{connection_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-connections-connection-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 users user-id",
+      "summary": "Documented GET /v1/users/{user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api get v1 users user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/{user_id}"
+        }
+      ],
+      "operation": "bigmailer.get.v1-users-user-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post v1 brands brand-id bulk-campaigns",
+      "summary": "Documented POST /v1/brands/{brand_id}/bulk-campaigns (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id bulk-campaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/bulk-campaigns"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-bulk-campaigns",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id bulk-campaigns campaign-id",
+      "summary": "Documented POST /v1/brands/{brand_id}/bulk-campaigns/{campaign_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id bulk-campaigns campaign-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/bulk-campaigns/{campaign_id}"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-bulk-campaigns-campaign-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id contacts batches",
+      "summary": "Documented POST /v1/brands/{brand_id}/contacts/batches (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id contacts batches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/contacts/batches"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-contacts-batches",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id properties",
+      "summary": "Documented POST /v1/brands/{brand_id}/properties (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id properties --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/properties"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-properties",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id properties brand-property-id",
+      "summary": "Documented POST /v1/brands/{brand_id}/properties/{brand_property_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id properties brand-property-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/properties/{brand_property_id}"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-properties-brand-property-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id rss-campaigns",
+      "summary": "Documented POST /v1/brands/{brand_id}/rss-campaigns (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id rss-campaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/rss-campaigns"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-rss-campaigns",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id rss-campaigns campaign-id",
+      "summary": "Documented POST /v1/brands/{brand_id}/rss-campaigns/{campaign_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id rss-campaigns campaign-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/rss-campaigns/{campaign_id}"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-rss-campaigns-campaign-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id rss-campaigns campaign-id pause",
+      "summary": "Documented POST /v1/brands/{brand_id}/rss-campaigns/{campaign_id}/pause (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id rss-campaigns campaign-id pause --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/rss-campaigns/{campaign_id}/pause"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-rss-campaigns-campaign-id-pause",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id rss-campaigns campaign-id unpause",
+      "summary": "Documented POST /v1/brands/{brand_id}/rss-campaigns/{campaign_id}/unpause (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id rss-campaigns campaign-id unpause --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/rss-campaigns/{campaign_id}/unpause"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-rss-campaigns-campaign-id-unpause",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id senders sender-id bounce-domains",
+      "summary": "Documented POST /v1/brands/{brand_id}/senders/{sender_id}/bounce-domains (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id senders sender-id bounce-domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/senders/{sender_id}/bounce-domains"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-senders-sender-id-bounce-domains",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id senders sender-id bounce-domains verify",
+      "summary": "Documented POST /v1/brands/{brand_id}/senders/{sender_id}/bounce-domains/verify (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id senders sender-id bounce-domains verify --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/senders/{sender_id}/bounce-domains/verify"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-senders-sender-id-bounce-domains-verify",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id senders sender-id verify",
+      "summary": "Documented POST /v1/brands/{brand_id}/senders/{sender_id}/verify (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id senders sender-id verify --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/senders/{sender_id}/verify"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-senders-sender-id-verify",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id suppression-lists",
+      "summary": "Documented POST /v1/brands/{brand_id}/suppression-lists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id suppression-lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/suppression-lists"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-suppression-lists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id test-campaigns",
+      "summary": "Documented POST /v1/brands/{brand_id}/test-campaigns (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id test-campaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/test-campaigns"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-test-campaigns",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id transactional-campaigns",
+      "summary": "Documented POST /v1/brands/{brand_id}/transactional-campaigns (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id transactional-campaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/transactional-campaigns"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-transactional-campaigns",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id transactional-campaigns campaign-id",
+      "summary": "Documented POST /v1/brands/{brand_id}/transactional-campaigns/{campaign_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id transactional-campaigns campaign-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/transactional-campaigns/{campaign_id}"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-transactional-campaigns-campaign-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 brands brand-id transactional-campaigns campaign-id send",
+      "summary": "Documented POST /v1/brands/{brand_id}/transactional-campaigns/{campaign_id}/send (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer api post v1 brands brand-id transactional-campaigns campaign-id send --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/transactional-campaigns/{campaign_id}/send"
+        }
+      ],
+      "operation": "bigmailer.post.v1-brands-brand-id-transactional-campaigns-campaign-id-send",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "brands list",
+      "summary": "Run the brands ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "brands",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer brands list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands"
+        }
+      ]
+    },
+    {
+      "path": "bulk campaigns list",
+      "summary": "Run the bulk campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bulk_campaigns",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer bulk campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/bulk-campaigns"
+        }
+      ]
+    },
+    {
+      "path": "connections list",
+      "summary": "Run the connections ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "connections",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer connections list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/connections"
+        }
+      ]
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/contacts"
+        }
+      ]
+    },
+    {
+      "path": "create brand apply",
+      "summary": "Plan and execute the create brand reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_brand",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "connection_id",
+          "type": "string",
+          "summary": "Required connection id record field.",
+          "maps_to": "record.connection_id",
+          "required": true
+        },
+        {
+          "name": "from_email",
+          "type": "string",
+          "summary": "Required from email record field.",
+          "maps_to": "record.from_email",
+          "required": true
+        },
+        {
+          "name": "from_name",
+          "type": "string",
+          "summary": "Required from name record field.",
+          "maps_to": "record.from_name",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer create brand apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands"
+        }
+      ],
+      "risk": "external mutation; creates a new BigMailer brand (sending identity); approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer create contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/contacts"
+        }
+      ],
+      "risk": "external mutation; creates a contact in a BigMailer brand; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create field apply",
+      "summary": "Plan and execute the create field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_field",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer create field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/fields"
+        }
+      ],
+      "risk": "external mutation; creates a custom contact field in a BigMailer brand; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create list apply",
+      "summary": "Plan and execute the create list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_list",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer create list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/lists"
+        }
+      ],
+      "risk": "external mutation; creates a contact list in a BigMailer brand; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create message type apply",
+      "summary": "Plan and execute the create message type reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_message_type",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer create message type apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/message-types"
+        }
+      ],
+      "risk": "external mutation; creates a message type (unsubscribe category) in a BigMailer brand; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create segment apply",
+      "summary": "Plan and execute the create segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_segment",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer create segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/segments"
+        }
+      ],
+      "risk": "external mutation; creates a contact segment in a BigMailer brand; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create sender apply",
+      "summary": "Plan and execute the create sender reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_sender",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "identity",
+          "type": "string",
+          "summary": "Required identity record field.",
+          "maps_to": "record.identity",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer create sender apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/senders"
+        }
+      ],
+      "risk": "external mutation; adds a sender domain/email identity to a BigMailer brand; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create template apply",
+      "summary": "Plan and execute the create template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_template",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "html",
+          "type": "string",
+          "summary": "Required html record field.",
+          "maps_to": "record.html",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer create template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/templates"
+        }
+      ],
+      "risk": "external mutation; creates a campaign template in a BigMailer brand; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create user apply",
+      "summary": "Plan and execute the create user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Required role record field.",
+          "maps_to": "record.role",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer create user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/users"
+        }
+      ],
+      "risk": "external mutation; invites a new user into the BigMailer account; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the delete contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer delete contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/brands/{brand_id}/contacts/{contact_id}"
+        }
+      ],
+      "risk": "permanently removes a contact from a brand; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete field apply",
+      "summary": "Plan and execute the delete field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_field",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer delete field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/brands/{brand_id}/fields/{field_id}"
+        }
+      ],
+      "risk": "permanently removes a custom contact field from a brand; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete list apply",
+      "summary": "Plan and execute the delete list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_list",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer delete list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/brands/{brand_id}/lists/{list_id}"
+        }
+      ],
+      "risk": "permanently removes a list from a brand (contacts in the list are NOT deleted); irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete message type apply",
+      "summary": "Plan and execute the delete message type reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_message_type",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer delete message type apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/brands/{brand_id}/message-types/{message_type_id}"
+        }
+      ],
+      "risk": "permanently removes a message type from a brand; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete segment apply",
+      "summary": "Plan and execute the delete segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_segment",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer delete segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/brands/{brand_id}/segments/{segment_id}"
+        }
+      ],
+      "risk": "permanently removes a segment from a brand; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete sender apply",
+      "summary": "Plan and execute the delete sender reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sender",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer delete sender apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/brands/{brand_id}/senders/{sender_id}"
+        }
+      ],
+      "risk": "permanently removes a sender identity from a brand; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete template apply",
+      "summary": "Plan and execute the delete template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_template",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer delete template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/brands/{brand_id}/templates/{template_id}"
+        }
+      ],
+      "risk": "permanently removes a template from a brand; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete user apply",
+      "summary": "Plan and execute the delete user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer delete user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/users/{user_id}"
+        }
+      ],
+      "risk": "permanently removes a user from the BigMailer account; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "fields list",
+      "summary": "Run the fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fields",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/fields"
+        }
+      ]
+    },
+    {
+      "path": "lists list",
+      "summary": "Run the lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lists",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/lists"
+        }
+      ]
+    },
+    {
+      "path": "message types list",
+      "summary": "Run the message types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "message_types",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer message types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/message-types"
+        }
+      ]
+    },
+    {
+      "path": "rss campaigns list",
+      "summary": "Run the rss campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "rss_campaigns",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer rss campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/rss-campaigns"
+        }
+      ]
+    },
+    {
+      "path": "segments list",
+      "summary": "Run the segments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segments",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer segments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/segments"
+        }
+      ]
+    },
+    {
+      "path": "senders list",
+      "summary": "Run the senders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "senders",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer senders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/senders"
+        }
+      ]
+    },
+    {
+      "path": "suppression lists list",
+      "summary": "Run the suppression lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "suppression_lists",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer suppression lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/suppression-lists"
+        }
+      ]
+    },
+    {
+      "path": "templates list",
+      "summary": "Run the templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/templates"
+        }
+      ]
+    },
+    {
+      "path": "test campaigns list",
+      "summary": "Run the test campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "test_campaigns",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer test campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/test-campaigns"
+        }
+      ]
+    },
+    {
+      "path": "transactional campaigns list",
+      "summary": "Run the transactional campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transactional_campaigns",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer transactional campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/brands/{brand_id}/transactional-campaigns"
+        }
+      ]
+    },
+    {
+      "path": "update brand apply",
+      "summary": "Plan and execute the update brand reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_brand",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer update brand apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer update contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/contacts/{contact_id}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update field apply",
+      "summary": "Plan and execute the update field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_field",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer update field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/fields/{field_id}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update list apply",
+      "summary": "Plan and execute the update list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_list",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer update list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/lists/{list_id}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update message type apply",
+      "summary": "Plan and execute the update message type reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_message_type",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer update message type apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/message-types/{message_type_id}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update segment apply",
+      "summary": "Plan and execute the update segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_segment",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer update segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/segments/{segment_id}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update sender apply",
+      "summary": "Plan and execute the update sender reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_sender",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer update sender apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/senders/{sender_id}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update template apply",
+      "summary": "Plan and execute the update template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_template",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer update template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/templates/{template_id}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update user apply",
+      "summary": "Plan and execute the update user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer update user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/users/{user_id}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "upsert contact apply",
+      "summary": "Plan and execute the upsert contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upsert_contact",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "flags": [
+        {
+          "name": "brand_id",
+          "type": "string",
+          "summary": "Required brand id record field.",
+          "maps_to": "record.brand_id",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm bigmailer upsert contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/brands/{brand_id}/contacts/upsert"
+        }
+      ],
+      "risk": "external mutation; creates the contact if the email is new, otherwise updates the existing contact; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "examples": [
+        "pm bigmailer users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users"
+        }
+      ]
+    }
+  ]
+}

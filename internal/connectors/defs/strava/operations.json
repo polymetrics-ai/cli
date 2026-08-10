@@ -1,0 +1,475 @@
+{
+  "operations": [
+    {
+      "id": "strava.post.activities",
+      "kind": "rest_write",
+      "summary": "POST /activities",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/activities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.activities-id",
+      "kind": "rest_read",
+      "summary": "GET /activities/{id}",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.put.activities-id",
+      "kind": "rest_write",
+      "summary": "PUT /activities/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/activities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.activities-id-comments",
+      "kind": "rest_read",
+      "summary": "GET /activities/{id}/comments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activities/{id}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.activities-id-kudos",
+      "kind": "rest_read",
+      "summary": "GET /activities/{id}/kudos",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activities/{id}/kudos",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.activities-id-laps",
+      "kind": "rest_read",
+      "summary": "GET /activities/{id}/laps",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activities/{id}/laps",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.activities-id-streams",
+      "kind": "rest_read",
+      "summary": "GET /activities/{id}/streams",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activities/{id}/streams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.activities-id-zones",
+      "kind": "rest_read",
+      "summary": "GET /activities/{id}/zones",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activities/{id}/zones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.put.athlete",
+      "kind": "rest_write",
+      "summary": "PUT /athlete",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/athlete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.athlete-zones",
+      "kind": "rest_read",
+      "summary": "GET /athlete/zones",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/athlete/zones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.athletes-id-routes",
+      "kind": "rest_read",
+      "summary": "GET /athletes/{id}/routes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/athletes/{id}/routes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.clubs-id",
+      "kind": "rest_read",
+      "summary": "GET /clubs/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/clubs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.clubs-id-activities",
+      "kind": "rest_read",
+      "summary": "GET /clubs/{id}/activities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/clubs/{id}/activities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.clubs-id-admins",
+      "kind": "rest_read",
+      "summary": "GET /clubs/{id}/admins",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/clubs/{id}/admins",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.clubs-id-members",
+      "kind": "rest_read",
+      "summary": "GET /clubs/{id}/members",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/clubs/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.gear-id",
+      "kind": "rest_read",
+      "summary": "GET /gear/{id}",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/gear/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.post.push-subscriptions",
+      "kind": "rest_write",
+      "summary": "POST /push_subscriptions",
+      "description": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/push_subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.routes-id",
+      "kind": "rest_read",
+      "summary": "GET /routes/{id}",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/routes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.routes-id-export-gpx",
+      "kind": "rest_read",
+      "summary": "GET /routes/{id}/export_gpx",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/routes/{id}/export_gpx",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.routes-id-export-tcx",
+      "kind": "rest_read",
+      "summary": "GET /routes/{id}/export_tcx",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/routes/{id}/export_tcx",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.routes-id-streams",
+      "kind": "rest_read",
+      "summary": "GET /routes/{id}/streams",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/routes/{id}/streams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.segment-efforts",
+      "kind": "rest_read",
+      "summary": "GET /segment_efforts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/segment_efforts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.segment-efforts-id",
+      "kind": "rest_read",
+      "summary": "GET /segment_efforts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/segment_efforts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.segment-efforts-id-streams",
+      "kind": "rest_read",
+      "summary": "GET /segment_efforts/{id}/streams",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/segment_efforts/{id}/streams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.segments-explore",
+      "kind": "rest_read",
+      "summary": "GET /segments/explore",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/segments/explore",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.segments-starred",
+      "kind": "rest_read",
+      "summary": "GET /segments/starred",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/segments/starred",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.segments-id",
+      "kind": "rest_read",
+      "summary": "GET /segments/{id}",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/segments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.put.segments-id-starred",
+      "kind": "rest_write",
+      "summary": "PUT /segments/{id}/starred",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/segments/{id}/starred",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.segments-id-streams",
+      "kind": "rest_read",
+      "summary": "GET /segments/{id}/streams",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/segments/{id}/streams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.post.uploads",
+      "kind": "rest_write",
+      "summary": "POST /uploads",
+      "description": "no safe reverse-ETL write surface identified",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/uploads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "strava.get.uploads-uploadid",
+      "kind": "rest_read",
+      "summary": "GET /uploads/{uploadId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/uploads/{uploadId}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

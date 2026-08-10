@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "promotions",
+  "type": "object",
+  "x-primary-key": ["uuid"],
+  "required": ["uuid"],
+  "properties": {
+    "uuid": { "type": "string" },
+    "ProviderCode": { "type": ["string", "null"] },
+    "StartUtc": { "type": ["string", "null"] },
+    "EndUtc": { "type": ["string", "null"] },
+    "CurrencyIso": { "type": ["string", "null"] },
+    "ValidityPeriodIso": { "type": ["string", "null"] },
+    "MinimumSendAmount": { "type": ["number", "null"] },
+    "LocalizationKey": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,3206 @@
+{
+  "tagline": "Run Iterable's declared streams and reverse-ETL actions.",
+  "usage": "pm iterable \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api * operation",
+        "api get api campaigns",
+        "api get api campaigns id",
+        "api get api campaigns metrics",
+        "api get api campaigns recurring id childcampaigns",
+        "api get api catalogs",
+        "api get api catalogs catalogname fieldmappings",
+        "api get api catalogs catalogname items",
+        "api get api catalogs catalogname items itemid",
+        "api get api channels",
+        "api get api email viewinbrowser",
+        "api get api embedded-messaging messages",
+        "api get api events byuserid userid",
+        "api get api events email",
+        "api get api experiments",
+        "api get api experiments experimentid",
+        "api get api experiments experimentid variants",
+        "api get api experiments metrics",
+        "api get api export data-csv",
+        "api get api export data-json",
+        "api get api export jobid files",
+        "api get api export jobs",
+        "api get api export userevents",
+        "api get api inapp getmessages",
+        "api get api inapp getprioritymessage",
+        "api get api inapp web getmessages",
+        "api get api journeys",
+        "api get api lists",
+        "api get api lists getusers",
+        "api get api lists listid size",
+        "api get api lists previewusers",
+        "api get api messagetypes",
+        "api get api metadata",
+        "api get api metadata table",
+        "api get api metadata table key",
+        "api get api snippets",
+        "api get api snippets identifier",
+        "api get api templates",
+        "api get api templates email get",
+        "api get api templates embedded get",
+        "api get api templates getbyclienttemplateid",
+        "api get api templates inapp get",
+        "api get api templates push get",
+        "api get api templates sms get",
+        "api get api users byuserid",
+        "api get api users byuserid userid",
+        "api get api users email",
+        "api get api users forgotten",
+        "api get api users forgottenuserids",
+        "api get api users getbyemail",
+        "api get api users getfields",
+        "api get api users getsentmessages",
+        "api get api webhooks",
+        "campaigns list",
+        "lists list",
+        "templates list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete api catalogs catalogname",
+        "api delete api catalogs catalogname items",
+        "api delete api catalogs catalogname items itemid",
+        "api delete api export jobid",
+        "api delete api lists listid",
+        "api delete api metadata table",
+        "api delete api metadata table key",
+        "api delete api snippets identifier",
+        "api delete api subscriptions subscriptiongroup subscriptiongroupid byuserid userid",
+        "api delete api subscriptions subscriptiongroup subscriptiongroupid user useremail",
+        "api delete api users byuserid userid",
+        "api delete api users email",
+        "api patch api catalogs catalogname items itemid",
+        "api patch api subscriptions subscriptiongroup subscriptiongroupid byuserid userid",
+        "api patch api subscriptions subscriptiongroup subscriptiongroupid user useremail",
+        "api post api auth jwts invalidate",
+        "api post api campaigns abort",
+        "api post api campaigns activatetriggered",
+        "api post api campaigns archive",
+        "api post api campaigns campaignid schedule",
+        "api post api campaigns campaignid send",
+        "api post api campaigns cancel",
+        "api post api campaigns create",
+        "api post api campaigns deactivatetriggered",
+        "api post api campaigns trigger",
+        "api post api catalogs catalogname",
+        "api post api catalogs catalogname items",
+        "api post api commerce trackpurchase",
+        "api post api commerce updatecart",
+        "api post api email cancel",
+        "api post api email target",
+        "api post api embedded-messaging events click",
+        "api post api embedded-messaging events received",
+        "api post api embedded-messaging events session",
+        "api post api events inappconsume",
+        "api post api events track",
+        "api post api events trackbulk",
+        "api post api events trackinappclick",
+        "api post api events trackinappclose",
+        "api post api events trackinappdelivery",
+        "api post api events trackinappopen",
+        "api post api events trackpushopen",
+        "api post api events trackwebpushclick",
+        "api post api export start",
+        "api post api inapp cancel",
+        "api post api inapp target",
+        "api post api lists",
+        "api post api lists subscribe",
+        "api post api lists unsubscribe",
+        "api post api push cancel",
+        "api post api push target",
+        "api post api sms cancel",
+        "api post api sms target",
+        "api post api snippets",
+        "api post api subscriptions subscribetodoubleoptin",
+        "api post api templates bulkdelete",
+        "api post api templates email preview",
+        "api post api templates email proof",
+        "api post api templates email update",
+        "api post api templates email upsert",
+        "api post api templates embedded update",
+        "api post api templates embedded upsert",
+        "api post api templates inapp preview",
+        "api post api templates inapp proof",
+        "api post api templates inapp update",
+        "api post api templates inapp upsert",
+        "api post api templates push proof",
+        "api post api templates push update",
+        "api post api templates push upsert",
+        "api post api templates sms proof",
+        "api post api templates sms update",
+        "api post api templates sms upsert",
+        "api post api users bulkupdate",
+        "api post api users bulkupdatesubscriptions",
+        "api post api users disabledevice",
+        "api post api users forget",
+        "api post api users merge",
+        "api post api users registerbrowsertoken",
+        "api post api users registerdevicetoken",
+        "api post api users unforget",
+        "api post api users update",
+        "api post api users updateemail",
+        "api post api users updatesubscriptions",
+        "api post api verify sms begin",
+        "api post api verify sms check",
+        "api post api webhooks",
+        "api post api webpush cancel",
+        "api post api webpush target",
+        "api post api whatsapp cancel",
+        "api post api whatsapp target",
+        "api post api workflows triggerworkflow",
+        "api put api catalogs catalogname fieldmappings",
+        "api put api catalogs catalogname items itemid",
+        "api put api metadata table key",
+        "api put api snippets identifier",
+        "api put api subscriptions subscriptiongroup subscriptiongroupid"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api * operation",
+      "summary": "Documented * /* (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api * operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "*",
+          "path": "/*"
+        }
+      ],
+      "operation": "iterable.operation.operation",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api catalogs catalogname",
+      "summary": "Documented DELETE /api/catalogs/{catalogName} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api delete api catalogs catalogname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/catalogs/{catalogName}"
+        }
+      ],
+      "operation": "iterable.delete.api-catalogs-catalogname",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api catalogs catalogname items",
+      "summary": "Documented DELETE /api/catalogs/{catalogName}/items (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api delete api catalogs catalogname items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/catalogs/{catalogName}/items"
+        }
+      ],
+      "operation": "iterable.delete.api-catalogs-catalogname-items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api catalogs catalogname items itemid",
+      "summary": "Documented DELETE /api/catalogs/{catalogName}/items/{itemId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api delete api catalogs catalogname items itemid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/catalogs/{catalogName}/items/{itemId}"
+        }
+      ],
+      "operation": "iterable.delete.api-catalogs-catalogname-items-itemid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api export jobid",
+      "summary": "Documented DELETE /api/export/{jobId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api delete api export jobid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/export/{jobId}"
+        }
+      ],
+      "operation": "iterable.delete.api-export-jobid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api lists listid",
+      "summary": "Documented DELETE /api/lists/{listId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api delete api lists listid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/lists/{listId}"
+        }
+      ],
+      "operation": "iterable.delete.api-lists-listid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api metadata table",
+      "summary": "Documented DELETE /api/metadata/{table} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api delete api metadata table --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/metadata/{table}"
+        }
+      ],
+      "operation": "iterable.delete.api-metadata-table",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api metadata table key",
+      "summary": "Documented DELETE /api/metadata/{table}/{key} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api delete api metadata table key --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/metadata/{table}/{key}"
+        }
+      ],
+      "operation": "iterable.delete.api-metadata-table-key",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api snippets identifier",
+      "summary": "Documented DELETE /api/snippets/{identifier} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api delete api snippets identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/snippets/{identifier}"
+        }
+      ],
+      "operation": "iterable.delete.api-snippets-identifier",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api subscriptions subscriptiongroup subscriptiongroupid byuserid userid",
+      "summary": "Documented DELETE /api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api delete api subscriptions subscriptiongroup subscriptiongroupid byuserid userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}"
+        }
+      ],
+      "operation": "iterable.delete.api-subscriptions-subscriptiongroup-subscriptiongroupid-byuserid-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api subscriptions subscriptiongroup subscriptiongroupid user useremail",
+      "summary": "Documented DELETE /api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api delete api subscriptions subscriptiongroup subscriptiongroupid user useremail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}"
+        }
+      ],
+      "operation": "iterable.delete.api-subscriptions-subscriptiongroup-subscriptiongroupid-user-useremail",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api users byuserid userid",
+      "summary": "Documented DELETE /api/users/byUserId/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api delete api users byuserid userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/users/byUserId/{userId}"
+        }
+      ],
+      "operation": "iterable.delete.api-users-byuserid-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api users email",
+      "summary": "Documented DELETE /api/users/{email} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api delete api users email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/users/{email}"
+        }
+      ],
+      "operation": "iterable.delete.api-users-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api campaigns",
+      "summary": "Documented GET /api/campaigns (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api campaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/campaigns"
+        }
+      ],
+      "operation": "iterable.get.api-campaigns",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api campaigns id",
+      "summary": "Documented GET /api/campaigns/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api campaigns id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/campaigns/{id}"
+        }
+      ],
+      "operation": "iterable.get.api-campaigns-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api campaigns metrics",
+      "summary": "Documented GET /api/campaigns/metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api campaigns metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/campaigns/metrics"
+        }
+      ],
+      "operation": "iterable.get.api-campaigns-metrics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api campaigns recurring id childcampaigns",
+      "summary": "Documented GET /api/campaigns/recurring/{id}/childCampaigns (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api campaigns recurring id childcampaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/campaigns/recurring/{id}/childCampaigns"
+        }
+      ],
+      "operation": "iterable.get.api-campaigns-recurring-id-childcampaigns",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api catalogs",
+      "summary": "Documented GET /api/catalogs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api catalogs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/catalogs"
+        }
+      ],
+      "operation": "iterable.get.api-catalogs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api catalogs catalogname fieldmappings",
+      "summary": "Documented GET /api/catalogs/{catalogName}/fieldMappings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api catalogs catalogname fieldmappings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/catalogs/{catalogName}/fieldMappings"
+        }
+      ],
+      "operation": "iterable.get.api-catalogs-catalogname-fieldmappings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api catalogs catalogname items",
+      "summary": "Documented GET /api/catalogs/{catalogName}/items (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api catalogs catalogname items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/catalogs/{catalogName}/items"
+        }
+      ],
+      "operation": "iterable.get.api-catalogs-catalogname-items",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api catalogs catalogname items itemid",
+      "summary": "Documented GET /api/catalogs/{catalogName}/items/{itemId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api catalogs catalogname items itemid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/catalogs/{catalogName}/items/{itemId}"
+        }
+      ],
+      "operation": "iterable.get.api-catalogs-catalogname-items-itemid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api channels",
+      "summary": "Documented GET /api/channels (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api channels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/channels"
+        }
+      ],
+      "operation": "iterable.get.api-channels",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api email viewinbrowser",
+      "summary": "Documented GET /api/email/viewInBrowser (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api email viewinbrowser --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/email/viewInBrowser"
+        }
+      ],
+      "operation": "iterable.get.api-email-viewinbrowser",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api embedded-messaging messages",
+      "summary": "Documented GET /api/embedded-messaging/messages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api embedded-messaging messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/embedded-messaging/messages"
+        }
+      ],
+      "operation": "iterable.get.api-embedded-messaging-messages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api events byuserid userid",
+      "summary": "Documented GET /api/events/byUserId/{userId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api events byuserid userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/events/byUserId/{userId}"
+        }
+      ],
+      "operation": "iterable.get.api-events-byuserid-userid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api events email",
+      "summary": "Documented GET /api/events/{email} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api events email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/events/{email}"
+        }
+      ],
+      "operation": "iterable.get.api-events-email",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api experiments",
+      "summary": "Documented GET /api/experiments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api experiments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/experiments"
+        }
+      ],
+      "operation": "iterable.get.api-experiments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api experiments experimentid",
+      "summary": "Documented GET /api/experiments/{experimentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api experiments experimentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/experiments/{experimentId}"
+        }
+      ],
+      "operation": "iterable.get.api-experiments-experimentid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api experiments experimentid variants",
+      "summary": "Documented GET /api/experiments/{experimentId}/variants (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api experiments experimentid variants --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/experiments/{experimentId}/variants"
+        }
+      ],
+      "operation": "iterable.get.api-experiments-experimentid-variants",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api experiments metrics",
+      "summary": "Documented GET /api/experiments/metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api experiments metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/experiments/metrics"
+        }
+      ],
+      "operation": "iterable.get.api-experiments-metrics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api export data-csv",
+      "summary": "Documented GET /api/export/data.csv (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api export data-csv --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/export/data.csv"
+        }
+      ],
+      "operation": "iterable.get.api-export-data-csv",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api export data-json",
+      "summary": "Documented GET /api/export/data.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api export data-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/export/data.json"
+        }
+      ],
+      "operation": "iterable.get.api-export-data-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api export jobid files",
+      "summary": "Documented GET /api/export/{jobId}/files (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api export jobid files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/export/{jobId}/files"
+        }
+      ],
+      "operation": "iterable.get.api-export-jobid-files",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api export jobs",
+      "summary": "Documented GET /api/export/jobs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api export jobs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/export/jobs"
+        }
+      ],
+      "operation": "iterable.get.api-export-jobs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api export userevents",
+      "summary": "Documented GET /api/export/userEvents (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api export userevents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/export/userEvents"
+        }
+      ],
+      "operation": "iterable.get.api-export-userevents",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api inapp getmessages",
+      "summary": "Documented GET /api/inApp/getMessages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api inapp getmessages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/inApp/getMessages"
+        }
+      ],
+      "operation": "iterable.get.api-inapp-getmessages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api inapp getprioritymessage",
+      "summary": "Documented GET /api/inApp/getPriorityMessage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api inapp getprioritymessage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/inApp/getPriorityMessage"
+        }
+      ],
+      "operation": "iterable.get.api-inapp-getprioritymessage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api inapp web getmessages",
+      "summary": "Documented GET /api/inApp/web/getMessages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api inapp web getmessages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/inApp/web/getMessages"
+        }
+      ],
+      "operation": "iterable.get.api-inapp-web-getmessages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api journeys",
+      "summary": "Documented GET /api/journeys (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api journeys --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/journeys"
+        }
+      ],
+      "operation": "iterable.get.api-journeys",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api lists",
+      "summary": "Documented GET /api/lists (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/lists"
+        }
+      ],
+      "operation": "iterable.get.api-lists",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api lists getusers",
+      "summary": "Documented GET /api/lists/getUsers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api lists getusers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/lists/getUsers"
+        }
+      ],
+      "operation": "iterable.get.api-lists-getusers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api lists listid size",
+      "summary": "Documented GET /api/lists/{listId}/size (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api lists listid size --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/lists/{listId}/size"
+        }
+      ],
+      "operation": "iterable.get.api-lists-listid-size",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api lists previewusers",
+      "summary": "Documented GET /api/lists/previewUsers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api lists previewusers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/lists/previewUsers"
+        }
+      ],
+      "operation": "iterable.get.api-lists-previewusers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api messagetypes",
+      "summary": "Documented GET /api/messageTypes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api messagetypes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/messageTypes"
+        }
+      ],
+      "operation": "iterable.get.api-messagetypes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api metadata",
+      "summary": "Documented GET /api/metadata (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api metadata --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/metadata"
+        }
+      ],
+      "operation": "iterable.get.api-metadata",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api metadata table",
+      "summary": "Documented GET /api/metadata/{table} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api metadata table --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/metadata/{table}"
+        }
+      ],
+      "operation": "iterable.get.api-metadata-table",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api metadata table key",
+      "summary": "Documented GET /api/metadata/{table}/{key} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api metadata table key --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/metadata/{table}/{key}"
+        }
+      ],
+      "operation": "iterable.get.api-metadata-table-key",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api snippets",
+      "summary": "Documented GET /api/snippets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api snippets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/snippets"
+        }
+      ],
+      "operation": "iterable.get.api-snippets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api snippets identifier",
+      "summary": "Documented GET /api/snippets/{identifier} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api snippets identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/snippets/{identifier}"
+        }
+      ],
+      "operation": "iterable.get.api-snippets-identifier",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api templates",
+      "summary": "Documented GET /api/templates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api templates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/templates"
+        }
+      ],
+      "operation": "iterable.get.api-templates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api templates email get",
+      "summary": "Documented GET /api/templates/email/get (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api templates email get --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/templates/email/get"
+        }
+      ],
+      "operation": "iterable.get.api-templates-email-get",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api templates embedded get",
+      "summary": "Documented GET /api/templates/embedded/get (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api templates embedded get --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/templates/embedded/get"
+        }
+      ],
+      "operation": "iterable.get.api-templates-embedded-get",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api templates getbyclienttemplateid",
+      "summary": "Documented GET /api/templates/getByClientTemplateId (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api templates getbyclienttemplateid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/templates/getByClientTemplateId"
+        }
+      ],
+      "operation": "iterable.get.api-templates-getbyclienttemplateid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api templates inapp get",
+      "summary": "Documented GET /api/templates/inapp/get (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api templates inapp get --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/templates/inapp/get"
+        }
+      ],
+      "operation": "iterable.get.api-templates-inapp-get",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api templates push get",
+      "summary": "Documented GET /api/templates/push/get (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api templates push get --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/templates/push/get"
+        }
+      ],
+      "operation": "iterable.get.api-templates-push-get",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api templates sms get",
+      "summary": "Documented GET /api/templates/sms/get (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api templates sms get --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/templates/sms/get"
+        }
+      ],
+      "operation": "iterable.get.api-templates-sms-get",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api users byuserid",
+      "summary": "Documented GET /api/users/byUserId (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api users byuserid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/users/byUserId"
+        }
+      ],
+      "operation": "iterable.get.api-users-byuserid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api users byuserid userid",
+      "summary": "Documented GET /api/users/byUserId/{userId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api users byuserid userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/users/byUserId/{userId}"
+        }
+      ],
+      "operation": "iterable.get.api-users-byuserid-userid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api users email",
+      "summary": "Documented GET /api/users/{email} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api users email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/users/{email}"
+        }
+      ],
+      "operation": "iterable.get.api-users-email",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api users forgotten",
+      "summary": "Documented GET /api/users/forgotten (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api users forgotten --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/users/forgotten"
+        }
+      ],
+      "operation": "iterable.get.api-users-forgotten",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api users forgottenuserids",
+      "summary": "Documented GET /api/users/forgottenUserIds (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api users forgottenuserids --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/users/forgottenUserIds"
+        }
+      ],
+      "operation": "iterable.get.api-users-forgottenuserids",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api users getbyemail",
+      "summary": "Documented GET /api/users/getByEmail (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api users getbyemail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/users/getByEmail"
+        }
+      ],
+      "operation": "iterable.get.api-users-getbyemail",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api users getfields",
+      "summary": "Documented GET /api/users/getFields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api users getfields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/users/getFields"
+        }
+      ],
+      "operation": "iterable.get.api-users-getfields",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api users getsentmessages",
+      "summary": "Documented GET /api/users/getSentMessages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api users getsentmessages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/users/getSentMessages"
+        }
+      ],
+      "operation": "iterable.get.api-users-getsentmessages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api webhooks",
+      "summary": "Documented GET /api/webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api get api webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/webhooks"
+        }
+      ],
+      "operation": "iterable.get.api-webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch api catalogs catalogname items itemid",
+      "summary": "Documented PATCH /api/catalogs/{catalogName}/items/{itemId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api patch api catalogs catalogname items itemid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/catalogs/{catalogName}/items/{itemId}"
+        }
+      ],
+      "operation": "iterable.patch.api-catalogs-catalogname-items-itemid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api subscriptions subscriptiongroup subscriptiongroupid byuserid userid",
+      "summary": "Documented PATCH /api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api patch api subscriptions subscriptiongroup subscriptiongroupid byuserid userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}"
+        }
+      ],
+      "operation": "iterable.patch.api-subscriptions-subscriptiongroup-subscriptiongroupid-byuserid-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api subscriptions subscriptiongroup subscriptiongroupid user useremail",
+      "summary": "Documented PATCH /api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api patch api subscriptions subscriptiongroup subscriptiongroupid user useremail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}"
+        }
+      ],
+      "operation": "iterable.patch.api-subscriptions-subscriptiongroup-subscriptiongroupid-user-useremail",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api auth jwts invalidate",
+      "summary": "Documented POST /api/auth/jwts/invalidate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api auth jwts invalidate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/auth/jwts/invalidate"
+        }
+      ],
+      "operation": "iterable.post.api-auth-jwts-invalidate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api campaigns abort",
+      "summary": "Documented POST /api/campaigns/abort (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api campaigns abort --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/campaigns/abort"
+        }
+      ],
+      "operation": "iterable.post.api-campaigns-abort",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api campaigns activatetriggered",
+      "summary": "Documented POST /api/campaigns/activateTriggered (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api campaigns activatetriggered --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/campaigns/activateTriggered"
+        }
+      ],
+      "operation": "iterable.post.api-campaigns-activatetriggered",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api campaigns archive",
+      "summary": "Documented POST /api/campaigns/archive (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api campaigns archive --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/campaigns/archive"
+        }
+      ],
+      "operation": "iterable.post.api-campaigns-archive",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api campaigns campaignid schedule",
+      "summary": "Documented POST /api/campaigns/{campaignId}/schedule (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api campaigns campaignid schedule --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/campaigns/{campaignId}/schedule"
+        }
+      ],
+      "operation": "iterable.post.api-campaigns-campaignid-schedule",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api campaigns campaignid send",
+      "summary": "Documented POST /api/campaigns/{campaignId}/send (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api campaigns campaignid send --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/campaigns/{campaignId}/send"
+        }
+      ],
+      "operation": "iterable.post.api-campaigns-campaignid-send",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api campaigns cancel",
+      "summary": "Documented POST /api/campaigns/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api campaigns cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/campaigns/cancel"
+        }
+      ],
+      "operation": "iterable.post.api-campaigns-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api campaigns create",
+      "summary": "Documented POST /api/campaigns/create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api campaigns create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/campaigns/create"
+        }
+      ],
+      "operation": "iterable.post.api-campaigns-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api campaigns deactivatetriggered",
+      "summary": "Documented POST /api/campaigns/deactivateTriggered (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api campaigns deactivatetriggered --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/campaigns/deactivateTriggered"
+        }
+      ],
+      "operation": "iterable.post.api-campaigns-deactivatetriggered",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api campaigns trigger",
+      "summary": "Documented POST /api/campaigns/trigger (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api campaigns trigger --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/campaigns/trigger"
+        }
+      ],
+      "operation": "iterable.post.api-campaigns-trigger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api catalogs catalogname",
+      "summary": "Documented POST /api/catalogs/{catalogName} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api catalogs catalogname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/catalogs/{catalogName}"
+        }
+      ],
+      "operation": "iterable.post.api-catalogs-catalogname",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api catalogs catalogname items",
+      "summary": "Documented POST /api/catalogs/{catalogName}/items (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api catalogs catalogname items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/catalogs/{catalogName}/items"
+        }
+      ],
+      "operation": "iterable.post.api-catalogs-catalogname-items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api commerce trackpurchase",
+      "summary": "Documented POST /api/commerce/trackPurchase (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api commerce trackpurchase --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/commerce/trackPurchase"
+        }
+      ],
+      "operation": "iterable.post.api-commerce-trackpurchase",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api commerce updatecart",
+      "summary": "Documented POST /api/commerce/updateCart (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api commerce updatecart --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/commerce/updateCart"
+        }
+      ],
+      "operation": "iterable.post.api-commerce-updatecart",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api email cancel",
+      "summary": "Documented POST /api/email/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api email cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/email/cancel"
+        }
+      ],
+      "operation": "iterable.post.api-email-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api email target",
+      "summary": "Documented POST /api/email/target (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api email target --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/email/target"
+        }
+      ],
+      "operation": "iterable.post.api-email-target",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api embedded-messaging events click",
+      "summary": "Documented POST /api/embedded-messaging/events/click (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api embedded-messaging events click --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/embedded-messaging/events/click"
+        }
+      ],
+      "operation": "iterable.post.api-embedded-messaging-events-click",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api embedded-messaging events received",
+      "summary": "Documented POST /api/embedded-messaging/events/received (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api embedded-messaging events received --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/embedded-messaging/events/received"
+        }
+      ],
+      "operation": "iterable.post.api-embedded-messaging-events-received",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api embedded-messaging events session",
+      "summary": "Documented POST /api/embedded-messaging/events/session (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api embedded-messaging events session --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/embedded-messaging/events/session"
+        }
+      ],
+      "operation": "iterable.post.api-embedded-messaging-events-session",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api events inappconsume",
+      "summary": "Documented POST /api/events/inAppConsume (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api events inappconsume --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/events/inAppConsume"
+        }
+      ],
+      "operation": "iterable.post.api-events-inappconsume",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api events track",
+      "summary": "Documented POST /api/events/track (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api events track --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/events/track"
+        }
+      ],
+      "operation": "iterable.post.api-events-track",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api events trackbulk",
+      "summary": "Documented POST /api/events/trackBulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api events trackbulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/events/trackBulk"
+        }
+      ],
+      "operation": "iterable.post.api-events-trackbulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api events trackinappclick",
+      "summary": "Documented POST /api/events/trackInAppClick (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api events trackinappclick --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/events/trackInAppClick"
+        }
+      ],
+      "operation": "iterable.post.api-events-trackinappclick",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api events trackinappclose",
+      "summary": "Documented POST /api/events/trackInAppClose (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api events trackinappclose --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/events/trackInAppClose"
+        }
+      ],
+      "operation": "iterable.post.api-events-trackinappclose",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api events trackinappdelivery",
+      "summary": "Documented POST /api/events/trackInAppDelivery (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api events trackinappdelivery --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/events/trackInAppDelivery"
+        }
+      ],
+      "operation": "iterable.post.api-events-trackinappdelivery",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api events trackinappopen",
+      "summary": "Documented POST /api/events/trackInAppOpen (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api events trackinappopen --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/events/trackInAppOpen"
+        }
+      ],
+      "operation": "iterable.post.api-events-trackinappopen",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api events trackpushopen",
+      "summary": "Documented POST /api/events/trackPushOpen (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api events trackpushopen --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/events/trackPushOpen"
+        }
+      ],
+      "operation": "iterable.post.api-events-trackpushopen",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api events trackwebpushclick",
+      "summary": "Documented POST /api/events/trackWebPushClick (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api events trackwebpushclick --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/events/trackWebPushClick"
+        }
+      ],
+      "operation": "iterable.post.api-events-trackwebpushclick",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api export start",
+      "summary": "Documented POST /api/export/start (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api export start --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/export/start"
+        }
+      ],
+      "operation": "iterable.post.api-export-start",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api inapp cancel",
+      "summary": "Documented POST /api/inApp/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api inapp cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/inApp/cancel"
+        }
+      ],
+      "operation": "iterable.post.api-inapp-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api inapp target",
+      "summary": "Documented POST /api/inApp/target (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api inapp target --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/inApp/target"
+        }
+      ],
+      "operation": "iterable.post.api-inapp-target",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api lists",
+      "summary": "Documented POST /api/lists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/lists"
+        }
+      ],
+      "operation": "iterable.post.api-lists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api lists subscribe",
+      "summary": "Documented POST /api/lists/subscribe (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api lists subscribe --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/lists/subscribe"
+        }
+      ],
+      "operation": "iterable.post.api-lists-subscribe",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api lists unsubscribe",
+      "summary": "Documented POST /api/lists/unsubscribe (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api lists unsubscribe --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/lists/unsubscribe"
+        }
+      ],
+      "operation": "iterable.post.api-lists-unsubscribe",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api push cancel",
+      "summary": "Documented POST /api/push/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api push cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/push/cancel"
+        }
+      ],
+      "operation": "iterable.post.api-push-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api push target",
+      "summary": "Documented POST /api/push/target (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api push target --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/push/target"
+        }
+      ],
+      "operation": "iterable.post.api-push-target",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api sms cancel",
+      "summary": "Documented POST /api/sms/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api sms cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/sms/cancel"
+        }
+      ],
+      "operation": "iterable.post.api-sms-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api sms target",
+      "summary": "Documented POST /api/sms/target (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api sms target --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/sms/target"
+        }
+      ],
+      "operation": "iterable.post.api-sms-target",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api snippets",
+      "summary": "Documented POST /api/snippets (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api snippets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/snippets"
+        }
+      ],
+      "operation": "iterable.post.api-snippets",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api subscriptions subscribetodoubleoptin",
+      "summary": "Documented POST /api/subscriptions/subscribeToDoubleOptIn (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api subscriptions subscribetodoubleoptin --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/subscriptions/subscribeToDoubleOptIn"
+        }
+      ],
+      "operation": "iterable.post.api-subscriptions-subscribetodoubleoptin",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates bulkdelete",
+      "summary": "Documented POST /api/templates/bulkDelete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates bulkdelete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/bulkDelete"
+        }
+      ],
+      "operation": "iterable.post.api-templates-bulkdelete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates email preview",
+      "summary": "Documented POST /api/templates/email/preview (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates email preview --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/email/preview"
+        }
+      ],
+      "operation": "iterable.post.api-templates-email-preview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates email proof",
+      "summary": "Documented POST /api/templates/email/proof (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates email proof --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/email/proof"
+        }
+      ],
+      "operation": "iterable.post.api-templates-email-proof",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates email update",
+      "summary": "Documented POST /api/templates/email/update (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates email update --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/email/update"
+        }
+      ],
+      "operation": "iterable.post.api-templates-email-update",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates email upsert",
+      "summary": "Documented POST /api/templates/email/upsert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates email upsert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/email/upsert"
+        }
+      ],
+      "operation": "iterable.post.api-templates-email-upsert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates embedded update",
+      "summary": "Documented POST /api/templates/embedded/update (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates embedded update --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/embedded/update"
+        }
+      ],
+      "operation": "iterable.post.api-templates-embedded-update",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates embedded upsert",
+      "summary": "Documented POST /api/templates/embedded/upsert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates embedded upsert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/embedded/upsert"
+        }
+      ],
+      "operation": "iterable.post.api-templates-embedded-upsert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates inapp preview",
+      "summary": "Documented POST /api/templates/inapp/preview (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates inapp preview --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/inapp/preview"
+        }
+      ],
+      "operation": "iterable.post.api-templates-inapp-preview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates inapp proof",
+      "summary": "Documented POST /api/templates/inapp/proof (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates inapp proof --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/inapp/proof"
+        }
+      ],
+      "operation": "iterable.post.api-templates-inapp-proof",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates inapp update",
+      "summary": "Documented POST /api/templates/inapp/update (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates inapp update --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/inapp/update"
+        }
+      ],
+      "operation": "iterable.post.api-templates-inapp-update",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates inapp upsert",
+      "summary": "Documented POST /api/templates/inapp/upsert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates inapp upsert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/inapp/upsert"
+        }
+      ],
+      "operation": "iterable.post.api-templates-inapp-upsert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates push proof",
+      "summary": "Documented POST /api/templates/push/proof (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates push proof --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/push/proof"
+        }
+      ],
+      "operation": "iterable.post.api-templates-push-proof",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates push update",
+      "summary": "Documented POST /api/templates/push/update (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates push update --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/push/update"
+        }
+      ],
+      "operation": "iterable.post.api-templates-push-update",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates push upsert",
+      "summary": "Documented POST /api/templates/push/upsert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates push upsert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/push/upsert"
+        }
+      ],
+      "operation": "iterable.post.api-templates-push-upsert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates sms proof",
+      "summary": "Documented POST /api/templates/sms/proof (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates sms proof --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/sms/proof"
+        }
+      ],
+      "operation": "iterable.post.api-templates-sms-proof",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates sms update",
+      "summary": "Documented POST /api/templates/sms/update (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates sms update --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/sms/update"
+        }
+      ],
+      "operation": "iterable.post.api-templates-sms-update",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api templates sms upsert",
+      "summary": "Documented POST /api/templates/sms/upsert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api templates sms upsert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/templates/sms/upsert"
+        }
+      ],
+      "operation": "iterable.post.api-templates-sms-upsert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api users bulkupdate",
+      "summary": "Documented POST /api/users/bulkUpdate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api users bulkupdate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/users/bulkUpdate"
+        }
+      ],
+      "operation": "iterable.post.api-users-bulkupdate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api users bulkupdatesubscriptions",
+      "summary": "Documented POST /api/users/bulkUpdateSubscriptions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api users bulkupdatesubscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/users/bulkUpdateSubscriptions"
+        }
+      ],
+      "operation": "iterable.post.api-users-bulkupdatesubscriptions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api users disabledevice",
+      "summary": "Documented POST /api/users/disableDevice (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api users disabledevice --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/users/disableDevice"
+        }
+      ],
+      "operation": "iterable.post.api-users-disabledevice",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api users forget",
+      "summary": "Documented POST /api/users/forget (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api users forget --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/users/forget"
+        }
+      ],
+      "operation": "iterable.post.api-users-forget",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api users merge",
+      "summary": "Documented POST /api/users/merge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api users merge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/users/merge"
+        }
+      ],
+      "operation": "iterable.post.api-users-merge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api users registerbrowsertoken",
+      "summary": "Documented POST /api/users/registerBrowserToken (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api users registerbrowsertoken --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/users/registerBrowserToken"
+        }
+      ],
+      "operation": "iterable.post.api-users-registerbrowsertoken",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api users registerdevicetoken",
+      "summary": "Documented POST /api/users/registerDeviceToken (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api users registerdevicetoken --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/users/registerDeviceToken"
+        }
+      ],
+      "operation": "iterable.post.api-users-registerdevicetoken",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api users unforget",
+      "summary": "Documented POST /api/users/unforget (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api users unforget --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/users/unforget"
+        }
+      ],
+      "operation": "iterable.post.api-users-unforget",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api users update",
+      "summary": "Documented POST /api/users/update (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api users update --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/users/update"
+        }
+      ],
+      "operation": "iterable.post.api-users-update",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api users updateemail",
+      "summary": "Documented POST /api/users/updateEmail (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api users updateemail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/users/updateEmail"
+        }
+      ],
+      "operation": "iterable.post.api-users-updateemail",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api users updatesubscriptions",
+      "summary": "Documented POST /api/users/updateSubscriptions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api users updatesubscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/users/updateSubscriptions"
+        }
+      ],
+      "operation": "iterable.post.api-users-updatesubscriptions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api verify sms begin",
+      "summary": "Documented POST /api/verify/sms/begin (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api verify sms begin --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/verify/sms/begin"
+        }
+      ],
+      "operation": "iterable.post.api-verify-sms-begin",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api verify sms check",
+      "summary": "Documented POST /api/verify/sms/check (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api verify sms check --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/verify/sms/check"
+        }
+      ],
+      "operation": "iterable.post.api-verify-sms-check",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api webhooks",
+      "summary": "Documented POST /api/webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/webhooks"
+        }
+      ],
+      "operation": "iterable.post.api-webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api webpush cancel",
+      "summary": "Documented POST /api/webPush/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api webpush cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/webPush/cancel"
+        }
+      ],
+      "operation": "iterable.post.api-webpush-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api webpush target",
+      "summary": "Documented POST /api/webPush/target (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api webpush target --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/webPush/target"
+        }
+      ],
+      "operation": "iterable.post.api-webpush-target",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api whatsapp cancel",
+      "summary": "Documented POST /api/whatsApp/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api whatsapp cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/whatsApp/cancel"
+        }
+      ],
+      "operation": "iterable.post.api-whatsapp-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api whatsapp target",
+      "summary": "Documented POST /api/whatsApp/target (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api whatsapp target --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/whatsApp/target"
+        }
+      ],
+      "operation": "iterable.post.api-whatsapp-target",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api workflows triggerworkflow",
+      "summary": "Documented POST /api/workflows/triggerWorkflow (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api post api workflows triggerworkflow --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/workflows/triggerWorkflow"
+        }
+      ],
+      "operation": "iterable.post.api-workflows-triggerworkflow",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api catalogs catalogname fieldmappings",
+      "summary": "Documented PUT /api/catalogs/{catalogName}/fieldMappings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api put api catalogs catalogname fieldmappings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/catalogs/{catalogName}/fieldMappings"
+        }
+      ],
+      "operation": "iterable.put.api-catalogs-catalogname-fieldmappings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api catalogs catalogname items itemid",
+      "summary": "Documented PUT /api/catalogs/{catalogName}/items/{itemId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api put api catalogs catalogname items itemid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/catalogs/{catalogName}/items/{itemId}"
+        }
+      ],
+      "operation": "iterable.put.api-catalogs-catalogname-items-itemid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api metadata table key",
+      "summary": "Documented PUT /api/metadata/{table}/{key} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api put api metadata table key --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/metadata/{table}/{key}"
+        }
+      ],
+      "operation": "iterable.put.api-metadata-table-key",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api snippets identifier",
+      "summary": "Documented PUT /api/snippets/{identifier} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api put api snippets identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/snippets/{identifier}"
+        }
+      ],
+      "operation": "iterable.put.api-snippets-identifier",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api subscriptions subscriptiongroup subscriptiongroupid",
+      "summary": "Documented PUT /api/subscriptions/{subscriptionGroup}/{subscriptionGroupId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable api put api subscriptions subscriptiongroup subscriptiongroupid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}"
+        }
+      ],
+      "operation": "iterable.put.api-subscriptions-subscriptiongroup-subscriptiongroupid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "campaigns list",
+      "summary": "Run the campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "lists list",
+      "summary": "Run the lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lists",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "templates list",
+      "summary": "Run the templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates",
+      "source_url": "https://api.iterable.com/api-docs",
+      "examples": [
+        "pm iterable templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/templates"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

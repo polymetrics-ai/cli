@@ -1,0 +1,1472 @@
+{
+  "schema_version": 1,
+  "connector": "100ms",
+  "retrieval": {
+    "sitemap": {
+      "url": "https://www.100ms.live/docs/sitemap.xml",
+      "retrieved_at": "2026-08-09",
+      "sha256": "ea75501d994ac2546d8f9b0a30eb9d9c0ef7bdac4832b386590a33b4337d8a82",
+      "server_side_v2_api_reference_pages": 86
+    },
+    "direct_provider_sources": {
+      "repository": "https://github.com/100mslive/100ms-docs",
+      "successfully_fetched_mdx_pages": 86,
+      "visible_request_component_rows": 78,
+      "distinct_component_operations": 72,
+      "explicit_contextual_curl_operations": 1,
+      "immutable_operations": 73,
+      "read_operations": 33,
+      "write_operations": 40,
+      "nonrecursive": true
+    },
+    "normalizations": [
+      "Removed a trailing slash from the documented sessions collection URL.",
+      "Corrected the provider source typo {repsonse_id} to {response_id}; the same source page labels the parameter response_id.",
+      "Retained POST /v2/analytics/events/webhooks/replay from its explicit provider curl example because the provider page omits a typed request component for that documented request."
+    ],
+    "derived_combined_openapi": {
+      "sha256": "ac06d415570495884dce0b12e4d4af6c2d23a3cbbedf819fee3776ddcb3e0326",
+      "bytes": 9028,
+      "operations": 73
+    }
+  },
+  "pages": [
+    {
+      "slug": "server-side__v2__api-reference__active-rooms__end-active-room",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/end-active-room",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/end-active-room.mdx",
+      "sha256": "8ca1d390c31290d3581d01603471686d81b75aaf613d97d16330981cbef540a9",
+      "bytes": 2319
+    },
+    {
+      "slug": "server-side__v2__api-reference__active-rooms__list-peers",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/list-peers",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/list-peers.mdx",
+      "sha256": "9c29d0fceed5fcf4ee1fabe0e26aeb95d6d71364fed23342b0749c0229ae388d",
+      "bytes": 2651
+    },
+    {
+      "slug": "server-side__v2__api-reference__active-rooms__object",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/object",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/object.mdx",
+      "sha256": "e13d3081bf3c700dfe9177ed1e040b2c604e0ebdc19441dc6fbef774f3be0e90",
+      "bytes": 2015
+    },
+    {
+      "slug": "server-side__v2__api-reference__active-rooms__overview",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/overview",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/overview.mdx",
+      "sha256": "f2b6558fd988cd1da1d22c4e4a8febcd80a4f0809576231ab936796540e96a65",
+      "bytes": 3094
+    },
+    {
+      "slug": "server-side__v2__api-reference__active-rooms__remove-peers",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/remove-peers",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/remove-peers.mdx",
+      "sha256": "f843f90a349293800dfb0bbe30788e614e5f28092bae855b71c5196f9bd28d79",
+      "bytes": 2944
+    },
+    {
+      "slug": "server-side__v2__api-reference__active-rooms__retrieve-active-room",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/retrieve-active-room",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/retrieve-active-room.mdx",
+      "sha256": "ca457df255d7dd13217ed3bce01f82a2872ef166c7925b697f5a75645cd7ba67",
+      "bytes": 2085
+    },
+    {
+      "slug": "server-side__v2__api-reference__active-rooms__retrieve-peer",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/retrieve-peer",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/retrieve-peer.mdx",
+      "sha256": "b92ebea8da80ed2fc12e8313b1e18f9d8b16552737329c9219a651bd3329e827",
+      "bytes": 3149
+    },
+    {
+      "slug": "server-side__v2__api-reference__active-rooms__send-message",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/send-message",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/send-message.mdx",
+      "sha256": "365d582f572f0712e6085429a215d780bfad6080017330063cbaa5696abfe837",
+      "bytes": 4101
+    },
+    {
+      "slug": "server-side__v2__api-reference__active-rooms__update-a-peer",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/update-a-peer",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/update-a-peer.mdx",
+      "sha256": "3e2ba293104daf32126df1cb9c6886746ace0ee81f5d87eec58e363ad1d4aa8c",
+      "bytes": 3705
+    },
+    {
+      "slug": "server-side__v2__api-reference__analytics__error-events",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/error-events",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/error-events.mdx",
+      "sha256": "5ff502910e340737e6f121fbc7b19767ddd2e58d67488fe7f07e4bcabea23427",
+      "bytes": 28627
+    },
+    {
+      "slug": "server-side__v2__api-reference__analytics__list-webhook-events",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/list-webhook-events",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/list-webhook-events.mdx",
+      "sha256": "9de3f473aa2748c18b0630d5c1224215ea27197b939a3dbebaeb38c13347998c",
+      "bytes": 6484
+    },
+    {
+      "slug": "server-side__v2__api-reference__analytics__overview",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/overview",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/overview.mdx",
+      "sha256": "db378db88e32e37457de1a5acee759098b37698ff9439ac4a1953ba5d100448c",
+      "bytes": 7460
+    },
+    {
+      "slug": "server-side__v2__api-reference__analytics__peer-quality-stats",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/peer-quality-stats",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/peer-quality-stats.mdx",
+      "sha256": "3e0c5f7aa834506c281094db081e9838b9e81be669f8e600975146a23b0eb191",
+      "bytes": 9439
+    },
+    {
+      "slug": "server-side__v2__api-reference__analytics__recording-events",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/recording-events",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/recording-events.mdx",
+      "sha256": "584346c859d6d8201d1bb6fc7cc7c2f4b35ee908d91485487d2ac77bb2027341",
+      "bytes": 7089
+    },
+    {
+      "slug": "server-side__v2__api-reference__analytics__replay-webhook-events",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/replay-webhook-events",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/replay-webhook-events.mdx",
+      "sha256": "82c4c95413fbc4d784224ade92ed52c611ca1c866248d408c51e51bbbd183494",
+      "bytes": 9491
+    },
+    {
+      "slug": "server-side__v2__api-reference__analytics__track-events",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/track-events",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/track-events.mdx",
+      "sha256": "d166aaa38f8bf1cdf6eeec61439255c0d5188e80844be4cb40c8c21854da16b5",
+      "bytes": 9118
+    },
+    {
+      "slug": "server-side__v2__api-reference__external-streams__get-external-stream",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/external-streams/get-external-stream",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/external-streams/get-external-stream.mdx",
+      "sha256": "12450024f38b0a477518740f1a6bf63e9f5eba1b6376ce491c4d2319c789115e",
+      "bytes": 1598
+    },
+    {
+      "slug": "server-side__v2__api-reference__external-streams__list-all-external-streams",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/external-streams/list-all-external-streams",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/external-streams/list-all-external-streams.mdx",
+      "sha256": "cf356f0676205eff58d8efb44b2db55674e659b684d5e7919dee58f7c00a87ca",
+      "bytes": 2473
+    },
+    {
+      "slug": "server-side__v2__api-reference__external-streams__overview",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/external-streams/overview",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/external-streams/overview.mdx",
+      "sha256": "55b26baeb23b3f9b45c863aeb6dceb907fdc65bb27d4bc4db4632a9c7280fed6",
+      "bytes": 2644
+    },
+    {
+      "slug": "server-side__v2__api-reference__external-streams__start-external-stream-for-room",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/external-streams/start-external-stream-for-room",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/external-streams/start-external-stream-for-room.mdx",
+      "sha256": "48de0693dc3880714c5cd7b42f1e874ce602fac44243e31f8461bb0b6b4029d1",
+      "bytes": 3231
+    },
+    {
+      "slug": "server-side__v2__api-reference__external-streams__stop-external-stream-by-id",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/external-streams/stop-external-stream-by-id",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/external-streams/stop-external-stream-by-id.mdx",
+      "sha256": "aba3ae68b332be7a382e141ea04ada2f155601a411fe40787002c1cc1d9c9fc0",
+      "bytes": 1110
+    },
+    {
+      "slug": "server-side__v2__api-reference__external-streams__stop-external-stream-for-room",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/external-streams/stop-external-stream-for-room",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/external-streams/stop-external-stream-for-room.mdx",
+      "sha256": "6f747785f04664df798a8cd5fe5b5d3e0318152f3e992f92550f8c58537f2628",
+      "bytes": 1366
+    },
+    {
+      "slug": "server-side__v2__api-reference__legacy-api-v1__destinations__recording",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/legacy-api-v1/destinations/recording",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/legacy-api-v1/destinations/recording.mdx",
+      "sha256": "d9898856c66a367044eb02e45532b1940a8a0d16649fe5b09838b79ec56b71c2",
+      "bytes": 6028
+    },
+    {
+      "slug": "server-side__v2__api-reference__legacy-api-v1__destinations__rtmp-streaming-and-browser-recording",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/legacy-api-v1/destinations/rtmp-streaming-and-browser-recording",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/legacy-api-v1/destinations/rtmp-streaming-and-browser-recording.mdx",
+      "sha256": "c90d72e110b4999f91679ce6a7ab9c6ee88c8dd4187fbb281d1d265b7db535d3",
+      "bytes": 9994
+    },
+    {
+      "slug": "server-side__v2__api-reference__legacy-api-v1__room",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/legacy-api-v1/room",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/legacy-api-v1/room.mdx",
+      "sha256": "01ac7cf3452c95803080ed35c06d45d5a1a8a230c2510bec8ea86fd5dd6320f2",
+      "bytes": 11488
+    },
+    {
+      "slug": "server-side__v2__api-reference__legacy-api-v1__session",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/legacy-api-v1/session",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/legacy-api-v1/session.mdx",
+      "sha256": "2fd7a7493a6f419ac06d650f8c9b6e2427b6ffb91fc981dc4b32cc6d5629f24b",
+      "bytes": 5878
+    },
+    {
+      "slug": "server-side__v2__api-reference__legacy-api-v1__templates-and-roles",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/legacy-api-v1/templates-and-roles",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/legacy-api-v1/templates-and-roles.mdx",
+      "sha256": "7cf2ce6c516c3a30d11a8d4a970b418f3c050eaa03c93515ab273fa37ac9a308",
+      "bytes": 26646
+    },
+    {
+      "slug": "server-side__v2__api-reference__live-streams__get-live-stream",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/get-live-stream",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/get-live-stream.mdx",
+      "sha256": "5818a65363b41c8579cd0e1553051b477ef6db6c62274772eace869121476bd2",
+      "bytes": 2247
+    },
+    {
+      "slug": "server-side__v2__api-reference__live-streams__list-all-live-streams",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/list-all-live-streams",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/list-all-live-streams.mdx",
+      "sha256": "a9f2332512729bb8233b25bae65682754581372d64693e2802abdff852615fe9",
+      "bytes": 1951
+    },
+    {
+      "slug": "server-side__v2__api-reference__live-streams__overview",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/overview",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/overview.mdx",
+      "sha256": "39f5f7b6ff6e0285dec6189d7c61a6d8fd1533f81e70d7da1fdc123ecf86b53b",
+      "bytes": 2695
+    },
+    {
+      "slug": "server-side__v2__api-reference__live-streams__pause-live-stream-recording",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/pause-live-stream-recording",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/pause-live-stream-recording.mdx",
+      "sha256": "e062839f43f554df4a1c0447c4b05a076991af60fe34cc8e160db1e152cd375c",
+      "bytes": 1327
+    },
+    {
+      "slug": "server-side__v2__api-reference__live-streams__resume-live-stream-recording",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/resume-live-stream-recording",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/resume-live-stream-recording.mdx",
+      "sha256": "ecafa5c01b59d763a7fd88050aaca210c52a3267552406f2ac255a3a6de1dc6f",
+      "bytes": 1093
+    },
+    {
+      "slug": "server-side__v2__api-reference__live-streams__send-timed-metadata",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/send-timed-metadata",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/send-timed-metadata.mdx",
+      "sha256": "44ee9546c1ab390df8567c8d3802e54f44bd44b62f620f926f7149280d5383f3",
+      "bytes": 1581
+    },
+    {
+      "slug": "server-side__v2__api-reference__live-streams__start-live-stream-for-room",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/start-live-stream-for-room",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/start-live-stream-for-room.mdx",
+      "sha256": "d8706f2388ffd7ecad96b5fc429fd372dde1f759d2148ff969d41eaa89cae42d",
+      "bytes": 7410
+    },
+    {
+      "slug": "server-side__v2__api-reference__live-streams__stop-live-stream-by-id",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/stop-live-stream-by-id",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/stop-live-stream-by-id.mdx",
+      "sha256": "f84d99cd7b985b8fe863b05dbd722453267a4bff05ebdd99fe1810ecd3c371ba",
+      "bytes": 1079
+    },
+    {
+      "slug": "server-side__v2__api-reference__live-streams__stop-live-stream-for-room",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/stop-live-stream-for-room",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/stop-live-stream-for-room.mdx",
+      "sha256": "4c518fb1c96a212433e171d30eb1ac891bb8e10a1ca264bfc1fcc0139d4a661f",
+      "bytes": 1338
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__configure-recordings",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/configure-recordings",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/configure-recordings.mdx",
+      "sha256": "05997000e1f5377df97ab31800f64cd86cc99a3e75aed315a6fb5aa7e0bd1351",
+      "bytes": 7822
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__create-template-via-api",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/create-template-via-api",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/create-template-via-api.mdx",
+      "sha256": "0d8f349a52ff9a6be66a22ab97002304a74b117ad09e9652ada830a66aeba322",
+      "bytes": 63002
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__create-template-via-dashboard",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/create-template-via-dashboard",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/create-template-via-dashboard.mdx",
+      "sha256": "929a3d10a43f0c67b9b0027a30ce23848140e41619e2dab4ab3c25281961241f",
+      "bytes": 9560
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__create-update-role",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/create-update-role",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/create-update-role.mdx",
+      "sha256": "bb55b9159eb6f34983babade0b9d58ea59eaa10af8c721db0e2eb1000307d42d",
+      "bytes": 5763
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__delete-a-role",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/delete-a-role",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/delete-a-role.mdx",
+      "sha256": "580aee527e87f145e73d90f7ac1050f172b943aea6d17ccdbfeff837f5e1c1a5",
+      "bytes": 1304
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__list-templates",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/list-templates",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/list-templates.mdx",
+      "sha256": "0deadd989b3c5f3826bbf3166b9a57560bd888acfb99a038ccd65744741919e9",
+      "bytes": 15804
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__retrieve-a-role",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/retrieve-a-role",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/retrieve-a-role.mdx",
+      "sha256": "4f7c5d6dc2ad4b73f23cee4300614486de20338e48ce9541faf8feaeda82f06a",
+      "bytes": 3279
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__retrieve-a-template",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/retrieve-a-template",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/retrieve-a-template.mdx",
+      "sha256": "19cb2a5b37b43825d2efa5d8e22cc26788a608bba2c8eb7e8d4e7188c8ff510a",
+      "bytes": 12726
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__retrieve-destinations",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/retrieve-destinations",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/retrieve-destinations.mdx",
+      "sha256": "ebe3dd452a5f198b65272e8b29b9932b0604a5b610edc871618d74f9fd970e7f",
+      "bytes": 1210
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__retrieve-settings",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/retrieve-settings",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/retrieve-settings.mdx",
+      "sha256": "440e4db47d9af896d43fb5704f397f3ee5f5b13f9fc3c0a49dada9b3b2280a4c",
+      "bytes": 1269
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__template-object",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/template-object",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/template-object.mdx",
+      "sha256": "3b993c1a1f07a8ddb18bd8996c3ad2c01b5eceeb95715f7b2c8debf36e05c167",
+      "bytes": 3451
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__update-a-template",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/update-a-template",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/update-a-template.mdx",
+      "sha256": "f08c7493af1a09181977e1be2c64fd39e5fbc6d3feca78747fee20fedd4072e4",
+      "bytes": 14973
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__update-destinations",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/update-destinations",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/update-destinations.mdx",
+      "sha256": "6a213ed0fbab72cbff73a48ab5ea1fa8d23cd4a8c626c84656998dbe51d1a84f",
+      "bytes": 7997
+    },
+    {
+      "slug": "server-side__v2__api-reference__policy__update-settings",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/update-settings",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/update-settings.mdx",
+      "sha256": "29b84874a379b12bec95154835c784a7d73ca6fc949060f8a9bbd3cde8a4f9e3",
+      "bytes": 3320
+    },
+    {
+      "slug": "server-side__v2__api-reference__polls__create-polls-via-api",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/create-polls-via-api",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/create-polls-via-api.mdx",
+      "sha256": "481ebec3d2df5c286738c09b52276fa738ff5f76aad1a341d19b5896c9cde0c2",
+      "bytes": 15859
+    },
+    {
+      "slug": "server-side__v2__api-reference__polls__get-polls-via-api",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/get-polls-via-api",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/get-polls-via-api.mdx",
+      "sha256": "3cc18378de2f92a9bdb2bc8ed7726e402aad14a6fc8c74cc4227003c0a2807b5",
+      "bytes": 10804
+    },
+    {
+      "slug": "server-side__v2__api-reference__polls__link-polls-with-room-via-api",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/link-polls-with-room-via-api",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/link-polls-with-room-via-api.mdx",
+      "sha256": "def6f6ad573b42309f52fcbb4f16dfa03a54b3b192fccad584f77c1f45287103",
+      "bytes": 2166
+    },
+    {
+      "slug": "server-side__v2__api-reference__polls__overview",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/overview",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/overview.mdx",
+      "sha256": "c678a22e14cf0fe9c06a53850bb6cf788ee9165049c7b67ad73c34cdf03c77d3",
+      "bytes": 7824
+    },
+    {
+      "slug": "server-side__v2__api-reference__recording-assets__get-asset",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recording-assets/get-asset",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recording-assets/get-asset.mdx",
+      "sha256": "8bc8882f33b8972e1b0422e4b4432e32d7904f918a294f155984681dadd9c23a",
+      "bytes": 5476
+    },
+    {
+      "slug": "server-side__v2__api-reference__recording-assets__get-presigned-url",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recording-assets/get-presigned-url",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recording-assets/get-presigned-url.mdx",
+      "sha256": "70e05f6d2769232c243fcc1f3b1eba431b8074cd14a287319f724cd1b38bcf48",
+      "bytes": 2011
+    },
+    {
+      "slug": "server-side__v2__api-reference__recording-assets__list-all-assets",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recording-assets/list-all-assets",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recording-assets/list-all-assets.mdx",
+      "sha256": "4a79fa9e53ef100dd96e135e22dea6f3e5d6aeb8fd252a6747564d21e4d7a739",
+      "bytes": 1630
+    },
+    {
+      "slug": "server-side__v2__api-reference__recording-assets__overview",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recording-assets/overview",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recording-assets/overview.mdx",
+      "sha256": "e214b6c93107fb346888b114bcbef01c78fe6cfad06ea01ddac52220ae95e38b",
+      "bytes": 4935
+    },
+    {
+      "slug": "server-side__v2__api-reference__recordings__get-recording",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/get-recording",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/get-recording.mdx",
+      "sha256": "abef1332d02197b5c3ddad5fc076854131220a36b65ab82931b83c0baf9921dc",
+      "bytes": 3036
+    },
+    {
+      "slug": "server-side__v2__api-reference__recordings__list-all-recordings",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/list-all-recordings",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/list-all-recordings.mdx",
+      "sha256": "e730651268ddee054eeb260391840e3c80ee4c68c2c651c07f09e0d21cd2b39e",
+      "bytes": 2731
+    },
+    {
+      "slug": "server-side__v2__api-reference__recordings__overview",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/overview",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/overview.mdx",
+      "sha256": "420d83a4c2b92d37a73f684e219757680911af91250aff87ee29cd56ea3c3011",
+      "bytes": 3542
+    },
+    {
+      "slug": "server-side__v2__api-reference__recordings__pause-recording-for-room",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/pause-recording-for-room",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/pause-recording-for-room.mdx",
+      "sha256": "dbac3aa9998cc10f8c1ab33f0226f136833487ab9fa42876bb97d1a9b3307c81",
+      "bytes": 989
+    },
+    {
+      "slug": "server-side__v2__api-reference__recordings__resume-recording-for-room",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/resume-recording-for-room",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/resume-recording-for-room.mdx",
+      "sha256": "54d0592b68b25d9a80befff4ddaf299d4d26dab4e6ef260e5c0ecd9c1f4c00bc",
+      "bytes": 924
+    },
+    {
+      "slug": "server-side__v2__api-reference__recordings__start-recording-for-room",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/start-recording-for-room",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/start-recording-for-room.mdx",
+      "sha256": "cfd285270931a93ab84223cd2144aa66da750ab3459c0d81f45e5276ec92dec5",
+      "bytes": 7430
+    },
+    {
+      "slug": "server-side__v2__api-reference__recordings__stop-recording-by-id",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/stop-recording-by-id",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/stop-recording-by-id.mdx",
+      "sha256": "d22d1f0eb6d9401493729ed14a610f1786a30eeaa08af2edf75b5069597c6cb2",
+      "bytes": 958
+    },
+    {
+      "slug": "server-side__v2__api-reference__recordings__stop-recording-for-room",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/stop-recording-for-room",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/stop-recording-for-room.mdx",
+      "sha256": "e8ce3537717bbdf68cb37626407119d616903a0bd32d342a90b3f48f18ba043f",
+      "bytes": 1260
+    },
+    {
+      "slug": "server-side__v2__api-reference__room-codes__create-room-code-api",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/create-room-code-api",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/room-codes/create-room-code-api.mdx",
+      "sha256": "82730bff3226384a6c51c5415b74d12563446d5be66785890a4af9cf3eb12426",
+      "bytes": 2544
+    },
+    {
+      "slug": "server-side__v2__api-reference__room-codes__get-room-code-api",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/get-room-code-api",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/room-codes/get-room-code-api.mdx",
+      "sha256": "41120cf74c8ad6464f652ee05bf53ecd26705ed996d78b9b707acf03c97efe4b",
+      "bytes": 1972
+    },
+    {
+      "slug": "server-side__v2__api-reference__room-codes__room-code-object",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/room-code-object",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/room-codes/room-code-object.mdx",
+      "sha256": "0207b6b04d3dcc61580070186f9d3ecf8ba41ad6940d02e714daa56dc7739a0f",
+      "bytes": 1229
+    },
+    {
+      "slug": "server-side__v2__api-reference__room-codes__room-code-overview",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/room-code-overview",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/room-codes/room-code-overview.mdx",
+      "sha256": "0625a38aa413f22cdd3c625bd580f958667952035113aa82252b598983df81a5",
+      "bytes": 3123
+    },
+    {
+      "slug": "server-side__v2__api-reference__room-codes__update-room-code-api",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/update-room-code-api",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/room-codes/update-room-code-api.mdx",
+      "sha256": "034e2771a2470bc4520f3aefd25447854b97305aae6ee7f8daf06cbb53be5e63",
+      "bytes": 1823
+    },
+    {
+      "slug": "server-side__v2__api-reference__Rooms__create-via-api",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/create-via-api",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Rooms/create-via-api.mdx",
+      "sha256": "5cbf3a908a14f3ee2a01551fe44edb715b7cb6979415d59baae01986b4927fc6",
+      "bytes": 13085
+    },
+    {
+      "slug": "server-side__v2__api-reference__Rooms__create-via-dashboard",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/create-via-dashboard",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Rooms/create-via-dashboard.mdx",
+      "sha256": "8b7f7ff398140e9ce7535e72b4212ecb6e38b8bf93580fae2d1bdd37975e5d18",
+      "bytes": 1090
+    },
+    {
+      "slug": "server-side__v2__api-reference__Rooms__disable-or-enable",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/disable-or-enable",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Rooms/disable-or-enable.mdx",
+      "sha256": "416b25d46967b31cc688ed1c2e986ffe6fbb2f52da8030f33ae28c9a6ce0ecfe",
+      "bytes": 1918
+    },
+    {
+      "slug": "server-side__v2__api-reference__Rooms__list-rooms",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/list-rooms",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Rooms/list-rooms.mdx",
+      "sha256": "4d237666da5e10168635e084b135116a796107d704ddad4d2b829e92c7717244",
+      "bytes": 4558
+    },
+    {
+      "slug": "server-side__v2__api-reference__Rooms__object",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/object",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Rooms/object.mdx",
+      "sha256": "367a609415d0659e17fe9e6e85f818ce36056c9cfd81acc8ce4515877e6ed737",
+      "bytes": 8046
+    },
+    {
+      "slug": "server-side__v2__api-reference__Rooms__overview",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/overview",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Rooms/overview.mdx",
+      "sha256": "2f524614b20e6edb0ca2bfe79b91af432e6d7521fe930ba36a92b1d2a4cd7335",
+      "bytes": 2123
+    },
+    {
+      "slug": "server-side__v2__api-reference__Rooms__retrieve-room",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/retrieve-room",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Rooms/retrieve-room.mdx",
+      "sha256": "7b0b71bd7486cecfdcb1a07eb3fba94f3218ddc36d2a3794ca6077b4dbd584a8",
+      "bytes": 1369
+    },
+    {
+      "slug": "server-side__v2__api-reference__Rooms__update-a-room",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/update-a-room",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Rooms/update-a-room.mdx",
+      "sha256": "88e52d688b329770a697bb1703e4d02416b93aecaa4cb5aac61e2e19510813e9",
+      "bytes": 8704
+    },
+    {
+      "slug": "server-side__v2__api-reference__Sessions__list-sessions",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Sessions/list-sessions",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Sessions/list-sessions.mdx",
+      "sha256": "4549bee32d783581ac04f4a35e1d9cdbb547b422624b5a4b8c9e65485bd9b541",
+      "bytes": 3849
+    },
+    {
+      "slug": "server-side__v2__api-reference__Sessions__object",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Sessions/object",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Sessions/object.mdx",
+      "sha256": "2a2d235f2e353dbc0f96eabcfe5b47e4677e82986e19ece2270b257cb9bd50ed",
+      "bytes": 4205
+    },
+    {
+      "slug": "server-side__v2__api-reference__Sessions__retrieve-a-session",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Sessions/retrieve-a-session",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Sessions/retrieve-a-session.mdx",
+      "sha256": "510412f7f087b6ce6c311b00d7ed538902fe5b1296de452a270139480136a308",
+      "bytes": 2033
+    },
+    {
+      "slug": "server-side__v2__api-reference__stream-key__create-rtmp-stream-key",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/stream-key/create-rtmp-stream-key",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/stream-key/create-rtmp-stream-key.mdx",
+      "sha256": "76ccef792832db838aa8b70dfa8d0bda3e514e60560e1748b87c1b6e9be37466",
+      "bytes": 1476
+    },
+    {
+      "slug": "server-side__v2__api-reference__stream-key__disable-rtmp-stream-key",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/stream-key/disable-rtmp-stream-key",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/stream-key/disable-rtmp-stream-key.mdx",
+      "sha256": "49f49e07f6675e96b34ba89d8c4d7a7dec921ef7e4cccf77f1c63d94cd900ac3",
+      "bytes": 1264
+    },
+    {
+      "slug": "server-side__v2__api-reference__stream-key__get-rtmp-stream-key",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/stream-key/get-rtmp-stream-key",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/stream-key/get-rtmp-stream-key.mdx",
+      "sha256": "77178e91af9080ffb45503268f1ec59863a234db38ddc2b4851cf1a64418ab69",
+      "bytes": 1282
+    },
+    {
+      "slug": "server-side__v2__api-reference__stream-key__overview",
+      "url": "https://www.100ms.live/docs/server-side/v2/api-reference/stream-key/overview",
+      "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/stream-key/overview.mdx",
+      "sha256": "c8cf13ccc0ca2fa21016a2a12685539439bdff8b970848670fc037a9a19d80cb",
+      "bytes": 2616
+    }
+  ],
+  "operations": [
+    {
+      "method": "GET",
+      "path": "/v2/active-rooms/{room_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/retrieve-active-room",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/retrieve-active-room.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/active-rooms/{room_id}/end-room",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/end-active-room",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/end-active-room.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/active-rooms/{room_id}/peers",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/list-peers",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/list-peers.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/active-rooms/{room_id}/peers/{peer_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/retrieve-peer",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/retrieve-peer.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/active-rooms/{room_id}/peers/{peer_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/update-a-peer",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/update-a-peer.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/active-rooms/{room_id}/remove-peers",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/remove-peers",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/remove-peers.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/active-rooms/{room_id}/send-message",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/send-message",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/active-rooms/send-message.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/events",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/error-events",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/error-events.mdx",
+          "coordinate": "visible request component"
+        },
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/overview",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/overview.mdx",
+          "coordinate": "visible request component"
+        },
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/recording-events",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/recording-events.mdx",
+          "coordinate": "visible request component"
+        },
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/track-events",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/track-events.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/analytics/events/webhooks/replay",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/replay-webhook-events",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/replay-webhook-events.mdx",
+          "coordinate": "documented curl example, line 116"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/peer-stats",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/peer-quality-stats",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/peer-quality-stats.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/webhooks",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/list-webhook-events",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/list-webhook-events.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/analytics/webhooks/replay",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/replay-webhook-events",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/replay-webhook-events.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/webhooks/replay/{workflow_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/analytics/replay-webhook-events",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/analytics/replay-webhook-events.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/external-streams",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/external-streams/list-all-external-streams",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/external-streams/list-all-external-streams.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/external-streams/room/{room_id}/start",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/external-streams/start-external-stream-for-room",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/external-streams/start-external-stream-for-room.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/external-streams/room/{room_id}/stop",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/external-streams/stop-external-stream-for-room",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/external-streams/stop-external-stream-for-room.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/external-streams/{stream_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/external-streams/get-external-stream",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/external-streams/get-external-stream.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/external-streams/{stream_id}/stop",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/external-streams/stop-external-stream-by-id",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/external-streams/stop-external-stream-by-id.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/live-streams",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/list-all-live-streams",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/list-all-live-streams.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/room/{room_id}/start",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/start-live-stream-for-room",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/start-live-stream-for-room.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/room/{room_id}/stop",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/stop-live-stream-for-room",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/stop-live-stream-for-room.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/live-streams/{stream_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/get-live-stream",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/get-live-stream.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/{stream_id}/pause-recording",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/pause-live-stream-recording",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/pause-live-stream-recording.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/{stream_id}/resume-recording",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/resume-live-stream-recording",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/resume-live-stream-recording.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/{stream_id}/stop",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/stop-live-stream-by-id",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/stop-live-stream-by-id.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/live-streams/{stream_id}/timed-metadata",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/live-streams/send-timed-metadata",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/live-streams/send-timed-metadata.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/polls",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/create-polls-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/create-polls-via-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/polls/{poll_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/get-polls-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/get-polls-via-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/polls/{poll_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/create-polls-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/create-polls-via-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/polls/{poll_id}/questions/{question_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/create-polls-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/create-polls-via-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/polls/{poll_id}/questions/{question_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/create-polls-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/create-polls-via-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/polls/{poll_id}/questions/{question_id}/options/{option_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/create-polls-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/create-polls-via-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/polls/{poll_id}/questions/{question_id}/options/{option_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/create-polls-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/create-polls-via-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/polls/{poll_id}/responses",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/get-polls-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/get-polls-via-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/polls/{poll_id}/responses/{response_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/get-polls-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/get-polls-via-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/polls/{poll_id}/results",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/get-polls-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/get-polls-via-api.mdx",
+          "coordinate": "visible request component"
+        },
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/get-polls-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/get-polls-via-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/polls/{poll_id}/sessions",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/get-polls-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/get-polls-via-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/recording-assets",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recording-assets/list-all-assets",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recording-assets/list-all-assets.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/recording-assets/{asset_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recording-assets/get-asset",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recording-assets/get-asset.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/recording-assets/{asset_id}/presigned-url",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recording-assets/get-presigned-url",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recording-assets/get-presigned-url.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/recordings",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/list-all-recordings",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/list-all-recordings.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/recordings/room/{room_id}/pause",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/pause-recording-for-room",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/pause-recording-for-room.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/recordings/room/{room_id}/resume",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/resume-recording-for-room",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/resume-recording-for-room.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/recordings/room/{room_id}/start",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/start-recording-for-room",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/start-recording-for-room.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/recordings/room/{room_id}/stop",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/stop-recording-for-room",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/stop-recording-for-room.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/recordings/{recording_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/get-recording",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/get-recording.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/recordings/{recording_id}/stop",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/recordings/stop-recording-by-id",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/recordings/stop-recording-by-id.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/room-codes/code",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/update-room-code-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/room-codes/update-room-code-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/room-codes/room/{room_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/get-room-code-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/room-codes/get-room-code-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/room-codes/room/{room_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/create-room-code-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/room-codes/create-room-code-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/room-codes/room/{room_id}/role/{role}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/create-room-code-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/room-codes/create-room-code-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/rooms",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/list-rooms",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Rooms/list-rooms.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/rooms",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/polls/link-polls-with-room-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/polls/link-polls-with-room-via-api.mdx",
+          "coordinate": "visible request component"
+        },
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/create-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Rooms/create-via-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/rooms/{room_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/retrieve-room",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Rooms/retrieve-room.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/rooms/{room_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/disable-or-enable",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Rooms/disable-or-enable.mdx",
+          "coordinate": "visible request component"
+        },
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/update-a-room",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Rooms/update-a-room.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sessions",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Sessions/list-sessions",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Sessions/list-sessions.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sessions/{session_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/Sessions/retrieve-a-session",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/Sessions/retrieve-a-session.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/stream-keys/room/{room_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/stream-key/get-rtmp-stream-key",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/stream-key/get-rtmp-stream-key.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/stream-keys/room/{room_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/stream-key/create-rtmp-stream-key",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/stream-key/create-rtmp-stream-key.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/stream-keys/room/{room_id}/disable",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/stream-key/disable-rtmp-stream-key",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/stream-key/disable-rtmp-stream-key.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/templates",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/list-templates",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/list-templates.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/templates",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/create-template-via-api",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/create-template-via-api.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/templates/{template_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/retrieve-a-template",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/retrieve-a-template.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/templates/{template_id}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/update-a-template",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/update-a-template.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/templates/{template_id}/destinations",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/retrieve-destinations",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/retrieve-destinations.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/templates/{template_id}/destinations",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/update-destinations",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/update-destinations.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/templates/{template_id}/recordings",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/configure-recordings",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/configure-recordings.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/templates/{template_id}/recordings",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/configure-recordings",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/configure-recordings.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/templates/{template_id}/roles/{role_name}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/delete-a-role",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/delete-a-role.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/templates/{template_id}/roles/{role_name}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/retrieve-a-role",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/retrieve-a-role.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/templates/{template_id}/roles/{role_name}",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/create-update-role",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/create-update-role.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/v2/templates/{template_id}/settings",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/retrieve-settings",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/retrieve-settings.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/v2/templates/{template_id}/settings",
+      "sources": [
+        {
+          "url": "https://www.100ms.live/docs/server-side/v2/api-reference/policy/update-settings",
+          "raw_source_url": "https://raw.githubusercontent.com/100mslive/100ms-docs/main/docs/server-side/v2/api-reference/policy/update-settings.mdx",
+          "coordinate": "visible request component"
+        }
+      ]
+    }
+  ]
+}

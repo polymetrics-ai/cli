@@ -1,21 +1,690 @@
 {
-  "api": "Countercyclical API v1 (https://api.countercyclical.io/v1)",
+  "api": "Countercyclical API v1 (https://api.countercyclical.io/v1); provider artifact version: Countercyclical API v1; current GitBook developer reference",
   "docs": "https://docs.countercyclical.io/developers/endpoints",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion, re-reviewed against the live developer docs (docs.countercyclical.io/developers/*, fetched 2026-07-04, which document a materially larger surface than the upstream Airbyte-source-shaped legacy connector's 3-stream manifest): 6 read streams (the 3 legacy streams retained, plus teams/assumptions/pipelines) and 1 write action (create_investment). Every documented endpoint is covered_by a stream/write action XOR excluded with a real category and reason. Webhooks are documented as a settings-UI-managed Enterprise feature with no CRUD API endpoint at all (non_data_endpoint); the two integration-specific investment-creation actions (Zapier and Make) are functionally identical (same apiKey query-param auth every other endpoint uses, same tickerSymbol-only request body) so only one is exposed as a write action to avoid declaring two write actions with byte-identical behavior.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (12 documented operations across 17 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "countercyclical-artifact-2026-08-09",
+      "url": "https://docs.countercyclical.io/developers/endpoints",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344"
+    },
+    {
+      "id": "countercyclical-artifact-ref-76e562fe7fb30be1-0c787a95f18e9044",
+      "url": "https://docs.countercyclical.io/developers/endpoints.md",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "76e562fe7fb30be11f99ac07039d470dbbf0f983b96c6bc32bffc17ddd8af1bc"
+    },
+    {
+      "id": "countercyclical-artifact-ref-1f24b6173269667b-c7811625ed23a90f",
+      "url": "https://docs.countercyclical.io/developers/endpoints/investments",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "1f24b6173269667b6f306c0e5909cb588fc8b43655c030fc729c897f65a0d52c"
+    },
+    {
+      "id": "countercyclical-artifact-ref-8ba75a02e6c6ae04-04f654a1079de3ff",
+      "url": "https://docs.countercyclical.io/developers/endpoints/memos",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "8ba75a02e6c6ae0465c707ec1046da6af50f7940f26d2c58c781e36dbc7efd52"
+    },
+    {
+      "id": "countercyclical-artifact-ref-a914d5f526d9040a-1c00bb95c6850fac",
+      "url": "https://docs.countercyclical.io/developers/endpoints/pipelines",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "a914d5f526d9040ad63b2d56eca0a268abd797db852d098cd3b3e0e7e0d484cc"
+    },
+    {
+      "id": "countercyclical-artifact-ref-c3203ccd5484cee0-3c7f6b611920c2c4",
+      "url": "https://docs.countercyclical.io/developers/endpoints/teams",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c3203ccd5484cee0ef0cbdd0221e8625db0e30e8382230d3961c58d91557ae83"
+    },
+    {
+      "id": "countercyclical-artifact-ref-fdb7470944d7ad26-fc24cea7d63aa6a5",
+      "url": "https://docs.countercyclical.io/developers/endpoints/investments.md",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "fdb7470944d7ad26bd3bba5eb93b132acda27b9728e85c5be183a13c286cd222"
+    },
+    {
+      "id": "countercyclical-artifact-ref-86795e2d2b461ee0-0ad1607110631e22",
+      "url": "https://docs.countercyclical.io/developers/endpoints/memos.md",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "86795e2d2b461ee0aa63b660617a652197338b05559a57e8d44b09a42299704c"
+    },
+    {
+      "id": "countercyclical-artifact-ref-eb120f05c46da126-1d8f3b704fd1c1fa",
+      "url": "https://docs.countercyclical.io/developers/endpoints/pipelines.md",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "eb120f05c46da126d439223b4d0c2d77c53f8d64a5dcb6aa42e73081c6d90cbd"
+    },
+    {
+      "id": "countercyclical-artifact-ref-5d3deafc92d6d08f-126acc8264184da4",
+      "url": "https://docs.countercyclical.io/developers/endpoints/teams.md",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "5d3deafc92d6d08f0d1ce39c7c2692ecd9aecfb09d81259b8ba38c24a97a542d"
+    },
+    {
+      "id": "countercyclical-artifact-ref-8cc79c31c49330fc-865a71ac0b2d0fbf",
+      "url": "https://docs.countercyclical.io/llms.txt",
+      "kind": "official-reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "8cc79c31c49330fc0c27a218aa32cdd0a4b78ab2bf602186a6239208e8c96a74"
+    },
+    {
+      "id": "countercyclical-artifact-ref-0704524086a508eb-9f95b19dd8a11c40",
+      "url": "https://docs.countercyclical.io/developers/endpoints/assumptions.md",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0704524086a508eb2e32343e27856a30decd0af1d3a6bbb8f7bcb5eaeef673f0"
+    },
+    {
+      "id": "countercyclical-artifact-ref-381b8c21d3448ca2-d0275bcc4199b85b",
+      "url": "https://docs.countercyclical.io/developers/endpoints/integrations.md",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "381b8c21d3448ca225a15234d8ed699964ccd17b993fcbc205394846225588d5"
+    },
+    {
+      "id": "countercyclical-artifact-ref-6963e9c3ecc446c7-a5187de11269ae59",
+      "url": "https://docs.countercyclical.io/developers/endpoints/integrations/make.md",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "6963e9c3ecc446c71d954e3a2ef6bada801b7c212b45b5364de59bdb536ed62f"
+    },
+    {
+      "id": "countercyclical-artifact-ref-18c47f51a4d0e9ca-46a6839878059152",
+      "url": "https://docs.countercyclical.io/developers/endpoints/integrations/zapier.md",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "18c47f51a4d0e9ca9e9307682786c0c396f51cf508b3e79fe954cdddcb8b4171"
+    },
+    {
+      "id": "countercyclical-artifact-ref-5256aae01e23b594-6d49a859809f2d7a",
+      "url": "https://docs.countercyclical.io/developers/endpoints/valuations.md",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "5256aae01e23b594a84602294bfbf08482f143273f15bfeb4ab0b97a87384650"
+    },
+    {
+      "id": "countercyclical-artifact-ref-7bde7ac9253b213e-595c8912d5cc6f1c",
+      "url": "https://docs.countercyclical.io/fundamentals/settings/account/preferences.md",
+      "kind": "html_reference",
+      "version": "Countercyclical API v1; current GitBook developer reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "7bde7ac9253b213efe0b46760ec63b5bef97e0cdd74086c7487b1a405888e335"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/v1/investments", "covered_by": { "stream": "investments" } },
-    { "method": "GET", "path": "/v1/valuations", "covered_by": { "stream": "valuations" } },
-    { "method": "GET", "path": "/v1/memos", "covered_by": { "stream": "memos" } },
-    { "method": "GET", "path": "/v1/teams", "covered_by": { "stream": "teams" } },
-    { "method": "GET", "path": "/v1/assumptions", "covered_by": { "stream": "assumptions" } },
-    { "method": "GET", "path": "/v1/pipelines", "covered_by": { "stream": "pipelines" } },
-    { "method": "POST", "path": "/v1/integrations/make/actions/investments", "covered_by": { "write": "create_investment" } },
-    { "method": "GET", "path": "/v1/integrations/make/auth", "excluded": { "category": "non_data_endpoint", "reason": "Make-app credential-validation probe, not a syncable object or a record mutation" } },
-    { "method": "GET", "path": "/v1/integrations/make/triggers/investments", "excluded": { "category": "duplicate_of", "reason": "Make-scenario-trigger polling endpoint for newly created investments; identical record shape to the already-covered investments list stream" } },
-    { "method": "POST", "path": "/v1/integrations/zapier/actions/investments", "excluded": { "category": "duplicate_of", "reason": "functionally identical to create_investment (POST .../make/actions/investments): same apiKey auth, same tickerSymbol-only request body, same investment-creation effect; declaring both would be two write actions with byte-identical behavior differing only in URL path" } },
-    { "method": "GET", "path": "/v1/integrations/zapier/auth", "excluded": { "category": "non_data_endpoint", "reason": "Zapier-app credential-validation probe, not a syncable object or a record mutation" } },
-    { "method": "GET", "path": "/v1/integrations/zapier/triggers/investments", "excluded": { "category": "duplicate_of", "reason": "Zapier-trigger polling endpoint for newly created investments; identical record shape to the already-covered investments list stream" } },
-    { "method": "POST", "path": "/v1/webhooks", "excluded": { "category": "non_data_endpoint", "reason": "webhook management is documented as a Settings-UI-only Enterprise feature (Settings > Workspace > Advanced > Developers); no CRUD API endpoint is published for creating/listing/deleting webhooks" } }
+    {
+      "method": "GET",
+      "path": "/assumptions",
+      "provenance": {
+        "artifact": "countercyclical-artifact-ref-0704524086a508eb-9f95b19dd8a11c40",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints/assumptions.md",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0704524086a508eb2e32343e27856a30decd0af1d3a6bbb8f7bcb5eaeef673f0",
+        "coordinate": "https://docs.countercyclical.io/developers/endpoints/assumptions.md#GET /assumptions"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/make/actions/investments",
+      "provenance": {
+        "artifact": "countercyclical-artifact-ref-6963e9c3ecc446c7-a5187de11269ae59",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints/integrations/make.md",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6963e9c3ecc446c71d954e3a2ef6bada801b7c212b45b5364de59bdb536ed62f",
+        "coordinate": "https://docs.countercyclical.io/developers/endpoints/integrations/make.md#POST /integrations/make/actions/investments"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/make/auth",
+      "provenance": {
+        "artifact": "countercyclical-artifact-ref-6963e9c3ecc446c7-a5187de11269ae59",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints/integrations/make.md",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6963e9c3ecc446c71d954e3a2ef6bada801b7c212b45b5364de59bdb536ed62f",
+        "coordinate": "https://docs.countercyclical.io/developers/endpoints/integrations/make.md#GET /integrations/make/auth"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/make/triggers/investments",
+      "provenance": {
+        "artifact": "countercyclical-artifact-ref-6963e9c3ecc446c7-a5187de11269ae59",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints/integrations/make.md",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6963e9c3ecc446c71d954e3a2ef6bada801b7c212b45b5364de59bdb536ed62f",
+        "coordinate": "https://docs.countercyclical.io/developers/endpoints/integrations/make.md#GET /integrations/make/triggers/investments"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/zapier/actions/investments",
+      "provenance": {
+        "artifact": "countercyclical-artifact-ref-18c47f51a4d0e9ca-46a6839878059152",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints/integrations/zapier.md",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "18c47f51a4d0e9ca9e9307682786c0c396f51cf508b3e79fe954cdddcb8b4171",
+        "coordinate": "https://docs.countercyclical.io/developers/endpoints/integrations/zapier.md#POST /integrations/zapier/actions/investments"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/zapier/auth",
+      "provenance": {
+        "artifact": "countercyclical-artifact-ref-18c47f51a4d0e9ca-46a6839878059152",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints/integrations/zapier.md",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "18c47f51a4d0e9ca9e9307682786c0c396f51cf508b3e79fe954cdddcb8b4171",
+        "coordinate": "https://docs.countercyclical.io/developers/endpoints/integrations/zapier.md#GET /integrations/zapier/auth"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/zapier/triggers/investments",
+      "provenance": {
+        "artifact": "countercyclical-artifact-ref-18c47f51a4d0e9ca-46a6839878059152",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints/integrations/zapier.md",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "18c47f51a4d0e9ca9e9307682786c0c396f51cf508b3e79fe954cdddcb8b4171",
+        "coordinate": "https://docs.countercyclical.io/developers/endpoints/integrations/zapier.md#GET /integrations/zapier/triggers/investments"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/investments",
+      "provenance": {
+        "artifact": "countercyclical-artifact-ref-1f24b6173269667b-c7811625ed23a90f",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints/investments",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1f24b6173269667b6f306c0e5909cb588fc8b43655c030fc729c897f65a0d52c",
+        "coordinate": "https://docs.countercyclical.io/developers/endpoints/investments#GET /investments",
+        "alternatives": [
+          {
+            "source_url": "https://docs.countercyclical.io/developers/endpoints/investments.md",
+            "source_kind": "html_reference",
+            "version": "Countercyclical API v1; current GitBook developer reference",
+            "retrieved_at": "2026-08-09",
+            "sha256": "fdb7470944d7ad26bd3bba5eb93b132acda27b9728e85c5be183a13c286cd222",
+            "coordinate": "https://docs.countercyclical.io/developers/endpoints/investments.md#GET /investments"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/memos",
+      "provenance": {
+        "artifact": "countercyclical-artifact-ref-8ba75a02e6c6ae04-04f654a1079de3ff",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints/memos",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8ba75a02e6c6ae0465c707ec1046da6af50f7940f26d2c58c781e36dbc7efd52",
+        "coordinate": "https://docs.countercyclical.io/developers/endpoints/memos#GET /memos",
+        "alternatives": [
+          {
+            "source_url": "https://docs.countercyclical.io/developers/endpoints/memos.md",
+            "source_kind": "html_reference",
+            "version": "Countercyclical API v1; current GitBook developer reference",
+            "retrieved_at": "2026-08-09",
+            "sha256": "86795e2d2b461ee0aa63b660617a652197338b05559a57e8d44b09a42299704c",
+            "coordinate": "https://docs.countercyclical.io/developers/endpoints/memos.md#GET /memos"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pipelines",
+      "provenance": {
+        "artifact": "countercyclical-artifact-ref-a914d5f526d9040a-1c00bb95c6850fac",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints/pipelines",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a914d5f526d9040ad63b2d56eca0a268abd797db852d098cd3b3e0e7e0d484cc",
+        "coordinate": "https://docs.countercyclical.io/developers/endpoints/pipelines#GET /pipelines",
+        "alternatives": [
+          {
+            "source_url": "https://docs.countercyclical.io/developers/endpoints/pipelines.md",
+            "source_kind": "html_reference",
+            "version": "Countercyclical API v1; current GitBook developer reference",
+            "retrieved_at": "2026-08-09",
+            "sha256": "eb120f05c46da126d439223b4d0c2d77c53f8d64a5dcb6aa42e73081c6d90cbd",
+            "coordinate": "https://docs.countercyclical.io/developers/endpoints/pipelines.md#GET /pipelines"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams",
+      "provenance": {
+        "artifact": "countercyclical-artifact-ref-c3203ccd5484cee0-3c7f6b611920c2c4",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints/teams",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c3203ccd5484cee0ef0cbdd0221e8625db0e30e8382230d3961c58d91557ae83",
+        "coordinate": "https://docs.countercyclical.io/developers/endpoints/teams#GET /teams",
+        "alternatives": [
+          {
+            "source_url": "https://docs.countercyclical.io/developers/endpoints/teams.md",
+            "source_kind": "html_reference",
+            "version": "Countercyclical API v1; current GitBook developer reference",
+            "retrieved_at": "2026-08-09",
+            "sha256": "5d3deafc92d6d08f0d1ce39c7c2692ecd9aecfb09d81259b8ba38c24a97a542d",
+            "coordinate": "https://docs.countercyclical.io/developers/endpoints/teams.md#GET /teams"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/assumptions",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "countercyclical-artifact-2026-08-09",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344",
+        "coordinate": "existing-surface[GET /v1/assumptions]"
+      },
+      "covered_by": {
+        "stream": "assumptions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/integrations/make/actions/investments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "countercyclical-artifact-2026-08-09",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344",
+        "coordinate": "existing-surface[POST /v1/integrations/make/actions/investments]"
+      },
+      "covered_by": {
+        "write": "create_investment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/integrations/make/auth",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "countercyclical-artifact-2026-08-09",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344",
+        "coordinate": "existing-surface[GET /v1/integrations/make/auth]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Make-app credential-validation probe, not a syncable object or a record mutation",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/integrations/make/triggers/investments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "countercyclical-artifact-2026-08-09",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344",
+        "coordinate": "existing-surface[GET /v1/integrations/make/triggers/investments]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Make-scenario-trigger polling endpoint for newly created investments; identical record shape to the already-covered investments list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/integrations/zapier/actions/investments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "countercyclical-artifact-2026-08-09",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344",
+        "coordinate": "existing-surface[POST /v1/integrations/zapier/actions/investments]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "functionally identical to create_investment (POST .../make/actions/investments): same apiKey auth, same tickerSymbol-only request body, same investment-creation effect; declaring both would be two write actions with byte-identical behavior differing only in URL path",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/integrations/zapier/auth",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "countercyclical-artifact-2026-08-09",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344",
+        "coordinate": "existing-surface[GET /v1/integrations/zapier/auth]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Zapier-app credential-validation probe, not a syncable object or a record mutation",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/integrations/zapier/triggers/investments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "countercyclical-artifact-2026-08-09",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344",
+        "coordinate": "existing-surface[GET /v1/integrations/zapier/triggers/investments]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Zapier-trigger polling endpoint for newly created investments; identical record shape to the already-covered investments list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/investments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "countercyclical-artifact-2026-08-09",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344",
+        "coordinate": "existing-surface[GET /v1/investments]"
+      },
+      "covered_by": {
+        "stream": "investments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/memos",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "countercyclical-artifact-2026-08-09",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344",
+        "coordinate": "existing-surface[GET /v1/memos]"
+      },
+      "covered_by": {
+        "stream": "memos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/pipelines",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "countercyclical-artifact-2026-08-09",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344",
+        "coordinate": "existing-surface[GET /v1/pipelines]"
+      },
+      "covered_by": {
+        "stream": "pipelines"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/teams",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "countercyclical-artifact-2026-08-09",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344",
+        "coordinate": "existing-surface[GET /v1/teams]"
+      },
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/valuations",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "countercyclical-artifact-2026-08-09",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344",
+        "coordinate": "existing-surface[GET /v1/valuations]"
+      },
+      "covered_by": {
+        "stream": "valuations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/webhooks",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "countercyclical-artifact-2026-08-09",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344",
+        "coordinate": "existing-surface[POST /v1/webhooks]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "webhook management is documented as a Settings-UI-only Enterprise feature (Settings \u003e Workspace \u003e Advanced \u003e Developers); no CRUD API endpoint is published for creating/listing/deleting webhooks",
+        "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/valuations",
+      "provenance": {
+        "artifact": "countercyclical-artifact-ref-5256aae01e23b594-6d49a859809f2d7a",
+        "source_url": "https://docs.countercyclical.io/developers/endpoints/valuations.md",
+        "source_kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5256aae01e23b594a84602294bfbf08482f143273f15bfeb4ab0b97a87384650",
+        "coordinate": "https://docs.countercyclical.io/developers/endpoints/valuations.md#GET /valuations"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    }
   ]
 }

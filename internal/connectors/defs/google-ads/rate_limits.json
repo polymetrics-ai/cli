@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developers.google.com/google-ads/api/docs/productionize/rate-limits (retrieved 2026-08-06): Google Ads applies variable token-bucket limits jointly by client customer ID and developer token, without a stable, non-secret scope and numeric budget to declare."
+}

@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-044-public-machine-manifest.json",
+  "candidates": 40,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "gutendex",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 4 operation(s), not the immutable ledger count 2"
+    },
+    {
+      "connector": "hugging-face-datasets",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 4 operation(s), not the immutable ledger count 11"
+    },
+    {
+      "connector": "freshcaller",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 8 operation(s), not the immutable ledger count 18"
+    },
+    {
+      "connector": "kissmetrics",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 6 operation(s), not the immutable ledger count 18"
+    },
+    {
+      "connector": "linkrunner",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 12 operation(s), not the immutable ledger count 20"
+    },
+    {
+      "connector": "giphy",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 9 operation(s), not the immutable ledger count 24"
+    },
+    {
+      "connector": "intruder",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 4 operation(s), not the immutable ledger count 32"
+    },
+    {
+      "connector": "judge-me-reviews",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 36 operation(s), not the immutable ledger count 34"
+    },
+    {
+      "connector": "imagga",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 5 operation(s), not the immutable ledger count 35"
+    },
+    {
+      "connector": "glassfrog",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 9 operation(s), not the immutable ledger count 38"
+    },
+    {
+      "connector": "jotform",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 8 operation(s), not the immutable ledger count 51"
+    },
+    {
+      "connector": "fullstory",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 67 operation(s), not the immutable ledger count 52"
+    },
+    {
+      "connector": "flexport",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 58 operation(s), not the immutable ledger count 56"
+    },
+    {
+      "connector": "k6-cloud",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 3 operation(s), not the immutable ledger count 57"
+    },
+    {
+      "connector": "jobnimbus",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 9 operation(s), not the immutable ledger count 66"
+    },
+    {
+      "connector": "gologin",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 4 operation(s), not the immutable ledger count 71"
+    },
+    {
+      "connector": "less-annoying-crm",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 5 operation(s), not the immutable ledger count 79"
+    },
+    {
+      "connector": "getgist",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 85 operation(s), not the immutable ledger count 83"
+    },
+    {
+      "connector": "justcall",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 7 operation(s), not the immutable ledger count 87"
+    },
+    {
+      "connector": "mailerlite",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 9 operation(s), not the immutable ledger count 95"
+    },
+    {
+      "connector": "lob",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 13 operation(s), not the immutable ledger count 105"
+    },
+    {
+      "connector": "insightful",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 13 operation(s), not the immutable ledger count 112"
+    },
+    {
+      "connector": "instatus",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 94 operation(s), not the immutable ledger count 114"
+    },
+    {
+      "connector": "freshsales",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 7 operation(s), not the immutable ledger count 118"
+    },
+    {
+      "connector": "harvest",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 25 operation(s), not the immutable ledger count 124"
+    },
+    {
+      "connector": "hubspot",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 3118 operation(s), not the immutable ledger count 147"
+    },
+    {
+      "connector": "freshbooks",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 11 operation(s), not the immutable ledger count 149"
+    },
+    {
+      "connector": "mailjet-mail",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 11 operation(s), not the immutable ledger count 153"
+    },
+    {
+      "connector": "lokalise",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 5 operation(s), not the immutable ledger count 166"
+    },
+    {
+      "connector": "free-agent-connector",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 5 operation(s), not the immutable ledger count 200"
+    },
+    {
+      "connector": "freshdesk",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 10 operation(s), not the immutable ledger count 202"
+    },
+    {
+      "connector": "kisi",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 8 operation(s), not the immutable ledger count 209"
+    },
+    {
+      "connector": "katana",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 10 operation(s), not the immutable ledger count 223"
+    },
+    {
+      "connector": "grafana",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 11 operation(s), not the immutable ledger count 227"
+    },
+    {
+      "connector": "guru",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 7 operation(s), not the immutable ledger count 251"
+    },
+    {
+      "connector": "intercom",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 10 operation(s), not the immutable ledger count 324"
+    },
+    {
+      "connector": "invoiceninja",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 9 operation(s), not the immutable ledger count 356"
+    },
+    {
+      "connector": "freshservice",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 478 operation(s), not the immutable ledger count 493"
+    },
+    {
+      "connector": "high-level",
+      "stage": "existing_surface_evidence",
+      "reason": "existing source surface has 10 operation(s), not the immutable ledger count 630"
+    },
+    {
+      "connector": "genesys",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no genesys.{json,yaml,yml,txt,md,html,htm}"
+    }
+  ]
+}

@@ -1,0 +1,2177 @@
+{
+  "operations": [
+    {
+      "id": "shortcut.get.api-v3-categories",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/categories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-categories",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/categories",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-categories-category-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/categories/{category-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/categories/{category-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-categories-category-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/categories/{category-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/categories/{category-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-categories-category-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/categories/{category-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/categories/{category-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-categories-category-public-id-milestones",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/categories/{category-public-id}/milestones",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/categories/{category-public-id}/milestones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-categories-category-public-id-objectives",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/categories/{category-public-id}/objectives",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/categories/{category-public-id}/objectives",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-custom-fields",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/custom-fields",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/custom-fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-custom-fields-custom-field-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/custom-fields/{custom-field-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/custom-fields/{custom-field-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-custom-fields-custom-field-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/custom-fields/{custom-field-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/custom-fields/{custom-field-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-custom-fields-custom-field-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/custom-fields/{custom-field-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/custom-fields/{custom-field-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-documents",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/documents",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/documents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-documents",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/documents",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/documents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-documents-doc-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/documents/{doc-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/documents/{doc-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-documents-doc-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/documents/{doc-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/documents/{doc-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-documents-doc-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/documents/{doc-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/documents/{doc-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-documents-doc-public-id-epics",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/documents/{doc-public-id}/epics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/documents/{doc-public-id}/epics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-documents-doc-public-id-epics-epic-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/documents/{doc-public-id}/epics/{epic-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/documents/{doc-public-id}/epics/{epic-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-documents-doc-public-id-epics-epic-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/documents/{doc-public-id}/epics/{epic-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/documents/{doc-public-id}/epics/{epic-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-entity-templates",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/entity-templates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/entity-templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-entity-templates",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/entity-templates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/entity-templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-entity-templates-disable",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/entity-templates/disable",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/entity-templates/disable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-entity-templates-enable",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/entity-templates/enable",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/entity-templates/enable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-entity-templates-entity-template-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/entity-templates/{entity-template-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/entity-templates/{entity-template-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-entity-templates-entity-template-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/entity-templates/{entity-template-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/entity-templates/{entity-template-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-entity-templates-entity-template-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/entity-templates/{entity-template-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/entity-templates/{entity-template-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-epic-workflow",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/epic-workflow",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/epic-workflow",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-epics",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/epics",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/epics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-epics-paginated",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/epics/paginated",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/epics/paginated",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-epics-epic-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/epics/{epic-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/epics/{epic-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-epics-epic-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/epics/{epic-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/epics/{epic-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-epics-epic-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/epics/{epic-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/epics/{epic-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-epics-epic-public-id-comments",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/epics/{epic-public-id}/comments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/epics/{epic-public-id}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-epics-epic-public-id-comments",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/epics/{epic-public-id}/comments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/epics/{epic-public-id}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-epics-epic-public-id-comments-comment-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/epics/{epic-public-id}/comments/{comment-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/epics/{epic-public-id}/comments/{comment-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-epics-epic-public-id-comments-comment-public-id",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/epics/{epic-public-id}/comments/{comment-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/epics/{epic-public-id}/comments/{comment-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-epics-epic-public-id-comments-comment-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/epics/{epic-public-id}/comments/{comment-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/epics/{epic-public-id}/comments/{comment-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-epics-epic-public-id-comments-comment-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/epics/{epic-public-id}/comments/{comment-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/epics/{epic-public-id}/comments/{comment-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-epics-epic-public-id-documents",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/epics/{epic-public-id}/documents",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/epics/{epic-public-id}/documents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-epics-epic-public-id-health",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/epics/{epic-public-id}/health",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/epics/{epic-public-id}/health",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-epics-epic-public-id-health",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/epics/{epic-public-id}/health",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/epics/{epic-public-id}/health",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-epics-epic-public-id-health-history",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/epics/{epic-public-id}/health-history",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/epics/{epic-public-id}/health-history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-epics-epic-public-id-stories",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/epics/{epic-public-id}/stories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/epics/{epic-public-id}/stories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-external-link-stories",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/external-link/stories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/external-link/stories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-files",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/files",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-files",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/files",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-files-file-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/files/{file-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/files/{file-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-files-file-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/files/{file-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/files/{file-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-files-file-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/files/{file-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/files/{file-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-groups",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/groups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-groups",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/groups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-groups-group-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/groups/{group-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/groups/{group-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-groups-group-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/groups/{group-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/groups/{group-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-groups-group-public-id-stories",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/groups/{group-public-id}/stories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/groups/{group-public-id}/stories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-health-health-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/health/{health-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/health/{health-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-integrations-webhook",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/integrations/webhook",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/integrations/webhook",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-integrations-webhook-integration-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/integrations/webhook/{integration-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/integrations/webhook/{integration-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-integrations-webhook-integration-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/integrations/webhook/{integration-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/integrations/webhook/{integration-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-iterations",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/iterations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/iterations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-iterations-disable",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/iterations/disable",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/iterations/disable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-iterations-enable",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/iterations/enable",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/iterations/enable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-iterations-iteration-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/iterations/{iteration-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/iterations/{iteration-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-iterations-iteration-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/iterations/{iteration-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/iterations/{iteration-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-iterations-iteration-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/iterations/{iteration-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/iterations/{iteration-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-iterations-iteration-public-id-stories",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/iterations/{iteration-public-id}/stories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/iterations/{iteration-public-id}/stories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-key-results-key-result-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/key-results/{key-result-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/key-results/{key-result-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-key-results-key-result-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/key-results/{key-result-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/key-results/{key-result-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-labels",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/labels",
+      "description": "not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/labels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-labels",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/labels",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/labels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-labels-label-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/labels/{label-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/labels/{label-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-labels-label-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/labels/{label-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/labels/{label-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-labels-label-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/labels/{label-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/labels/{label-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-labels-label-public-id-epics",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/labels/{label-public-id}/epics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/labels/{label-public-id}/epics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-labels-label-public-id-stories",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/labels/{label-public-id}/stories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/labels/{label-public-id}/stories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-linked-files",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/linked-files",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/linked-files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-linked-files",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/linked-files",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/linked-files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-linked-files-linked-file-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/linked-files/{linked-file-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/linked-files/{linked-file-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-linked-files-linked-file-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/linked-files/{linked-file-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/linked-files/{linked-file-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-linked-files-linked-file-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/linked-files/{linked-file-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/linked-files/{linked-file-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-member",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/member",
+      "description": "authenticated-member profile introspection, not a syncable object stream",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/member",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-members",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/members",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-members-member-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/members/{member-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/members/{member-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-milestones",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/milestones",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/milestones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-milestones",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/milestones",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/milestones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-milestones-milestone-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/milestones/{milestone-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/milestones/{milestone-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-milestones-milestone-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/milestones/{milestone-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/milestones/{milestone-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-milestones-milestone-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/milestones/{milestone-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/milestones/{milestone-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-milestones-milestone-public-id-epics",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/milestones/{milestone-public-id}/epics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/milestones/{milestone-public-id}/epics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-objectives",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/objectives",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/objectives",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-objectives",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/objectives",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/objectives",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-objectives-objective-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/objectives/{objective-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/objectives/{objective-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-objectives-objective-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/objectives/{objective-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/objectives/{objective-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-objectives-objective-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/objectives/{objective-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/objectives/{objective-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-objectives-objective-public-id-epics",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/objectives/{objective-public-id}/epics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/objectives/{objective-public-id}/epics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-objectives-objective-public-id-health",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/objectives/{objective-public-id}/health",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/objectives/{objective-public-id}/health",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-objectives-objective-public-id-health",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/objectives/{objective-public-id}/health",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/objectives/{objective-public-id}/health",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-objectives-objective-public-id-health-history",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/objectives/{objective-public-id}/health-history",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/objectives/{objective-public-id}/health-history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-projects",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/projects",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-projects-project-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/projects/{project-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/projects/{project-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-projects-project-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/projects/{project-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/projects/{project-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-projects-project-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/projects/{project-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/projects/{project-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-projects-project-public-id-stories",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/projects/{project-public-id}/stories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/projects/{project-public-id}/stories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-repositories",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/repositories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/repositories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-repositories-repo-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/repositories/{repo-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/repositories/{repo-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-search",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/search",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-search-documents",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/search/documents",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/search/documents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-search-epics",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/search/epics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/search/epics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-search-iterations",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/search/iterations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/search/iterations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-search-milestones",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/search/milestones",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/search/milestones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-search-objectives",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/search/objectives",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/search/objectives",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-search-stories",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/search/stories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/search/stories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-stories",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/stories",
+      "description": "legacy connector never implemented story creation; not implemented in this bundle",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/stories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-stories-bulk",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/stories/bulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/stories/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-stories-bulk",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/stories/bulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/stories/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-stories-bulk",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/stories/bulk",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/stories/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-stories-from-template",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/stories/from-template",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/stories/from-template",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-stories-search",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/stories/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/stories/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-stories-story-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/stories/{story-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/stories/{story-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-stories-story-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/stories/{story-public-id}",
+      "description": "legacy connector never implemented story updates; not implemented in this bundle",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/stories/{story-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-stories-story-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/stories/{story-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/stories/{story-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-stories-story-public-id-comments",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/stories/{story-public-id}/comments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/stories/{story-public-id}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-stories-story-public-id-comments",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/stories/{story-public-id}/comments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/stories/{story-public-id}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-stories-story-public-id-comments-comment-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/stories/{story-public-id}/comments/{comment-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-stories-story-public-id-comments-comment-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/stories/{story-public-id}/comments/{comment-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-stories-story-public-id-comments-comment-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/stories/{story-public-id}/comments/{comment-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-stories-story-public-id-comments-comment-public-id-reactions",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/stories/{story-public-id}/comments/{comment-public-id}/reactions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}/reactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-stories-story-public-id-comments-comment-public-id-reactions",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/stories/{story-public-id}/comments/{comment-public-id}/reactions",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}/reactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-stories-story-public-id-comments-comment-public-id-unlink-from-slack",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/stories/{story-public-id}/comments/{comment-public-id}/unlink-from-slack",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}/unlink-from-slack",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-stories-story-public-id-history",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/stories/{story-public-id}/history",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/stories/{story-public-id}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-stories-story-public-id-sub-tasks",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/stories/{story-public-id}/sub-tasks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/stories/{story-public-id}/sub-tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-stories-story-public-id-tasks",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/stories/{story-public-id}/tasks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/stories/{story-public-id}/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-stories-story-public-id-tasks-task-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/stories/{story-public-id}/tasks/{task-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/stories/{story-public-id}/tasks/{task-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-stories-story-public-id-tasks-task-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/stories/{story-public-id}/tasks/{task-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/stories/{story-public-id}/tasks/{task-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-stories-story-public-id-tasks-task-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/stories/{story-public-id}/tasks/{task-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/stories/{story-public-id}/tasks/{task-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.post.api-v3-story-links",
+      "kind": "rest_write",
+      "summary": "POST /api/v3/story-links",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v3/story-links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-story-links-story-link-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/story-links/{story-link-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/story-links/{story-link-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.put.api-v3-story-links-story-link-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v3/story-links/{story-link-public-id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v3/story-links/{story-link-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.delete.api-v3-story-links-story-link-public-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v3/story-links/{story-link-public-id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v3/story-links/{story-link-public-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-workflows",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/workflows",
+      "description": "not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/workflows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shortcut.get.api-v3-workflows-workflow-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v3/workflows/{workflow-public-id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v3/workflows/{workflow-public-id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

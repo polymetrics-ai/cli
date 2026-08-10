@@ -1,0 +1,571 @@
+package main
+
+import (
+	"bytes"
+	"crypto/sha256"
+	"fmt"
+	"net/url"
+	"regexp"
+	"sort"
+	"strings"
+
+	nethtml "golang.org/x/net/html"
+)
+
+var batchHTMLExplicitOperation = regexp.MustCompile(`(?i)\b(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS|TRACE)\b\x60?\s+\x60?(/[A-Za-z0-9._~%!$&'()*+,;=:@/{}\[\]-]+)`)
+var batchMarkdownReferenceLink = regexp.MustCompile(`\[[^\]]+\]\(([^)\s]+)\)`)
+var batchHTMLAnglePathParameter = regexp.MustCompile(`<([A-Za-z_][A-Za-z0-9_-]*)>`)
+
+// completeBatchHTMLReferenceRoot accepts a provider's root reference without
+// traversing unrelated linked documents only when its own explicit request
+// inventory already satisfies the immutable ledger count.
+func completeBatchHTMLReferenceRoot(candidate BatchManifestConnector, raw []byte, source batchArtifactSource) (batchArtifactInventory, bool, error) {
+	inventory, err := parseBatchHTMLReferenceRoot(raw, source)
+	if err != nil {
+		return batchArtifactInventory{}, false, err
+	}
+	return inventory, len(inventory.Endpoints) >= candidate.OperationsTotal, nil
+}
+
+func parseBatchHTMLReferenceRoot(raw []byte, source batchArtifactSource) (batchArtifactInventory, error) {
+	if source.URL == "" {
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML reference has no source URL")
+	}
+	if source.Kind == "" {
+		source.Kind = "html_reference"
+	}
+	if source.SHA256 == "" {
+		source.SHA256 = fmt.Sprintf("%x", sha256Bytes(raw))
+	}
+	rootURL, err := parseBatchReferenceURL(source.URL)
+	if err != nil {
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML reference URL is unsafe: %v", err)
+	}
+	inventory := batchArtifactInventory{Sources: []batchArtifactSource{source}}
+	for _, match := range batchHTMLExplicitOperationMatches(raw) {
+		method := strings.ToUpper(string(match[1]))
+		path := normalizeBatchHTMLOperationPath(string(match[2]))
+		if path == "" {
+			continue
+		}
+		endpoint := batchArtifactEndpoint{
+			Method:           method,
+			Path:             path,
+			Summary:          fmt.Sprintf("%s %s", method, path),
+			SourceURL:        source.URL,
+			SourceKind:       source.Kind,
+			SourceVersion:    source.Version,
+			SourceRetrieved:  source.Retrieved,
+			SourceSHA256:     source.SHA256,
+			SourceCoordinate: fmt.Sprintf("%s#%s %s", rootURL.String(), method, path),
+		}
+		inventory = mergeBatchArtifactInventories(inventory, batchArtifactInventory{Endpoints: []batchArtifactEndpoint{endpoint}})
+	}
+	if len(inventory.Endpoints) == 0 {
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML root contains no explicit operations")
+	}
+	return deduplicateBatchArtifactSources(inventory), nil
+}
+
+// parseBatchHTMLReference is deliberately conservative: it only normalizes
+// method/path pairs printed by the provider and machine-readable sources
+// linked by provider-owned pages. It never turns prose such as "get started"
+// into an operation, and traversal is capped and cacheable through fetch.
+func parseBatchHTMLReference(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
+	return parseBatchHTMLReferenceWithBudget(raw, source, fetch, newBatchArtifactReferenceBudget(raw))
+}
+
+func parseBatchHTMLReferenceWithBudget(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, error) {
+	if source.URL == "" {
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML reference has no source URL")
+	}
+	if budget == nil {
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML reference has no shared traversal budget")
+	}
+	if source.Kind == "" {
+		source.Kind = "html_reference"
+	}
+	if source.SHA256 == "" {
+		source.SHA256 = fmt.Sprintf("%x", sha256Bytes(raw))
+	}
+	rootURL, err := parseBatchReferenceURL(source.URL)
+	if err != nil {
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML reference URL is unsafe: %v", err)
+	}
+	type page struct {
+		URL    string
+		Raw    []byte
+		Source batchArtifactSource
+	}
+	queue := []page{{URL: rootURL.String(), Raw: raw, Source: source}}
+	seen := map[string]bool{rootURL.String(): true}
+	sources := []batchArtifactSource{source}
+	inventory := batchArtifactInventory{}
+	for len(queue) > 0 {
+		current := queue[0]
+		queue = queue[1:]
+
+		machineSource := current.Source
+		machineSource.Kind = "official-reference"
+		machine, isMachine, machineErr := parseBatchReferenceMachineArtifactWithBudget(current.Raw, machineSource, fetch, budget)
+		if machineErr != nil {
+			return batchArtifactInventory{}, machineErr
+		}
+		if isMachine {
+			inventory = mergeBatchArtifactInventories(inventory, machine)
+			continue
+		}
+
+		for _, match := range batchHTMLExplicitOperationMatches(current.Raw) {
+			method := strings.ToUpper(string(match[1]))
+			path := normalizeBatchHTMLOperationPath(string(match[2]))
+			if path == "" {
+				continue
+			}
+			endpoint := batchArtifactEndpoint{
+				Method:           method,
+				Path:             path,
+				Summary:          fmt.Sprintf("%s %s", method, path),
+				SourceURL:        current.Source.URL,
+				SourceKind:       current.Source.Kind,
+				SourceVersion:    current.Source.Version,
+				SourceRetrieved:  current.Source.Retrieved,
+				SourceSHA256:     current.Source.SHA256,
+				SourceCoordinate: fmt.Sprintf("%s#%s %s", current.URL, method, path),
+			}
+			inventory = mergeBatchArtifactInventories(inventory, batchArtifactInventory{Endpoints: []batchArtifactEndpoint{endpoint}})
+		}
+
+		currentURL, currentURLErr := parseBatchReferenceURL(current.URL)
+		if currentURLErr != nil {
+			return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference page URL %q is unsafe: %v", current.URL, currentURLErr)
+		}
+		links, linksErr := batchHTMLReferenceLinks(current.Raw, currentURL)
+		if linksErr != nil {
+			return batchArtifactInventory{}, linksErr
+		}
+		for _, link := range links {
+			if seen[link] {
+				continue
+			}
+			if fetch == nil {
+				return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference link %q cannot be fetched during traversal", link)
+			}
+			if !budget.hasDocumentCapacity() {
+				return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference traversal exceeds the %d-document limit", maxBatchArtifactReferenceDocuments)
+			}
+			linkRaw, linkErr := fetch(link)
+			if linkErr != nil {
+				return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference link %q could not be fetched: %v", link, linkErr)
+			}
+			if err := budget.addFetched(linkRaw); err != nil {
+				if err == errBatchArtifactReferenceDocumentLimit {
+					return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference traversal exceeds the %d-document limit", maxBatchArtifactReferenceDocuments)
+				}
+				return batchArtifactInventory{}, batchArtifactInventoryUnknown("official reference traversal exceeds the bounded %d-byte source budget", maxBatchArtifactReferenceBytes)
+			}
+			seen[link] = true
+			linkSource := batchArtifactSource{
+				URL:       link,
+				Kind:      "html_reference",
+				Version:   source.Version,
+				Retrieved: source.Retrieved,
+				SHA256:    fmt.Sprintf("%x", sha256Bytes(linkRaw)),
+			}
+			sources = append(sources, linkSource)
+			queue = append(queue, page{URL: link, Raw: linkRaw, Source: linkSource})
+		}
+	}
+	inventory.Sources = append(inventory.Sources, sources...)
+	inventory = deduplicateBatchArtifactSources(inventory)
+	if len(inventory.Endpoints) == 0 {
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML reference traversal found no explicit operations or linked machine-readable contract")
+	}
+	return inventory, nil
+}
+
+func parseBatchReferenceArtifactWithBudget(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, error) {
+	inventory, isMachine, err := parseBatchReferenceMachineArtifactWithBudget(raw, source, fetch, budget)
+	if err != nil {
+		return batchArtifactInventory{}, err
+	}
+	if isMachine {
+		return inventory, nil
+	}
+	return parseBatchHTMLReferenceWithBudget(raw, source, fetch, budget)
+}
+
+func parseBatchReferenceMachineArtifactWithBudget(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, bool, error) {
+	inventory, openAPIErr := parseBatchOpenAPIArtifactSourceWithBudget(raw, source, fetch, budget)
+	if openAPIErr == nil {
+		return inventory, true, nil
+	}
+	inventory, discoveryErr := parseBatchGoogleDiscoveryArtifact(raw, source)
+	if discoveryErr == nil {
+		return inventory, true, nil
+	}
+	inventory, postmanErr := parseBatchPostmanArtifact(raw, source)
+	if postmanErr == nil {
+		return inventory, true, nil
+	}
+	if batchReferenceLooksLikeMachineArtifact(raw, source.URL) {
+		return batchArtifactInventory{}, true, batchArtifactInventoryUnknown("official reference %q is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: %v; Google Discovery: %v; Postman: %v", source.URL, openAPIErr, discoveryErr, postmanErr)
+	}
+	if !batchReferenceLooksLikeText(raw, source.URL) {
+		return batchArtifactInventory{}, true, batchArtifactInventoryUnknown("official reference %q is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document", source.URL)
+	}
+	return batchArtifactInventory{}, false, nil
+}
+
+func batchReferenceLooksLikeMachineArtifact(raw []byte, sourceURL string) bool {
+	trimmed := bytes.TrimSpace(raw)
+	document, err := parseBatchArtifactDocument(raw, batchArtifactSource{})
+	if err == nil {
+		fields, fieldsErr := batchYAMLFields(document.Root)
+		if fieldsErr == nil {
+			if _, ok := fields["openapi"]; ok {
+				return true
+			}
+			if _, ok := fields["swagger"]; ok {
+				return true
+			}
+			if info, ok := fields["info"]; ok {
+				if infoFields, infoErr := batchYAMLFields(info); infoErr == nil {
+					if schema, schemaErr := batchYAMLFieldString(infoFields, "schema"); schemaErr == nil && strings.Contains(strings.ToLower(schema), "postman") {
+						return true
+					}
+				}
+			}
+			if len(trimmed) > 0 && trimmed[0] == '{' {
+				if _, ok := fields["item"]; ok {
+					return true
+				}
+			}
+		}
+	}
+	return batchReferenceURLHasSuffix(sourceURL, ".json", ".yaml", ".yml")
+}
+
+func batchReferenceLooksLikeText(raw []byte, sourceURL string) bool {
+	lower := strings.ToLower(string(raw))
+	if len(batchHTMLExplicitOperationMatches(raw)) > 0 || batchMarkdownReferenceLink.Match(raw) {
+		return true
+	}
+	for _, marker := range []string{"<html", "<!doctype html", "<a ", "<a>", "<body", "<article", "<main"} {
+		if strings.Contains(lower, marker) {
+			return true
+		}
+	}
+	return batchReferenceURLHasSuffix(sourceURL, ".html", ".htm", ".md", ".txt")
+}
+
+// batchHTMLExplicitOperationMatches recognizes request lines in raw HTML and
+// in the equivalent rendered text. GitBook's Markdown export wraps the
+// method token in a <mark> element, so the method and its code-formatted path
+// are separate raw tokens even though they form one visible request line.
+func batchHTMLExplicitOperationMatches(raw []byte) [][][]byte {
+	matches := batchHTMLExplicitOperation.FindAllSubmatch(raw, -1)
+	if !bytes.Contains(raw, []byte("<")) {
+		return matches
+	}
+	var structuralText strings.Builder
+	var exampleText strings.Builder
+	var allText strings.Builder
+	var ignoredDepth, exampleDepth int
+	tokenizer := nethtml.NewTokenizer(bytes.NewReader(raw))
+	for {
+		tokenType := tokenizer.Next()
+		if tokenType == nethtml.ErrorToken {
+			break
+		}
+		switch tokenType {
+		case nethtml.StartTagToken:
+			token := tokenizer.Token()
+			switch token.Data {
+			case "pre":
+				exampleDepth++
+			case "script", "style", "template", "noscript":
+				ignoredDepth++
+			}
+		case nethtml.EndTagToken:
+			token := tokenizer.Token()
+			switch token.Data {
+			case "pre":
+				if exampleDepth > 0 {
+					exampleDepth--
+				}
+			case "script", "style", "template", "noscript":
+				if ignoredDepth > 0 {
+					ignoredDepth--
+				}
+			}
+		case nethtml.TextToken:
+			if ignoredDepth > 0 {
+				continue
+			}
+			text := tokenizer.Raw()
+			allText.Write(text)
+			allText.WriteByte(' ')
+			if exampleDepth > 0 {
+				exampleText.Write(text)
+				exampleText.WriteByte(' ')
+				continue
+			}
+			structuralText.Write(text)
+			structuralText.WriteByte(' ')
+		}
+	}
+	structuralMatches := batchHTMLExplicitOperation.FindAllSubmatch([]byte(structuralText.String()), -1)
+	if len(structuralMatches) == 0 {
+		return append(matches, batchHTMLExplicitOperation.FindAllSubmatch([]byte(allText.String()), -1)...)
+	}
+	for _, example := range batchHTMLExplicitOperation.FindAllSubmatch([]byte(exampleText.String()), -1) {
+		if batchHTMLExampleOperationMatchesStructuralRoute(example, structuralMatches) {
+			continue
+		}
+		structuralMatches = append(structuralMatches, example)
+	}
+	return structuralMatches
+}
+
+func batchHTMLExampleOperationMatchesStructuralRoute(example [][]byte, structuralMatches [][][]byte) bool {
+	if len(example) < 3 {
+		return false
+	}
+	method := strings.ToUpper(string(example[1]))
+	path := normalizeBatchHTMLOperationPath(string(example[2]))
+	if method == "" || path == "" {
+		return false
+	}
+	for _, structural := range structuralMatches {
+		if len(structural) < 3 || method != strings.ToUpper(string(structural[1])) {
+			continue
+		}
+		structuralPath := normalizeBatchHTMLOperationPath(string(structural[2]))
+		if structuralPath != "" && batchHTMLExamplePathMatchesStructuralRoute(path, structuralPath) {
+			return true
+		}
+	}
+	return false
+}
+
+func batchHTMLExamplePathMatchesStructuralRoute(examplePath, structuralPath string) bool {
+	if examplePath == structuralPath {
+		return true
+	}
+	exampleSegments := strings.Split(strings.TrimPrefix(examplePath, "/"), "/")
+	structuralSegments := strings.Split(strings.TrimPrefix(structuralPath, "/"), "/")
+	if len(exampleSegments) != len(structuralSegments) {
+		return false
+	}
+	for index, structuralSegment := range structuralSegments {
+		exampleSegment := exampleSegments[index]
+		if start := strings.IndexByte(structuralSegment, '{'); start >= 0 {
+			end := strings.IndexByte(structuralSegment[start:], '}')
+			if end < 1 {
+				return false
+			}
+			end += start
+			prefix, suffix := structuralSegment[:start], structuralSegment[end+1:]
+			if !strings.HasPrefix(exampleSegment, prefix) || !strings.HasSuffix(exampleSegment, suffix) {
+				return false
+			}
+			value := strings.TrimSuffix(strings.TrimPrefix(exampleSegment, prefix), suffix)
+			if !batchHTMLExamplePathSegmentValue(value) {
+				return false
+			}
+			continue
+		}
+		if structuralSegment == exampleSegment || structuralSegment == strings.TrimSuffix(exampleSegment, ".json") {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func batchHTMLExamplePathSegmentValue(value string) bool {
+	value = strings.ToLower(strings.TrimSuffix(strings.TrimSpace(value), ".json"))
+	if value == "" || strings.ContainsAny(value, "{}") {
+		return false
+	}
+	switch value {
+	case "all", "current", "default", "latest", "me", "self":
+		return false
+	default:
+		return true
+	}
+}
+
+func batchReferenceURLHasSuffix(rawURL string, suffixes ...string) bool {
+	parsed, err := url.Parse(rawURL)
+	if err != nil {
+		return false
+	}
+	path := strings.ToLower(parsed.Path)
+	for _, suffix := range suffixes {
+		if strings.HasSuffix(path, suffix) {
+			return true
+		}
+	}
+	return false
+}
+
+func batchHTMLReferenceLinks(raw []byte, base *url.URL) ([]string, error) {
+	if base == nil {
+		return nil, nil
+	}
+	links := map[string]bool{}
+	addLink := func(candidate string) error {
+		candidate = strings.TrimSpace(nethtml.UnescapeString(candidate))
+		if !isLikelyBatchReferenceLink(candidate) {
+			return nil
+		}
+		parsed, err := url.Parse(candidate)
+		if err != nil {
+			return batchArtifactInventoryUnknown("official reference contains a malformed selected link")
+		}
+		resolved := base.ResolveReference(parsed)
+		resolved.Fragment = ""
+		resolved.RawFragment = ""
+		if !batchReferenceHostAdmitted(base, resolved) {
+			if batchReferenceLinkRequiresTrustedHost(candidate) {
+				return batchArtifactInventoryUnknown("official reference contains a selected link outside the trusted provider host")
+			}
+			return nil
+		}
+		if err := validateBatchReferenceURLObject(resolved); err != nil {
+			return batchArtifactInventoryUnknown("official reference contains a selected link that failed URL admission")
+		}
+		links[resolved.String()] = true
+		return nil
+	}
+	tokenizer := nethtml.NewTokenizer(bytes.NewReader(raw))
+	for {
+		tokenType := tokenizer.Next()
+		if tokenType == nethtml.ErrorToken {
+			break
+		}
+		if tokenType != nethtml.StartTagToken && tokenType != nethtml.SelfClosingTagToken {
+			continue
+		}
+		token := tokenizer.Token()
+		for _, attribute := range token.Attr {
+			if attribute.Key != "href" && attribute.Key != "src" {
+				continue
+			}
+			if err := addLink(attribute.Val); err != nil {
+				return nil, err
+			}
+		}
+	}
+	for _, match := range batchMarkdownReferenceLink.FindAllSubmatch(raw, -1) {
+		if err := addLink(string(match[1])); err != nil {
+			return nil, err
+		}
+	}
+	out := make([]string, 0, len(links))
+	for link := range links {
+		out = append(out, link)
+	}
+	sort.Strings(out)
+	return out, nil
+}
+
+func batchReferenceHostAdmitted(base, candidate *url.URL) bool {
+	if base == nil || candidate == nil {
+		return false
+	}
+	baseHost := strings.TrimSuffix(strings.ToLower(base.Hostname()), ".")
+	candidateHost := strings.TrimSuffix(strings.ToLower(candidate.Hostname()), ".")
+	if baseHost == "" || candidateHost == "" || baseHost != candidateHost {
+		return false
+	}
+	return batchReferencePort(base) == batchReferencePort(candidate)
+}
+
+func batchReferencePort(value *url.URL) string {
+	if port := value.Port(); port != "" {
+		return port
+	}
+	return "443"
+}
+
+func validateBatchReferenceURLObject(parsed *url.URL) error {
+	if parsed == nil {
+		return fmt.Errorf("reference URL is nil")
+	}
+	return validateBatchArtifactURLObjectWithQuery(parsed, true)
+}
+
+func isLikelyBatchReferenceLink(raw string) bool {
+	lower := strings.ToLower(strings.TrimSpace(raw))
+	if lower == "" || strings.HasPrefix(lower, "#") {
+		return false
+	}
+	if parsed, err := url.Parse(lower); err == nil {
+		// Relative references intentionally have no scheme: they are resolved
+		// against the provider-owned base URL before host and HTTPS admission.
+		// Every explicit scheme must be an HTTP transport, so new opaque or
+		// executable URI schemes cannot become selected traversal candidates.
+		switch parsed.Scheme {
+		case "", "http", "https":
+		default:
+			return false
+		}
+		for _, suffix := range []string{".css", ".js", ".mjs", ".map", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico", ".woff", ".woff2", ".ttf", ".eot", ".rss", "/rss.xml", ".atom", "/atom.xml"} {
+			if strings.HasSuffix(parsed.Path, suffix) {
+				return false
+			}
+		}
+	}
+	for _, marker := range []string{".json", ".yaml", ".yml", "openapi", "swagger", "postman", "reference", "endpoint", "operation", "api-doc", "api/"} {
+		if strings.Contains(lower, marker) {
+			return true
+		}
+	}
+	return false
+}
+
+func batchReferenceLinkRequiresTrustedHost(raw string) bool {
+	lower := strings.ToLower(strings.TrimSpace(raw))
+	for _, marker := range []string{".json", ".yaml", ".yml", "openapi", "swagger", "postman"} {
+		if strings.Contains(lower, marker) {
+			return true
+		}
+	}
+	return false
+}
+
+func normalizeBatchHTMLOperationPath(raw string) string {
+	path := nethtml.UnescapeString(strings.TrimSpace(raw))
+	path = batchHTMLAnglePathParameter.ReplaceAllString(path, "{$1}")
+	if strings.ContainsAny(path, "<>") {
+		return ""
+	}
+	if cut := strings.IndexAny(path, "?#\"'"); cut >= 0 {
+		path = path[:cut]
+	}
+	if path == "" || !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") {
+		return ""
+	}
+	return path
+}
+
+func deduplicateBatchArtifactSources(inventory batchArtifactInventory) batchArtifactInventory {
+	seen := map[string]bool{}
+	sources := make([]batchArtifactSource, 0, len(inventory.Sources))
+	for _, source := range inventory.Sources {
+		if source.URL == "" || seen[source.URL] {
+			continue
+		}
+		seen[source.URL] = true
+		sources = append(sources, source)
+	}
+	inventory.Sources = sources
+	return inventory
+}
+
+func sha256Bytes(raw []byte) [32]byte {
+	return sha256.Sum256(raw)
+}

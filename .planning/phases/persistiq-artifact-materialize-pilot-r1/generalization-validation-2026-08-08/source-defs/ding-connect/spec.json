@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DingConnect Connection Specification",
+  "type": "object",
+  "required": ["api_key"],
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "DingConnect API key, sent as the api_key request header. Used only for header auth; never logged."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.dingconnect.com",
+      "description": "DingConnect API base URL override for tests or proxies."
+    },
+    "x_correlation_id": {
+      "type": "string",
+      "description": "Optional X-Correlation-Id header value for request tracing."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    }
+  }
+}

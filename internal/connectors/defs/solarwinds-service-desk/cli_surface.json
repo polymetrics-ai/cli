@@ -1,0 +1,2783 @@
+{
+  "tagline": "Run SolarWinds Service Desk's declared streams and reverse-ETL actions.",
+  "usage": "pm solarwinds-service-desk \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get catalog-items id",
+        "api get categories id",
+        "api get change-catalogs id",
+        "api get changes id",
+        "api get configuration-items id",
+        "api get contracts id",
+        "api get departments id",
+        "api get groups id",
+        "api get hardwares id",
+        "api get hardwares id warranties",
+        "api get incidents id",
+        "api get mobiles id",
+        "api get object-type id audits",
+        "api get object-type id time-tracks",
+        "api get other-assets id",
+        "api get printers id",
+        "api get problems id",
+        "api get purchase-orders id",
+        "api get releases id",
+        "api get roles id",
+        "api get sites id",
+        "api get softwares id",
+        "api get solutions id",
+        "api get users id",
+        "api get vendors id",
+        "audits list",
+        "catalog items list",
+        "categories list",
+        "change catalogs list",
+        "changes list",
+        "configuration items list",
+        "contracts list",
+        "departments list",
+        "groups list",
+        "hardwares list",
+        "incidents list",
+        "mobiles list",
+        "other assets list",
+        "printers list",
+        "problems list",
+        "purchase orders list",
+        "releases list",
+        "risks list",
+        "roles list",
+        "sites list",
+        "softwares list",
+        "solutions list",
+        "users list",
+        "vendors list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete contracts contract-id items item-id",
+        "api delete hardwares hardware-id warranties warranty-id",
+        "api delete memberships id",
+        "api delete object-type id comments comment-id",
+        "api delete object-type id purchases purchase-id",
+        "api delete object-type id tasks task-id",
+        "api delete object-type id time-tracks time-track-id",
+        "api post attachments",
+        "api post catalog-items",
+        "api post catalog-items id service-requests",
+        "api post categories",
+        "api post change-catalogs",
+        "api post change-catalogs id change-requests",
+        "api post changes",
+        "api post configuration-items",
+        "api post contracts",
+        "api post contracts id items",
+        "api post departments",
+        "api post groups",
+        "api post hardwares",
+        "api post hardwares id warranties",
+        "api post incidents",
+        "api post memberships",
+        "api post mobiles",
+        "api post object-type id comments",
+        "api post object-type id purchases",
+        "api post object-type id tasks",
+        "api post object-type id time-tracks",
+        "api post other-assets",
+        "api post problems",
+        "api post purchase-orders",
+        "api post releases",
+        "api post roles",
+        "api post sites",
+        "api post solutions",
+        "api post users",
+        "api post vendors",
+        "api put asset-links delete-asset-link-by-id",
+        "api put catalog-items id",
+        "api put categories id",
+        "api put change-catalogs id",
+        "api put changes id",
+        "api put configuration-items id",
+        "api put configuration-items id append-multiple-dependent-assets",
+        "api put contracts contract-id items item-id",
+        "api put contracts id",
+        "api put departments id",
+        "api put groups id",
+        "api put hardwares hardware-id warranties warranty-id",
+        "api put hardwares id",
+        "api put incidents id",
+        "api put mobiles id",
+        "api put object-type id comments comment-id",
+        "api put object-type id purchases purchase-id",
+        "api put object-type id tasks task-id",
+        "api put object-type id time-tracks time-track-id",
+        "api put other-assets id",
+        "api put printers id",
+        "api put problems id",
+        "api put purchase-orders id",
+        "api put releases id",
+        "api put roles id",
+        "api put sites id",
+        "api put solutions id",
+        "api put users id",
+        "api put vendors id",
+        "delete catalog item apply",
+        "delete category apply",
+        "delete change apply",
+        "delete change catalog apply",
+        "delete configuration item apply",
+        "delete contract apply",
+        "delete department apply",
+        "delete group apply",
+        "delete hardware apply",
+        "delete incident apply",
+        "delete mobile apply",
+        "delete other asset apply",
+        "delete problem apply",
+        "delete purchase order apply",
+        "delete release apply",
+        "delete role apply",
+        "delete site apply",
+        "delete solution apply",
+        "delete user apply",
+        "delete vendor apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete contracts contract-id items item-id",
+      "summary": "Documented DELETE /contracts/{contract_id}/items/{item_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api delete contracts contract-id items item-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contracts/{contract_id}/items/{item_id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.delete.contracts-contract-id-items-item-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete hardwares hardware-id warranties warranty-id",
+      "summary": "Documented DELETE /hardwares/{hardware_id}/warranties/{warranty_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api delete hardwares hardware-id warranties warranty-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/hardwares/{hardware_id}/warranties/{warranty_id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.delete.hardwares-hardware-id-warranties-warranty-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete memberships id",
+      "summary": "Documented DELETE /memberships/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api delete memberships id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/memberships/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.delete.memberships-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete object-type id comments comment-id",
+      "summary": "Documented DELETE /{object_type}/{id}/comments/{comment_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api delete object-type id comments comment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/{object_type}/{id}/comments/{comment_id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.delete.object-type-id-comments-comment-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete object-type id purchases purchase-id",
+      "summary": "Documented DELETE /{object_type}/{id}/purchases/{purchase_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api delete object-type id purchases purchase-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/{object_type}/{id}/purchases/{purchase_id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.delete.object-type-id-purchases-purchase-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete object-type id tasks task-id",
+      "summary": "Documented DELETE /{object_type}/{id}/tasks/{task_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api delete object-type id tasks task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/{object_type}/{id}/tasks/{task_id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.delete.object-type-id-tasks-task-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete object-type id time-tracks time-track-id",
+      "summary": "Documented DELETE /{object_type}/{id}/time_tracks/{time_track_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api delete object-type id time-tracks time-track-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/{object_type}/{id}/time_tracks/{time_track_id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.delete.object-type-id-time-tracks-time-track-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get catalog-items id",
+      "summary": "Documented GET /catalog_items/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get catalog-items id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/catalog_items/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.catalog-items-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get categories id",
+      "summary": "Documented GET /categories/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get categories id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/categories/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.categories-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get change-catalogs id",
+      "summary": "Documented GET /change_catalogs/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get change-catalogs id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/change_catalogs/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.change-catalogs-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get changes id",
+      "summary": "Documented GET /changes/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get changes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/changes/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.changes-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get configuration-items id",
+      "summary": "Documented GET /configuration_items/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get configuration-items id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/configuration_items/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.configuration-items-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contracts id",
+      "summary": "Documented GET /contracts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get contracts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contracts/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.contracts-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get departments id",
+      "summary": "Documented GET /departments/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get departments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/departments/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.departments-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups id",
+      "summary": "Documented GET /groups/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get groups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.groups-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get hardwares id",
+      "summary": "Documented GET /hardwares/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get hardwares id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/hardwares/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.hardwares-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get hardwares id warranties",
+      "summary": "Documented GET /hardwares/{id}/warranties (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get hardwares id warranties --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/hardwares/{id}/warranties"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.hardwares-id-warranties",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get incidents id",
+      "summary": "Documented GET /incidents/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get incidents id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/incidents/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.incidents-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mobiles id",
+      "summary": "Documented GET /mobiles/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get mobiles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mobiles/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.mobiles-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get object-type id audits",
+      "summary": "Documented GET /{object_type}/{id}/audits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get object-type id audits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{object_type}/{id}/audits"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.object-type-id-audits",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get object-type id time-tracks",
+      "summary": "Documented GET /{object_type}/{id}/time_tracks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get object-type id time-tracks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{object_type}/{id}/time_tracks"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.object-type-id-time-tracks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get other-assets id",
+      "summary": "Documented GET /other_assets/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get other-assets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/other_assets/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.other-assets-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get printers id",
+      "summary": "Documented GET /printers/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get printers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/printers/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.printers-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get problems id",
+      "summary": "Documented GET /problems/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get problems id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/problems/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.problems-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get purchase-orders id",
+      "summary": "Documented GET /purchase_orders/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get purchase-orders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/purchase_orders/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.purchase-orders-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get releases id",
+      "summary": "Documented GET /releases/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get releases id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/releases/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.releases-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get roles id",
+      "summary": "Documented GET /roles/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get roles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/roles/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.roles-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sites id",
+      "summary": "Documented GET /sites/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get sites id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sites/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.sites-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get softwares id",
+      "summary": "Documented GET /softwares/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get softwares id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/softwares/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.softwares-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get solutions id",
+      "summary": "Documented GET /solutions/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get solutions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.solutions-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id",
+      "summary": "Documented GET /users/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.users-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get vendors id",
+      "summary": "Documented GET /vendors/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api get vendors id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vendors/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.get.vendors-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post attachments",
+      "summary": "Documented POST /attachments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post attachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/attachments"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.attachments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post catalog-items",
+      "summary": "Documented POST /catalog_items (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post catalog-items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/catalog_items"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.catalog-items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post catalog-items id service-requests",
+      "summary": "Documented POST /catalog_items/{id}/service_requests (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post catalog-items id service-requests --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/catalog_items/{id}/service_requests"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.catalog-items-id-service-requests",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post categories",
+      "summary": "Documented POST /categories (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post categories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/categories"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.categories",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post change-catalogs",
+      "summary": "Documented POST /change_catalogs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post change-catalogs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/change_catalogs"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.change-catalogs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post change-catalogs id change-requests",
+      "summary": "Documented POST /change_catalogs/{id}/change_requests (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post change-catalogs id change-requests --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/change_catalogs/{id}/change_requests"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.change-catalogs-id-change-requests",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post changes",
+      "summary": "Documented POST /changes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post changes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/changes"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.changes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post configuration-items",
+      "summary": "Documented POST /configuration_items (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post configuration-items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/configuration_items"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.configuration-items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post contracts",
+      "summary": "Documented POST /contracts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post contracts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contracts"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.contracts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post contracts id items",
+      "summary": "Documented POST /contracts/{id}/items (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post contracts id items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contracts/{id}/items"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.contracts-id-items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post departments",
+      "summary": "Documented POST /departments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post departments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/departments"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.departments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post groups",
+      "summary": "Documented POST /groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post hardwares",
+      "summary": "Documented POST /hardwares (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post hardwares --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/hardwares"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.hardwares",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post hardwares id warranties",
+      "summary": "Documented POST /hardwares/{id}/warranties (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post hardwares id warranties --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/hardwares/{id}/warranties"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.hardwares-id-warranties",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post incidents",
+      "summary": "Documented POST /incidents (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post incidents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/incidents"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.incidents",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post memberships",
+      "summary": "Documented POST /memberships (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post memberships --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/memberships"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.memberships",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post mobiles",
+      "summary": "Documented POST /mobiles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post mobiles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/mobiles"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.mobiles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post object-type id comments",
+      "summary": "Documented POST /{object_type}/{id}/comments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post object-type id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{object_type}/{id}/comments"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.object-type-id-comments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post object-type id purchases",
+      "summary": "Documented POST /{object_type}/{id}/purchases (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post object-type id purchases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{object_type}/{id}/purchases"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.object-type-id-purchases",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post object-type id tasks",
+      "summary": "Documented POST /{object_type}/{id}/tasks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post object-type id tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{object_type}/{id}/tasks"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.object-type-id-tasks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post object-type id time-tracks",
+      "summary": "Documented POST /{object_type}/{id}/time_tracks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post object-type id time-tracks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{object_type}/{id}/time_tracks"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.object-type-id-time-tracks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post other-assets",
+      "summary": "Documented POST /other_assets (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post other-assets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/other_assets"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.other-assets",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post problems",
+      "summary": "Documented POST /problems (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post problems --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/problems"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.problems",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post purchase-orders",
+      "summary": "Documented POST /purchase_orders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post purchase-orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/purchase_orders"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.purchase-orders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post releases",
+      "summary": "Documented POST /releases (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post releases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/releases"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.releases",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post roles",
+      "summary": "Documented POST /roles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post roles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/roles"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.roles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sites",
+      "summary": "Documented POST /sites (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post sites --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sites"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.sites",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post solutions",
+      "summary": "Documented POST /solutions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post solutions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/solutions"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.solutions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users",
+      "summary": "Documented POST /users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post vendors",
+      "summary": "Documented POST /vendors (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api post vendors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vendors"
+        }
+      ],
+      "operation": "solarwinds-service-desk.post.vendors",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put asset-links delete-asset-link-by-id",
+      "summary": "Documented PUT /asset_links/delete_asset_link_by_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put asset-links delete-asset-link-by-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/asset_links/delete_asset_link_by_id"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.asset-links-delete-asset-link-by-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put catalog-items id",
+      "summary": "Documented PUT /catalog_items/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put catalog-items id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/catalog_items/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.catalog-items-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put categories id",
+      "summary": "Documented PUT /categories/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put categories id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/categories/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.categories-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put change-catalogs id",
+      "summary": "Documented PUT /change_catalogs/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put change-catalogs id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/change_catalogs/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.change-catalogs-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put changes id",
+      "summary": "Documented PUT /changes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put changes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/changes/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.changes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put configuration-items id",
+      "summary": "Documented PUT /configuration_items/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put configuration-items id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/configuration_items/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.configuration-items-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put configuration-items id append-multiple-dependent-assets",
+      "summary": "Documented PUT /configuration_items/{id}/append_multiple_dependent_assets (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put configuration-items id append-multiple-dependent-assets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/configuration_items/{id}/append_multiple_dependent_assets"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.configuration-items-id-append-multiple-dependent-assets",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put contracts contract-id items item-id",
+      "summary": "Documented PUT /contracts/{contract_id}/items/{item_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put contracts contract-id items item-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contracts/{contract_id}/items/{item_id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.contracts-contract-id-items-item-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put contracts id",
+      "summary": "Documented PUT /contracts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put contracts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contracts/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.contracts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put departments id",
+      "summary": "Documented PUT /departments/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put departments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/departments/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.departments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put groups id",
+      "summary": "Documented PUT /groups/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put groups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/groups/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.groups-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put hardwares hardware-id warranties warranty-id",
+      "summary": "Documented PUT /hardwares/{hardware_id}/warranties/{warranty_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put hardwares hardware-id warranties warranty-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/hardwares/{hardware_id}/warranties/{warranty_id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.hardwares-hardware-id-warranties-warranty-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put hardwares id",
+      "summary": "Documented PUT /hardwares/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put hardwares id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/hardwares/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.hardwares-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put incidents id",
+      "summary": "Documented PUT /incidents/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put incidents id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/incidents/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.incidents-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put mobiles id",
+      "summary": "Documented PUT /mobiles/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put mobiles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/mobiles/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.mobiles-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put object-type id comments comment-id",
+      "summary": "Documented PUT /{object_type}/{id}/comments/{comment_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put object-type id comments comment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/{object_type}/{id}/comments/{comment_id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.object-type-id-comments-comment-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put object-type id purchases purchase-id",
+      "summary": "Documented PUT /{object_type}/{id}/purchases/{purchase_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put object-type id purchases purchase-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/{object_type}/{id}/purchases/{purchase_id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.object-type-id-purchases-purchase-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put object-type id tasks task-id",
+      "summary": "Documented PUT /{object_type}/{id}/tasks/{task_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put object-type id tasks task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/{object_type}/{id}/tasks/{task_id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.object-type-id-tasks-task-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put object-type id time-tracks time-track-id",
+      "summary": "Documented PUT /{object_type}/{id}/time_tracks/{time_track_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put object-type id time-tracks time-track-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/{object_type}/{id}/time_tracks/{time_track_id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.object-type-id-time-tracks-time-track-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put other-assets id",
+      "summary": "Documented PUT /other_assets/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put other-assets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/other_assets/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.other-assets-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put printers id",
+      "summary": "Documented PUT /printers/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put printers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/printers/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.printers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put problems id",
+      "summary": "Documented PUT /problems/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put problems id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/problems/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.problems-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put purchase-orders id",
+      "summary": "Documented PUT /purchase_orders/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put purchase-orders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/purchase_orders/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.purchase-orders-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put releases id",
+      "summary": "Documented PUT /releases/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put releases id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/releases/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.releases-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put roles id",
+      "summary": "Documented PUT /roles/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put roles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/roles/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.roles-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put sites id",
+      "summary": "Documented PUT /sites/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put sites id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sites/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.sites-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put solutions id",
+      "summary": "Documented PUT /solutions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put solutions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/solutions/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.solutions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put users id",
+      "summary": "Documented PUT /users/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.users-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put vendors id",
+      "summary": "Documented PUT /vendors/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk api put vendors id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/vendors/{id}"
+        }
+      ],
+      "operation": "solarwinds-service-desk.put.vendors-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "audits list",
+      "summary": "Run the audits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "audits",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk audits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/audits"
+        }
+      ]
+    },
+    {
+      "path": "catalog items list",
+      "summary": "Run the catalog items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "catalog_items",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk catalog items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/catalog_items"
+        }
+      ]
+    },
+    {
+      "path": "categories list",
+      "summary": "Run the categories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "categories",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk categories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/categories"
+        }
+      ]
+    },
+    {
+      "path": "change catalogs list",
+      "summary": "Run the change catalogs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "change_catalogs",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk change catalogs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/change_catalogs"
+        }
+      ]
+    },
+    {
+      "path": "changes list",
+      "summary": "Run the changes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "changes",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk changes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/changes"
+        }
+      ]
+    },
+    {
+      "path": "configuration items list",
+      "summary": "Run the configuration items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "configuration_items",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk configuration items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/configuration_items"
+        }
+      ]
+    },
+    {
+      "path": "contracts list",
+      "summary": "Run the contracts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contracts",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk contracts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contracts"
+        }
+      ]
+    },
+    {
+      "path": "delete catalog item apply",
+      "summary": "Plan and execute the delete catalog item reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_catalog_item",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete catalog item apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/catalog_items/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk catalog item record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete category apply",
+      "summary": "Plan and execute the delete category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_category",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/categories/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk category record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete change apply",
+      "summary": "Plan and execute the delete change reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_change",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete change apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/changes/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk change record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete change catalog apply",
+      "summary": "Plan and execute the delete change catalog reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_change_catalog",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete change catalog apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/change_catalogs/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk change catalog record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete configuration item apply",
+      "summary": "Plan and execute the delete configuration item reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_configuration_item",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete configuration item apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/configuration_items/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk configuration item record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete contract apply",
+      "summary": "Plan and execute the delete contract reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_contract",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete contract apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contracts/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk contract record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete department apply",
+      "summary": "Plan and execute the delete department reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_department",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete department apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/departments/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk department record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete group apply",
+      "summary": "Plan and execute the delete group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_group",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/groups/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk group record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete hardware apply",
+      "summary": "Plan and execute the delete hardware reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_hardware",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete hardware apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/hardwares/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk hardware record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete incident apply",
+      "summary": "Plan and execute the delete incident reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_incident",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete incident apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/incidents/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk incident record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete mobile apply",
+      "summary": "Plan and execute the delete mobile reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_mobile",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete mobile apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/mobiles/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk mobile record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete other asset apply",
+      "summary": "Plan and execute the delete other asset reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_other_asset",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete other asset apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/other_assets/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk other asset record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete problem apply",
+      "summary": "Plan and execute the delete problem reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_problem",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete problem apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/problems/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk problem record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete purchase order apply",
+      "summary": "Plan and execute the delete purchase order reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_purchase_order",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete purchase order apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/purchase_orders/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk purchase order record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete release apply",
+      "summary": "Plan and execute the delete release reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_release",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete release apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/releases/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk release record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete role apply",
+      "summary": "Plan and execute the delete role reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_role",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete role apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/roles/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk role record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete site apply",
+      "summary": "Plan and execute the delete site reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_site",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete site apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sites/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk site record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete solution apply",
+      "summary": "Plan and execute the delete solution reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_solution",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete solution apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/solutions/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk solution record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete user apply",
+      "summary": "Plan and execute the delete user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_user",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk user record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete vendor apply",
+      "summary": "Plan and execute the delete vendor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_vendor",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk delete vendor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/vendors/{id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a SolarWinds Service Desk vendor record; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "departments list",
+      "summary": "Run the departments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "departments",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk departments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/departments"
+        }
+      ]
+    },
+    {
+      "path": "groups list",
+      "summary": "Run the groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups"
+        }
+      ]
+    },
+    {
+      "path": "hardwares list",
+      "summary": "Run the hardwares ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "hardwares",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk hardwares list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/hardwares"
+        }
+      ]
+    },
+    {
+      "path": "incidents list",
+      "summary": "Run the incidents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "incidents",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk incidents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/incidents"
+        }
+      ]
+    },
+    {
+      "path": "mobiles list",
+      "summary": "Run the mobiles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mobiles",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk mobiles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mobiles"
+        }
+      ]
+    },
+    {
+      "path": "other assets list",
+      "summary": "Run the other assets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "other_assets",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk other assets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/other_assets"
+        }
+      ]
+    },
+    {
+      "path": "printers list",
+      "summary": "Run the printers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "printers",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk printers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/printers"
+        }
+      ]
+    },
+    {
+      "path": "problems list",
+      "summary": "Run the problems ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "problems",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk problems list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/problems"
+        }
+      ]
+    },
+    {
+      "path": "purchase orders list",
+      "summary": "Run the purchase orders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "purchase_orders",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk purchase orders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/purchase_orders"
+        }
+      ]
+    },
+    {
+      "path": "releases list",
+      "summary": "Run the releases ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "releases",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk releases list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/releases"
+        }
+      ]
+    },
+    {
+      "path": "risks list",
+      "summary": "Run the risks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "risks",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk risks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/risks"
+        }
+      ]
+    },
+    {
+      "path": "roles list",
+      "summary": "Run the roles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "roles",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk roles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/roles"
+        }
+      ]
+    },
+    {
+      "path": "sites list",
+      "summary": "Run the sites ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sites",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk sites list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sites"
+        }
+      ]
+    },
+    {
+      "path": "softwares list",
+      "summary": "Run the softwares ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "softwares",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk softwares list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/softwares"
+        }
+      ]
+    },
+    {
+      "path": "solutions list",
+      "summary": "Run the solutions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "solutions",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk solutions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/solutions"
+        }
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ]
+    },
+    {
+      "path": "vendors list",
+      "summary": "Run the vendors ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "vendors",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "examples": [
+        "pm solarwinds-service-desk vendors list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vendors"
+        }
+      ]
+    }
+  ]
+}

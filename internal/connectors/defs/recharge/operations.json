@@ -1,0 +1,1940 @@
+{
+  "operations": [
+    {
+      "id": "recharge.get.accounts",
+      "kind": "rest_read",
+      "summary": "GET /accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.accounts-id",
+      "kind": "rest_read",
+      "summary": "GET /accounts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.addresses",
+      "kind": "rest_read",
+      "summary": "GET /addresses",
+      "description": "addresses not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/addresses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.addresses",
+      "kind": "rest_write",
+      "summary": "POST /addresses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/addresses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.addresses-merge",
+      "kind": "rest_write",
+      "summary": "POST /addresses/merge",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/addresses/merge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.addresses-id",
+      "kind": "rest_read",
+      "summary": "GET /addresses/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/addresses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.addresses-id",
+      "kind": "rest_write",
+      "summary": "PUT /addresses/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/addresses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.addresses-id",
+      "kind": "rest_write",
+      "summary": "DELETE /addresses/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/addresses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.addresses-id-charges-skip",
+      "kind": "rest_write",
+      "summary": "POST /addresses/{id}/charges/skip",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/addresses/{id}/charges/skip",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.api-orders",
+      "kind": "rest_read",
+      "summary": "GET /api/orders/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/orders/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.async-batches",
+      "kind": "rest_read",
+      "summary": "GET /async_batches",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/async_batches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.async-batches",
+      "kind": "rest_write",
+      "summary": "POST /async_batches",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/async_batches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.async-batches-batch-id",
+      "kind": "rest_read",
+      "summary": "GET /async_batches/{batch_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/async_batches/{batch_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.async-batches-batch-id-process",
+      "kind": "rest_write",
+      "summary": "POST /async_batches/{batch_id}/process",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/async_batches/{batch_id}/process",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.async-batches-batch-id-tasks",
+      "kind": "rest_read",
+      "summary": "GET /async_batches/{batch_id}/tasks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/async_batches/{batch_id}/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.async-batches-batch-id-tasks",
+      "kind": "rest_write",
+      "summary": "POST /async_batches/{batch_id}/tasks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/async_batches/{batch_id}/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.async-batches-id",
+      "kind": "rest_read",
+      "summary": "GET /async_batches/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/async_batches/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.bundle-selections",
+      "kind": "rest_read",
+      "summary": "GET /bundle_selections",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bundle_selections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.bundle-selections",
+      "kind": "rest_write",
+      "summary": "POST /bundle_selections",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bundle_selections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.bundle-selections-id",
+      "kind": "rest_read",
+      "summary": "GET /bundle_selections/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bundle_selections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.bundle-selections-id",
+      "kind": "rest_write",
+      "summary": "PUT /bundle_selections/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/bundle_selections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.bundle-selections-id",
+      "kind": "rest_write",
+      "summary": "DELETE /bundle_selections/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/bundle_selections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.charges",
+      "kind": "rest_read",
+      "summary": "GET /charges",
+      "description": "charges not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/charges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.charges-charge-id-remove-discount",
+      "kind": "rest_write",
+      "summary": "POST /charges/{charge_id}/remove_discount/",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charges/{charge_id}/remove_discount/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.charges-id",
+      "kind": "rest_read",
+      "summary": "GET /charges/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/charges/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.charges-id-add-free-gift",
+      "kind": "rest_write",
+      "summary": "POST /charges/{id}/add_free_gift",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charges/{id}/add_free_gift",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.charges-id-apply-discount",
+      "kind": "rest_write",
+      "summary": "POST /charges/{id}/apply_discount",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charges/{id}/apply_discount",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.charges-id-capture-payment",
+      "kind": "rest_write",
+      "summary": "POST /charges/{id}/capture_payment",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charges/{id}/capture_payment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.charges-id-process",
+      "kind": "rest_write",
+      "summary": "POST /charges/{id}/process",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charges/{id}/process",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.charges-id-refund",
+      "kind": "rest_write",
+      "summary": "POST /charges/{id}/refund",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charges/{id}/refund",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.charges-id-remove-discount",
+      "kind": "rest_write",
+      "summary": "POST /charges/{id}/remove_discount",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charges/{id}/remove_discount",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.charges-id-remove-free-gift",
+      "kind": "rest_write",
+      "summary": "POST /charges/{id}/remove_free_gift",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charges/{id}/remove_free_gift",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.charges-id-skip",
+      "kind": "rest_write",
+      "summary": "POST /charges/{id}/skip",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charges/{id}/skip",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.charges-id-unskip",
+      "kind": "rest_write",
+      "summary": "POST /charges/{id}/unskip",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charges/{id}/unskip",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.checkout-checkout-token-shipping-rates",
+      "kind": "rest_read",
+      "summary": "GET /checkout/{checkout_token}/shipping_rates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/checkout/{checkout_token}/shipping_rates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.checkouts",
+      "kind": "rest_write",
+      "summary": "POST /checkouts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checkouts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.checkouts-token",
+      "kind": "rest_read",
+      "summary": "GET /checkouts/{token}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/checkouts/{token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.checkouts-token",
+      "kind": "rest_write",
+      "summary": "PUT /checkouts/{token}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/checkouts/{token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.checkouts-token-charge",
+      "kind": "rest_write",
+      "summary": "POST /checkouts/{token}/charge",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checkouts/{token}/charge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.checkouts-token-shipping-rates",
+      "kind": "rest_read",
+      "summary": "GET /checkouts/{token}/shipping_rates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/checkouts/{token}/shipping_rates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.collection-products",
+      "kind": "rest_read",
+      "summary": "GET /collection_products",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/collection_products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.collections",
+      "kind": "rest_read",
+      "summary": "GET /collections",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/collections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.collections",
+      "kind": "rest_write",
+      "summary": "POST /collections",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/collections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.collections-id",
+      "kind": "rest_read",
+      "summary": "GET /collections/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/collections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.collections-id",
+      "kind": "rest_write",
+      "summary": "PUT /collections/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/collections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.collections-id",
+      "kind": "rest_write",
+      "summary": "DELETE /collections/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/collections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.collections-id-collection-products-bulk",
+      "kind": "rest_write",
+      "summary": "POST /collections/{id}/collection_products-bulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/collections/{id}/collection_products-bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.collections-id-collection-products-bulk",
+      "kind": "rest_write",
+      "summary": "DELETE /collections/{id}/collection_products-bulk",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/collections/{id}/collection_products-bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.credit-accounts",
+      "kind": "rest_read",
+      "summary": "GET /credit_accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credit_accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.credit-accounts",
+      "kind": "rest_write",
+      "summary": "POST /credit_accounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/credit_accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.credit-accounts-id",
+      "kind": "rest_read",
+      "summary": "GET /credit_accounts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credit_accounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.credit-accounts-id",
+      "kind": "rest_write",
+      "summary": "PUT /credit_accounts/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/credit_accounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.credit-accounts-id-credit-adjustments",
+      "kind": "rest_read",
+      "summary": "GET /credit_accounts/{id}/credit_adjustments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credit_accounts/{id}/credit_adjustments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.credit-accounts-id-credit-adjustments",
+      "kind": "rest_write",
+      "summary": "POST /credit_accounts/{id}/credit_adjustments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/credit_accounts/{id}/credit_adjustments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.credit-adjustments",
+      "kind": "rest_read",
+      "summary": "GET /credit_adjustments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credit_adjustments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.customer-entitlements",
+      "kind": "rest_read",
+      "summary": "GET /customer_entitlements",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer_entitlements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.customer-entitlements",
+      "kind": "rest_write",
+      "summary": "POST /customer_entitlements",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customer_entitlements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.customer-entitlements-id",
+      "kind": "rest_write",
+      "summary": "PUT /customer_entitlements/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customer_entitlements/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.customer-entitlements-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customer_entitlements/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customer_entitlements/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.customers",
+      "kind": "rest_write",
+      "summary": "POST /customers",
+      "description": "legacy is read-only; write actions never implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.customers-id",
+      "kind": "rest_read",
+      "summary": "GET /customers/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.customers-id",
+      "kind": "rest_write",
+      "summary": "PUT /customers/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.customers-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.customers-id-credit-summary",
+      "kind": "rest_read",
+      "summary": "GET /customers/{id}/credit_summary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{id}/credit_summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.customers-id-delivery-schedule",
+      "kind": "rest_read",
+      "summary": "GET /customers/{id}/delivery_schedule",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{id}/delivery_schedule",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.customers-id-notifications",
+      "kind": "rest_write",
+      "summary": "POST /customers/{id}/notifications",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{id}/notifications",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.discounts",
+      "kind": "rest_read",
+      "summary": "GET /discounts",
+      "description": "discounts not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.discounts",
+      "kind": "rest_write",
+      "summary": "POST /discounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/discounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.discounts-id",
+      "kind": "rest_read",
+      "summary": "GET /discounts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.discounts-id",
+      "kind": "rest_write",
+      "summary": "PUT /discounts/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/discounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.discounts-id",
+      "kind": "rest_write",
+      "summary": "DELETE /discounts/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/discounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.events",
+      "kind": "rest_read",
+      "summary": "GET /events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.metafields",
+      "kind": "rest_read",
+      "summary": "GET /metafields",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/metafields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.metafields",
+      "kind": "rest_write",
+      "summary": "POST /metafields",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/metafields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.metafields-id",
+      "kind": "rest_read",
+      "summary": "GET /metafields/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/metafields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.metafields-id",
+      "kind": "rest_write",
+      "summary": "PUT /metafields/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/metafields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.metafields-id",
+      "kind": "rest_write",
+      "summary": "DELETE /metafields/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/metafields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.metafields-metafield-id",
+      "kind": "rest_read",
+      "summary": "GET /metafields/{metafield_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/metafields/{metafield_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.onetimes",
+      "kind": "rest_read",
+      "summary": "GET /onetimes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/onetimes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.onetimes",
+      "kind": "rest_write",
+      "summary": "POST /onetimes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/onetimes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.onetimes-id",
+      "kind": "rest_read",
+      "summary": "GET /onetimes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/onetimes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.onetimes-id",
+      "kind": "rest_write",
+      "summary": "PUT /onetimes/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/onetimes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.onetimes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /onetimes/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/onetimes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.orders",
+      "kind": "rest_read",
+      "summary": "GET /orders/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orders/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.orders-id",
+      "kind": "rest_read",
+      "summary": "GET /orders/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.orders-id",
+      "kind": "rest_write",
+      "summary": "PUT /orders/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/orders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.orders-id",
+      "kind": "rest_write",
+      "summary": "DELETE /orders/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/orders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.orders-id-clone",
+      "kind": "rest_write",
+      "summary": "POST /orders/{id}/clone",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/orders/{id}/clone",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.orders-id-delay",
+      "kind": "rest_write",
+      "summary": "POST /orders/{id}/delay",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/orders/{id}/delay",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.payment-methods",
+      "kind": "rest_read",
+      "summary": "GET /payment_methods",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/payment_methods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.payment-methods",
+      "kind": "rest_write",
+      "summary": "POST /payment_methods",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/payment_methods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.payment-methods-id",
+      "kind": "rest_read",
+      "summary": "GET /payment_methods/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/payment_methods/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.payment-methods-id",
+      "kind": "rest_write",
+      "summary": "PUT /payment_methods/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/payment_methods/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.payment-methods-id",
+      "kind": "rest_write",
+      "summary": "DELETE /payment_methods/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/payment_methods/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.plans",
+      "kind": "rest_read",
+      "summary": "GET /plans",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.plans",
+      "kind": "rest_write",
+      "summary": "POST /plans",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.plans-id",
+      "kind": "rest_write",
+      "summary": "PUT /plans/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/plans/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.plans-id",
+      "kind": "rest_write",
+      "summary": "DELETE /plans/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/plans/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.products",
+      "kind": "rest_read",
+      "summary": "GET /products",
+      "description": "products not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.products",
+      "kind": "rest_write",
+      "summary": "POST /products",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.products-2",
+      "kind": "rest_read",
+      "summary": "GET /products/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.products-external-product-id",
+      "kind": "rest_read",
+      "summary": "GET /products/{external_product_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{external_product_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.products-external-product-id",
+      "kind": "rest_write",
+      "summary": "PUT /products/{external_product_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/products/{external_product_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.products-external-product-id",
+      "kind": "rest_write",
+      "summary": "DELETE /products/{external_product_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/products/{external_product_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.products-external-product-id-plans-bulk",
+      "kind": "rest_write",
+      "summary": "POST /products/{external_product_id}/plans-bulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/products/{external_product_id}/plans-bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.products-external-product-id-plans-bulk",
+      "kind": "rest_write",
+      "summary": "PUT /products/{external_product_id}/plans-bulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/products/{external_product_id}/plans-bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.products-external-product-id-plans-bulk",
+      "kind": "rest_write",
+      "summary": "DELETE /products/{external_product_id}/plans-bulk",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/products/{external_product_id}/plans-bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.store",
+      "kind": "rest_read",
+      "summary": "GET /store",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/store",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.subscriptions",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.subscriptions-skip-gift",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/skip_gift",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/skip_gift",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.subscriptions-id",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.subscriptions-id",
+      "kind": "rest_write",
+      "summary": "PUT /subscriptions/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/subscriptions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.subscriptions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /subscriptions/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/subscriptions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.subscriptions-id-activate",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{id}/activate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{id}/activate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.subscriptions-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{id}/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.subscriptions-id-change-address",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{id}/change_address",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{id}/change_address",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.subscriptions-id-set-next-charge-date",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{id}/set_next_charge_date",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{id}/set_next_charge_date",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.token-information",
+      "kind": "rest_read",
+      "summary": "GET /token_information",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/token_information",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.webhooks",
+      "kind": "rest_read",
+      "summary": "GET /webhooks",
+      "description": "webhooks not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.webhooks",
+      "kind": "rest_write",
+      "summary": "POST /webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.get.webhooks-id",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.put.webhooks-id",
+      "kind": "rest_write",
+      "summary": "PUT /webhooks/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.delete.webhooks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /webhooks/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recharge.post.webhooks-id-test",
+      "kind": "rest_write",
+      "summary": "POST /webhooks/{id}/test",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks/{id}/test",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

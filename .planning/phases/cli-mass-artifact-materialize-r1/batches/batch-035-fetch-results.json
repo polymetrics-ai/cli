@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-035-zoom-unversioned-reference-manifest.json",
+  "fetched": [
+    {
+      "connector": "zoom",
+      "source_url": "https://developers.zoom.us/docs/api/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-035-zoom-artifacts/zoom.html",
+      "status": "retrieved",
+      "reason": null
+    }
+  ]
+}

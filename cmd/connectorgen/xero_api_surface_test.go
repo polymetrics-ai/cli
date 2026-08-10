@@ -35,8 +35,8 @@ func TestXeroAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		t.Fatalf("unmarshal xero api_surface.json: %v", err)
 	}
 
-	if surface.OperationLedgerVersion != 1 {
-		t.Fatalf("operation_ledger_version = %d, want 1", surface.OperationLedgerVersion)
+	if surface.OperationLedgerVersion != 2 {
+		t.Fatalf("operation_ledger_version = %d, want 2", surface.OperationLedgerVersion)
 	}
 	if len(surface.Endpoints) != 235 {
 		t.Fatalf("endpoints = %d, want 235", len(surface.Endpoints))
@@ -156,8 +156,8 @@ func TestXeroOperationsLedgerMetrics(t *testing.T) {
 		} `json:"operations"`
 	}
 	readJSONFile(t, filepath.Join(root, "operations.json"), &ledger)
-	if len(ledger.Operations) != 70 {
-		t.Fatalf("operations = %d, want 70", len(ledger.Operations))
+	if len(ledger.Operations) != 92 {
+		t.Fatalf("operations = %d, want 92", len(ledger.Operations))
 	}
 	kinds := map[string]int{}
 	seen := map[string]bool{}
@@ -168,7 +168,7 @@ func TestXeroOperationsLedgerMetrics(t *testing.T) {
 		seen[op.ID] = true
 		kinds[op.Kind]++
 	}
-	assertStringIntMap(t, "xero operation kinds", kinds, map[string]int{"binary_download": 26, "file_upload": 22, "rest_read": 22})
+	assertStringIntMap(t, "xero operation kinds", kinds, map[string]int{"binary_download": 26, "file_upload": 22, "rest_read": 22, "rest_write": 22})
 }
 
 func schemaRequiredIncludes(schema map[string]any, field string) bool {

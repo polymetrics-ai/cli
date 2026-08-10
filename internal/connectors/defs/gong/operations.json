@@ -256,6 +256,9 @@
         "path": "/v2/users/extensive",
         "content_type": "application/json",
         "max_bytes": 1048576,
+        "body": {
+          "filter": {}
+        },
         "body_schema": {
           "type": "object",
           "properties": {
@@ -293,9 +296,6 @@
             "filter"
           ],
           "additionalProperties": false
-        },
-        "body": {
-          "filter": {}
         }
       }
     },
@@ -829,7 +829,6 @@
       "approval": "reverse ETL plan, preview, approval, execute; destructive confirmation required",
       "output_policy": "gong_bounded_input_redacted",
       "mutation_class": "create",
-      "secret_sensitive": false,
       "sensitive_policy": {
         "input_mode": "file",
         "redact_fields": [

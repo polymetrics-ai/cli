@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developers.klaviyo.com/en/docs/rate_limits_and_error_handling (retrieved 2026-08-06): Klaviyo publishes endpoint-specific tiers per account, but the bundle lacks a non-secret account scope property and endpoint-tier mapping."
+}

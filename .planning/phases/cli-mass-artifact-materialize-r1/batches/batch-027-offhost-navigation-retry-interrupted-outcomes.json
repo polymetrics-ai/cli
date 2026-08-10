@@ -1,0 +1,366 @@
+{
+  "schema_version": 1,
+  "batch": "batch-027-offhost-navigation-retry",
+  "manifest": "batches/batch-023-root-manifest.json",
+  "source_cache": "batches/batch-023-artifacts",
+  "execution": "interrupted",
+  "reason": "controlled stop: the second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; no staged bundle completed and narrower official-source routes remain required",
+  "outcomes": [
+    {
+      "connector": "coassemble",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "fullstory",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "fastbill",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "shortio",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "sendowl",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "flexport",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "rd-station-marketing",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "systeme",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "twilio-taskrouter",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "tremendous",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "breezy-hr",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "callrail",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "appcues",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "finage",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "merge",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "100ms",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "apple-search-ads",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "split-io",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "agilecrm",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "less-annoying-crm",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "omnisend",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "tickettailor",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "nocrm",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "getgist",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "postmarkapp",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "justcall",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "aircall",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "nexiopay",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "rki-covid",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "mailerlite",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "eventbrite",
+      "state": "already_materialized",
+      "evidence": "batches/batch-023-source-materialize.json"
+    },
+    {
+      "connector": "chameleon",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "everhour",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "northpass-lms",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "chartmogul",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "nutshell",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "easypost",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "survey-sparrow",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "instatus",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "campaign-monitor",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    }
+  ]
+}

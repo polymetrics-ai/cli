@@ -1,0 +1,399 @@
+{
+  "tagline": "Run Simplesat's declared streams and reverse-ETL actions.",
+  "usage": "pm simplesat \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "answers list",
+        "api get api v1 answers answer-id",
+        "api get api v1 customers customer-id",
+        "api get api v1 responses response-id",
+        "api get api v1 team-members team-member-id",
+        "customers list",
+        "questions list",
+        "responses list",
+        "surveys list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api post api v1 customers bulk",
+        "create or update customer apply",
+        "create or update response apply",
+        "create or update team member apply",
+        "send survey email apply",
+        "update answer apply",
+        "update customer apply",
+        "update response apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "answers list",
+      "summary": "Run the answers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "answers",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "examples": [
+        "pm simplesat answers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/answers/search"
+        }
+      ]
+    },
+    {
+      "path": "api get api v1 answers answer-id",
+      "summary": "Documented GET /api/v1/answers/{answer_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "examples": [
+        "pm simplesat api get api v1 answers answer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/answers/{answer_id}"
+        }
+      ],
+      "operation": "simplesat.get.api-v1-answers-answer-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 customers customer-id",
+      "summary": "Documented GET /api/v1/customers/{customer_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "examples": [
+        "pm simplesat api get api v1 customers customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/customers/{customer_id}"
+        }
+      ],
+      "operation": "simplesat.get.api-v1-customers-customer-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 responses response-id",
+      "summary": "Documented GET /api/v1/responses/{response_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "examples": [
+        "pm simplesat api get api v1 responses response-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/responses/{response_id}"
+        }
+      ],
+      "operation": "simplesat.get.api-v1-responses-response-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 team-members team-member-id",
+      "summary": "Documented GET /api/v1/team-members/{team_member_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "examples": [
+        "pm simplesat api get api v1 team-members team-member-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/team-members/{team_member_id}"
+        }
+      ],
+      "operation": "simplesat.get.api-v1-team-members-team-member-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post api v1 customers bulk",
+      "summary": "Documented POST /api/v1/customers/bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "examples": [
+        "pm simplesat api post api v1 customers bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/customers/bulk"
+        }
+      ],
+      "operation": "simplesat.post.api-v1-customers-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "create or update customer apply",
+      "summary": "Plan and execute the create or update customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_or_update_customer",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "examples": [
+        "pm simplesat create or update customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/customers"
+        }
+      ],
+      "risk": "creates a new customer or updates the existing one matched by external_id/email; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create or update response apply",
+      "summary": "Plan and execute the create or update response reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_or_update_response",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "flags": [
+        {
+          "name": "survey_id",
+          "type": "integer",
+          "summary": "Required survey id record field.",
+          "maps_to": "record.survey_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm simplesat create or update response apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/responses/create-or-update"
+        }
+      ],
+      "risk": "creates a new survey response (or updates one matched by the API's own dedup rule) including its nested answers/customer/ticket/team_members sub-objects; commonly used to import or backfill historical survey data with an explicit created timestamp",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create or update team member apply",
+      "summary": "Plan and execute the create or update team member reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_or_update_team_member",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "examples": [
+        "pm simplesat create or update team member apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/team-members"
+        }
+      ],
+      "risk": "creates a new team member or updates the existing one matched by external_id/email; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "customers list",
+      "summary": "Run the customers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "examples": [
+        "pm simplesat customers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/customers"
+        }
+      ]
+    },
+    {
+      "path": "questions list",
+      "summary": "Run the questions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "questions",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "examples": [
+        "pm simplesat questions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/questions"
+        }
+      ]
+    },
+    {
+      "path": "responses list",
+      "summary": "Run the responses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "responses",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "examples": [
+        "pm simplesat responses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/responses/search"
+        }
+      ]
+    },
+    {
+      "path": "send survey email apply",
+      "summary": "Plan and execute the send survey email reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "send_survey_email",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "examples": [
+        "pm simplesat send survey email apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/surveys/{survey_token}/email"
+        }
+      ],
+      "risk": "sends a live survey invitation email to the named customer's real inbox; each call generates one outbound email delivery, not a reversible data mutation",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "surveys list",
+      "summary": "Run the surveys ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "surveys",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "examples": [
+        "pm simplesat surveys list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/surveys"
+        }
+      ]
+    },
+    {
+      "path": "update answer apply",
+      "summary": "Plan and execute the update answer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_answer",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm simplesat update answer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/answers/{answer_id}"
+        }
+      ],
+      "risk": "mutates an existing survey answer's recorded choice/comment/follow-up fields; changes the customer-submitted response data an already-collected survey answer represents",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update customer apply",
+      "summary": "Plan and execute the update customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_customer",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm simplesat update customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/customers/{customer_id}"
+        }
+      ],
+      "risk": "mutates an existing customer's profile fields by id; overwrites tags/custom_attributes wholesale with the submitted value",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update response apply",
+      "summary": "Plan and execute the update response reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_response",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "survey_id",
+          "type": "integer",
+          "summary": "Required survey id record field.",
+          "maps_to": "record.survey_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm simplesat update response apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/responses/{response_id}/update"
+        }
+      ],
+      "risk": "mutates an existing survey response's tags/answers/team_members by id; overwrites the identified response's recorded data",
+      "approval": "requires plan, preview, approval, and execute"
+    }
+  ]
+}

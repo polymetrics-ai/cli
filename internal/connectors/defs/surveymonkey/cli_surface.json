@@ -1,0 +1,2600 @@
+{
+  "tagline": "Run SurveyMonkey's declared streams and reverse-ETL actions.",
+  "usage": "pm surveymonkey \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "benchmark bundle analysis list",
+        "benchmark bundle list",
+        "benchmark bundles list",
+        "collector bulk responses list",
+        "collector list",
+        "collector message list",
+        "collector message recipients list",
+        "collector messages list",
+        "collector recipients list",
+        "collector response details list",
+        "collector response list",
+        "collector responses list",
+        "collector stats list",
+        "collectors list",
+        "contact field list",
+        "contact fields list",
+        "contact list",
+        "contact list contacts bulk list",
+        "contact list contacts list",
+        "contact list list",
+        "contact lists list",
+        "contacts bulk list",
+        "contacts list",
+        "error list",
+        "errors list",
+        "group activities by action list",
+        "group activities list",
+        "group list",
+        "group member list",
+        "group members list",
+        "groups list",
+        "organization list",
+        "organizations list",
+        "page rollups list",
+        "page trends list",
+        "question bank questions list",
+        "question benchmark list",
+        "question rollups list",
+        "question trends list",
+        "roles list",
+        "scim resource type list",
+        "scim resource types list",
+        "scim schema list",
+        "scim schemas list",
+        "scim service provider config list",
+        "scim user list",
+        "scim users list",
+        "survey categories list",
+        "survey collector message stats list",
+        "survey collector recipient list",
+        "survey details list",
+        "survey folders list",
+        "survey language list",
+        "survey languages catalog list",
+        "survey languages list",
+        "survey list",
+        "survey page list",
+        "survey pages list",
+        "survey question list",
+        "survey questions list",
+        "survey response details list",
+        "survey response list",
+        "survey response summaries list",
+        "survey responses list",
+        "survey rollups list",
+        "survey search list",
+        "survey share list list",
+        "survey templates list",
+        "survey trends list",
+        "surveys list",
+        "team survey templates list",
+        "user shared list",
+        "user workgroups list",
+        "users me list",
+        "webhook list",
+        "webhooks list",
+        "workgroup list",
+        "workgroup member list",
+        "workgroup members list",
+        "workgroup share list",
+        "workgroup shares list",
+        "workgroups list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add contact to contact list apply",
+        "add contacts to contact list bulk apply",
+        "copy contact list apply",
+        "create collector message apply",
+        "create collector response apply",
+        "create contact apply",
+        "create contact list apply",
+        "create contacts bulk apply",
+        "create message recipient apply",
+        "create message recipients bulk apply",
+        "create organization apply",
+        "create scim user apply",
+        "create survey apply",
+        "create survey collector apply",
+        "create survey folder apply",
+        "create survey language apply",
+        "create survey page apply",
+        "create survey question apply",
+        "create webhook apply",
+        "create workgroup apply",
+        "create workgroup member apply",
+        "create workgroup members bulk apply",
+        "create workgroup share apply",
+        "create workgroup shares bulk apply",
+        "merge contact list apply",
+        "replace collector apply",
+        "replace collector message apply",
+        "replace collector response apply",
+        "replace contact apply",
+        "replace contact list apply",
+        "replace scim user apply",
+        "replace survey apply",
+        "replace survey page apply",
+        "replace survey response apply",
+        "replace webhook apply",
+        "send collector message apply",
+        "share survey apply",
+        "update collector apply",
+        "update collector message apply",
+        "update collector response apply",
+        "update contact apply",
+        "update contact field apply",
+        "update contact list apply",
+        "update group member apply",
+        "update organization apply",
+        "update scim user apply",
+        "update survey apply",
+        "update survey language apply",
+        "update survey page apply",
+        "update survey response apply",
+        "update webhook apply",
+        "update workgroup apply",
+        "update workgroup member apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add contact to contact list apply",
+      "summary": "Plan and execute the add contact to contact list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_contact_to_contact_list",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey add contact to contact list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/contact_lists/{contact_list_id}/contacts"
+        }
+      ],
+      "risk": "creates SurveyMonkey contact-list membership data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "add contacts to contact list bulk apply",
+      "summary": "Plan and execute the add contacts to contact list bulk reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_contacts_to_contact_list_bulk",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey add contacts to contact list bulk apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/contact_lists/{contact_list_id}/contacts/bulk"
+        }
+      ],
+      "risk": "creates SurveyMonkey bulk contact-list memberships data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "benchmark bundle analysis list",
+      "summary": "Run the benchmark bundle analysis ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "benchmark_bundle_analysis",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey benchmark bundle analysis list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/benchmark_bundles/{id}/analyze"
+        }
+      ]
+    },
+    {
+      "path": "benchmark bundle list",
+      "summary": "Run the benchmark bundle ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "benchmark_bundle",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey benchmark bundle list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/benchmark_bundles/{bundle_id}"
+        }
+      ]
+    },
+    {
+      "path": "benchmark bundles list",
+      "summary": "Run the benchmark bundles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "benchmark_bundles",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey benchmark bundles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/benchmark_bundles"
+        }
+      ]
+    },
+    {
+      "path": "collector bulk responses list",
+      "summary": "Run the collector bulk responses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collector_bulk_responses",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey collector bulk responses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/collectors/{collector_id}/responses/bulk"
+        }
+      ]
+    },
+    {
+      "path": "collector list",
+      "summary": "Run the collector ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collector",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey collector list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/collectors/{collector_id}"
+        }
+      ]
+    },
+    {
+      "path": "collector message list",
+      "summary": "Run the collector message ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collector_message",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey collector message list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/collectors/{collector_id}/messages/{message_id}"
+        }
+      ]
+    },
+    {
+      "path": "collector message recipients list",
+      "summary": "Run the collector message recipients ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collector_message_recipients",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey collector message recipients list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/collectors/{collector_id}/messages/{message_id}/recipients"
+        }
+      ]
+    },
+    {
+      "path": "collector messages list",
+      "summary": "Run the collector messages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collector_messages",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey collector messages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/collectors/{collector_id}/messages"
+        }
+      ]
+    },
+    {
+      "path": "collector recipients list",
+      "summary": "Run the collector recipients ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collector_recipients",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey collector recipients list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/collectors/{collector_id}/recipients"
+        }
+      ]
+    },
+    {
+      "path": "collector response details list",
+      "summary": "Run the collector response details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collector_response_details",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey collector response details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/collectors/{collector_id}/responses/{response_id}/details"
+        }
+      ]
+    },
+    {
+      "path": "collector response list",
+      "summary": "Run the collector response ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collector_response",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey collector response list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/collectors/{collector_id}/responses/{response_id}"
+        }
+      ]
+    },
+    {
+      "path": "collector responses list",
+      "summary": "Run the collector responses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collector_responses",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey collector responses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/collectors/{collector_id}/responses"
+        }
+      ]
+    },
+    {
+      "path": "collector stats list",
+      "summary": "Run the collector stats ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collector_stats",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey collector stats list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/collectors/{collector_id}/stats"
+        }
+      ]
+    },
+    {
+      "path": "collectors list",
+      "summary": "Run the collectors ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collectors",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey collectors list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/collectors"
+        }
+      ]
+    },
+    {
+      "path": "contact field list",
+      "summary": "Run the contact field ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_field",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey contact field list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contact_fields/{contact_field_id}"
+        }
+      ]
+    },
+    {
+      "path": "contact fields list",
+      "summary": "Run the contact fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_fields",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey contact fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contact_fields"
+        }
+      ]
+    },
+    {
+      "path": "contact list",
+      "summary": "Run the contact ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey contact list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contacts/{contact_id}"
+        }
+      ]
+    },
+    {
+      "path": "contact list contacts bulk list",
+      "summary": "Run the contact list contacts bulk ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_list_contacts_bulk",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey contact list contacts bulk list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contact_lists/{contact_list_id}/contacts/bulk"
+        }
+      ]
+    },
+    {
+      "path": "contact list contacts list",
+      "summary": "Run the contact list contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_list_contacts",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey contact list contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contact_lists/{contact_list_id}/contacts"
+        }
+      ]
+    },
+    {
+      "path": "contact list list",
+      "summary": "Run the contact list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_list",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey contact list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contact_lists/{contact_list_id}"
+        }
+      ]
+    },
+    {
+      "path": "contact lists list",
+      "summary": "Run the contact lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_lists",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey contact lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contact_lists"
+        }
+      ]
+    },
+    {
+      "path": "contacts bulk list",
+      "summary": "Run the contacts bulk ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts_bulk",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey contacts bulk list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contacts/bulk"
+        }
+      ]
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contacts"
+        }
+      ]
+    },
+    {
+      "path": "copy contact list apply",
+      "summary": "Plan and execute the copy contact list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "copy_contact_list",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey copy contact list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/contact_lists/{contact_list_id}/copy"
+        }
+      ],
+      "risk": "creates SurveyMonkey copied contact list data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create collector message apply",
+      "summary": "Plan and execute the create collector message reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_collector_message",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create collector message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/collectors/{collector_id}/messages"
+        }
+      ],
+      "risk": "creates SurveyMonkey collector message data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create collector response apply",
+      "summary": "Plan and execute the create collector response reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_collector_response",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create collector response apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/collectors/{collector_id}/responses"
+        }
+      ],
+      "risk": "creates SurveyMonkey collector response data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/contacts"
+        }
+      ],
+      "risk": "creates SurveyMonkey contact data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create contact list apply",
+      "summary": "Plan and execute the create contact list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact_list",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create contact list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/contact_lists"
+        }
+      ],
+      "risk": "creates SurveyMonkey contact list data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create contacts bulk apply",
+      "summary": "Plan and execute the create contacts bulk reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contacts_bulk",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create contacts bulk apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/contacts/bulk"
+        }
+      ],
+      "risk": "creates SurveyMonkey bulk contacts data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create message recipient apply",
+      "summary": "Plan and execute the create message recipient reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_message_recipient",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create message recipient apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/collectors/{collector_id}/messages/{message_id}/recipients"
+        }
+      ],
+      "risk": "creates SurveyMonkey message recipient data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create message recipients bulk apply",
+      "summary": "Plan and execute the create message recipients bulk reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_message_recipients_bulk",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create message recipients bulk apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/collectors/{collector_id}/messages/{message_id}/recipients/bulk"
+        }
+      ],
+      "risk": "creates SurveyMonkey bulk message recipients data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create organization apply",
+      "summary": "Plan and execute the create organization reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_organization",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create organization apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/organizations"
+        }
+      ],
+      "risk": "changes SurveyMonkey organization administration/provisioning state; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create scim user apply",
+      "summary": "Plan and execute the create scim user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_scim_user",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create scim user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/scim/v2/Users"
+        }
+      ],
+      "risk": "changes SurveyMonkey SCIM user provisioning administration/provisioning state; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create survey apply",
+      "summary": "Plan and execute the create survey reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_survey",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create survey apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/surveys"
+        }
+      ],
+      "risk": "creates SurveyMonkey survey data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create survey collector apply",
+      "summary": "Plan and execute the create survey collector reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_survey_collector",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create survey collector apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/surveys/{survey_id}/collectors"
+        }
+      ],
+      "risk": "creates SurveyMonkey survey collector data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create survey folder apply",
+      "summary": "Plan and execute the create survey folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_survey_folder",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create survey folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/survey_folders"
+        }
+      ],
+      "risk": "creates SurveyMonkey survey folder data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create survey language apply",
+      "summary": "Plan and execute the create survey language reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_survey_language",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create survey language apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/surveys/{survey_id}/languages/{language_code}"
+        }
+      ],
+      "risk": "creates SurveyMonkey survey language/translation data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create survey page apply",
+      "summary": "Plan and execute the create survey page reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_survey_page",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create survey page apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/surveys/{survey_id}/pages"
+        }
+      ],
+      "risk": "creates SurveyMonkey survey page data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create survey question apply",
+      "summary": "Plan and execute the create survey question reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_survey_question",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create survey question apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions"
+        }
+      ],
+      "risk": "creates SurveyMonkey survey question data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/webhooks"
+        }
+      ],
+      "risk": "creates SurveyMonkey webhook data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create workgroup apply",
+      "summary": "Plan and execute the create workgroup reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_workgroup",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create workgroup apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/workgroups"
+        }
+      ],
+      "risk": "changes SurveyMonkey workgroup administration/provisioning state; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create workgroup member apply",
+      "summary": "Plan and execute the create workgroup member reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_workgroup_member",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create workgroup member apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/workgroups/{workgroup_id}/members"
+        }
+      ],
+      "risk": "changes SurveyMonkey workgroup membership administration/provisioning state; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create workgroup members bulk apply",
+      "summary": "Plan and execute the create workgroup members bulk reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_workgroup_members_bulk",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create workgroup members bulk apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/workgroups/{workgroup_id}/members/bulk"
+        }
+      ],
+      "risk": "changes SurveyMonkey bulk workgroup membership administration/provisioning state; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create workgroup share apply",
+      "summary": "Plan and execute the create workgroup share reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_workgroup_share",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create workgroup share apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/workgroups/{workgroup_id}/shares"
+        }
+      ],
+      "risk": "sends or shares SurveyMonkey workgroup share; may notify real recipients or change access for real users; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create workgroup shares bulk apply",
+      "summary": "Plan and execute the create workgroup shares bulk reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_workgroup_shares_bulk",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey create workgroup shares bulk apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/workgroups/{workgroup_id}/shares/bulk"
+        }
+      ],
+      "risk": "sends or shares SurveyMonkey bulk workgroup shares; may notify real recipients or change access for real users; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "error list",
+      "summary": "Run the error ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "error",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey error list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/errors/{error_id}"
+        }
+      ]
+    },
+    {
+      "path": "errors list",
+      "summary": "Run the errors ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "errors",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey errors list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/errors"
+        }
+      ]
+    },
+    {
+      "path": "group activities by action list",
+      "summary": "Run the group activities by action ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "group_activities_by_action",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey group activities by action list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/groups/{group_id}/activities/{action_type}"
+        }
+      ]
+    },
+    {
+      "path": "group activities list",
+      "summary": "Run the group activities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "group_activities",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey group activities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/groups/{group_id}/activities"
+        }
+      ]
+    },
+    {
+      "path": "group list",
+      "summary": "Run the group ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "group",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey group list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/groups/{group_id}"
+        }
+      ]
+    },
+    {
+      "path": "group member list",
+      "summary": "Run the group member ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "group_member",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey group member list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/groups/{group_id}/members/{member_id}"
+        }
+      ]
+    },
+    {
+      "path": "group members list",
+      "summary": "Run the group members ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "group_members",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey group members list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/groups/{group_id}/members"
+        }
+      ]
+    },
+    {
+      "path": "groups list",
+      "summary": "Run the groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/groups"
+        }
+      ]
+    },
+    {
+      "path": "merge contact list apply",
+      "summary": "Plan and execute the merge contact list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "merge_contact_list",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey merge contact list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/contact_lists/{contact_list_id}/merge"
+        }
+      ],
+      "risk": "updates SurveyMonkey contact lists through merge data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "organization list",
+      "summary": "Run the organization ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organization",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey organization list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/organization/{organization_id}"
+        }
+      ]
+    },
+    {
+      "path": "organizations list",
+      "summary": "Run the organizations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organizations",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey organizations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/organizations"
+        }
+      ]
+    },
+    {
+      "path": "page rollups list",
+      "summary": "Run the page rollups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "page_rollups",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey page rollups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/pages/{page_id}/rollups"
+        }
+      ]
+    },
+    {
+      "path": "page trends list",
+      "summary": "Run the page trends ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "page_trends",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey page trends list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/pages/{page_id}/trends"
+        }
+      ]
+    },
+    {
+      "path": "question bank questions list",
+      "summary": "Run the question bank questions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "question_bank_questions",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey question bank questions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/question_bank/questions"
+        }
+      ]
+    },
+    {
+      "path": "question benchmark list",
+      "summary": "Run the question benchmark ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "question_benchmark",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey question benchmark list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/benchmark"
+        }
+      ]
+    },
+    {
+      "path": "question rollups list",
+      "summary": "Run the question rollups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "question_rollups",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey question rollups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/rollups"
+        }
+      ]
+    },
+    {
+      "path": "question trends list",
+      "summary": "Run the question trends ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "question_trends",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey question trends list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/trends"
+        }
+      ]
+    },
+    {
+      "path": "replace collector apply",
+      "summary": "Plan and execute the replace collector reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "replace_collector",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey replace collector apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/collectors/{collector_id}"
+        }
+      ],
+      "risk": "replaces SurveyMonkey collector data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "replace collector message apply",
+      "summary": "Plan and execute the replace collector message reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "replace_collector_message",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey replace collector message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/collectors/{collector_id}/messages/{message_id}"
+        }
+      ],
+      "risk": "replaces SurveyMonkey collector message data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "replace collector response apply",
+      "summary": "Plan and execute the replace collector response reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "replace_collector_response",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey replace collector response apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/collectors/{collector_id}/responses/{response_id}"
+        }
+      ],
+      "risk": "replaces SurveyMonkey collector response data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "replace contact apply",
+      "summary": "Plan and execute the replace contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "replace_contact",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey replace contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/contacts/{contact_id}"
+        }
+      ],
+      "risk": "replaces SurveyMonkey contact data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "replace contact list apply",
+      "summary": "Plan and execute the replace contact list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "replace_contact_list",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey replace contact list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/contact_lists/{contact_list_id}"
+        }
+      ],
+      "risk": "replaces SurveyMonkey contact list data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "replace scim user apply",
+      "summary": "Plan and execute the replace scim user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "replace_scim_user",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey replace scim user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/scim/v2/Users/{id}"
+        }
+      ],
+      "risk": "changes SurveyMonkey SCIM user provisioning administration/provisioning state; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "replace survey apply",
+      "summary": "Plan and execute the replace survey reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "replace_survey",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey replace survey apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/surveys/{id}"
+        }
+      ],
+      "risk": "replaces SurveyMonkey survey data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "replace survey page apply",
+      "summary": "Plan and execute the replace survey page reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "replace_survey_page",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey replace survey page apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/surveys/{survey_id}/pages/{page_id}"
+        }
+      ],
+      "risk": "replaces SurveyMonkey survey page data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "replace survey response apply",
+      "summary": "Plan and execute the replace survey response reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "replace_survey_response",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey replace survey response apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/surveys/{survey_id}/responses/{response_id}"
+        }
+      ],
+      "risk": "replaces SurveyMonkey survey response data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "replace webhook apply",
+      "summary": "Plan and execute the replace webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "replace_webhook",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey replace webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/webhooks/{webhook_id}"
+        }
+      ],
+      "risk": "replaces SurveyMonkey webhook data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "roles list",
+      "summary": "Run the roles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "roles",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey roles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/roles"
+        }
+      ]
+    },
+    {
+      "path": "scim resource type list",
+      "summary": "Run the scim resource type ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scim_resource_type",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey scim resource type list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim/v2/ResourceTypes/{id}"
+        }
+      ]
+    },
+    {
+      "path": "scim resource types list",
+      "summary": "Run the scim resource types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scim_resource_types",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey scim resource types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim/v2/ResourceTypes"
+        }
+      ]
+    },
+    {
+      "path": "scim schema list",
+      "summary": "Run the scim schema ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scim_schema",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey scim schema list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim/v2/Schemas/{id}"
+        }
+      ]
+    },
+    {
+      "path": "scim schemas list",
+      "summary": "Run the scim schemas ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scim_schemas",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey scim schemas list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim/v2/Schemas"
+        }
+      ]
+    },
+    {
+      "path": "scim service provider config list",
+      "summary": "Run the scim service provider config ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scim_service_provider_config",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey scim service provider config list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim/v2/ServiceProviderConfig"
+        }
+      ]
+    },
+    {
+      "path": "scim user list",
+      "summary": "Run the scim user ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scim_user",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey scim user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim/v2/Users/{id}"
+        }
+      ]
+    },
+    {
+      "path": "scim users list",
+      "summary": "Run the scim users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scim_users",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey scim users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scim/v2/Users"
+        }
+      ]
+    },
+    {
+      "path": "send collector message apply",
+      "summary": "Plan and execute the send collector message reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "send_collector_message",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey send collector message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/collectors/{collector_id}/messages/{message_id}/send"
+        }
+      ],
+      "risk": "sends or shares SurveyMonkey collector message; may notify real recipients or change access for real users; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "share survey apply",
+      "summary": "Plan and execute the share survey reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "share_survey",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey share survey apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/surveys/{survey_id}/share"
+        }
+      ],
+      "risk": "sends or shares SurveyMonkey survey access; may notify real recipients or change access for real users; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "survey categories list",
+      "summary": "Run the survey categories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_categories",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey categories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/survey_categories"
+        }
+      ]
+    },
+    {
+      "path": "survey collector message stats list",
+      "summary": "Run the survey collector message stats ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_collector_message_stats",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey collector message stats list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/collectors/{collector_id}/messages/{message_id}/stats"
+        }
+      ]
+    },
+    {
+      "path": "survey collector recipient list",
+      "summary": "Run the survey collector recipient ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_collector_recipient",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey collector recipient list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/collectors/{collector_id}/recipients/{recipient_id}"
+        }
+      ]
+    },
+    {
+      "path": "survey details list",
+      "summary": "Run the survey details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_details",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{id}/details"
+        }
+      ]
+    },
+    {
+      "path": "survey folders list",
+      "summary": "Run the survey folders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_folders",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey folders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/survey_folders"
+        }
+      ]
+    },
+    {
+      "path": "survey language list",
+      "summary": "Run the survey language ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_language",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey language list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/languages/{language_code}"
+        }
+      ]
+    },
+    {
+      "path": "survey languages catalog list",
+      "summary": "Run the survey languages catalog ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_languages_catalog",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey languages catalog list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/survey_languages"
+        }
+      ]
+    },
+    {
+      "path": "survey languages list",
+      "summary": "Run the survey languages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_languages",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey languages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/languages"
+        }
+      ]
+    },
+    {
+      "path": "survey list",
+      "summary": "Run the survey ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{id}"
+        }
+      ]
+    },
+    {
+      "path": "survey page list",
+      "summary": "Run the survey page ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_page",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey page list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/pages/{page_id}"
+        }
+      ]
+    },
+    {
+      "path": "survey pages list",
+      "summary": "Run the survey pages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_pages",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey pages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/pages"
+        }
+      ]
+    },
+    {
+      "path": "survey question list",
+      "summary": "Run the survey question ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_question",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey question list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}"
+        }
+      ]
+    },
+    {
+      "path": "survey questions list",
+      "summary": "Run the survey questions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_questions",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey questions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions"
+        }
+      ]
+    },
+    {
+      "path": "survey response details list",
+      "summary": "Run the survey response details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_response_details",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey response details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/responses/{response_id}/details"
+        }
+      ]
+    },
+    {
+      "path": "survey response list",
+      "summary": "Run the survey response ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_response",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey response list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/responses/{response_id}"
+        }
+      ]
+    },
+    {
+      "path": "survey response summaries list",
+      "summary": "Run the survey response summaries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_response_summaries",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey response summaries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/responses"
+        }
+      ]
+    },
+    {
+      "path": "survey responses list",
+      "summary": "Run the survey responses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_responses",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey responses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/responses/bulk"
+        }
+      ]
+    },
+    {
+      "path": "survey rollups list",
+      "summary": "Run the survey rollups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_rollups",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey rollups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/rollups"
+        }
+      ]
+    },
+    {
+      "path": "survey search list",
+      "summary": "Run the survey search ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_search",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey search list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/search"
+        }
+      ]
+    },
+    {
+      "path": "survey share list list",
+      "summary": "Run the survey share list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_share_list",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey share list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/share_list"
+        }
+      ]
+    },
+    {
+      "path": "survey templates list",
+      "summary": "Run the survey templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_templates",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/survey_templates"
+        }
+      ]
+    },
+    {
+      "path": "survey trends list",
+      "summary": "Run the survey trends ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_trends",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey survey trends list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/{survey_id}/trends"
+        }
+      ]
+    },
+    {
+      "path": "surveys list",
+      "summary": "Run the surveys ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "surveys",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey surveys list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys"
+        }
+      ]
+    },
+    {
+      "path": "team survey templates list",
+      "summary": "Run the team survey templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "team_survey_templates",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey team survey templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/team_survey_templates"
+        }
+      ]
+    },
+    {
+      "path": "update collector apply",
+      "summary": "Plan and execute the update collector reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_collector",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update collector apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/collectors/{collector_id}"
+        }
+      ],
+      "risk": "updates SurveyMonkey collector data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update collector message apply",
+      "summary": "Plan and execute the update collector message reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_collector_message",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update collector message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/collectors/{collector_id}/messages/{message_id}"
+        }
+      ],
+      "risk": "updates SurveyMonkey collector message data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update collector response apply",
+      "summary": "Plan and execute the update collector response reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_collector_response",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update collector response apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/collectors/{collector_id}/responses/{response_id}"
+        }
+      ],
+      "risk": "updates SurveyMonkey collector response data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_contact",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/contacts/{contact_id}"
+        }
+      ],
+      "risk": "updates SurveyMonkey contact data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update contact field apply",
+      "summary": "Plan and execute the update contact field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_contact_field",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update contact field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/contact_fields/{contact_field_id}"
+        }
+      ],
+      "risk": "updates SurveyMonkey contact field data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update contact list apply",
+      "summary": "Plan and execute the update contact list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_contact_list",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update contact list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/contact_lists/{contact_list_id}"
+        }
+      ],
+      "risk": "updates SurveyMonkey contact list data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update group member apply",
+      "summary": "Plan and execute the update group member reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_group_member",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update group member apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/groups/{group_id}/members/{member_id}"
+        }
+      ],
+      "risk": "changes SurveyMonkey group membership administration/provisioning state; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update organization apply",
+      "summary": "Plan and execute the update organization reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_organization",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update organization apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/organization/{organization_id}"
+        }
+      ],
+      "risk": "changes SurveyMonkey organization administration/provisioning state; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update scim user apply",
+      "summary": "Plan and execute the update scim user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_scim_user",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update scim user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/scim/v2/Users/{id}"
+        }
+      ],
+      "risk": "changes SurveyMonkey SCIM user provisioning administration/provisioning state; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update survey apply",
+      "summary": "Plan and execute the update survey reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_survey",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update survey apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/surveys/{id}"
+        }
+      ],
+      "risk": "updates SurveyMonkey survey data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update survey language apply",
+      "summary": "Plan and execute the update survey language reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_survey_language",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update survey language apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/surveys/{survey_id}/languages/{language_code}"
+        }
+      ],
+      "risk": "updates SurveyMonkey survey language/translation data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update survey page apply",
+      "summary": "Plan and execute the update survey page reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_survey_page",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update survey page apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/surveys/{survey_id}/pages/{page_id}"
+        }
+      ],
+      "risk": "updates SurveyMonkey survey page data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update survey response apply",
+      "summary": "Plan and execute the update survey response reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_survey_response",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update survey response apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/surveys/{survey_id}/responses/{response_id}"
+        }
+      ],
+      "risk": "updates SurveyMonkey survey response data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "Plan and execute the update webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_webhook",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/webhooks/{webhook_id}"
+        }
+      ],
+      "risk": "updates SurveyMonkey webhook data in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update workgroup apply",
+      "summary": "Plan and execute the update workgroup reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_workgroup",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update workgroup apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/workgroups/{workgroup_id}"
+        }
+      ],
+      "risk": "changes SurveyMonkey workgroup administration/provisioning state; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update workgroup member apply",
+      "summary": "Plan and execute the update workgroup member reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_workgroup_member",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey update workgroup member apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/workgroups/{workgroup_id}/members/{member_id}"
+        }
+      ],
+      "risk": "changes SurveyMonkey workgroup membership administration/provisioning state; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "user shared list",
+      "summary": "Run the user shared ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_shared",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey user shared list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/users/{user_id}/shared"
+        }
+      ]
+    },
+    {
+      "path": "user workgroups list",
+      "summary": "Run the user workgroups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_workgroups",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey user workgroups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/users/{user_id}/workgroups"
+        }
+      ]
+    },
+    {
+      "path": "users me list",
+      "summary": "Run the users me ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users_me",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey users me list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/users/me"
+        }
+      ]
+    },
+    {
+      "path": "webhook list",
+      "summary": "Run the webhook ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey webhook list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/webhooks/{webhook_id}"
+        }
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/webhooks"
+        }
+      ]
+    },
+    {
+      "path": "workgroup list",
+      "summary": "Run the workgroup ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workgroup",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey workgroup list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/workgroups/{workgroup_id}"
+        }
+      ]
+    },
+    {
+      "path": "workgroup member list",
+      "summary": "Run the workgroup member ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workgroup_member",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey workgroup member list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/workgroups/{workgroup_id}/members/{member_id}"
+        }
+      ]
+    },
+    {
+      "path": "workgroup members list",
+      "summary": "Run the workgroup members ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workgroup_members",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey workgroup members list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/workgroups/{workgroup_id}/members"
+        }
+      ]
+    },
+    {
+      "path": "workgroup share list",
+      "summary": "Run the workgroup share ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workgroup_share",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey workgroup share list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/workgroups/{workgroup_id}/shares/{share_id}"
+        }
+      ]
+    },
+    {
+      "path": "workgroup shares list",
+      "summary": "Run the workgroup shares ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workgroup_shares",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey workgroup shares list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/workgroups/{workgroup_id}/shares"
+        }
+      ]
+    },
+    {
+      "path": "workgroups list",
+      "summary": "Run the workgroups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workgroups",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "examples": [
+        "pm surveymonkey workgroups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/workgroups"
+        }
+      ]
+    }
+  ]
+}

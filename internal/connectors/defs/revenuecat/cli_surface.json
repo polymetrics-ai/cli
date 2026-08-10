@@ -1,0 +1,2090 @@
+{
+  "tagline": "Run RevenueCat's declared streams and reverse-ETL actions.",
+  "usage": "pm revenuecat \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get projects project-id customers customer-id events",
+        "api get projects project-id customers customer-id invoices invoice-id file",
+        "api get projects project-id paywalls paywall-id versions version-id",
+        "app list",
+        "app public api keys list",
+        "app store kit config list",
+        "apps list",
+        "audit logs list",
+        "chart data list",
+        "chart options list",
+        "collaborators list",
+        "customer active entitlements list",
+        "customer aliases list",
+        "customer attributes list",
+        "customer center list",
+        "customer invoices list",
+        "customer list",
+        "customer purchases list",
+        "customer subscriptions list",
+        "customer virtual currencies list",
+        "customers list",
+        "entitlement list",
+        "entitlement products list",
+        "entitlements list",
+        "offering list",
+        "offering packages list",
+        "offerings list",
+        "overview metrics list",
+        "package list",
+        "package products list",
+        "paywall list",
+        "paywalls list",
+        "product list",
+        "products list",
+        "projects list",
+        "purchase entitlements list",
+        "purchase list",
+        "purchases list",
+        "revenue metric list",
+        "subscription authenticated management url list",
+        "subscription entitlements list",
+        "subscription list",
+        "subscription transactions list",
+        "subscriptions list",
+        "virtual currencies list",
+        "virtual currency list",
+        "webhook integration list",
+        "webhook integrations list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api post projects project-id media-assets",
+        "api post projects project-id paywalls paywall-id actions publish",
+        "api post projects project-id paywalls paywall-id actions unpublish",
+        "archive entitlement apply",
+        "archive offering apply",
+        "archive product apply",
+        "archive virtual currency apply",
+        "assign customer offering apply",
+        "attach products to entitlement apply",
+        "attach products to package apply",
+        "cancel subscription apply",
+        "create app apply",
+        "create customer apply",
+        "create entitlement apply",
+        "create offering apply",
+        "create package apply",
+        "create paywall apply",
+        "create paywall version apply",
+        "create product apply",
+        "create product in store apply",
+        "create project apply",
+        "create virtual currencies transaction apply",
+        "create virtual currency apply",
+        "create webhook integration apply",
+        "delete app apply",
+        "delete customer apply",
+        "delete entitlement apply",
+        "delete offering apply",
+        "delete package apply",
+        "delete paywall apply",
+        "delete product apply",
+        "delete virtual currency apply",
+        "delete webhook integration apply",
+        "detach products from entitlement apply",
+        "detach products from package apply",
+        "extend subscription apply",
+        "grant customer entitlement apply",
+        "refund purchase apply",
+        "refund subscription apply",
+        "refund subscription transaction apply",
+        "restore purchase by order id apply",
+        "revoke customer granted entitlement apply",
+        "set customer attributes apply",
+        "transfer customer data apply",
+        "unarchive entitlement apply",
+        "unarchive offering apply",
+        "unarchive product apply",
+        "unarchive virtual currency apply",
+        "update app apply",
+        "update entitlement apply",
+        "update offering apply",
+        "update package apply",
+        "update paywall apply",
+        "update product apply",
+        "update virtual currencies balance apply",
+        "update virtual currency apply",
+        "update webhook integration apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get projects project-id customers customer-id events",
+      "summary": "Documented GET /projects/{project_id}/customers/{customer_id}/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat api get projects project-id customers customer-id events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/customers/{customer_id}/events"
+        }
+      ],
+      "operation": "revenuecat.get.projects-project-id-customers-customer-id-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects project-id customers customer-id invoices invoice-id file",
+      "summary": "Documented GET /projects/{project_id}/customers/{customer_id}/invoices/{invoice_id}/file (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat api get projects project-id customers customer-id invoices invoice-id file --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/customers/{customer_id}/invoices/{invoice_id}/file"
+        }
+      ],
+      "operation": "revenuecat.get.projects-project-id-customers-customer-id-invoices-invoice-id-file",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects project-id paywalls paywall-id versions version-id",
+      "summary": "Documented GET /projects/{project_id}/paywalls/{paywall_id}/versions/{version_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat api get projects project-id paywalls paywall-id versions version-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/paywalls/{paywall_id}/versions/{version_id}"
+        }
+      ],
+      "operation": "revenuecat.get.projects-project-id-paywalls-paywall-id-versions-version-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post projects project-id media-assets",
+      "summary": "Documented POST /projects/{project_id}/media_assets (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat api post projects project-id media-assets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/media_assets"
+        }
+      ],
+      "operation": "revenuecat.post.projects-project-id-media-assets",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects project-id paywalls paywall-id actions publish",
+      "summary": "Documented POST /projects/{project_id}/paywalls/{paywall_id}/actions/publish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat api post projects project-id paywalls paywall-id actions publish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/paywalls/{paywall_id}/actions/publish"
+        }
+      ],
+      "operation": "revenuecat.post.projects-project-id-paywalls-paywall-id-actions-publish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects project-id paywalls paywall-id actions unpublish",
+      "summary": "Documented POST /projects/{project_id}/paywalls/{paywall_id}/actions/unpublish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat api post projects project-id paywalls paywall-id actions unpublish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/paywalls/{paywall_id}/actions/unpublish"
+        }
+      ],
+      "operation": "revenuecat.post.projects-project-id-paywalls-paywall-id-actions-unpublish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "app list",
+      "summary": "Run the app ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "app",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat app list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/apps/{app_id}"
+        }
+      ]
+    },
+    {
+      "path": "app public api keys list",
+      "summary": "Run the app public api keys ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "app_public_api_keys",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat app public api keys list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/apps/{app_id}/public_api_keys"
+        }
+      ]
+    },
+    {
+      "path": "app store kit config list",
+      "summary": "Run the app store kit config ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "app_store_kit_config",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat app store kit config list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/apps/{app_id}/store_kit_config"
+        }
+      ]
+    },
+    {
+      "path": "apps list",
+      "summary": "Run the apps ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "apps",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat apps list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/apps"
+        }
+      ]
+    },
+    {
+      "path": "archive entitlement apply",
+      "summary": "Plan and execute the archive entitlement reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "archive_entitlement",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat archive entitlement apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/entitlements/{entitlement_id}/actions/archive"
+        }
+      ],
+      "risk": "archives an entitlement",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "archive offering apply",
+      "summary": "Plan and execute the archive offering reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "archive_offering",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat archive offering apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/offerings/{offering_id}/actions/archive"
+        }
+      ],
+      "risk": "archives an offering",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "archive product apply",
+      "summary": "Plan and execute the archive product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "archive_product",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat archive product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/products/{product_id}/actions/archive"
+        }
+      ],
+      "risk": "archives a product",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "archive virtual currency apply",
+      "summary": "Plan and execute the archive virtual currency reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "archive_virtual_currency",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat archive virtual currency apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}/actions/archive"
+        }
+      ],
+      "risk": "archives a virtual currency",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "assign customer offering apply",
+      "summary": "Plan and execute the assign customer offering reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "assign_customer_offering",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat assign customer offering apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/customers/{customer_id}/actions/assign_offering"
+        }
+      ],
+      "risk": "assigns or clears a customer offering override",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "attach products to entitlement apply",
+      "summary": "Plan and execute the attach products to entitlement reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "attach_products_to_entitlement",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat attach products to entitlement apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/entitlements/{entitlement_id}/actions/attach_products"
+        }
+      ],
+      "risk": "attaches products to an entitlement",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "attach products to package apply",
+      "summary": "Plan and execute the attach products to package reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "attach_products_to_package",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat attach products to package apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/packages/{package_id}/actions/attach_products"
+        }
+      ],
+      "risk": "attaches products to a package",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "audit logs list",
+      "summary": "Run the audit logs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "audit_logs",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat audit logs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/audit_logs"
+        }
+      ]
+    },
+    {
+      "path": "cancel subscription apply",
+      "summary": "Plan and execute the cancel subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "cancel_subscription",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat cancel subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/subscriptions/{subscription_id}/actions/cancel"
+        }
+      ],
+      "risk": "cancels an active Web Billing subscription",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "chart data list",
+      "summary": "Run the chart data ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "chart_data",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat chart data list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/charts/{chart_name}"
+        }
+      ]
+    },
+    {
+      "path": "chart options list",
+      "summary": "Run the chart options ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "chart_options",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat chart options list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/charts/{chart_name}/options"
+        }
+      ]
+    },
+    {
+      "path": "collaborators list",
+      "summary": "Run the collaborators ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collaborators",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat collaborators list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/collaborators"
+        }
+      ]
+    },
+    {
+      "path": "create app apply",
+      "summary": "Plan and execute the create app reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_app",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat create app apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/apps"
+        }
+      ],
+      "risk": "creates a RevenueCat app in the configured project",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create customer apply",
+      "summary": "Plan and execute the create customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_customer",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat create customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/customers"
+        }
+      ],
+      "risk": "creates a RevenueCat customer",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create entitlement apply",
+      "summary": "Plan and execute the create entitlement reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_entitlement",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat create entitlement apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/entitlements"
+        }
+      ],
+      "risk": "creates an entitlement",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create offering apply",
+      "summary": "Plan and execute the create offering reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_offering",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat create offering apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/offerings"
+        }
+      ],
+      "risk": "creates an offering",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create package apply",
+      "summary": "Plan and execute the create package reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_package",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat create package apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/offerings/{offering_id}/packages"
+        }
+      ],
+      "risk": "creates a package in an offering",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create paywall apply",
+      "summary": "Plan and execute the create paywall reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_paywall",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat create paywall apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/paywalls"
+        }
+      ],
+      "risk": "creates a paywall",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create paywall version apply",
+      "summary": "Plan and execute the create paywall version reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_paywall_version",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat create paywall version apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/paywalls/{paywall_id}/versions"
+        }
+      ],
+      "risk": "creates a paywall version",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create product apply",
+      "summary": "Plan and execute the create product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_product",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat create product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/products"
+        }
+      ],
+      "risk": "creates a product",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create product in store apply",
+      "summary": "Plan and execute the create product in store reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_product_in_store",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat create product in store apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/products/{product_id}/create_in_store"
+        }
+      ],
+      "risk": "pushes a product to the configured store",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create project apply",
+      "summary": "Plan and execute the create project reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_project",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat create project apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects"
+        }
+      ],
+      "risk": "creates a RevenueCat project",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create virtual currencies transaction apply",
+      "summary": "Plan and execute the create virtual currencies transaction reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_virtual_currencies_transaction",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat create virtual currencies transaction apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/customers/{customer_id}/virtual_currencies/transactions"
+        }
+      ],
+      "risk": "creates a virtual currency transaction for a customer",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create virtual currency apply",
+      "summary": "Plan and execute the create virtual currency reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_virtual_currency",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat create virtual currency apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/virtual_currencies"
+        }
+      ],
+      "risk": "creates a virtual currency",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create webhook integration apply",
+      "summary": "Plan and execute the create webhook integration reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_webhook_integration",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat create webhook integration apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/integrations/webhooks"
+        }
+      ],
+      "risk": "creates a webhook integration that sends events to the configured URL",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "customer active entitlements list",
+      "summary": "Run the customer active entitlements ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_active_entitlements",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat customer active entitlements list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/customers/{customer_id}/active_entitlements"
+        }
+      ]
+    },
+    {
+      "path": "customer aliases list",
+      "summary": "Run the customer aliases ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_aliases",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat customer aliases list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/customers/{customer_id}/aliases"
+        }
+      ]
+    },
+    {
+      "path": "customer attributes list",
+      "summary": "Run the customer attributes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_attributes",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat customer attributes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/customers/{customer_id}/attributes"
+        }
+      ]
+    },
+    {
+      "path": "customer center list",
+      "summary": "Run the customer center ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_center",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat customer center list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/customers/{customer_id}/customer_center"
+        }
+      ]
+    },
+    {
+      "path": "customer invoices list",
+      "summary": "Run the customer invoices ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_invoices",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat customer invoices list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/customers/{customer_id}/invoices"
+        }
+      ]
+    },
+    {
+      "path": "customer list",
+      "summary": "Run the customer ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat customer list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/customers/{customer_id}"
+        }
+      ]
+    },
+    {
+      "path": "customer purchases list",
+      "summary": "Run the customer purchases ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_purchases",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat customer purchases list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/customers/{customer_id}/purchases"
+        }
+      ]
+    },
+    {
+      "path": "customer subscriptions list",
+      "summary": "Run the customer subscriptions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_subscriptions",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat customer subscriptions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/customers/{customer_id}/subscriptions"
+        }
+      ]
+    },
+    {
+      "path": "customer virtual currencies list",
+      "summary": "Run the customer virtual currencies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_virtual_currencies",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat customer virtual currencies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/customers/{customer_id}/virtual_currencies"
+        }
+      ]
+    },
+    {
+      "path": "customers list",
+      "summary": "Run the customers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat customers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/customers"
+        }
+      ]
+    },
+    {
+      "path": "delete app apply",
+      "summary": "Plan and execute the delete app reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_app",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat delete app apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/apps/{app_id}"
+        }
+      ],
+      "risk": "permanently deletes a RevenueCat app and its configuration",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete customer apply",
+      "summary": "Plan and execute the delete customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_customer",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat delete customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/customers/{customer_id}"
+        }
+      ],
+      "risk": "permanently deletes a RevenueCat customer",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete entitlement apply",
+      "summary": "Plan and execute the delete entitlement reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_entitlement",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat delete entitlement apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/entitlements/{entitlement_id}"
+        }
+      ],
+      "risk": "deletes an entitlement",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete offering apply",
+      "summary": "Plan and execute the delete offering reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_offering",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat delete offering apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/offerings/{offering_id}"
+        }
+      ],
+      "risk": "deletes an offering and attached packages",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete package apply",
+      "summary": "Plan and execute the delete package reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_package",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat delete package apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/packages/{package_id}"
+        }
+      ],
+      "risk": "deletes a package",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete paywall apply",
+      "summary": "Plan and execute the delete paywall reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_paywall",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat delete paywall apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/paywalls/{paywall_id}"
+        }
+      ],
+      "risk": "deletes a paywall",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete product apply",
+      "summary": "Plan and execute the delete product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_product",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat delete product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/products/{product_id}"
+        }
+      ],
+      "risk": "deletes a product",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete virtual currency apply",
+      "summary": "Plan and execute the delete virtual currency reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_virtual_currency",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat delete virtual currency apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}"
+        }
+      ],
+      "risk": "deletes a virtual currency",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete webhook integration apply",
+      "summary": "Plan and execute the delete webhook integration reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_webhook_integration",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat delete webhook integration apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/integrations/webhooks/{webhook_integration_id}"
+        }
+      ],
+      "risk": "deletes a webhook integration",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "detach products from entitlement apply",
+      "summary": "Plan and execute the detach products from entitlement reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "detach_products_from_entitlement",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat detach products from entitlement apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/entitlements/{entitlement_id}/actions/detach_products"
+        }
+      ],
+      "risk": "detaches products from an entitlement",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "detach products from package apply",
+      "summary": "Plan and execute the detach products from package reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "detach_products_from_package",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat detach products from package apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/packages/{package_id}/actions/detach_products"
+        }
+      ],
+      "risk": "detaches products from a package",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "entitlement list",
+      "summary": "Run the entitlement ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "entitlement",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat entitlement list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/entitlements/{entitlement_id}"
+        }
+      ]
+    },
+    {
+      "path": "entitlement products list",
+      "summary": "Run the entitlement products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "entitlement_products",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat entitlement products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/entitlements/{entitlement_id}/products"
+        }
+      ]
+    },
+    {
+      "path": "entitlements list",
+      "summary": "Run the entitlements ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "entitlements",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat entitlements list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/entitlements"
+        }
+      ]
+    },
+    {
+      "path": "extend subscription apply",
+      "summary": "Plan and execute the extend subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "extend_subscription",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat extend subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/subscriptions/{subscription_id}/actions/extend"
+        }
+      ],
+      "risk": "extends the current billing period of a subscription",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "grant customer entitlement apply",
+      "summary": "Plan and execute the grant customer entitlement reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "grant_customer_entitlement",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat grant customer entitlement apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/customers/{customer_id}/actions/grant_entitlement"
+        }
+      ],
+      "risk": "grants an entitlement to a customer",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "offering list",
+      "summary": "Run the offering ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "offering",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat offering list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/offerings/{offering_id}"
+        }
+      ]
+    },
+    {
+      "path": "offering packages list",
+      "summary": "Run the offering packages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "offering_packages",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat offering packages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/offerings/{offering_id}/packages"
+        }
+      ]
+    },
+    {
+      "path": "offerings list",
+      "summary": "Run the offerings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "offerings",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat offerings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/offerings"
+        }
+      ]
+    },
+    {
+      "path": "overview metrics list",
+      "summary": "Run the overview metrics ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "overview_metrics",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat overview metrics list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/metrics/overview"
+        }
+      ]
+    },
+    {
+      "path": "package list",
+      "summary": "Run the package ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "package",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat package list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/packages/{package_id}"
+        }
+      ]
+    },
+    {
+      "path": "package products list",
+      "summary": "Run the package products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "package_products",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat package products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/packages/{package_id}/products"
+        }
+      ]
+    },
+    {
+      "path": "paywall list",
+      "summary": "Run the paywall ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "paywall",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat paywall list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/paywalls/{paywall_id}"
+        }
+      ]
+    },
+    {
+      "path": "paywalls list",
+      "summary": "Run the paywalls ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "paywalls",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat paywalls list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/paywalls"
+        }
+      ]
+    },
+    {
+      "path": "product list",
+      "summary": "Run the product ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat product list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/products/{product_id}"
+        }
+      ]
+    },
+    {
+      "path": "products list",
+      "summary": "Run the products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/products"
+        }
+      ]
+    },
+    {
+      "path": "projects list",
+      "summary": "Run the projects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat projects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects"
+        }
+      ]
+    },
+    {
+      "path": "purchase entitlements list",
+      "summary": "Run the purchase entitlements ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "purchase_entitlements",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat purchase entitlements list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/purchases/{purchase_id}/entitlements"
+        }
+      ]
+    },
+    {
+      "path": "purchase list",
+      "summary": "Run the purchase ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "purchase",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat purchase list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/purchases/{purchase_id}"
+        }
+      ]
+    },
+    {
+      "path": "purchases list",
+      "summary": "Run the purchases ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "purchases",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat purchases list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/purchases"
+        }
+      ]
+    },
+    {
+      "path": "refund purchase apply",
+      "summary": "Plan and execute the refund purchase reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "refund_purchase",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat refund purchase apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/purchases/{purchase_id}/actions/refund"
+        }
+      ],
+      "risk": "refunds a Web Billing purchase",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "refund subscription apply",
+      "summary": "Plan and execute the refund subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "refund_subscription",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat refund subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/subscriptions/{subscription_id}/actions/refund"
+        }
+      ],
+      "risk": "refunds an active Web Billing subscription",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "refund subscription transaction apply",
+      "summary": "Plan and execute the refund subscription transaction reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "refund_subscription_transaction",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat refund subscription transaction apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/subscriptions/{subscription_id}/transactions/{transaction_id}/actions/refund"
+        }
+      ],
+      "risk": "refunds a Play Store or Galaxy subscription transaction",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "restore purchase by order id apply",
+      "summary": "Plan and execute the restore purchase by order id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "restore_purchase_by_order_id",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat restore purchase by order id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/customers/{customer_id}/actions/restore_purchase_by_order_id"
+        }
+      ],
+      "risk": "restores a Google Play purchase by order id",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "revenue metric list",
+      "summary": "Run the revenue metric ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "revenue_metric",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat revenue metric list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/metrics/revenue"
+        }
+      ]
+    },
+    {
+      "path": "revoke customer granted entitlement apply",
+      "summary": "Plan and execute the revoke customer granted entitlement reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "revoke_customer_granted_entitlement",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat revoke customer granted entitlement apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/customers/{customer_id}/actions/revoke_granted_entitlement"
+        }
+      ],
+      "risk": "revokes a granted customer entitlement",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "set customer attributes apply",
+      "summary": "Plan and execute the set customer attributes reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "set_customer_attributes",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat set customer attributes apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/customers/{customer_id}/attributes"
+        }
+      ],
+      "risk": "sets customer attributes",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "subscription authenticated management url list",
+      "summary": "Run the subscription authenticated management url ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscription_authenticated_management_url",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat subscription authenticated management url list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/subscriptions/{subscription_id}/authenticated_management_url"
+        }
+      ]
+    },
+    {
+      "path": "subscription entitlements list",
+      "summary": "Run the subscription entitlements ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscription_entitlements",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat subscription entitlements list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/subscriptions/{subscription_id}/entitlements"
+        }
+      ]
+    },
+    {
+      "path": "subscription list",
+      "summary": "Run the subscription ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscription",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat subscription list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/subscriptions/{subscription_id}"
+        }
+      ]
+    },
+    {
+      "path": "subscription transactions list",
+      "summary": "Run the subscription transactions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscription_transactions",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat subscription transactions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/subscriptions/{subscription_id}/transactions"
+        }
+      ]
+    },
+    {
+      "path": "subscriptions list",
+      "summary": "Run the subscriptions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscriptions",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat subscriptions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/subscriptions"
+        }
+      ]
+    },
+    {
+      "path": "transfer customer data apply",
+      "summary": "Plan and execute the transfer customer data reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "transfer_customer_data",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat transfer customer data apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/customers/{customer_id}/actions/transfer"
+        }
+      ],
+      "risk": "transfers subscriptions and purchases to another customer",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "unarchive entitlement apply",
+      "summary": "Plan and execute the unarchive entitlement reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "unarchive_entitlement",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat unarchive entitlement apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/entitlements/{entitlement_id}/actions/unarchive"
+        }
+      ],
+      "risk": "unarchives an entitlement",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "unarchive offering apply",
+      "summary": "Plan and execute the unarchive offering reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "unarchive_offering",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat unarchive offering apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/offerings/{offering_id}/actions/unarchive"
+        }
+      ],
+      "risk": "unarchives an offering",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "unarchive product apply",
+      "summary": "Plan and execute the unarchive product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "unarchive_product",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat unarchive product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/products/{product_id}/actions/unarchive"
+        }
+      ],
+      "risk": "unarchives a product",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "unarchive virtual currency apply",
+      "summary": "Plan and execute the unarchive virtual currency reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "unarchive_virtual_currency",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat unarchive virtual currency apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}/actions/unarchive"
+        }
+      ],
+      "risk": "unarchives a virtual currency",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update app apply",
+      "summary": "Plan and execute the update app reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_app",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat update app apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/apps/{app_id}"
+        }
+      ],
+      "risk": "updates an existing RevenueCat app",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update entitlement apply",
+      "summary": "Plan and execute the update entitlement reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_entitlement",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat update entitlement apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/entitlements/{entitlement_id}"
+        }
+      ],
+      "risk": "updates an entitlement",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update offering apply",
+      "summary": "Plan and execute the update offering reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_offering",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat update offering apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/offerings/{offering_id}"
+        }
+      ],
+      "risk": "updates an offering",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update package apply",
+      "summary": "Plan and execute the update package reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_package",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat update package apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/packages/{package_id}"
+        }
+      ],
+      "risk": "updates a package",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update paywall apply",
+      "summary": "Plan and execute the update paywall reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_paywall",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat update paywall apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/projects/{project_id}/paywalls/{paywall_id}"
+        }
+      ],
+      "risk": "updates a paywall draft",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update product apply",
+      "summary": "Plan and execute the update product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_product",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat update product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/products/{product_id}"
+        }
+      ],
+      "risk": "updates a product",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update virtual currencies balance apply",
+      "summary": "Plan and execute the update virtual currencies balance reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_virtual_currencies_balance",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat update virtual currencies balance apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/customers/{customer_id}/virtual_currencies/update_balance"
+        }
+      ],
+      "risk": "updates a customer virtual currency balance without creating a transaction",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update virtual currency apply",
+      "summary": "Plan and execute the update virtual currency reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_virtual_currency",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat update virtual currency apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}"
+        }
+      ],
+      "risk": "updates a virtual currency",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update webhook integration apply",
+      "summary": "Plan and execute the update webhook integration reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_webhook_integration",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat update webhook integration apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/integrations/webhooks/{webhook_integration_id}"
+        }
+      ],
+      "risk": "updates a webhook integration",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "virtual currencies list",
+      "summary": "Run the virtual currencies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "virtual_currencies",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat virtual currencies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/virtual_currencies"
+        }
+      ]
+    },
+    {
+      "path": "virtual currency list",
+      "summary": "Run the virtual currency ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "virtual_currency",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat virtual currency list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}"
+        }
+      ]
+    },
+    {
+      "path": "webhook integration list",
+      "summary": "Run the webhook integration ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook_integration",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat webhook integration list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/integrations/webhooks/{webhook_integration_id}"
+        }
+      ]
+    },
+    {
+      "path": "webhook integrations list",
+      "summary": "Run the webhook integrations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook_integrations",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "examples": [
+        "pm revenuecat webhook integrations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/integrations/webhooks"
+        }
+      ]
+    }
+  ]
+}

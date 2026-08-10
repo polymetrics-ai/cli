@@ -1,0 +1,3428 @@
+{
+  "tagline": "Run Paystack's declared streams and reverse-ETL actions.",
+  "usage": "pm paystack \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get address-verification states",
+        "api get apple-pay domain",
+        "api get balance",
+        "api get balance ledger",
+        "api get bank",
+        "api get bank resolve",
+        "api get bulkcharge",
+        "api get bulkcharge code",
+        "api get bulkcharge code charges",
+        "api get bulkcharge pause code",
+        "api get bulkcharge resume code",
+        "api get charge reference",
+        "api get country",
+        "api get customer authorization verify reference",
+        "api get customer code",
+        "api get customer id directdebit-mandate-authorizations",
+        "api get decision bin bin",
+        "api get dedicated-account",
+        "api get dedicated-account available-providers",
+        "api get dedicated-account id",
+        "api get dedicated-account requery",
+        "api get directdebit mandate-authorizations",
+        "api get dispute export",
+        "api get dispute id",
+        "api get dispute id upload-url",
+        "api get dispute transaction id",
+        "api get integration payment-session-timeout",
+        "api get order",
+        "api get order code validate",
+        "api get order id",
+        "api get order product id",
+        "api get page",
+        "api get page check-slug-availability slug",
+        "api get page id",
+        "api get paymentrequest id",
+        "api get paymentrequest totals",
+        "api get paymentrequest verify id",
+        "api get plan",
+        "api get plan code",
+        "api get product",
+        "api get product id",
+        "api get refund",
+        "api get refund id",
+        "api get settlement",
+        "api get settlement id transactions",
+        "api get split",
+        "api get split id",
+        "api get storefront",
+        "api get storefront id",
+        "api get storefront id order",
+        "api get storefront id product",
+        "api get storefront verify slug",
+        "api get subaccount",
+        "api get subaccount code",
+        "api get subscription code",
+        "api get subscription code manage link",
+        "api get terminal",
+        "api get terminal terminal-id",
+        "api get terminal terminal-id event event-id",
+        "api get terminal terminal-id presence",
+        "api get transaction export",
+        "api get transaction id",
+        "api get transaction timeline id",
+        "api get transaction totals",
+        "api get transaction verify reference",
+        "api get transfer",
+        "api get transfer code",
+        "api get transfer export",
+        "api get transfer verify reference",
+        "api get transferrecipient",
+        "api get transferrecipient code",
+        "api get virtual-terminal",
+        "api get virtual-terminal code",
+        "customers list",
+        "disputes list",
+        "invoices list",
+        "subscriptions list",
+        "transactions list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete apple-pay domain",
+        "api delete dedicated-account id",
+        "api delete dedicated-account split",
+        "api delete product id",
+        "api delete storefront id",
+        "api delete transferrecipient code",
+        "api delete virtual-terminal code split-code",
+        "api post apple-pay domain",
+        "api post bank validate",
+        "api post bulkcharge",
+        "api post charge",
+        "api post charge submit-address",
+        "api post charge submit-birthday",
+        "api post charge submit-otp",
+        "api post charge submit-phone",
+        "api post charge submit-pin",
+        "api post customer",
+        "api post customer authorization deactivate",
+        "api post customer authorization initialize",
+        "api post customer code identification",
+        "api post customer id initialize-direct-debit",
+        "api post customer set-risk-action",
+        "api post dedicated-account",
+        "api post dedicated-account assign",
+        "api post dedicated-account split",
+        "api post dispute id evidence",
+        "api post order",
+        "api post page",
+        "api post page id product",
+        "api post paymentrequest",
+        "api post paymentrequest archive id",
+        "api post paymentrequest finalize id",
+        "api post paymentrequest notify id",
+        "api post plan",
+        "api post product",
+        "api post refund",
+        "api post refund retry-with-customer-details id",
+        "api post split",
+        "api post split id subaccount add",
+        "api post split id subaccount remove",
+        "api post storefront",
+        "api post storefront id duplicate",
+        "api post storefront id product",
+        "api post storefront id publish",
+        "api post subaccount",
+        "api post subscription",
+        "api post subscription code manage email",
+        "api post subscription disable",
+        "api post subscription enable",
+        "api post terminal commission-device",
+        "api post terminal decommission-device",
+        "api post terminal id event",
+        "api post transaction charge-authorization",
+        "api post transaction initialize",
+        "api post transaction partial-debit",
+        "api post transfer",
+        "api post transfer bulk",
+        "api post transfer disable-otp",
+        "api post transfer disable-otp-finalize",
+        "api post transfer enable-otp",
+        "api post transfer finalize-transfer",
+        "api post transfer resend-otp",
+        "api post transferrecipient",
+        "api post transferrecipient bulk",
+        "api post virtual-terminal",
+        "api post virtual-terminal code destination assign",
+        "api post virtual-terminal code destination unassign",
+        "api put customer code",
+        "api put customer id directdebit-activation-charge",
+        "api put directdebit activation-charge",
+        "api put dispute id",
+        "api put dispute id resolve",
+        "api put integration payment-session-timeout",
+        "api put page id",
+        "api put paymentrequest id",
+        "api put plan code",
+        "api put product id",
+        "api put split id",
+        "api put storefront id",
+        "api put subaccount code",
+        "api put terminal terminal-id",
+        "api put transferrecipient code",
+        "api put virtual-terminal code",
+        "api put virtual-terminal code deactivate",
+        "api put virtual-terminal code split-code"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete apple-pay domain",
+      "summary": "Documented DELETE /apple-pay/domain (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api delete apple-pay domain --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/apple-pay/domain"
+        }
+      ],
+      "operation": "paystack.delete.apple-pay-domain",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete dedicated-account id",
+      "summary": "Documented DELETE /dedicated_account/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api delete dedicated-account id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/dedicated_account/{id}"
+        }
+      ],
+      "operation": "paystack.delete.dedicated-account-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete dedicated-account split",
+      "summary": "Documented DELETE /dedicated_account/split (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api delete dedicated-account split --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/dedicated_account/split"
+        }
+      ],
+      "operation": "paystack.delete.dedicated-account-split",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete product id",
+      "summary": "Documented DELETE /product/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api delete product id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/product/{id}"
+        }
+      ],
+      "operation": "paystack.delete.product-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete storefront id",
+      "summary": "Documented DELETE /storefront/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api delete storefront id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/storefront/{id}"
+        }
+      ],
+      "operation": "paystack.delete.storefront-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete transferrecipient code",
+      "summary": "Documented DELETE /transferrecipient/{code} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api delete transferrecipient code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/transferrecipient/{code}"
+        }
+      ],
+      "operation": "paystack.delete.transferrecipient-code",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete virtual-terminal code split-code",
+      "summary": "Documented DELETE /virtual_terminal/{code}/split_code (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api delete virtual-terminal code split-code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/virtual_terminal/{code}/split_code"
+        }
+      ],
+      "operation": "paystack.delete.virtual-terminal-code-split-code",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get address-verification states",
+      "summary": "Documented GET /address_verification/states (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get address-verification states --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/address_verification/states"
+        }
+      ],
+      "operation": "paystack.get.address-verification-states",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get apple-pay domain",
+      "summary": "Documented GET /apple-pay/domain (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get apple-pay domain --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/apple-pay/domain"
+        }
+      ],
+      "operation": "paystack.get.apple-pay-domain",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get balance",
+      "summary": "Documented GET /balance (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get balance --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/balance"
+        }
+      ],
+      "operation": "paystack.get.balance",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get balance ledger",
+      "summary": "Documented GET /balance/ledger (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get balance ledger --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/balance/ledger"
+        }
+      ],
+      "operation": "paystack.get.balance-ledger",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bank",
+      "summary": "Documented GET /bank (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get bank --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bank"
+        }
+      ],
+      "operation": "paystack.get.bank",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bank resolve",
+      "summary": "Documented GET /bank/resolve (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get bank resolve --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bank/resolve"
+        }
+      ],
+      "operation": "paystack.get.bank-resolve",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bulkcharge",
+      "summary": "Documented GET /bulkcharge (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get bulkcharge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bulkcharge"
+        }
+      ],
+      "operation": "paystack.get.bulkcharge",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bulkcharge code",
+      "summary": "Documented GET /bulkcharge/{code} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get bulkcharge code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bulkcharge/{code}"
+        }
+      ],
+      "operation": "paystack.get.bulkcharge-code",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bulkcharge code charges",
+      "summary": "Documented GET /bulkcharge/{code}/charges (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get bulkcharge code charges --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bulkcharge/{code}/charges"
+        }
+      ],
+      "operation": "paystack.get.bulkcharge-code-charges",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bulkcharge pause code",
+      "summary": "Documented GET /bulkcharge/pause/{code} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get bulkcharge pause code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bulkcharge/pause/{code}"
+        }
+      ],
+      "operation": "paystack.get.bulkcharge-pause-code",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bulkcharge resume code",
+      "summary": "Documented GET /bulkcharge/resume/{code} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get bulkcharge resume code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bulkcharge/resume/{code}"
+        }
+      ],
+      "operation": "paystack.get.bulkcharge-resume-code",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get charge reference",
+      "summary": "Documented GET /charge/{reference} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get charge reference --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/charge/{reference}"
+        }
+      ],
+      "operation": "paystack.get.charge-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get country",
+      "summary": "Documented GET /country (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get country --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/country"
+        }
+      ],
+      "operation": "paystack.get.country",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer authorization verify reference",
+      "summary": "Documented GET /customer/authorization/verify/{reference} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get customer authorization verify reference --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer/authorization/verify/{reference}"
+        }
+      ],
+      "operation": "paystack.get.customer-authorization-verify-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer code",
+      "summary": "Documented GET /customer/{code} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get customer code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer/{code}"
+        }
+      ],
+      "operation": "paystack.get.customer-code",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer id directdebit-mandate-authorizations",
+      "summary": "Documented GET /customer/{id}/directdebit-mandate-authorizations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get customer id directdebit-mandate-authorizations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer/{id}/directdebit-mandate-authorizations"
+        }
+      ],
+      "operation": "paystack.get.customer-id-directdebit-mandate-authorizations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get decision bin bin",
+      "summary": "Documented GET /decision/bin/{bin} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get decision bin bin --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/decision/bin/{bin}"
+        }
+      ],
+      "operation": "paystack.get.decision-bin-bin",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dedicated-account",
+      "summary": "Documented GET /dedicated_account (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get dedicated-account --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dedicated_account"
+        }
+      ],
+      "operation": "paystack.get.dedicated-account",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dedicated-account available-providers",
+      "summary": "Documented GET /dedicated_account/available_providers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get dedicated-account available-providers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dedicated_account/available_providers"
+        }
+      ],
+      "operation": "paystack.get.dedicated-account-available-providers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dedicated-account id",
+      "summary": "Documented GET /dedicated_account/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get dedicated-account id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dedicated_account/{id}"
+        }
+      ],
+      "operation": "paystack.get.dedicated-account-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dedicated-account requery",
+      "summary": "Documented GET /dedicated_account/requery (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get dedicated-account requery --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dedicated_account/requery"
+        }
+      ],
+      "operation": "paystack.get.dedicated-account-requery",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get directdebit mandate-authorizations",
+      "summary": "Documented GET /directdebit/mandate-authorizations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get directdebit mandate-authorizations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/directdebit/mandate-authorizations"
+        }
+      ],
+      "operation": "paystack.get.directdebit-mandate-authorizations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dispute export",
+      "summary": "Documented GET /dispute/export (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get dispute export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dispute/export"
+        }
+      ],
+      "operation": "paystack.get.dispute-export",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dispute id",
+      "summary": "Documented GET /dispute/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get dispute id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dispute/{id}"
+        }
+      ],
+      "operation": "paystack.get.dispute-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dispute id upload-url",
+      "summary": "Documented GET /dispute/{id}/upload_url (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get dispute id upload-url --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dispute/{id}/upload_url"
+        }
+      ],
+      "operation": "paystack.get.dispute-id-upload-url",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dispute transaction id",
+      "summary": "Documented GET /dispute/transaction/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get dispute transaction id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dispute/transaction/{id}"
+        }
+      ],
+      "operation": "paystack.get.dispute-transaction-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get integration payment-session-timeout",
+      "summary": "Documented GET /integration/payment_session_timeout (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get integration payment-session-timeout --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integration/payment_session_timeout"
+        }
+      ],
+      "operation": "paystack.get.integration-payment-session-timeout",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get order",
+      "summary": "Documented GET /order (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get order --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/order"
+        }
+      ],
+      "operation": "paystack.get.order",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get order code validate",
+      "summary": "Documented GET /order/{code}/validate (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get order code validate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/order/{code}/validate"
+        }
+      ],
+      "operation": "paystack.get.order-code-validate",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get order id",
+      "summary": "Documented GET /order/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get order id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/order/{id}"
+        }
+      ],
+      "operation": "paystack.get.order-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get order product id",
+      "summary": "Documented GET /order/product/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get order product id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/order/product/{id}"
+        }
+      ],
+      "operation": "paystack.get.order-product-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get page",
+      "summary": "Documented GET /page (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get page --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/page"
+        }
+      ],
+      "operation": "paystack.get.page",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get page check-slug-availability slug",
+      "summary": "Documented GET /page/check_slug_availability/{slug} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get page check-slug-availability slug --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/page/check_slug_availability/{slug}"
+        }
+      ],
+      "operation": "paystack.get.page-check-slug-availability-slug",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get page id",
+      "summary": "Documented GET /page/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get page id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/page/{id}"
+        }
+      ],
+      "operation": "paystack.get.page-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get paymentrequest id",
+      "summary": "Documented GET /paymentrequest/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get paymentrequest id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/paymentrequest/{id}"
+        }
+      ],
+      "operation": "paystack.get.paymentrequest-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get paymentrequest totals",
+      "summary": "Documented GET /paymentrequest/totals (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get paymentrequest totals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/paymentrequest/totals"
+        }
+      ],
+      "operation": "paystack.get.paymentrequest-totals",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get paymentrequest verify id",
+      "summary": "Documented GET /paymentrequest/verify/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get paymentrequest verify id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/paymentrequest/verify/{id}"
+        }
+      ],
+      "operation": "paystack.get.paymentrequest-verify-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plan",
+      "summary": "Documented GET /plan (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get plan --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plan"
+        }
+      ],
+      "operation": "paystack.get.plan",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plan code",
+      "summary": "Documented GET /plan/{code} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get plan code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plan/{code}"
+        }
+      ],
+      "operation": "paystack.get.plan-code",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get product",
+      "summary": "Documented GET /product (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get product --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/product"
+        }
+      ],
+      "operation": "paystack.get.product",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get product id",
+      "summary": "Documented GET /product/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get product id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/product/{id}"
+        }
+      ],
+      "operation": "paystack.get.product-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get refund",
+      "summary": "Documented GET /refund (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get refund --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/refund"
+        }
+      ],
+      "operation": "paystack.get.refund",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get refund id",
+      "summary": "Documented GET /refund/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get refund id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/refund/{id}"
+        }
+      ],
+      "operation": "paystack.get.refund-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settlement",
+      "summary": "Documented GET /settlement (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get settlement --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settlement"
+        }
+      ],
+      "operation": "paystack.get.settlement",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settlement id transactions",
+      "summary": "Documented GET /settlement/{id}/transactions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get settlement id transactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settlement/{id}/transactions"
+        }
+      ],
+      "operation": "paystack.get.settlement-id-transactions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get split",
+      "summary": "Documented GET /split (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get split --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/split"
+        }
+      ],
+      "operation": "paystack.get.split",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get split id",
+      "summary": "Documented GET /split/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get split id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/split/{id}"
+        }
+      ],
+      "operation": "paystack.get.split-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get storefront",
+      "summary": "Documented GET /storefront (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get storefront --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/storefront"
+        }
+      ],
+      "operation": "paystack.get.storefront",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get storefront id",
+      "summary": "Documented GET /storefront/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get storefront id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/storefront/{id}"
+        }
+      ],
+      "operation": "paystack.get.storefront-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get storefront id order",
+      "summary": "Documented GET /storefront/{id}/order (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get storefront id order --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/storefront/{id}/order"
+        }
+      ],
+      "operation": "paystack.get.storefront-id-order",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get storefront id product",
+      "summary": "Documented GET /storefront/{id}/product (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get storefront id product --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/storefront/{id}/product"
+        }
+      ],
+      "operation": "paystack.get.storefront-id-product",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get storefront verify slug",
+      "summary": "Documented GET /storefront/verify/{slug} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get storefront verify slug --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/storefront/verify/{slug}"
+        }
+      ],
+      "operation": "paystack.get.storefront-verify-slug",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subaccount",
+      "summary": "Documented GET /subaccount (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get subaccount --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subaccount"
+        }
+      ],
+      "operation": "paystack.get.subaccount",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subaccount code",
+      "summary": "Documented GET /subaccount/{code} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get subaccount code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subaccount/{code}"
+        }
+      ],
+      "operation": "paystack.get.subaccount-code",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscription code",
+      "summary": "Documented GET /subscription/{code} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get subscription code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscription/{code}"
+        }
+      ],
+      "operation": "paystack.get.subscription-code",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscription code manage link",
+      "summary": "Documented GET /subscription/{code}/manage/link (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get subscription code manage link --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscription/{code}/manage/link"
+        }
+      ],
+      "operation": "paystack.get.subscription-code-manage-link",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get terminal",
+      "summary": "Documented GET /terminal (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get terminal --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/terminal"
+        }
+      ],
+      "operation": "paystack.get.terminal",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get terminal terminal-id",
+      "summary": "Documented GET /terminal/{terminal_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get terminal terminal-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/terminal/{terminal_id}"
+        }
+      ],
+      "operation": "paystack.get.terminal-terminal-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get terminal terminal-id event event-id",
+      "summary": "Documented GET /terminal/{terminal_id}/event/{event_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get terminal terminal-id event event-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/terminal/{terminal_id}/event/{event_id}"
+        }
+      ],
+      "operation": "paystack.get.terminal-terminal-id-event-event-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get terminal terminal-id presence",
+      "summary": "Documented GET /terminal/{terminal_id}/presence (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get terminal terminal-id presence --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/terminal/{terminal_id}/presence"
+        }
+      ],
+      "operation": "paystack.get.terminal-terminal-id-presence",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transaction export",
+      "summary": "Documented GET /transaction/export (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get transaction export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transaction/export"
+        }
+      ],
+      "operation": "paystack.get.transaction-export",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transaction id",
+      "summary": "Documented GET /transaction/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get transaction id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transaction/{id}"
+        }
+      ],
+      "operation": "paystack.get.transaction-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transaction timeline id",
+      "summary": "Documented GET /transaction/timeline/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get transaction timeline id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transaction/timeline/{id}"
+        }
+      ],
+      "operation": "paystack.get.transaction-timeline-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transaction totals",
+      "summary": "Documented GET /transaction/totals (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get transaction totals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transaction/totals"
+        }
+      ],
+      "operation": "paystack.get.transaction-totals",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transaction verify reference",
+      "summary": "Documented GET /transaction/verify/{reference} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get transaction verify reference --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transaction/verify/{reference}"
+        }
+      ],
+      "operation": "paystack.get.transaction-verify-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transfer",
+      "summary": "Documented GET /transfer (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get transfer --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transfer"
+        }
+      ],
+      "operation": "paystack.get.transfer",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transfer code",
+      "summary": "Documented GET /transfer/{code} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get transfer code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transfer/{code}"
+        }
+      ],
+      "operation": "paystack.get.transfer-code",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transfer export",
+      "summary": "Documented GET /transfer/export (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get transfer export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transfer/export"
+        }
+      ],
+      "operation": "paystack.get.transfer-export",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transfer verify reference",
+      "summary": "Documented GET /transfer/verify/{reference} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get transfer verify reference --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transfer/verify/{reference}"
+        }
+      ],
+      "operation": "paystack.get.transfer-verify-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transferrecipient",
+      "summary": "Documented GET /transferrecipient (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get transferrecipient --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transferrecipient"
+        }
+      ],
+      "operation": "paystack.get.transferrecipient",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transferrecipient code",
+      "summary": "Documented GET /transferrecipient/{code} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get transferrecipient code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transferrecipient/{code}"
+        }
+      ],
+      "operation": "paystack.get.transferrecipient-code",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get virtual-terminal",
+      "summary": "Documented GET /virtual_terminal (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get virtual-terminal --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/virtual_terminal"
+        }
+      ],
+      "operation": "paystack.get.virtual-terminal",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get virtual-terminal code",
+      "summary": "Documented GET /virtual_terminal/{code} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api get virtual-terminal code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/virtual_terminal/{code}"
+        }
+      ],
+      "operation": "paystack.get.virtual-terminal-code",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post apple-pay domain",
+      "summary": "Documented POST /apple-pay/domain (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post apple-pay domain --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/apple-pay/domain"
+        }
+      ],
+      "operation": "paystack.post.apple-pay-domain",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post bank validate",
+      "summary": "Documented POST /bank/validate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post bank validate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bank/validate"
+        }
+      ],
+      "operation": "paystack.post.bank-validate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post bulkcharge",
+      "summary": "Documented POST /bulkcharge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post bulkcharge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bulkcharge"
+        }
+      ],
+      "operation": "paystack.post.bulkcharge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charge",
+      "summary": "Documented POST /charge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post charge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charge"
+        }
+      ],
+      "operation": "paystack.post.charge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charge submit-address",
+      "summary": "Documented POST /charge/submit_address (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post charge submit-address --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charge/submit_address"
+        }
+      ],
+      "operation": "paystack.post.charge-submit-address",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charge submit-birthday",
+      "summary": "Documented POST /charge/submit_birthday (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post charge submit-birthday --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charge/submit_birthday"
+        }
+      ],
+      "operation": "paystack.post.charge-submit-birthday",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charge submit-otp",
+      "summary": "Documented POST /charge/submit_otp (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post charge submit-otp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charge/submit_otp"
+        }
+      ],
+      "operation": "paystack.post.charge-submit-otp",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charge submit-phone",
+      "summary": "Documented POST /charge/submit_phone (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post charge submit-phone --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charge/submit_phone"
+        }
+      ],
+      "operation": "paystack.post.charge-submit-phone",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charge submit-pin",
+      "summary": "Documented POST /charge/submit_pin (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post charge submit-pin --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charge/submit_pin"
+        }
+      ],
+      "operation": "paystack.post.charge-submit-pin",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customer",
+      "summary": "Documented POST /customer (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post customer --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer"
+        }
+      ],
+      "operation": "paystack.post.customer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customer authorization deactivate",
+      "summary": "Documented POST /customer/authorization/deactivate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post customer authorization deactivate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer/authorization/deactivate"
+        }
+      ],
+      "operation": "paystack.post.customer-authorization-deactivate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customer authorization initialize",
+      "summary": "Documented POST /customer/authorization/initialize (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post customer authorization initialize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer/authorization/initialize"
+        }
+      ],
+      "operation": "paystack.post.customer-authorization-initialize",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customer code identification",
+      "summary": "Documented POST /customer/{code}/identification (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post customer code identification --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer/{code}/identification"
+        }
+      ],
+      "operation": "paystack.post.customer-code-identification",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customer id initialize-direct-debit",
+      "summary": "Documented POST /customer/{id}/initialize-direct-debit (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post customer id initialize-direct-debit --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer/{id}/initialize-direct-debit"
+        }
+      ],
+      "operation": "paystack.post.customer-id-initialize-direct-debit",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customer set-risk-action",
+      "summary": "Documented POST /customer/set_risk_action (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post customer set-risk-action --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer/set_risk_action"
+        }
+      ],
+      "operation": "paystack.post.customer-set-risk-action",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post dedicated-account",
+      "summary": "Documented POST /dedicated_account (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post dedicated-account --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/dedicated_account"
+        }
+      ],
+      "operation": "paystack.post.dedicated-account",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post dedicated-account assign",
+      "summary": "Documented POST /dedicated_account/assign (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post dedicated-account assign --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/dedicated_account/assign"
+        }
+      ],
+      "operation": "paystack.post.dedicated-account-assign",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post dedicated-account split",
+      "summary": "Documented POST /dedicated_account/split (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post dedicated-account split --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/dedicated_account/split"
+        }
+      ],
+      "operation": "paystack.post.dedicated-account-split",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post dispute id evidence",
+      "summary": "Documented POST /dispute/{id}/evidence (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post dispute id evidence --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/dispute/{id}/evidence"
+        }
+      ],
+      "operation": "paystack.post.dispute-id-evidence",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post order",
+      "summary": "Documented POST /order (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post order --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/order"
+        }
+      ],
+      "operation": "paystack.post.order",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post page",
+      "summary": "Documented POST /page (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post page --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/page"
+        }
+      ],
+      "operation": "paystack.post.page",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post page id product",
+      "summary": "Documented POST /page/{id}/product (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post page id product --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/page/{id}/product"
+        }
+      ],
+      "operation": "paystack.post.page-id-product",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post paymentrequest",
+      "summary": "Documented POST /paymentrequest (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post paymentrequest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/paymentrequest"
+        }
+      ],
+      "operation": "paystack.post.paymentrequest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post paymentrequest archive id",
+      "summary": "Documented POST /paymentrequest/archive/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post paymentrequest archive id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/paymentrequest/archive/{id}"
+        }
+      ],
+      "operation": "paystack.post.paymentrequest-archive-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post paymentrequest finalize id",
+      "summary": "Documented POST /paymentrequest/finalize/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post paymentrequest finalize id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/paymentrequest/finalize/{id}"
+        }
+      ],
+      "operation": "paystack.post.paymentrequest-finalize-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post paymentrequest notify id",
+      "summary": "Documented POST /paymentrequest/notify/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post paymentrequest notify id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/paymentrequest/notify/{id}"
+        }
+      ],
+      "operation": "paystack.post.paymentrequest-notify-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post plan",
+      "summary": "Documented POST /plan (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post plan --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/plan"
+        }
+      ],
+      "operation": "paystack.post.plan",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post product",
+      "summary": "Documented POST /product (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post product --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/product"
+        }
+      ],
+      "operation": "paystack.post.product",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post refund",
+      "summary": "Documented POST /refund (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post refund --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/refund"
+        }
+      ],
+      "operation": "paystack.post.refund",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post refund retry-with-customer-details id",
+      "summary": "Documented POST /refund/retry_with_customer_details/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post refund retry-with-customer-details id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/refund/retry_with_customer_details/{id}"
+        }
+      ],
+      "operation": "paystack.post.refund-retry-with-customer-details-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post split",
+      "summary": "Documented POST /split (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post split --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/split"
+        }
+      ],
+      "operation": "paystack.post.split",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post split id subaccount add",
+      "summary": "Documented POST /split/{id}/subaccount/add (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post split id subaccount add --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/split/{id}/subaccount/add"
+        }
+      ],
+      "operation": "paystack.post.split-id-subaccount-add",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post split id subaccount remove",
+      "summary": "Documented POST /split/{id}/subaccount/remove (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post split id subaccount remove --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/split/{id}/subaccount/remove"
+        }
+      ],
+      "operation": "paystack.post.split-id-subaccount-remove",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post storefront",
+      "summary": "Documented POST /storefront (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post storefront --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/storefront"
+        }
+      ],
+      "operation": "paystack.post.storefront",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post storefront id duplicate",
+      "summary": "Documented POST /storefront/{id}/duplicate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post storefront id duplicate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/storefront/{id}/duplicate"
+        }
+      ],
+      "operation": "paystack.post.storefront-id-duplicate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post storefront id product",
+      "summary": "Documented POST /storefront/{id}/product (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post storefront id product --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/storefront/{id}/product"
+        }
+      ],
+      "operation": "paystack.post.storefront-id-product",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post storefront id publish",
+      "summary": "Documented POST /storefront/{id}/publish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post storefront id publish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/storefront/{id}/publish"
+        }
+      ],
+      "operation": "paystack.post.storefront-id-publish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subaccount",
+      "summary": "Documented POST /subaccount (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post subaccount --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subaccount"
+        }
+      ],
+      "operation": "paystack.post.subaccount",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscription",
+      "summary": "Documented POST /subscription (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post subscription --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription"
+        }
+      ],
+      "operation": "paystack.post.subscription",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscription code manage email",
+      "summary": "Documented POST /subscription/{code}/manage/email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post subscription code manage email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription/{code}/manage/email"
+        }
+      ],
+      "operation": "paystack.post.subscription-code-manage-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscription disable",
+      "summary": "Documented POST /subscription/disable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post subscription disable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription/disable"
+        }
+      ],
+      "operation": "paystack.post.subscription-disable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscription enable",
+      "summary": "Documented POST /subscription/enable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post subscription enable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription/enable"
+        }
+      ],
+      "operation": "paystack.post.subscription-enable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post terminal commission-device",
+      "summary": "Documented POST /terminal/commission_device (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post terminal commission-device --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/terminal/commission_device"
+        }
+      ],
+      "operation": "paystack.post.terminal-commission-device",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post terminal decommission-device",
+      "summary": "Documented POST /terminal/decommission_device (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post terminal decommission-device --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/terminal/decommission_device"
+        }
+      ],
+      "operation": "paystack.post.terminal-decommission-device",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post terminal id event",
+      "summary": "Documented POST /terminal/{id}/event (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post terminal id event --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/terminal/{id}/event"
+        }
+      ],
+      "operation": "paystack.post.terminal-id-event",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transaction charge-authorization",
+      "summary": "Documented POST /transaction/charge_authorization (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post transaction charge-authorization --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transaction/charge_authorization"
+        }
+      ],
+      "operation": "paystack.post.transaction-charge-authorization",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transaction initialize",
+      "summary": "Documented POST /transaction/initialize (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post transaction initialize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transaction/initialize"
+        }
+      ],
+      "operation": "paystack.post.transaction-initialize",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transaction partial-debit",
+      "summary": "Documented POST /transaction/partial_debit (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post transaction partial-debit --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transaction/partial_debit"
+        }
+      ],
+      "operation": "paystack.post.transaction-partial-debit",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transfer",
+      "summary": "Documented POST /transfer (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post transfer --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transfer"
+        }
+      ],
+      "operation": "paystack.post.transfer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transfer bulk",
+      "summary": "Documented POST /transfer/bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post transfer bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transfer/bulk"
+        }
+      ],
+      "operation": "paystack.post.transfer-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transfer disable-otp",
+      "summary": "Documented POST /transfer/disable_otp (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post transfer disable-otp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transfer/disable_otp"
+        }
+      ],
+      "operation": "paystack.post.transfer-disable-otp",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transfer disable-otp-finalize",
+      "summary": "Documented POST /transfer/disable_otp_finalize (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post transfer disable-otp-finalize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transfer/disable_otp_finalize"
+        }
+      ],
+      "operation": "paystack.post.transfer-disable-otp-finalize",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transfer enable-otp",
+      "summary": "Documented POST /transfer/enable_otp (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post transfer enable-otp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transfer/enable_otp"
+        }
+      ],
+      "operation": "paystack.post.transfer-enable-otp",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transfer finalize-transfer",
+      "summary": "Documented POST /transfer/finalize_transfer (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post transfer finalize-transfer --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transfer/finalize_transfer"
+        }
+      ],
+      "operation": "paystack.post.transfer-finalize-transfer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transfer resend-otp",
+      "summary": "Documented POST /transfer/resend_otp (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post transfer resend-otp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transfer/resend_otp"
+        }
+      ],
+      "operation": "paystack.post.transfer-resend-otp",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transferrecipient",
+      "summary": "Documented POST /transferrecipient (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post transferrecipient --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transferrecipient"
+        }
+      ],
+      "operation": "paystack.post.transferrecipient",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transferrecipient bulk",
+      "summary": "Documented POST /transferrecipient/bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post transferrecipient bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transferrecipient/bulk"
+        }
+      ],
+      "operation": "paystack.post.transferrecipient-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post virtual-terminal",
+      "summary": "Documented POST /virtual_terminal (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post virtual-terminal --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/virtual_terminal"
+        }
+      ],
+      "operation": "paystack.post.virtual-terminal",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post virtual-terminal code destination assign",
+      "summary": "Documented POST /virtual_terminal/{code}/destination/assign (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post virtual-terminal code destination assign --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/virtual_terminal/{code}/destination/assign"
+        }
+      ],
+      "operation": "paystack.post.virtual-terminal-code-destination-assign",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post virtual-terminal code destination unassign",
+      "summary": "Documented POST /virtual_terminal/{code}/destination/unassign (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api post virtual-terminal code destination unassign --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/virtual_terminal/{code}/destination/unassign"
+        }
+      ],
+      "operation": "paystack.post.virtual-terminal-code-destination-unassign",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put customer code",
+      "summary": "Documented PUT /customer/{code} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put customer code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customer/{code}"
+        }
+      ],
+      "operation": "paystack.put.customer-code",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put customer id directdebit-activation-charge",
+      "summary": "Documented PUT /customer/{id}/directdebit-activation-charge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put customer id directdebit-activation-charge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customer/{id}/directdebit-activation-charge"
+        }
+      ],
+      "operation": "paystack.put.customer-id-directdebit-activation-charge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put directdebit activation-charge",
+      "summary": "Documented PUT /directdebit/activation-charge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put directdebit activation-charge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/directdebit/activation-charge"
+        }
+      ],
+      "operation": "paystack.put.directdebit-activation-charge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put dispute id",
+      "summary": "Documented PUT /dispute/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put dispute id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/dispute/{id}"
+        }
+      ],
+      "operation": "paystack.put.dispute-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put dispute id resolve",
+      "summary": "Documented PUT /dispute/{id}/resolve (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put dispute id resolve --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/dispute/{id}/resolve"
+        }
+      ],
+      "operation": "paystack.put.dispute-id-resolve",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put integration payment-session-timeout",
+      "summary": "Documented PUT /integration/payment_session_timeout (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put integration payment-session-timeout --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/integration/payment_session_timeout"
+        }
+      ],
+      "operation": "paystack.put.integration-payment-session-timeout",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put page id",
+      "summary": "Documented PUT /page/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put page id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/page/{id}"
+        }
+      ],
+      "operation": "paystack.put.page-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put paymentrequest id",
+      "summary": "Documented PUT /paymentrequest/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put paymentrequest id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/paymentrequest/{id}"
+        }
+      ],
+      "operation": "paystack.put.paymentrequest-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put plan code",
+      "summary": "Documented PUT /plan/{code} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put plan code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/plan/{code}"
+        }
+      ],
+      "operation": "paystack.put.plan-code",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put product id",
+      "summary": "Documented PUT /product/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put product id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/product/{id}"
+        }
+      ],
+      "operation": "paystack.put.product-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put split id",
+      "summary": "Documented PUT /split/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put split id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/split/{id}"
+        }
+      ],
+      "operation": "paystack.put.split-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put storefront id",
+      "summary": "Documented PUT /storefront/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put storefront id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/storefront/{id}"
+        }
+      ],
+      "operation": "paystack.put.storefront-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put subaccount code",
+      "summary": "Documented PUT /subaccount/{code} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put subaccount code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/subaccount/{code}"
+        }
+      ],
+      "operation": "paystack.put.subaccount-code",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put terminal terminal-id",
+      "summary": "Documented PUT /terminal/{terminal_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put terminal terminal-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/terminal/{terminal_id}"
+        }
+      ],
+      "operation": "paystack.put.terminal-terminal-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put transferrecipient code",
+      "summary": "Documented PUT /transferrecipient/{code} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put transferrecipient code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/transferrecipient/{code}"
+        }
+      ],
+      "operation": "paystack.put.transferrecipient-code",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put virtual-terminal code",
+      "summary": "Documented PUT /virtual_terminal/{code} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put virtual-terminal code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/virtual_terminal/{code}"
+        }
+      ],
+      "operation": "paystack.put.virtual-terminal-code",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put virtual-terminal code deactivate",
+      "summary": "Documented PUT /virtual_terminal/{code}/deactivate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put virtual-terminal code deactivate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/virtual_terminal/{code}/deactivate"
+        }
+      ],
+      "operation": "paystack.put.virtual-terminal-code-deactivate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put virtual-terminal code split-code",
+      "summary": "Documented PUT /virtual_terminal/{code}/split_code (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack api put virtual-terminal code split-code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/virtual_terminal/{code}/split_code"
+        }
+      ],
+      "operation": "paystack.put.virtual-terminal-code-split-code",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "customers list",
+      "summary": "Run the customers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack customers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer"
+        }
+      ]
+    },
+    {
+      "path": "disputes list",
+      "summary": "Run the disputes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "disputes",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack disputes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dispute"
+        }
+      ]
+    },
+    {
+      "path": "invoices list",
+      "summary": "Run the invoices ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoices",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack invoices list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/paymentrequest"
+        }
+      ]
+    },
+    {
+      "path": "subscriptions list",
+      "summary": "Run the subscriptions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscriptions",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack subscriptions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscription"
+        }
+      ]
+    },
+    {
+      "path": "transactions list",
+      "summary": "Run the transactions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transactions",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "examples": [
+        "pm paystack transactions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transaction"
+        }
+      ]
+    }
+  ]
+}

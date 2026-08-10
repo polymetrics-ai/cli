@@ -1,12 +1,50 @@
 {
-  "api": "Railz REST API v1 (https://api.railz.ai/v1)",
+  "api": "Railz REST API v1 (https://api.railz.ai/v1); provider artifact version: FIS Accounting Data as a Service API v2; OpenAPI 3.0.0",
   "docs": "https://docs.railz.ai/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (businesses, connections, customers, invoices, bills); legacy itself ships no writes and no other endpoints (OAuth token exchange is explicitly left to callers, not implemented in-package), so the full Railz surface is excluded with concrete reasons below.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (145 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "railz-artifact-2026-08-09",
+      "url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "kind": "openapi",
+      "version": "3.0.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
+      "path": "/bills",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "FIS Accounting Data as a Service API v2; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "existing-surface[GET /bills]"
+      },
+      "covered_by": {
+        "stream": "bills"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/businesses",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "FIS Accounting Data as a Service API v2; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "existing-surface[GET /businesses]"
+      },
       "covered_by": {
         "stream": "businesses"
       }
@@ -14,6 +52,16 @@
     {
       "method": "GET",
       "path": "/connections",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "FIS Accounting Data as a Service API v2; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "existing-surface[GET /connections]"
+      },
       "covered_by": {
         "stream": "connections"
       }
@@ -21,6 +69,16 @@
     {
       "method": "GET",
       "path": "/customers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "FIS Accounting Data as a Service API v2; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "existing-surface[GET /customers]"
+      },
       "covered_by": {
         "stream": "customers"
       }
@@ -28,15 +86,3063 @@
     {
       "method": "GET",
       "path": "/invoices",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "FIS Accounting Data as a Service API v2; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "existing-surface[GET /invoices]"
+      },
       "covered_by": {
         "stream": "invoices"
       }
     },
     {
       "method": "GET",
-      "path": "/bills",
-      "covered_by": {
-        "stream": "bills"
+      "path": "/v2/accounting/accountingTransactions",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/accountingTransactions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/accounts",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/accounts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/accounts",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/accounts\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/accounts/batch",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/accounts/batch\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/accounts/batch",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/accounts/batch\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/accounts/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/accounts/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/apAging",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/apAging\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/arAging",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/arAging\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/attachments",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/attachments\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/attachments",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/attachments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/balanceSheets",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/balanceSheets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/balanceSheets/report",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/balanceSheets/report\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/bankAccounts",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bankAccounts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/bankAccounts",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bankAccounts\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/bankTransactions",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bankTransactions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/bankTransactions",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bankTransactions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/bankTransactions/batch",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bankTransactions/batch\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/bankTransactions/batch",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bankTransactions/batch\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/bankTransactions/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bankTransactions/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/bankTransfers",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bankTransfers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/bankTransfers",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bankTransfers\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/bills",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bills\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/bills",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bills\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/bills/creditNotes",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bills/creditNotes\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/bills/creditNotes",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bills/creditNotes\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/bills/paymentRequests",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bills/paymentRequests\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/bills/paymentRequests",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bills/paymentRequests\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/accounting/bills/paymentRequests/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bills/paymentRequests/{id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/bills/payments",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bills/payments\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/bills/payments",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bills/payments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/bills/payments/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bills/payments/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/accounting/bills/payments/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bills/payments/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/bills/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bills/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/accounting/bills/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/bills/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/budgets",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/budgets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/cashflowStatements",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/cashflowStatements\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/cashflowStatements/report",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/cashflowStatements/report\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/contacts",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/contacts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/customers",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/customers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/customers",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/customers\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/customers/bankAccounts",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/customers/bankAccounts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/customers/bankAccounts",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/customers/bankAccounts\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/customers/batch",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/customers/batch\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/customers/batch",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/customers/batch\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/customers/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/customers/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/deposits",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/deposits\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/deposits",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/deposits\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/estimates",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/estimates\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/estimates",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/estimates\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/expenses",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/expenses\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/expenses",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/expenses\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/fileUpload/{type}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/fileUpload/{type}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/incomeStatements",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/incomeStatements\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/incomeStatements/report",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/incomeStatements/report\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/inventory",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/inventory\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/inventory",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/inventory\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/inventory/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/inventory/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/invoices",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/invoices\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/invoices",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/invoices\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/invoices/creditNotes",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/invoices/creditNotes\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/invoices/creditNotes",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/invoices/creditNotes\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/invoices/payments",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/invoices/payments\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/invoices/payments",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/invoices/payments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/invoices/payments/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/invoices/payments/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/accounting/invoices/payments/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/invoices/payments/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/invoices/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/invoices/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/accounting/invoices/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/invoices/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/journalEntries",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/journalEntries\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/journalEntries",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/journalEntries\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/journalEntries/batch",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/journalEntries/batch\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/journalEntries/batch",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/journalEntries/batch\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/journalEntries/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/journalEntries/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/journals",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/journals\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/journals",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/journals\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/journals/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/journals/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/paymentMethods",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/paymentMethods\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/payrollTransactions",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/payrollTransactions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/purchaseOrders",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/purchaseOrders\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/purchaseOrders",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/purchaseOrders\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/refunds",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/refunds\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/refunds",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/refunds\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/taxAuthority",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/taxAuthority\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/taxRates",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/taxRates\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/taxRates",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/taxRates\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/trackingCategories",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/trackingCategories\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/trackingCategories",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/trackingCategories\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/trialBalances",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/trialBalances\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/vendors",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/vendors\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/vendors",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/vendors\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/accounting/vendors/bankAccounts",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/vendors/bankAccounts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/vendors/bankAccounts",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/vendors/bankAccounts\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/vendors/bankAccounts/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/vendors/bankAccounts/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/accounting/vendors/batch",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/vendors/batch\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/vendors/batch",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/vendors/batch\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/accounting/vendors/{id}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/accounting/vendors/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/bankReconciliation",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/analytics/bankReconciliation\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/businessValuations",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/analytics/businessValuations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/creditRatings",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/analytics/creditRatings\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/creditScores",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/analytics/creditScores\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/financialBenchmarking",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/analytics/financialBenchmarking\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/financialForecasts",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/analytics/financialForecasts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/financialRatios",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/analytics/financialRatios\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/fraudRiskMetrics",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/analytics/fraudRiskMetrics\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/portfolioMetrics",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/analytics/portfolioMetrics\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/probabilityOfDefault",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/analytics/probabilityOfDefault\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/analytics/taxBenchmarking",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/analytics/taxBenchmarking\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/banking/bankAccounts",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/banking/bankAccounts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/banking/bankAssets",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/banking/bankAssets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/banking/bankTransactions",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/banking/bankTransactions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/businesses",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/businesses\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/businesses",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/businesses\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/businesses/generateUrl",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/businesses/generateUrl\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/businesses/info",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/businesses/info\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/businesses/{uuid}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/businesses/{uuid}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/businesses/{uuid}",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/businesses/{uuid}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/businesses/{uuid}/connection/migrate",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/businesses/{uuid}/connection/migrate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/commerce/disputes",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/commerce/disputes\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/commerce/orders",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/commerce/orders\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/commerce/products",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/commerce/products\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/commerce/transactions",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/commerce/transactions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/connections",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/connections\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/connections/disconnect",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/connections/disconnect\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/data/deleteStatus",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/data/deleteStatus\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/data/pushOptions",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/data/pushOptions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/data/pushStatus",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/data/pushStatus\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/data/sync",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/data/sync\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/data/syncInfo",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/data/syncInfo\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/data/syncStatus",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/data/syncStatus\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/sandbox/fireWebhooks",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/sandbox/fireWebhooks\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/balanceSheets",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/balanceSheets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/bankAccounts",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/bankAccounts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/bankReconciliation",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/bankReconciliation\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/bills",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/bills\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/businessValuations",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/businessValuations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/cashflowStatements",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/cashflowStatements\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/credits",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/credits\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/expenses",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/expenses\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/financialForecasts",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/financialForecasts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/financialForecasts/summaryEligibility",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/financialForecasts/summaryEligibility\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/financialRatios",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/financialRatios\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/incomeStatements",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/incomeStatements\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/invoices",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/invoices\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/railzScore",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/railzScore\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/revenue",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/revenue\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/visualizations/taxBenchmarking",
+      "provenance": {
+        "artifact": "railz-artifact-2026-08-09",
+        "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e2bdb9e1ebc0d479a7855a426a00857f2c5e8c225d15ab1b20e70bcd2115699",
+        "coordinate": "paths[\"/v2/visualizations/taxBenchmarking\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

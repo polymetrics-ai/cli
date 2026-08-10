@@ -1,0 +1,25 @@
+{
+  "authority": "CAPTAIN-ORDER-fast-426-terra-20260809.md",
+  "counts": {
+    "already_complete": 5,
+    "foundation_pending": 217,
+    "genuinely_blocked": 195,
+    "materialized_total": 231,
+    "newly_materialized": 215,
+    "rate_limits_declared": 3,
+    "rate_limits_file_total": 426,
+    "rate_limits_not_applicable": 1,
+    "rate_limits_unknown": 422,
+    "reachable": 24,
+    "recovered_pilot": 4,
+    "recovered_seven": 7,
+    "remaining": 0,
+    "retry_pending": 0
+  },
+  "execution_mode": "inline_manual_gsd_fallback_single_worker",
+  "phase": "cli-mass-artifact-materialize-r1",
+  "rate_limit_source_ledger": "RATE-LIMIT-SOURCE-LEDGER.json",
+  "reconstruction_report": "LEDGER-RECONSTRUCTION-20260809.json",
+  "state": "materializing",
+  "target_total": 426
+}

@@ -1,0 +1,80 @@
+{
+  "operations": [
+    {
+      "id": "simplesat.get.api-v1-answers-answer-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/answers/{answer_id}",
+      "description": "single-record detail fetch for a resource the answers stream (POST /api/v1/answers/search with no filter body, listing every answer) already lists in full; no additional data is reachable only through this endpoint",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/answers/{answer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "simplesat.post.api-v1-customers-bulk",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/customers/bulk",
+      "description": "batch upsert of an array of customers wrapped in a single {\"customers\":[...]} request body; the engine's write dialect issues exactly one HTTP request per record with no batch/array-body primitive, so this is not independently expressible — create_or_update_customer already covers the identical per-record upsert capability, just not batched into one request",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/customers/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "simplesat.get.api-v1-customers-customer-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/customers/{customer_id}",
+      "description": "single-record detail fetch for a resource the customers stream (GET /api/v1/customers) already lists in full",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/customers/{customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "simplesat.get.api-v1-responses-response-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/responses/{response_id}",
+      "description": "single-record detail fetch for a resource the responses stream (POST /api/v1/responses/search with no filter body, listing every response) already lists in full, including its nested ticket/customer/team_members/answers sub-objects",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/responses/{response_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "simplesat.get.api-v1-team-members-team-member-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/team-members/{team_member_id}",
+      "description": "v1 publishes no list/search endpoint for team members at all (only this single-id detail GET and the create-or-update POST below) — there is no documented way to enumerate team member ids to iterate this endpoint over, so it cannot back a list stream",
+      "source_url": "https://developer.simplesat.io/api/Simplesat%20API%20(v1)%20OpenAPI.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/team-members/{team_member_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

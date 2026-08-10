@@ -1,0 +1,1583 @@
+{
+  "tagline": "Run Shippo's declared streams and reverse-ETL actions.",
+  "usage": "pm shippo \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "addresses list",
+        "api get addresses addressid",
+        "api get addresses addressid validate",
+        "api get batches batchid",
+        "api get carrier-accounts",
+        "api get carrier-accounts carrieraccountid",
+        "api get carrier-accounts carrieraccountobjectid signin initiate",
+        "api get carrier-accounts reg-status",
+        "api get customs declarations",
+        "api get customs declarations customsdeclarationid",
+        "api get customs items",
+        "api get customs items customsitemid",
+        "api get live-rates settings parcel-template",
+        "api get manifests",
+        "api get manifests manifestid",
+        "api get orders",
+        "api get orders orderid",
+        "api get parcel-templates",
+        "api get parcel-templates carrierparceltemplatetoken",
+        "api get parcels parcelid",
+        "api get rates rateid",
+        "api get refunds",
+        "api get refunds operation",
+        "api get refunds refundid",
+        "api get service-groups",
+        "api get shipments shipmentid",
+        "api get shipments shipmentid rates",
+        "api get shipments shipmentid rates currencycode",
+        "api get shippo-accounts",
+        "api get shippo-accounts shippoaccountid",
+        "api get tracks carrier tracking-number",
+        "api get tracks carrier trackingnumber",
+        "api get transactions transactionid",
+        "api get user-parcel-templates",
+        "api get user-parcel-templates userparceltemplateobjectid",
+        "api get webhooks",
+        "api get webhooks webhookid",
+        "api webhook batch-post",
+        "api webhook track-post",
+        "api webhook transaction-post",
+        "parcels list",
+        "shipments list",
+        "transactions list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete live-rates settings parcel-template",
+        "api delete service-groups servicegroupid",
+        "api delete user-parcel-templates userparceltemplateobjectid",
+        "api delete webhooks webhookid",
+        "api post addresses",
+        "api post batches",
+        "api post batches batchid add-shipments",
+        "api post batches batchid purchase",
+        "api post batches batchid remove-shipments",
+        "api post carrier-accounts",
+        "api post carrier-accounts register new",
+        "api post customs declarations",
+        "api post customs items",
+        "api post live-rates",
+        "api post manifests",
+        "api post orders",
+        "api post parcels",
+        "api post pickups",
+        "api post refunds",
+        "api post service-groups",
+        "api post shipments",
+        "api post shippo-accounts",
+        "api post tracks",
+        "api post transactions",
+        "api post user-parcel-templates",
+        "api post webhooks",
+        "api put carrier-accounts carrieraccountid",
+        "api put live-rates settings parcel-template",
+        "api put service-groups",
+        "api put shippo-accounts shippoaccountid",
+        "api put user-parcel-templates userparceltemplateobjectid",
+        "api put webhooks webhookid"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "addresses list",
+      "summary": "Run the addresses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "addresses",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo addresses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/addresses"
+        }
+      ]
+    },
+    {
+      "path": "api delete live-rates settings parcel-template",
+      "summary": "Documented DELETE /live-rates/settings/parcel-template (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api delete live-rates settings parcel-template --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/live-rates/settings/parcel-template"
+        }
+      ],
+      "operation": "shippo.delete.live-rates-settings-parcel-template",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete service-groups servicegroupid",
+      "summary": "Documented DELETE /service-groups/{ServiceGroupId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api delete service-groups servicegroupid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/service-groups/{ServiceGroupId}"
+        }
+      ],
+      "operation": "shippo.delete.service-groups-servicegroupid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete user-parcel-templates userparceltemplateobjectid",
+      "summary": "Documented DELETE /user-parcel-templates/{UserParcelTemplateObjectId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api delete user-parcel-templates userparceltemplateobjectid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/user-parcel-templates/{UserParcelTemplateObjectId}"
+        }
+      ],
+      "operation": "shippo.delete.user-parcel-templates-userparceltemplateobjectid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete webhooks webhookid",
+      "summary": "Documented DELETE /webhooks/{webhookId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api delete webhooks webhookid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{webhookId}"
+        }
+      ],
+      "operation": "shippo.delete.webhooks-webhookid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get addresses addressid",
+      "summary": "Documented GET /addresses/{AddressId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get addresses addressid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/addresses/{AddressId}"
+        }
+      ],
+      "operation": "shippo.get.addresses-addressid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get addresses addressid validate",
+      "summary": "Documented GET /addresses/{AddressId}/validate (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get addresses addressid validate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/addresses/{AddressId}/validate"
+        }
+      ],
+      "operation": "shippo.get.addresses-addressid-validate",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get batches batchid",
+      "summary": "Documented GET /batches/{BatchId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get batches batchid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/batches/{BatchId}"
+        }
+      ],
+      "operation": "shippo.get.batches-batchid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get carrier-accounts",
+      "summary": "Documented GET /carrier_accounts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get carrier-accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/carrier_accounts"
+        }
+      ],
+      "operation": "shippo.get.carrier-accounts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get carrier-accounts carrieraccountid",
+      "summary": "Documented GET /carrier_accounts/{CarrierAccountId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get carrier-accounts carrieraccountid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/carrier_accounts/{CarrierAccountId}"
+        }
+      ],
+      "operation": "shippo.get.carrier-accounts-carrieraccountid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get carrier-accounts carrieraccountobjectid signin initiate",
+      "summary": "Documented GET /carrier_accounts/{CarrierAccountObjectId}/signin/initiate (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get carrier-accounts carrieraccountobjectid signin initiate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/carrier_accounts/{CarrierAccountObjectId}/signin/initiate"
+        }
+      ],
+      "operation": "shippo.get.carrier-accounts-carrieraccountobjectid-signin-initiate",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get carrier-accounts reg-status",
+      "summary": "Documented GET /carrier_accounts/reg-status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get carrier-accounts reg-status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/carrier_accounts/reg-status"
+        }
+      ],
+      "operation": "shippo.get.carrier-accounts-reg-status",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customs declarations",
+      "summary": "Documented GET /customs/declarations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get customs declarations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customs/declarations"
+        }
+      ],
+      "operation": "shippo.get.customs-declarations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customs declarations customsdeclarationid",
+      "summary": "Documented GET /customs/declarations/{CustomsDeclarationId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get customs declarations customsdeclarationid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customs/declarations/{CustomsDeclarationId}"
+        }
+      ],
+      "operation": "shippo.get.customs-declarations-customsdeclarationid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customs items",
+      "summary": "Documented GET /customs/items (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get customs items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customs/items"
+        }
+      ],
+      "operation": "shippo.get.customs-items",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customs items customsitemid",
+      "summary": "Documented GET /customs/items/{CustomsItemId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get customs items customsitemid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customs/items/{CustomsItemId}"
+        }
+      ],
+      "operation": "shippo.get.customs-items-customsitemid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get live-rates settings parcel-template",
+      "summary": "Documented GET /live-rates/settings/parcel-template (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get live-rates settings parcel-template --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/live-rates/settings/parcel-template"
+        }
+      ],
+      "operation": "shippo.get.live-rates-settings-parcel-template",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get manifests",
+      "summary": "Documented GET /manifests (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get manifests --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/manifests"
+        }
+      ],
+      "operation": "shippo.get.manifests",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get manifests manifestid",
+      "summary": "Documented GET /manifests/{ManifestId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get manifests manifestid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/manifests/{ManifestId}"
+        }
+      ],
+      "operation": "shippo.get.manifests-manifestid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get orders",
+      "summary": "Documented GET /orders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders"
+        }
+      ],
+      "operation": "shippo.get.orders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get orders orderid",
+      "summary": "Documented GET /orders/{OrderId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get orders orderid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders/{OrderId}"
+        }
+      ],
+      "operation": "shippo.get.orders-orderid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get parcel-templates",
+      "summary": "Documented GET /parcel-templates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get parcel-templates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/parcel-templates"
+        }
+      ],
+      "operation": "shippo.get.parcel-templates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get parcel-templates carrierparceltemplatetoken",
+      "summary": "Documented GET /parcel-templates/{CarrierParcelTemplateToken} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get parcel-templates carrierparceltemplatetoken --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/parcel-templates/{CarrierParcelTemplateToken}"
+        }
+      ],
+      "operation": "shippo.get.parcel-templates-carrierparceltemplatetoken",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get parcels parcelid",
+      "summary": "Documented GET /parcels/{ParcelId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get parcels parcelid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/parcels/{ParcelId}"
+        }
+      ],
+      "operation": "shippo.get.parcels-parcelid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get rates rateid",
+      "summary": "Documented GET /rates/{RateId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get rates rateid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rates/{RateId}"
+        }
+      ],
+      "operation": "shippo.get.rates-rateid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get refunds",
+      "summary": "Documented GET /refunds (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get refunds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/refunds"
+        }
+      ],
+      "operation": "shippo.get.refunds",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get refunds operation",
+      "summary": "Documented GET /refunds/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get refunds operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/refunds/"
+        }
+      ],
+      "operation": "shippo.get.refunds-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get refunds refundid",
+      "summary": "Documented GET /refunds/{RefundId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get refunds refundid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/refunds/{RefundId}"
+        }
+      ],
+      "operation": "shippo.get.refunds-refundid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get service-groups",
+      "summary": "Documented GET /service-groups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get service-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/service-groups"
+        }
+      ],
+      "operation": "shippo.get.service-groups",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get shipments shipmentid",
+      "summary": "Documented GET /shipments/{ShipmentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get shipments shipmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shipments/{ShipmentId}"
+        }
+      ],
+      "operation": "shippo.get.shipments-shipmentid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get shipments shipmentid rates",
+      "summary": "Documented GET /shipments/{ShipmentId}/rates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get shipments shipmentid rates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shipments/{ShipmentId}/rates"
+        }
+      ],
+      "operation": "shippo.get.shipments-shipmentid-rates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get shipments shipmentid rates currencycode",
+      "summary": "Documented GET /shipments/{ShipmentId}/rates/{CurrencyCode} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get shipments shipmentid rates currencycode --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shipments/{ShipmentId}/rates/{CurrencyCode}"
+        }
+      ],
+      "operation": "shippo.get.shipments-shipmentid-rates-currencycode",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get shippo-accounts",
+      "summary": "Documented GET /shippo-accounts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get shippo-accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shippo-accounts"
+        }
+      ],
+      "operation": "shippo.get.shippo-accounts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get shippo-accounts shippoaccountid",
+      "summary": "Documented GET /shippo-accounts/{ShippoAccountId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get shippo-accounts shippoaccountid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shippo-accounts/{ShippoAccountId}"
+        }
+      ],
+      "operation": "shippo.get.shippo-accounts-shippoaccountid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tracks carrier tracking-number",
+      "summary": "Documented GET /tracks/{carrier}/{tracking_number} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get tracks carrier tracking-number --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tracks/{carrier}/{tracking_number}"
+        }
+      ],
+      "operation": "shippo.get.tracks-carrier-tracking-number",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tracks carrier trackingnumber",
+      "summary": "Documented GET /tracks/{Carrier}/{TrackingNumber} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get tracks carrier trackingnumber --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tracks/{Carrier}/{TrackingNumber}"
+        }
+      ],
+      "operation": "shippo.get.tracks-carrier-trackingnumber",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transactions transactionid",
+      "summary": "Documented GET /transactions/{TransactionId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get transactions transactionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transactions/{TransactionId}"
+        }
+      ],
+      "operation": "shippo.get.transactions-transactionid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get user-parcel-templates",
+      "summary": "Documented GET /user-parcel-templates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get user-parcel-templates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user-parcel-templates"
+        }
+      ],
+      "operation": "shippo.get.user-parcel-templates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get user-parcel-templates userparceltemplateobjectid",
+      "summary": "Documented GET /user-parcel-templates/{UserParcelTemplateObjectId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get user-parcel-templates userparceltemplateobjectid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user-parcel-templates/{UserParcelTemplateObjectId}"
+        }
+      ],
+      "operation": "shippo.get.user-parcel-templates-userparceltemplateobjectid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks",
+      "summary": "Documented GET /webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "shippo.get.webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks webhookid",
+      "summary": "Documented GET /webhooks/{webhookId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api get webhooks webhookid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks/{webhookId}"
+        }
+      ],
+      "operation": "shippo.get.webhooks-webhookid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post addresses",
+      "summary": "Documented POST /addresses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post addresses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/addresses"
+        }
+      ],
+      "operation": "shippo.post.addresses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post batches",
+      "summary": "Documented POST /batches (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post batches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/batches"
+        }
+      ],
+      "operation": "shippo.post.batches",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post batches batchid add-shipments",
+      "summary": "Documented POST /batches/{BatchId}/add_shipments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post batches batchid add-shipments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/batches/{BatchId}/add_shipments"
+        }
+      ],
+      "operation": "shippo.post.batches-batchid-add-shipments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post batches batchid purchase",
+      "summary": "Documented POST /batches/{BatchId}/purchase (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post batches batchid purchase --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/batches/{BatchId}/purchase"
+        }
+      ],
+      "operation": "shippo.post.batches-batchid-purchase",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post batches batchid remove-shipments",
+      "summary": "Documented POST /batches/{BatchId}/remove_shipments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post batches batchid remove-shipments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/batches/{BatchId}/remove_shipments"
+        }
+      ],
+      "operation": "shippo.post.batches-batchid-remove-shipments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post carrier-accounts",
+      "summary": "Documented POST /carrier_accounts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post carrier-accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/carrier_accounts"
+        }
+      ],
+      "operation": "shippo.post.carrier-accounts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post carrier-accounts register new",
+      "summary": "Documented POST /carrier_accounts/register/new (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post carrier-accounts register new --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/carrier_accounts/register/new"
+        }
+      ],
+      "operation": "shippo.post.carrier-accounts-register-new",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customs declarations",
+      "summary": "Documented POST /customs/declarations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post customs declarations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customs/declarations"
+        }
+      ],
+      "operation": "shippo.post.customs-declarations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customs items",
+      "summary": "Documented POST /customs/items (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post customs items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customs/items"
+        }
+      ],
+      "operation": "shippo.post.customs-items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post live-rates",
+      "summary": "Documented POST /live-rates (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post live-rates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/live-rates"
+        }
+      ],
+      "operation": "shippo.post.live-rates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post manifests",
+      "summary": "Documented POST /manifests (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post manifests --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/manifests"
+        }
+      ],
+      "operation": "shippo.post.manifests",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post orders",
+      "summary": "Documented POST /orders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orders"
+        }
+      ],
+      "operation": "shippo.post.orders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post parcels",
+      "summary": "Documented POST /parcels (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post parcels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/parcels"
+        }
+      ],
+      "operation": "shippo.post.parcels",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post pickups",
+      "summary": "Documented POST /pickups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post pickups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pickups"
+        }
+      ],
+      "operation": "shippo.post.pickups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post refunds",
+      "summary": "Documented POST /refunds (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post refunds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/refunds"
+        }
+      ],
+      "operation": "shippo.post.refunds",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post service-groups",
+      "summary": "Documented POST /service-groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post service-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/service-groups"
+        }
+      ],
+      "operation": "shippo.post.service-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post shipments",
+      "summary": "Documented POST /shipments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post shipments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shipments"
+        }
+      ],
+      "operation": "shippo.post.shipments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post shippo-accounts",
+      "summary": "Documented POST /shippo-accounts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post shippo-accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shippo-accounts"
+        }
+      ],
+      "operation": "shippo.post.shippo-accounts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tracks",
+      "summary": "Documented POST /tracks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post tracks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tracks"
+        }
+      ],
+      "operation": "shippo.post.tracks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transactions",
+      "summary": "Documented POST /transactions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post transactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transactions"
+        }
+      ],
+      "operation": "shippo.post.transactions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post user-parcel-templates",
+      "summary": "Documented POST /user-parcel-templates (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post user-parcel-templates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user-parcel-templates"
+        }
+      ],
+      "operation": "shippo.post.user-parcel-templates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhooks",
+      "summary": "Documented POST /webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api post webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "shippo.post.webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put carrier-accounts carrieraccountid",
+      "summary": "Documented PUT /carrier_accounts/{CarrierAccountId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api put carrier-accounts carrieraccountid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/carrier_accounts/{CarrierAccountId}"
+        }
+      ],
+      "operation": "shippo.put.carrier-accounts-carrieraccountid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put live-rates settings parcel-template",
+      "summary": "Documented PUT /live-rates/settings/parcel-template (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api put live-rates settings parcel-template --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/live-rates/settings/parcel-template"
+        }
+      ],
+      "operation": "shippo.put.live-rates-settings-parcel-template",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put service-groups",
+      "summary": "Documented PUT /service-groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api put service-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/service-groups"
+        }
+      ],
+      "operation": "shippo.put.service-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put shippo-accounts shippoaccountid",
+      "summary": "Documented PUT /shippo-accounts/{ShippoAccountId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api put shippo-accounts shippoaccountid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/shippo-accounts/{ShippoAccountId}"
+        }
+      ],
+      "operation": "shippo.put.shippo-accounts-shippoaccountid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put user-parcel-templates userparceltemplateobjectid",
+      "summary": "Documented PUT /user-parcel-templates/{UserParcelTemplateObjectId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api put user-parcel-templates userparceltemplateobjectid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/user-parcel-templates/{UserParcelTemplateObjectId}"
+        }
+      ],
+      "operation": "shippo.put.user-parcel-templates-userparceltemplateobjectid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put webhooks webhookid",
+      "summary": "Documented PUT /webhooks/{webhookId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api put webhooks webhookid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/webhooks/{webhookId}"
+        }
+      ],
+      "operation": "shippo.put.webhooks-webhookid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api webhook batch-post",
+      "summary": "Documented WEBHOOK batch#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api webhook batch-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "batch#POST"
+        }
+      ],
+      "operation": "shippo.webhook.batch-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook track-post",
+      "summary": "Documented WEBHOOK track#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api webhook track-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "track#POST"
+        }
+      ],
+      "operation": "shippo.webhook.track-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook transaction-post",
+      "summary": "Documented WEBHOOK transaction#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo api webhook transaction-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "transaction#POST"
+        }
+      ],
+      "operation": "shippo.webhook.transaction-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "parcels list",
+      "summary": "Run the parcels ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "parcels",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo parcels list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/parcels"
+        }
+      ]
+    },
+    {
+      "path": "shipments list",
+      "summary": "Run the shipments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "shipments",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo shipments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shipments"
+        }
+      ]
+    },
+    {
+      "path": "transactions list",
+      "summary": "Run the transactions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transactions",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "examples": [
+        "pm shippo transactions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transactions"
+        }
+      ]
+    }
+  ]
+}

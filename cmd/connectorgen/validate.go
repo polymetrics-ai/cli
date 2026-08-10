@@ -17,30 +17,31 @@ import (
 // constants (lowercase, package-private) so tests can assert on them without
 // string literals scattered across the corpus.
 const (
-	ruleMissingFile              = "missing_file"
-	ruleMetaSchema               = "meta_schema"
-	ruleInterpolationUnresolved  = "interpolation_unresolved"
-	ruleSchemaRefMissing         = "schema_ref_missing"
-	rulePrimaryKeyMissing        = "primary_key_missing"
-	ruleCursorFieldMissing       = "cursor_field_missing"
-	ruleWritePathFields          = "write_path_fields"
-	ruleSurfaceCoverage          = "surface_coverage"
-	ruleSurfaceUnknownTarget     = "surface_unknown_target"
-	ruleSurfaceIncomplete        = "surface_incomplete"
-	ruleSurfaceCategory          = "surface_category"
-	ruleSurfaceOperation         = "surface_operation"
-	ruleSurfaceProvenance        = "surface_provenance"
-	ruleSurfaceFailFirstRun      = "surface_fail_first_run"
-	ruleCLISurfaceUnknownTarget  = "cli_surface_unknown_target"
-	ruleCLISurfaceMissingMapping = "cli_surface_missing_mapping"
-	ruleCLISurfaceSafety         = "cli_surface_safety"
-	ruleNameRegex                = "name_regex"
-	ruleSecretLiteral            = "secret_literal"
-	ruleDocsHeading              = "docs_heading"
-	ruleStartDateFreeFormString  = "start_date_free_form_string"
-	ruleConformanceSkipReason    = "conformance_skip_reason"
-	ruleDefaultTypeMismatch      = "default_type_mismatch"
-	ruleIncrementalPolicy        = "incremental_policy"
+	ruleMissingFile               = "missing_file"
+	ruleMetaSchema                = "meta_schema"
+	ruleInterpolationUnresolved   = "interpolation_unresolved"
+	ruleSchemaRefMissing          = "schema_ref_missing"
+	rulePrimaryKeyMissing         = "primary_key_missing"
+	ruleCursorFieldMissing        = "cursor_field_missing"
+	ruleWritePathFields           = "write_path_fields"
+	ruleSurfaceCoverage           = "surface_coverage"
+	ruleSurfaceUnknownTarget      = "surface_unknown_target"
+	ruleSurfaceIncomplete         = "surface_incomplete"
+	ruleSurfaceCategory           = "surface_category"
+	ruleSurfaceOperation          = "surface_operation"
+	ruleSurfaceProvenance         = "surface_provenance"
+	ruleSurfaceFailFirstRun       = "surface_fail_first_run"
+	ruleCLISurfaceUnknownTarget   = "cli_surface_unknown_target"
+	ruleCLISurfaceMissingMapping  = "cli_surface_missing_mapping"
+	ruleCLISurfaceNamedDependency = "cli_surface_named_dependency"
+	ruleCLISurfaceSafety          = "cli_surface_safety"
+	ruleNameRegex                 = "name_regex"
+	ruleSecretLiteral             = "secret_literal"
+	ruleDocsHeading               = "docs_heading"
+	ruleStartDateFreeFormString   = "start_date_free_form_string"
+	ruleConformanceSkipReason     = "conformance_skip_reason"
+	ruleDefaultTypeMismatch       = "default_type_mismatch"
+	ruleIncrementalPolicy         = "incremental_policy"
 )
 
 var supportedParamFormats = map[string]bool{
@@ -50,6 +51,8 @@ var supportedParamFormats = map[string]bool{
 	"unix_seconds": true,
 	"date":         true,
 }
+
+var namedDependencySlugRE = regexp.MustCompile(`^[a-z0-9][a-z0-9._-]*$`)
 
 var allowedOperatorPrefixes = map[string]bool{
 	"":   true,
@@ -628,7 +631,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
+		hasCovered := ep.CoveredBy != nil && (len(ep.CoveredBy.StreamTargets()) > 0 || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -662,14 +665,14 @@ func checkAPISurface(b engine.Bundle) []Finding {
 				Message: fmt.Sprintf("endpoint %d (%s %s) has both operation and excluded", i, ep.Method, ep.Path),
 			})
 		case hasCovered:
-			if ep.CoveredBy.Stream != "" {
-				if !streams[ep.CoveredBy.Stream] {
+			for _, stream := range ep.CoveredBy.StreamTargets() {
+				if !streams[stream] {
 					findings = append(findings, Finding{
 						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceUnknownTarget,
-						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.stream %q is not a declared stream", i, ep.Method, ep.Path, ep.CoveredBy.Stream),
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.stream %q is not a declared stream", i, ep.Method, ep.Path, stream),
 					})
 				} else {
-					coveredStreams[ep.CoveredBy.Stream] = true
+					coveredStreams[stream] = true
 				}
 			}
 			for _, write := range ep.CoveredBy.WriteTargets() {
@@ -814,6 +817,7 @@ func checkCLISurface(b engine.Bundle) []Finding {
 	var findings []Finding
 	for i, cmd := range b.CLISurface.Commands {
 		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes, operations)...)
+		findings = append(findings, checkCLISurfaceNamedDependency(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceOperationSafety(b, i, cmd, operations)...)
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
@@ -822,6 +826,32 @@ func checkCLISurface(b engine.Bundle) []Finding {
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
 	}
 	return findings
+}
+
+func checkCLISurfaceNamedDependency(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
+	if cmd.Availability != "not_implemented" {
+		return nil
+	}
+	if !validNamedDependencyNote(cmd.Notes) {
+		return []Finding{{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceNamedDependency,
+			Message:   fmt.Sprintf("not-implemented command %d (%q) must declare notes beginning with named_dependency=<slug>", i, cmd.Path),
+		}}
+	}
+	return nil
+}
+
+func validNamedDependencyNote(notes string) bool {
+	rest, ok := strings.CutPrefix(strings.TrimSpace(notes), "named_dependency=")
+	if !ok || rest == "" {
+		return false
+	}
+	if end := strings.IndexAny(rest, ":; \t\r\n"); end >= 0 {
+		rest = rest[:end]
+	}
+	return namedDependencySlugRE.MatchString(rest)
 }
 
 func checkCLISurfaceReferences(
@@ -1801,7 +1831,7 @@ func checkCLISurfaceEndpointCoverage(
 			})
 			continue
 		}
-		if state.excluded || state.operation != nil || state.coveredBy == nil || (state.coveredBy.Stream == "" && len(state.coveredBy.WriteTargets()) == 0) {
+		if state.excluded || state.operation != nil || state.coveredBy == nil || (len(state.coveredBy.StreamTargets()) == 0 && len(state.coveredBy.WriteTargets()) == 0) {
 			if cmd.Operation != "" && state.operation != nil {
 				continue
 			}
@@ -1820,12 +1850,12 @@ func checkCLISurfaceEndpointCoverage(
 			})
 			continue
 		}
-		if cmd.Stream != "" && state.coveredBy.Stream != cmd.Stream {
+		if cmd.Stream != "" && !slices.Contains(state.coveredBy.StreamTargets(), cmd.Stream) {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceSafety,
-				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by stream %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Stream, cmd.Stream),
+				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by streams %v, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.StreamTargets(), cmd.Stream),
 			})
 		}
 		if cmd.Write != "" && !slices.Contains(state.coveredBy.WriteTargets(), cmd.Write) {

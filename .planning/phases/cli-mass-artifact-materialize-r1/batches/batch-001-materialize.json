@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-001-manifest.json",
+  "candidates": 5,
+  "included": [
+    {
+      "connector": "avni",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+        "version": "1.0.0; OpenAPI 3.0.0; master",
+        "retrieved_at": "2026-08-09",
+        "sha256": "891a67622e7b542142453fd1ef224eba5128ec301739e3fac8d2310adca20ea5"
+      },
+      "artifact_operations": 31,
+      "declared_operations": 31,
+      "operation_split": {
+        "executable": 7,
+        "provider_blocked": 0,
+        "excluded": 24
+      },
+      "cli_commands": 31,
+      "implemented_commands": 7,
+      "named_dependency_commands": 24,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 24
+    },
+    {
+      "connector": "akeneo",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+        "version": "1.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02e408a00b56a0df61c2f3b665146ae2dd37621a7b81f6e90ea561a30b96c119"
+      },
+      "artifact_operations": 152,
+      "declared_operations": 203,
+      "operation_split": {
+        "executable": 21,
+        "provider_blocked": 30,
+        "excluded": 152
+      },
+      "cli_commands": 203,
+      "implemented_commands": 21,
+      "named_dependency_commands": 182,
+      "flagged_discrepancies": 51,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 182
+    },
+    {
+      "connector": "apify-dataset",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://docs.apify.com/api/openapi.json",
+        "version": "v2-2026-08-05T133145Z",
+        "retrieved_at": "2026-08-09",
+        "sha256": "32219ffaa61e173fe5b2a5d081416f35177cb97a53ca945b0ff5e76f2ddbc855"
+      },
+      "artifact_operations": 231,
+      "declared_operations": 234,
+      "operation_split": {
+        "executable": 3,
+        "provider_blocked": 134,
+        "excluded": 97
+      },
+      "cli_commands": 234,
+      "implemented_commands": 3,
+      "named_dependency_commands": 231,
+      "flagged_discrepancies": 3,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 231
+    },
+    {
+      "connector": "basecamp",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/basecamp/basecamp-sdk/main/openapi.json",
+        "version": "2026-08-03; OpenAPI 3.1.0; b0567a77e6f1dc13161a47bcccd366261cb76fa4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1710674381b273d8192f3dc2ea421e903916cd70939589dca800e8bc08102c60"
+      },
+      "artifact_operations": 250,
+      "declared_operations": 253,
+      "operation_split": {
+        "executable": 3,
+        "provider_blocked": 149,
+        "excluded": 101
+      },
+      "cli_commands": 253,
+      "implemented_commands": 3,
+      "named_dependency_commands": 250,
+      "flagged_discrepancies": 3,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 250
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "algolia",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation DELETE /{path} has unsupported field \"$ref\"), and official reference fallback \"https://www.algolia.com/doc/rest-api/search/\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    }
+  ]
+}

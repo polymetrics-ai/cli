@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-054-special-source-manifest.json",
+  "candidates": 2,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "pipeliner",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: artifact OpenAPI server URL \"https://us-east.api.pipelinersales.com/api/v100/rest/spaces/{space_id}\" has a non-literal request path), and official reference fallback \"https://developers.pipelinersales.com/api-docs/overview/quick-start\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "retailexpress-by-maropost",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://developer.retailexpress.com.au/getting-started\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    }
+  ]
+}

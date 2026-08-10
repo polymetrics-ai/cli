@@ -1,0 +1,19 @@
+{
+  "operations": [
+    {
+      "id": "buzzsprout.get.api-podcast-id-episodes-episode-id-json",
+      "kind": "rest_read",
+      "summary": "GET /api/{podcast_id}/episodes/{episode_id}.json",
+      "description": "single-episode detail fetch; every field it returns is already emitted by the episodes list stream (GET /api/{podcast_id}/episodes.json returns the full episode set with the identical shape), and Buzzsprout has no per-episode incremental/webhook signal that would make a targeted single-record read useful beyond the list sync",
+      "source_url": "https://github.com/buzzsprout/buzzsprout-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/{podcast_id}/episodes/{episode_id}.json",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

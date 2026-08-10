@@ -1,0 +1,245 @@
+{
+  "operations": [
+    {
+      "id": "emailoctopus.get.campaigns-campaignid-reports-bounced",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/reports/bounced",
+      "description": "per-recipient bounced-contact list for one campaign; a large per-recipient analytics breakdown distinct from the aggregate summary report already covered, breadth-vs-cost triage this pass",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/reports/bounced",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.campaigns-campaignid-reports-clicked",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/reports/clicked",
+      "description": "per-recipient clicked-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/reports/clicked",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.campaigns-campaignid-reports-complained",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/reports/complained",
+      "description": "per-recipient complained-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/reports/complained",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.campaigns-campaignid-reports-links",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/reports/links",
+      "description": "per-link click-count breakdown for one campaign; a secondary analytics cut beyond the aggregate summary report, breadth-vs-cost triage this pass",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/reports/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.campaigns-campaignid-reports-not-clicked",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/reports/not-clicked",
+      "description": "per-recipient not-clicked-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/reports/not-clicked",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.campaigns-campaignid-reports-not-opened",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/reports/not-opened",
+      "description": "per-recipient not-opened-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/reports/not-opened",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.campaigns-campaignid-reports-opened",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/reports/opened",
+      "description": "per-recipient opened-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/reports/opened",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.campaigns-campaignid-reports-sent",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/reports/sent",
+      "description": "per-recipient sent-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/reports/sent",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.campaigns-campaignid-reports-unsubscribed",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/reports/unsubscribed",
+      "description": "per-recipient unsubscribed-contact list for one campaign; part of the excluded per-recipient engagement-detail matrix",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/reports/unsubscribed",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.campaigns-id",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{id}",
+      "description": "single-campaign detail; identical record shape to the campaigns list stream's per-item object, already covered by that stream",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.lists-id",
+      "kind": "rest_read",
+      "summary": "GET /lists/{id}",
+      "description": "single-list detail; identical record shape to the lists list stream's per-item object, already covered by that stream",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.put.lists-id-contacts-bulk",
+      "kind": "rest_write",
+      "summary": "PUT /lists/{id}/contacts/bulk",
+      "description": "bulk multi-contact update over an array of up to 100 contact objects in one call; update_list_contact already covers the per-record mutation shape this dialect expresses, the batch form is narrower breadth-vs-cost triage this pass",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/lists/{id}/contacts/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.lists-id-contacts-subscribed",
+      "kind": "rest_read",
+      "summary": "GET /lists/{id}/contacts/subscribed",
+      "description": "the list_contacts stream already reads every contact regardless of status; this is a status-filtered view of the same underlying record set, not a distinct resource shape",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lists/{id}/contacts/subscribed",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.lists-id-contacts-tagged-tag",
+      "kind": "rest_read",
+      "summary": "GET /lists/{id}/contacts/tagged/{tag}",
+      "description": "the list_contacts stream already reads every contact regardless of tag; this is a tag-filtered view of the same underlying record set, not a distinct resource shape",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lists/{id}/contacts/tagged/{tag}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.lists-id-contacts-unsubscribed",
+      "kind": "rest_read",
+      "summary": "GET /lists/{id}/contacts/unsubscribed",
+      "description": "the list_contacts stream already reads every contact regardless of status; this is a status-filtered view of the same underlying record set, not a distinct resource shape",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lists/{id}/contacts/unsubscribed",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "emailoctopus.get.lists-id-contacts-email",
+      "kind": "rest_read",
+      "summary": "GET /lists/{id}/contacts/{email}",
+      "description": "single-contact detail; identical record shape to the list_contacts list stream's per-item object, already covered by that stream",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lists/{id}/contacts/{email}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

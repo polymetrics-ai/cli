@@ -1,0 +1,4052 @@
+{
+  "operations": [
+    {
+      "id": "trello.get.actions-idaction-reactions",
+      "kind": "rest_read",
+      "summary": "GET /actions/{idAction}/reactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/actions/{idAction}/reactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.actions-idaction-reactions",
+      "kind": "rest_write",
+      "summary": "POST /actions/{idAction}/reactions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/actions/{idAction}/reactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.actions-idaction-reactions-id",
+      "kind": "rest_read",
+      "summary": "GET /actions/{idAction}/reactions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/actions/{idAction}/reactions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.actions-idaction-reactions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /actions/{idAction}/reactions/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/actions/{idAction}/reactions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.actions-idaction-reactionssummary",
+      "kind": "rest_read",
+      "summary": "GET /actions/{idAction}/reactionsSummary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/actions/{idAction}/reactionsSummary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.actions-id",
+      "kind": "rest_read",
+      "summary": "GET /actions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/actions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.actions-id",
+      "kind": "rest_write",
+      "summary": "PUT /actions/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/actions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.actions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /actions/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/actions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.actions-id-board",
+      "kind": "rest_read",
+      "summary": "GET /actions/{id}/board",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/actions/{id}/board",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.actions-id-card",
+      "kind": "rest_read",
+      "summary": "GET /actions/{id}/card",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/actions/{id}/card",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.actions-id-list",
+      "kind": "rest_read",
+      "summary": "GET /actions/{id}/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/actions/{id}/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.actions-id-member",
+      "kind": "rest_read",
+      "summary": "GET /actions/{id}/member",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/actions/{id}/member",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.actions-id-membercreator",
+      "kind": "rest_read",
+      "summary": "GET /actions/{id}/memberCreator",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/actions/{id}/memberCreator",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.actions-id-organization",
+      "kind": "rest_read",
+      "summary": "GET /actions/{id}/organization",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/actions/{id}/organization",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.actions-id-text",
+      "kind": "rest_write",
+      "summary": "PUT /actions/{id}/text",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/actions/{id}/text",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.actions-id-field",
+      "kind": "rest_read",
+      "summary": "GET /actions/{id}/{field}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/actions/{id}/{field}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.applications-key-compliance",
+      "kind": "rest_read",
+      "summary": "GET /applications/{key}/compliance",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/applications/{key}/compliance",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.batch",
+      "kind": "rest_read",
+      "summary": "GET /batch",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.boards",
+      "kind": "rest_write",
+      "summary": "POST /boards/",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/boards/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-boardid-actions",
+      "kind": "rest_read",
+      "summary": "GET /boards/{boardId}/actions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{boardId}/actions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-boardid-boardstars",
+      "kind": "rest_read",
+      "summary": "GET /boards/{boardId}/boardStars",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{boardId}/boardStars",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}",
+      "description": "legacy's board_ids-configured per-id GET path for the boards stream itself is not modeled; boards always lists every accessible board (see docs.md Known limits) — a documented, non-security-relevant deviation, not a missing endpoint in practice (the same board data is still reachable via /members/me/boards)",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.boards-id",
+      "kind": "rest_write",
+      "summary": "PUT /boards/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/boards/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.boards-id",
+      "kind": "rest_write",
+      "summary": "DELETE /boards/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/boards/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-actions",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/actions",
+      "description": "ENGINE_GAP: identical fan_out + cursor-pagination conflict as /boards/{id}/cards above (actions also uses id-cursor before pagination). See docs.md Known limits and this migration's reported blockers[].",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/actions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-boardplugins",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/boardPlugins",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/boardPlugins",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.boards-id-boardplugins",
+      "kind": "rest_write",
+      "summary": "POST /boards/{id}/boardPlugins",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/boards/{id}/boardPlugins",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.boards-id-boardplugins-idplugin",
+      "kind": "rest_write",
+      "summary": "DELETE /boards/{id}/boardPlugins/{idPlugin}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/boards/{id}/boardPlugins/{idPlugin}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.boards-id-calendarkey-generate",
+      "kind": "rest_write",
+      "summary": "POST /boards/{id}/calendarKey/generate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/boards/{id}/calendarKey/generate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-cards",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/cards",
+      "description": "ENGINE_GAP: cards requires board auto-discovery (fan_out.ids_from.request) AND id-cursor pagination (before param, last_record_field) on the SAME stream; the engine reuses one PaginationSpec for both the id-listing request and the per-board sub-fetch, so the id-listing call would either hard 401 (stream.Query's token param is not applied to fan_out.ids_from.request) or infinite-loop under lastRecordCursor (no short-page stop, no loop guard, and /members/me/boards ignores the before param entirely). See docs.md Known limits and this migration's reported blockers[].",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/cards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-cards-filter",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/cards/{filter}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/cards/{filter}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-customfields",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/customFields",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/customFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.boards-id-emailkey-generate",
+      "kind": "rest_write",
+      "summary": "POST /boards/{id}/emailKey/generate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/boards/{id}/emailKey/generate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.boards-id-exports",
+      "kind": "rest_write",
+      "summary": "POST /boards/{id}/exports",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/boards/{id}/exports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-exports-mostrecent",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/exports/mostRecent",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/exports/mostRecent",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-exports-idexport",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/exports/{idExport}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/exports/{idExport}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.boards-id-exports-idexport",
+      "kind": "rest_write",
+      "summary": "DELETE /boards/{id}/exports/{idExport}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/boards/{id}/exports/{idExport}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-exports-idexport-download",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/exports/{idExport}/download",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/exports/{idExport}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.boards-id-idtags",
+      "kind": "rest_write",
+      "summary": "POST /boards/{id}/idTags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/boards/{id}/idTags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-labels",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/labels",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/labels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.boards-id-labels",
+      "kind": "rest_write",
+      "summary": "POST /boards/{id}/labels",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/boards/{id}/labels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.boards-id-lists",
+      "kind": "rest_write",
+      "summary": "POST /boards/{id}/lists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/boards/{id}/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-lists-filter",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/lists/{filter}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/lists/{filter}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.boards-id-markedasviewed",
+      "kind": "rest_write",
+      "summary": "POST /boards/{id}/markedAsViewed",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/boards/{id}/markedAsViewed",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-members",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/members",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.boards-id-members",
+      "kind": "rest_write",
+      "summary": "PUT /boards/{id}/members",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/boards/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.boards-id-members-idmember",
+      "kind": "rest_write",
+      "summary": "PUT /boards/{id}/members/{idMember}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/boards/{id}/members/{idMember}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.boards-id-members-idmember",
+      "kind": "rest_write",
+      "summary": "DELETE /boards/{id}/members/{idMember}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/boards/{id}/members/{idMember}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-memberships",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/memberships",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/memberships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.boards-id-memberships-idmembership",
+      "kind": "rest_write",
+      "summary": "PUT /boards/{id}/memberships/{idMembership}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/boards/{id}/memberships/{idMembership}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.boards-id-myprefs-emailposition",
+      "kind": "rest_write",
+      "summary": "PUT /boards/{id}/myPrefs/emailPosition",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/boards/{id}/myPrefs/emailPosition",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.boards-id-myprefs-idemaillist",
+      "kind": "rest_write",
+      "summary": "PUT /boards/{id}/myPrefs/idEmailList",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/boards/{id}/myPrefs/idEmailList",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.boards-id-myprefs-showsidebar",
+      "kind": "rest_write",
+      "summary": "PUT /boards/{id}/myPrefs/showSidebar",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/boards/{id}/myPrefs/showSidebar",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.boards-id-myprefs-showsidebaractivity",
+      "kind": "rest_write",
+      "summary": "PUT /boards/{id}/myPrefs/showSidebarActivity",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/boards/{id}/myPrefs/showSidebarActivity",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.boards-id-myprefs-showsidebarboardactions",
+      "kind": "rest_write",
+      "summary": "PUT /boards/{id}/myPrefs/showSidebarBoardActions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/boards/{id}/myPrefs/showSidebarBoardActions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.boards-id-myprefs-showsidebarmembers",
+      "kind": "rest_write",
+      "summary": "PUT /boards/{id}/myPrefs/showSidebarMembers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/boards/{id}/myPrefs/showSidebarMembers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-plugins",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/plugins",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/plugins",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.boards-id-field",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/{field}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/{field}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.cards",
+      "kind": "rest_write",
+      "summary": "POST /cards",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/cards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.cards-idcard-checklist-idchecklist-checkitem-idcheckitem",
+      "kind": "rest_write",
+      "summary": "PUT /cards/{idCard}/checklist/{idChecklist}/checkItem/{idCheckItem}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/cards/{idCard}/checklist/{idChecklist}/checkItem/{idCheckItem}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.cards-idcard-customfield-idcustomfield-item",
+      "kind": "rest_write",
+      "summary": "PUT /cards/{idCard}/customField/{idCustomField}/item",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/cards/{idCard}/customField/{idCustomField}/item",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.cards-idcard-customfields",
+      "kind": "rest_write",
+      "summary": "PUT /cards/{idCard}/customFields",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/cards/{idCard}/customFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.cards-id",
+      "kind": "rest_write",
+      "summary": "PUT /cards/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/cards/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.cards-id",
+      "kind": "rest_write",
+      "summary": "DELETE /cards/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/cards/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-actions",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/actions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/actions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.cards-id-actions-comments",
+      "kind": "rest_write",
+      "summary": "POST /cards/{id}/actions/comments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/cards/{id}/actions/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.cards-id-actions-idaction-comments",
+      "kind": "rest_write",
+      "summary": "PUT /cards/{id}/actions/{idAction}/comments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/cards/{id}/actions/{idAction}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.cards-id-actions-idaction-comments",
+      "kind": "rest_write",
+      "summary": "DELETE /cards/{id}/actions/{idAction}/comments",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/cards/{id}/actions/{idAction}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-attachments",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/attachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.cards-id-attachments",
+      "kind": "rest_write",
+      "summary": "POST /cards/{id}/attachments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/cards/{id}/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-attachments-idattachment",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/attachments/{idAttachment}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/attachments/{idAttachment}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.cards-id-attachments-idattachment",
+      "kind": "rest_write",
+      "summary": "DELETE /cards/{id}/attachments/{idAttachment}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/cards/{id}/attachments/{idAttachment}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-board",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/board",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/board",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-checkitem-idcheckitem",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/checkItem/{idCheckItem}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/checkItem/{idCheckItem}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.cards-id-checkitem-idcheckitem",
+      "kind": "rest_write",
+      "summary": "PUT /cards/{id}/checkItem/{idCheckItem}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/cards/{id}/checkItem/{idCheckItem}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.cards-id-checkitem-idcheckitem",
+      "kind": "rest_write",
+      "summary": "DELETE /cards/{id}/checkItem/{idCheckItem}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/cards/{id}/checkItem/{idCheckItem}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-checkitemstates",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/checkItemStates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/checkItemStates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-checklists",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/checklists",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/checklists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.cards-id-checklists",
+      "kind": "rest_write",
+      "summary": "POST /cards/{id}/checklists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/cards/{id}/checklists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.cards-id-checklists-idchecklist",
+      "kind": "rest_write",
+      "summary": "DELETE /cards/{id}/checklists/{idChecklist}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/cards/{id}/checklists/{idChecklist}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-customfielditems",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/customFieldItems",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/customFieldItems",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.cards-id-idlabels",
+      "kind": "rest_write",
+      "summary": "POST /cards/{id}/idLabels",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/cards/{id}/idLabels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.cards-id-idlabels-idlabel",
+      "kind": "rest_write",
+      "summary": "DELETE /cards/{id}/idLabels/{idLabel}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/cards/{id}/idLabels/{idLabel}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.cards-id-idmembers",
+      "kind": "rest_write",
+      "summary": "POST /cards/{id}/idMembers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/cards/{id}/idMembers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.cards-id-idmembers-idmember",
+      "kind": "rest_write",
+      "summary": "DELETE /cards/{id}/idMembers/{idMember}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/cards/{id}/idMembers/{idMember}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.cards-id-labels",
+      "kind": "rest_write",
+      "summary": "POST /cards/{id}/labels",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/cards/{id}/labels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-list",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.cards-id-markassociatednotificationsread",
+      "kind": "rest_write",
+      "summary": "POST /cards/{id}/markAssociatedNotificationsRead",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/cards/{id}/markAssociatedNotificationsRead",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-members",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/members",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-membersvoted",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/membersVoted",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/membersVoted",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.cards-id-membersvoted",
+      "kind": "rest_write",
+      "summary": "POST /cards/{id}/membersVoted",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/cards/{id}/membersVoted",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.cards-id-membersvoted-idmember",
+      "kind": "rest_write",
+      "summary": "DELETE /cards/{id}/membersVoted/{idMember}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/cards/{id}/membersVoted/{idMember}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-plugindata",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/pluginData",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/pluginData",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-stickers",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/stickers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/stickers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.cards-id-stickers",
+      "kind": "rest_write",
+      "summary": "POST /cards/{id}/stickers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/cards/{id}/stickers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-stickers-idsticker",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/stickers/{idSticker}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/stickers/{idSticker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.cards-id-stickers-idsticker",
+      "kind": "rest_write",
+      "summary": "PUT /cards/{id}/stickers/{idSticker}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/cards/{id}/stickers/{idSticker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.cards-id-stickers-idsticker",
+      "kind": "rest_write",
+      "summary": "DELETE /cards/{id}/stickers/{idSticker}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/cards/{id}/stickers/{idSticker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.cards-id-field",
+      "kind": "rest_read",
+      "summary": "GET /cards/{id}/{field}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cards/{id}/{field}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.checklists",
+      "kind": "rest_write",
+      "summary": "POST /checklists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checklists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.checklists-id",
+      "kind": "rest_read",
+      "summary": "GET /checklists/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/checklists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.checklists-id",
+      "kind": "rest_write",
+      "summary": "PUT /checklists/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/checklists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.checklists-id",
+      "kind": "rest_write",
+      "summary": "DELETE /checklists/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/checklists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.checklists-id-board",
+      "kind": "rest_read",
+      "summary": "GET /checklists/{id}/board",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/checklists/{id}/board",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.checklists-id-cards",
+      "kind": "rest_read",
+      "summary": "GET /checklists/{id}/cards",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/checklists/{id}/cards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.checklists-id-checkitems",
+      "kind": "rest_read",
+      "summary": "GET /checklists/{id}/checkItems",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/checklists/{id}/checkItems",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.checklists-id-checkitems",
+      "kind": "rest_write",
+      "summary": "POST /checklists/{id}/checkItems",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checklists/{id}/checkItems",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.checklists-id-checkitems-idcheckitem",
+      "kind": "rest_read",
+      "summary": "GET /checklists/{id}/checkItems/{idCheckItem}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/checklists/{id}/checkItems/{idCheckItem}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.checklists-id-checkitems-idcheckitem",
+      "kind": "rest_write",
+      "summary": "DELETE /checklists/{id}/checkItems/{idCheckItem}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/checklists/{id}/checkItems/{idCheckItem}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.checklists-id-field",
+      "kind": "rest_read",
+      "summary": "GET /checklists/{id}/{field}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/checklists/{id}/{field}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.checklists-id-field",
+      "kind": "rest_write",
+      "summary": "PUT /checklists/{id}/{field}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/checklists/{id}/{field}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.customfields",
+      "kind": "rest_write",
+      "summary": "POST /customFields",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.customfields-id",
+      "kind": "rest_read",
+      "summary": "GET /customFields/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.customfields-id",
+      "kind": "rest_write",
+      "summary": "PUT /customFields/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.customfields-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customFields/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.customfields-id-options",
+      "kind": "rest_read",
+      "summary": "GET /customFields/{id}/options",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customFields/{id}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.customfields-id-options",
+      "kind": "rest_write",
+      "summary": "POST /customFields/{id}/options",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customFields/{id}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.customfields-id-options-idcustomfieldoption",
+      "kind": "rest_read",
+      "summary": "GET /customFields/{id}/options/{idCustomFieldOption}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customFields/{id}/options/{idCustomFieldOption}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.customfields-id-options-idcustomfieldoption",
+      "kind": "rest_write",
+      "summary": "DELETE /customFields/{id}/options/{idCustomFieldOption}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customFields/{id}/options/{idCustomFieldOption}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.emoji",
+      "kind": "rest_read",
+      "summary": "GET /emoji",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/emoji",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.enterprises-id-enterprisejoinrequest-bulk",
+      "kind": "rest_write",
+      "summary": "PUT /enterprises/${id}/enterpriseJoinRequest/bulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/enterprises/${id}/enterpriseJoinRequest/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.enterprises-id",
+      "kind": "rest_read",
+      "summary": "GET /enterprises/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enterprises/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.enterprises-id-admins",
+      "kind": "rest_read",
+      "summary": "GET /enterprises/{id}/admins",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enterprises/{id}/admins",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.enterprises-id-admins-idmember",
+      "kind": "rest_write",
+      "summary": "PUT /enterprises/{id}/admins/{idMember}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/enterprises/{id}/admins/{idMember}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.enterprises-id-admins-idmember",
+      "kind": "rest_write",
+      "summary": "DELETE /enterprises/{id}/admins/{idMember}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/enterprises/{id}/admins/{idMember}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.enterprises-id-auditlog",
+      "kind": "rest_read",
+      "summary": "GET /enterprises/{id}/auditlog",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enterprises/{id}/auditlog",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.enterprises-id-claimableorganizations",
+      "kind": "rest_read",
+      "summary": "GET /enterprises/{id}/claimableOrganizations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enterprises/{id}/claimableOrganizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.enterprises-id-members",
+      "kind": "rest_read",
+      "summary": "GET /enterprises/{id}/members",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enterprises/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.enterprises-id-members-query",
+      "kind": "rest_read",
+      "summary": "GET /enterprises/{id}/members/query",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enterprises/{id}/members/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.enterprises-id-members-idmember",
+      "kind": "rest_read",
+      "summary": "GET /enterprises/{id}/members/{idMember}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enterprises/{id}/members/{idMember}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.enterprises-id-members-idmember-deactivated",
+      "kind": "rest_write",
+      "summary": "PUT /enterprises/{id}/members/{idMember}/deactivated",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/enterprises/{id}/members/{idMember}/deactivated",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.enterprises-id-members-idmember-licensed",
+      "kind": "rest_write",
+      "summary": "PUT /enterprises/{id}/members/{idMember}/licensed",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/enterprises/{id}/members/{idMember}/licensed",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.enterprises-id-organizations",
+      "kind": "rest_read",
+      "summary": "GET /enterprises/{id}/organizations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enterprises/{id}/organizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.enterprises-id-organizations",
+      "kind": "rest_write",
+      "summary": "PUT /enterprises/{id}/organizations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/enterprises/{id}/organizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.enterprises-id-organizations-bulk-idorganizations",
+      "kind": "rest_read",
+      "summary": "GET /enterprises/{id}/organizations/bulk/{idOrganizations}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enterprises/{id}/organizations/bulk/{idOrganizations}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.enterprises-id-organizations-idorg",
+      "kind": "rest_write",
+      "summary": "DELETE /enterprises/{id}/organizations/{idOrg}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/enterprises/{id}/organizations/{idOrg}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.enterprises-id-pendingorganizations",
+      "kind": "rest_read",
+      "summary": "GET /enterprises/{id}/pendingOrganizations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enterprises/{id}/pendingOrganizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.enterprises-id-signupurl",
+      "kind": "rest_read",
+      "summary": "GET /enterprises/{id}/signupUrl",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enterprises/{id}/signupUrl",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.enterprises-id-tokens",
+      "kind": "rest_write",
+      "summary": "POST /enterprises/{id}/tokens",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/enterprises/{id}/tokens",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.enterprises-id-transferrable-bulk-idorganizations",
+      "kind": "rest_read",
+      "summary": "GET /enterprises/{id}/transferrable/bulk/{idOrganizations}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enterprises/{id}/transferrable/bulk/{idOrganizations}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.enterprises-id-transferrable-organization-idorganization",
+      "kind": "rest_read",
+      "summary": "GET /enterprises/{id}/transferrable/organization/{idOrganization}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enterprises/{id}/transferrable/organization/{idOrganization}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.labels",
+      "kind": "rest_write",
+      "summary": "POST /labels",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/labels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.labels-id",
+      "kind": "rest_read",
+      "summary": "GET /labels/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/labels/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.labels-id",
+      "kind": "rest_write",
+      "summary": "PUT /labels/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/labels/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.labels-id",
+      "kind": "rest_write",
+      "summary": "DELETE /labels/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/labels/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.labels-id-field",
+      "kind": "rest_write",
+      "summary": "PUT /labels/{id}/{field}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/labels/{id}/{field}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.lists",
+      "kind": "rest_write",
+      "summary": "POST /lists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.lists-id",
+      "kind": "rest_read",
+      "summary": "GET /lists/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.lists-id",
+      "kind": "rest_write",
+      "summary": "PUT /lists/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/lists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.lists-id-actions",
+      "kind": "rest_read",
+      "summary": "GET /lists/{id}/actions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lists/{id}/actions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.lists-id-archiveallcards",
+      "kind": "rest_write",
+      "summary": "POST /lists/{id}/archiveAllCards",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/lists/{id}/archiveAllCards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.lists-id-board",
+      "kind": "rest_read",
+      "summary": "GET /lists/{id}/board",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lists/{id}/board",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.lists-id-cards",
+      "kind": "rest_read",
+      "summary": "GET /lists/{id}/cards",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lists/{id}/cards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.lists-id-closed",
+      "kind": "rest_write",
+      "summary": "PUT /lists/{id}/closed",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/lists/{id}/closed",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.lists-id-idboard",
+      "kind": "rest_write",
+      "summary": "PUT /lists/{id}/idBoard",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/lists/{id}/idBoard",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.lists-id-moveallcards",
+      "kind": "rest_write",
+      "summary": "POST /lists/{id}/moveAllCards",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/lists/{id}/moveAllCards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.lists-id-field",
+      "kind": "rest_write",
+      "summary": "PUT /lists/{id}/{field}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/lists/{id}/{field}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-me",
+      "kind": "rest_read",
+      "summary": "GET /members/me",
+      "description": "authenticated-member identity probe used only by Check(), not a syncable object stream",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.members-id",
+      "kind": "rest_write",
+      "summary": "PUT /members/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/members/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-actions",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/actions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/actions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.members-id-avatar",
+      "kind": "rest_write",
+      "summary": "POST /members/{id}/avatar",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/members/{id}/avatar",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-boardbackgrounds",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/boardBackgrounds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/boardBackgrounds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.members-id-boardbackgrounds",
+      "kind": "rest_write",
+      "summary": "POST /members/{id}/boardBackgrounds",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/members/{id}/boardBackgrounds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-boardbackgrounds-idbackground",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/boardBackgrounds/{idBackground}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/boardBackgrounds/{idBackground}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.members-id-boardbackgrounds-idbackground",
+      "kind": "rest_write",
+      "summary": "PUT /members/{id}/boardBackgrounds/{idBackground}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/members/{id}/boardBackgrounds/{idBackground}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.members-id-boardbackgrounds-idbackground",
+      "kind": "rest_write",
+      "summary": "DELETE /members/{id}/boardBackgrounds/{idBackground}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/members/{id}/boardBackgrounds/{idBackground}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-boardstars",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/boardStars",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/boardStars",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.members-id-boardstars",
+      "kind": "rest_write",
+      "summary": "POST /members/{id}/boardStars",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/members/{id}/boardStars",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-boardstars-idstar",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/boardStars/{idStar}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/boardStars/{idStar}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.members-id-boardstars-idstar",
+      "kind": "rest_write",
+      "summary": "PUT /members/{id}/boardStars/{idStar}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/members/{id}/boardStars/{idStar}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.members-id-boardstars-idstar",
+      "kind": "rest_write",
+      "summary": "DELETE /members/{id}/boardStars/{idStar}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/members/{id}/boardStars/{idStar}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-boards",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/boards",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/boards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-boardsinvited",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/boardsInvited",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/boardsInvited",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-cards",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/cards",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/cards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-customboardbackgrounds",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/customBoardBackgrounds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/customBoardBackgrounds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.members-id-customboardbackgrounds",
+      "kind": "rest_write",
+      "summary": "POST /members/{id}/customBoardBackgrounds",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/members/{id}/customBoardBackgrounds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-customboardbackgrounds-idbackground",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/customBoardBackgrounds/{idBackground}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/customBoardBackgrounds/{idBackground}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.members-id-customboardbackgrounds-idbackground",
+      "kind": "rest_write",
+      "summary": "PUT /members/{id}/customBoardBackgrounds/{idBackground}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/members/{id}/customBoardBackgrounds/{idBackground}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.members-id-customboardbackgrounds-idbackground",
+      "kind": "rest_write",
+      "summary": "DELETE /members/{id}/customBoardBackgrounds/{idBackground}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/members/{id}/customBoardBackgrounds/{idBackground}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-customemoji",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/customEmoji",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/customEmoji",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.members-id-customemoji",
+      "kind": "rest_write",
+      "summary": "POST /members/{id}/customEmoji",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/members/{id}/customEmoji",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-customemoji-idemoji",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/customEmoji/{idEmoji}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/customEmoji/{idEmoji}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-customstickers",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/customStickers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/customStickers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.members-id-customstickers",
+      "kind": "rest_write",
+      "summary": "POST /members/{id}/customStickers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/members/{id}/customStickers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-customstickers-idsticker",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/customStickers/{idSticker}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/customStickers/{idSticker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.members-id-customstickers-idsticker",
+      "kind": "rest_write",
+      "summary": "DELETE /members/{id}/customStickers/{idSticker}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/members/{id}/customStickers/{idSticker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-notifications",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/notifications",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/notifications",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-notificationschannelsettings",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/notificationsChannelSettings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/notificationsChannelSettings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.members-id-notificationschannelsettings",
+      "kind": "rest_write",
+      "summary": "PUT /members/{id}/notificationsChannelSettings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/members/{id}/notificationsChannelSettings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-notificationschannelsettings-channel",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/notificationsChannelSettings/{channel}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/notificationsChannelSettings/{channel}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.members-id-notificationschannelsettings-channel",
+      "kind": "rest_write",
+      "summary": "PUT /members/{id}/notificationsChannelSettings/{channel}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/members/{id}/notificationsChannelSettings/{channel}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.members-id-notificationschannelsettings-channel-blockedkeys",
+      "kind": "rest_write",
+      "summary": "PUT /members/{id}/notificationsChannelSettings/{channel}/{blockedKeys}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/members/{id}/notificationsChannelSettings/{channel}/{blockedKeys}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.members-id-onetimemessagesdismissed",
+      "kind": "rest_write",
+      "summary": "POST /members/{id}/oneTimeMessagesDismissed",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/members/{id}/oneTimeMessagesDismissed",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-organizations",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/organizations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/organizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-organizationsinvited",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/organizationsInvited",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/organizationsInvited",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-savedsearches",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/savedSearches",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/savedSearches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.members-id-savedsearches",
+      "kind": "rest_write",
+      "summary": "POST /members/{id}/savedSearches",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/members/{id}/savedSearches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-savedsearches-idsearch",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/savedSearches/{idSearch}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/savedSearches/{idSearch}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.members-id-savedsearches-idsearch",
+      "kind": "rest_write",
+      "summary": "PUT /members/{id}/savedSearches/{idSearch}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/members/{id}/savedSearches/{idSearch}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.members-id-savedsearches-idsearch",
+      "kind": "rest_write",
+      "summary": "DELETE /members/{id}/savedSearches/{idSearch}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/members/{id}/savedSearches/{idSearch}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-tokens",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/tokens",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/tokens",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.members-id-field",
+      "kind": "rest_read",
+      "summary": "GET /members/{id}/{field}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/members/{id}/{field}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.notifications-all-read",
+      "kind": "rest_write",
+      "summary": "POST /notifications/all/read",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/notifications/all/read",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.notifications-id",
+      "kind": "rest_read",
+      "summary": "GET /notifications/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notifications/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.notifications-id",
+      "kind": "rest_write",
+      "summary": "PUT /notifications/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/notifications/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.notifications-id-board",
+      "kind": "rest_read",
+      "summary": "GET /notifications/{id}/board",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notifications/{id}/board",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.notifications-id-card",
+      "kind": "rest_read",
+      "summary": "GET /notifications/{id}/card",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notifications/{id}/card",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.notifications-id-list",
+      "kind": "rest_read",
+      "summary": "GET /notifications/{id}/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notifications/{id}/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.notifications-id-member",
+      "kind": "rest_read",
+      "summary": "GET /notifications/{id}/member",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notifications/{id}/member",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.notifications-id-membercreator",
+      "kind": "rest_read",
+      "summary": "GET /notifications/{id}/memberCreator",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notifications/{id}/memberCreator",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.notifications-id-organization",
+      "kind": "rest_read",
+      "summary": "GET /notifications/{id}/organization",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notifications/{id}/organization",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.notifications-id-unread",
+      "kind": "rest_write",
+      "summary": "PUT /notifications/{id}/unread",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/notifications/{id}/unread",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.notifications-id-field",
+      "kind": "rest_read",
+      "summary": "GET /notifications/{id}/{field}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notifications/{id}/{field}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.organizations",
+      "kind": "rest_write",
+      "summary": "POST /organizations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.organizations-id",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.organizations-id",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.organizations-id",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.organizations-id-actions",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/actions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/actions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.organizations-id-boards",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/boards",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/boards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.organizations-id-exports",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/exports",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/exports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.organizations-id-exports",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{id}/exports",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{id}/exports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.organizations-id-logo",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{id}/logo",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{id}/logo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.organizations-id-logo",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{id}/logo",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{id}/logo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.organizations-id-members",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/members",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.organizations-id-members",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{id}/members",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.organizations-id-members-idmember",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{id}/members/{idMember}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{id}/members/{idMember}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.organizations-id-members-idmember",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{id}/members/{idMember}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{id}/members/{idMember}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.organizations-id-members-idmember-all",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{id}/members/{idMember}/all",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{id}/members/{idMember}/all",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.organizations-id-members-idmember-deactivated",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{id}/members/{idMember}/deactivated",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{id}/members/{idMember}/deactivated",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.organizations-id-memberships",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/memberships",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/memberships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.organizations-id-memberships-idmembership",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/memberships/{idMembership}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/memberships/{idMembership}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.organizations-id-newbillableguests-idboard",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/newBillableGuests/{idBoard}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/newBillableGuests/{idBoard}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.organizations-id-plugindata",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/pluginData",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/pluginData",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.organizations-id-prefs-associateddomain",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{id}/prefs/associatedDomain",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{id}/prefs/associatedDomain",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.organizations-id-prefs-orginviterestrict",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{id}/prefs/orgInviteRestrict",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{id}/prefs/orgInviteRestrict",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.organizations-id-tags",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/tags",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.organizations-id-tags",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{id}/tags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.organizations-id-tags-idtag",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{id}/tags/{idTag}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{id}/tags/{idTag}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.organizations-id-field",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/{field}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/{field}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.plugins-idplugin-listing",
+      "kind": "rest_write",
+      "summary": "POST /plugins/{idPlugin}/listing",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plugins/{idPlugin}/listing",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.plugins-idplugin-listings-idlisting",
+      "kind": "rest_write",
+      "summary": "PUT /plugins/{idPlugin}/listings/{idListing}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/plugins/{idPlugin}/listings/{idListing}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.plugins-id",
+      "kind": "rest_read",
+      "summary": "GET /plugins/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plugins/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.plugins-id",
+      "kind": "rest_write",
+      "summary": "PUT /plugins/{id}/",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/plugins/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.plugins-id-compliance-memberprivacy",
+      "kind": "rest_read",
+      "summary": "GET /plugins/{id}/compliance/memberPrivacy",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plugins/{id}/compliance/memberPrivacy",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.search",
+      "kind": "rest_read",
+      "summary": "GET /search",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.search-members",
+      "kind": "rest_read",
+      "summary": "GET /search/members/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/search/members/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.tokens-token",
+      "kind": "rest_read",
+      "summary": "GET /tokens/{token}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tokens/{token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.tokens-token",
+      "kind": "rest_write",
+      "summary": "DELETE /tokens/{token}/",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tokens/{token}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.tokens-token-member",
+      "kind": "rest_read",
+      "summary": "GET /tokens/{token}/member",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tokens/{token}/member",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.tokens-token-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /tokens/{token}/webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tokens/{token}/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.tokens-token-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /tokens/{token}/webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tokens/{token}/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.tokens-token-webhooks-idwebhook",
+      "kind": "rest_read",
+      "summary": "GET /tokens/{token}/webhooks/{idWebhook}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tokens/{token}/webhooks/{idWebhook}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.tokens-token-webhooks-idwebhook",
+      "kind": "rest_write",
+      "summary": "PUT /tokens/{token}/webhooks/{idWebhook}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tokens/{token}/webhooks/{idWebhook}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.tokens-token-webhooks-idwebhook",
+      "kind": "rest_write",
+      "summary": "DELETE /tokens/{token}/webhooks/{idWebhook}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tokens/{token}/webhooks/{idWebhook}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.post.webhooks",
+      "kind": "rest_write",
+      "summary": "POST /webhooks/",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.webhooks-id",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.put.webhooks-id",
+      "kind": "rest_write",
+      "summary": "PUT /webhooks/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.delete.webhooks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /webhooks/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "trello.get.webhooks-id-field",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{id}/{field}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{id}/{field}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

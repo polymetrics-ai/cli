@@ -1,0 +1,1160 @@
+{
+  "operations": [
+    {
+      "id": "beamer.get.nps",
+      "kind": "rest_read",
+      "summary": "GET /nps",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/nps",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.nps-check",
+      "kind": "rest_read",
+      "summary": "GET /nps/check",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/nps/check",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.nps-count",
+      "kind": "rest_read",
+      "summary": "GET /nps/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/nps/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.post.nps-email",
+      "kind": "rest_write",
+      "summary": "POST /nps/email",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/nps/email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.nps-link",
+      "kind": "rest_read",
+      "summary": "GET /nps/link",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/nps/link",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.post.ping",
+      "kind": "rest_write",
+      "summary": "POST /ping",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/ping",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.posts",
+      "kind": "rest_read",
+      "summary": "GET /posts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/posts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.post.posts",
+      "kind": "rest_write",
+      "summary": "POST /posts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/posts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.posts-count",
+      "kind": "rest_read",
+      "summary": "GET /posts/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/posts/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.posts-postid",
+      "kind": "rest_read",
+      "summary": "GET /posts/{postId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/posts/{postId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.put.posts-postid",
+      "kind": "rest_write",
+      "summary": "PUT /posts/{postId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/posts/{postId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.delete.posts-postid",
+      "kind": "rest_write",
+      "summary": "DELETE /posts/{postId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/posts/{postId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.posts-postid-comments",
+      "kind": "rest_read",
+      "summary": "GET /posts/{postId}/comments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/posts/{postId}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.post.posts-postid-comments",
+      "kind": "rest_write",
+      "summary": "POST /posts/{postId}/comments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/posts/{postId}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.posts-postid-comments-count",
+      "kind": "rest_read",
+      "summary": "GET /posts/{postId}/comments/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/posts/{postId}/comments/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.posts-postid-comments-commentid",
+      "kind": "rest_read",
+      "summary": "GET /posts/{postId}/comments/{commentId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/posts/{postId}/comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.delete.posts-postid-comments-commentid",
+      "kind": "rest_write",
+      "summary": "DELETE /posts/{postId}/comments/{commentId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/posts/{postId}/comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.posts-postid-reactions",
+      "kind": "rest_read",
+      "summary": "GET /posts/{postId}/reactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/posts/{postId}/reactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.post.posts-postid-reactions",
+      "kind": "rest_write",
+      "summary": "POST /posts/{postId}/reactions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/posts/{postId}/reactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.posts-postid-reactions-count",
+      "kind": "rest_read",
+      "summary": "GET /posts/{postId}/reactions/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/posts/{postId}/reactions/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.posts-postid-reactions-reactionid",
+      "kind": "rest_read",
+      "summary": "GET /posts/{postId}/reactions/{reactionId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/posts/{postId}/reactions/{reactionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.delete.posts-postid-reactions-reactionid",
+      "kind": "rest_write",
+      "summary": "DELETE /posts/{postId}/reactions/{reactionId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/posts/{postId}/reactions/{reactionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.delete.privacy",
+      "kind": "rest_write",
+      "summary": "DELETE /privacy",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/privacy",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.requests",
+      "kind": "rest_read",
+      "summary": "GET /requests",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.post.requests",
+      "kind": "rest_write",
+      "summary": "POST /requests",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.requests-count",
+      "kind": "rest_read",
+      "summary": "GET /requests/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/requests/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.requests-featurerequestid",
+      "kind": "rest_read",
+      "summary": "GET /requests/{featureRequestId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/requests/{featureRequestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.put.requests-featurerequestid",
+      "kind": "rest_write",
+      "summary": "PUT /requests/{featureRequestId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/requests/{featureRequestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.delete.requests-featurerequestid",
+      "kind": "rest_write",
+      "summary": "DELETE /requests/{featureRequestId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/requests/{featureRequestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.requests-featurerequestid-comments",
+      "kind": "rest_read",
+      "summary": "GET /requests/{featureRequestId}/comments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/requests/{featureRequestId}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.post.requests-featurerequestid-comments",
+      "kind": "rest_write",
+      "summary": "POST /requests/{featureRequestId}/comments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/requests/{featureRequestId}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.requests-featurerequestid-comments-count",
+      "kind": "rest_read",
+      "summary": "GET /requests/{featureRequestId}/comments/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/requests/{featureRequestId}/comments/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.requests-featurerequestid-comments-commentid",
+      "kind": "rest_read",
+      "summary": "GET /requests/{featureRequestId}/comments/{commentId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/requests/{featureRequestId}/comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.delete.requests-featurerequestid-comments-commentid",
+      "kind": "rest_write",
+      "summary": "DELETE /requests/{featureRequestId}/comments/{commentId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/requests/{featureRequestId}/comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.requests-featurerequestid-votes",
+      "kind": "rest_read",
+      "summary": "GET /requests/{featureRequestId}/votes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/requests/{featureRequestId}/votes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.post.requests-featurerequestid-votes",
+      "kind": "rest_write",
+      "summary": "POST /requests/{featureRequestId}/votes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/requests/{featureRequestId}/votes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.requests-featurerequestid-votes-count",
+      "kind": "rest_read",
+      "summary": "GET /requests/{featureRequestId}/votes/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/requests/{featureRequestId}/votes/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.requests-featurerequestid-votes-voteid",
+      "kind": "rest_read",
+      "summary": "GET /requests/{featureRequestId}/votes/{voteId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/requests/{featureRequestId}/votes/{voteId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.delete.requests-featurerequestid-votes-voteid",
+      "kind": "rest_write",
+      "summary": "DELETE /requests/{featureRequestId}/votes/{voteId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/requests/{featureRequestId}/votes/{voteId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.post.team",
+      "kind": "rest_write",
+      "summary": "POST /team",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/team",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.put.team",
+      "kind": "rest_write",
+      "summary": "PUT /team",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/team",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.delete.team",
+      "kind": "rest_write",
+      "summary": "DELETE /team",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/team",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.unread",
+      "kind": "rest_read",
+      "summary": "GET /unread",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/unread",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.unread-count",
+      "kind": "rest_read",
+      "summary": "GET /unread/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/unread/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.url",
+      "kind": "rest_read",
+      "summary": "GET /url",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.users",
+      "kind": "rest_read",
+      "summary": "GET /users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.post.users",
+      "kind": "rest_write",
+      "summary": "POST /users",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.put.users",
+      "kind": "rest_write",
+      "summary": "PUT /users",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.delete.users",
+      "kind": "rest_write",
+      "summary": "DELETE /users",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-feature-requests-count",
+      "kind": "rest_read",
+      "summary": "GET /v0/feature-requests/count",
+      "description": "a count-only aggregate of the feature_requests stream; no additional record data",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/feature-requests/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-feature-requests-featurerequestid",
+      "kind": "rest_read",
+      "summary": "GET /v0/feature-requests/{featureRequestId}",
+      "description": "single-feature-request lookup by id; fully covered by the feature_requests list stream",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/feature-requests/{featureRequestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-feature-requests-featurerequestid-comments",
+      "kind": "rest_read",
+      "summary": "GET /v0/feature-requests/{featureRequestId}/comments",
+      "description": "comments here are already unified into the bundle's single comments stream (matching legacy's own combined /comments endpoint, which serves both post and feature-request comments); the per-feature-request comments listing is redundant surface, kept read-side to the single comments stream while its write actions are still modeled separately below since Beamer's write API is genuinely split by parent resource",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/feature-requests/{featureRequestId}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-feature-requests-featurerequestid-comments-count",
+      "kind": "rest_read",
+      "summary": "GET /v0/feature-requests/{featureRequestId}/comments/count",
+      "description": "count-only aggregate; see /feature-requests/{featureRequestId}/comments",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/feature-requests/{featureRequestId}/comments/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-feature-requests-featurerequestid-comments-commentid",
+      "kind": "rest_read",
+      "summary": "GET /v0/feature-requests/{featureRequestId}/comments/{commentId}",
+      "description": "single-comment lookup by id; see /feature-requests/{featureRequestId}/comments",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/feature-requests/{featureRequestId}/comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-feature-requests-featurerequestid-votes-count",
+      "kind": "rest_read",
+      "summary": "GET /v0/feature-requests/{featureRequestId}/votes/count",
+      "description": "a count-only aggregate of a feature request's votes; no additional record data",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/feature-requests/{featureRequestId}/votes/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-feature-requests-featurerequestid-votes-voteid",
+      "kind": "rest_read",
+      "summary": "GET /v0/feature-requests/{featureRequestId}/votes/{voteId}",
+      "description": "single-vote lookup by id; fully covered by the feature_request_votes stream",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/feature-requests/{featureRequestId}/votes/{voteId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-nps-check",
+      "kind": "rest_read",
+      "summary": "GET /v0/nps/check",
+      "description": "a stateful eligibility check for whether a given end user should currently see the NPS prompt widget, not a data record",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/nps/check",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-nps-count",
+      "kind": "rest_read",
+      "summary": "GET /v0/nps/count",
+      "description": "a count-only aggregate of the nps stream; no additional record data",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/nps/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.post.v0-nps-email",
+      "kind": "rest_write",
+      "summary": "POST /v0/nps/email",
+      "description": "sends a real NPS survey email to a real end user immediately",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v0/nps/email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-nps-link",
+      "kind": "rest_read",
+      "summary": "GET /v0/nps/link",
+      "description": "returns a one-time NPS survey URL for a given user, not a data record",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/nps/link",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-posts-count",
+      "kind": "rest_read",
+      "summary": "GET /v0/posts/count",
+      "description": "a count-only aggregate of the posts stream; no additional record data",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/posts/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-posts-postid",
+      "kind": "rest_read",
+      "summary": "GET /v0/posts/{postId}",
+      "description": "single-post lookup by id; fully covered by the posts list stream",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/posts/{postId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-posts-postid-comments-count",
+      "kind": "rest_read",
+      "summary": "GET /v0/posts/{postId}/comments/count",
+      "description": "a count-only aggregate of a post's comments; no additional record data",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/posts/{postId}/comments/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-posts-postid-comments-commentid",
+      "kind": "rest_read",
+      "summary": "GET /v0/posts/{postId}/comments/{commentId}",
+      "description": "single-comment lookup by id; fully covered by the comments list stream",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/posts/{postId}/comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-posts-postid-reactions-count",
+      "kind": "rest_read",
+      "summary": "GET /v0/posts/{postId}/reactions/count",
+      "description": "a count-only aggregate of a post's reactions; no additional record data",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/posts/{postId}/reactions/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-posts-postid-reactions-reactionid",
+      "kind": "rest_read",
+      "summary": "GET /v0/posts/{postId}/reactions/{reactionId}",
+      "description": "single-reaction lookup by id; fully covered by the post_reactions stream",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/posts/{postId}/reactions/{reactionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.delete.v0-privacy",
+      "kind": "rest_write",
+      "summary": "DELETE /v0/privacy",
+      "description": "a GDPR/CCPA-style irreversible erasure of a specific end user's data across the whole Beamer account; a compliance action, not a routine reverse-ETL data mutation",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v0/privacy",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.post.v0-team",
+      "kind": "rest_write",
+      "summary": "POST /v0/team",
+      "description": "invites a new BigMailer-account-style team member into the Beamer workspace itself (account administration, not product data); the third-party reference could not fully document its body schema, and legacy has no precedent for it",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v0/team",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.put.v0-team",
+      "kind": "rest_write",
+      "summary": "PUT /v0/team",
+      "description": "changes a team member's role/permissions; account administration, not product data; see POST /team",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v0/team",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.delete.v0-team",
+      "kind": "rest_write",
+      "summary": "DELETE /v0/team",
+      "description": "removes a team member from the Beamer workspace; account administration with no data-record shape, irreversible",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v0/team",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-unread",
+      "kind": "rest_read",
+      "summary": "GET /v0/unread",
+      "description": "a filtered, stateful view over the posts stream (which posts this specific end user has not yet seen); defaults to marking those posts as read as a GET-time side effect, which a read-only sync connector must never trigger implicitly",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/unread",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.get.v0-unread-count",
+      "kind": "rest_read",
+      "summary": "GET /v0/unread/count",
+      "description": "count-only aggregate of the unread view; same reasoning as /unread",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v0/unread/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.post.v0-users",
+      "kind": "rest_write",
+      "summary": "POST /v0/users",
+      "description": "Scale-plan-only end-user identity registration; creates/overwrites Beamer's own end-user profile store, a distinct concern from this connector's post/feature-request/NPS data sync and gated behind a specific paid plan tier not universally available",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v0/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.put.v0-users",
+      "kind": "rest_write",
+      "summary": "PUT /v0/users",
+      "description": "bulk end-user profile update, addressed by a query-string filter (userId/beamerId/userEmail) rather than a single record id; see POST /users",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v0/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "beamer.delete.v0-users",
+      "kind": "rest_write",
+      "summary": "DELETE /v0/users",
+      "description": "bulk end-user deletion by semicolon-separated id list, addressed by a query-string filter rather than a single record id; irreversible end-user data removal",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v0/users",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

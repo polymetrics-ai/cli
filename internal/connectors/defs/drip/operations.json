@@ -1,0 +1,1389 @@
+{
+  "operations": [
+    {
+      "id": "drip.delete.account-id-subscribers-email-tags-tag",
+      "kind": "rest_write",
+      "summary": "DELETE /:account_id/subscribers/:email/tags/:tag",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/:account_id/subscribers/:email/tags/:tag",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.accounts-account-id",
+      "kind": "rest_read",
+      "summary": "GET /accounts/{account_id}",
+      "description": "single-account detail; identical record shape to the accounts list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accounts/{account_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.users-me",
+      "kind": "rest_read",
+      "summary": "GET /users/me",
+      "description": "authenticated-user identity introspection, not a syncable object stream",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-broadcasts",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/broadcasts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/broadcasts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-broadcasts",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/broadcasts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/broadcasts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-broadcasts-broadcast-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/broadcasts/:broadcast_id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/broadcasts/:broadcast_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.patch.v2-account-id-broadcasts-broadcast-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v2/:account_id/broadcasts/:broadcast_id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/:account_id/broadcasts/:broadcast_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.delete.v2-account-id-broadcasts-broadcast-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/:account_id/broadcasts/:broadcast_id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/:account_id/broadcasts/:broadcast_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-broadcasts-broadcast-id-send-test",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/broadcasts/:broadcast_id/send_test",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/broadcasts/:broadcast_id/send_test",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-campaigns",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/campaigns",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/campaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-campaigns-campaign-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/campaigns/:campaign_id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/campaigns/:campaign_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-campaigns-campaign-id-activate",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/campaigns/:campaign_id/activate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/campaigns/:campaign_id/activate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-campaigns-campaign-id-pause",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/campaigns/:campaign_id/pause",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/campaigns/:campaign_id/pause",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-campaigns-campaign-id-subscribers",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/campaigns/:campaign_id/subscribers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/campaigns/:campaign_id/subscribers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-campaigns-campaign-id-subscribers",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/campaigns/:campaign_id/subscribers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/campaigns/:campaign_id/subscribers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-custom-field-identifiers",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/custom_field_identifiers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/custom_field_identifiers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-event-actions",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/event_actions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/event_actions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-events",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/events",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-events-batches",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/events/batches",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/events/batches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-forms",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/forms",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/forms",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-forms-form-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/forms/:form_id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/forms/:form_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-goals",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/goals",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/goals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-goals-conversion-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/goals/:conversion_id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/goals/:conversion_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-orders",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/orders",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-orders-batches",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/orders/batches",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/orders/batches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-refunds",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/refunds",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/refunds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-subscribers",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/subscribers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/subscribers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-subscribers",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/subscribers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/subscribers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.delete.v2-account-id-subscribers-id-or-email",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/:account_id/subscribers/:id_or_email",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/:account_id/subscribers/:id_or_email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-subscribers-id-or-email-remove",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/subscribers/:id_or_email/remove",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/subscribers/:id_or_email/remove",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-subscribers-id-or-email-unsubscribe-all",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/subscribers/:id_or_email/unsubscribe_all",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/subscribers/:id_or_email/unsubscribe_all",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-subscribers-id-or-email-or-visitor-uuid",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/subscribers/:id_or_email_or_visitor_uuid",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/subscribers/:id_or_email_or_visitor_uuid",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-subscribers-subscriber-id-campaign-subscriptions",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/subscribers/:subscriber_id/campaign_subscriptions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/subscribers/:subscriber_id/campaign_subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-subscribers-batches",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/subscribers/batches",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/subscribers/batches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-tags",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/tags",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-tags",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/tags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-unsubscribes-batches",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/unsubscribes/batches",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/unsubscribes/batches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-webhooks-webhook-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/webhooks/:webhook_id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/webhooks/:webhook_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.delete.v2-account-id-webhooks-webhook-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/:account_id/webhooks/:webhook_id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/:account_id/webhooks/:webhook_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-workflows",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/workflows",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/workflows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-workflows-workflow-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/workflows/:workflow_id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/workflows/:workflow_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-workflows-workflow-id-activate",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/workflows/:workflow_id/activate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/workflows/:workflow_id/activate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-workflows-workflow-id-pause",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/workflows/:workflow_id/pause",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/workflows/:workflow_id/pause",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-workflows-workflow-id-subscribers",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/workflows/:workflow_id/subscribers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/workflows/:workflow_id/subscribers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.delete.v2-account-id-workflows-workflow-id-subscribers-id-or-email",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/:account_id/workflows/:workflow_id/subscribers/:id_or_email",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/:account_id/workflows/:workflow_id/subscribers/:id_or_email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-account-id-workflows-workflow-id-triggers",
+      "kind": "rest_read",
+      "summary": "GET /v2/:account_id/workflows/:workflow_id/triggers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/:account_id/workflows/:workflow_id/triggers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v2-account-id-workflows-workflow-id-triggers",
+      "kind": "rest_write",
+      "summary": "POST /v2/:account_id/workflows/:workflow_id/triggers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/:account_id/workflows/:workflow_id/triggers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.put.v2-account-id-workflows-workflow-id-triggers-trigger-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/:account_id/workflows/:workflow_id/triggers/:trigger_id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/:account_id/workflows/:workflow_id/triggers/:trigger_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-accounts",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-accounts-account-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounts/:account_id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounts/:account_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.v2-user",
+      "kind": "rest_read",
+      "summary": "GET /v2/user",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/user",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v3-account-id-shopper-activity-cart",
+      "kind": "rest_write",
+      "summary": "POST /v3/:account_id/shopper_activity/cart",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/:account_id/shopper_activity/cart",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v3-account-id-shopper-activity-cart-batch",
+      "kind": "rest_write",
+      "summary": "POST /v3/:account_id/shopper_activity/cart/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/:account_id/shopper_activity/cart/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v3-account-id-shopper-activity-order",
+      "kind": "rest_write",
+      "summary": "POST /v3/:account_id/shopper_activity/order",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/:account_id/shopper_activity/order",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v3-account-id-shopper-activity-order-batch",
+      "kind": "rest_write",
+      "summary": "POST /v3/:account_id/shopper_activity/order/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/:account_id/shopper_activity/order/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v3-account-id-shopper-activity-product",
+      "kind": "rest_write",
+      "summary": "POST /v3/:account_id/shopper_activity/product",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/:account_id/shopper_activity/product",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.v3-account-id-shopper-activity-product-batch",
+      "kind": "rest_write",
+      "summary": "POST /v3/:account_id/shopper_activity/product/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/:account_id/shopper_activity/product/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-broadcasts-broadcast-id",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/broadcasts/{broadcast_id}",
+      "description": "single-broadcast detail; identical record shape to the broadcasts list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/broadcasts/{broadcast_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-broadcasts-broadcast-id-send-test",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/broadcasts/{broadcast_id}/send_test",
+      "description": "sends a one-off test-send copy of a draft broadcast to a preview address; a preview/QA action, not a syncable record mutation",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/broadcasts/{broadcast_id}/send_test",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-campaigns-campaign-id",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/campaigns/{campaign_id}",
+      "description": "single-campaign detail; identical record shape to the campaigns list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/campaigns/{campaign_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-campaigns-campaign-id-activate",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/campaigns/{campaign_id}/activate",
+      "description": "activates an email-series (drip-sequence) campaign; campaigns were not part of legacy's write surface and this multi-step-sequence resource is out of scope for this pass's write coverage, unlike the simpler single-broadcast and single-workflow state toggles this pass does cover",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/campaigns/{campaign_id}/activate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-campaigns-campaign-id-pause",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/campaigns/{campaign_id}/pause",
+      "description": "pauses an email-series campaign; same scope narrowing as activate",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/campaigns/{campaign_id}/pause",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-campaigns-campaign-id-subscribers",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/campaigns/{campaign_id}/subscribers",
+      "description": "campaign-scoped filtered view of the same subscriber records the subscribers stream already reads in full",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/campaigns/{campaign_id}/subscribers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-campaigns-campaign-id-subscribers",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/campaigns/{campaign_id}/subscribers",
+      "description": "subscribes a person to an email-series campaign; same email-series-write scope narrowing as activate/pause",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/campaigns/{campaign_id}/subscribers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-custom-field-identifiers",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/custom_field_identifiers",
+      "description": "lists the names of custom fields ever set on any subscriber; schema/field-name introspection, not object data itself",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/custom_field_identifiers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-event-actions",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/event_actions",
+      "description": "lists the distinct custom event action names ever recorded; schema/name introspection, not event object data itself",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/event_actions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-events-batches",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/events/batches",
+      "description": "bulk multi-event batch recording; record_event already covers the single-event shape this endpoint's batch array wraps",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/events/batches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-forms-form-id",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/forms/{form_id}",
+      "description": "single-form detail; identical record shape to the forms list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/forms/{form_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-goals",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/goals",
+      "description": "conversion-goal definition list; marketing-analytics configuration, not core CRM/subscriber-shaped data prioritized this pass",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/goals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-goals-conversion-id",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/goals/{conversion_id}",
+      "description": "single-conversion-goal detail; same scope narrowing as the goals list",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/goals/{conversion_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-orders",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/orders",
+      "description": "legacy e-commerce order-tracking API; superseded by the v3 shopper_activity endpoints and not part of a CRM-shaped record/mutation model this pass targets",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-orders-batches",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/orders/batches",
+      "description": "legacy batch order-tracking; same scope narrowing as the single-order endpoint",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/orders/batches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-shopper-activity-cart-batch",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/shopper_activity/cart/batch",
+      "description": "e-commerce cart-activity ingestion; requires a cart/line-item domain model this connector's read streams do not otherwise expose or need",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/shopper_activity/cart/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-shopper-activity-order-batch",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/shopper_activity/order/batch",
+      "description": "e-commerce order-activity ingestion; same domain-model scope narrowing as cart/batch",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/shopper_activity/order/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-shopper-activity-product-batch",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/shopper_activity/product/batch",
+      "description": "e-commerce product-activity ingestion; same domain-model scope narrowing as cart/batch",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/shopper_activity/product/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-subscribers-batches",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/subscribers/batches",
+      "description": "bulk multi-subscriber batch upsert over the same collection create_or_update_subscriber already covers per-record; this dialect's per-record write model already expresses the single-subscriber shape this endpoint's batch array wraps",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/subscribers/batches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-subscribers-subscriber-id",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/subscribers/{subscriber_id}",
+      "description": "single-subscriber detail; identical record shape to the subscribers list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/subscribers/{subscriber_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-subscribers-subscriber-id-campaign-subscriptions",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/subscribers/{subscriber_id}/campaign_subscriptions",
+      "description": "per-subscriber campaign-membership sub-resource; a join view derivable from the subscribers/campaigns streams already synced, not a distinct top-level object",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/subscribers/{subscriber_id}/campaign_subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-tags",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/tags",
+      "description": "returns a BARE JSON STRING ARRAY ({\"tags\": [\"Customer\", \"SEO\"]}), not an array of objects; connsdk.RecordsAt only extracts array elements that decode as a JSON object, so every element here would be silently dropped, yielding zero records — the identical gap class documented for ip2whois's nameservers field (conventions.md ledger item 12), not a scoping choice. Tag mutation is still covered via apply_tag/remove_tag below, which operate per-subscriber and need no list extraction.",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-unsubscribes-batches",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/unsubscribes/batches",
+      "description": "bulk multi-subscriber batch unsubscribe; unsubscribe_subscriber already covers the single-subscriber shape this endpoint's batch array wraps",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/unsubscribes/batches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-webhooks-webhook-id",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/webhooks/{webhook_id}",
+      "description": "single-webhook detail; identical record shape to the webhooks list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/webhooks/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-workflow-triggers",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/workflow_triggers",
+      "description": "workflow-trigger configuration list; automation-config metadata, not CRM-shaped object data",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/workflow_triggers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-workflow-triggers",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/workflow_triggers",
+      "description": "creates a workflow trigger; automation-config mutation, out of scope for this pass",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/workflow_triggers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-workflow-triggers-trigger-id",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/workflow_triggers/{trigger_id}",
+      "description": "updates a workflow trigger; automation-config mutation, out of scope for this pass",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/workflow_triggers/{trigger_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.get.account-id-workflows-workflow-id",
+      "kind": "rest_read",
+      "summary": "GET /{account_id}/workflows/{workflow_id}",
+      "description": "single-workflow detail; identical record shape to the workflows list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.drip.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{account_id}/workflows/{workflow_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-workflows-workflow-id-subscribers",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/workflows/{workflow_id}/subscribers",
+      "description": "starts a specific person on a workflow, a distinct enrollment action from the workflow-level activate/pause state toggles this pass covers; out of scope for this pass's write coverage",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/workflows/{workflow_id}/subscribers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "drip.post.account-id-workflows-workflow-id-subscribers-subscriber-id-remove",
+      "kind": "rest_write",
+      "summary": "POST /{account_id}/workflows/{workflow_id}/subscribers/{subscriber_id}/remove",
+      "description": "removes one person from a workflow; same per-enrollment scope narrowing as the subscribe endpoint",
+      "source_url": "https://developer.drip.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{account_id}/workflows/{workflow_id}/subscribers/{subscriber_id}/remove",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "state": "declared",
+  "policies": [
+    {
+      "id": "account-per-second",
+      "source": {
+        "url": "https://www.aha.io/api",
+        "retrieved_at": "2026-08-06"
+      },
+      "selector": {
+        "all": true
+      },
+      "scope": {
+        "subject_kind": "account",
+        "subject_config": "base_url"
+      },
+      "budgets": [
+        {
+          "model": "fixed_window",
+          "dimension": "sustained",
+          "unit": "requests",
+          "limit": 20,
+          "window_seconds": 1
+        }
+      ]
+    },
+    {
+      "id": "account-per-minute",
+      "source": {
+        "url": "https://www.aha.io/api",
+        "retrieved_at": "2026-08-06"
+      },
+      "selector": {
+        "all": true
+      },
+      "scope": {
+        "subject_kind": "account",
+        "subject_config": "base_url"
+      },
+      "budgets": [
+        {
+          "model": "fixed_window",
+          "dimension": "sustained",
+          "unit": "requests",
+          "limit": 300,
+          "window_seconds": 60
+        }
+      ]
+    }
+  ]
+}

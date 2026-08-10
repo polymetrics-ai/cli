@@ -1,0 +1,2449 @@
+{
+  "operations": [
+    {
+      "id": "clickup-api.get.v2-attachment",
+      "kind": "rest_read",
+      "summary": "GET /v2/attachment",
+      "description": "lists attachments for an entity; not part of legacy's parity surface and paired one-sidedly with an upload endpoint this pass cannot express; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/attachment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-attachment",
+      "kind": "rest_write",
+      "summary": "POST /v2/attachment",
+      "description": "V3 multipart/form-data attachment upload to a task or File-type Custom Field; same multipart limitation as createtaskattachment",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/attachment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-checklist-checklist-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/checklist/{checklist_id}",
+      "description": "renames/reorders a checklist; sub-resource of the already-excluded checklist surface",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/checklist/{checklist_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-checklist-checklist-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/checklist/{checklist_id}",
+      "description": "deletes a checklist; sub-resource of the already-excluded checklist surface",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/checklist/{checklist_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-checklist-checklist-id-checklist-item",
+      "kind": "rest_write",
+      "summary": "POST /v2/checklist/{checklist_id}/checklist_item",
+      "description": "creates a checklist line item; sub-resource of the already-excluded checklist creation surface",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/checklist/{checklist_id}/checklist_item",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-checklist-checklist-id-checklist-item-checklist-item-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/checklist/{checklist_id}/checklist_item/{checklist_item_id}",
+      "description": "updates a checklist item; sub-resource of the already-excluded checklist surface",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/checklist/{checklist_id}/checklist_item/{checklist_item_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-checklist-checklist-id-checklist-item-checklist-item-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/checklist/{checklist_id}/checklist_item/{checklist_item_id}",
+      "description": "deletes a checklist item; sub-resource of the already-excluded checklist surface",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/checklist/{checklist_id}/checklist_item/{checklist_item_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-comment-comment-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/comment/{comment_id}",
+      "description": "comment edit/assign/resolve; not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/comment/{comment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-comment-comment-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/comment/{comment_id}",
+      "description": "comment deletion; not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/comment/{comment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-comment-comment-id-reply",
+      "kind": "rest_read",
+      "summary": "GET /v2/comment/{comment_id}/reply",
+      "description": "threaded-comment replies; not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/comment/{comment_id}/reply",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-comment-comment-id-reply",
+      "kind": "rest_write",
+      "summary": "POST /v2/comment/{comment_id}/reply",
+      "description": "threaded-comment reply creation; a lower-value near-duplicate of the already-covered create_task_comment write; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/comment/{comment_id}/reply",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-folder-folder-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/folder/{folder_id}",
+      "description": "returns the Lists within a Folder, identical record shape to the lists stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/folder/{folder_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-folder-folder-id-field",
+      "kind": "rest_read",
+      "summary": "GET /v2/folder/{folder_id}/field",
+      "description": "Custom Field discovery scoped to a Folder; same discovery purpose as the list-scoped variant already excluded",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/folder/{folder_id}/field",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-folder-folder-id-guest-guest-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/folder/{folder_id}/guest/{guest_id}",
+      "description": "Enterprise-plan-only guest-to-Folder sharing",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/folder/{folder_id}/guest/{guest_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-folder-folder-id-guest-guest-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/folder/{folder_id}/guest/{guest_id}",
+      "description": "Enterprise-plan-only guest-access revocation from a Folder",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/folder/{folder_id}/guest/{guest_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-folder-folder-id-list",
+      "kind": "rest_read",
+      "summary": "GET /v2/folder/{folder_id}/list",
+      "description": "Lists nested within a Folder (getlists) -- distinct from the lists stream, which reads Get Folderless Lists (/v2/space/{space_id}/list, matching legacy's own folder-less scoping exactly); adding a folder-scoped sibling stream is deferred as breadth-vs-cost triage since legacy never modeled Folder-nested Lists at all",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/folder/{folder_id}/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-folder-folder-id-list-template-template-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/folder/{folder_id}/list_template/{template_id}",
+      "description": "creates a List from a template, async bulk-provisioning; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/folder/{folder_id}/list_template/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-folder-folder-id-view",
+      "kind": "rest_read",
+      "summary": "GET /v2/folder/{folder_id}/view",
+      "description": "lists Folder views; same Views product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/folder/{folder_id}/view",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-folder-folder-id-view",
+      "kind": "rest_write",
+      "summary": "POST /v2/folder/{folder_id}/view",
+      "description": "creates a Folder-level view (List/Board/Calendar/Table/Timeline/etc.); whole Views product area deferred; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/folder/{folder_id}/view",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-goal-goal-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/goal/{goal_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/goal/{goal_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-goal-goal-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/goal/{goal_id}",
+      "description": "updates a Goal's name/due date/description/owners/color; a lower-value near-duplicate of the already-covered create_goal write's shape; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/goal/{goal_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-goal-goal-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/goal/{goal_id}",
+      "description": "deletes a Goal; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/goal/{goal_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-goal-goal-id-key-result",
+      "kind": "rest_write",
+      "summary": "POST /v2/goal/{goal_id}/key_result",
+      "description": "creates a Target (key result) within a Goal; a lower-value sub-resource of the already-covered create_goal write; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/goal/{goal_id}/key_result",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-group",
+      "kind": "rest_read",
+      "summary": "GET /v2/group",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/group",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-group-group-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/group/{group_id}",
+      "description": "updates a User Group's membership (billing side-effects on guest conversion); Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/group/{group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-group-group-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/group/{group_id}",
+      "description": "deletes a User Group; Pass B breadth-vs-cost triage on the destructive/admin side",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/group/{group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-key-result-key-result-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/key_result/{key_result_id}",
+      "description": "updates a Goal Target's progress; sub-resource of the already-covered goals surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/key_result/{key_result_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-key-result-key-result-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/key_result/{key_result_id}",
+      "description": "deletes a Goal Target; sub-resource of the already-covered goals surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/key_result/{key_result_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-list-list-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/list/{list_id}",
+      "description": "single-list detail; identical record shape to the lists list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/list/{list_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-list-list-id-comment",
+      "kind": "rest_read",
+      "summary": "GET /v2/list/{list_id}/comment",
+      "description": "List-scoped comment listing; not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/list/{list_id}/comment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-list-list-id-comment",
+      "kind": "rest_write",
+      "summary": "POST /v2/list/{list_id}/comment",
+      "description": "List-level comment creation; a lower-value near-duplicate of the already-covered create_task_comment write; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/list/{list_id}/comment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-list-list-id-field",
+      "kind": "rest_read",
+      "summary": "GET /v2/list/{list_id}/field",
+      "description": "Custom Field discovery for a List (needed to resolve field_id/value shapes before calling set_custom_field_value); not part of legacy's parity surface, deferred as breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/list/{list_id}/field",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-list-list-id-guest-guest-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/list/{list_id}/guest/{guest_id}",
+      "description": "Enterprise-plan-only guest-to-List sharing",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/list/{list_id}/guest/{guest_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-list-list-id-guest-guest-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/list/{list_id}/guest/{guest_id}",
+      "description": "Enterprise-plan-only guest-access revocation from a List",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/list/{list_id}/guest/{guest_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-list-list-id-member",
+      "kind": "rest_read",
+      "summary": "GET /v2/list/{list_id}/member",
+      "description": "List membership listing; not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/list/{list_id}/member",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-list-list-id-task",
+      "kind": "rest_read",
+      "summary": "GET /v2/list/{list_id}/task",
+      "description": "list-scoped task retrieval returning the identical task record shape the team-scoped tasks stream already covers; legacy only reads team-scoped tasks and this pass keeps that scoping",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/list/{list_id}/task",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-list-list-id-task-task-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/list/{list_id}/task/{task_id}",
+      "description": "adds a task to an additional List (Tasks-in-Multiple-Lists ClickApp, plan-gated); not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/list/{list_id}/task/{task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-list-list-id-task-task-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/list/{list_id}/task/{task_id}",
+      "description": "removes a task from an additional (non-home) List, plan-gated ClickApp; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/list/{list_id}/task/{task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-list-list-id-tasktemplate-template-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/list/{list_id}/taskTemplate/{template_id}",
+      "description": "creates a task from a template; a lower-value near-duplicate of the already-covered create_task write; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/list/{list_id}/taskTemplate/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-list-list-id-view",
+      "kind": "rest_read",
+      "summary": "GET /v2/list/{list_id}/view",
+      "description": "lists List views; same Views product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/list/{list_id}/view",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-list-list-id-view",
+      "kind": "rest_write",
+      "summary": "POST /v2/list/{list_id}/view",
+      "description": "creates a List-level view; same Views product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/list/{list_id}/view",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-oauth-token",
+      "kind": "rest_read",
+      "summary": "GET /v2/oauth/token",
+      "description": "OAuth2 authorization-code token exchange; this connector authenticates via a personal API token, not the OAuth flow",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/oauth/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-oauth-token",
+      "kind": "rest_write",
+      "summary": "POST /v2/oauth/token",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/oauth/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-space-space-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/space/{space_id}",
+      "description": "single-space detail; identical record shape to the spaces list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/space/{space_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-space-space-id-field",
+      "kind": "rest_read",
+      "summary": "GET /v2/space/{space_id}/field",
+      "description": "Custom Field discovery scoped to a Space; same discovery purpose as the list-scoped variant already excluded",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/space/{space_id}/field",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-space-space-id-folder-template-template-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/space/{space_id}/folder_template/{template_id}",
+      "description": "creates a Folder plus all its nested Lists/tasks from a template, an async bulk-provisioning operation rather than a plain single-resource mutation; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/space/{space_id}/folder_template/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-space-space-id-list",
+      "kind": "rest_write",
+      "summary": "POST /v2/space/{space_id}/list",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/space/{space_id}/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-space-space-id-list-template-template-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/space/{space_id}/list_template/{template_id}",
+      "description": "creates a folderless List from a template, async bulk-provisioning; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/space/{space_id}/list_template/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-space-space-id-tag",
+      "kind": "rest_write",
+      "summary": "POST /v2/space/{space_id}/tag",
+      "description": "creates a new task Tag definition at the Space level; a lower-value complement to the already-covered add_tag_to_task/remove_tag_from_task per-task tag writes; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/space/{space_id}/tag",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-space-space-id-tag-tag-name",
+      "kind": "rest_write",
+      "summary": "PUT /v2/space/{space_id}/tag/{tag_name}",
+      "description": "renames/recolors a Space-level Tag definition; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/space/{space_id}/tag/{tag_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-space-space-id-tag-tag-name",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/space/{space_id}/tag/{tag_name}",
+      "description": "deletes a Tag definition from a Space (distinct from remove_tag_from_task, which only un-attaches a tag from one task) -- removes the tag from every task that used it, workspace-wide; Pass B breadth-vs-cost triage on the destructive/admin side",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/space/{space_id}/tag/{tag_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-space-space-id-view",
+      "kind": "rest_read",
+      "summary": "GET /v2/space/{space_id}/view",
+      "description": "lists Space views; same Views product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/space/{space_id}/view",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-space-space-id-view",
+      "kind": "rest_write",
+      "summary": "POST /v2/space/{space_id}/view",
+      "description": "creates a Space-level view; same Views product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/space/{space_id}/view",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-task-bulk-time-in-status",
+      "kind": "rest_read",
+      "summary": "GET /v2/task/bulk_time_in_status",
+      "description": "bulk variant of the already-excluded per-task time-in-status report",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/task/bulk_time_in_status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-task-bulk-time-in-status-task-ids",
+      "kind": "rest_read",
+      "summary": "GET /v2/task/bulk_time_in_status/task_ids",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/task/bulk_time_in_status/task_ids",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-task-task-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/task/{task_id}",
+      "description": "single-task detail; identical record shape to the tasks list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/task/{task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-task-task-id-attachment",
+      "kind": "rest_write",
+      "summary": "POST /v2/task/{task_id}/attachment",
+      "description": "multipart/form-data file upload; the dialect's write body_type is json/form/none, none of which express a binary multipart body",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/task/{task_id}/attachment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-task-task-id-checklist",
+      "kind": "rest_write",
+      "summary": "POST /v2/task/{task_id}/checklist",
+      "description": "creates a checklist on a task; not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/task/{task_id}/checklist",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-task-task-id-comment",
+      "kind": "rest_read",
+      "summary": "GET /v2/task/{task_id}/comment",
+      "description": "task comment listing (25-per-page, start/start_id cursor pagination); not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/task/{task_id}/comment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-task-task-id-dependency",
+      "kind": "rest_write",
+      "summary": "POST /v2/task/{task_id}/dependency",
+      "description": "sets a waiting-on/blocking dependency between tasks; not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/task/{task_id}/dependency",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-task-task-id-dependency",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/task/{task_id}/dependency",
+      "description": "removes a task dependency; sub-resource of the already-excluded dependency surface",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/task/{task_id}/dependency",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-task-task-id-field-field-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/task/{task_id}/field/{field_id}",
+      "description": "clears a Custom Field's value without deleting the field option itself; a lower-value complement to the already-covered set_custom_field_value write; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/task/{task_id}/field/{field_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-task-task-id-guest-guest-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/task/{task_id}/guest/{guest_id}",
+      "description": "Enterprise-plan-only guest-to-task sharing",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/task/{task_id}/guest/{guest_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-task-task-id-guest-guest-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/task/{task_id}/guest/{guest_id}",
+      "description": "Enterprise-plan-only guest-access revocation from a task",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/task/{task_id}/guest/{guest_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-task-task-id-link-links-to",
+      "kind": "rest_write",
+      "summary": "POST /v2/task/{task_id}/link/{links_to}",
+      "description": "creates a general task-to-task link (distinct from a dependency); not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/task/{task_id}/link/{links_to}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-task-task-id-link-links-to",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/task/{task_id}/link/{links_to}",
+      "description": "removes a task link; sub-resource of the already-excluded task-link surface",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/task/{task_id}/link/{links_to}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-task-task-id-list-list-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/task/{task_id}/list/{list_id}",
+      "description": "moves a task to a new home List; not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/task/{task_id}/list/{list_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-task-task-id-member",
+      "kind": "rest_read",
+      "summary": "GET /v2/task/{task_id}/member",
+      "description": "task membership listing; not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/task/{task_id}/member",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-task-task-id-merge",
+      "kind": "rest_write",
+      "summary": "POST /v2/task/{task_id}/merge",
+      "description": "merges source tasks into a target task, an irreversible structural operation on task identity; Pass B breadth-vs-cost triage on the destructive/admin side",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/task/{task_id}/merge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-task-task-id-time",
+      "kind": "rest_read",
+      "summary": "GET /v2/task/{task_id}/time",
+      "description": "legacy time-tracking endpoint, superseded by the Time Tracking API",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/task/{task_id}/time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-task-task-id-time",
+      "kind": "rest_write",
+      "summary": "POST /v2/task/{task_id}/time",
+      "description": "legacy time-tracking endpoint, superseded by the Time Tracking API",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/task/{task_id}/time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-task-task-id-time",
+      "kind": "rest_write",
+      "summary": "PUT /v2/task/{task_id}/time",
+      "description": "legacy time-tracking endpoint, superseded by the Time Tracking API",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/task/{task_id}/time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-task-task-id-time",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/task/{task_id}/time",
+      "description": "ClickUp's own docs mark this a legacy time-tracking endpoint, superseded by the Time Tracking API (trackatimeentry etc.), which this pass excludes for the same breadth-vs-cost reason",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/task/{task_id}/time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-task-task-id-time-interval-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/task/{task_id}/time/{interval_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/task/{task_id}/time/{interval_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-task-task-id-time-interval-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/task/{task_id}/time/{interval_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/task/{task_id}/time/{interval_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-task-task-id-time-estimate",
+      "kind": "rest_write",
+      "summary": "POST /v2/task/{task_id}/time_estimate",
+      "description": "replaces ALL of a task's per-assignee time estimates (destructive to unlisted assignees' estimates), Business-plan-gated; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/task/{task_id}/time_estimate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-task-task-id-time-estimate-bulk",
+      "kind": "rest_write",
+      "summary": "POST /v2/task/{task_id}/time_estimate/bulk",
+      "description": "per-assignee variant of the already-excluded time-estimate replacement endpoint",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/task/{task_id}/time_estimate/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-task-task-id-time-in-status",
+      "kind": "rest_read",
+      "summary": "GET /v2/task/{task_id}/time_in_status",
+      "description": "per-task time-in-status report, plan-gated ClickApp; not a syncable object stream in the usual sense; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/task/{task_id}/time_in_status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-task",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_Id}/task",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_Id}/task",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-time-entries",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_Id}/time_entries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_Id}/time_entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-team-team-id-time-entries",
+      "kind": "rest_write",
+      "summary": "POST /v2/team/{team_Id}/time_entries",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/team/{team_Id}/time_entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-team-team-id-time-entries-start",
+      "kind": "rest_write",
+      "summary": "POST /v2/team/{team_Id}/time_entries/start",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/team/{team_Id}/time_entries/start",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-team-team-id-auditlogs",
+      "kind": "rest_write",
+      "summary": "POST /v2/team/{team_id}/auditlogs",
+      "description": "Enterprise-plan-only, Workspace-owner-only audit log export",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/team/{team_id}/auditlogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-custom-item",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/custom_item",
+      "description": "Custom Task Type discovery (needed to interpret a task's custom_item_id); not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/custom_item",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-customroles",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/customroles",
+      "description": "Custom Role discovery; not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/customroles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-field",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/field",
+      "description": "Custom Field discovery scoped to a Workspace; same discovery purpose as the list-scoped variant already excluded",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/field",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-foldertemplate",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/folderTemplate",
+      "description": "folder template discovery, same purpose class as the task-template discovery endpoint already excluded",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/folderTemplate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-folder-template",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/folder_template",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/folder_template",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-goal-goal-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/goal/{goal_id}",
+      "description": "single-goal detail (with its Targets); identical top-level record shape to the goals list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/goal/{goal_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-group",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/group",
+      "description": "User Group listing; not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/group",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-team-team-id-group",
+      "kind": "rest_write",
+      "summary": "POST /v2/team/{team_id}/group",
+      "description": "creates a User Group (member-management side-effects, prorated billing on guest conversion); not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/team/{team_id}/group",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-team-team-id-guest",
+      "kind": "rest_write",
+      "summary": "POST /v2/team/{team_id}/guest",
+      "description": "Enterprise-plan-only guest invitation",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/team/{team_id}/guest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-guest-guest-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/guest/{guest_id}",
+      "description": "Enterprise-plan-only guest detail read",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/guest/{guest_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-team-team-id-guest-guest-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/team/{team_id}/guest/{guest_id}",
+      "description": "Enterprise-plan-only guest option configuration",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/team/{team_id}/guest/{guest_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-team-team-id-guest-guest-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/team/{team_id}/guest/{guest_id}",
+      "description": "Enterprise-plan-only guest removal from the Workspace",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/team/{team_id}/guest/{guest_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-listtemplate",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/listTemplate",
+      "description": "list template discovery, same purpose class as the task-template discovery endpoint already excluded",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/listTemplate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-list-template",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/list_template",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/list_template",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-plan",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/plan",
+      "description": "billing-plan snapshot, not a syncable object stream",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/plan",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-seats",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/seats",
+      "description": "billing seat-usage snapshot, not a syncable object stream",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/seats",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-shared",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/shared",
+      "description": "shared-with-me hierarchy listing; not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/shared",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-task-filtered-team-tasks",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/task/filtered_team_tasks",
+      "description": "cross-List/Folder/Space filtered task search returning the identical task record shape the team-scoped tasks stream already covers; a query-parameter variant, not a distinct resource",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/task/filtered_team_tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-tasktemplate",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/taskTemplate",
+      "description": "task template discovery, only useful in service of the excluded createtaskfromtemplate write; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/taskTemplate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-time-entries-2",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/time_entries",
+      "description": "Time Tracking entries within a date range; whole Time Tracking product area deferred as breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/time_entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-team-team-id-time-entries-2",
+      "kind": "rest_write",
+      "summary": "POST /v2/team/{team_id}/time_entries",
+      "description": "creates a Time Tracking entry; not part of legacy's parity surface, whole Time Tracking product area deferred; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/team/{team_id}/time_entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-time-entries-current",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/time_entries/current",
+      "description": "running-timer read; sub-resource of the already out-of-scope Time Tracking product area",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/time_entries/current",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-team-team-id-time-entries-start-2",
+      "kind": "rest_write",
+      "summary": "POST /v2/team/{team_id}/time_entries/start",
+      "description": "starts a timer; sub-resource of the already out-of-scope Time Tracking product area",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/team/{team_id}/time_entries/start",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-team-team-id-time-entries-stop",
+      "kind": "rest_write",
+      "summary": "POST /v2/team/{team_id}/time_entries/stop",
+      "description": "stops a timer; sub-resource of the already out-of-scope Time Tracking product area",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/team/{team_id}/time_entries/stop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-time-entries-tags",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/time_entries/tags",
+      "description": "Time Tracking entry label listing; not part of legacy's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/time_entries/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-team-team-id-time-entries-tags",
+      "kind": "rest_write",
+      "summary": "POST /v2/team/{team_id}/time_entries/tags",
+      "description": "adds a label to time entries; sub-resource of the already out-of-scope Time Tracking product area",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/team/{team_id}/time_entries/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-team-team-id-time-entries-tags",
+      "kind": "rest_write",
+      "summary": "PUT /v2/team/{team_id}/time_entries/tags",
+      "description": "renames a time-entry label; sub-resource of the already out-of-scope Time Tracking product area",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/team/{team_id}/time_entries/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-team-team-id-time-entries-tags",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/team/{team_id}/time_entries/tags",
+      "description": "removes labels from time entries; sub-resource of the already out-of-scope Time Tracking product area",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/team/{team_id}/time_entries/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-time-entries-timer-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/time_entries/{timer_id}",
+      "description": "single time-entry read; sub-resource of the already out-of-scope Time Tracking product area",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/time_entries/{timer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-team-team-id-time-entries-timer-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/team/{team_id}/time_entries/{timer_id}",
+      "description": "updates a time entry; sub-resource of the already out-of-scope Time Tracking product area",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/team/{team_id}/time_entries/{timer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-team-team-id-time-entries-timer-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/team/{team_id}/time_entries/{timer_id}",
+      "description": "deletes a time entry; sub-resource of the already out-of-scope Time Tracking product area",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/team/{team_id}/time_entries/{timer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-time-entries-timer-id-history",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/time_entries/{timer_id}/history",
+      "description": "time-entry change history; sub-resource of the already out-of-scope Time Tracking product area",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/time_entries/{timer_id}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-team-team-id-user",
+      "kind": "rest_write",
+      "summary": "POST /v2/team/{team_id}/user",
+      "description": "Enterprise-plan-only member invitation",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/team/{team_id}/user",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-user-user-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/user/{user_id}",
+      "description": "Enterprise-plan-only user detail read",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/user/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-team-team-id-user-user-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/team/{team_id}/user/{user_id}",
+      "description": "Enterprise-plan-only user name/role update",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/team/{team_id}/user/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-team-team-id-user-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/team/{team_id}/user/{user_id}",
+      "description": "Enterprise-plan-only member deactivation",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/team/{team_id}/user/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-team-team-id-view",
+      "kind": "rest_read",
+      "summary": "GET /v2/team/{team_id}/view",
+      "description": "lists Everything-level views; same Views product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/team/{team_id}/view",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-team-team-id-view",
+      "kind": "rest_write",
+      "summary": "POST /v2/team/{team_id}/view",
+      "description": "creates an Everything-level view; same Views product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/team/{team_id}/view",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-user",
+      "kind": "rest_read",
+      "summary": "GET /v2/user",
+      "description": "authenticated-user profile introspection, not a syncable object stream",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/user",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-view-view-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/view/{view_id}",
+      "description": "single-view detail; same Views product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/view/{view_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-view-view-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/view/{view_id}",
+      "description": "updates a view's grouping/sorting/filters/columns; same Views product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/view/{view_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-view-view-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/view/{view_id}",
+      "description": "deletes a view; same Views product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/view/{view_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-view-view-id-comment",
+      "kind": "rest_read",
+      "summary": "GET /v2/view/{view_id}/comment",
+      "description": "Chat-view comment listing, gated behind the excluded Views product area; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/view/{view_id}/comment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-view-view-id-comment",
+      "kind": "rest_write",
+      "summary": "POST /v2/view/{view_id}/comment",
+      "description": "Chat-view comment creation, gated behind the excluded Views product area; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/view/{view_id}/comment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-view-view-id-task",
+      "kind": "rest_read",
+      "summary": "GET /v2/view/{view_id}/task",
+      "description": "lists tasks visible in a view; same Views product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/view/{view_id}/task",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-workspaces-workspace-id-channels",
+      "kind": "rest_read",
+      "summary": "GET /v2/workspaces/{workspace_id}/channels",
+      "description": "lists Chat Channels; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/channels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-workspaces-workspace-id-channels",
+      "kind": "rest_write",
+      "summary": "POST /v2/workspaces/{workspace_id}/channels",
+      "description": "creates a Chat Channel; whole Chat product area is a messaging surface distinct from this connector's project-management data model; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/workspaces/{workspace_id}/channels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-workspaces-workspace-id-channels-location",
+      "kind": "rest_write",
+      "summary": "POST /v2/workspaces/{workspace_id}/channels/location",
+      "description": "creates a Chat Channel on a Space/Folder/List; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/workspaces/{workspace_id}/channels/location",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-workspaces-workspace-id-channels-channel-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/workspaces/{workspace_id}/channels/{channel_id}",
+      "description": "reads a Chat Channel; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.patch.v2-workspaces-workspace-id-channels-channel-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v2/workspaces/{workspace_id}/channels/{channel_id}",
+      "description": "updates a Chat Channel; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-workspaces-workspace-id-channels-channel-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/workspaces/{workspace_id}/channels/{channel_id}",
+      "description": "deletes a Chat Channel; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-workspaces-workspace-id-channels-channel-id-followers",
+      "kind": "rest_read",
+      "summary": "GET /v2/workspaces/{workspace_id}/channels/{channel_id}/followers",
+      "description": "Chat Channel followers; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}/followers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-workspaces-workspace-id-channels-channel-id-members",
+      "kind": "rest_read",
+      "summary": "GET /v2/workspaces/{workspace_id}/channels/{channel_id}/members",
+      "description": "Chat Channel members; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-workspaces-workspace-id-channels-channel-id-messages",
+      "kind": "rest_read",
+      "summary": "GET /v2/workspaces/{workspace_id}/channels/{channel_id}/messages",
+      "description": "lists Chat Channel messages; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-workspaces-workspace-id-channels-channel-id-messages",
+      "kind": "rest_write",
+      "summary": "POST /v2/workspaces/{workspace_id}/channels/{channel_id}/messages",
+      "description": "sends a Chat message; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-workspaces-workspace-id-direct-messages",
+      "kind": "rest_write",
+      "summary": "POST /v2/workspaces/{workspace_id}/direct_messages",
+      "description": "creates a Chat direct message; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/workspaces/{workspace_id}/direct_messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.patch.v2-workspaces-workspace-id-messages-message-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v2/workspaces/{workspace_id}/messages/{message_id}",
+      "description": "updates a Chat message; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-workspaces-workspace-id-messages-message-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/workspaces/{workspace_id}/messages/{message_id}",
+      "description": "deletes a Chat message; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-workspaces-workspace-id-messages-message-id-reactions",
+      "kind": "rest_read",
+      "summary": "GET /v2/workspaces/{workspace_id}/messages/{message_id}/reactions",
+      "description": "Chat message reactions; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/reactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-workspaces-workspace-id-messages-message-id-reactions",
+      "kind": "rest_write",
+      "summary": "POST /v2/workspaces/{workspace_id}/messages/{message_id}/reactions",
+      "description": "adds a Chat message reaction; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/reactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.delete.v2-workspaces-workspace-id-messages-message-id-reactions-reaction",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/workspaces/{workspace_id}/messages/{message_id}/reactions/{reaction}",
+      "description": "removes a Chat message reaction; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/reactions/{reaction}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-workspaces-workspace-id-messages-message-id-replies",
+      "kind": "rest_read",
+      "summary": "GET /v2/workspaces/{workspace_id}/messages/{message_id}/replies",
+      "description": "Chat message replies; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/replies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v2-workspaces-workspace-id-messages-message-id-replies",
+      "kind": "rest_write",
+      "summary": "POST /v2/workspaces/{workspace_id}/messages/{message_id}/replies",
+      "description": "creates a Chat reply message; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/replies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-workspaces-workspace-id-messages-message-id-tagged-users",
+      "kind": "rest_read",
+      "summary": "GET /v2/workspaces/{workspace_id}/messages/{message_id}/tagged_users",
+      "description": "Chat message tagged-user listing; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/tagged_users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v2-workspaces-workspace-id-subtypes",
+      "kind": "rest_read",
+      "summary": "GET /v2/workspaces/{workspace_id}/subtypes",
+      "description": "Chat post-subtype id lookup; same Chat product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workspaces/{workspace_id}/subtypes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v2-object-type-object-id-acl",
+      "kind": "rest_write",
+      "summary": "PUT /v2/{object_type}/{object_id}/acl",
+      "description": "privacy/access-control update on an arbitrary object or location; may incur billing charges on sharing, and the object_type path segment makes this a polymorphic write this dialect cannot safely generalize",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/{object_type}/{object_id}/acl",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v3-workspaces-workspace-id-docs",
+      "kind": "rest_read",
+      "summary": "GET /v3/workspaces/{workspace_id}/docs",
+      "description": "searches Docs in a Workspace; whole Docs product area deferred; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/workspaces/{workspace_id}/docs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v3-workspaces-workspace-id-docs",
+      "kind": "rest_write",
+      "summary": "POST /v3/workspaces/{workspace_id}/docs",
+      "description": "creates a Doc; whole Docs product area (rich-text documents, not task/project records) is a distinct data model from this connector's parity surface; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/workspaces/{workspace_id}/docs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v3-workspaces-workspace-id-docs-doc-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/workspaces/{workspace_id}/docs/{doc_id}",
+      "description": "reads a Doc; same Docs product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v3-workspaces-workspace-id-docs-doc-id-pagelisting",
+      "kind": "rest_read",
+      "summary": "GET /v3/workspaces/{workspace_id}/docs/{doc_id}/pageListing",
+      "description": "Doc page-listing tree; same Docs product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pageListing",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v3-workspaces-workspace-id-docs-doc-id-pages",
+      "kind": "rest_read",
+      "summary": "GET /v3/workspaces/{workspace_id}/docs/{doc_id}/pages",
+      "description": "lists Doc pages; same Docs product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.post.v3-workspaces-workspace-id-docs-doc-id-pages",
+      "kind": "rest_write",
+      "summary": "POST /v3/workspaces/{workspace_id}/docs/{doc_id}/pages",
+      "description": "creates a Doc page; same Docs product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.get.v3-workspaces-workspace-id-docs-doc-id-pages-page-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/workspaces/{workspace_id}/docs/{doc_id}/pages/{page_id}",
+      "description": "reads a Doc page; same Docs product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pages/{page_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clickup-api.put.v3-workspaces-workspace-id-docs-doc-id-pages-page-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/workspaces/{workspace_id}/docs/{doc_id}/pages/{page_id}",
+      "description": "edits a Doc page; same Docs product area already deferred",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pages/{page_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

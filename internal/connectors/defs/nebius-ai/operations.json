@@ -1,0 +1,52 @@
+{
+  "operations": [
+    {
+      "id": "nebius-ai.post.v0-models-upload",
+      "kind": "rest_write",
+      "summary": "POST /v0/models/upload",
+      "description": "Upload custom model archive uses multipart/form-data request payloads that are outside the JSON declarative write dialect.",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v0/models/upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nebius-ai.post.v1-datasets-uploads-upload-id-parts",
+      "kind": "rest_write",
+      "summary": "POST /v1/datasets/uploads/{upload_id}/parts",
+      "description": "Upload a new part for a multipart upload uses application/octet-stream request payloads that are outside the JSON declarative write dialect.",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/datasets/uploads/{upload_id}/parts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nebius-ai.post.v1-files",
+      "kind": "rest_write",
+      "summary": "POST /v1/files",
+      "description": "Upload file uses multipart/form-data request payloads that are outside the JSON declarative write dialect.",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/files",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

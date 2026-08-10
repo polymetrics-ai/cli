@@ -1,0 +1,2791 @@
+{
+  "operations": [
+    {
+      "id": "repairshopr.get.api-v1-appointments",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/appointments",
+      "description": "/api/v1/appointments is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/appointments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.api-v1-customers",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/customers",
+      "description": "Legacy connector never implemented writes",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.api-v1-line-items",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/line_items",
+      "description": "/api/v1/line_items is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/line_items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.api-v1-payments",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/payments",
+      "description": "/api/v1/payments is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.api-v1-users",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/users",
+      "description": "/api/v1/users is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.appointment-types",
+      "kind": "rest_read",
+      "summary": "GET /appointment_types",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/appointment_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.appointment-types",
+      "kind": "rest_write",
+      "summary": "POST /appointment_types",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/appointment_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.appointment-types-id",
+      "kind": "rest_read",
+      "summary": "GET /appointment_types/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/appointment_types/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.appointment-types-id",
+      "kind": "rest_write",
+      "summary": "PUT /appointment_types/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/appointment_types/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.appointment-types-id",
+      "kind": "rest_write",
+      "summary": "DELETE /appointment_types/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/appointment_types/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.appointments",
+      "kind": "rest_read",
+      "summary": "GET /appointments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/appointments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.appointments",
+      "kind": "rest_write",
+      "summary": "POST /appointments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/appointments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.appointments-id",
+      "kind": "rest_read",
+      "summary": "GET /appointments/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/appointments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.appointments-id",
+      "kind": "rest_write",
+      "summary": "PUT /appointments/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/appointments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.appointments-id",
+      "kind": "rest_write",
+      "summary": "DELETE /appointments/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/appointments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.callerid",
+      "kind": "rest_read",
+      "summary": "GET /callerid",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/callerid",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.canned-responses",
+      "kind": "rest_read",
+      "summary": "GET /canned_responses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/canned_responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.canned-responses",
+      "kind": "rest_write",
+      "summary": "POST /canned_responses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/canned_responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.canned-responses-settings",
+      "kind": "rest_read",
+      "summary": "GET /canned_responses/settings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/canned_responses/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.patch.canned-responses-id",
+      "kind": "rest_write",
+      "summary": "PATCH /canned_responses/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/canned_responses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.canned-responses-id",
+      "kind": "rest_write",
+      "summary": "DELETE /canned_responses/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/canned_responses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.contacts",
+      "kind": "rest_read",
+      "summary": "GET /contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.contacts",
+      "kind": "rest_write",
+      "summary": "POST /contacts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.contacts-id",
+      "kind": "rest_read",
+      "summary": "GET /contacts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contacts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.contacts-id",
+      "kind": "rest_write",
+      "summary": "PUT /contacts/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/contacts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.contacts-id",
+      "kind": "rest_write",
+      "summary": "DELETE /contacts/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/contacts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.contracts",
+      "kind": "rest_read",
+      "summary": "GET /contracts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contracts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.contracts",
+      "kind": "rest_write",
+      "summary": "POST /contracts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contracts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.contracts-id",
+      "kind": "rest_read",
+      "summary": "GET /contracts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contracts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.contracts-id",
+      "kind": "rest_write",
+      "summary": "PUT /contracts/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/contracts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.contracts-id",
+      "kind": "rest_write",
+      "summary": "DELETE /contracts/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/contracts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.customer-assets",
+      "kind": "rest_read",
+      "summary": "GET /customer_assets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer_assets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.customer-assets",
+      "kind": "rest_write",
+      "summary": "POST /customer_assets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customer_assets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.customer-assets-assets-by-contact-contact-id",
+      "kind": "rest_read",
+      "summary": "GET /customer_assets/assets_by_contact/{contact_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer_assets/assets_by_contact/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.customer-assets-chat-information-by-ids",
+      "kind": "rest_read",
+      "summary": "GET /customer_assets/chat_information_by_ids",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer_assets/chat_information_by_ids",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.customer-assets-id",
+      "kind": "rest_read",
+      "summary": "GET /customer_assets/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer_assets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.customer-assets-id",
+      "kind": "rest_write",
+      "summary": "PUT /customer_assets/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customer_assets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.customer-assets-id-installed-applications",
+      "kind": "rest_read",
+      "summary": "GET /customer_assets/{id}/installed_applications",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer_assets/{id}/installed_applications",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.customer-assets-id-patches",
+      "kind": "rest_read",
+      "summary": "GET /customer_assets/{id}/patches",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer_assets/{id}/patches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.customers",
+      "kind": "rest_read",
+      "summary": "GET /customers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.customers",
+      "kind": "rest_write",
+      "summary": "POST /customers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.customers-autocomplete",
+      "kind": "rest_read",
+      "summary": "GET /customers/autocomplete",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/autocomplete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.customers-latest",
+      "kind": "rest_read",
+      "summary": "GET /customers/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.customers-customer-id-payment-profiles",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/payment_profiles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/payment_profiles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.customers-customer-id-payment-profiles",
+      "kind": "rest_write",
+      "summary": "POST /customers/{customer_id}/payment_profiles",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{customer_id}/payment_profiles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.customers-customer-id-payment-profiles-id",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/payment_profiles/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/payment_profiles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.customers-customer-id-payment-profiles-id",
+      "kind": "rest_write",
+      "summary": "PUT /customers/{customer_id}/payment_profiles/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customers/{customer_id}/payment_profiles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.customers-customer-id-payment-profiles-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{customer_id}/payment_profiles/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{customer_id}/payment_profiles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.customers-customer-id-phones",
+      "kind": "rest_read",
+      "summary": "GET /customers/{customer_id}/phones",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{customer_id}/phones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.customers-customer-id-phones",
+      "kind": "rest_write",
+      "summary": "POST /customers/{customer_id}/phones",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{customer_id}/phones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.customers-customer-id-phones-id",
+      "kind": "rest_write",
+      "summary": "PUT /customers/{customer_id}/phones/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customers/{customer_id}/phones/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.customers-customer-id-phones-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{customer_id}/phones/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{customer_id}/phones/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.customers-id",
+      "kind": "rest_read",
+      "summary": "GET /customers/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.customers-id",
+      "kind": "rest_write",
+      "summary": "PUT /customers/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.customers-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.estimates",
+      "kind": "rest_read",
+      "summary": "GET /estimates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/estimates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.estimates",
+      "kind": "rest_write",
+      "summary": "POST /estimates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/estimates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.estimates-id",
+      "kind": "rest_read",
+      "summary": "GET /estimates/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/estimates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.estimates-id",
+      "kind": "rest_write",
+      "summary": "PUT /estimates/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/estimates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.estimates-id",
+      "kind": "rest_write",
+      "summary": "DELETE /estimates/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/estimates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.estimates-id-convert-to-invoice",
+      "kind": "rest_write",
+      "summary": "POST /estimates/{id}/convert_to_invoice",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/estimates/{id}/convert_to_invoice",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.estimates-id-email",
+      "kind": "rest_write",
+      "summary": "POST /estimates/{id}/email",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/estimates/{id}/email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.estimates-id-line-items",
+      "kind": "rest_write",
+      "summary": "POST /estimates/{id}/line_items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/estimates/{id}/line_items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.estimates-id-line-items-line-item-id",
+      "kind": "rest_write",
+      "summary": "PUT /estimates/{id}/line_items/{line_item_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/estimates/{id}/line_items/{line_item_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.estimates-id-line-items-line-item-id",
+      "kind": "rest_write",
+      "summary": "DELETE /estimates/{id}/line_items/{line_item_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/estimates/{id}/line_items/{line_item_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.estimates-id-print",
+      "kind": "rest_write",
+      "summary": "POST /estimates/{id}/print",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/estimates/{id}/print",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.invoices",
+      "kind": "rest_read",
+      "summary": "GET /invoices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.invoices",
+      "kind": "rest_write",
+      "summary": "POST /invoices",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.invoices-id",
+      "kind": "rest_read",
+      "summary": "GET /invoices/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoices/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.invoices-id",
+      "kind": "rest_write",
+      "summary": "PUT /invoices/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/invoices/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.invoices-id",
+      "kind": "rest_write",
+      "summary": "DELETE /invoices/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/invoices/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.invoices-id-email",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{id}/email",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{id}/email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.invoices-id-line-items",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{id}/line_items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{id}/line_items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.invoices-id-line-items-line-item-id",
+      "kind": "rest_write",
+      "summary": "PUT /invoices/{id}/line_items/{line_item_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/invoices/{id}/line_items/{line_item_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.invoices-id-line-items-line-item-id",
+      "kind": "rest_write",
+      "summary": "DELETE /invoices/{id}/line_items/{line_item_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/invoices/{id}/line_items/{line_item_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.invoices-id-print",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{id}/print",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{id}/print",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.invoices-id-ticket",
+      "kind": "rest_read",
+      "summary": "GET /invoices/{id}/ticket",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoices/{id}/ticket",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.items",
+      "kind": "rest_read",
+      "summary": "GET /items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.leads",
+      "kind": "rest_read",
+      "summary": "GET /leads",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/leads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.leads",
+      "kind": "rest_write",
+      "summary": "POST /leads",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.leads-id",
+      "kind": "rest_read",
+      "summary": "GET /leads/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/leads/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.leads-id",
+      "kind": "rest_write",
+      "summary": "PUT /leads/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/leads/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.line-items",
+      "kind": "rest_read",
+      "summary": "GET /line_items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/line_items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.me",
+      "kind": "rest_read",
+      "summary": "GET /me",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.new-ticket-forms",
+      "kind": "rest_read",
+      "summary": "GET /new_ticket_forms",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/new_ticket_forms",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.new-ticket-forms-id",
+      "kind": "rest_read",
+      "summary": "GET /new_ticket_forms/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/new_ticket_forms/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.new-ticket-forms-id-process-form",
+      "kind": "rest_write",
+      "summary": "POST /new_ticket_forms/{id}/process_form",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/new_ticket_forms/{id}/process_form",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.otp-login",
+      "kind": "rest_write",
+      "summary": "POST /otp_login",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/otp_login",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.payment-methods",
+      "kind": "rest_read",
+      "summary": "GET /payment_methods",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/payment_methods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.payments",
+      "kind": "rest_read",
+      "summary": "GET /payments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.payments",
+      "kind": "rest_write",
+      "summary": "POST /payments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.payments-id",
+      "kind": "rest_read",
+      "summary": "GET /payments/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/payments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.portal-users",
+      "kind": "rest_read",
+      "summary": "GET /portal_users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/portal_users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.portal-users",
+      "kind": "rest_write",
+      "summary": "POST /portal_users",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/portal_users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.portal-users-create-invitation",
+      "kind": "rest_write",
+      "summary": "POST /portal_users/create_invitation",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/portal_users/create_invitation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.portal-users-id",
+      "kind": "rest_write",
+      "summary": "PUT /portal_users/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/portal_users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.portal-users-id",
+      "kind": "rest_write",
+      "summary": "DELETE /portal_users/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/portal_users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.products",
+      "kind": "rest_read",
+      "summary": "GET /products",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.products",
+      "kind": "rest_write",
+      "summary": "POST /products",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.products-barcode",
+      "kind": "rest_read",
+      "summary": "GET /products/barcode",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/barcode",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.products-categories",
+      "kind": "rest_read",
+      "summary": "GET /products/categories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.products-id",
+      "kind": "rest_read",
+      "summary": "GET /products/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.products-id",
+      "kind": "rest_write",
+      "summary": "PUT /products/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/products/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.products-id-add-images",
+      "kind": "rest_write",
+      "summary": "POST /products/{id}/add_images",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/products/{id}/add_images",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.products-id-delete-image",
+      "kind": "rest_write",
+      "summary": "DELETE /products/{id}/delete_image",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/products/{id}/delete_image",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.products-id-location-quantities",
+      "kind": "rest_write",
+      "summary": "PUT /products/{id}/location_quantities",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/products/{id}/location_quantities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.products-product-id-product-serials",
+      "kind": "rest_read",
+      "summary": "GET /products/{product_id}/product_serials",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{product_id}/product_serials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.products-product-id-product-serials",
+      "kind": "rest_write",
+      "summary": "POST /products/{product_id}/product_serials",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/products/{product_id}/product_serials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.products-product-id-product-serials-attach-to-line-item",
+      "kind": "rest_write",
+      "summary": "POST /products/{product_id}/product_serials/attach_to_line_item",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/products/{product_id}/product_serials/attach_to_line_item",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.products-product-id-product-serials-id",
+      "kind": "rest_write",
+      "summary": "PUT /products/{product_id}/product_serials/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/products/{product_id}/product_serials/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.purchase-orders",
+      "kind": "rest_read",
+      "summary": "GET /purchase_orders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/purchase_orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.purchase-orders",
+      "kind": "rest_write",
+      "summary": "POST /purchase_orders",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/purchase_orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.purchase-orders-id",
+      "kind": "rest_read",
+      "summary": "GET /purchase_orders/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/purchase_orders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.purchase-orders-id",
+      "kind": "rest_write",
+      "summary": "PUT /purchase_orders/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/purchase_orders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.purchase-orders-id-attachments",
+      "kind": "rest_write",
+      "summary": "POST /purchase_orders/{id}/attachments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/purchase_orders/{id}/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.purchase-orders-id-create-po-line-item",
+      "kind": "rest_write",
+      "summary": "POST /purchase_orders/{id}/create_po_line_item",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/purchase_orders/{id}/create_po_line_item",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.purchase-orders-id-receive",
+      "kind": "rest_write",
+      "summary": "POST /purchase_orders/{id}/receive",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/purchase_orders/{id}/receive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.rmm-public-scripts-asset-id-schedule",
+      "kind": "rest_write",
+      "summary": "POST /rmm/public_scripts/{asset_id}/schedule",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/rmm/public_scripts/{asset_id}/schedule",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.rmm-alerts",
+      "kind": "rest_read",
+      "summary": "GET /rmm_alerts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rmm_alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.rmm-alerts",
+      "kind": "rest_write",
+      "summary": "POST /rmm_alerts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/rmm_alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.rmm-alerts-id",
+      "kind": "rest_read",
+      "summary": "GET /rmm_alerts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rmm_alerts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.rmm-alerts-id",
+      "kind": "rest_write",
+      "summary": "DELETE /rmm_alerts/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/rmm_alerts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.rmm-alerts-id-mute",
+      "kind": "rest_write",
+      "summary": "POST /rmm_alerts/{id}/mute",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/rmm_alerts/{id}/mute",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.schedules",
+      "kind": "rest_read",
+      "summary": "GET /schedules",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/schedules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.schedules",
+      "kind": "rest_write",
+      "summary": "POST /schedules",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/schedules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.schedules-id",
+      "kind": "rest_read",
+      "summary": "GET /schedules/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/schedules/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.schedules-id",
+      "kind": "rest_write",
+      "summary": "PUT /schedules/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/schedules/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.schedules-id",
+      "kind": "rest_write",
+      "summary": "DELETE /schedules/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/schedules/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.schedules-id-add-line-item",
+      "kind": "rest_write",
+      "summary": "POST /schedules/{id}/add_line_item",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/schedules/{id}/add_line_item",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.schedules-id-line-items-schedule-line-item-id",
+      "kind": "rest_write",
+      "summary": "PUT /schedules/{id}/line_items/{schedule_line_item_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/schedules/{id}/line_items/{schedule_line_item_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.schedules-id-remove-line-item",
+      "kind": "rest_write",
+      "summary": "POST /schedules/{id}/remove_line_item",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/schedules/{id}/remove_line_item",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.search",
+      "kind": "rest_read",
+      "summary": "GET /search",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.settings",
+      "kind": "rest_read",
+      "summary": "GET /settings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.settings-printing",
+      "kind": "rest_read",
+      "summary": "GET /settings/printing",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings/printing",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.settings-tabs",
+      "kind": "rest_read",
+      "summary": "GET /settings/tabs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings/tabs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.ticket-blueprints",
+      "kind": "rest_read",
+      "summary": "GET /ticket_blueprints",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ticket_blueprints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.ticket-blueprints-id-apply",
+      "kind": "rest_write",
+      "summary": "POST /ticket_blueprints/{id}/apply",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/ticket_blueprints/{id}/apply",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.ticket-comments",
+      "kind": "rest_read",
+      "summary": "GET /ticket_comments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ticket_comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.ticket-timers",
+      "kind": "rest_read",
+      "summary": "GET /ticket_timers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ticket_timers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.tickets",
+      "kind": "rest_read",
+      "summary": "GET /tickets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tickets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.tickets",
+      "kind": "rest_write",
+      "summary": "POST /tickets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tickets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.tickets-settings",
+      "kind": "rest_read",
+      "summary": "GET /tickets/settings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tickets/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.tickets-id",
+      "kind": "rest_read",
+      "summary": "GET /tickets/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tickets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.tickets-id",
+      "kind": "rest_write",
+      "summary": "PUT /tickets/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tickets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.tickets-id",
+      "kind": "rest_write",
+      "summary": "DELETE /tickets/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tickets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.tickets-id-add-line-item",
+      "kind": "rest_write",
+      "summary": "POST /tickets/{id}/add_line_item",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tickets/{id}/add_line_item",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.tickets-id-attach-file-url",
+      "kind": "rest_write",
+      "summary": "POST /tickets/{id}/attach_file_url",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tickets/{id}/attach_file_url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.tickets-id-charge-timer-entry",
+      "kind": "rest_write",
+      "summary": "POST /tickets/{id}/charge_timer_entry",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tickets/{id}/charge_timer_entry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.tickets-id-comment",
+      "kind": "rest_write",
+      "summary": "POST /tickets/{id}/comment",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tickets/{id}/comment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.tickets-id-comments",
+      "kind": "rest_read",
+      "summary": "GET /tickets/{id}/comments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tickets/{id}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.tickets-id-delete-attachment",
+      "kind": "rest_write",
+      "summary": "POST /tickets/{id}/delete_attachment",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tickets/{id}/delete_attachment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.tickets-id-delete-timer-entry",
+      "kind": "rest_write",
+      "summary": "POST /tickets/{id}/delete_timer_entry",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tickets/{id}/delete_timer_entry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.tickets-id-print",
+      "kind": "rest_write",
+      "summary": "POST /tickets/{id}/print",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tickets/{id}/print",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.tickets-id-remove-line-item",
+      "kind": "rest_write",
+      "summary": "POST /tickets/{id}/remove_line_item",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tickets/{id}/remove_line_item",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.tickets-id-timer-entry",
+      "kind": "rest_write",
+      "summary": "POST /tickets/{id}/timer_entry",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tickets/{id}/timer_entry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.tickets-id-update-line-item",
+      "kind": "rest_write",
+      "summary": "PUT /tickets/{id}/update_line_item",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tickets/{id}/update_line_item",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.tickets-id-update-timer-entry",
+      "kind": "rest_write",
+      "summary": "PUT /tickets/{id}/update_timer_entry",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tickets/{id}/update_timer_entry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.tickets-ticket-id-worksheet-results",
+      "kind": "rest_read",
+      "summary": "GET /tickets/{ticket_id}/worksheet_results",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tickets/{ticket_id}/worksheet_results",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.tickets-ticket-id-worksheet-results",
+      "kind": "rest_write",
+      "summary": "POST /tickets/{ticket_id}/worksheet_results",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tickets/{ticket_id}/worksheet_results",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.tickets-ticket-id-worksheet-results-id",
+      "kind": "rest_read",
+      "summary": "GET /tickets/{ticket_id}/worksheet_results/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tickets/{ticket_id}/worksheet_results/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.tickets-ticket-id-worksheet-results-id",
+      "kind": "rest_write",
+      "summary": "PUT /tickets/{ticket_id}/worksheet_results/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tickets/{ticket_id}/worksheet_results/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.tickets-ticket-id-worksheet-results-id",
+      "kind": "rest_write",
+      "summary": "DELETE /tickets/{ticket_id}/worksheet_results/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tickets/{ticket_id}/worksheet_results/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.timelogs",
+      "kind": "rest_read",
+      "summary": "GET /timelogs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/timelogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.timelogs",
+      "kind": "rest_write",
+      "summary": "PUT /timelogs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/timelogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.timelogs-last",
+      "kind": "rest_read",
+      "summary": "GET /timelogs/last",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/timelogs/last",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.user-devices",
+      "kind": "rest_write",
+      "summary": "POST /user_devices",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/user_devices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.user-devices-id",
+      "kind": "rest_read",
+      "summary": "GET /user_devices/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/user_devices/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.user-devices-id",
+      "kind": "rest_write",
+      "summary": "PUT /user_devices/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/user_devices/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.users",
+      "kind": "rest_read",
+      "summary": "GET /users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.users-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.vendors",
+      "kind": "rest_read",
+      "summary": "GET /vendors",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/vendors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.vendors",
+      "kind": "rest_write",
+      "summary": "POST /vendors",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/vendors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.vendors-id",
+      "kind": "rest_read",
+      "summary": "GET /vendors/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/vendors/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.vendors-id",
+      "kind": "rest_write",
+      "summary": "PUT /vendors/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/vendors/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.wiki-pages",
+      "kind": "rest_read",
+      "summary": "GET /wiki_pages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/wiki_pages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.post.wiki-pages",
+      "kind": "rest_write",
+      "summary": "POST /wiki_pages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/wiki_pages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.get.wiki-pages-id",
+      "kind": "rest_read",
+      "summary": "GET /wiki_pages/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/wiki_pages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.put.wiki-pages-id",
+      "kind": "rest_write",
+      "summary": "PUT /wiki_pages/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/wiki_pages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "repairshopr.delete.wiki-pages-id",
+      "kind": "rest_write",
+      "summary": "DELETE /wiki_pages/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api-docs.repairshopr.com/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/wiki_pages/{id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

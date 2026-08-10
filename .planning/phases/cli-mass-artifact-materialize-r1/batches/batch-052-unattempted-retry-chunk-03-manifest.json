@@ -1,0 +1,625 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 32,
+    "min_operations": 0,
+    "max_operations": 10000,
+    "criteria": "deterministic retry queue: retained manifest candidate exactly matches the target ledger primary official source and has not appeared in a fresh-network retry report"
+  },
+  "connectors": [
+    {
+      "connector": "qualaroo",
+      "operations_total": 1,
+      "operations_read": 1,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://help.qualaroo.com/the-rest-reporting-api",
+        "kind": "html_reference",
+        "version": "Qualaroo REST Reporting API current help-center reference; last modified 2023-08-16",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://help.qualaroo.com/the-rest-reporting-api",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "The metadata-linked Qualaroo Help Center article is a current provider-owned REST Reporting API reference. It states that the REST API uses HTTP Basic Authentication, names the api.qualaroo.com/api/v1 endpoint, and explicitly instructs clients to send a GET request to the one responses route. A bounded unauthenticated request to that provider route returned HTTP 401 with a Basic authentication challenge, confirming the published access model without accessing data.",
+      "counting_note": "Qualaroo's current provider-published REST Reporting API article has one Endpoint section and one explicitly documented callable route: GET /api/v1/nudges/SURVEY_ID/responses.json. Its order, date-range, and pagination query examples are parameters on that same retrieval action, not separate operations. The Help Center's other API navigation entries document JavaScript/browser integrations or survey-link behavior rather than additional REST Reporting API method/path actions, so they are outside this read-only connector surface.",
+      "processed_at": "2026-08-06T14:19:30Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "rd-station-marketing",
+      "operations_total": 56,
+      "operations_read": 22,
+      "operations_write": 34,
+      "artifact": {
+        "url": "https://developers.rdstation.com/marketing",
+        "kind": "html_reference",
+        "version": "RD Station Marketing API v2.0 stable current reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.rdstation.com/reference/introducao-rdsm",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "RD Station's current provider-owned developer portal says its API documentation supports REST integrations and directs users to the RD Station Marketing documentation. The page is on its stable, current v2.0 branch and its full navigation separates `RD STATION MARKETING API` from Multi-product, CRM, Conversas, and Exact Spotter APIs. That Marketing section systematically lists all 59 method-labelled action pages, while its Authentication section documents the OAuth app, authorization-code, token-refresh, and revocation flow. The public portal links both App Publisher/App Store and account access. No account, app, credential, token, API request, or customer record was used.",
+      "counting_note": "RD Station's live stable v2.0 developer reference renders a complete `RD STATION MARKETING API` section. Its method-labelled page navigation has 59 distinct marketing action pages with no duplicate method/page: 22 GET, 30 POST, three PATCH, one PUT, and three delete pages (the translated portal renders the DELETE label as `OF`). Three POST OAuth support routes—obtaining, refreshing, and revoking an access token—are credential infrastructure and excluded, leaving 56 data actions. Every retained GET is a contact, segmentation, workflow, email, landing-page, form, analytics, campaign, or catalog retrieval. Every retained POST creates/updates contact or catalog state, inserts workflow leads, or records conversion/e-commerce events; the PATCH/PUT/delete actions also mutate state, so there are no semantic non-GET reads. The separately headed cross-product Webhook Service is not mixed into this named Marketing API surface; its payload/event documentation is inbound-webhook material and does not add callable Marketing actions. The provider's generic API-catalog link returns 404, but its current rendered Marketing navigation remains systematic and enumerable.",
+      "processed_at": "2026-08-06T15:10:49Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "recharge",
+      "operations_total": 119,
+      "operations_read": 44,
+      "operations_write": 75,
+      "artifact": {
+        "url": "https://developer.rechargepayments.com/2021-11/",
+        "kind": "html_reference",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.rechargepayments.com/2021-11/",
+      "auth_model": "api_key",
+      "access_model": "enterprise",
+      "evidence_source": "Recharge's live provider reference labels v.2021-11 as selected and identifies 2021-01 as the only older documented version. It declares the REST/RPC API base server, API-key authentication, per-token scopes, and the systematically rendered Core Resources, Webhooks, Async Batch, and Admin Resources endpoint sections used for enumeration. The provider directs token generation through a store's Recharge API-token page, so access is account/store controlled. No store, API token, webhook, customer, subscription, order, payment method, charge, product, batch, event, or other customer data was accessed.",
+      "counting_note": "Recharge's provider-rendered v.2021-11 reference has 120 distinct callable method/path sections with no duplicate method/path: 45 GET, 42 POST, 17 PUT, and 16 DELETE. `GET /token_information` only retrieves details/scopes of the credential presented with the request and is excluded as token-management support infrastructure, leaving 119 data actions. All 44 retained GET operations retrieve Recharge resources, batch state/tasks, accounts, or events. Every POST/PUT/DELETE operation creates, merges, updates, processes, captures, refunds, skips, sends, clones, delays, activates, cancels, tests, or otherwise changes provider state, so there are no semantic non-GET reads. Webhook topic/payload documentation is excluded as inbound events, while CRUD configuration and explicit test-webhook actions are retained. Pagination, response schemas, API-token scopes, examples, and platform-compatibility tags do not add operations.",
+      "processed_at": "2026-08-06T15:14:48Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "recruitee",
+      "operations_total": 904,
+      "operations_read": 382,
+      "operations_write": 522,
+      "artifact": {
+        "url": "https://apidocs.recruitee.com/",
+        "kind": "html_reference",
+        "version": "current generated Recruitee API HTML reference (Last-Modified 2026-07-28)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://apidocs.recruitee.com/",
+      "auth_model": "basic",
+      "access_model": "enterprise",
+      "evidence_source": "The live provider-owned reference at `apidocs.recruitee.com` is titled `Recruitee API`, renders a navigation entry for each of its 948 action blocks, and names `https://api.recruitee.com` in the action definitions. Its response advertises the current generated document's 2026-07-28 Last-Modified date. The reference repeatedly documents HTTP Basic authentication with an account email and password; its separately documented OAuth flows were used only to identify credential-support exclusions. The account/company-scoped API requires Recruitee credentials, so access is enterprise controlled. No account, credentials, API request, candidate, offer, interview, referral, report, or other provider data was accessed.",
+      "counting_note": "Recruitee's provider-rendered reference contains 948 method/path action blocks: 385 GET, 296 PATCH, 181 POST, 78 DELETE, and eight PUT. One exact repeated PATCH method/path (`/c/{company_id}/referral/applications/settle`) is de-duplicated, leaving 947 distinct callable actions. Forty-three direct authentication/credential-support actions are excluded: password, 2FA, recovery, secure-change, OAuth client/access-token/personal-token, SSO/sign-in-consent, referral-portal credential, and anonymous-root endpoints. That leaves 904 data actions. The 369 retained GET actions are reads; thirteen non-GET actions are also semantic reads because the provider expressly labels them estimation, retrieval, preview, candidate search, search CSV export, or search count actions. The remaining 522 actions create, alter, delete, send, schedule, retry, or otherwise change Recruitee state. Inbound callback/event documentation, schemas, parameters, and examples do not add callable operations.",
+      "processed_at": "2026-08-06T15:24:55Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "reddit",
+      "operations_total": 145,
+      "operations_read": 52,
+      "operations_write": 93,
+      "artifact": {
+        "url": "https://www.reddit.com/dev/api/",
+        "kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://www.reddit.com/dev/api/",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Method sections in official API reference. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "referralhero",
+      "operations_total": 35,
+      "operations_read": 18,
+      "operations_write": 17,
+      "artifact": {
+        "url": "https://support.referralhero.com/integrate/rest-api/endpoints-reference.md",
+        "kind": "html_reference",
+        "version": "ReferralHero REST API v2 current Endpoints Reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://support.referralhero.com/integrate/rest-api/endpoints-reference",
+      "auth_model": "bearer",
+      "access_model": "enterprise",
+      "evidence_source": "ReferralHero's live provider support site calls the API a REST API in active development, declares its base URL as `https://app.referralhero.com/api/v2`, and presents the Endpoints Reference as the REST API's endpoint catalog. Its public documentation directly renders each method/path block and provides a downloadable Markdown equivalent used for exact enumeration. The reference says all requests require an API token from the ReferralHero account dashboard, preferring `Authorization: Bearer` with `X-API-Key` only as an alternative, making access account controlled. No account, API token, API request, campaign, subscriber, referral, reward, coupon, or other provider data was accessed.",
+      "counting_note": "ReferralHero's current provider-published Endpoints Reference explicitly lists 35 unique method/path actions for its `/api/v2` REST API: 18 GET, 16 POST, and one DELETE, with no duplicates. All GET actions retrieve lists/campaigns, leaderboards, bonuses, subscribers, referrals, rewards, or coupon groups. Every POST creates, updates, confirms, tracks, promotes, unlocks, qualifies, or unqualifies referral-program state; the DELETE removes a subscriber, so all 17 non-GET operations are writes. The current Reference includes the search-by-name and qualify/unqualify actions; separately retained V1/V2 reference pages are not double-counted. API-token authentication prose, webhook delivery/event material, objects, errors, schemas, parameters, and tutorials do not add callable REST actions.",
+      "processed_at": "2026-08-06T15:27:14Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "rentcast",
+      "operations_total": 10,
+      "operations_read": 10,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://developers.rentcast.io/reference",
+        "kind": "html_reference",
+        "version": "RentCast API current rendered reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.rentcast.io/reference/introduction",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "RentCast's current provider-owned documentation calls itself the property-data API reference and systematically separates its ten GET endpoint pages from narrative and schema pages. Its live Introduction says a free API plan provides 50 requests per month, and that a developer can create an account to generate an API key in the API dashboard before using any available endpoint. The provider offers paid and enterprise plans too, but ordinary developer signup and the free plan make the documented surface publicly available with an API key. No account, API key, API request, property, owner, valuation, listing, market, or other provider data was accessed.",
+      "counting_note": "RentCast's live provider-rendered API Reference navigation lists ten unique method-labelled endpoint pages, all GET: property records, random property records, property record by ID, value estimate, rent estimate, sale listings, sale listing by ID, rental listings, rental listing by ID, and market statistics. The responsive desktop/mobile copies of that navigation are de-duplicated by reference URL. Every listed endpoint retrieves property, listing, valuation, or market data, so all ten actions are reads. Overview, schema, billing, security, integration, query, pagination, property-type, response-code, and rate-limit pages do not add callable operations.",
+      "processed_at": "2026-08-06T15:28:48Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "retently",
+      "operations_total": 32,
+      "operations_read": 17,
+      "operations_write": 15,
+      "artifact": {
+        "url": "https://www.retently.com/docs/api/",
+        "kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.retently.com/docs/api/",
+      "auth_model": "api_key",
+      "access_model": "enterprise",
+      "evidence_source": "Retently's live provider-owned REST API Reference identifies itself as `CX API (v2)`, labels its exhaustive navigation `Current API endpoints`, and renders a method/path panel plus permission requirement for each listed action. Its API Details name `https://app.retently.com` as the base URL and state a 150-request-per-minute rate limit. The same reference calls `X-Api-Key` the recommended authentication method, says API keys and their read/write permissions are managed in the account settings, and scopes every request to its owning account. No Retently account, API key, API request, customer, company, survey, feedback response, campaign, template, suppression, or other provider data was accessed.",
+      "counting_note": "Retently's provider-rendered `Current API endpoints` navigation has 32 distinct callable method/path entries with no duplicates: 17 GET, ten POST, and five DELETE. Every GET action retrieves account status, customers, companies, reports, scores, feedback, outbox records, templates, campaigns, trends, or suppressions, so all 17 are reads. Each POST explicitly creates or updates customers, sends a survey, imports feedback, synchronizes attributes, adds feedback metadata or suppressions, or changes subscription status; each DELETE removes customer, outbox, feedback, or suppression state. Thus all 15 non-GET actions are writes and there are no semantic POST reads. The separately collapsed deprecated-endpoints section is not part of this current v2 surface, and schemas, request examples, authentication prose, rate-limit information, and account-permission descriptions do not add actions.",
+      "processed_at": "2026-08-06T15:52:37Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "salesforce",
+      "operations_total": 99,
+      "operations_read": 81,
+      "operations_write": 18,
+      "artifact": {
+        "url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+        "kind": "html_reference",
+        "version": "Salesforce REST API 67.0 (Summer '26 current guide)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm",
+      "auth_model": "bearer",
+      "access_model": "enterprise",
+      "evidence_source": "Salesforce's live developer guide labels Summer '26 REST API version 67.0 as latest and its provider content endpoint supplies the systematic Reference table and each current resource Syntax block. The official Supported Editions page says an org and API-enabled user are required, with API access default in Enterprise, Performance, Unlimited, and Developer editions; its authorization guide requires an external client app or connected app and an OAuth 2.0 flow, which supplies bearer access tokens to REST resources. No Salesforce org, OAuth credential, access token, API request, object metadata, Account, Contact, Lead, or other provider data was accessed.",
+      "counting_note": "Salesforce's current REST API Reference table has 97 rows: 67 directly linked core REST resource entries, 23 explicitly linked distinct product APIs (such as Analytics, Connect/Chatter, Bulk, Tooling, UI, and Wave), five unlinked internal-use-only entries, and two unlinked feature-specific Field Service rows with no published method reference. A bounded recursive retrieval of all 199 provider `resources_*` and `dome_*` pages reachable from the 67 core entries yielded 107 distinct current HTTP method/URI actions: 64 GET, 21 HEAD, 12 POST, three PATCH, one PUT, and six DELETE. Eight direct user-password administration actions are excluded as credential infrastructure: GET, HEAD, POST/set, and DELETE/reset for both User and SelfServiceUser password endpoints. The retained 99 actions are therefore 62 GET plus 19 HEAD reads and ten POST plus three PATCH, one PUT, and four DELETE writes. The retained POST actions all create, submit, trigger, or execute potentially mutating composite work; none is an explicitly read-only query. Provider examples and explanatory pages without a Syntax HTTP Method row do not add actions. Current core REST resources are counted once; separately documented product APIs, internal-only rows, unlinked Field Service feature rows, and inbound streaming/event notifications are not silently mixed into this connector's named REST API surface.",
+      "processed_at": "2026-08-06T16:54:00Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "salesloft",
+      "operations_total": 198,
+      "operations_read": 115,
+      "operations_write": 83,
+      "artifact": {
+        "url": "https://developers.salesloft.com/docs/api/",
+        "kind": "html_reference",
+        "version": "Salesloft API v2.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.salesloft.com/docs/api/salesloft-platform/",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "Salesloft's live provider-owned API v2 portal presents the systematic resource-group and operation catalogue. Its Introduction documents OAuth 2.0 authorization-code authentication (and also notes client-credentials and API-key options), OAuth token endpoints, and explicit read/write/delete scopes. The public developer portal does not impose a partner gate. No Salesloft team, OAuth client, API key, access token, API request, person, account, cadence, user, email, task, conversation, webhook, or other provider data was accessed.",
+      "counting_note": "Salesloft's live provider-rendered v2 API landing page systematically lists 92 resource groups with 198 advertised operation items. Bounded retrieval of every group page found exactly 198 unique operation links, each carrying the provider's generated HTTP-method badge: 111 GET, 48 POST, 21 PUT, and 18 DELETE. The provider's Docusaurus build configuration names a v2 specification source, but its public raw route returns 404; the current generated reference itself is the counted artifact. GET actions are reads. Four documented POST actions are semantic reads: the two asynchronous cadence/cadence-collection export-download requests, the email-template missing-tag check that returns missed tags, and the meeting-settings search that fetches filtered records. The remaining POST actions create, import, upsert, submit, trigger, redaction, schedule, or otherwise change Salesloft state; every PUT and DELETE is a write. Thus the retained split is 115 reads and 83 writes. The reference contains no callable API-key, token, OAuth, credential, password, or secret-administration operation; it documents authentication separately. Webhook subscription management is callable and retained, while inbound webhook event deliveries are excluded.",
+      "processed_at": "2026-08-06T16:59:23Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "savvycal",
+      "operations_total": 22,
+      "operations_read": 12,
+      "operations_write": 10,
+      "artifact": {
+        "url": "https://developers.savvycal.com/category/rest-api",
+        "kind": "html_reference",
+        "version": "v1",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.savvycal.com/authentication",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "The active SavvyCal developer portal provides a complete REST API category index with an item count per group and a rendered method/path page for every action. Its Authentication guide documents public OAuth 2 authorization-code applications, including redirect URI, authorization-code exchange, and refresh tokens, plus optional personal access tokens for an account holder's own account. No SavvyCal credential or API request was used.",
+      "counting_note": "SavvyCal's provider-owned REST API category explicitly lists 29 documentation items: seven schemas and 22 callable actions. The rendered action references enumerate 12 GET reads, seven POST state-changing actions, one PATCH update, and two DELETE actions. POST cancellation, event creation, scheduling-link creation/duplication/toggle, and webhook creation are mutations; no semantic POST reads were documented. Inbound webhook delivery event types are excluded, while the four documented webhook-subscription configuration actions are retained.",
+      "processed_at": "2026-08-06T17:06:15Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "scryfall",
+      "operations_total": 49,
+      "operations_read": 49,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://scryfall.com/docs/api",
+        "kind": "html_reference",
+        "version": "current unversioned API documentation",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://scryfall.com/docs/api/cards",
+      "auth_model": "none",
+      "access_model": "public",
+      "evidence_source": "Scryfall's active provider-owned API documentation exposes the complete Types & Methods navigation, then a separate rendered documentation page with a method/path heading for each action. The API overview specifies only required User-Agent and Accept request headers; it does not require an API credential. No Scryfall API request, credential, account, card, set, ruling, catalog, bulk-data file, migration record, or other provider data was accessed.",
+      "counting_note": "Scryfall's current provider-rendered API reference explicitly indexes 13 Card actions, four Set actions, five Ruling actions, two Card Symbol actions, 20 individually documented Catalog actions, three Bulk Data actions, and two Card Migration actions: 49 callable operations. Its Tags page documents bulk-data content only and adds no callable API route. Forty-eight action-page headers are GET. POST /cards/collection accepts card identifiers and returns the requested card objects, so it is a semantic read. No documented action changes Scryfall state.",
+      "processed_at": "2026-08-06T17:15:19Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "segment",
+      "operations_total": 197,
+      "operations_read": 97,
+      "operations_write": 100,
+      "artifact": {
+        "url": "https://docs.segmentapis.com/",
+        "kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://docs.segmentapis.com/",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "OpenAPI state published by official reference, version 73.1.0. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "sendowl",
+      "operations_total": 54,
+      "operations_read": 22,
+      "operations_write": 32,
+      "artifact": {
+        "url": "https://dashboard.sendowl.com/developers/api/introduction",
+        "kind": "html_reference",
+        "version": "current provider-rendered REST API reference; documented v1, v1_2, and v1_3 routes",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://dashboard.sendowl.com/developers/api/introduction",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "SendOwl's active provider-owned Developers area identifies its API as a RESTful API and publishes the complete component navigation with HTML method/path headings for every counted action. Its introduction documents account-issued API credentials using HTTP Basic authentication. The reference was inspected read-only; no SendOwl account, credential, API request, order, product, subscription, discount, bundle, license, buyer, or other provider data was accessed.",
+      "counting_note": "SendOwl's active provider-rendered REST API navigation systematically links seven callable resource pages: products, bundles, subscriptions, drip items, orders, discounts, and licenses. Their method/path headings produce 55 raw HTTP entries: 23 GET, 15 POST, nine PUT, and eight DELETE. The two order-search headings are explicitly two query variants of the same GET /api/v1_3/orders/search action, so they normalize to one method/path action; the resulting 54 distinct actions are 22 GET reads, 15 POST writes, nine PUT writes, and eight DELETE writes. Product#drip_items and Subscription#drip_items are cross-reference headings with no HTTP operation, and Orders#create explicitly says no multi-item order-create endpoint exists, so none is counted. The separate sendowl.js checkout-library page is not a REST/RPC operation reference; no inbound webhook event type is counted.",
+      "processed_at": "2026-08-06T17:36:52Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "sentry",
+      "operations_total": 217,
+      "operations_read": 117,
+      "operations_write": 100,
+      "artifact": {
+        "url": "https://docs.sentry.io/llms.txt",
+        "kind": "html_reference",
+        "version": "Sentry Web API v0; current provider Markdown category/action index",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.sentry.io/api/",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "Sentry's active provider-owned API documentation publishes the Web API v0 category navigation and an llms index that links every counted current action page. Its authorization documentation describes token-based Bearer authorization. The index and action pages were retrieved and enumerated read-only; no Sentry organization, project, issue, event, release, client key, token, API request, or other provider data was accessed.",
+      "counting_note": "Sentry's current provider-owned llms index systematically links 223 callable Web API v0 Markdown operation pages across 21 categories. Their explicit method/path headings yield 223 unique method/path actions: 120 GET, 34 POST, 32 PUT, two PATCH, and 35 DELETE; no duplicate method/path pair occurs. Six direct client-key/DSN credential-infrastructure actions are excluded: organization/project key lists and a project-key retrieve (three GET), plus project-key create (POST), update (PUT), and delete (DELETE). The retained 217 data actions are therefore 117 GET reads and 100 writes (33 POST, 31 PUT, two PATCH, and 34 DELETE). The 103 raw non-GET titles describe creates, updates, deletes, installation/configuration, or other stateful actions; none is documented as a pure retrieval/query action, so no semantic non-GET reads are reclassified. Inbound webhook deliveries are excluded.",
+      "processed_at": "2026-08-06T17:53:16Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "serpstat",
+      "operations_total": 143,
+      "operations_read": 111,
+      "operations_write": 32,
+      "artifact": {
+        "url": "https://api-docs.serpstat.com/",
+        "kind": "html_reference",
+        "version": "current Serpstat Public API Stoplight reference: v4 services plus the current SERP Crawling API v2 service",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://serpstat.com/api/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Serpstat's active provider-owned API documentation redirects from serpstat.com/api to the current api-docs.serpstat.com Public API reference. Its rendered Stoplight reference exposes the complete table of contents and individual JSON-RPC operation pages, while the introduction documents a profile-generated API token on eligible paid/trial plans. The documentation and its machine-readable navigation were retrieved and enumerated read-only; no Serpstat account, credential, API request, domain, keyword, project, audit, task, report, team member, or other provider data was accessed.",
+      "counting_note": "Serpstat's active provider-hosted Stoplight table of contents systematically enumerates 12 HTTP-service sections and 143 typed HTTP-operation pages. All 143 are JSON-RPC actions submitted by POST; the shared transport route is not used to collapse distinct provider method names. The reference marks 103 `get*` methods as retrievals. Eight additional POST methods are semantic reads because their provider descriptions return a report, diff, analysis, log, page names, or CSV data: Audit `export`, Domain `exportPositions`, Keyword `exportSuggestions` and `exportKeywordsPhrase`, Rank Tracker `detectUrlCannibalization` and `diffPositions`, plus Audit `pageNames` and `userLog`. The remaining 32 actions create/delete projects, configure/start/stop/rescan audits, manage rank-tracker projects/keywords/tags/competitors/regions/schedules, queue classification/keyword-volume/SERP-crawl work, or manage team members, and are writes. The documentation's Custom Data Export and older explanatory SERP/volume articles do not add separately typed operations beyond these indexed current service pages. No inbound webhook event is counted.",
+      "processed_at": "2026-08-06T18:00:45Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "service-now",
+      "operations_total": 6,
+      "operations_read": 2,
+      "operations_write": 4,
+      "artifact": {
+        "url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+        "kind": "html_reference",
+        "version": "ServiceNow Zurich API Reference; current Table API",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "auth_model": "basic",
+      "access_model": "enterprise",
+      "evidence_source": "ServiceNow's active provider-owned Zurich documentation renders the complete Table API operation headings read-only and identifies the API as CRUD access to tables. Its current REST API reference states that ServiceNow REST APIs support Basic Authentication and OAuth 2.0; this connector's configured instance-user surface uses Basic authentication. No ServiceNow instance, account, credential, table, record, incident, user, group, API request, or other provider data was accessed.",
+      "counting_note": "ServiceNow's current Zurich Table API reference explicitly renders six generic method/path contracts: GET /now/table/{tableName}; GET, PATCH, PUT, and DELETE /now/table/{tableName}/{sys_id}; and POST /now/table/{tableName}. The two GET contracts retrieve a table collection or one record. POST creates a record, PATCH updates submitted fields, PUT replaces a record, and DELETE removes it, yielding two reads and four writes. `tableName` is a caller-supplied resource parameter, not a finite set of separately documented public actions, so each generic contract is counted once. The Table API is connector-matched; the broader ServiceNow REST catalog and instance-defined scripted APIs are not mixed into this inventory.",
+      "processed_at": "2026-08-06T18:04:20Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "shipstation",
+      "operations_total": 48,
+      "operations_read": 23,
+      "operations_write": 25,
+      "artifact": {
+        "url": "https://www.shipstation.com/docs/api/",
+        "kind": "html_reference",
+        "version": "ShipStation API V1; current provider-rendered V1 reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.shipstation.com/docs/api/",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "ShipStation's active provider-owned V1 documentation states that V1 remains available for certain plans and exposes its complete category/action navigation. Its V1 requirements page documents HTTP Basic authentication using account API credentials. The reference pages were retrieved and enumerated read-only; no ShipStation account, credential, API request, order, shipment, customer, product, store, warehouse, label, carrier, webhook, or other provider data was accessed.",
+      "counting_note": "ShipStation's live V1 reference navigation systematically links 48 callable action pages across accounts, carriers, customers, fulfillments, orders, products, shipments, stores, users, warehouses, and webhooks. Each page renders one distinct HTTP request contract: 22 GET, 20 POST, three PUT, and three DELETE; no duplicate method/path pair occurs after normalizing documented query parameters. All GET actions are reads. POST /shipments/getrates is a semantic read because the provider describes it as retrieving shipping rates for supplied shipping details. The other 19 POST actions create, assign, label, hold, mark, tag, refresh, fund, subscribe, or otherwise mutate state; the PUT and DELETE actions also mutate state, yielding 23 reads and 25 writes. Callable webhook subscriptions are retained; inbound webhook deliveries are excluded.",
+      "processed_at": "2026-08-06T18:14:44Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "shortio",
+      "operations_total": 53,
+      "operations_read": 28,
+      "operations_write": 25,
+      "artifact": {
+        "url": "https://developers.short.io/llms.txt",
+        "kind": "html_reference",
+        "version": "current Short.io API reference; 54 provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.short.io/reference",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Short.io's active provider-owned developer hub publishes an llms index and systematic API Reference navigation. All 54 linked current operation pages were retrieved and their embedded OpenAPI blocks parsed read-only; the reference declares header API-key authentication. No Short.io account, API key, API request, domain, link, click event, QR artifact, folder, permission, targeting rule, or other provider data was accessed.",
+      "counting_note": "Short.io's active provider llms API-reference index links 54 individual parseable OpenAPI 3.1.0 operation blocks: 19 GET, 28 POST, one PUT, and six DELETE. Every method/path pair is unique. One GET /domain/{domainId}/paths operation is explicitly deprecated and excluded, leaving 53 actions. Of the 18 retained GET operations, /links/tweetbot creates a link despite its GET transport and is a write; the other 17 GET operations are reads. Eleven POST operations are semantic reads: QR-code generation (single and bulk) and nine domain/link statistics, click, interval, raw-click, and top-value retrievals whose provider descriptions return derived data. The remaining 17 POST operations, the PUT, the six DELETE, and GET link creation mutate state, yielding 28 reads and 25 writes.",
+      "processed_at": "2026-08-06T18:22:56Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "sigma-computing",
+      "operations_total": 239,
+      "operations_read": 119,
+      "operations_write": 120,
+      "artifact": {
+        "url": "https://help.sigmacomputing.com/llms.txt",
+        "kind": "html_reference",
+        "version": "current Sigma REST API; 260 provider reference Markdown pages with individual embedded OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://help.sigmacomputing.com/reference/get-started-sigma-api",
+      "auth_model": "oauth2_client_credentials",
+      "access_model": "enterprise",
+      "evidence_source": "Sigma's active provider-owned help site publishes a complete llms reference index and current per-operation Markdown pages, each with its own embedded OpenAPI block. Its API overview requires credentials for an organization member and identifies the client-credentials token flow; the provider's credential guidance requires an Admin account type, so access is recorded as enterprise. The index and pages were retrieved and parsed read-only; no Sigma organization, account, credential, API request, workbook, report, dataset, connection, team, member, file, export, or other provider data was accessed.",
+      "counting_note": "Sigma's current provider llms index contains 260 reference Markdown pages. The 256 pages that define an HTTP action each supply one embedded OpenAPI 3.1.0 block, with 123 GET, 73 POST, four PUT, 18 PATCH, and 38 DELETE method/path pairs; all pairs are unique. Eight actions are explicitly labelled Deprecated in the provider index (five GET, two POST, and one DELETE) and are excluded. Nine current credential/authentication actions are also excluded: API-credential CRUD, client-credential create/delete, access-token issuance, and OAuth-token revocation. The resulting 239 data actions are 116 GET, 67 POST, four PUT, 17 PATCH, and 35 DELETE. POST connection lookup and workbook/report data exports are documented retrieval operations and are semantic reads; all other retained non-GET actions create, alter, dispatch, materialize, synchronize, or delete state. This yields 119 reads and 120 writes.",
+      "processed_at": "2026-08-06T18:35:15Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "signnow",
+      "operations_total": 329,
+      "operations_read": 114,
+      "operations_write": 215,
+      "artifact": {
+        "url": "https://docs.signnow.com/",
+        "kind": "html_reference",
+        "version": "current signNow REST API Reference; published Stoplight main branch updated 2026-08-04",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.signnow.com/",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "signNow's active provider-owned documentation is a published Stoplight project with a systematic API Reference table of contents and public per-operation OpenAPI node data. Its current OAuth2 section documents authorization-code redirect and access-token actions; that credential infrastructure is excluded. The table of contents and all current operation nodes were retrieved and parsed read-only; no signNow account, credential, API request, user, document, template, document group, invite, signing link, organization, team, brand, event subscription, or other provider data was accessed.",
+      "counting_note": "signNow's current provider-owned Stoplight reference navigation contains 359 published HTTP-operation entries. Twenty sit beneath the provider-labelled Deprecated section and are excluded. The remaining 339 navigation entries resolve to 335 unique current method/path pairs after four duplicate pairs are collapsed: 106 GET, 101 POST, 61 PUT, four PATCH, and 63 DELETE. Six OAuth/password/verification credential actions are excluded (two GET and four POST), leaving 329 data actions: 104 GET, 97 POST, 61 PUT, four PATCH, and 63 DELETE. Ten POST operations are semantic reads because their provider descriptions only generate temporary view/editor/sending/signing URLs or return downloadable document data: two embedded-view links, four embedded editor/sending links, two embedded-invite links, a document-group download, and a one-time document download link. The other 87 POST operations plus all PUT/PATCH/DELETE operations create, send, alter, upload, invite, share, or remove state, yielding 114 reads and 215 writes.",
+      "processed_at": "2026-08-06T18:41:43Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "simfin",
+      "operations_total": 14,
+      "operations_read": 14,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://simfin.readme.io/llms.txt",
+        "kind": "html_reference",
+        "version": "SimFin API v3.0; 14 current provider reference OpenAPI 3.0.1 blocks",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://simfin.readme.io/reference",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "SimFin's active provider-owned ReadMe API Reference identifies version 3.0 and publishes an llms index for the complete reference. The index and all 14 current callable pages were retrieved and their embedded OpenAPI blocks parsed read-only. The provider's getting-started reference documents Authorization-header API-key authentication. No SimFin account, credential, API request, company, financial statement, price, share, filing, change-log entry, or other provider data was accessed.",
+      "counting_note": "SimFin's current provider ReadMe v3.0 llms index systematically lists 14 callable API-reference pages after its two overview pages. Each linked page embeds one OpenAPI 3.0.1 block, and together they define 14 unique method/path pairs. All 14 are GET actions for company general, list, financial-statement, price, share-outstanding, filing, changed-company, and database-change data; none is marked deprecated and no write action is documented.",
+      "processed_at": "2026-08-06T18:44:21Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "smartreach",
+      "operations_total": 22,
+      "operations_read": 13,
+      "operations_write": 9,
+      "artifact": {
+        "url": "https://help.smartreach.io/llms.txt",
+        "kind": "html_reference",
+        "version": "current SmartReach API Reference; per-page OpenAPI 3.0.0 blocks, info version 1.0.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://help.smartreach.io/reference/getprospects",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "SmartReach's current provider-owned llms index and all 22 linked provider Markdown endpoint pages were retrieved read-only. The pages embed OpenAPI blocks that expose the exact method, path, title, and required X-API-KEY header. No SmartReach account, API key, API request, team, campaign, prospect, email setting, do-not-contact entry, user, task, or other provider data was accessed.",
+      "counting_note": "SmartReach's provider-owned llms index currently lists five general guidance pages and 22 reference endpoint pages. Each endpoint page embeds one provider OpenAPI 3.0.0 action block: 13 GET retrievals; four POST and four PUT state-changing actions; and one DELETE state-changing action. Separate documented verbs on the same path are retained as distinct REST actions. No inbound webhook events or credential-minting endpoints appear in this reference index.",
+      "processed_at": "2026-08-06T19:01:05Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "smartwaiver",
+      "operations_total": 31,
+      "operations_read": 20,
+      "operations_write": 11,
+      "artifact": {
+        "url": "https://api.smartwaiver.com/docs/v4/",
+        "kind": "html_reference",
+        "version": "current Smartwaiver API v4 provider HTML reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://api.smartwaiver.com/docs/v4/",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "Smartwaiver's active provider documentation redirects its v4 URL to the current generated API reference. Its complete resource/action table of contents supplies every current method-bearing action, while the authentication section documents bearer API-key authorization for active Smartwaiver accounts. The reference was retrieved read-only; no Smartwaiver account, API key, API request, waiver, checkin, template, published key, user record, setting, webhook message, phone number, participant detail, or other provider data was accessed.",
+      "counting_note": "The current provider-generated v4 HTML reference has an exhaustive action table of contents with 31 method-bearing entries: 20 GET reads, six POST writes, two PUT writes, and three DELETE writes. The documented GET search initiation/result retrieval pair remains read-only. Dynamic-template/process, group-reservation, published-key, prefill-link, and SMS POSTs create state or cause external effects, so they are writes. Webhook queue/configuration management is callable and retained; the inbound new-waiver delivery itself is not a callable operation and is excluded.",
+      "processed_at": "2026-08-06T19:06:23Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "snapchat-marketing",
+      "operations_total": 179,
+      "operations_read": 125,
+      "operations_write": 54,
+      "artifact": {
+        "url": "https://developers.snap.com/llms.txt",
+        "kind": "html_reference",
+        "version": "current Snapchat Ads API v1 provider Markdown reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.snap.com/marketing-api/Ads-API/introduction",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "partner_gated",
+      "evidence_source": "Snap's former Marketing API host explicitly directs users to the live developers.snap.com reference and states its own Ads API content is empty/deprecated. The replacement provider-owned llms index gives the complete current Ads API page set; each action page was retrieved read-only to enumerate documented request lines. The provider's authentication guide requires a Business Manager OAuth app created by an Organization Admin and describes OAuth authorization-code access. No Snapchat/Snap Business Manager account, OAuth credential, API request, organization, ad account, campaign, ad squad, ad, audience, creative, media asset, report, or other provider data was accessed.",
+      "counting_note": "Snap's current provider llms index lists 66 Ads API Markdown reference pages. Their explicitly documented Ads API request lines were collected, query variants and placeholder-style differences were normalized, and exact method/path duplicates were collapsed: 108 GET, 42 POST, 14 PUT, four PATCH, and 11 DELETE actions (179 total). Seventeen POST estimate, audience-size, bid-estimate, lead-report export, forecasting, insight/diagnostic, catalog-search/facet, and by-id lookup actions are semantic reads, yielding 125 reads and 54 writes. The obsolete marketingapi.snapchat.com host is explicitly empty/deprecated and was not counted; no inbound webhook/event delivery was counted as callable.",
+      "processed_at": "2026-08-06T19:15:04Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "sonar-cloud",
+      "operations_total": 118,
+      "operations_read": 50,
+      "operations_write": 68,
+      "artifact": {
+        "url": "https://sonarcloud.io/api/webservices/list",
+        "kind": "html_reference",
+        "version": "live SonarCloud Web API machine-readable catalog (33 services)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://sonarcloud.io/web_api",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "SonarCloud's active provider Web API catalog was retrieved read-only and supplies each service, action key, HTTP-method flag, deprecation marker, and parameter/response metadata. The current public Web API page is cookie-gated in-browser, but the provider-published catalog endpoint is directly available and complete. No SonarCloud account, authorization token, API request, organization, project, component, issue, hotspot, rule, metric, measure, webhook, analysis, source file, user, group, quality profile, notification, or other provider data was accessed.",
+      "counting_note": "The live provider Web API catalog exposes 156 actions across 33 services (69 GET and 87 POST). Thirty-one actions carry the provider's explicit deprecatedSince marker and were excluded. Seven authentication, user-token lifecycle, or Web API catalog-introspection actions were also excluded as credential/support infrastructure, leaving 118 current data actions: 50 GET reads and 68 POST mutations. Every retained POST action is an explicitly state-changing add, remove, create, update, delete, assign, set, transition, or similar mutation; no semantic POST read was identified.",
+      "processed_at": "2026-08-06T19:18:39Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "sparkpost",
+      "operations_total": 154,
+      "operations_read": 88,
+      "operations_write": 66,
+      "artifact": {
+        "url": "https://github.com/SparkPost/developers.sparkpost.com/tree/main/content/api",
+        "kind": "html_reference",
+        "version": "current provider API Blueprint source commit 68364a8e3f60",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.sparkpost.com/api/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "SparkPost's active provider API Reference links the current official API Blueprint source directory, and the provider-owned repository main branch was updated on 2026-07-24. Every current Blueprint action heading was retrieved read-only to enumerate its method and route. The provider reference documents account-created API-key authorization; no SparkPost account, API key, API request, email, recipient, template, domain, transmission, suppression record, IP pool, webhook, subaccount, or other provider data was accessed.",
+      "counting_note": "SparkPost's current provider source directory contains 30 API Blueprint reference files with 156 named method actions. The three first-page/subsequent-page/filtered-search examples for GET /v1/events/message are one pagination/query action and were collapsed, yielding 154 documented actions. Other same-method/path headings were retained when they describe distinct template format/draft-publish state or transmission send/schedule semantics. The retained split is 85 GET reads plus three semantic POST preview/eligibility checks, and 66 create/send/update/delete/validation mutations. No action heading is explicitly marked deprecated.",
+      "processed_at": "2026-08-06T19:25:51Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "split-io",
+      "operations_total": 74,
+      "operations_read": 22,
+      "operations_write": 52,
+      "artifact": {
+        "url": "https://docs.split.io/reference",
+        "kind": "html_reference",
+        "version": "current rendered Split Admin API reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.split.io/reference/introduction",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "The provider's live API Documentation index enumerates every reference action with a method label and exposes its explicit Deprecated Endpoint state in the navigation DOM. The provider's Authentication page documents API-key authorization. Read-only documentation requests were used; no Split account, API key, API request, workspace/project, environment, feature flag, segment, user, event, or other provider data was accessed.",
+      "counting_note": "Split's current rendered API reference sidebar is a systematic endpoint index: 92 documented HTTP action links (27 GET, 26 POST, 15 PUT, 7 PATCH, 17 DELETE). Eighteen links carry the provider's explicit Deprecated Endpoint marker (API-key lifecycle, Groups, project mutation, restrictions, and Users actions) and were excluded, leaving 74 current actions: 22 GET reads and 52 state-changing POST/PUT/PATCH/DELETE writes. No retained POST is described as a retrieval/query operation. Inbound webhooks are not listed in this callable reference and were not counted.",
+      "processed_at": "2026-08-06T19:30:11Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "spotify-ads",
+      "operations_total": 112,
+      "operations_read": 58,
+      "operations_write": 54,
+      "artifact": {
+        "url": "https://developer.spotify.com/documentation/ads-api",
+        "kind": "html_reference",
+        "version": "Spotify Ads API v3.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.spotify.com/documentation/ads-api/reference/v3.0/getAdAccount",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "partner_gated",
+      "evidence_source": "Spotify's live Ads API reference server-renders the complete v3 operation metadata, including method, path, and operation ID, for reproducible enumeration. Its quickstart documents OAuth authorization-code setup, Ads API Terms acceptance, and client-ID allowlisting. Read-only documentation requests were used; no Spotify account, client credential, authorization code, access token, Ads Manager account, ad account, campaign, ad set, ad, audience, asset, business, report, or other provider data was accessed.",
+      "counting_note": "Spotify's current v3 reference page data contains 115 distinct documented operation IDs: 53 GET, 34 POST, 17 PATCH, and 11 DELETE. The three CAPI authentication-token lifecycle operations (list, create, delete) were excluded as credential infrastructure, leaving 112 data operations. The 52 retained GET operations plus six semantic POST retrievals (audience and bid estimates, reserved pricing, two signed-upload-URL issuances, and asynchronous CSV-report creation) are reads; the remaining 54 actions mutate state. The current provider overview identifies v3 as the most recent Ads API version.",
+      "processed_at": "2026-08-06T19:35:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "stigg",
+      "operations_total": 49,
+      "operations_read": 20,
+      "operations_write": 29,
+      "artifact": {
+        "url": "https://docs.stigg.io/api-and-sdks/api-reference/overview",
+        "kind": "html_reference",
+        "version": "current unversioned GraphQL API reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.stigg.io/api-and-sdks/api-reference/overview",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Stigg's live provider-hosted GraphQL overview identifies the POST GraphQL endpoint, X-API-Key authentication, queries as side-effect-free, and mutations as create/update/delete operations. Its systematic navigation and the 51 provider Markdown action pages were retrieved read-only: all returned successfully and were enumerated by documented root field. No Stigg account, API key, GraphQL request, customer, subscription, plan, add-on, feature, entitlement, usage, credit, coupon, or other provider data was accessed.",
+      "counting_note": "Stigg's active systematic GraphQL reference navigation resolves to 52 distinct documented public root fields: 21 queries and 31 mutations. The 51 navigation pages include two pages with paired archive/unarchive mutations and one comparison guide that repeats getActiveSubscriptions while additionally documenting the subscriptions query; root fields, rather than pages or examples, were deduplicated under the counting policy. Three root fields are explicitly marked deprecated in the provider reference (createOneCustomer, createSubscription, and creditBalanceSummary) and were excluded, leaving 20 query reads and 29 mutation writes. The separately documented REST API was not mixed into this connector's explicitly named GraphQL-over-HTTP surface.",
+      "processed_at": "2026-08-06T19:52:05Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "stockdata",
+      "operations_total": 16,
+      "operations_read": 16,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://www.stockdata.org/documentation",
+        "kind": "html_reference",
+        "version": "API v1",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.stockdata.org/documentation",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "StockData's live documentation provides a systematic API-endpoint navigation and 16 rendered Endpoint blocks. Each block was enumerated directly from its provider-published GET method/path declaration; the documentation states that a free signup supplies an API token that is passed as a GET parameter. Read-only documentation retrieval was used; no StockData account, API token, API request, ticker, quote, price, dividend, split, news item, entity, market statistic, source, or other provider data was accessed.",
+      "counting_note": "StockData's live provider-owned one-page API reference has 16 explicit Endpoint blocks, each with a distinct GET method/path operation. Every documented operation is a market-data, news, analysis, entity-metadata, or source retrieval action and counts as a read. Concrete UUID URLs appear only in request examples and were not treated as separate operations; endpoint blocks use the corresponding placeholder route. No deprecated operation is marked in the current reference.",
+      "processed_at": "2026-08-06T19:54:10Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "strava",
+      "operations_total": 34,
+      "operations_read": 29,
+      "operations_write": 5,
+      "artifact": {
+        "url": "https://developers.strava.com/docs/reference/",
+        "kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.strava.com/docs/reference/",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "Strava's live developer reference provides systematic navigation to the 34 operation cards, whose provider-rendered operation IDs, HTTP methods, and paths were enumerated directly. Its live authentication documentation states that the v3 API uses OAuth2, redirects the user for authorization, receives an authorization code, and exchanges it for a refresh and short-lived access token. Read-only documentation retrieval was used; no Strava account, OAuth client, authorization code, access token, refresh token, API request, athlete, activity, club, route, segment, stream, gear, upload, or other provider data was accessed.",
+      "counting_note": "Strava's live provider-rendered v3 Swagger-style reference has 34 unique operation cards with explicit method/path declarations: 29 GET, 2 POST, and 3 PUT. GET operations, including route exports and stream retrieval, count as reads; the POST manual-activity and upload actions plus the activity, athlete, and starred-segment PUT actions count as writes. The only deprecation text in an operation card marks two old pagination parameters, not the List Activity Comments operation itself, so no current operation was excluded. Authentication token/deauthorization endpoints are credential lifecycle infrastructure and are outside this v3 resource-operation artifact.",
+      "processed_at": "2026-08-06T19:56:25Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    }
+  ]
+}

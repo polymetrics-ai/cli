@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/raw/docuseal-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "docuseal",
+      "artifact": {
+        "url": "https://console.docuseal.com/openapi.yml",
+        "version": "DocuSeal API 1.0.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b"
+      },
+      "artifact_operations": 34,
+      "declared_operations": 34,
+      "operation_split": {
+        "executable": 10,
+        "provider_blocked": 0,
+        "excluded": 24
+      },
+      "cli_commands": 34,
+      "implemented_commands": 9,
+      "named_dependency_commands": 25,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 24
+    }
+  ],
+  "dropped": []
+}

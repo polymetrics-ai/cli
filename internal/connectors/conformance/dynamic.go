@@ -162,7 +162,28 @@ func withReplayURL(b engine.Bundle, baseURL string) engine.Bundle {
 // derived from real credentials per THREAT-MODEL §4 — conformance never
 // touches live secrets or provider endpoints.
 func runtimeConfigForEngine(b engine.Bundle) connectors.RuntimeConfig {
-	cfg := connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__", Config: map[string]string{}, Secrets: map[string]string{}}
+	// Rate-limit policies derive an opaque scope from CoordinationIdentity even
+	// when the request is replayed. This deliberately public, fixture-only
+	// identity is separate from every real credential binding; it lets the
+	// replay exercise the same rate-limit path without consulting a vault or
+	// weakening the declared policy.
+	identity, err := connectors.NewCoordinationIdentity(
+		[]byte("polymetrics-conformance-fixture-salt-v1"),
+		connectors.CredentialBinding{
+			BindingID:      "conformance-fixture",
+			ProviderFamily: "conformance",
+			AuthProfile:    "fixture",
+		},
+	)
+	if err != nil {
+		panic(fmt.Sprintf("build conformance fixture coordination identity: %v", err))
+	}
+	cfg := connectors.RuntimeConfig{
+		ProjectDir:           "__polymetrics_conformance_fixture__",
+		Config:               map[string]string{},
+		Secrets:              map[string]string{},
+		CoordinationIdentity: identity,
+	}
 	if b.Spec == nil {
 		return cfg
 	}

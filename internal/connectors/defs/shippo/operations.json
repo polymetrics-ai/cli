@@ -1,0 +1,1101 @@
+{
+  "operations": [
+    {
+      "id": "shippo.post.addresses",
+      "kind": "rest_write",
+      "summary": "POST /addresses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/addresses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.addresses-addressid",
+      "kind": "rest_read",
+      "summary": "GET /addresses/{AddressId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/addresses/{AddressId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.addresses-addressid-validate",
+      "kind": "rest_read",
+      "summary": "GET /addresses/{AddressId}/validate",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/addresses/{AddressId}/validate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.batches",
+      "kind": "rest_write",
+      "summary": "POST /batches",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.batches-batchid",
+      "kind": "rest_read",
+      "summary": "GET /batches/{BatchId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/batches/{BatchId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.batches-batchid-add-shipments",
+      "kind": "rest_write",
+      "summary": "POST /batches/{BatchId}/add_shipments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/{BatchId}/add_shipments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.batches-batchid-purchase",
+      "kind": "rest_write",
+      "summary": "POST /batches/{BatchId}/purchase",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/{BatchId}/purchase",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.batches-batchid-remove-shipments",
+      "kind": "rest_write",
+      "summary": "POST /batches/{BatchId}/remove_shipments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/{BatchId}/remove_shipments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.carrier-accounts",
+      "kind": "rest_read",
+      "summary": "GET /carrier_accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/carrier_accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.carrier-accounts",
+      "kind": "rest_write",
+      "summary": "POST /carrier_accounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/carrier_accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.carrier-accounts-reg-status",
+      "kind": "rest_read",
+      "summary": "GET /carrier_accounts/reg-status",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/carrier_accounts/reg-status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.carrier-accounts-register-new",
+      "kind": "rest_write",
+      "summary": "POST /carrier_accounts/register/new",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/carrier_accounts/register/new",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.carrier-accounts-carrieraccountid",
+      "kind": "rest_read",
+      "summary": "GET /carrier_accounts/{CarrierAccountId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/carrier_accounts/{CarrierAccountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.put.carrier-accounts-carrieraccountid",
+      "kind": "rest_write",
+      "summary": "PUT /carrier_accounts/{CarrierAccountId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/carrier_accounts/{CarrierAccountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.carrier-accounts-carrieraccountobjectid-signin-initiate",
+      "kind": "rest_read",
+      "summary": "GET /carrier_accounts/{CarrierAccountObjectId}/signin/initiate",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/carrier_accounts/{CarrierAccountObjectId}/signin/initiate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.customs-declarations",
+      "kind": "rest_read",
+      "summary": "GET /customs/declarations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customs/declarations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.customs-declarations",
+      "kind": "rest_write",
+      "summary": "POST /customs/declarations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customs/declarations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.customs-declarations-customsdeclarationid",
+      "kind": "rest_read",
+      "summary": "GET /customs/declarations/{CustomsDeclarationId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customs/declarations/{CustomsDeclarationId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.customs-items",
+      "kind": "rest_read",
+      "summary": "GET /customs/items",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customs/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.customs-items",
+      "kind": "rest_write",
+      "summary": "POST /customs/items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customs/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.customs-items-customsitemid",
+      "kind": "rest_read",
+      "summary": "GET /customs/items/{CustomsItemId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customs/items/{CustomsItemId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.live-rates",
+      "kind": "rest_write",
+      "summary": "POST /live-rates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/live-rates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.live-rates-settings-parcel-template",
+      "kind": "rest_read",
+      "summary": "GET /live-rates/settings/parcel-template",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/live-rates/settings/parcel-template",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.put.live-rates-settings-parcel-template",
+      "kind": "rest_write",
+      "summary": "PUT /live-rates/settings/parcel-template",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/live-rates/settings/parcel-template",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.delete.live-rates-settings-parcel-template",
+      "kind": "rest_write",
+      "summary": "DELETE /live-rates/settings/parcel-template",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/live-rates/settings/parcel-template",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.manifests",
+      "kind": "rest_read",
+      "summary": "GET /manifests",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/manifests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.manifests",
+      "kind": "rest_write",
+      "summary": "POST /manifests",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/manifests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.manifests-manifestid",
+      "kind": "rest_read",
+      "summary": "GET /manifests/{ManifestId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/manifests/{ManifestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.orders",
+      "kind": "rest_read",
+      "summary": "GET /orders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.orders",
+      "kind": "rest_write",
+      "summary": "POST /orders",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.orders-orderid",
+      "kind": "rest_read",
+      "summary": "GET /orders/{OrderId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orders/{OrderId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.parcel-templates",
+      "kind": "rest_read",
+      "summary": "GET /parcel-templates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/parcel-templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.parcel-templates-carrierparceltemplatetoken",
+      "kind": "rest_read",
+      "summary": "GET /parcel-templates/{CarrierParcelTemplateToken}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/parcel-templates/{CarrierParcelTemplateToken}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.parcels",
+      "kind": "rest_write",
+      "summary": "POST /parcels",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/parcels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.parcels-parcelid",
+      "kind": "rest_read",
+      "summary": "GET /parcels/{ParcelId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/parcels/{ParcelId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.pickups",
+      "kind": "rest_write",
+      "summary": "POST /pickups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/pickups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.rates-rateid",
+      "kind": "rest_read",
+      "summary": "GET /rates/{RateId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rates/{RateId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.refunds",
+      "kind": "rest_read",
+      "summary": "GET /refunds",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/refunds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.refunds",
+      "kind": "rest_write",
+      "summary": "POST /refunds",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/refunds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.refunds-2",
+      "kind": "rest_read",
+      "summary": "GET /refunds/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/refunds/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.refunds-refundid",
+      "kind": "rest_read",
+      "summary": "GET /refunds/{RefundId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/refunds/{RefundId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.service-groups",
+      "kind": "rest_read",
+      "summary": "GET /service-groups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/service-groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.service-groups",
+      "kind": "rest_write",
+      "summary": "POST /service-groups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/service-groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.put.service-groups",
+      "kind": "rest_write",
+      "summary": "PUT /service-groups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/service-groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.delete.service-groups-servicegroupid",
+      "kind": "rest_write",
+      "summary": "DELETE /service-groups/{ServiceGroupId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/service-groups/{ServiceGroupId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.shipments",
+      "kind": "rest_write",
+      "summary": "POST /shipments",
+      "description": "legacy connector never implemented shipment creation; not implemented in this bundle",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/shipments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.shipments-shipmentid",
+      "kind": "rest_read",
+      "summary": "GET /shipments/{ShipmentId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/shipments/{ShipmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.shipments-shipmentid-rates",
+      "kind": "rest_read",
+      "summary": "GET /shipments/{ShipmentId}/rates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/shipments/{ShipmentId}/rates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.shipments-shipmentid-rates-currencycode",
+      "kind": "rest_read",
+      "summary": "GET /shipments/{ShipmentId}/rates/{CurrencyCode}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/shipments/{ShipmentId}/rates/{CurrencyCode}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.shippo-accounts",
+      "kind": "rest_read",
+      "summary": "GET /shippo-accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/shippo-accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.shippo-accounts",
+      "kind": "rest_write",
+      "summary": "POST /shippo-accounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/shippo-accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.shippo-accounts-shippoaccountid",
+      "kind": "rest_read",
+      "summary": "GET /shippo-accounts/{ShippoAccountId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/shippo-accounts/{ShippoAccountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.put.shippo-accounts-shippoaccountid",
+      "kind": "rest_write",
+      "summary": "PUT /shippo-accounts/{ShippoAccountId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/shippo-accounts/{ShippoAccountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.tracks",
+      "kind": "rest_write",
+      "summary": "POST /tracks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tracks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.tracks-carrier-trackingnumber",
+      "kind": "rest_read",
+      "summary": "GET /tracks/{Carrier}/{TrackingNumber}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tracks/{Carrier}/{TrackingNumber}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.tracks-carrier-tracking-number",
+      "kind": "rest_read",
+      "summary": "GET /tracks/{carrier}/{tracking_number}",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tracks/{carrier}/{tracking_number}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.transactions",
+      "kind": "rest_write",
+      "summary": "POST /transactions",
+      "description": "legacy connector never implemented label purchasing; not implemented in this bundle",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.transactions-transactionid",
+      "kind": "rest_read",
+      "summary": "GET /transactions/{TransactionId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transactions/{TransactionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.user-parcel-templates",
+      "kind": "rest_read",
+      "summary": "GET /user-parcel-templates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/user-parcel-templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.user-parcel-templates",
+      "kind": "rest_write",
+      "summary": "POST /user-parcel-templates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/user-parcel-templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.user-parcel-templates-userparceltemplateobjectid",
+      "kind": "rest_read",
+      "summary": "GET /user-parcel-templates/{UserParcelTemplateObjectId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/user-parcel-templates/{UserParcelTemplateObjectId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.put.user-parcel-templates-userparceltemplateobjectid",
+      "kind": "rest_write",
+      "summary": "PUT /user-parcel-templates/{UserParcelTemplateObjectId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/user-parcel-templates/{UserParcelTemplateObjectId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.delete.user-parcel-templates-userparceltemplateobjectid",
+      "kind": "rest_write",
+      "summary": "DELETE /user-parcel-templates/{UserParcelTemplateObjectId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/user-parcel-templates/{UserParcelTemplateObjectId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.webhooks",
+      "kind": "rest_read",
+      "summary": "GET /webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.post.webhooks",
+      "kind": "rest_write",
+      "summary": "POST /webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.get.webhooks-webhookid",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{webhookId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{webhookId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.put.webhooks-webhookid",
+      "kind": "rest_write",
+      "summary": "PUT /webhooks/{webhookId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/webhooks/{webhookId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.delete.webhooks-webhookid",
+      "kind": "rest_write",
+      "summary": "DELETE /webhooks/{webhookId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{webhookId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shippo.webhook.batch-post",
+      "kind": "composite",
+      "summary": "WEBHOOK batch#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK batch#POST"
+        ]
+      }
+    },
+    {
+      "id": "shippo.webhook.track-post",
+      "kind": "composite",
+      "summary": "WEBHOOK track#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK track#POST"
+        ]
+      }
+    },
+    {
+      "id": "shippo.webhook.transaction-post",
+      "kind": "composite",
+      "summary": "WEBHOOK transaction#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK transaction#POST"
+        ]
+      }
+    }
+  ]
+}

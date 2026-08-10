@@ -1,0 +1,2870 @@
+{
+  "tagline": "Run GoCardless's declared streams and reverse-ETL actions.",
+  "usage": "pm gocardless \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get bank-account-details customer-bank-account-id",
+        "api get payment-accounts payment-account-transaction-id transactions",
+        "api get transferred-mandates mandate-id",
+        "balances list",
+        "bank account detail list",
+        "bank account holder verification list",
+        "bank authorisation list",
+        "billing request institutions list",
+        "billing request list",
+        "billing request template list",
+        "billing request templates list",
+        "billing requests list",
+        "block list",
+        "blocks list",
+        "creditor bank account list",
+        "creditor bank accounts list",
+        "creditor list",
+        "creditors list",
+        "currency exchange rates list",
+        "customer bank account list",
+        "customer bank account token list",
+        "customer bank accounts list",
+        "customer list",
+        "customers list",
+        "event list",
+        "events list",
+        "export list",
+        "exports list",
+        "funds availability list",
+        "instalment schedule list",
+        "instalment schedules list",
+        "institutions list",
+        "mandate import entries list",
+        "mandate import list",
+        "mandate list",
+        "mandates list",
+        "negative balance limits list",
+        "outbound payment import entries list",
+        "outbound payment import list",
+        "outbound payment imports list",
+        "outbound payment list",
+        "outbound payment stats list",
+        "outbound payments list",
+        "payer authorisation list",
+        "payment account list",
+        "payment account transaction list",
+        "payment account transactions by payment account list",
+        "payment accounts list",
+        "payment list",
+        "payments list",
+        "payout items list",
+        "payout list",
+        "payouts list",
+        "redirect flow list",
+        "refund list",
+        "refunds list",
+        "scheme identifier list",
+        "scheme identifiers list",
+        "subscription list",
+        "subscriptions list",
+        "tax rate list",
+        "tax rates list",
+        "transferred mandate list",
+        "verification details list",
+        "webhook list",
+        "webhooks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add a mandate import entry apply",
+        "api post oauth access-token",
+        "api post oauth introspect",
+        "api post oauth revoke",
+        "api post scenario-simulators scenario-simulator-id actions run",
+        "approve an outbound payment apply",
+        "cancel a billing request apply",
+        "cancel a mandate apply",
+        "cancel a mandate import apply",
+        "cancel a payment apply",
+        "cancel a subscription apply",
+        "cancel an instalment schedule apply",
+        "cancel an outbound payment apply",
+        "change currency apply",
+        "collect bank account details apply",
+        "collect customer details apply",
+        "complete a redirect flow apply",
+        "confirm a payer authorisation apply",
+        "confirm the payer details apply",
+        "create a bank account holder verification apply",
+        "create a bank authorisation apply",
+        "create a billing request apply",
+        "create a billing request flow apply",
+        "create a billing request template apply",
+        "create a billing request with actions apply",
+        "create a block apply",
+        "create a creditor apply",
+        "create a creditor bank account apply",
+        "create a customer apply",
+        "create a customer bank account apply",
+        "create a customer bank account token apply",
+        "create a logo associated with a creditor apply",
+        "create a mandate apply",
+        "create a mandate pdf apply",
+        "create a new mandate import apply",
+        "create a payer authorisation apply",
+        "create a payer theme associated with a creditor apply",
+        "create a payment apply",
+        "create a redirect flow apply",
+        "create a refund apply",
+        "create a scheme identifier apply",
+        "create a subscription apply",
+        "create a verification detail apply",
+        "create a withdrawal outbound payment apply",
+        "create an outbound payment apply",
+        "create an outbound payment import apply",
+        "create blocks by reference apply",
+        "create with dates apply",
+        "disable a block apply",
+        "disable a creditor bank account apply",
+        "disable a customer bank account apply",
+        "enable a block apply",
+        "fulfil a billing request apply",
+        "handle a notification apply",
+        "initialise a billing request flow apply",
+        "notify the customer apply",
+        "pause a subscription apply",
+        "perform a bank details lookup apply",
+        "reinstate a mandate apply",
+        "remove a customer apply",
+        "resume a subscription apply",
+        "retry a payment apply",
+        "retry a webhook apply",
+        "select institution for a billing request apply",
+        "simulate a scenario apply",
+        "submit a mandate import apply",
+        "submit a payer authorisation apply",
+        "trigger fallback apply",
+        "update a billing request template apply",
+        "update a creditor apply",
+        "update a customer apply",
+        "update a customer bank account apply",
+        "update a mandate apply",
+        "update a payer authorisation apply",
+        "update a payment apply",
+        "update a payout apply",
+        "update a refund apply",
+        "update a subscription apply",
+        "update an instalment schedule apply",
+        "update an outbound payment apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add a mandate import entry apply",
+      "summary": "Plan and execute the add a mandate import entry reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_a_mandate_import_entry",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless add a mandate import entry apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/mandate_import_entries"
+        }
+      ],
+      "risk": "GoCardless mutation: Add a mandate import entry.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "api get bank-account-details customer-bank-account-id",
+      "summary": "Documented GET /bank_account_details/{customer_bank_account_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless api get bank-account-details customer-bank-account-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bank_account_details/{customer_bank_account_id}"
+        }
+      ],
+      "operation": "gocardless.get.bank-account-details-customer-bank-account-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get payment-accounts payment-account-transaction-id transactions",
+      "summary": "Documented GET /payment_accounts/{payment_account_transaction_id}/transactions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless api get payment-accounts payment-account-transaction-id transactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payment_accounts/{payment_account_transaction_id}/transactions"
+        }
+      ],
+      "operation": "gocardless.get.payment-accounts-payment-account-transaction-id-transactions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transferred-mandates mandate-id",
+      "summary": "Documented GET /transferred_mandates/{mandate_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless api get transferred-mandates mandate-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transferred_mandates/{mandate_id}"
+        }
+      ],
+      "operation": "gocardless.get.transferred-mandates-mandate-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post oauth access-token",
+      "summary": "Documented POST /oauth/access_token (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless api post oauth access-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/oauth/access_token"
+        }
+      ],
+      "operation": "gocardless.post.oauth-access-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post oauth introspect",
+      "summary": "Documented POST /oauth/introspect (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless api post oauth introspect --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/oauth/introspect"
+        }
+      ],
+      "operation": "gocardless.post.oauth-introspect",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post oauth revoke",
+      "summary": "Documented POST /oauth/revoke (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless api post oauth revoke --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/oauth/revoke"
+        }
+      ],
+      "operation": "gocardless.post.oauth-revoke",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post scenario-simulators scenario-simulator-id actions run",
+      "summary": "Documented POST /scenario_simulators/{scenario_simulator_id}/actions/run (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless api post scenario-simulators scenario-simulator-id actions run --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/scenario_simulators/{scenario_simulator_id}/actions/run"
+        }
+      ],
+      "operation": "gocardless.post.scenario-simulators-scenario-simulator-id-actions-run",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "approve an outbound payment apply",
+      "summary": "Plan and execute the approve an outbound payment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "approve_an_outbound_payment",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless approve an outbound payment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/outbound_payments/{outbound_payment_id}/actions/approve"
+        }
+      ],
+      "risk": "GoCardless mutation: Approve an outbound payment.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "balances list",
+      "summary": "Run the balances ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "balances",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless balances list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/balances"
+        }
+      ]
+    },
+    {
+      "path": "bank account detail list",
+      "summary": "Run the bank account detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_account_detail",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless bank account detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bank_account_details/{bank_account_detail_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "bank account holder verification list",
+      "summary": "Run the bank account holder verification ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_account_holder_verification",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless bank account holder verification list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bank_account_holder_verifications/{bank_account_holder_verification_id}"
+        }
+      ]
+    },
+    {
+      "path": "bank authorisation list",
+      "summary": "Run the bank authorisation ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_authorisation",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless bank authorisation list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bank_authorisations/{bank_authorisation_id}"
+        }
+      ]
+    },
+    {
+      "path": "billing request institutions list",
+      "summary": "Run the billing request institutions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "billing_request_institutions",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless billing request institutions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/billing_requests/{billing_request_id}/institutions"
+        }
+      ]
+    },
+    {
+      "path": "billing request list",
+      "summary": "Run the billing request ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "billing_request",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless billing request list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/billing_requests/{billing_request_id}"
+        }
+      ]
+    },
+    {
+      "path": "billing request template list",
+      "summary": "Run the billing request template ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "billing_request_template",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless billing request template list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/billing_request_templates/{billing_request_template_id}"
+        }
+      ]
+    },
+    {
+      "path": "billing request templates list",
+      "summary": "Run the billing request templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "billing_request_templates",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless billing request templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/billing_request_templates"
+        }
+      ]
+    },
+    {
+      "path": "billing requests list",
+      "summary": "Run the billing requests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "billing_requests",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless billing requests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/billing_requests"
+        }
+      ]
+    },
+    {
+      "path": "block list",
+      "summary": "Run the block ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "block",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless block list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blocks/{block_id}"
+        }
+      ]
+    },
+    {
+      "path": "blocks list",
+      "summary": "Run the blocks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blocks",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless blocks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blocks"
+        }
+      ]
+    },
+    {
+      "path": "cancel a billing request apply",
+      "summary": "Plan and execute the cancel a billing request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "cancel_a_billing_request",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless cancel a billing request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_requests/{billing_request_id}/actions/cancel"
+        }
+      ],
+      "risk": "Destructive GoCardless mutation: Cancel a Billing Request.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "cancel a mandate apply",
+      "summary": "Plan and execute the cancel a mandate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "cancel_a_mandate",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless cancel a mandate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/mandates/{mandate_id}/actions/cancel"
+        }
+      ],
+      "risk": "Destructive GoCardless mutation: Cancel a mandate.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "cancel a mandate import apply",
+      "summary": "Plan and execute the cancel a mandate import reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "cancel_a_mandate_import",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless cancel a mandate import apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/mandate_imports/{mandate_import_id}/actions/cancel"
+        }
+      ],
+      "risk": "Destructive GoCardless mutation: Cancel a mandate import.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "cancel a payment apply",
+      "summary": "Plan and execute the cancel a payment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "cancel_a_payment",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless cancel a payment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/payments/{payment_id}/actions/cancel"
+        }
+      ],
+      "risk": "Destructive GoCardless mutation: Cancel a payment.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "cancel a subscription apply",
+      "summary": "Plan and execute the cancel a subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "cancel_a_subscription",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless cancel a subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/actions/cancel"
+        }
+      ],
+      "risk": "Destructive GoCardless mutation: Cancel a subscription.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "cancel an instalment schedule apply",
+      "summary": "Plan and execute the cancel an instalment schedule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "cancel_an_instalment_schedule",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless cancel an instalment schedule apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/instalment_schedules/{instalment_schedule_id}/actions/cancel"
+        }
+      ],
+      "risk": "Destructive GoCardless mutation: Cancel an instalment schedule.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "cancel an outbound payment apply",
+      "summary": "Plan and execute the cancel an outbound payment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "cancel_an_outbound_payment",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless cancel an outbound payment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/outbound_payments/{outbound_payment_id}/actions/cancel"
+        }
+      ],
+      "risk": "Destructive GoCardless mutation: Cancel an outbound payment.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "change currency apply",
+      "summary": "Plan and execute the change currency reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "change_currency",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless change currency apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_requests/{billing_request_id}/actions/choose_currency"
+        }
+      ],
+      "risk": "GoCardless mutation: Change currency.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "collect bank account details apply",
+      "summary": "Plan and execute the collect bank account details reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "collect_bank_account_details",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless collect bank account details apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_requests/{billing_request_id}/actions/collect_bank_account"
+        }
+      ],
+      "risk": "GoCardless mutation: Collect bank account details.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "collect customer details apply",
+      "summary": "Plan and execute the collect customer details reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "collect_customer_details",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless collect customer details apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_requests/{billing_request_id}/actions/collect_customer_details"
+        }
+      ],
+      "risk": "GoCardless mutation: Collect customer details.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "complete a redirect flow apply",
+      "summary": "Plan and execute the complete a redirect flow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "complete_a_redirect_flow",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless complete a redirect flow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/redirect_flows/{redirect_flow_id}/actions/complete"
+        }
+      ],
+      "risk": "GoCardless mutation: Complete a redirect flow.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "confirm a payer authorisation apply",
+      "summary": "Plan and execute the confirm a payer authorisation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "confirm_a_payer_authorisation",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless confirm a payer authorisation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/payer_authorisations/{payer_authorisation_id}/actions/confirm"
+        }
+      ],
+      "risk": "GoCardless mutation: Confirm a Payer Authorisation.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "confirm the payer details apply",
+      "summary": "Plan and execute the confirm the payer details reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "confirm_the_payer_details",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless confirm the payer details apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_requests/{billing_request_id}/actions/confirm_payer_details"
+        }
+      ],
+      "risk": "GoCardless mutation: Confirm the payer details.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create a bank account holder verification apply",
+      "summary": "Plan and execute the create a bank account holder verification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_bank_account_holder_verification",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a bank account holder verification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bank_account_holder_verifications"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a bank account holder verification..",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a bank authorisation apply",
+      "summary": "Plan and execute the create a bank authorisation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_bank_authorisation",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a bank authorisation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bank_authorisations"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a Bank Authorisation.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a billing request apply",
+      "summary": "Plan and execute the create a billing request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_billing_request",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a billing request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_requests"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a Billing Request.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a billing request flow apply",
+      "summary": "Plan and execute the create a billing request flow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_billing_request_flow",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a billing request flow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_request_flows"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a Billing Request Flow.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a billing request template apply",
+      "summary": "Plan and execute the create a billing request template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_billing_request_template",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a billing request template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_request_templates"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a Billing Request Template.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a billing request with actions apply",
+      "summary": "Plan and execute the create a billing request with actions reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_billing_request_with_actions",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a billing request with actions apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_requests/create_with_actions"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a Billing Request with Actions.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a block apply",
+      "summary": "Plan and execute the create a block reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_block",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a block apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/blocks"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a block.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a creditor apply",
+      "summary": "Plan and execute the create a creditor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_creditor",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a creditor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/creditors"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a creditor.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a creditor bank account apply",
+      "summary": "Plan and execute the create a creditor bank account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_creditor_bank_account",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a creditor bank account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/creditor_bank_accounts"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a creditor bank account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a customer apply",
+      "summary": "Plan and execute the create a customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_customer",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a customer.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a customer bank account apply",
+      "summary": "Plan and execute the create a customer bank account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_customer_bank_account",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a customer bank account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer_bank_accounts"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a customer bank account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a customer bank account token apply",
+      "summary": "Plan and execute the create a customer bank account token reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_customer_bank_account_token",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a customer bank account token apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer_bank_account_tokens"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a customer bank account token.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a logo associated with a creditor apply",
+      "summary": "Plan and execute the create a logo associated with a creditor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_logo_associated_with_a_creditor",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a logo associated with a creditor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/branding/logos"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a logo associated with a creditor.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a mandate apply",
+      "summary": "Plan and execute the create a mandate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_mandate",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a mandate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/mandates"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a mandate.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a mandate pdf apply",
+      "summary": "Plan and execute the create a mandate pdf reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_mandate_pdf",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a mandate pdf apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/mandate_pdfs"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a mandate PDF.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a new mandate import apply",
+      "summary": "Plan and execute the create a new mandate import reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_new_mandate_import",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a new mandate import apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/mandate_imports"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a new mandate import.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a payer authorisation apply",
+      "summary": "Plan and execute the create a payer authorisation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_payer_authorisation",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a payer authorisation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/payer_authorisations"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a Payer Authorisation.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a payer theme associated with a creditor apply",
+      "summary": "Plan and execute the create a payer theme associated with a creditor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_payer_theme_associated_with_a_creditor",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a payer theme associated with a creditor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/branding/payer_themes"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a payer theme associated with a creditor.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a payment apply",
+      "summary": "Plan and execute the create a payment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_payment",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a payment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/payments"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a payment.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a redirect flow apply",
+      "summary": "Plan and execute the create a redirect flow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_redirect_flow",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a redirect flow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/redirect_flows"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a redirect flow.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a refund apply",
+      "summary": "Plan and execute the create a refund reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_refund",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a refund apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/refunds"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a refund.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a scheme identifier apply",
+      "summary": "Plan and execute the create a scheme identifier reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_scheme_identifier",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a scheme identifier apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/scheme_identifiers"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a scheme identifier.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a subscription apply",
+      "summary": "Plan and execute the create a subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_subscription",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a subscription.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a verification detail apply",
+      "summary": "Plan and execute the create a verification detail reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_verification_detail",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a verification detail apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/verification_details"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a verification detail.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create a withdrawal outbound payment apply",
+      "summary": "Plan and execute the create a withdrawal outbound payment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_withdrawal_outbound_payment",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create a withdrawal outbound payment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/outbound_payments/withdrawal"
+        }
+      ],
+      "risk": "GoCardless mutation: Create a withdrawal outbound payment.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create an outbound payment apply",
+      "summary": "Plan and execute the create an outbound payment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_an_outbound_payment",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create an outbound payment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/outbound_payments"
+        }
+      ],
+      "risk": "GoCardless mutation: Create an outbound payment.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create an outbound payment import apply",
+      "summary": "Plan and execute the create an outbound payment import reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_an_outbound_payment_import",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create an outbound payment import apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/outbound_payment_imports"
+        }
+      ],
+      "risk": "GoCardless mutation: Create an outbound payment import.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create blocks by reference apply",
+      "summary": "Plan and execute the create blocks by reference reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_blocks_by_reference",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create blocks by reference apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/blocks/block_by_ref"
+        }
+      ],
+      "risk": "GoCardless mutation: Create blocks by reference.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create with dates apply",
+      "summary": "Plan and execute the create with dates reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_with_dates",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless create with dates apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/instalment_schedules"
+        }
+      ],
+      "risk": "GoCardless mutation: Create (with dates).",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "creditor bank account list",
+      "summary": "Run the creditor bank account ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "creditor_bank_account",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless creditor bank account list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/creditor_bank_accounts/{creditor_bank_account_id}"
+        }
+      ]
+    },
+    {
+      "path": "creditor bank accounts list",
+      "summary": "Run the creditor bank accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "creditor_bank_accounts",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless creditor bank accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/creditor_bank_accounts"
+        }
+      ]
+    },
+    {
+      "path": "creditor list",
+      "summary": "Run the creditor ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "creditor",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless creditor list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/creditors/{creditor_id}"
+        }
+      ]
+    },
+    {
+      "path": "creditors list",
+      "summary": "Run the creditors ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "creditors",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless creditors list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/creditors"
+        }
+      ]
+    },
+    {
+      "path": "currency exchange rates list",
+      "summary": "Run the currency exchange rates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "currency_exchange_rates",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless currency exchange rates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/currency_exchange_rates"
+        }
+      ]
+    },
+    {
+      "path": "customer bank account list",
+      "summary": "Run the customer bank account ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_bank_account",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless customer bank account list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer_bank_accounts/{customer_bank_account_id}"
+        }
+      ]
+    },
+    {
+      "path": "customer bank account token list",
+      "summary": "Run the customer bank account token ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_bank_account_token",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless customer bank account token list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer_bank_account_tokens/{customer_bank_account_token_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "customer bank accounts list",
+      "summary": "Run the customer bank accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_bank_accounts",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless customer bank accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer_bank_accounts"
+        }
+      ]
+    },
+    {
+      "path": "customer list",
+      "summary": "Run the customer ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless customer list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}"
+        }
+      ]
+    },
+    {
+      "path": "customers list",
+      "summary": "Run the customers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless customers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers"
+        }
+      ]
+    },
+    {
+      "path": "disable a block apply",
+      "summary": "Plan and execute the disable a block reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "disable_a_block",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless disable a block apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/blocks/{block_id}/actions/disable"
+        }
+      ],
+      "risk": "Destructive GoCardless mutation: Disable a block.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "disable a creditor bank account apply",
+      "summary": "Plan and execute the disable a creditor bank account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "disable_a_creditor_bank_account",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless disable a creditor bank account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/creditor_bank_accounts/{creditor_bank_account_id}/actions/disable"
+        }
+      ],
+      "risk": "Destructive GoCardless mutation: Disable a creditor bank account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "disable a customer bank account apply",
+      "summary": "Plan and execute the disable a customer bank account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "disable_a_customer_bank_account",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless disable a customer bank account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer_bank_accounts/{customer_bank_account_id}/actions/disable"
+        }
+      ],
+      "risk": "Destructive GoCardless mutation: Disable a customer bank account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "enable a block apply",
+      "summary": "Plan and execute the enable a block reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "enable_a_block",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless enable a block apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/blocks/{block_id}/actions/enable"
+        }
+      ],
+      "risk": "GoCardless mutation: Enable a block.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "event list",
+      "summary": "Run the event ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless event list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}"
+        }
+      ]
+    },
+    {
+      "path": "events list",
+      "summary": "Run the events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ]
+    },
+    {
+      "path": "export list",
+      "summary": "Run the export ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "export",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless export list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exports/{export_id}"
+        }
+      ]
+    },
+    {
+      "path": "exports list",
+      "summary": "Run the exports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "exports",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless exports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exports"
+        }
+      ]
+    },
+    {
+      "path": "fulfil a billing request apply",
+      "summary": "Plan and execute the fulfil a billing request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "fulfil_a_billing_request",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless fulfil a billing request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_requests/{billing_request_id}/actions/fulfil"
+        }
+      ],
+      "risk": "GoCardless mutation: Fulfil a Billing Request.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "funds availability list",
+      "summary": "Run the funds availability ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "funds_availability",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless funds availability list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/funds_availability/{mandate_id}"
+        }
+      ]
+    },
+    {
+      "path": "handle a notification apply",
+      "summary": "Plan and execute the handle a notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "handle_a_notification",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless handle a notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer_notifications/{customer_notification_id}/actions/handle"
+        }
+      ],
+      "risk": "GoCardless mutation: Handle a notification.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "initialise a billing request flow apply",
+      "summary": "Plan and execute the initialise a billing request flow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "initialise_a_billing_request_flow",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless initialise a billing request flow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_request_flows/{billing_request_flow_id}/actions/initialise"
+        }
+      ],
+      "risk": "GoCardless mutation: Initialise a Billing Request Flow.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "instalment schedule list",
+      "summary": "Run the instalment schedule ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "instalment_schedule",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless instalment schedule list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/instalment_schedules/{instalment_schedule_id}"
+        }
+      ]
+    },
+    {
+      "path": "instalment schedules list",
+      "summary": "Run the instalment schedules ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "instalment_schedules",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless instalment schedules list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/instalment_schedules"
+        }
+      ]
+    },
+    {
+      "path": "institutions list",
+      "summary": "Run the institutions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "institutions",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless institutions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/institutions"
+        }
+      ]
+    },
+    {
+      "path": "mandate import entries list",
+      "summary": "Run the mandate import entries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mandate_import_entries",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless mandate import entries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mandate_import_entries"
+        }
+      ]
+    },
+    {
+      "path": "mandate import list",
+      "summary": "Run the mandate import ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mandate_import",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless mandate import list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mandate_imports/{mandate_import_id}"
+        }
+      ]
+    },
+    {
+      "path": "mandate list",
+      "summary": "Run the mandate ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mandate",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless mandate list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mandates/{mandate_id}"
+        }
+      ]
+    },
+    {
+      "path": "mandates list",
+      "summary": "Run the mandates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mandates",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless mandates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mandates"
+        }
+      ]
+    },
+    {
+      "path": "negative balance limits list",
+      "summary": "Run the negative balance limits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "negative_balance_limits",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless negative balance limits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/negative_balance_limits"
+        }
+      ]
+    },
+    {
+      "path": "notify the customer apply",
+      "summary": "Plan and execute the notify the customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "notify_the_customer",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless notify the customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_requests/{billing_request_id}/actions/notify"
+        }
+      ],
+      "risk": "GoCardless mutation: Notify the customer.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "outbound payment import entries list",
+      "summary": "Run the outbound payment import entries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "outbound_payment_import_entries",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless outbound payment import entries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/outbound_payment_import_entries"
+        }
+      ]
+    },
+    {
+      "path": "outbound payment import list",
+      "summary": "Run the outbound payment import ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "outbound_payment_import",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless outbound payment import list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/outbound_payment_imports/{outbound_payment_import_id}"
+        }
+      ]
+    },
+    {
+      "path": "outbound payment imports list",
+      "summary": "Run the outbound payment imports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "outbound_payment_imports",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless outbound payment imports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/outbound_payment_imports"
+        }
+      ]
+    },
+    {
+      "path": "outbound payment list",
+      "summary": "Run the outbound payment ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "outbound_payment",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless outbound payment list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/outbound_payments/{outbound_payment_id}"
+        }
+      ]
+    },
+    {
+      "path": "outbound payment stats list",
+      "summary": "Run the outbound payment stats ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "outbound_payment_stats",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless outbound payment stats list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/outbound_payments/stats"
+        }
+      ]
+    },
+    {
+      "path": "outbound payments list",
+      "summary": "Run the outbound payments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "outbound_payments",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless outbound payments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/outbound_payments"
+        }
+      ]
+    },
+    {
+      "path": "pause a subscription apply",
+      "summary": "Plan and execute the pause a subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "pause_a_subscription",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless pause a subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/actions/pause"
+        }
+      ],
+      "risk": "GoCardless mutation: Pause a subscription.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "payer authorisation list",
+      "summary": "Run the payer authorisation ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payer_authorisation",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless payer authorisation list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payer_authorisations/{payer_authorisation_id}"
+        }
+      ]
+    },
+    {
+      "path": "payment account list",
+      "summary": "Run the payment account ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payment_account",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless payment account list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payment_accounts/{payment_account_id}"
+        }
+      ]
+    },
+    {
+      "path": "payment account transaction list",
+      "summary": "Run the payment account transaction ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payment_account_transaction",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless payment account transaction list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payment_account_transactions/{payment_account_transaction_id}"
+        }
+      ]
+    },
+    {
+      "path": "payment account transactions by payment account list",
+      "summary": "Run the payment account transactions by payment account ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payment_account_transactions_by_payment_account",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless payment account transactions by payment account list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payment_accounts/{payment_account_id}/transactions"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "payment accounts list",
+      "summary": "Run the payment accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payment_accounts",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless payment accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payment_accounts"
+        }
+      ]
+    },
+    {
+      "path": "payment list",
+      "summary": "Run the payment ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payment",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless payment list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payments/{payment_id}"
+        }
+      ]
+    },
+    {
+      "path": "payments list",
+      "summary": "Run the payments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payments",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless payments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payments"
+        }
+      ]
+    },
+    {
+      "path": "payout items list",
+      "summary": "Run the payout items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payout_items",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless payout items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payout_items"
+        }
+      ]
+    },
+    {
+      "path": "payout list",
+      "summary": "Run the payout ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payout",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless payout list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payouts/{payout_id}"
+        }
+      ]
+    },
+    {
+      "path": "payouts list",
+      "summary": "Run the payouts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payouts",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless payouts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payouts"
+        }
+      ]
+    },
+    {
+      "path": "perform a bank details lookup apply",
+      "summary": "Plan and execute the perform a bank details lookup reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "perform_a_bank_details_lookup",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless perform a bank details lookup apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bank_details_lookups"
+        }
+      ],
+      "risk": "GoCardless mutation: Perform a bank details lookup.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "redirect flow list",
+      "summary": "Run the redirect flow ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "redirect_flow",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless redirect flow list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/redirect_flows/{redirect_flow_id}"
+        }
+      ]
+    },
+    {
+      "path": "refund list",
+      "summary": "Run the refund ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "refund",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless refund list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/refunds/{refund_id}"
+        }
+      ]
+    },
+    {
+      "path": "refunds list",
+      "summary": "Run the refunds ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "refunds",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless refunds list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/refunds"
+        }
+      ]
+    },
+    {
+      "path": "reinstate a mandate apply",
+      "summary": "Plan and execute the reinstate a mandate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "reinstate_a_mandate",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless reinstate a mandate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/mandates/{mandate_id}/actions/reinstate"
+        }
+      ],
+      "risk": "GoCardless mutation: Reinstate a mandate.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "remove a customer apply",
+      "summary": "Plan and execute the remove a customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "remove_a_customer",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless remove a customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{customer_id}"
+        }
+      ],
+      "risk": "Destructive GoCardless mutation: Remove a customer.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "resume a subscription apply",
+      "summary": "Plan and execute the resume a subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "resume_a_subscription",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless resume a subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/actions/resume"
+        }
+      ],
+      "risk": "GoCardless mutation: Resume a subscription.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "retry a payment apply",
+      "summary": "Plan and execute the retry a payment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "retry_a_payment",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless retry a payment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/payments/{payment_id}/actions/retry"
+        }
+      ],
+      "risk": "GoCardless mutation: Retry a payment.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "retry a webhook apply",
+      "summary": "Plan and execute the retry a webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "retry_a_webhook",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless retry a webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks/{webhook_id}/actions/retry"
+        }
+      ],
+      "risk": "GoCardless mutation: Retry a webhook.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "scheme identifier list",
+      "summary": "Run the scheme identifier ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scheme_identifier",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless scheme identifier list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scheme_identifiers/{scheme_identifier_id}"
+        }
+      ]
+    },
+    {
+      "path": "scheme identifiers list",
+      "summary": "Run the scheme identifiers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scheme_identifiers",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless scheme identifiers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scheme_identifiers"
+        }
+      ]
+    },
+    {
+      "path": "select institution for a billing request apply",
+      "summary": "Plan and execute the select institution for a billing request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "select_institution_for_a_billing_request",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless select institution for a billing request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_requests/{billing_request_id}/actions/select_institution"
+        }
+      ],
+      "risk": "GoCardless mutation: Select institution for a Billing Request.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "simulate a scenario apply",
+      "summary": "Plan and execute the simulate a scenario reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "simulate_a_scenario",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless simulate a scenario apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/scenario_simulators/{scenario}/actions/run"
+        }
+      ],
+      "risk": "GoCardless mutation: Simulate a scenario.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "submit a mandate import apply",
+      "summary": "Plan and execute the submit a mandate import reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "submit_a_mandate_import",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless submit a mandate import apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/mandate_imports/{mandate_import_id}/actions/submit"
+        }
+      ],
+      "risk": "GoCardless mutation: Submit a mandate import.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "submit a payer authorisation apply",
+      "summary": "Plan and execute the submit a payer authorisation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "submit_a_payer_authorisation",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless submit a payer authorisation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/payer_authorisations/{payer_authorisation_id}/actions/submit"
+        }
+      ],
+      "risk": "GoCardless mutation: Submit a Payer Authorisation.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "subscription list",
+      "summary": "Run the subscription ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscription",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless subscription list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions/{subscription_id}"
+        }
+      ]
+    },
+    {
+      "path": "subscriptions list",
+      "summary": "Run the subscriptions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscriptions",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless subscriptions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions"
+        }
+      ]
+    },
+    {
+      "path": "tax rate list",
+      "summary": "Run the tax rate ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tax_rate",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless tax rate list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tax_rates/{tax_rate_id}"
+        }
+      ]
+    },
+    {
+      "path": "tax rates list",
+      "summary": "Run the tax rates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tax_rates",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless tax rates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tax_rates"
+        }
+      ]
+    },
+    {
+      "path": "transferred mandate list",
+      "summary": "Run the transferred mandate ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transferred_mandate",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless transferred mandate list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transferred_mandates/{transferred_mandate_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "trigger fallback apply",
+      "summary": "Plan and execute the trigger fallback reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "trigger_fallback",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless trigger fallback apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/billing_requests/{billing_request_id}/actions/fallback"
+        }
+      ],
+      "risk": "GoCardless mutation: Trigger fallback.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update a billing request template apply",
+      "summary": "Plan and execute the update a billing request template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_a_billing_request_template",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless update a billing request template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/billing_request_templates/{billing_request_template_id}"
+        }
+      ],
+      "risk": "GoCardless mutation: Update a Billing Request Template.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update a creditor apply",
+      "summary": "Plan and execute the update a creditor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_a_creditor",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless update a creditor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/creditors/{creditor_id}"
+        }
+      ],
+      "risk": "GoCardless mutation: Update a creditor.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update a customer apply",
+      "summary": "Plan and execute the update a customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_a_customer",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless update a customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customers/{customer_id}"
+        }
+      ],
+      "risk": "GoCardless mutation: Update a customer.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update a customer bank account apply",
+      "summary": "Plan and execute the update a customer bank account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_a_customer_bank_account",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless update a customer bank account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customer_bank_accounts/{customer_bank_account_id}"
+        }
+      ],
+      "risk": "GoCardless mutation: Update a customer bank account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update a mandate apply",
+      "summary": "Plan and execute the update a mandate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_a_mandate",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless update a mandate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/mandates/{mandate_id}"
+        }
+      ],
+      "risk": "GoCardless mutation: Update a mandate.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update a payer authorisation apply",
+      "summary": "Plan and execute the update a payer authorisation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_a_payer_authorisation",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless update a payer authorisation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/payer_authorisations/{payer_authorisation_id}"
+        }
+      ],
+      "risk": "GoCardless mutation: Update a Payer Authorisation.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update a payment apply",
+      "summary": "Plan and execute the update a payment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_a_payment",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless update a payment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/payments/{payment_id}"
+        }
+      ],
+      "risk": "GoCardless mutation: Update a payment.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update a payout apply",
+      "summary": "Plan and execute the update a payout reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_a_payout",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless update a payout apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/payouts/{payout_id}"
+        }
+      ],
+      "risk": "GoCardless mutation: Update a payout.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update a refund apply",
+      "summary": "Plan and execute the update a refund reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_a_refund",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless update a refund apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/refunds/{refund_id}"
+        }
+      ],
+      "risk": "GoCardless mutation: Update a refund.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update a subscription apply",
+      "summary": "Plan and execute the update a subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_a_subscription",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless update a subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/subscriptions/{subscription_id}"
+        }
+      ],
+      "risk": "GoCardless mutation: Update a subscription.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update an instalment schedule apply",
+      "summary": "Plan and execute the update an instalment schedule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_an_instalment_schedule",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless update an instalment schedule apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/instalment_schedules/{instalment_schedule_id}"
+        }
+      ],
+      "risk": "GoCardless mutation: Update an instalment schedule.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update an outbound payment apply",
+      "summary": "Plan and execute the update an outbound payment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_an_outbound_payment",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless update an outbound payment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/outbound_payments/{outbound_payment_id}"
+        }
+      ],
+      "risk": "GoCardless mutation: Update an outbound payment.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "verification details list",
+      "summary": "Run the verification details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "verification_details",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless verification details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/verification_details"
+        }
+      ]
+    },
+    {
+      "path": "webhook list",
+      "summary": "Run the webhook ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless webhook list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks/{webhook_id}"
+        }
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "examples": [
+        "pm gocardless webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ]
+    }
+  ]
+}

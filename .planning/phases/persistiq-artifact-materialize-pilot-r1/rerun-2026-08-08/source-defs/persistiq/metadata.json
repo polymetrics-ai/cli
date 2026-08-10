@@ -1,0 +1,24 @@
+{
+  "name": "persistiq",
+  "display_name": "PersistIQ",
+  "description": "Reads PersistIQ leads, users, campaigns, mailboxes, activities, accounts, DNC domains, events, lead fields/statuses, tags, webhook plugin settings, and per-campaign leads/replies, and creates/updates leads and campaigns, adds/removes campaign leads, replies to campaign messages, and adds DNC domains, through v1 REST endpoints.",
+  "integration_type": "api",
+  "docs_url": "https://persistiq.com/api-docs/index.html",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "external PersistIQ API read of leads, users, campaigns, mailboxes, activities, accounts, DNC domains, events, lead fields/statuses, tags, webhook plugin settings, and per-campaign leads/replies",
+    "write": "external mutation of PersistIQ leads and campaigns: update_lead can move a lead into or out of active outbound-sequence automation; create_campaign/duplicate_campaign create new live campaigns; add_lead_to_campaign enrolls a lead into automated outreach immediately depending on campaign state; remove_lead_from_campaign stops scheduled outreach to a lead; reply_to_campaign_message sends a real outbound email on behalf of the mailbox owner; add_dnc_domain blocks future outreach to a domain account-wide",
+    "approval": "required; every write can trigger or halt outbound-email automation, send a real email, or change account-wide contact policy outside this connector's control depending on the target PersistIQ account's own configuration"
+  }
+}

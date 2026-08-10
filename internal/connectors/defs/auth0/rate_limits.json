@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://auth0.com/docs/troubleshoot/customer-support/operational-policies/rate-limit-policy (retrieved 2026-08-06): Auth0 API and endpoint token-bucket limits vary by tenant type, subscription, and deployment; the bundle has no matching non-secret selectors."
+}

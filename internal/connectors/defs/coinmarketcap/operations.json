@@ -1,0 +1,1572 @@
+{
+  "operations": [
+    {
+      "id": "coinmarketcap.get.v1-blockchain-statistics-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/blockchain/statistics/latest",
+      "description": "documented in CoinMarketCap's Deprecated endpoint bucket.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/blockchain/statistics/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cmc-index-historical",
+      "kind": "rest_read",
+      "summary": "GET /v1/cmc-index/historical",
+      "description": "CMC Index historical series; same product-surface narrowing as cmc-index/latest.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cmc-index/historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cmc-index-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/cmc-index/latest",
+      "description": "CMC Index is a distinct composite-index product surface, not part of this connector's core cryptocurrency/exchange/global-metrics market-data streams; not modeled this pass.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cmc-index/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cmc10-index-historical",
+      "kind": "rest_read",
+      "summary": "GET /v1/cmc10-index/historical",
+      "description": "CMC Index historical series; same product-surface narrowing as cmc10-index/latest.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cmc10-index/historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cmc10-index-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/cmc10-index/latest",
+      "description": "CMC Index is a distinct composite-index product surface, not part of this connector's core cryptocurrency/exchange/global-metrics market-data streams; not modeled this pass.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cmc10-index/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-community-trending-token",
+      "kind": "rest_read",
+      "summary": "GET /v1/community/trending/token",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/community/trending/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-community-trending-topic",
+      "kind": "rest_read",
+      "summary": "GET /v1/community/trending/topic",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/community/trending/topic",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-content-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/content/latest",
+      "description": "ENGINE_GAP: documented start/limit pagination advancing by page size (default limit 100, max 200), same shape as /v1/cryptocurrency/map.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/content/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-content-posts-comments",
+      "kind": "rest_read",
+      "summary": "GET /v1/content/posts/comments",
+      "description": "post_id-keyed community comments lookup; Content/Community is a distinct social-data surface not covered by this connector's market-data streams this pass.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/content/posts/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-content-posts-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/content/posts/latest",
+      "description": "last_score cursor-paginated community posts feed -- a distinct pagination shape (cursor advancing by a returned score value, not start/limit) requiring its own dialect review separate from the start/limit ENGINE_GAP; not modeled this pass.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/content/posts/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-content-posts-top",
+      "kind": "rest_read",
+      "summary": "GET /v1/content/posts/top",
+      "description": "last_score cursor-paginated community posts feed; same distinct-pagination-shape narrowing as content/posts/latest.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/content/posts/top",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-airdrop",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/airdrop",
+      "description": "id-keyed single-airdrop detail lookup; the paginated airdrops list this detail endpoint complements is itself excluded (ENGINE_GAP), so its singular counterpart is left uncovered this pass too.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/airdrop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-airdrops",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/airdrops",
+      "description": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/airdrops",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-categories",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/categories",
+      "description": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map. See docs.md Known limits.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-category",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/category",
+      "description": "id/slug-keyed single-category detail lookup; the paginated categories list this detail endpoint complements is itself excluded (ENGINE_GAP), so its singular counterpart is left uncovered this pass too.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/category",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-info",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/info",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-listings-historical",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/listings/historical",
+      "description": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map. See docs.md Known limits.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/listings/historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-listings-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/listings/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/listings/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-listings-new",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/listings/new",
+      "description": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map. See docs.md Known limits.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/listings/new",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-map",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/map",
+      "description": "ENGINE_GAP: 1-based start/limit pagination where start advances by pageSize each page (1, 1+pageSize, 1+2*pageSize, ...); neither dialect pagination type expresses this. See docs.md Known limits.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/map",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-market-pairs-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/market-pairs/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/market-pairs/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-multiplier",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/multiplier",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/multiplier",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-ohlcv-historical",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/ohlcv/historical",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/ohlcv/historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-ohlcv-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/ohlcv/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/ohlcv/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-price-performance-stats-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/price-performance-stats/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/price-performance-stats/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-quotes-historical",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/quotes/historical",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/quotes/historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-quotes-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/quotes/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/quotes/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-trending-gainers-losers",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/trending/gainers-losers",
+      "description": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/trending/gainers-losers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-trending-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/trending/latest",
+      "description": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/trending/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-cryptocurrency-trending-most-visited",
+      "kind": "rest_read",
+      "summary": "GET /v1/cryptocurrency/trending/most-visited",
+      "description": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cryptocurrency/trending/most-visited",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-derivatives-exchanges",
+      "kind": "rest_read",
+      "summary": "GET /v1/derivatives/exchanges",
+      "description": "Derivatives is a distinct futures/perpetuals-market product surface, not part of this connector's spot-market-oriented streams; not modeled this pass.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/derivatives/exchanges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-derivatives-positions",
+      "kind": "rest_read",
+      "summary": "GET /v1/derivatives/positions",
+      "description": "Derivatives positions data; same product-surface narrowing as derivatives/exchanges.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/derivatives/positions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.post.v1-dex-gainer-loser-list",
+      "kind": "rest_write",
+      "summary": "POST /v1/dex/gainer-loser/list",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/dex/gainer-loser/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-dex-holders-count",
+      "kind": "rest_read",
+      "summary": "GET /v1/dex/holders/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dex/holders/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.post.v1-dex-holders-detail",
+      "kind": "rest_write",
+      "summary": "POST /v1/dex/holders/detail",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/dex/holders/detail",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.post.v1-dex-holders-list",
+      "kind": "rest_write",
+      "summary": "POST /v1/dex/holders/list",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/dex/holders/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-dex-holders-tag-count",
+      "kind": "rest_read",
+      "summary": "GET /v1/dex/holders/tag_count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dex/holders/tag_count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-dex-holders-trend-list",
+      "kind": "rest_read",
+      "summary": "GET /v1/dex/holders/trend/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dex/holders/trend/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-dex-liquidity-change-list",
+      "kind": "rest_read",
+      "summary": "GET /v1/dex/liquidity-change/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dex/liquidity-change/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.post.v1-dex-meme-list",
+      "kind": "rest_write",
+      "summary": "POST /v1/dex/meme/list",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/dex/meme/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.post.v1-dex-new-list",
+      "kind": "rest_write",
+      "summary": "POST /v1/dex/new/list",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/dex/new/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-dex-platform-detail",
+      "kind": "rest_read",
+      "summary": "GET /v1/dex/platform/detail",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dex/platform/detail",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-dex-platform-list",
+      "kind": "rest_read",
+      "summary": "GET /v1/dex/platform/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dex/platform/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-dex-search",
+      "kind": "rest_read",
+      "summary": "GET /v1/dex/search",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dex/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-dex-security-detail",
+      "kind": "rest_read",
+      "summary": "GET /v1/dex/security/detail",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dex/security/detail",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-dex-token",
+      "kind": "rest_read",
+      "summary": "GET /v1/dex/token",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dex/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-dex-token-liquidity-query",
+      "kind": "rest_read",
+      "summary": "GET /v1/dex/token-liquidity/query",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dex/token-liquidity/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-dex-token-pools",
+      "kind": "rest_read",
+      "summary": "GET /v1/dex/token/pools",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dex/token/pools",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-dex-token-price",
+      "kind": "rest_read",
+      "summary": "GET /v1/dex/token/price",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dex/token/price",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.post.v1-dex-token-price-batch",
+      "kind": "rest_write",
+      "summary": "POST /v1/dex/token/price/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/dex/token/price/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.post.v1-dex-tokens-batch-query",
+      "kind": "rest_write",
+      "summary": "POST /v1/dex/tokens/batch-query",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/dex/tokens/batch-query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-dex-tokens-transactions",
+      "kind": "rest_read",
+      "summary": "GET /v1/dex/tokens/transactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dex/tokens/transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.post.v1-dex-tokens-trending-list",
+      "kind": "rest_write",
+      "summary": "POST /v1/dex/tokens/trending/list",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/dex/tokens/trending/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-exchange-assets",
+      "kind": "rest_read",
+      "summary": "GET /v1/exchange/assets",
+      "description": "id-keyed exchange on-chain proof-of-reserves assets lookup; same id-source dependency on the excluded exchange/map as exchange/quotes/latest.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exchange/assets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-exchange-info",
+      "kind": "rest_read",
+      "summary": "GET /v1/exchange/info",
+      "description": "id/slug-keyed exchange metadata lookup; same id-source dependency on the excluded exchange/map as exchange/quotes/latest.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exchange/info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-exchange-listings-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/exchange/listings/latest",
+      "description": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exchange/listings/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-exchange-map",
+      "kind": "rest_read",
+      "summary": "GET /v1/exchange/map",
+      "description": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exchange/map",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-exchange-market-pairs-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/exchange/market-pairs/latest",
+      "description": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exchange/market-pairs/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-exchange-quotes-historical",
+      "kind": "rest_read",
+      "summary": "GET /v1/exchange/quotes/historical",
+      "description": "id/slug-keyed exchange historical quote lookup; same id-source dependency on the excluded exchange/map as exchange/quotes/latest.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exchange/quotes/historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-exchange-quotes-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/exchange/quotes/latest",
+      "description": "id/slug-keyed exchange quote lookup; the paginated exchange/map and exchange/listings/latest streams this depends on for id discovery are themselves excluded (ENGINE_GAP), leaving no dialect-clean id source to drive it without inventing an ungrounded config-list workaround.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exchange/quotes/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-fiat-map",
+      "kind": "rest_read",
+      "summary": "GET /v1/fiat/map",
+      "description": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map; used only as the check request in this bundle. See docs.md Known limits.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/fiat/map",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-k-line-candles",
+      "kind": "rest_read",
+      "summary": "GET /v1/k-line/candles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/k-line/candles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-k-line-points",
+      "kind": "rest_read",
+      "summary": "GET /v1/k-line/points",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/k-line/points",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-partners-flipside-crypto-fcas-listings-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/partners/flipside-crypto/fcas/listings/latest",
+      "description": "documented in CoinMarketCap's Deprecated endpoint bucket (Flipside Crypto FCAS partnership retired); excluded as deprecated, not a coverage gap.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/partners/flipside-crypto/fcas/listings/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-partners-flipside-crypto-fcas-quotes-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/partners/flipside-crypto/fcas/quotes/latest",
+      "description": "documented in CoinMarketCap's Deprecated endpoint bucket, same retired FCAS partnership as fcas/listings/latest.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/partners/flipside-crypto/fcas/quotes/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-simple-price",
+      "kind": "rest_read",
+      "summary": "GET /v1/simple/price",
+      "description": "ids-required lightweight price lookup; a narrower subset of cryptocurrency_quotes_latest's already-covered id-keyed quote data (same id/convert params, fewer response fields).",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/simple/price",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-tools-postman",
+      "kind": "rest_read",
+      "summary": "GET /v1/tools/postman",
+      "description": "returns a generated Postman collection specification document, not connector-relevant record data.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/tools/postman",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v1-tools-price-conversion",
+      "kind": "rest_read",
+      "summary": "GET /v1/tools/price-conversion",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/tools/price-conversion",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v2-cryptocurrency-market-pairs-latest",
+      "kind": "rest_read",
+      "summary": "GET /v2/cryptocurrency/market-pairs/latest",
+      "description": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cryptocurrency/market-pairs/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v2-cryptocurrency-ohlcv-historical",
+      "kind": "rest_read",
+      "summary": "GET /v2/cryptocurrency/ohlcv/historical",
+      "description": "id/symbol-keyed OHLCV historical series; same OHLCV-product-line narrowing as ohlcv/latest.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cryptocurrency/ohlcv/historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v2-cryptocurrency-ohlcv-latest",
+      "kind": "rest_read",
+      "summary": "GET /v2/cryptocurrency/ohlcv/latest",
+      "description": "id/symbol-keyed OHLCV snapshot; this pass's cryptocurrency coverage is the quotes/info detail family, not the separate OHLCV product line.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cryptocurrency/ohlcv/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v2-cryptocurrency-price-performance-stats-latest",
+      "kind": "rest_read",
+      "summary": "GET /v2/cryptocurrency/price-performance-stats/latest",
+      "description": "id/slug/symbol-keyed stats lookup outside this pass's covered quotes/info detail family; a distinct response shape (period-bucketed high/low stats) not modeled this pass.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cryptocurrency/price-performance-stats/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v2-cryptocurrency-quotes-historical",
+      "kind": "rest_read",
+      "summary": "GET /v2/cryptocurrency/quotes/historical",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cryptocurrency/quotes/historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v2-cryptocurrency-quotes-latest",
+      "kind": "rest_read",
+      "summary": "GET /v2/cryptocurrency/quotes/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cryptocurrency/quotes/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v2-dex-multiplier",
+      "kind": "rest_read",
+      "summary": "GET /v2/dex/multiplier",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/dex/multiplier",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v2-simple-price",
+      "kind": "rest_read",
+      "summary": "GET /v2/simple/price",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/simple/price",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v3-cryptocurrency-listings-latest",
+      "kind": "rest_read",
+      "summary": "GET /v3/cryptocurrency/listings/latest",
+      "description": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map. See docs.md Known limits.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/cryptocurrency/listings/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v3-cryptocurrency-quotes-historical",
+      "kind": "rest_read",
+      "summary": "GET /v3/cryptocurrency/quotes/historical",
+      "description": "id/symbol-keyed historical time-series lookup (its own count/interval/time_start/time_end shape, distinct from quotes/latest); this pass covers the _latest sibling only, not this historical variant.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/cryptocurrency/quotes/historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v3-fear-and-greed-historical",
+      "kind": "rest_read",
+      "summary": "GET /v3/fear-and-greed/historical",
+      "description": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/fear-and-greed/historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v3-index-cmc100-historical",
+      "kind": "rest_read",
+      "summary": "GET /v3/index/cmc100-historical",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/index/cmc100-historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v3-index-cmc100-latest",
+      "kind": "rest_read",
+      "summary": "GET /v3/index/cmc100-latest",
+      "description": "CMC 100 composite index, same distinct index-product-surface narrowing as the CMC Index category.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/index/cmc100-latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v3-index-cmc20-historical",
+      "kind": "rest_read",
+      "summary": "GET /v3/index/cmc20-historical",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/index/cmc20-historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v3-index-cmc20-latest",
+      "kind": "rest_read",
+      "summary": "GET /v3/index/cmc20-latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/index/cmc20-latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v4-dex-listings-info",
+      "kind": "rest_read",
+      "summary": "GET /v4/dex/listings/info",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/dex/listings/info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v4-dex-listings-quotes",
+      "kind": "rest_read",
+      "summary": "GET /v4/dex/listings/quotes",
+      "description": "DEX Data on-chain product surface; same narrowing as dex/networks/list.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/dex/listings/quotes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v4-dex-networks-list",
+      "kind": "rest_read",
+      "summary": "GET /v4/dex/networks/list",
+      "description": "DEX Data is a distinct on-chain/decentralized-exchange product surface with its own network/pool/token id model, unrelated to this connector's centralized fiat-market-data streams; not modeled this pass.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/dex/networks/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v4-dex-pairs-ohlcv-historical",
+      "kind": "rest_read",
+      "summary": "GET /v4/dex/pairs/ohlcv/historical",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/dex/pairs/ohlcv/historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v4-dex-pairs-ohlcv-latest",
+      "kind": "rest_read",
+      "summary": "GET /v4/dex/pairs/ohlcv/latest",
+      "description": "DEX Data on-chain product surface; same narrowing as dex/networks/list.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/dex/pairs/ohlcv/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v4-dex-pairs-quotes-latest",
+      "kind": "rest_read",
+      "summary": "GET /v4/dex/pairs/quotes/latest",
+      "description": "DEX Data on-chain product surface; same narrowing as dex/networks/list.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/dex/pairs/quotes/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v4-dex-pairs-trade-latest",
+      "kind": "rest_read",
+      "summary": "GET /v4/dex/pairs/trade/latest",
+      "description": "DEX Data on-chain product surface; same narrowing as dex/networks/list.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/dex/pairs/trade/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v4-dex-spot-pairs-latest",
+      "kind": "rest_read",
+      "summary": "GET /v4/dex/spot-pairs/latest",
+      "description": "DEX Data on-chain product surface; same narrowing as dex/networks/list.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/dex/spot-pairs/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v5-cryptocurrency-derivatives-market-pairs-list-latest",
+      "kind": "rest_read",
+      "summary": "GET /v5/cryptocurrency/derivatives/market-pairs/list/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v5/cryptocurrency/derivatives/market-pairs/list/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v5-derivatives-liquidations-cryptocurrency-list-latest",
+      "kind": "rest_read",
+      "summary": "GET /v5/derivatives/liquidations/cryptocurrency/list/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v5/derivatives/liquidations/cryptocurrency/list/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v5-derivatives-liquidations-exchange-list-latest",
+      "kind": "rest_read",
+      "summary": "GET /v5/derivatives/liquidations/exchange/list/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v5/derivatives/liquidations/exchange/list/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v5-derivatives-liquidations-quotes-latest",
+      "kind": "rest_read",
+      "summary": "GET /v5/derivatives/liquidations/quotes/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v5/derivatives/liquidations/quotes/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v5-exchange-derivatives-list",
+      "kind": "rest_read",
+      "summary": "GET /v5/exchange/derivatives/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v5/exchange/derivatives/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v5-exchange-derivatives-market-pairs-list-latest",
+      "kind": "rest_read",
+      "summary": "GET /v5/exchange/derivatives/market-pairs/list/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v5/exchange/derivatives/market-pairs/list/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v5-real-world-assets-assets-list",
+      "kind": "rest_read",
+      "summary": "GET /v5/real-world-assets/assets/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v5/real-world-assets/assets/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v5-real-world-assets-info",
+      "kind": "rest_read",
+      "summary": "GET /v5/real-world-assets/info",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v5/real-world-assets/info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v5-real-world-assets-issuers",
+      "kind": "rest_read",
+      "summary": "GET /v5/real-world-assets/issuers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v5/real-world-assets/issuers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v5-real-world-assets-issuers-list",
+      "kind": "rest_read",
+      "summary": "GET /v5/real-world-assets/issuers/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v5/real-world-assets/issuers/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v5-real-world-assets-map",
+      "kind": "rest_read",
+      "summary": "GET /v5/real-world-assets/map",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v5/real-world-assets/map",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v5-real-world-assets-market-pairs-list",
+      "kind": "rest_read",
+      "summary": "GET /v5/real-world-assets/market-pairs/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v5/real-world-assets/market-pairs/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coinmarketcap.get.v5-real-world-assets-quotes-latest",
+      "kind": "rest_read",
+      "summary": "GET /v5/real-world-assets/quotes/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v5/real-world-assets/quotes/latest",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

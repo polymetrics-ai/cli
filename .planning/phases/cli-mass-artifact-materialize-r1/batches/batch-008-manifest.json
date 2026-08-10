@@ -1,0 +1,720 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 40,
+    "min_operations": 0,
+    "max_operations": 100000,
+    "criteria": "status=done; authoritative artifact_kind=openapi|swagger|openapi_fragments|postman|html_reference; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope"
+  },
+  "connectors": [
+    {
+      "connector": "chameleon",
+      "operations_total": 99,
+      "operations_read": 61,
+      "operations_write": 38,
+      "artifact": {
+        "url": "https://developers.chameleon.io/llms.txt",
+        "kind": "html_reference",
+        "version": "REST API v3",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.chameleon.io/apis/overview",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Chameleon Developer Docs llms index, REST API Overview, its 29 linked REST reference pages, and Authentication page",
+      "counting_note": "Chameleon's provider-published llms index exhaustively links 29 REST API reference pages. Parsed each documented HTTP method/path, normalized documented path/query alternatives and example IDs, and de-duplicated equivalent examples: 52 GET, 22 POST, 11 DELETE, 11 PATCH, and three PUT actions. Nine POST actions are semantic reads: six profile/company retrieval/search/count calls and three translation-download variants. All other non-GET actions create, upload, update, deliver, publish, reset, or delete state. Incoming/outgoing webhook event topics and client-side JavaScript APIs were excluded; REST calls that create/delete webhook subscriptions were included.",
+      "processed_at": "2026-08-06T00:20:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "everhour",
+      "operations_total": 101,
+      "operations_read": 40,
+      "operations_write": 61,
+      "artifact": {
+        "url": "https://jsapi.apiary.io/apis/everhour",
+        "kind": "html_reference",
+        "version": "Everhour API default version 1.2; Apiary document lastUpdated 2026-05-18T12:26:16.361Z",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://everhour.docs.apiary.io/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Everhour's provider-published Apiary structured API document; its Getting Started, Authentication, and Versioning content",
+      "counting_note": "Everhour's provider-published Apiary document exposes 103 action entries (40 GET, 24 POST, one PATCH, 21 PUT, 17 DELETE). Two pairs describe the exact same method/path and are counted once each: POST /resource-planner/assignments and PUT /tasks/{task_id}, yielding 101 unique callable HTTP actions. All 40 GET actions are reads, including attachment downloads and two separately documented deprecated report exports. Every non-GET action creates, refreshes, marks/exports, updates, archives, syncs, starts/stops, clocks, approves/rejects, or deletes provider state, so the remaining 61 are writes; no POST action is a semantic query. Callable webhook CRUD is retained, while no inbound webhook-delivery event type is an operation in this artifact.",
+      "processed_at": "2026-08-05T22:30:03Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "northpass-lms",
+      "operations_total": 103,
+      "operations_read": 49,
+      "operations_write": 54,
+      "artifact": {
+        "url": "https://developers.northpass.com/reference",
+        "kind": "html_reference",
+        "version": "Northpass API v2",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.northpass.com/reference",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Provider-published Northpass Developer Hub systematic API Reference sidebar, labeled OpenAPI Specification; enumerated its distinct rendered operation links without credentials.",
+      "counting_note": "The provider-rendered OpenAPI Specification sidebar contains 104 distinct operation links: 49 GET, 28 POST, 6 PUT, 3 PATCH, and 18 DELETE. One POST operation is explicitly marked [deprecated] and excluded, leaving 103 current operations. All retained GET operations are retrieval/list operations; all POST, PUT, PATCH, and DELETE operations are writes.",
+      "processed_at": "2026-08-06T08:57:39Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "chartmogul",
+      "operations_total": 104,
+      "operations_read": 42,
+      "operations_write": 62,
+      "artifact": {
+        "url": "https://dev.chartmogul.com/reference/retrieve-account/",
+        "kind": "html_reference",
+        "version": "REST API v1; current provider reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://dev.chartmogul.com/reference/",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published ChartMogul REST API reference navigation, its 123-entry sitemap (104 operation pages plus category pages), Create an Activities Export page, and Authentication guide",
+      "counting_note": "ChartMogul's provider-published reference navigation exhaustively lists 104 callable REST action pages: 41 GET reads; 29 POST, 15 PATCH, three PUT, and 16 DELETE actions. POST /v1/activities_export requests and later retrieves a parameterized activities export, so it is classified as a semantic read under r1 policy; every other non-GET action imports, creates, changes, merges, connects, disables, or deletes provider state. The 104 rendered operation pages are all unique nav entries. No webhook event type is listed in this REST reference, and none was counted.",
+      "processed_at": "2026-08-06T00:45:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "nutshell",
+      "operations_total": 109,
+      "operations_read": 67,
+      "operations_write": 42,
+      "artifact": {
+        "url": "https://developers.nutshell.com/reference/",
+        "kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.nutshell.com/reference/",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "Provider-published Nutshell REST API systematic HTML reference; authentication guide identifies HTTP Basic authentication using a user email and API key. Enumeration used no credentials.",
+      "counting_note": "The provider’s systematic REST API Reference sidebar contains 109 distinct operation links: 67 GET, 25 POST, 1 PUT, 6 PATCH, and 10 DELETE. Every GET is a retrieval/list/export operation; all POST, PUT, PATCH, and DELETE operations are writes. The provider labels its separate JSON-RPC API as legacy, so it is excluded in favor of the current REST API named by this connector.",
+      "processed_at": "2026-08-06T08:59:19Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "easypost",
+      "operations_total": 111,
+      "operations_read": 49,
+      "operations_write": 62,
+      "artifact": {
+        "url": "https://docs.easypost.com/sitemap.xml",
+        "kind": "html_reference",
+        "version": "EasyPost API v2 documentation; provider sitemap lastmod 2026-07-30T21:30:56.410Z",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://docs.easypost.com/docs/shipments",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; EasyPost's provider-published API-doc sitemap; all sitemap-indexed API-reference endpoint cards; Authentication documentation",
+      "counting_note": "Enumerated every endpoint card across the 45 provider-sitemap-indexed /docs/ API-reference pages, then de-duplicated by HTTP method/path. The result is 111 actions: 45 GET, 53 POST, four PATCH, two PUT, and seven DELETE. GET actions are reads. Four documented POST calculation/retrieval actions are semantic reads: Retrieve Rates for a Shipment (/beta/rates), Luma Promise (explicitly without label purchase), Smart Deliver By, and Smart Deliver On. The other 49 POST actions and all PATCH/PUT/DELETE actions create, buy, update, charge, refund, alter, or delete provider state, so are writes. The duplicate shipment create/buy cards appearing in related topical pages were not double counted. Inbound webhook deliveries are excluded; callable webhook management is retained.",
+      "processed_at": "2026-08-05T22:20:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "invoiced",
+      "operations_total": 111,
+      "operations_read": 41,
+      "operations_write": 70,
+      "artifact": {
+        "url": "https://developer.invoiced.com/api",
+        "kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.invoiced.com/api",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned Invoiced API Documentation index and all 21 linked resource-reference pages",
+      "counting_note": "The provider's static reference navigation links 21 resource pages. Parsing every provider-authored HTTP Request block yields 111 unique method/path actions: GET 40, POST 36, PATCH 15, DELETE 19, PUT 1. Two alternative paths are explicitly documented in their action blocks (two payment-source DELETE paths and two note-list GET paths) and are retained as distinct actions. POST /subscriptions/preview is an explicitly named preview, counted as the sole semantic POST read; all other POSTs create, send, pay, void, refund, trigger, or otherwise mutate resources.",
+      "processed_at": "2026-08-06T01:52:06Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "survey-sparrow",
+      "operations_total": 113,
+      "operations_read": 54,
+      "operations_write": 59,
+      "artifact": {
+        "url": "https://developers.surveysparrow.com/rest-apis/",
+        "kind": "html_reference",
+        "version": "SurveySparrow API v3",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.surveysparrow.com/rest-apis/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "SurveySparrow's live provider-hosted Docusaurus v3 reference provides the category inventory and server-rendered per-endpoint pages. The 113 provider pages were retrieved read-only and each page's documented HTTP-method badge, /v3 path, title, and current/deprecation text were enumerated directly. The rendered request interface identifies API-key authentication. No SurveySparrow account, API key, OAuth credential, API request, survey, contact, response, question, channel, contact list/property, reminder, reputation entity, folder, ticket, team, role, variable, webhook, user, template, email theme, expression, or other provider data was accessed.",
+      "counting_note": "SurveySparrow's live systematic v3 reference lists 29 endpoint categories. Their provider pages resolve to 113 unique callable method/path pages: 53 GET, 29 POST, 11 PUT, 5 PATCH, and 15 DELETE. The category inventory has one duplicate endpoint presentation, while the Ticket Templates category is itself its single endpoint page; every resulting unique page returned successfully and exposed its method and /v3 path. GETs count as reads, and POST Get channel analytics metrics is explicitly a retrieval action, yielding 54 reads; all remaining non-GET actions create, clone, update, complete, add, delete, subscribe, invite, or otherwise mutate state and yield 59 writes. The only deprecation text is a request field in Create a channel, not an action. Inbound webhook deliveries are not callable operations; webhook configuration CRUD is retained.",
+      "processed_at": "2026-08-06T20:00:13Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "instatus",
+      "operations_total": 114,
+      "operations_read": 42,
+      "operations_write": 72,
+      "artifact": {
+        "url": "https://instatus.com/help/api",
+        "kind": "html_reference",
+        "version": "Instatus REST API reference (live HTML)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://instatus.com/help/api",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned Instatus API navigation, all 23 linked endpoint-reference pages, and provider-hosted https://instat.us/summary.json",
+      "counting_note": "The provider's API navigation and Jump-to-endpoints index expose 23 API pages. Extracting every explicit Endpoint method/path declaration gives 105 entries (GET 36, POST 28, PUT 19, DELETE 22); one exact GET /v2/pages declaration is repeated by the Status pages and Private pages guides, so it is counted once. The Monitors page additionally documents three unauthenticated cron-ping paths (success, failure, start), each callable with GET, POST, or HEAD: six GET/HEAD reads and three POST writes. The Public data guide documents the provider-hosted /summary.json status response; direct provider retrieval confirms its GET. Result: 104 normalized labeled operations plus 10 documented non-duplicate operations, or 42 reads and 72 writes.",
+      "processed_at": "2026-08-06T01:45:20Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "campaign-monitor",
+      "operations_total": 117,
+      "operations_read": 60,
+      "operations_write": 57,
+      "artifact": {
+        "url": "https://www.campaignmonitor.com/api/",
+        "kind": "html_reference",
+        "version": "v3.3",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://www.campaignmonitor.com/api/v3-3/getting-started/",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Campaign Monitor v3.3 API category index, endpoint-reference pages, and authentication documentation",
+      "counting_note": "Campaign Monitor's provider-published v3.3 API index links a complete set of nine REST reference category pages. Parsed every rendered endpoint declaration: 60 GET reads, 27 POST, 18 PUT, and 12 DELETE writes. The separate Webhooks page describes inbound webhook event types only and has no endpoint declarations, so those events are excluded. All documented POST actions create, send, publish, copy, import, mutate, or resend state; none is a semantic query.",
+      "processed_at": "2026-08-05T18:50:21Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "webflow",
+      "operations_total": 117,
+      "operations_read": 54,
+      "operations_write": 63,
+      "artifact": {
+        "url": "https://developers.webflow.com/data/reference",
+        "kind": "html_reference",
+        "version": "live Webflow Data API v2 rendered reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.webflow.com/data/reference",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "The metadata-linked Webflow Developer Documentation is a live provider-published Fern reference for Data API v2. Its systematic Data API navigation produced 148 reference links; the provider's public Markdown page representations then yielded 117 distinct current /v2 method/path pages with no retrieval failure or duplicate. The official authentication documentation identifies OAuth plus site and workspace API tokens sent through an Authorization/Bearer request pattern. Research was limited to public documentation; no Webflow account, credential value, site, collection, collection item, asset, page, form submission, order, product, comment, webhook, workspace, or customer data was accessed.",
+      "counting_note": "The live provider-published Data API v2 reference has a systematic 148-link index. Fetching each index page's published Markdown representation yielded 117 unique current /v2 method/path operations with no retrieval failure or duplicate: 54 GET, 25 POST, 16 PATCH, 16 DELETE, and 6 PUT. All 25 POST actions explicitly create, publish, fulfill/refund, register, or update provider state, so every non-GET action is a write. Legacy /data/v2.0.0 content appears only on a deprecated CMS overview and was excluded, along with guidance/authentication pages and inbound webhook deliveries. The result is 117 data actions: 54 reads and 63 writes.",
+      "processed_at": "2026-08-06T23:14:49Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "freshsales",
+      "operations_total": 118,
+      "operations_read": 37,
+      "operations_write": 81,
+      "artifact": {
+        "url": "https://developers.freshsales.io/api/",
+        "kind": "html_reference",
+        "version": "Freshsales CRM API Reference (current provider-rendered reference; unversioned)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.freshsales.io/api/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url (stale and redirected to a provider 404); Freshsales' provider-published CRM API Reference systematic navigation, method-labelled `api-url` action blocks, and Authentication section",
+      "counting_note": "Enumerated the complete provider-rendered CRM API reference's `div.api-url` action declarations. The page renders 126 declarations; de-duplicated eight exact repeated DOM declarations (the four field-list endpoints each appear twice and the Manual Call Log declaration appears five times), retaining 118 distinct documented action/method/path tuples. This intentionally retains separately named provider actions sharing a method/path, such as task update versus mark-done and the documented product/document price actions. The 35 GET actions are reads; POST `/api/filtered_search/lead` and POST `/api/filtered_search/contact` are explicitly Search actions and count as semantic reads. The remaining 42 POST, 24 PUT, and 15 DELETE actions mutate state. No inbound webhook delivery action is presented.",
+      "processed_at": "2026-08-06T02:15:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "sonar-cloud",
+      "operations_total": 118,
+      "operations_read": 50,
+      "operations_write": 68,
+      "artifact": {
+        "url": "https://sonarcloud.io/api/webservices/list",
+        "kind": "html_reference",
+        "version": "live SonarCloud Web API machine-readable catalog (33 services)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://sonarcloud.io/web_api",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "SonarCloud's active provider Web API catalog was retrieved read-only and supplies each service, action key, HTTP-method flag, deprecation marker, and parameter/response metadata. The current public Web API page is cookie-gated in-browser, but the provider-published catalog endpoint is directly available and complete. No SonarCloud account, authorization token, API request, organization, project, component, issue, hotspot, rule, metric, measure, webhook, analysis, source file, user, group, quality profile, notification, or other provider data was accessed.",
+      "counting_note": "The live provider Web API catalog exposes 156 actions across 33 services (69 GET and 87 POST). Thirty-one actions carry the provider's explicit deprecatedSince marker and were excluded. Seven authentication, user-token lifecycle, or Web API catalog-introspection actions were also excluded as credential/support infrastructure, leaving 118 current data actions: 50 GET reads and 68 POST mutations. Every retained POST action is an explicitly state-changing add, remove, create, update, delete, assign, set, transition, or similar mutation; no semantic POST read was identified.",
+      "processed_at": "2026-08-06T19:18:39Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "harvest",
+      "operations_total": 124,
+      "operations_read": 55,
+      "operations_write": 69,
+      "artifact": {
+        "url": "https://help.getharvest.com/api-v2/",
+        "kind": "html_reference",
+        "version": "Harvest API v2, current live documentation",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://help.getharvest.com/api-v2/",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; official Harvest API v2 reference index and all provider-linked reference articles",
+      "counting_note": "Crawled every provider-linked article under the current v2 reference root: 47 linked articles, of which 27 contain 124 documented action blocks. Methods are 55 GET, 30 POST, 20 PATCH, and 19 DELETE. All POST blocks explicitly create/send/mark/re-open business resources and are writes; all PATCH/DELETE blocks are writes. Distinct provider-named actions sharing a method/path were retained rather than de-duplicated: for example, invoice/estimate lifecycle transitions and alternative create flows each have separate headings in the official reference.",
+      "processed_at": "2026-08-06T00:57:04Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "lemlist",
+      "operations_total": 127,
+      "operations_read": 57,
+      "operations_write": 70,
+      "artifact": {
+        "url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+        "kind": "html_reference",
+        "version": "v2 (current rendered reference)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "Lemlist's v2 provider API reference and Authentication page. The overview declares the endpoint reference contains every technical API detail; its complete navigation supplies the enumerated method-labelled endpoint pages.",
+      "counting_note": "Systematically expanded all 21 provider Endpoint navigation groups and de-duplicated five Popular Resources duplicates, yielding 51 GET, 48 POST, 11 PATCH, 16 DEL, and one PUT endpoint pages. Six POST retrieval/check actions are semantic reads: single and bulk enrichment requests, people and company database searches, email-account connectivity testing, and batch campaign statistics. The provider documentation calls its rendered reference complete; webhook-management routes are included while inbound event types are not counted.",
+      "processed_at": "2026-08-06T02:58:22Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "buildkite",
+      "operations_total": 128,
+      "operations_read": 56,
+      "operations_write": 72,
+      "artifact": {
+        "url": "https://buildkite.com/docs/apis/rest-api.md",
+        "kind": "html_reference",
+        "version": "v2",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://buildkite.com/docs/apis/rest-api",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Buildkite REST API v2 overview Markdown endpoint table and authentication section",
+      "counting_note": "Buildkite's provider-published REST API v2 overview explicitly says its Endpoints section lists all available endpoints. Counted every table row: 56 GET reads; 22 POST, 18 PUT, 10 PATCH, and 22 DELETE writes. Each non-GET table entry is documented as a create, update, delete, or lifecycle/state mutation; webhook event types are outside this callable REST list and excluded.",
+      "processed_at": "2026-08-05T18:23:53Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "capsule-crm",
+      "operations_total": 132,
+      "operations_read": 68,
+      "operations_write": 64,
+      "artifact": {
+        "url": "https://developer.capsulecrm.com/v2",
+        "kind": "html_reference",
+        "version": "v2",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.capsulecrm.com/v2/overview/authentication",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Capsule v2 operation index and all linked operation pages plus authentication documentation",
+      "counting_note": "Capsule's provider-published v2 reference index links 24 operation-group pages. Parsed every request block: 67 GET reads, 26 POST, 18 PUT, and 21 DELETE actions; each method/path is unique. The documented POST Run query filter action retrieves filter results and is classified as a semantic read, yielding 68 reads and 64 writes. OAuth authorization/token flows are authentication support material rather than named v2 data-operation index actions and were not added; REST-hook callbacks/inbound events are excluded.",
+      "processed_at": "2026-08-05T18:57:13Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "serpstat",
+      "operations_total": 143,
+      "operations_read": 111,
+      "operations_write": 32,
+      "artifact": {
+        "url": "https://api-docs.serpstat.com/",
+        "kind": "html_reference",
+        "version": "current Serpstat Public API Stoplight reference: v4 services plus the current SERP Crawling API v2 service",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://serpstat.com/api/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Serpstat's active provider-owned API documentation redirects from serpstat.com/api to the current api-docs.serpstat.com Public API reference. Its rendered Stoplight reference exposes the complete table of contents and individual JSON-RPC operation pages, while the introduction documents a profile-generated API token on eligible paid/trial plans. The documentation and its machine-readable navigation were retrieved and enumerated read-only; no Serpstat account, credential, API request, domain, keyword, project, audit, task, report, team member, or other provider data was accessed.",
+      "counting_note": "Serpstat's active provider-hosted Stoplight table of contents systematically enumerates 12 HTTP-service sections and 143 typed HTTP-operation pages. All 143 are JSON-RPC actions submitted by POST; the shared transport route is not used to collapse distinct provider method names. The reference marks 103 `get*` methods as retrievals. Eight additional POST methods are semantic reads because their provider descriptions return a report, diff, analysis, log, page names, or CSV data: Audit `export`, Domain `exportPositions`, Keyword `exportSuggestions` and `exportKeywordsPhrase`, Rank Tracker `detectUrlCannibalization` and `diffPositions`, plus Audit `pageNames` and `userLog`. The remaining 32 actions create/delete projects, configure/start/stop/rescan audits, manage rank-tracker projects/keywords/tags/competitors/regions/schedules, queue classification/keyword-volume/SERP-crawl work, or manage team members, and are writes. The documentation's Custom Data Export and older explanatory SERP/volume articles do not add separately typed operations beyond these indexed current service pages. No inbound webhook event is counted.",
+      "processed_at": "2026-08-06T18:00:45Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "hubspot",
+      "operations_total": 147,
+      "operations_read": 80,
+      "operations_write": 67,
+      "artifact": {
+        "url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
+        "kind": "html_reference",
+        "version": "HubSpot 2026-03 API reference (Latest)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.hubspot.com/docs/api-reference/latest/overview",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned HubSpot Docs 2026-03 Latest API reference and its method-labelled sidebar",
+      "counting_note": "The provider's fully expanded 2026-03 Latest sidebar exposes 147 method-labelled endpoint pages: GET 76, POST 35, PATCH 11, PUT 8, DEL 17. Four POST operations are semantic reads (OAuth token introspection, file-content validation, content-audit export, and CRM export); all other POSTs and state-changing methods are writes. The provider version selector separately labels v1-v4 as Legacy, so it is excluded rather than double-counting current/successor operations. Webhook subscription configuration is counted; inbound delivery event types are not published as callable endpoint pages in this reference.",
+      "processed_at": "2026-08-06T01:12:18Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "planhat",
+      "operations_total": 147,
+      "operations_read": 49,
+      "operations_write": 98,
+      "artifact": {
+        "url": "https://www.planhat.com/developers/api/introduction",
+        "kind": "html_reference",
+        "version": "Planhat Developers API current rendered reference; Framer Last-Modified 2026-08-06",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.planhat.com/developers/api/introduction",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "The metadata docs host redirects to Planhat's current provider-owned Developers reference. Its provider sitemap lists all 31 current API pages, whose rendered navigation and request blocks were systematically enumerated without credentials.",
+      "counting_note": "Enumerated the complete current provider developer sitemap's 31 /developers/api pages. Its 25 data-model pages expose 144 unique callable action blocks after model-overview headings are removed: 49 Get-by-ID/list/dimension-data reads and 95 create, update, delete, bulk-upsert/insert, or duplicate writes. The User Activities page adds three distinct documented POST ingestion actions (/analytics/{tenantUUID}, /analytics/bulk/{tenantUUID}, and /dock/segment), all writes. Informational introduction, authentication, endpoint-base, schema/example, and generic bulk-upsert explanation headings were not counted as callable operations. This produces 147 distinct current action blocks, 49 read / 98 write; no local connector stream or undocumented route was used to fill the inventory.",
+      "processed_at": "2026-08-06T13:21:38Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "freshbooks",
+      "operations_total": 149,
+      "operations_read": 74,
+      "operations_write": 75,
+      "artifact": {
+        "url": "https://documenter.getpostman.com/view/3322108/S1ERwwza",
+        "kind": "postman",
+        "version": "FreshBooks API public Postman collection, latest tag; Collection schema v2.0.0; published 2023-03-21",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.freshbooks.com/api/postman-collection",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; FreshBooks provider documentation's Postman Collection page linking this public collection; direct parse of the provider-linked latest collection JSON and authentication text",
+      "counting_note": "Parsed FreshBooks' provider-linked public Postman collection (213 request items). Normalizing its published variables/sample account and object IDs, stripping query examples, and de-duplicating repeat request variants gives 150 unique HTTP method/path operations: 74 GET, 43 POST, 25 PUT, and eight DELETE. POST `/auth/oauth/revoke` is bearer/refresh-token credential infrastructure and is excluded consistently with r1, leaving 149 data operations. All 74 remaining GET calls are reads; every included POST/PUT/DELETE creates, changes, tokenizes, uploads, configures, or removes provider state, so is a write. Webhook callback management is retained; inbound callback deliveries are not collection requests and are excluded.",
+      "processed_at": "2026-08-06T02:00:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "mux",
+      "operations_total": 150,
+      "operations_read": 88,
+      "operations_write": 62,
+      "artifact": {
+        "url": "https://www.mux.com/docs/api-reference/video/assets",
+        "kind": "html_reference",
+        "version": "current Mux API reference (no single API version displayed)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.mux.com/docs/api-reference",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "Provider-hosted Mux API reference navigation. Its rendered method-labelled links/buttons were enumerated across every visible API family without credentials.",
+      "counting_note": "The provider-rendered API-reference navigation is a systematic catalog of 150 unique method-labelled action pages across System, Video, Stream URL, Image URL, Robots, and Data APIs: 88 GET, 31 POST, 12 PUT, 4 PATCH, and 15 DELETE. No action label is duplicated. Every POST label is create, generate, cancel, reset, trigger, or annotation creation; combined with PUT/PATCH/DELETE these are stateful writes. GET action pages are reads.",
+      "processed_at": "2026-08-06T08:33:03Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "mailjet-mail",
+      "operations_total": 153,
+      "operations_read": 87,
+      "operations_write": 66,
+      "artifact": {
+        "url": "https://dev.mailjet.com/email/reference/",
+        "kind": "html_reference",
+        "version": "Email REST API v3 (current connector-named surface)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://dev.mailjet.com/email/reference/",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "Metadata docs_url; provider-hosted Mailjet Email API v3 reference overview. Its method/path table was enumerated directly and verified to contain no duplicate v3 method+path rows.",
+      "counting_note": "The provider-rendered Email API overview is a complete method/path index. Its 153 unique v3 method+path rows comprise 87 GET, 32 POST, 22 PUT, and 12 DELETE actions. The sole v3.1 Send API row is not included because this connector’s named surface is v3 REST; the provider describes v3 and v3.1 as separate Send API variants. Every v3 POST creates, manages, validates, schedules, sends, or otherwise changes a resource, so no POST is classified as a semantic read. Inbound webhook event types are excluded; callable callback-URL management is included.",
+      "processed_at": "2026-08-06T03:33:29Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "sparkpost",
+      "operations_total": 154,
+      "operations_read": 88,
+      "operations_write": 66,
+      "artifact": {
+        "url": "https://github.com/SparkPost/developers.sparkpost.com/tree/main/content/api",
+        "kind": "html_reference",
+        "version": "current provider API Blueprint source commit 68364a8e3f60",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.sparkpost.com/api/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "SparkPost's active provider API Reference links the current official API Blueprint source directory, and the provider-owned repository main branch was updated on 2026-07-24. Every current Blueprint action heading was retrieved read-only to enumerate its method and route. The provider reference documents account-created API-key authorization; no SparkPost account, API key, API request, email, recipient, template, domain, transmission, suppression record, IP pool, webhook, subaccount, or other provider data was accessed.",
+      "counting_note": "SparkPost's current provider source directory contains 30 API Blueprint reference files with 156 named method actions. The three first-page/subsequent-page/filtered-search examples for GET /v1/events/message are one pagination/query action and were collapsed, yielding 154 documented actions. Other same-method/path headings were retained when they describe distinct template format/draft-publish state or transmission send/schedule semantics. The retained split is 85 GET reads plus three semantic POST preview/eligibility checks, and 66 create/send/update/delete/validation mutations. No action heading is explicitly marked deprecated.",
+      "processed_at": "2026-08-06T19:25:51Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "miro",
+      "operations_total": 196,
+      "operations_read": 84,
+      "operations_write": 112,
+      "artifact": {
+        "url": "https://developers.miro.com/reference",
+        "kind": "html_reference",
+        "version": "current Miro REST API reference (Platform, Enterprise, SCIM, and experimental sections)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.miro.com/reference/overview",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "Provider-hosted Miro REST API reference navigation. The current reference was enumerated by its visible method-labelled action links, including Platform, experimental, Enterprise, and SCIM sections, without credentials.",
+      "counting_note": "The provider-rendered REST reference navigation systematically exposes 210 method-labelled action pages: 93 GET, 42 POST, 7 PUT, 33 PATCH, and 35 DELETE. Fourteen pages are explicitly Legacy SCIM variants duplicating current SCIM actions and were excluded under the current-versus-legacy policy. The 196 current action pages comprise 84 GET reads and 41 POST, 6 PUT, 31 PATCH, and 34 DELETE writes. All POST action titles are token, create, share, assignment, session-reset, export-job, or legal-hold mutations rather than query-only reads; inbound webhook events are excluded.",
+      "processed_at": "2026-08-06T07:52:12Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "salesloft",
+      "operations_total": 198,
+      "operations_read": 115,
+      "operations_write": 83,
+      "artifact": {
+        "url": "https://developers.salesloft.com/docs/api/",
+        "kind": "html_reference",
+        "version": "Salesloft API v2.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.salesloft.com/docs/api/salesloft-platform/",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "Salesloft's live provider-owned API v2 portal presents the systematic resource-group and operation catalogue. Its Introduction documents OAuth 2.0 authorization-code authentication (and also notes client-credentials and API-key options), OAuth token endpoints, and explicit read/write/delete scopes. The public developer portal does not impose a partner gate. No Salesloft team, OAuth client, API key, access token, API request, person, account, cadence, user, email, task, conversation, webhook, or other provider data was accessed.",
+      "counting_note": "Salesloft's live provider-rendered v2 API landing page systematically lists 92 resource groups with 198 advertised operation items. Bounded retrieval of every group page found exactly 198 unique operation links, each carrying the provider's generated HTTP-method badge: 111 GET, 48 POST, 21 PUT, and 18 DELETE. The provider's Docusaurus build configuration names a v2 specification source, but its public raw route returns 404; the current generated reference itself is the counted artifact. GET actions are reads. Four documented POST actions are semantic reads: the two asynchronous cadence/cadence-collection export-download requests, the email-template missing-tag check that returns missed tags, and the meeting-settings search that fetches filtered records. The remaining POST actions create, import, upsert, submit, trigger, redaction, schedule, or otherwise change Salesloft state; every PUT and DELETE is a write. Thus the retained split is 115 reads and 83 writes. The reference contains no callable API-key, token, OAuth, credential, password, or secret-administration operation; it documents authentication separately. Webhook subscription management is callable and retained, while inbound webhook event deliveries are excluded.",
+      "processed_at": "2026-08-06T16:59:23Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "free-agent-connector",
+      "operations_total": 200,
+      "operations_read": 92,
+      "operations_write": 108,
+      "artifact": {
+        "url": "https://dev.freeagent.com/docs",
+        "kind": "html_reference",
+        "version": "FreeAgent REST API v2 (current provider documentation)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://dev.freeagent.com/docs",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; FreeAgent's provider-published systematic v2 HTML reference navigation; browser retrieval and enumeration of all 56 linked documentation pages; provider OAuth documentation",
+      "counting_note": "Fetched all 56 provider-rendered documentation navigation pages and de-duplicated documented method/path contracts after stripping query-string examples: 201 distinct HTTP actions (93 GET, 30 POST, 52 PUT, 26 DELETE). One POST OAuth token_endpoint exchange is credential infrastructure and is excluded consistently with r1, leaving 200 data actions. All non-GET data operations are writes. The provider notably documents GET `/payroll/:year/payments/:payment_date/mark_as_unpaid`; despite its GET verb, its explicit state-changing action is correctly classified as a semantic write. The remaining 92 GET actions are reads; no semantic POST read is documented.",
+      "processed_at": "2026-08-06T01:50:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "nylas",
+      "operations_total": 201,
+      "operations_read": 86,
+      "operations_write": 115,
+      "artifact": {
+        "url": "https://developer.nylas.com/docs/reference/api/",
+        "kind": "html_reference",
+        "version": "Nylas API v3",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.nylas.com/docs/reference/api/",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "Provider-published Nylas v3 API Reference systematic navigation, which declares operation counts by resource and exposes each operation page; enumerated its distinct endpoint pages without credentials.",
+      "counting_note": "The provider’s complete API-reference navigation enumerates 201 operation pages: 76 GET, 58 POST, 23 PUT, 9 PATCH, and 35 DELETE. Twelve query-style POST operations (smart-compose, availability/free-busy, validation, mock payload, template rendering, provider detection, and domain info) are reads. The two OAuth/token GET operations are credential flows and are writes under the shared policy; remaining GET operations are reads, and all remaining mutation verbs are writes. Notification delivery-event documentation is outside this callable API index and was not counted.",
+      "processed_at": "2026-08-06T09:01:37Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "freshdesk",
+      "operations_total": 202,
+      "operations_read": 92,
+      "operations_write": 110,
+      "artifact": {
+        "url": "https://developers.freshdesk.com/api/",
+        "kind": "html_reference",
+        "version": "Freshdesk REST API v2.0 (current provider reference)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.freshdesk.com/api/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Freshdesk's provider-published REST API v2.0 single-page reference, systematic method-labelled endpoint sections, and Customer Satisfaction NEW/LEGACY compatibility sections",
+      "counting_note": "Enumerated method/path declarations from Freshdesk's systematic single-page REST API v2.0 reference. Its 216 rendered declarations reduce to 205 distinct v2 method/path contracts after removing repeated request/cURL declarations and normalizing bracket, colon, and brace placeholder spellings (including the duplicate custom-object schema list spelling). The reference separately labels three Customer Satisfaction methods as LEGACY—GET `/api/v2/surveys`, POST `/api/v2/tickets/[ticket_id]/satisfaction_ratings`, and GET `/api/v2/surveys/satisfaction_ratings`—and says new CSAT APIs apply to new/upgraded accounts; excluded those equivalent legacy methods under the r1 current-versus-legacy policy. The remaining 202 are 92 GET reads plus 42 POST, 35 PUT, 31 DELETE, and two PATCH writes. All retained POSTs create, update, bulk-change, follow, reply, forward, submit a survey response, or otherwise mutate state; no POST query was counted as a read. No inbound webhook delivery action is presented.",
+      "processed_at": "2026-08-06T02:10:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "sentry",
+      "operations_total": 217,
+      "operations_read": 117,
+      "operations_write": 100,
+      "artifact": {
+        "url": "https://docs.sentry.io/llms.txt",
+        "kind": "html_reference",
+        "version": "Sentry Web API v0; current provider Markdown category/action index",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.sentry.io/api/",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "Sentry's active provider-owned API documentation publishes the Web API v0 category navigation and an llms index that links every counted current action page. Its authorization documentation describes token-based Bearer authorization. The index and action pages were retrieved and enumerated read-only; no Sentry organization, project, issue, event, release, client key, token, API request, or other provider data was accessed.",
+      "counting_note": "Sentry's current provider-owned llms index systematically links 223 callable Web API v0 Markdown operation pages across 21 categories. Their explicit method/path headings yield 223 unique method/path actions: 120 GET, 34 POST, 32 PUT, two PATCH, and 35 DELETE; no duplicate method/path pair occurs. Six direct client-key/DSN credential-infrastructure actions are excluded: organization/project key lists and a project-key retrieve (three GET), plus project-key create (POST), update (PUT), and delete (DELETE). The retained 217 data actions are therefore 117 GET reads and 100 writes (33 POST, 31 PUT, two PATCH, and 34 DELETE). The 103 raw non-GET titles describe creates, updates, deletes, installation/configuration, or other stateful actions; none is documented as a pure retrieval/query action, so no semantic non-GET reads are reclassified. Inbound webhook deliveries are excluded.",
+      "processed_at": "2026-08-06T17:53:16Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "katana",
+      "operations_total": 223,
+      "operations_read": 88,
+      "operations_write": 135,
+      "artifact": {
+        "url": "https://developer.katanamrp.com/reference",
+        "kind": "html_reference",
+        "version": "Katana API v1.0 (live ReadMe reference)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.katanamrp.com/reference/api-authentication",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned Katana API v1.0 systematic HTML reference and authentication guide",
+      "counting_note": "The provider's systematic v1.0 reference sidebar contains 446 rendered method labels because its navigation is duplicated; exact method/href de-duplication leaves 223 callable actions: GET 85, POST 56, PATCH 42, DEL 40. The two explicitly named advanced sales-order search POST operations and POST Export webhook logs (which returns a filtered CSV URL) are semantic reads, so reads are 85 GET plus three POST lookups. All other POST/PATCH/DEL operations create, alter, rank, transfer, receive, or remove provider resources and are writes. Webhook subscription-management and log-export actions are included; inbound webhook event types in the separate guide are excluded.",
+      "processed_at": "2026-08-06T02:29:14Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "grafana",
+      "operations_total": 227,
+      "operations_read": 98,
+      "operations_write": 129,
+      "artifact": {
+        "url": "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/",
+        "kind": "html_reference",
+        "version": "Grafana release-13.1.3 documentation source",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; official Grafana Legacy HTTP API index and the linked Grafana release-13.1.3 documentation sources",
+      "counting_note": "Enumerated the provider-published Markdown backing the official v13.1.3 Legacy Grafana HTTP API index. Its 28 chapter pages contain 193 unique inline method/path actions across the 27 ordinary chapter sources; the official alerting-provisioning chapter includes Grafana's shared alerting fragment, whose 34 route sections add 16 GET, 6 POST, 6 PUT, and 6 DELETE actions. Combined methods are 97 GET, 62 POST, 26 PUT, 10 PATCH, and 32 DELETE (227). GET methods are reads, and POST /api/ds/query is the one provider-described semantic query read; all other POST actions create, mutate, administer, send, reload, revoke, or otherwise change state. The current successor /apis reference was deliberately excluded: the connector names the legacy HTTP surface and the counting policy forbids double-counting equivalent legacy/current APIs unless both are explicitly part of the named surface.",
+      "processed_at": "2026-08-06T00:44:36Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "discord",
+      "operations_total": 232,
+      "operations_read": 96,
+      "operations_write": 136,
+      "artifact": {
+        "url": "https://docs.discord.com/llms.txt",
+        "kind": "html_reference",
+        "version": "Discord API v10 (current documentation index)",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://docs.discord.com/developers/reference",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Discord's provider-published llms index and its complete current Markdown reference pages",
+      "counting_note": "Counted every current provider-documented HTTP \u003cRoute\u003e action block in Discord's llms-indexed reference: 204 actions across 22 HTTP-resource pages, plus 16 application-command, eight interaction-response, two Gateway REST, and two OAuth2 current-information actions. Method split is 96 GET, 40 POST, 24 PUT, 33 PATCH, and 39 DELETE. GET actions are reads; every non-GET action creates, responds, invokes, modifies, links, deletes, or otherwise changes provider state, so is a write. Separately headed current action blocks sharing a route were retained (thread variants, lobby link/unlink, DM versus group DM, and interaction followup versus generic webhook actions). Deprecated/current endpoint pairs appearing only as changelog examples were excluded. Inbound Gateway and webhook event types are excluded; the two documented Gateway REST discovery endpoints are retained.",
+      "processed_at": "2026-08-05T21:18:40Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "shopwired",
+      "operations_total": 237,
+      "operations_read": 118,
+      "operations_write": 119,
+      "artifact": {
+        "url": "https://shopwired.readme.io/llms.txt",
+        "kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://shopwired.readme.io/reference",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "ShopWired's active provider-owned ReadMe reference identifies API version 1.0 and publishes an llms index explicitly directing agents to the full reference and OpenAPI endpoint blocks. The index and all 237 linked current operation pages were retrieved and enumerated read-only. Their OpenAPI security definitions specify HTTP Basic authentication. No ShopWired store, account, credential, API request, catalog item, order, customer, marketing record, shipping setting, theme, webhook, payment record, or other provider data was accessed.",
+      "counting_note": "ShopWired's active provider llms index systematically links 237 API-reference Markdown pages, each embedding one parseable OpenAPI 3.1.0 operation block. All 237 blocks were retrieved and parsed: 118 GET, 49 POST, 33 PUT, and 37 DELETE; every method/path is unique and none is marked deprecated. The 118 GET actions retrieve, list, count, search, or otherwise return data. Every non-GET summary documents a stateful create, update, delete, dispatch, refund, verify/re-send, upload, assign, or other mutation, so no semantic POST read is reclassified. Callable webhook configuration CRUD is retained; inbound webhook deliveries are excluded.",
+      "processed_at": "2026-08-06T18:19:07Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "pinterest",
+      "operations_total": 274,
+      "operations_read": 159,
+      "operations_write": 115,
+      "artifact": {
+        "url": "https://developers.pinterest.com/docs/api/v5/introduction/",
+        "kind": "html_reference",
+        "version": "Pinterest API v5 current rendered reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.pinterest.com/docs/api/v5/introduction/",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "Pinterest's live provider-owned v5 API reference presents a complete category navigation and expressly says the page has information on all available endpoints. The systematically expanded navigation exposed 277 unique method-labelled endpoint pages, including current gated surfaces rather than inferring operations from connector code. The public developer portal exposes normal Sign up/Log in and My apps flows; its endpoint pages document Pinterest OAuth 2.0 authorization and applicable scopes. The direct documentation for dynamic-title processing, translation review, preview creation, and notification delivery was used to distinguish state-changing operations from semantic queries without accessing an account or invoking an endpoint.",
+      "counting_note": "Pinterest's current API v5 Introduction says it contains information on all available endpoints. Expanding every category in its provider-rendered endpoint navigation yields 277 distinct method/reference-page actions with no duplicate method/page: 144 GET, 76 POST, 34 PATCH, and 23 DEL. Three OAuth token support actions (two access-token generation routes and token revocation) are credential infrastructure and excluded, leaving 274 data actions. All 144 retained GET actions are reads. Fifteen POST operations are semantic reads: four asynchronous analytics/report requests plus campaign-delivery estimates, audience sizing, bid floors, an ephemeral ad preview URL, bulk advertiser-entity retrieval, lead export, item-bid options, product-filter listing, catalog report generation, catalog-items retrieval, and local-inventory-items retrieval. The remaining 58 data POSTs create, ingest, update, apply, delete, send, or otherwise change provider state; with all 34 PATCH and 23 DEL actions, they yield 115 writes. `POST /notifications` is retained as a write because the provider explicitly documents it as a gated REST action for third-party partners to send notifications to Pinterest, not as an inbound provider webhook event type. Schemas, rate-limit prose, SDK links, samples, and navigation headings do not add operations.",
+      "processed_at": "2026-08-06T15:04:04Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "pretix",
+      "operations_total": 321,
+      "operations_read": 147,
+      "operations_write": 174,
+      "artifact": {
+        "url": "https://docs.pretix.eu/dev/api/index.html",
+        "kind": "html_reference",
+        "version": "pretix 2026.8.0.dev0 current REST API resource reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.pretix.eu/en/latest/api/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "The metadata documentation URL redirects to this current provider-owned pretix API reference. Its Resources and endpoints navigation links the complete 52-page rendered resource set used for method/path extraction, and its Authentication navigation separately publishes token-based API authentication and OAuth documentation.",
+      "counting_note": "Systematically parsed the HTTP signature blocks from all 52 unique resources/*.html pages linked by the provider's current Resources and endpoints navigation; its resources index itself has no endpoint blocks. The rendered pages emitted 322 blocks with one exact repeated GET signature across overlapping documentation, leaving 321 unique method/path actions: 142 GET, 99 POST, 43 PATCH, and 37 DELETE. GET actions are reads. Five explicitly data-output POST actions are semantic reads: event and organizer exporter runs, offline-sales-batch PDF rendering, shredder export, and ticket-PDF batch rendering. The remaining POST, PATCH, and DELETE actions create, modify, trigger, or remove provider state and are writes. Inbound webhook deliveries are excluded; callable webhook configuration actions remain included.",
+      "processed_at": "2026-08-06T14:01:02Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "signnow",
+      "operations_total": 329,
+      "operations_read": 114,
+      "operations_write": 215,
+      "artifact": {
+        "url": "https://docs.signnow.com/",
+        "kind": "html_reference",
+        "version": "current signNow REST API Reference; published Stoplight main branch updated 2026-08-04",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.signnow.com/",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "signNow's active provider-owned documentation is a published Stoplight project with a systematic API Reference table of contents and public per-operation OpenAPI node data. Its current OAuth2 section documents authorization-code redirect and access-token actions; that credential infrastructure is excluded. The table of contents and all current operation nodes were retrieved and parsed read-only; no signNow account, credential, API request, user, document, template, document group, invite, signing link, organization, team, brand, event subscription, or other provider data was accessed.",
+      "counting_note": "signNow's current provider-owned Stoplight reference navigation contains 359 published HTTP-operation entries. Twenty sit beneath the provider-labelled Deprecated section and are excluded. The remaining 339 navigation entries resolve to 335 unique current method/path pairs after four duplicate pairs are collapsed: 106 GET, 101 POST, 61 PUT, four PATCH, and 63 DELETE. Six OAuth/password/verification credential actions are excluded (two GET and four POST), leaving 329 data actions: 104 GET, 97 POST, 61 PUT, four PATCH, and 63 DELETE. Ten POST operations are semantic reads because their provider descriptions only generate temporary view/editor/sending/signing URLs or return downloadable document data: two embedded-view links, four embedded editor/sending links, two embedded-invite links, a document-group download, and a one-time document download link. The other 87 POST operations plus all PUT/PATCH/DELETE operations create, send, alter, upload, invite, share, or remove state, yielding 114 reads and 215 writes.",
+      "processed_at": "2026-08-06T18:41:43Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    }
+  ]
+}

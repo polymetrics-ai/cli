@@ -1,0 +1,2639 @@
+{
+  "tagline": "Run ConfigCat's declared streams and reverse-ETL actions.",
+  "usage": "pm configcat \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v1 environments environmentid settings settingid value",
+        "api get v1 integrationlink integrationlinktype key details",
+        "api get v1 organizations organizationid auditlogs",
+        "api get v1 organizations organizationid invitations",
+        "api get v1 organizations organizationid organization-limitations",
+        "api get v1 products productid",
+        "api get v1 products productid invitations",
+        "api get v1 products productid members",
+        "api get v1 products productid preferences",
+        "api get v1 proxy-profiles proxyprofileid sdk-keys",
+        "api get v1 settings settingid code-references",
+        "api get v1 settings settingid predefined-variations",
+        "api get v1 settings settingkeyorid value",
+        "api get v1 tags tagid settings",
+        "api get v1 webhooks webhookid keys",
+        "api get v2 change-requests changerequestid",
+        "api get v2 change-requests changerequestid proposed-changes",
+        "api get v2 configs configid environments environmentid values",
+        "api get v2 environments environmentid settings settingid value",
+        "api get v2 organizations organizationid auditlogs",
+        "api get v2 organizations organizationid members",
+        "api get v2 products productid auditlogs",
+        "api get v2 products productid change-requests",
+        "api get v2 settings settingkeyorid value",
+        "audit logs list",
+        "config list",
+        "config setting values list",
+        "configs list",
+        "deleted settings list",
+        "environment list",
+        "environments list",
+        "integration list",
+        "integrations list",
+        "me list",
+        "members list",
+        "organizations list",
+        "permission group list",
+        "permission groups list",
+        "products list",
+        "proxy profile list",
+        "proxy profiles list",
+        "sdk keys list",
+        "segment list",
+        "segments list",
+        "setting list",
+        "settings list",
+        "stale flags list",
+        "tag list",
+        "tags list",
+        "webhook list",
+        "webhooks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v1 environments environmentid settings settingid integrationlinks integrationlinktype key",
+        "api delete v1 integrations integrationid",
+        "api delete v1 invitations invitationid",
+        "api delete v1 organizations organizationid members userid",
+        "api delete v1 permissions permissiongroupid",
+        "api delete v1 products productid",
+        "api delete v1 products productid members userid",
+        "api delete v1 proxy-profiles proxyprofileid",
+        "api delete v1 segments segmentid",
+        "api delete v1 webhooks webhookid",
+        "api delete v2 change-request-comments commentid",
+        "api delete v2 change-requests changerequestid proposed-changes settingid",
+        "api patch v1 environments environmentid settings settingid value",
+        "api patch v1 proxy-profiles proxyprofileid",
+        "api patch v1 settings settingid",
+        "api patch v1 settings settingkeyorid value",
+        "api patch v1 webhooks webhookid",
+        "api patch v2 environments environmentid settings settingid value",
+        "api patch v2 settings settingkeyorid value",
+        "api post v1 code-references",
+        "api post v1 code-references delete-reports",
+        "api post v1 configs configid environments environmentid values",
+        "api post v1 configs configid environments environmentid webhooks",
+        "api post v1 environments environmentid settings settingid integrationlinks integrationlinktype key",
+        "api post v1 jira connect",
+        "api post v1 jira environments environmentid settings settingid integrationlinks key",
+        "api post v1 organizations organizationid members userid",
+        "api post v1 organizations organizationid products",
+        "api post v1 organizations organizationid proxy-profiles",
+        "api post v1 products productid integrations",
+        "api post v1 products productid members invite",
+        "api post v1 products productid permissions",
+        "api post v1 products productid preferences",
+        "api post v1 products productid segments",
+        "api post v1 proxy-profiles proxyprofileid sdk-keys deselect",
+        "api post v1 proxy-profiles proxyprofileid sdk-keys select",
+        "api post v1 proxy-profiles proxyprofileid secret",
+        "api post v2 change-requests changerequestid apply",
+        "api post v2 change-requests changerequestid approve",
+        "api post v2 change-requests changerequestid claim-ownership",
+        "api post v2 change-requests changerequestid close",
+        "api post v2 change-requests changerequestid comments",
+        "api post v2 change-requests changerequestid proposed-changes settingid resolve-conflicts",
+        "api post v2 change-requests changerequestid remove-approval",
+        "api post v2 configs configid environments environmentid change-requests",
+        "api post v2 configs configid environments environmentid values",
+        "api put v1 environments environmentid settings settingid value",
+        "api put v1 integrations integrationid",
+        "api put v1 permissions permissiongroupid",
+        "api put v1 products productid",
+        "api put v1 proxy-profiles proxyprofileid",
+        "api put v1 segments segmentid",
+        "api put v1 settings settingid predefined-variations",
+        "api put v1 settings settingkeyorid value",
+        "api put v1 webhooks webhookid",
+        "api put v2 change-request-comments commentid",
+        "api put v2 change-requests changerequestid",
+        "api put v2 change-requests changerequestid proposed-changes",
+        "api put v2 environments environmentid settings settingid value",
+        "api put v2 settings settingkeyorid value",
+        "create config apply",
+        "create environment apply",
+        "create flag apply",
+        "create tag apply",
+        "delete config apply",
+        "delete environment apply",
+        "delete flag apply",
+        "delete tag apply",
+        "update config apply",
+        "update environment apply",
+        "update flag apply",
+        "update tag apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v1 environments environmentid settings settingid integrationlinks integrationlinktype key",
+      "summary": "Documented DELETE /v1/environments/{environmentId}/settings/{settingId}/integrationLinks/{integrationLinkType}/{key} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api delete v1 environments environmentid settings settingid integrationlinks integrationlinktype key --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/environments/{environmentId}/settings/{settingId}/integrationLinks/{integrationLinkType}/{key}"
+        }
+      ],
+      "operation": "configcat.delete.v1-environments-environmentid-settings-settingid-integrationlinks-integrationlinktype-key",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 integrations integrationid",
+      "summary": "Documented DELETE /v1/integrations/{integrationId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api delete v1 integrations integrationid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/integrations/{integrationId}"
+        }
+      ],
+      "operation": "configcat.delete.v1-integrations-integrationid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 invitations invitationid",
+      "summary": "Documented DELETE /v1/invitations/{invitationId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api delete v1 invitations invitationid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/invitations/{invitationId}"
+        }
+      ],
+      "operation": "configcat.delete.v1-invitations-invitationid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 organizations organizationid members userid",
+      "summary": "Documented DELETE /v1/organizations/{organizationId}/members/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api delete v1 organizations organizationid members userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/organizations/{organizationId}/members/{userId}"
+        }
+      ],
+      "operation": "configcat.delete.v1-organizations-organizationid-members-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 permissions permissiongroupid",
+      "summary": "Documented DELETE /v1/permissions/{permissionGroupId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api delete v1 permissions permissiongroupid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/permissions/{permissionGroupId}"
+        }
+      ],
+      "operation": "configcat.delete.v1-permissions-permissiongroupid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 products productid",
+      "summary": "Documented DELETE /v1/products/{productId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api delete v1 products productid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/products/{productId}"
+        }
+      ],
+      "operation": "configcat.delete.v1-products-productid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 products productid members userid",
+      "summary": "Documented DELETE /v1/products/{productId}/members/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api delete v1 products productid members userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/products/{productId}/members/{userId}"
+        }
+      ],
+      "operation": "configcat.delete.v1-products-productid-members-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 proxy-profiles proxyprofileid",
+      "summary": "Documented DELETE /v1/proxy-profiles/{proxyProfileId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api delete v1 proxy-profiles proxyprofileid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/proxy-profiles/{proxyProfileId}"
+        }
+      ],
+      "operation": "configcat.delete.v1-proxy-profiles-proxyprofileid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 segments segmentid",
+      "summary": "Documented DELETE /v1/segments/{segmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api delete v1 segments segmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/segments/{segmentId}"
+        }
+      ],
+      "operation": "configcat.delete.v1-segments-segmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 webhooks webhookid",
+      "summary": "Documented DELETE /v1/webhooks/{webhookId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api delete v1 webhooks webhookid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/webhooks/{webhookId}"
+        }
+      ],
+      "operation": "configcat.delete.v1-webhooks-webhookid",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api delete v2 change-request-comments commentid",
+      "summary": "Documented DELETE /v2/change-request-comments/{commentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api delete v2 change-request-comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/change-request-comments/{commentId}"
+        }
+      ],
+      "operation": "configcat.delete.v2-change-request-comments-commentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 change-requests changerequestid proposed-changes settingid",
+      "summary": "Documented DELETE /v2/change-requests/{changeRequestId}/proposed-changes/{settingId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api delete v2 change-requests changerequestid proposed-changes settingid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/change-requests/{changeRequestId}/proposed-changes/{settingId}"
+        }
+      ],
+      "operation": "configcat.delete.v2-change-requests-changerequestid-proposed-changes-settingid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v1 environments environmentid settings settingid value",
+      "summary": "Documented GET /v1/environments/{environmentId}/settings/{settingId}/value (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 environments environmentid settings settingid value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/environments/{environmentId}/settings/{settingId}/value"
+        }
+      ],
+      "operation": "configcat.get.v1-environments-environmentid-settings-settingid-value",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 integrationlink integrationlinktype key details",
+      "summary": "Documented GET /v1/integrationLink/{integrationLinkType}/{key}/details (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 integrationlink integrationlinktype key details --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/integrationLink/{integrationLinkType}/{key}/details"
+        }
+      ],
+      "operation": "configcat.get.v1-integrationlink-integrationlinktype-key-details",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organizations organizationid auditlogs",
+      "summary": "Documented GET /v1/organizations/{organizationId}/auditlogs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 organizations organizationid auditlogs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organizations/{organizationId}/auditlogs"
+        }
+      ],
+      "operation": "configcat.get.v1-organizations-organizationid-auditlogs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organizations organizationid invitations",
+      "summary": "Documented GET /v1/organizations/{organizationId}/invitations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 organizations organizationid invitations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organizations/{organizationId}/invitations"
+        }
+      ],
+      "operation": "configcat.get.v1-organizations-organizationid-invitations",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organizations organizationid organization-limitations",
+      "summary": "Documented GET /v1/organizations/{organizationId}/organization-limitations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 organizations organizationid organization-limitations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organizations/{organizationId}/organization-limitations"
+        }
+      ],
+      "operation": "configcat.get.v1-organizations-organizationid-organization-limitations",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 products productid",
+      "summary": "Documented GET /v1/products/{productId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 products productid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products/{productId}"
+        }
+      ],
+      "operation": "configcat.get.v1-products-productid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 products productid invitations",
+      "summary": "Documented GET /v1/products/{productId}/invitations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 products productid invitations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products/{productId}/invitations"
+        }
+      ],
+      "operation": "configcat.get.v1-products-productid-invitations",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 products productid members",
+      "summary": "Documented GET /v1/products/{productId}/members (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 products productid members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products/{productId}/members"
+        }
+      ],
+      "operation": "configcat.get.v1-products-productid-members",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 products productid preferences",
+      "summary": "Documented GET /v1/products/{productId}/preferences (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 products productid preferences --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products/{productId}/preferences"
+        }
+      ],
+      "operation": "configcat.get.v1-products-productid-preferences",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 proxy-profiles proxyprofileid sdk-keys",
+      "summary": "Documented GET /v1/proxy-profiles/{proxyProfileId}/sdk-keys (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 proxy-profiles proxyprofileid sdk-keys --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/proxy-profiles/{proxyProfileId}/sdk-keys"
+        }
+      ],
+      "operation": "configcat.get.v1-proxy-profiles-proxyprofileid-sdk-keys",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 settings settingid code-references",
+      "summary": "Documented GET /v1/settings/{settingId}/code-references (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 settings settingid code-references --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/settings/{settingId}/code-references"
+        }
+      ],
+      "operation": "configcat.get.v1-settings-settingid-code-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 settings settingid predefined-variations",
+      "summary": "Documented GET /v1/settings/{settingId}/predefined-variations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 settings settingid predefined-variations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/settings/{settingId}/predefined-variations"
+        }
+      ],
+      "operation": "configcat.get.v1-settings-settingid-predefined-variations",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 settings settingkeyorid value",
+      "summary": "Documented GET /v1/settings/{settingKeyOrId}/value (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 settings settingkeyorid value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/settings/{settingKeyOrId}/value"
+        }
+      ],
+      "operation": "configcat.get.v1-settings-settingkeyorid-value",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 tags tagid settings",
+      "summary": "Documented GET /v1/tags/{tagId}/settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 tags tagid settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/tags/{tagId}/settings"
+        }
+      ],
+      "operation": "configcat.get.v1-tags-tagid-settings",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 webhooks webhookid keys",
+      "summary": "Documented GET /v1/webhooks/{webhookId}/keys (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v1 webhooks webhookid keys --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/webhooks/{webhookId}/keys"
+        }
+      ],
+      "operation": "configcat.get.v1-webhooks-webhookid-keys",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 change-requests changerequestid",
+      "summary": "Documented GET /v2/change-requests/{changeRequestId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v2 change-requests changerequestid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/change-requests/{changeRequestId}"
+        }
+      ],
+      "operation": "configcat.get.v2-change-requests-changerequestid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 change-requests changerequestid proposed-changes",
+      "summary": "Documented GET /v2/change-requests/{changeRequestId}/proposed-changes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v2 change-requests changerequestid proposed-changes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/change-requests/{changeRequestId}/proposed-changes"
+        }
+      ],
+      "operation": "configcat.get.v2-change-requests-changerequestid-proposed-changes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 configs configid environments environmentid values",
+      "summary": "Documented GET /v2/configs/{configId}/environments/{environmentId}/values (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v2 configs configid environments environmentid values --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/configs/{configId}/environments/{environmentId}/values"
+        }
+      ],
+      "operation": "configcat.get.v2-configs-configid-environments-environmentid-values",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 environments environmentid settings settingid value",
+      "summary": "Documented GET /v2/environments/{environmentId}/settings/{settingId}/value (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v2 environments environmentid settings settingid value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/environments/{environmentId}/settings/{settingId}/value"
+        }
+      ],
+      "operation": "configcat.get.v2-environments-environmentid-settings-settingid-value",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 organizations organizationid auditlogs",
+      "summary": "Documented GET /v2/organizations/{organizationId}/auditlogs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v2 organizations organizationid auditlogs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations/{organizationId}/auditlogs"
+        }
+      ],
+      "operation": "configcat.get.v2-organizations-organizationid-auditlogs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 organizations organizationid members",
+      "summary": "Documented GET /v2/organizations/{organizationId}/members (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v2 organizations organizationid members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations/{organizationId}/members"
+        }
+      ],
+      "operation": "configcat.get.v2-organizations-organizationid-members",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 products productid auditlogs",
+      "summary": "Documented GET /v2/products/{productId}/auditlogs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v2 products productid auditlogs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/products/{productId}/auditlogs"
+        }
+      ],
+      "operation": "configcat.get.v2-products-productid-auditlogs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 products productid change-requests",
+      "summary": "Documented GET /v2/products/{productId}/change-requests (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v2 products productid change-requests --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/products/{productId}/change-requests"
+        }
+      ],
+      "operation": "configcat.get.v2-products-productid-change-requests",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 settings settingkeyorid value",
+      "summary": "Documented GET /v2/settings/{settingKeyOrId}/value (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api get v2 settings settingkeyorid value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/settings/{settingKeyOrId}/value"
+        }
+      ],
+      "operation": "configcat.get.v2-settings-settingkeyorid-value",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch v1 environments environmentid settings settingid value",
+      "summary": "Documented PATCH /v1/environments/{environmentId}/settings/{settingId}/value (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api patch v1 environments environmentid settings settingid value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/environments/{environmentId}/settings/{settingId}/value"
+        }
+      ],
+      "operation": "configcat.patch.v1-environments-environmentid-settings-settingid-value",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 proxy-profiles proxyprofileid",
+      "summary": "Documented PATCH /v1/proxy-profiles/{proxyProfileId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api patch v1 proxy-profiles proxyprofileid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/proxy-profiles/{proxyProfileId}"
+        }
+      ],
+      "operation": "configcat.patch.v1-proxy-profiles-proxyprofileid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 settings settingid",
+      "summary": "Documented PATCH /v1/settings/{settingId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api patch v1 settings settingid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/settings/{settingId}"
+        }
+      ],
+      "operation": "configcat.patch.v1-settings-settingid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 settings settingkeyorid value",
+      "summary": "Documented PATCH /v1/settings/{settingKeyOrId}/value (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api patch v1 settings settingkeyorid value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/settings/{settingKeyOrId}/value"
+        }
+      ],
+      "operation": "configcat.patch.v1-settings-settingkeyorid-value",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 webhooks webhookid",
+      "summary": "Documented PATCH /v1/webhooks/{webhookId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api patch v1 webhooks webhookid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/webhooks/{webhookId}"
+        }
+      ],
+      "operation": "configcat.patch.v1-webhooks-webhookid",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api patch v2 environments environmentid settings settingid value",
+      "summary": "Documented PATCH /v2/environments/{environmentId}/settings/{settingId}/value (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api patch v2 environments environmentid settings settingid value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/environments/{environmentId}/settings/{settingId}/value"
+        }
+      ],
+      "operation": "configcat.patch.v2-environments-environmentid-settings-settingid-value",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v2 settings settingkeyorid value",
+      "summary": "Documented PATCH /v2/settings/{settingKeyOrId}/value (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api patch v2 settings settingkeyorid value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/settings/{settingKeyOrId}/value"
+        }
+      ],
+      "operation": "configcat.patch.v2-settings-settingkeyorid-value",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 code-references",
+      "summary": "Documented POST /v1/code-references (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 code-references --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/code-references"
+        }
+      ],
+      "operation": "configcat.post.v1-code-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 code-references delete-reports",
+      "summary": "Documented POST /v1/code-references/delete-reports (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 code-references delete-reports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/code-references/delete-reports"
+        }
+      ],
+      "operation": "configcat.post.v1-code-references-delete-reports",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 configs configid environments environmentid values",
+      "summary": "Documented POST /v1/configs/{configId}/environments/{environmentId}/values (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 configs configid environments environmentid values --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/configs/{configId}/environments/{environmentId}/values"
+        }
+      ],
+      "operation": "configcat.post.v1-configs-configid-environments-environmentid-values",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 configs configid environments environmentid webhooks",
+      "summary": "Documented POST /v1/configs/{configId}/environments/{environmentId}/webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 configs configid environments environmentid webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/configs/{configId}/environments/{environmentId}/webhooks"
+        }
+      ],
+      "operation": "configcat.post.v1-configs-configid-environments-environmentid-webhooks",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api post v1 environments environmentid settings settingid integrationlinks integrationlinktype key",
+      "summary": "Documented POST /v1/environments/{environmentId}/settings/{settingId}/integrationLinks/{integrationLinkType}/{key} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 environments environmentid settings settingid integrationlinks integrationlinktype key --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/environments/{environmentId}/settings/{settingId}/integrationLinks/{integrationLinkType}/{key}"
+        }
+      ],
+      "operation": "configcat.post.v1-environments-environmentid-settings-settingid-integrationlinks-integrationlinktype-key",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 jira connect",
+      "summary": "Documented POST /v1/jira/connect (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 jira connect --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/jira/connect"
+        }
+      ],
+      "operation": "configcat.post.v1-jira-connect",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 jira environments environmentid settings settingid integrationlinks key",
+      "summary": "Documented POST /v1/jira/environments/{environmentId}/settings/{settingId}/integrationLinks/{key} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 jira environments environmentid settings settingid integrationlinks key --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/jira/environments/{environmentId}/settings/{settingId}/integrationLinks/{key}"
+        }
+      ],
+      "operation": "configcat.post.v1-jira-environments-environmentid-settings-settingid-integrationlinks-key",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organizations organizationid members userid",
+      "summary": "Documented POST /v1/organizations/{organizationId}/members/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 organizations organizationid members userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organizations/{organizationId}/members/{userId}"
+        }
+      ],
+      "operation": "configcat.post.v1-organizations-organizationid-members-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organizations organizationid products",
+      "summary": "Documented POST /v1/organizations/{organizationId}/products (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 organizations organizationid products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organizations/{organizationId}/products"
+        }
+      ],
+      "operation": "configcat.post.v1-organizations-organizationid-products",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organizations organizationid proxy-profiles",
+      "summary": "Documented POST /v1/organizations/{organizationId}/proxy-profiles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 organizations organizationid proxy-profiles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organizations/{organizationId}/proxy-profiles"
+        }
+      ],
+      "operation": "configcat.post.v1-organizations-organizationid-proxy-profiles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 products productid integrations",
+      "summary": "Documented POST /v1/products/{productId}/integrations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 products productid integrations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/products/{productId}/integrations"
+        }
+      ],
+      "operation": "configcat.post.v1-products-productid-integrations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 products productid members invite",
+      "summary": "Documented POST /v1/products/{productId}/members/invite (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 products productid members invite --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/products/{productId}/members/invite"
+        }
+      ],
+      "operation": "configcat.post.v1-products-productid-members-invite",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 products productid permissions",
+      "summary": "Documented POST /v1/products/{productId}/permissions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 products productid permissions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/products/{productId}/permissions"
+        }
+      ],
+      "operation": "configcat.post.v1-products-productid-permissions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 products productid preferences",
+      "summary": "Documented POST /v1/products/{productId}/preferences (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 products productid preferences --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/products/{productId}/preferences"
+        }
+      ],
+      "operation": "configcat.post.v1-products-productid-preferences",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 products productid segments",
+      "summary": "Documented POST /v1/products/{productId}/segments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 products productid segments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/products/{productId}/segments"
+        }
+      ],
+      "operation": "configcat.post.v1-products-productid-segments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 proxy-profiles proxyprofileid sdk-keys deselect",
+      "summary": "Documented POST /v1/proxy-profiles/{proxyProfileId}/sdk-keys/deselect (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 proxy-profiles proxyprofileid sdk-keys deselect --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/proxy-profiles/{proxyProfileId}/sdk-keys/deselect"
+        }
+      ],
+      "operation": "configcat.post.v1-proxy-profiles-proxyprofileid-sdk-keys-deselect",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 proxy-profiles proxyprofileid sdk-keys select",
+      "summary": "Documented POST /v1/proxy-profiles/{proxyProfileId}/sdk-keys/select (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 proxy-profiles proxyprofileid sdk-keys select --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/proxy-profiles/{proxyProfileId}/sdk-keys/select"
+        }
+      ],
+      "operation": "configcat.post.v1-proxy-profiles-proxyprofileid-sdk-keys-select",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 proxy-profiles proxyprofileid secret",
+      "summary": "Documented POST /v1/proxy-profiles/{proxyProfileId}/secret (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v1 proxy-profiles proxyprofileid secret --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/proxy-profiles/{proxyProfileId}/secret"
+        }
+      ],
+      "operation": "configcat.post.v1-proxy-profiles-proxyprofileid-secret",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 change-requests changerequestid apply",
+      "summary": "Documented POST /v2/change-requests/{changeRequestId}/apply (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v2 change-requests changerequestid apply --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/change-requests/{changeRequestId}/apply"
+        }
+      ],
+      "operation": "configcat.post.v2-change-requests-changerequestid-apply",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 change-requests changerequestid approve",
+      "summary": "Documented POST /v2/change-requests/{changeRequestId}/approve (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v2 change-requests changerequestid approve --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/change-requests/{changeRequestId}/approve"
+        }
+      ],
+      "operation": "configcat.post.v2-change-requests-changerequestid-approve",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 change-requests changerequestid claim-ownership",
+      "summary": "Documented POST /v2/change-requests/{changeRequestId}/claim-ownership (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v2 change-requests changerequestid claim-ownership --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/change-requests/{changeRequestId}/claim-ownership"
+        }
+      ],
+      "operation": "configcat.post.v2-change-requests-changerequestid-claim-ownership",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 change-requests changerequestid close",
+      "summary": "Documented POST /v2/change-requests/{changeRequestId}/close (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v2 change-requests changerequestid close --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/change-requests/{changeRequestId}/close"
+        }
+      ],
+      "operation": "configcat.post.v2-change-requests-changerequestid-close",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 change-requests changerequestid comments",
+      "summary": "Documented POST /v2/change-requests/{changeRequestId}/comments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v2 change-requests changerequestid comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/change-requests/{changeRequestId}/comments"
+        }
+      ],
+      "operation": "configcat.post.v2-change-requests-changerequestid-comments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 change-requests changerequestid proposed-changes settingid resolve-conflicts",
+      "summary": "Documented POST /v2/change-requests/{changeRequestId}/proposed-changes/{settingId}/resolve-conflicts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v2 change-requests changerequestid proposed-changes settingid resolve-conflicts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/change-requests/{changeRequestId}/proposed-changes/{settingId}/resolve-conflicts"
+        }
+      ],
+      "operation": "configcat.post.v2-change-requests-changerequestid-proposed-changes-settingid-resolve-conflicts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 change-requests changerequestid remove-approval",
+      "summary": "Documented POST /v2/change-requests/{changeRequestId}/remove-approval (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v2 change-requests changerequestid remove-approval --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/change-requests/{changeRequestId}/remove-approval"
+        }
+      ],
+      "operation": "configcat.post.v2-change-requests-changerequestid-remove-approval",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 configs configid environments environmentid change-requests",
+      "summary": "Documented POST /v2/configs/{configId}/environments/{environmentId}/change-requests (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v2 configs configid environments environmentid change-requests --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/configs/{configId}/environments/{environmentId}/change-requests"
+        }
+      ],
+      "operation": "configcat.post.v2-configs-configid-environments-environmentid-change-requests",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 configs configid environments environmentid values",
+      "summary": "Documented POST /v2/configs/{configId}/environments/{environmentId}/values (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api post v2 configs configid environments environmentid values --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/configs/{configId}/environments/{environmentId}/values"
+        }
+      ],
+      "operation": "configcat.post.v2-configs-configid-environments-environmentid-values",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 environments environmentid settings settingid value",
+      "summary": "Documented PUT /v1/environments/{environmentId}/settings/{settingId}/value (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v1 environments environmentid settings settingid value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/environments/{environmentId}/settings/{settingId}/value"
+        }
+      ],
+      "operation": "configcat.put.v1-environments-environmentid-settings-settingid-value",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 integrations integrationid",
+      "summary": "Documented PUT /v1/integrations/{integrationId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v1 integrations integrationid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/integrations/{integrationId}"
+        }
+      ],
+      "operation": "configcat.put.v1-integrations-integrationid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 permissions permissiongroupid",
+      "summary": "Documented PUT /v1/permissions/{permissionGroupId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v1 permissions permissiongroupid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/permissions/{permissionGroupId}"
+        }
+      ],
+      "operation": "configcat.put.v1-permissions-permissiongroupid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 products productid",
+      "summary": "Documented PUT /v1/products/{productId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v1 products productid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/products/{productId}"
+        }
+      ],
+      "operation": "configcat.put.v1-products-productid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 proxy-profiles proxyprofileid",
+      "summary": "Documented PUT /v1/proxy-profiles/{proxyProfileId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v1 proxy-profiles proxyprofileid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/proxy-profiles/{proxyProfileId}"
+        }
+      ],
+      "operation": "configcat.put.v1-proxy-profiles-proxyprofileid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 segments segmentid",
+      "summary": "Documented PUT /v1/segments/{segmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v1 segments segmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/segments/{segmentId}"
+        }
+      ],
+      "operation": "configcat.put.v1-segments-segmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 settings settingid predefined-variations",
+      "summary": "Documented PUT /v1/settings/{settingId}/predefined-variations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v1 settings settingid predefined-variations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/settings/{settingId}/predefined-variations"
+        }
+      ],
+      "operation": "configcat.put.v1-settings-settingid-predefined-variations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 settings settingkeyorid value",
+      "summary": "Documented PUT /v1/settings/{settingKeyOrId}/value (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v1 settings settingkeyorid value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/settings/{settingKeyOrId}/value"
+        }
+      ],
+      "operation": "configcat.put.v1-settings-settingkeyorid-value",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 webhooks webhookid",
+      "summary": "Documented PUT /v1/webhooks/{webhookId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v1 webhooks webhookid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/webhooks/{webhookId}"
+        }
+      ],
+      "operation": "configcat.put.v1-webhooks-webhookid",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api put v2 change-request-comments commentid",
+      "summary": "Documented PUT /v2/change-request-comments/{commentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v2 change-request-comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/change-request-comments/{commentId}"
+        }
+      ],
+      "operation": "configcat.put.v2-change-request-comments-commentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 change-requests changerequestid",
+      "summary": "Documented PUT /v2/change-requests/{changeRequestId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v2 change-requests changerequestid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/change-requests/{changeRequestId}"
+        }
+      ],
+      "operation": "configcat.put.v2-change-requests-changerequestid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 change-requests changerequestid proposed-changes",
+      "summary": "Documented PUT /v2/change-requests/{changeRequestId}/proposed-changes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v2 change-requests changerequestid proposed-changes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/change-requests/{changeRequestId}/proposed-changes"
+        }
+      ],
+      "operation": "configcat.put.v2-change-requests-changerequestid-proposed-changes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 environments environmentid settings settingid value",
+      "summary": "Documented PUT /v2/environments/{environmentId}/settings/{settingId}/value (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v2 environments environmentid settings settingid value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/environments/{environmentId}/settings/{settingId}/value"
+        }
+      ],
+      "operation": "configcat.put.v2-environments-environmentid-settings-settingid-value",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 settings settingkeyorid value",
+      "summary": "Documented PUT /v2/settings/{settingKeyOrId}/value (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat api put v2 settings settingkeyorid value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/settings/{settingKeyOrId}/value"
+        }
+      ],
+      "operation": "configcat.put.v2-settings-settingkeyorid-value",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "audit logs list",
+      "summary": "Run the audit logs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "audit_logs",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat audit logs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products/{productId}/auditlogs"
+        }
+      ]
+    },
+    {
+      "path": "config list",
+      "summary": "Run the config ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "config",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat config list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/configs/{configId}"
+        }
+      ]
+    },
+    {
+      "path": "config setting values list",
+      "summary": "Run the config setting values ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "config_setting_values",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat config setting values list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/configs/{configId}/environments/{environmentId}/values"
+        }
+      ]
+    },
+    {
+      "path": "configs list",
+      "summary": "Run the configs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "configs",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat configs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products/{productId}/configs"
+        }
+      ]
+    },
+    {
+      "path": "create config apply",
+      "summary": "Plan and execute the create config reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_config",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm configcat create config apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/products/{productId}/configs"
+        }
+      ],
+      "risk": "creates a new ConfigCat config within the configured product; low risk, no data destruction",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create environment apply",
+      "summary": "Plan and execute the create environment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_environment",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm configcat create environment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/products/{productId}/environments"
+        }
+      ],
+      "risk": "creates a new ConfigCat environment within the configured product; low risk, no data destruction",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create flag apply",
+      "summary": "Plan and execute the create flag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_flag",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "key",
+          "type": "string",
+          "summary": "Required key record field.",
+          "maps_to": "record.key",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "settingType",
+          "type": "string",
+          "summary": "Required settingType record field.",
+          "maps_to": "record.settingType",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm configcat create flag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/configs/{configId}/settings"
+        }
+      ],
+      "risk": "creates a new ConfigCat feature flag/setting within the configured config; low risk, no data destruction",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create tag apply",
+      "summary": "Plan and execute the create tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tag",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm configcat create tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/products/{productId}/tags"
+        }
+      ],
+      "risk": "creates a new ConfigCat tag within the configured product; low risk, no data destruction",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete config apply",
+      "summary": "Plan and execute the delete config reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_config",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "configId",
+          "type": "string",
+          "summary": "Required configId record field.",
+          "maps_to": "record.configId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm configcat delete config apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/configs/{configId}"
+        }
+      ],
+      "risk": "permanently deletes a ConfigCat config and every feature flag/setting defined in it; destructive, external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete environment apply",
+      "summary": "Plan and execute the delete environment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_environment",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "environmentId",
+          "type": "string",
+          "summary": "Required environmentId record field.",
+          "maps_to": "record.environmentId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm configcat delete environment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/environments/{environmentId}"
+        }
+      ],
+      "risk": "permanently deletes a ConfigCat environment and every feature flag value/SDK key scoped to it; destructive, external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete flag apply",
+      "summary": "Plan and execute the delete flag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_flag",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "settingId",
+          "type": "integer",
+          "summary": "Required settingId record field.",
+          "maps_to": "record.settingId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm configcat delete flag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/settings/{settingId}"
+        }
+      ],
+      "risk": "permanently deletes a ConfigCat feature flag/setting and its values in every environment; destructive, external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete tag apply",
+      "summary": "Plan and execute the delete tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tag",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "tagId",
+          "type": "integer",
+          "summary": "Required tagId record field.",
+          "maps_to": "record.tagId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm configcat delete tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/tags/{tagId}"
+        }
+      ],
+      "risk": "permanently deletes a ConfigCat tag and untags every feature flag that used it; destructive, external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "deleted settings list",
+      "summary": "Run the deleted settings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deleted_settings",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat deleted settings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/configs/{configId}/deleted-settings"
+        }
+      ]
+    },
+    {
+      "path": "environment list",
+      "summary": "Run the environment ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "environment",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat environment list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/environments/{environmentId}"
+        }
+      ]
+    },
+    {
+      "path": "environments list",
+      "summary": "Run the environments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "environments",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat environments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products/{productId}/environments"
+        }
+      ]
+    },
+    {
+      "path": "integration list",
+      "summary": "Run the integration ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "integration",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat integration list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/integrations/{integrationId}"
+        }
+      ]
+    },
+    {
+      "path": "integrations list",
+      "summary": "Run the integrations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "integrations",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat integrations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products/{productId}/integrations"
+        }
+      ]
+    },
+    {
+      "path": "me list",
+      "summary": "Run the me ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "me",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat me list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/me"
+        }
+      ]
+    },
+    {
+      "path": "members list",
+      "summary": "Run the members ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "members",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat members list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organizations/{organizationId}/members"
+        }
+      ]
+    },
+    {
+      "path": "organizations list",
+      "summary": "Run the organizations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organizations",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat organizations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organizations"
+        }
+      ]
+    },
+    {
+      "path": "permission group list",
+      "summary": "Run the permission group ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "permission_group",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat permission group list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/permissions/{permissionGroupId}"
+        }
+      ]
+    },
+    {
+      "path": "permission groups list",
+      "summary": "Run the permission groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "permission_groups",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat permission groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products/{productId}/permissions"
+        }
+      ]
+    },
+    {
+      "path": "products list",
+      "summary": "Run the products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products"
+        }
+      ]
+    },
+    {
+      "path": "proxy profile list",
+      "summary": "Run the proxy profile ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "proxy_profile",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat proxy profile list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/proxy-profiles/{proxyProfileId}"
+        }
+      ]
+    },
+    {
+      "path": "proxy profiles list",
+      "summary": "Run the proxy profiles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "proxy_profiles",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat proxy profiles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organizations/{organizationId}/proxy-profiles"
+        }
+      ]
+    },
+    {
+      "path": "sdk keys list",
+      "summary": "Run the sdk keys ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sdk_keys",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat sdk keys list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/configs/{configId}/environments/{environmentId}"
+        }
+      ]
+    },
+    {
+      "path": "segment list",
+      "summary": "Run the segment ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segment",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat segment list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/segments/{segmentId}"
+        }
+      ]
+    },
+    {
+      "path": "segments list",
+      "summary": "Run the segments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segments",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat segments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products/{productId}/segments"
+        }
+      ]
+    },
+    {
+      "path": "setting list",
+      "summary": "Run the setting ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "setting",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat setting list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/settings/{settingId}"
+        }
+      ]
+    },
+    {
+      "path": "settings list",
+      "summary": "Run the settings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "settings",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat settings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/configs/{configId}/settings"
+        }
+      ]
+    },
+    {
+      "path": "stale flags list",
+      "summary": "Run the stale flags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stale_flags",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat stale flags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products/{productId}/staleflags"
+        }
+      ]
+    },
+    {
+      "path": "tag list",
+      "summary": "Run the tag ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tag",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat tag list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/tags/{tagId}"
+        }
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products/{productId}/tags"
+        }
+      ]
+    },
+    {
+      "path": "update config apply",
+      "summary": "Plan and execute the update config reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_config",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "configId",
+          "type": "string",
+          "summary": "Required configId record field.",
+          "maps_to": "record.configId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm configcat update config apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/configs/{configId}"
+        }
+      ],
+      "risk": "renames/reorders an existing ConfigCat config; may affect SDK-visible dashboard organization",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update environment apply",
+      "summary": "Plan and execute the update environment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_environment",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "environmentId",
+          "type": "string",
+          "summary": "Required environmentId record field.",
+          "maps_to": "record.environmentId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm configcat update environment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/environments/{environmentId}"
+        }
+      ],
+      "risk": "renames/recolors an existing ConfigCat environment; may affect dashboard organization visible to other users",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update flag apply",
+      "summary": "Plan and execute the update flag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_flag",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "settingId",
+          "type": "integer",
+          "summary": "Required settingId record field.",
+          "maps_to": "record.settingId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm configcat update flag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/settings/{settingId}"
+        }
+      ],
+      "risk": "replaces an existing ConfigCat feature flag/setting's metadata (name/hint/tags); does not itself change the flag's evaluated VALUE in any environment",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update tag apply",
+      "summary": "Plan and execute the update tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tag",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "flags": [
+        {
+          "name": "tagId",
+          "type": "integer",
+          "summary": "Required tagId record field.",
+          "maps_to": "record.tagId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm configcat update tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/tags/{tagId}"
+        }
+      ],
+      "risk": "renames/recolors an existing ConfigCat tag; affects every feature flag tagged with it",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "webhook list",
+      "summary": "Run the webhook ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat webhook list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/webhooks/{webhookId}"
+        }
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "examples": [
+        "pm configcat webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products/{productId}/webhooks"
+        }
+      ]
+    }
+  ]
+}

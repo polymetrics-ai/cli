@@ -1,0 +1,4006 @@
+{
+  "operations": [
+    {
+      "id": "getlago.get.activity-logs",
+      "kind": "rest_read",
+      "summary": "GET /activity_logs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity_logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.activity-logs-activity-id",
+      "kind": "rest_read",
+      "summary": "GET /activity_logs/{activity_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity_logs/{activity_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.add-ons",
+      "kind": "rest_read",
+      "summary": "GET /add_ons",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/add_ons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.add-ons",
+      "kind": "rest_write",
+      "summary": "POST /add_ons",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/add_ons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.add-ons-code",
+      "kind": "rest_read",
+      "summary": "GET /add_ons/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/add_ons/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.add-ons-code",
+      "kind": "rest_write",
+      "summary": "PUT /add_ons/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/add_ons/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.add-ons-code",
+      "kind": "rest_write",
+      "summary": "DELETE /add_ons/{code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/add_ons/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.analytics-gross-revenue",
+      "kind": "rest_read",
+      "summary": "GET /analytics/gross_revenue",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/gross_revenue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.analytics-invoice-collection",
+      "kind": "rest_read",
+      "summary": "GET /analytics/invoice_collection",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/invoice_collection",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.analytics-invoiced-usage",
+      "kind": "rest_read",
+      "summary": "GET /analytics/invoiced_usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/invoiced_usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.analytics-mrr",
+      "kind": "rest_read",
+      "summary": "GET /analytics/mrr",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/mrr",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.analytics-overdue-balance",
+      "kind": "rest_read",
+      "summary": "GET /analytics/overdue_balance",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/overdue_balance",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.analytics-usage",
+      "kind": "rest_read",
+      "summary": "GET /analytics/usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.api-logs",
+      "kind": "rest_read",
+      "summary": "GET /api_logs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api_logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.api-logs-request-id",
+      "kind": "rest_read",
+      "summary": "GET /api_logs/{request_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api_logs/{request_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.applied-coupons",
+      "kind": "rest_read",
+      "summary": "GET /applied_coupons",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/applied_coupons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.applied-coupons",
+      "kind": "rest_write",
+      "summary": "POST /applied_coupons",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/applied_coupons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.billable-metrics",
+      "kind": "rest_write",
+      "summary": "POST /billable_metrics",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/billable_metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.billable-metrics-evaluate-expression",
+      "kind": "rest_write",
+      "summary": "POST /billable_metrics/evaluate_expression",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/billable_metrics/evaluate_expression",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.billable-metrics-code",
+      "kind": "rest_read",
+      "summary": "GET /billable_metrics/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/billable_metrics/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.billable-metrics-code",
+      "kind": "rest_write",
+      "summary": "PUT /billable_metrics/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/billable_metrics/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.billable-metrics-code",
+      "kind": "rest_write",
+      "summary": "DELETE /billable_metrics/{code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/billable_metrics/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.billing-entities",
+      "kind": "rest_read",
+      "summary": "GET /billing_entities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/billing_entities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.billing-entities",
+      "kind": "rest_write",
+      "summary": "POST /billing_entities",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/billing_entities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.billing-entities-code",
+      "kind": "rest_read",
+      "summary": "GET /billing_entities/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/billing_entities/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.billing-entities-code",
+      "kind": "rest_write",
+      "summary": "PUT /billing_entities/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/billing_entities/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.coupons",
+      "kind": "rest_read",
+      "summary": "GET /coupons",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/coupons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.coupons",
+      "kind": "rest_write",
+      "summary": "POST /coupons",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/coupons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.coupons-code",
+      "kind": "rest_read",
+      "summary": "GET /coupons/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/coupons/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.coupons-code",
+      "kind": "rest_write",
+      "summary": "PUT /coupons/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/coupons/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.coupons-code",
+      "kind": "rest_write",
+      "summary": "DELETE /coupons/{code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/coupons/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.credit-notes",
+      "kind": "rest_read",
+      "summary": "GET /credit_notes",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credit_notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.credit-notes",
+      "kind": "rest_write",
+      "summary": "POST /credit_notes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/credit_notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.credit-notes-estimate",
+      "kind": "rest_write",
+      "summary": "POST /credit_notes/estimate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/credit_notes/estimate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.credit-notes-lago-id",
+      "kind": "rest_read",
+      "summary": "GET /credit_notes/{lago_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credit_notes/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.credit-notes-lago-id",
+      "kind": "rest_write",
+      "summary": "PUT /credit_notes/{lago_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/credit_notes/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.credit-notes-lago-id-download",
+      "kind": "rest_write",
+      "summary": "POST /credit_notes/{lago_id}/download",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/credit_notes/{lago_id}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.credit-notes-lago-id-metadata",
+      "kind": "rest_write",
+      "summary": "POST /credit_notes/{lago_id}/metadata",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/credit_notes/{lago_id}/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.patch.credit-notes-lago-id-metadata",
+      "kind": "rest_write",
+      "summary": "PATCH /credit_notes/{lago_id}/metadata",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/credit_notes/{lago_id}/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.credit-notes-lago-id-metadata",
+      "kind": "rest_write",
+      "summary": "DELETE /credit_notes/{lago_id}/metadata",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/credit_notes/{lago_id}/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.credit-notes-lago-id-metadata-key",
+      "kind": "rest_write",
+      "summary": "DELETE /credit_notes/{lago_id}/metadata/{key}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/credit_notes/{lago_id}/metadata/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.credit-notes-lago-id-void",
+      "kind": "rest_write",
+      "summary": "PUT /credit_notes/{lago_id}/void",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/credit_notes/{lago_id}/void",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.customers",
+      "kind": "rest_write",
+      "summary": "POST /customers",
+      "description": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.customers-external-customer-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{external_customer_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{external_customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-applied-coupons",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/applied_coupons",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/applied_coupons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.customers-external-customer-id-applied-coupons-applied-coupon-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{external_customer_id}/applied_coupons/{applied_coupon_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{external_customer_id}/applied_coupons/{applied_coupon_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.customers-external-customer-id-checkout-url",
+      "kind": "rest_write",
+      "summary": "POST /customers/{external_customer_id}/checkout_url",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{external_customer_id}/checkout_url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-credit-notes",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/credit_notes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/credit_notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-current-usage",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/current_usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/current_usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-invoices",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/invoices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-past-usage",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/past_usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/past_usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-payment-methods",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/payment_methods",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/payment_methods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.customers-external-customer-id-payment-methods-lago-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{external_customer_id}/payment_methods/{lago_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{external_customer_id}/payment_methods/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.customers-external-customer-id-payment-methods-lago-id-set-as-default",
+      "kind": "rest_write",
+      "summary": "PUT /customers/{external_customer_id}/payment_methods/{lago_id}/set_as_default",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customers/{external_customer_id}/payment_methods/{lago_id}/set_as_default",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-payment-requests",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/payment_requests",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/payment_requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-payments",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/payments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-portal-url",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/portal_url",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/portal_url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-projected-usage",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/projected_usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/projected_usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-subscriptions",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/subscriptions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-wallets",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/wallets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/wallets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.customers-external-customer-id-wallets",
+      "kind": "rest_write",
+      "summary": "POST /customers/{external_customer_id}/wallets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{external_customer_id}/wallets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-wallets-code",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/wallets/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/wallets/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.customers-external-customer-id-wallets-code",
+      "kind": "rest_write",
+      "summary": "PUT /customers/{external_customer_id}/wallets/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customers/{external_customer_id}/wallets/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.customers-external-customer-id-wallets-code",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{external_customer_id}/wallets/{code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{external_customer_id}/wallets/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-wallets-wallet-code-alerts",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/wallets/{wallet_code}/alerts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/wallets/{wallet_code}/alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.customers-external-customer-id-wallets-wallet-code-alerts",
+      "kind": "rest_write",
+      "summary": "POST /customers/{external_customer_id}/wallets/{wallet_code}/alerts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{external_customer_id}/wallets/{wallet_code}/alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.customers-external-customer-id-wallets-wallet-code-alerts",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{external_customer_id}/wallets/{wallet_code}/alerts",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{external_customer_id}/wallets/{wallet_code}/alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.customers-external-customer-id-wallets-wallet-code-alerts-code",
+      "kind": "rest_read",
+      "summary": "GET /customers/{external_customer_id}/wallets/{wallet_code}/alerts/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customers/{external_customer_id}/wallets/{wallet_code}/alerts/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.customers-external-customer-id-wallets-wallet-code-alerts-code",
+      "kind": "rest_write",
+      "summary": "PUT /customers/{external_customer_id}/wallets/{wallet_code}/alerts/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customers/{external_customer_id}/wallets/{wallet_code}/alerts/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.customers-external-customer-id-wallets-wallet-code-alerts-code",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{external_customer_id}/wallets/{wallet_code}/alerts/{code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{external_customer_id}/wallets/{wallet_code}/alerts/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.customers-external-customer-id-wallets-wallet-code-metadata",
+      "kind": "rest_write",
+      "summary": "POST /customers/{external_customer_id}/wallets/{wallet_code}/metadata",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customers/{external_customer_id}/wallets/{wallet_code}/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.patch.customers-external-customer-id-wallets-wallet-code-metadata",
+      "kind": "rest_write",
+      "summary": "PATCH /customers/{external_customer_id}/wallets/{wallet_code}/metadata",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/customers/{external_customer_id}/wallets/{wallet_code}/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.customers-external-customer-id-wallets-wallet-code-metadata",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{external_customer_id}/wallets/{wallet_code}/metadata",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{external_customer_id}/wallets/{wallet_code}/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.customers-external-customer-id-wallets-wallet-code-metadata-key",
+      "kind": "rest_write",
+      "summary": "DELETE /customers/{external_customer_id}/wallets/{wallet_code}/metadata/{key}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customers/{external_customer_id}/wallets/{wallet_code}/metadata/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.events",
+      "kind": "rest_read",
+      "summary": "GET /events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.events",
+      "kind": "rest_write",
+      "summary": "POST /events",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.events-batch",
+      "kind": "rest_write",
+      "summary": "POST /events/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.events-batch-estimate-instant-fees",
+      "kind": "rest_write",
+      "summary": "POST /events/batch_estimate_instant_fees",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/batch_estimate_instant_fees",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.events-estimate-fees",
+      "kind": "rest_write",
+      "summary": "POST /events/estimate_fees",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/estimate_fees",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.events-estimate-instant-fees",
+      "kind": "rest_write",
+      "summary": "POST /events/estimate_instant_fees",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/estimate_instant_fees",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.events-transaction-id",
+      "kind": "rest_read",
+      "summary": "GET /events/{transaction_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{transaction_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.features",
+      "kind": "rest_read",
+      "summary": "GET /features",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/features",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.features",
+      "kind": "rest_write",
+      "summary": "POST /features",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/features",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.features-code",
+      "kind": "rest_read",
+      "summary": "GET /features/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/features/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.features-code",
+      "kind": "rest_write",
+      "summary": "PUT /features/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/features/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.features-code",
+      "kind": "rest_write",
+      "summary": "DELETE /features/{code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/features/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.features-code-privileges-privilege-code",
+      "kind": "rest_write",
+      "summary": "DELETE /features/{code}/privileges/{privilege_code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/features/{code}/privileges/{privilege_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.fees",
+      "kind": "rest_read",
+      "summary": "GET /fees",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/fees",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.fees-lago-id",
+      "kind": "rest_read",
+      "summary": "GET /fees/{lago_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/fees/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.fees-lago-id",
+      "kind": "rest_write",
+      "summary": "PUT /fees/{lago_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/fees/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.fees-lago-id",
+      "kind": "rest_write",
+      "summary": "DELETE /fees/{lago_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/fees/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.invoices",
+      "kind": "rest_write",
+      "summary": "POST /invoices",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.invoices-preview",
+      "kind": "rest_write",
+      "summary": "POST /invoices/preview",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/preview",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.invoices-id-refresh",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{id}/refresh",
+      "description": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{id}/refresh",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.invoices-lago-id",
+      "kind": "rest_read",
+      "summary": "GET /invoices/{lago_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoices/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.invoices-lago-id",
+      "kind": "rest_write",
+      "summary": "PUT /invoices/{lago_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/invoices/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.invoices-lago-id",
+      "kind": "rest_write",
+      "summary": "DELETE /invoices/{lago_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/invoices/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.invoices-lago-id-download",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{lago_id}/download",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{lago_id}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.invoices-lago-id-finalize",
+      "kind": "rest_write",
+      "summary": "PUT /invoices/{lago_id}/finalize",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/invoices/{lago_id}/finalize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.invoices-lago-id-lose-dispute",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{lago_id}/lose_dispute",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{lago_id}/lose_dispute",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.invoices-lago-id-payment-url",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{lago_id}/payment_url",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{lago_id}/payment_url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.invoices-lago-id-refresh",
+      "kind": "rest_write",
+      "summary": "PUT /invoices/{lago_id}/refresh",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/invoices/{lago_id}/refresh",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.invoices-lago-id-retry",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{lago_id}/retry",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{lago_id}/retry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.invoices-lago-id-retry-payment",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{lago_id}/retry_payment",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{lago_id}/retry_payment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.invoices-lago-id-void",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{lago_id}/void",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{lago_id}/void",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.organizations",
+      "kind": "rest_write",
+      "summary": "PUT /organizations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.payment-receipts",
+      "kind": "rest_read",
+      "summary": "GET /payment_receipts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/payment_receipts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.payment-receipts-lago-id",
+      "kind": "rest_read",
+      "summary": "GET /payment_receipts/{lago_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/payment_receipts/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.payment-requests",
+      "kind": "rest_read",
+      "summary": "GET /payment_requests",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/payment_requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.payment-requests",
+      "kind": "rest_write",
+      "summary": "POST /payment_requests",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/payment_requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.payment-requests-lago-id",
+      "kind": "rest_read",
+      "summary": "GET /payment_requests/{lago_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/payment_requests/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.payments",
+      "kind": "rest_read",
+      "summary": "GET /payments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.payments",
+      "kind": "rest_write",
+      "summary": "POST /payments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.payments-lago-id",
+      "kind": "rest_read",
+      "summary": "GET /payments/{lago_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/payments/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.plans",
+      "kind": "rest_write",
+      "summary": "POST /plans",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.plans-code",
+      "kind": "rest_read",
+      "summary": "GET /plans/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.plans-code",
+      "kind": "rest_write",
+      "summary": "PUT /plans/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/plans/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.plans-code",
+      "kind": "rest_write",
+      "summary": "DELETE /plans/{code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/plans/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.plans-code-charges",
+      "kind": "rest_read",
+      "summary": "GET /plans/{code}/charges",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/{code}/charges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.plans-code-charges",
+      "kind": "rest_write",
+      "summary": "POST /plans/{code}/charges",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plans/{code}/charges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.plans-code-charges-charge-code",
+      "kind": "rest_read",
+      "summary": "GET /plans/{code}/charges/{charge_code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/{code}/charges/{charge_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.plans-code-charges-charge-code",
+      "kind": "rest_write",
+      "summary": "PUT /plans/{code}/charges/{charge_code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/plans/{code}/charges/{charge_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.plans-code-charges-charge-code",
+      "kind": "rest_write",
+      "summary": "DELETE /plans/{code}/charges/{charge_code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/plans/{code}/charges/{charge_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.plans-code-charges-charge-code-filters",
+      "kind": "rest_read",
+      "summary": "GET /plans/{code}/charges/{charge_code}/filters",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/{code}/charges/{charge_code}/filters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.plans-code-charges-charge-code-filters",
+      "kind": "rest_write",
+      "summary": "POST /plans/{code}/charges/{charge_code}/filters",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plans/{code}/charges/{charge_code}/filters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.plans-code-charges-charge-code-filters-filter-id",
+      "kind": "rest_read",
+      "summary": "GET /plans/{code}/charges/{charge_code}/filters/{filter_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/{code}/charges/{charge_code}/filters/{filter_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.plans-code-charges-charge-code-filters-filter-id",
+      "kind": "rest_write",
+      "summary": "PUT /plans/{code}/charges/{charge_code}/filters/{filter_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/plans/{code}/charges/{charge_code}/filters/{filter_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.plans-code-charges-charge-code-filters-filter-id",
+      "kind": "rest_write",
+      "summary": "DELETE /plans/{code}/charges/{charge_code}/filters/{filter_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/plans/{code}/charges/{charge_code}/filters/{filter_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.plans-code-entitlements",
+      "kind": "rest_read",
+      "summary": "GET /plans/{code}/entitlements",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/{code}/entitlements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.plans-code-entitlements",
+      "kind": "rest_write",
+      "summary": "POST /plans/{code}/entitlements",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plans/{code}/entitlements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.patch.plans-code-entitlements",
+      "kind": "rest_write",
+      "summary": "PATCH /plans/{code}/entitlements",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/plans/{code}/entitlements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.plans-code-entitlements-feature-code",
+      "kind": "rest_read",
+      "summary": "GET /plans/{code}/entitlements/{feature_code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/{code}/entitlements/{feature_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.plans-code-entitlements-feature-code",
+      "kind": "rest_write",
+      "summary": "DELETE /plans/{code}/entitlements/{feature_code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/plans/{code}/entitlements/{feature_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.plans-code-entitlements-feature-code-privileges-privilege-code",
+      "kind": "rest_write",
+      "summary": "DELETE /plans/{code}/entitlements/{feature_code}/privileges/{privilege_code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/plans/{code}/entitlements/{feature_code}/privileges/{privilege_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.plans-code-fixed-charges",
+      "kind": "rest_read",
+      "summary": "GET /plans/{code}/fixed_charges",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/{code}/fixed_charges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.plans-code-fixed-charges",
+      "kind": "rest_write",
+      "summary": "POST /plans/{code}/fixed_charges",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plans/{code}/fixed_charges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.plans-code-fixed-charges-fixed-charge-code",
+      "kind": "rest_read",
+      "summary": "GET /plans/{code}/fixed_charges/{fixed_charge_code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plans/{code}/fixed_charges/{fixed_charge_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.plans-code-fixed-charges-fixed-charge-code",
+      "kind": "rest_write",
+      "summary": "PUT /plans/{code}/fixed_charges/{fixed_charge_code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/plans/{code}/fixed_charges/{fixed_charge_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.plans-code-fixed-charges-fixed-charge-code",
+      "kind": "rest_write",
+      "summary": "DELETE /plans/{code}/fixed_charges/{fixed_charge_code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/plans/{code}/fixed_charges/{fixed_charge_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.plans-code-metadata",
+      "kind": "rest_write",
+      "summary": "POST /plans/{code}/metadata",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plans/{code}/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.patch.plans-code-metadata",
+      "kind": "rest_write",
+      "summary": "PATCH /plans/{code}/metadata",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/plans/{code}/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.plans-code-metadata",
+      "kind": "rest_write",
+      "summary": "DELETE /plans/{code}/metadata",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/plans/{code}/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.plans-code-metadata-key",
+      "kind": "rest_write",
+      "summary": "DELETE /plans/{code}/metadata/{key}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/plans/{code}/metadata/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.subscriptions",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions",
+      "description": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.subscriptions-external-id",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{external_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{external_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.subscriptions-external-id",
+      "kind": "rest_write",
+      "summary": "PUT /subscriptions/{external_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/subscriptions/{external_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.subscriptions-external-id",
+      "kind": "rest_write",
+      "summary": "DELETE /subscriptions/{external_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/subscriptions/{external_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.subscriptions-external-id-alerts",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{external_id}/alerts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{external_id}/alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.subscriptions-external-id-alerts",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{external_id}/alerts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{external_id}/alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.subscriptions-external-id-alerts",
+      "kind": "rest_write",
+      "summary": "DELETE /subscriptions/{external_id}/alerts",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/subscriptions/{external_id}/alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.subscriptions-external-id-alerts-code",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{external_id}/alerts/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{external_id}/alerts/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.subscriptions-external-id-alerts-code",
+      "kind": "rest_write",
+      "summary": "PUT /subscriptions/{external_id}/alerts/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/subscriptions/{external_id}/alerts/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.subscriptions-external-id-alerts-code",
+      "kind": "rest_write",
+      "summary": "DELETE /subscriptions/{external_id}/alerts/{code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/subscriptions/{external_id}/alerts/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.subscriptions-external-id-charges",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{external_id}/charges",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{external_id}/charges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.subscriptions-external-id-charges-charge-code",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{external_id}/charges/{charge_code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{external_id}/charges/{charge_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.subscriptions-external-id-charges-charge-code",
+      "kind": "rest_write",
+      "summary": "PUT /subscriptions/{external_id}/charges/{charge_code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/subscriptions/{external_id}/charges/{charge_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.subscriptions-external-id-charges-charge-code-filters",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{external_id}/charges/{charge_code}/filters",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{external_id}/charges/{charge_code}/filters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.subscriptions-external-id-charges-charge-code-filters",
+      "kind": "rest_write",
+      "summary": "POST /subscriptions/{external_id}/charges/{charge_code}/filters",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscriptions/{external_id}/charges/{charge_code}/filters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.subscriptions-external-id-charges-charge-code-filters-filter-id",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{external_id}/charges/{charge_code}/filters/{filter_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{external_id}/charges/{charge_code}/filters/{filter_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.subscriptions-external-id-charges-charge-code-filters-filter-id",
+      "kind": "rest_write",
+      "summary": "PUT /subscriptions/{external_id}/charges/{charge_code}/filters/{filter_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/subscriptions/{external_id}/charges/{charge_code}/filters/{filter_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.subscriptions-external-id-charges-charge-code-filters-filter-id",
+      "kind": "rest_write",
+      "summary": "DELETE /subscriptions/{external_id}/charges/{charge_code}/filters/{filter_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/subscriptions/{external_id}/charges/{charge_code}/filters/{filter_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.subscriptions-external-id-entitlements",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{external_id}/entitlements",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{external_id}/entitlements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.patch.subscriptions-external-id-entitlements",
+      "kind": "rest_write",
+      "summary": "PATCH /subscriptions/{external_id}/entitlements",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/subscriptions/{external_id}/entitlements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.subscriptions-external-id-entitlements-feature-code",
+      "kind": "rest_write",
+      "summary": "DELETE /subscriptions/{external_id}/entitlements/{feature_code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/subscriptions/{external_id}/entitlements/{feature_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.subscriptions-external-id-entitlements-feature-code-privileges-privilege-code",
+      "kind": "rest_write",
+      "summary": "DELETE /subscriptions/{external_id}/entitlements/{feature_code}/privileges/{privilege_code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/subscriptions/{external_id}/entitlements/{feature_code}/privileges/{privilege_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.subscriptions-external-id-fixed-charges",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{external_id}/fixed_charges",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{external_id}/fixed_charges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.subscriptions-external-id-fixed-charges-fixed-charge-code",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{external_id}/fixed_charges/{fixed_charge_code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{external_id}/fixed_charges/{fixed_charge_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.subscriptions-external-id-fixed-charges-fixed-charge-code",
+      "kind": "rest_write",
+      "summary": "PUT /subscriptions/{external_id}/fixed_charges/{fixed_charge_code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/subscriptions/{external_id}/fixed_charges/{fixed_charge_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.subscriptions-external-id-lifetime-usage",
+      "kind": "rest_read",
+      "summary": "GET /subscriptions/{external_id}/lifetime_usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscriptions/{external_id}/lifetime_usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.subscriptions-external-id-lifetime-usage",
+      "kind": "rest_write",
+      "summary": "PUT /subscriptions/{external_id}/lifetime_usage",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/subscriptions/{external_id}/lifetime_usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.taxes",
+      "kind": "rest_read",
+      "summary": "GET /taxes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/taxes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.taxes",
+      "kind": "rest_write",
+      "summary": "POST /taxes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/taxes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.taxes-code",
+      "kind": "rest_read",
+      "summary": "GET /taxes/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/taxes/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.taxes-code",
+      "kind": "rest_write",
+      "summary": "PUT /taxes/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/taxes/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.taxes-code",
+      "kind": "rest_write",
+      "summary": "DELETE /taxes/{code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/taxes/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.wallet-transactions",
+      "kind": "rest_write",
+      "summary": "POST /wallet_transactions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/wallet_transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.wallet-transactions-lago-id",
+      "kind": "rest_read",
+      "summary": "GET /wallet_transactions/{lago_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/wallet_transactions/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.wallet-transactions-lago-id-consumptions",
+      "kind": "rest_read",
+      "summary": "GET /wallet_transactions/{lago_id}/consumptions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/wallet_transactions/{lago_id}/consumptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.wallet-transactions-lago-id-fundings",
+      "kind": "rest_read",
+      "summary": "GET /wallet_transactions/{lago_id}/fundings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/wallet_transactions/{lago_id}/fundings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.wallet-transactions-lago-id-payment-url",
+      "kind": "rest_write",
+      "summary": "POST /wallet_transactions/{lago_id}/payment_url",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/wallet_transactions/{lago_id}/payment_url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.wallets",
+      "kind": "rest_read",
+      "summary": "GET /wallets",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/wallets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.wallets",
+      "kind": "rest_write",
+      "summary": "POST /wallets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/wallets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.wallets-lago-id",
+      "kind": "rest_read",
+      "summary": "GET /wallets/{lago_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/wallets/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.wallets-lago-id",
+      "kind": "rest_write",
+      "summary": "PUT /wallets/{lago_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/wallets/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.wallets-lago-id",
+      "kind": "rest_write",
+      "summary": "DELETE /wallets/{lago_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/wallets/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.wallets-lago-id-metadata",
+      "kind": "rest_write",
+      "summary": "POST /wallets/{lago_id}/metadata",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/wallets/{lago_id}/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.patch.wallets-lago-id-metadata",
+      "kind": "rest_write",
+      "summary": "PATCH /wallets/{lago_id}/metadata",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/wallets/{lago_id}/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.wallets-lago-id-metadata",
+      "kind": "rest_write",
+      "summary": "DELETE /wallets/{lago_id}/metadata",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/wallets/{lago_id}/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.wallets-lago-id-metadata-key",
+      "kind": "rest_write",
+      "summary": "DELETE /wallets/{lago_id}/metadata/{key}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/wallets/{lago_id}/metadata/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.wallets-lago-id-wallet-transactions",
+      "kind": "rest_read",
+      "summary": "GET /wallets/{lago_id}/wallet_transactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/wallets/{lago_id}/wallet_transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.webhook-endpoints",
+      "kind": "rest_read",
+      "summary": "GET /webhook_endpoints",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhook_endpoints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.post.webhook-endpoints",
+      "kind": "rest_write",
+      "summary": "POST /webhook_endpoints",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhook_endpoints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.webhook-endpoints-lago-id",
+      "kind": "rest_read",
+      "summary": "GET /webhook_endpoints/{lago_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhook_endpoints/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.put.webhook-endpoints-lago-id",
+      "kind": "rest_write",
+      "summary": "PUT /webhook_endpoints/{lago_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/webhook_endpoints/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.delete.webhook-endpoints-lago-id",
+      "kind": "rest_write",
+      "summary": "DELETE /webhook_endpoints/{lago_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhook_endpoints/{lago_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.webhooks-json-public-key",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/json_public_key",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/json_public_key",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.get.webhooks-public-key",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/public_key",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/public_key",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "getlago.webhook.alert-triggered-post",
+      "kind": "composite",
+      "summary": "WEBHOOK alert_triggered#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK alert_triggered#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.billable-metric-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK billable_metric_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK billable_metric_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.billable-metric-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK billable_metric_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK billable_metric_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.billable-metric-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK billable_metric_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK billable_metric_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.credit-note-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK credit_note_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK credit_note_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.credit-note-generated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK credit_note_generated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK credit_note_generated#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.credit-note-provider-refund-failure-post",
+      "kind": "composite",
+      "summary": "WEBHOOK credit_note_provider_refund_failure#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK credit_note_provider_refund_failure#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.customer-accounting-provider-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_accounting_provider_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_accounting_provider_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.customer-accounting-provider-error-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_accounting_provider_error#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_accounting_provider_error#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.customer-checkout-url-generated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_checkout_url_generated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_checkout_url_generated#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.customer-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.customer-crm-provider-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_crm_provider_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_crm_provider_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.customer-crm-provider-error-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_crm_provider_error#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_crm_provider_error#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.customer-payment-provider-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_payment_provider_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_payment_provider_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.customer-payment-provider-error-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_payment_provider_error#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_payment_provider_error#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.customer-tax-provider-error-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_tax_provider_error#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_tax_provider_error#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.customer-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.customer-vies-check-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_vies_check#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_vies_check#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.dunning-campaign-finished-post",
+      "kind": "composite",
+      "summary": "WEBHOOK dunning_campaign_finished#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK dunning_campaign_finished#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.event-error-post",
+      "kind": "composite",
+      "summary": "WEBHOOK event_error#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK event_error#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.events-errors-post",
+      "kind": "composite",
+      "summary": "WEBHOOK events_errors#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK events_errors#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.feature-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK feature.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK feature.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.feature-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK feature.deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK feature.deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.feature-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK feature.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK feature.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.fee-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK fee_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK fee_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.fee-tax-provider-error-post",
+      "kind": "composite",
+      "summary": "WEBHOOK fee_tax_provider_error#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK fee_tax_provider_error#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.integration-provider-error-post",
+      "kind": "composite",
+      "summary": "WEBHOOK integration_provider_error#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK integration_provider_error#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.invoice-add-on-added-post",
+      "kind": "composite",
+      "summary": "WEBHOOK invoice_add_on_added#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK invoice_add_on_added#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.invoice-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK invoice_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK invoice_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.invoice-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK invoice_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK invoice_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.invoice-drafted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK invoice_drafted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK invoice_drafted#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.invoice-generated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK invoice_generated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK invoice_generated#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.invoice-one-off-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK invoice_one_off_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK invoice_one_off_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.invoice-paid-credit-added-post",
+      "kind": "composite",
+      "summary": "WEBHOOK invoice_paid_credit_added#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK invoice_paid_credit_added#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.invoice-payment-dispute-lost-post",
+      "kind": "composite",
+      "summary": "WEBHOOK invoice_payment_dispute_lost#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK invoice_payment_dispute_lost#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.invoice-payment-failure-post",
+      "kind": "composite",
+      "summary": "WEBHOOK invoice_payment_failure#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK invoice_payment_failure#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.invoice-payment-overdue-post",
+      "kind": "composite",
+      "summary": "WEBHOOK invoice_payment_overdue#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK invoice_payment_overdue#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.invoice-payment-status-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK invoice_payment_status_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK invoice_payment_status_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.invoice-resynced-post",
+      "kind": "composite",
+      "summary": "WEBHOOK invoice_resynced#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK invoice_resynced#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.invoice-voided-post",
+      "kind": "composite",
+      "summary": "WEBHOOK invoice_voided#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK invoice_voided#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.payment-provider-error-post",
+      "kind": "composite",
+      "summary": "WEBHOOK payment_provider_error#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK payment_provider_error#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.payment-request-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK payment_request_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK payment_request_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.payment-request-payment-failure-post",
+      "kind": "composite",
+      "summary": "WEBHOOK payment_request_payment_failure#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK payment_request_payment_failure#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.payment-request-payment-status-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK payment_request_payment_status_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK payment_request_payment_status_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.payment-requires-action-post",
+      "kind": "composite",
+      "summary": "WEBHOOK payment_requires_action#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK payment_requires_action#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.payment-succeeded-post",
+      "kind": "composite",
+      "summary": "WEBHOOK payment_succeeded#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK payment_succeeded#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.plan-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK plan_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK plan_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.plan-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK plan_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK plan_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.plan-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK plan_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK plan_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.subscription-canceled-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription_canceled#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription_canceled#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.subscription-incomplete-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription_incomplete#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription_incomplete#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.subscription-started-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription_started#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription_started#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.subscription-terminated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription_terminated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription_terminated#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.subscription-termination-alert-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription_termination_alert#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription_termination_alert#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.subscription-trial-ended-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription_trial_ended#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription_trial_ended#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.subscription-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.subscription-usage-threshold-reached-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subscription_usage_threshold_reached#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subscription_usage_threshold_reached#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.wallet-depleted-ongoing-balance-post",
+      "kind": "composite",
+      "summary": "WEBHOOK wallet_depleted_ongoing_balance#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK wallet_depleted_ongoing_balance#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.wallet-transaction-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK wallet_transaction_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK wallet_transaction_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.wallet-transaction-payment-failure-post",
+      "kind": "composite",
+      "summary": "WEBHOOK wallet_transaction_payment_failure#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK wallet_transaction_payment_failure#POST"
+        ]
+      }
+    },
+    {
+      "id": "getlago.webhook.wallet-transaction-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK wallet_transaction_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://swagger.getlago.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK wallet_transaction_updated#POST"
+        ]
+      }
+    }
+  ]
+}

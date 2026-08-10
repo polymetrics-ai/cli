@@ -1,0 +1,2221 @@
+{
+  "tagline": "Run MailerSend's declared streams and reverse-ETL actions.",
+  "usage": "pm mailersend \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "account users list",
+        "activity list",
+        "analytics by date list",
+        "analytics country list",
+        "analytics reading environment list",
+        "analytics user agents list",
+        "api get activities activity-id",
+        "api get api-quota",
+        "api get bulk-email bulk-email-id",
+        "api get domains domain-id",
+        "api get domains domain-id dns-records",
+        "api get domains domain-id dns-records domains domain-id recipients domains domain-id settings domains domain-id verification-status-and-similar-domain-subresources",
+        "api get domains domain-id recipients",
+        "api get domains domain-id smtp-users",
+        "api get domains domain-id smtp-users smtp-user-id",
+        "api get domains domain-id verify",
+        "api get email-verification",
+        "api get email-verification email-verification-id",
+        "api get email-verification email-verification-id results",
+        "api get email-verification email-verification-id verify",
+        "api get email-verification-lists results-and-all sms list detail-endpoints",
+        "api get identities email client-email-com",
+        "api get identities identity-id",
+        "api get inbound inbound-id",
+        "api get message-schedules message-id",
+        "api get messages message-id",
+        "api get recipients recipient-id",
+        "api get sms-activity",
+        "api get sms-activity sms-message-id",
+        "api get sms-inbounds",
+        "api get sms-inbounds sms-inbound-id",
+        "api get sms-messages",
+        "api get sms-messages sms-message-id",
+        "api get sms-numbers",
+        "api get sms-numbers sms-number-id",
+        "api get sms-recipients",
+        "api get sms-recipients sms-recipient-id",
+        "api get sms-webhooks",
+        "api get sms-webhooks sms-webhook-id",
+        "api get smtp-users blocklist-monitoring dmarc-monitoring-and-account-monitoring admin-list-resources",
+        "api get suppressions blocklist",
+        "api get suppressions hard-bounces",
+        "api get suppressions spam-complaints",
+        "api get suppressions unsubscribes",
+        "api get templates template-id operation message-schedules message-id operation identities identity-id operation identities email email operation inbound inbound-id operation users user-id operation invites invite-id operation token token-id operation webhooks webhook-id operation messages message-id operation domains domain-id operation recipients recipient-id",
+        "api get users user-id",
+        "api get webhooks webhook-id",
+        "domains list",
+        "inbound routes list",
+        "invites list",
+        "messages list",
+        "recipients list",
+        "scheduled messages list",
+        "sender identities list",
+        "templates list",
+        "tokens list",
+        "webhooks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete domains domain-id",
+        "api delete domains domain-id smtp-users smtp-user-id",
+        "api delete identities email client-email-com",
+        "api delete identities identity-id",
+        "api delete inbound inbound-id",
+        "api delete message-schedules message-id",
+        "api delete recipients recipient-id",
+        "api delete sms-inbounds sms-inbound-id",
+        "api delete sms-numbers sms-number-id",
+        "api delete sms-webhooks sms-webhook-id",
+        "api delete suppressions blocklist",
+        "api delete suppressions hard-bounces",
+        "api delete suppressions spam-complaints",
+        "api delete suppressions unsubscribes",
+        "api delete templates template-id operation message-schedules message-id operation identities identity-id operation identities email email operation inbound inbound-id operation users user-id operation invites invite-id operation token token-id operation webhooks webhook-id domain sms verification-delete-endpoints",
+        "api delete token token-id",
+        "api delete users user-id",
+        "api delete webhooks webhook-id",
+        "api post bulk-email",
+        "api post domains",
+        "api post email",
+        "api post email bulk-email sms-and-related-send-endpoints",
+        "api post email-verification",
+        "api post email-verification verify",
+        "api post identities",
+        "api post inbound",
+        "api post sms",
+        "api post sms-inbounds",
+        "api post sms-webhooks",
+        "api post suppressions blocklist",
+        "api post suppressions hard-bounces",
+        "api post suppressions spam-complaints",
+        "api post suppressions unsubscribes",
+        "api post templates identities identities identity-id resend inbound users invites invite-id resend token webhooks-and-verification-list-creation verification-endpoints",
+        "api post token",
+        "api post users",
+        "api post webhooks",
+        "api put domains domain-id settings",
+        "api put domains domain-id smtp-users smtp-user-id",
+        "api put identities email client-email-com",
+        "api put identities identity-id",
+        "api put inbound inbound-id",
+        "api put sms-inbounds sms-inbound-id",
+        "api put sms-numbers sms-number-id",
+        "api put sms-recipients sms-recipient-id",
+        "api put sms-webhooks sms-webhook-id",
+        "api put templates template-id operation identities identity-id operation identities email email operation inbound inbound-id operation users user-id operation token token-id operation webhooks webhook-id domain-settings-and-sms-configuration-update-endpoints",
+        "api put token token-id settings",
+        "api put users user-id",
+        "api put webhooks webhook-id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "account users list",
+      "summary": "Run the account users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_users",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend account users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ]
+    },
+    {
+      "path": "activity list",
+      "summary": "Run the activity ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activity",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend activity list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activity/{domain_id}"
+        }
+      ]
+    },
+    {
+      "path": "analytics by date list",
+      "summary": "Run the analytics by date ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "analytics_by_date",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend analytics by date list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analytics/date"
+        }
+      ]
+    },
+    {
+      "path": "analytics country list",
+      "summary": "Run the analytics country ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "analytics_country",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend analytics country list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analytics/country"
+        }
+      ]
+    },
+    {
+      "path": "analytics reading environment list",
+      "summary": "Run the analytics reading environment ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "analytics_reading_environment",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend analytics reading environment list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analytics/ua-type"
+        }
+      ]
+    },
+    {
+      "path": "analytics user agents list",
+      "summary": "Run the analytics user agents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "analytics_user_agents",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend analytics user agents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analytics/ua-name"
+        }
+      ]
+    },
+    {
+      "path": "api delete domains domain-id",
+      "summary": "Documented DELETE /domains/{domain_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete domains domain-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/domains/{domain_id}"
+        }
+      ],
+      "operation": "mailersend.delete.domains-domain-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete domains domain-id smtp-users smtp-user-id",
+      "summary": "Documented DELETE /domains/{domain_id}/smtp-users/{smtp_user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete domains domain-id smtp-users smtp-user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/domains/{domain_id}/smtp-users/{smtp_user_id}"
+        }
+      ],
+      "operation": "mailersend.delete.domains-domain-id-smtp-users-smtp-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete identities email client-email-com",
+      "summary": "Documented DELETE /identities/email/{client@email.com} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete identities email client-email-com --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/identities/email/{client@email.com}"
+        }
+      ],
+      "operation": "mailersend.delete.identities-email-client-email-com",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete identities identity-id",
+      "summary": "Documented DELETE /identities/{identity_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete identities identity-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/identities/{identity_id}"
+        }
+      ],
+      "operation": "mailersend.delete.identities-identity-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete inbound inbound-id",
+      "summary": "Documented DELETE /inbound/{inbound_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete inbound inbound-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/inbound/{inbound_id}"
+        }
+      ],
+      "operation": "mailersend.delete.inbound-inbound-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete message-schedules message-id",
+      "summary": "Documented DELETE /message-schedules/{message_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete message-schedules message-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/message-schedules/{message_id}"
+        }
+      ],
+      "operation": "mailersend.delete.message-schedules-message-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete recipients recipient-id",
+      "summary": "Documented DELETE /recipients/{recipient_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete recipients recipient-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/recipients/{recipient_id}"
+        }
+      ],
+      "operation": "mailersend.delete.recipients-recipient-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete sms-inbounds sms-inbound-id",
+      "summary": "Documented DELETE /sms-inbounds/{sms_inbound_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete sms-inbounds sms-inbound-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sms-inbounds/{sms_inbound_id}"
+        }
+      ],
+      "operation": "mailersend.delete.sms-inbounds-sms-inbound-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete sms-numbers sms-number-id",
+      "summary": "Documented DELETE /sms-numbers/{sms_number_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete sms-numbers sms-number-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sms-numbers/{sms_number_id}"
+        }
+      ],
+      "operation": "mailersend.delete.sms-numbers-sms-number-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete sms-webhooks sms-webhook-id",
+      "summary": "Documented DELETE /sms-webhooks/{sms_webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete sms-webhooks sms-webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sms-webhooks/{sms_webhook_id}"
+        }
+      ],
+      "operation": "mailersend.delete.sms-webhooks-sms-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete suppressions blocklist",
+      "summary": "Documented DELETE /suppressions/blocklist (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete suppressions blocklist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/suppressions/blocklist"
+        }
+      ],
+      "operation": "mailersend.delete.suppressions-blocklist",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete suppressions hard-bounces",
+      "summary": "Documented DELETE /suppressions/hard-bounces (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete suppressions hard-bounces --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/suppressions/hard-bounces"
+        }
+      ],
+      "operation": "mailersend.delete.suppressions-hard-bounces",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete suppressions spam-complaints",
+      "summary": "Documented DELETE /suppressions/spam-complaints (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete suppressions spam-complaints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/suppressions/spam-complaints"
+        }
+      ],
+      "operation": "mailersend.delete.suppressions-spam-complaints",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete suppressions unsubscribes",
+      "summary": "Documented DELETE /suppressions/unsubscribes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete suppressions unsubscribes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/suppressions/unsubscribes"
+        }
+      ],
+      "operation": "mailersend.delete.suppressions-unsubscribes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete templates template-id operation message-schedules message-id operation identities identity-id operation identities email email operation inbound inbound-id operation users user-id operation invites invite-id operation token token-id operation webhooks webhook-id domain sms verification-delete-endpoints",
+      "summary": "Documented DELETE /templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, domain/SMS/verification delete endpoints (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete templates template-id operation message-schedules message-id operation identities identity-id operation identities email email operation inbound inbound-id operation users user-id operation invites invite-id operation token token-id operation webhooks webhook-id domain sms verification-delete-endpoints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, domain/SMS/verification delete endpoints"
+        }
+      ],
+      "operation": "mailersend.delete.templates-template-id-message-schedules-message-id-identities-identity-id-identities-email-email-inbound-inbound-id-users-user-id-invites-invite-id-token-token-id-webhooks-webhook-id-domain-sms-verification-delete-endpoints",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api delete token token-id",
+      "summary": "Documented DELETE /token/{token_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete token token-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/token/{token_id}"
+        }
+      ],
+      "operation": "mailersend.delete.token-token-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete users user-id",
+      "summary": "Documented DELETE /users/{user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete users user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{user_id}"
+        }
+      ],
+      "operation": "mailersend.delete.users-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete webhooks webhook-id",
+      "summary": "Documented DELETE /webhooks/{webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api delete webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{webhook_id}"
+        }
+      ],
+      "operation": "mailersend.delete.webhooks-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get activities activity-id",
+      "summary": "Documented GET /activities/{activity_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get activities activity-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities/{activity_id}"
+        }
+      ],
+      "operation": "mailersend.get.activities-activity-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api-quota",
+      "summary": "Documented GET /api-quota (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get api-quota --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api-quota"
+        }
+      ],
+      "operation": "mailersend.get.api-quota",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bulk-email bulk-email-id",
+      "summary": "Documented GET /bulk-email/{bulk_email_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get bulk-email bulk-email-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bulk-email/{bulk_email_id}"
+        }
+      ],
+      "operation": "mailersend.get.bulk-email-bulk-email-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get domains domain-id",
+      "summary": "Documented GET /domains/{domain_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get domains domain-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/domains/{domain_id}"
+        }
+      ],
+      "operation": "mailersend.get.domains-domain-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get domains domain-id dns-records",
+      "summary": "Documented GET /domains/{domain_id}/dns-records (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get domains domain-id dns-records --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/domains/{domain_id}/dns-records"
+        }
+      ],
+      "operation": "mailersend.get.domains-domain-id-dns-records",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get domains domain-id dns-records domains domain-id recipients domains domain-id settings domains domain-id verification-status-and-similar-domain-subresources",
+      "summary": "Documented GET /domains/{domain_id}/dns-records, /domains/{domain_id}/recipients, /domains/{domain_id}/settings, /domains/{domain_id}/verification-status and similar domain subresources (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get domains domain-id dns-records domains domain-id recipients domains domain-id settings domains domain-id verification-status-and-similar-domain-subresources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/domains/{domain_id}/dns-records, /domains/{domain_id}/recipients, /domains/{domain_id}/settings, /domains/{domain_id}/verification-status and similar domain subresources"
+        }
+      ],
+      "operation": "mailersend.get.domains-domain-id-dns-records-domains-domain-id-recipients-domains-domain-id-settings-domains-domain-id-verification-status-and-similar-domain-subresources",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get domains domain-id recipients",
+      "summary": "Documented GET /domains/{domain_id}/recipients (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get domains domain-id recipients --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/domains/{domain_id}/recipients"
+        }
+      ],
+      "operation": "mailersend.get.domains-domain-id-recipients",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get domains domain-id smtp-users",
+      "summary": "Documented GET /domains/{domain_id}/smtp-users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get domains domain-id smtp-users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/domains/{domain_id}/smtp-users"
+        }
+      ],
+      "operation": "mailersend.get.domains-domain-id-smtp-users",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get domains domain-id smtp-users smtp-user-id",
+      "summary": "Documented GET /domains/{domain_id}/smtp-users/{smtp_user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get domains domain-id smtp-users smtp-user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/domains/{domain_id}/smtp-users/{smtp_user_id}"
+        }
+      ],
+      "operation": "mailersend.get.domains-domain-id-smtp-users-smtp-user-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get domains domain-id verify",
+      "summary": "Documented GET /domains/{domain_id}/verify (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get domains domain-id verify --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/domains/{domain_id}/verify"
+        }
+      ],
+      "operation": "mailersend.get.domains-domain-id-verify",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get email-verification",
+      "summary": "Documented GET /email-verification (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get email-verification --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/email-verification"
+        }
+      ],
+      "operation": "mailersend.get.email-verification",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get email-verification email-verification-id",
+      "summary": "Documented GET /email-verification/{email_verification_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get email-verification email-verification-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/email-verification/{email_verification_id}"
+        }
+      ],
+      "operation": "mailersend.get.email-verification-email-verification-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get email-verification email-verification-id results",
+      "summary": "Documented GET /email-verification/{email_verification_id}/results (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get email-verification email-verification-id results --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/email-verification/{email_verification_id}/results"
+        }
+      ],
+      "operation": "mailersend.get.email-verification-email-verification-id-results",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get email-verification email-verification-id verify",
+      "summary": "Documented GET /email-verification/{email_verification_id}/verify (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get email-verification email-verification-id verify --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/email-verification/{email_verification_id}/verify"
+        }
+      ],
+      "operation": "mailersend.get.email-verification-email-verification-id-verify",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get email-verification-lists results-and-all sms list detail-endpoints",
+      "summary": "Documented GET /email-verification lists/results and all /sms/* list/detail endpoints (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get email-verification-lists results-and-all sms list detail-endpoints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/email-verification lists/results and all /sms/* list/detail endpoints"
+        }
+      ],
+      "operation": "mailersend.get.email-verification-lists-results-and-all-sms-list-detail-endpoints",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get identities email client-email-com",
+      "summary": "Documented GET /identities/email/{client@email.com} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get identities email client-email-com --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/identities/email/{client@email.com}"
+        }
+      ],
+      "operation": "mailersend.get.identities-email-client-email-com",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get identities identity-id",
+      "summary": "Documented GET /identities/{identity_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get identities identity-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/identities/{identity_id}"
+        }
+      ],
+      "operation": "mailersend.get.identities-identity-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get inbound inbound-id",
+      "summary": "Documented GET /inbound/{inbound_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get inbound inbound-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/inbound/{inbound_id}"
+        }
+      ],
+      "operation": "mailersend.get.inbound-inbound-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get message-schedules message-id",
+      "summary": "Documented GET /message-schedules/{message_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get message-schedules message-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/message-schedules/{message_id}"
+        }
+      ],
+      "operation": "mailersend.get.message-schedules-message-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get messages message-id",
+      "summary": "Documented GET /messages/{message_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get messages message-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/messages/{message_id}"
+        }
+      ],
+      "operation": "mailersend.get.messages-message-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recipients recipient-id",
+      "summary": "Documented GET /recipients/{recipient_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get recipients recipient-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recipients/{recipient_id}"
+        }
+      ],
+      "operation": "mailersend.get.recipients-recipient-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sms-activity",
+      "summary": "Documented GET /sms-activity (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get sms-activity --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms-activity"
+        }
+      ],
+      "operation": "mailersend.get.sms-activity",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sms-activity sms-message-id",
+      "summary": "Documented GET /sms-activity/{sms_message_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get sms-activity sms-message-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms-activity/{sms_message_id}"
+        }
+      ],
+      "operation": "mailersend.get.sms-activity-sms-message-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sms-inbounds",
+      "summary": "Documented GET /sms-inbounds (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get sms-inbounds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms-inbounds"
+        }
+      ],
+      "operation": "mailersend.get.sms-inbounds",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sms-inbounds sms-inbound-id",
+      "summary": "Documented GET /sms-inbounds/{sms_inbound_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get sms-inbounds sms-inbound-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms-inbounds/{sms_inbound_id}"
+        }
+      ],
+      "operation": "mailersend.get.sms-inbounds-sms-inbound-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sms-messages",
+      "summary": "Documented GET /sms-messages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get sms-messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms-messages"
+        }
+      ],
+      "operation": "mailersend.get.sms-messages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sms-messages sms-message-id",
+      "summary": "Documented GET /sms-messages/{sms_message_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get sms-messages sms-message-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms-messages/{sms_message_id}"
+        }
+      ],
+      "operation": "mailersend.get.sms-messages-sms-message-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sms-numbers",
+      "summary": "Documented GET /sms-numbers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get sms-numbers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms-numbers"
+        }
+      ],
+      "operation": "mailersend.get.sms-numbers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sms-numbers sms-number-id",
+      "summary": "Documented GET /sms-numbers/{sms_number_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get sms-numbers sms-number-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms-numbers/{sms_number_id}"
+        }
+      ],
+      "operation": "mailersend.get.sms-numbers-sms-number-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sms-recipients",
+      "summary": "Documented GET /sms-recipients (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get sms-recipients --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms-recipients"
+        }
+      ],
+      "operation": "mailersend.get.sms-recipients",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sms-recipients sms-recipient-id",
+      "summary": "Documented GET /sms-recipients/{sms_recipient_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get sms-recipients sms-recipient-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms-recipients/{sms_recipient_id}"
+        }
+      ],
+      "operation": "mailersend.get.sms-recipients-sms-recipient-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sms-webhooks",
+      "summary": "Documented GET /sms-webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get sms-webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms-webhooks"
+        }
+      ],
+      "operation": "mailersend.get.sms-webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sms-webhooks sms-webhook-id",
+      "summary": "Documented GET /sms-webhooks/{sms_webhook_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get sms-webhooks sms-webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms-webhooks/{sms_webhook_id}"
+        }
+      ],
+      "operation": "mailersend.get.sms-webhooks-sms-webhook-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get smtp-users blocklist-monitoring dmarc-monitoring-and-account-monitoring admin-list-resources",
+      "summary": "Documented GET /smtp-users, /blocklist-monitoring, /dmarc-monitoring and account monitoring/admin list resources (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get smtp-users blocklist-monitoring dmarc-monitoring-and-account-monitoring admin-list-resources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/smtp-users, /blocklist-monitoring, /dmarc-monitoring and account monitoring/admin list resources"
+        }
+      ],
+      "operation": "mailersend.get.smtp-users-blocklist-monitoring-dmarc-monitoring-and-account-monitoring-admin-list-resources",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get suppressions blocklist",
+      "summary": "Documented GET /suppressions/blocklist (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get suppressions blocklist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/suppressions/blocklist"
+        }
+      ],
+      "operation": "mailersend.get.suppressions-blocklist",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get suppressions hard-bounces",
+      "summary": "Documented GET /suppressions/hard-bounces (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get suppressions hard-bounces --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/suppressions/hard-bounces"
+        }
+      ],
+      "operation": "mailersend.get.suppressions-hard-bounces",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get suppressions spam-complaints",
+      "summary": "Documented GET /suppressions/spam-complaints (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get suppressions spam-complaints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/suppressions/spam-complaints"
+        }
+      ],
+      "operation": "mailersend.get.suppressions-spam-complaints",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get suppressions unsubscribes",
+      "summary": "Documented GET /suppressions/unsubscribes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get suppressions unsubscribes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/suppressions/unsubscribes"
+        }
+      ],
+      "operation": "mailersend.get.suppressions-unsubscribes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get templates template-id operation message-schedules message-id operation identities identity-id operation identities email email operation inbound inbound-id operation users user-id operation invites invite-id operation token token-id operation webhooks webhook-id operation messages message-id operation domains domain-id operation recipients recipient-id",
+      "summary": "Documented GET /templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, /messages/{message_id}, /domains/{domain_id}, /recipients/{recipient_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get templates template-id operation message-schedules message-id operation identities identity-id operation identities email email operation inbound inbound-id operation users user-id operation invites invite-id operation token token-id operation webhooks webhook-id operation messages message-id operation domains domain-id operation recipients recipient-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, /messages/{message_id}, /domains/{domain_id}, /recipients/{recipient_id}"
+        }
+      ],
+      "operation": "mailersend.get.templates-template-id-message-schedules-message-id-identities-identity-id-identities-email-email-inbound-inbound-id-users-user-id-invites-invite-id-token-token-id-webhooks-webhook-id-messages-message-id-domains-domain-id-recipients-recipient-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users user-id",
+      "summary": "Documented GET /users/{user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get users user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{user_id}"
+        }
+      ],
+      "operation": "mailersend.get.users-user-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks webhook-id",
+      "summary": "Documented GET /webhooks/{webhook_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api get webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks/{webhook_id}"
+        }
+      ],
+      "operation": "mailersend.get.webhooks-webhook-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post bulk-email",
+      "summary": "Documented POST /bulk-email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post bulk-email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bulk-email"
+        }
+      ],
+      "operation": "mailersend.post.bulk-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post domains",
+      "summary": "Documented POST /domains (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/domains"
+        }
+      ],
+      "operation": "mailersend.post.domains",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post email",
+      "summary": "Documented POST /email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/email"
+        }
+      ],
+      "operation": "mailersend.post.email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post email bulk-email sms-and-related-send-endpoints",
+      "summary": "Documented POST /email, /bulk-email, /sms and related send endpoints (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post email bulk-email sms-and-related-send-endpoints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/email, /bulk-email, /sms and related send endpoints"
+        }
+      ],
+      "operation": "mailersend.post.email-bulk-email-sms-and-related-send-endpoints",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post email-verification",
+      "summary": "Documented POST /email-verification (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post email-verification --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/email-verification"
+        }
+      ],
+      "operation": "mailersend.post.email-verification",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post email-verification verify",
+      "summary": "Documented POST /email-verification/verify (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post email-verification verify --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/email-verification/verify"
+        }
+      ],
+      "operation": "mailersend.post.email-verification-verify",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post identities",
+      "summary": "Documented POST /identities (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post identities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/identities"
+        }
+      ],
+      "operation": "mailersend.post.identities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post inbound",
+      "summary": "Documented POST /inbound (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post inbound --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbound"
+        }
+      ],
+      "operation": "mailersend.post.inbound",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sms",
+      "summary": "Documented POST /sms (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post sms --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sms"
+        }
+      ],
+      "operation": "mailersend.post.sms",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sms-inbounds",
+      "summary": "Documented POST /sms-inbounds (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post sms-inbounds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sms-inbounds"
+        }
+      ],
+      "operation": "mailersend.post.sms-inbounds",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sms-webhooks",
+      "summary": "Documented POST /sms-webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post sms-webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sms-webhooks"
+        }
+      ],
+      "operation": "mailersend.post.sms-webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post suppressions blocklist",
+      "summary": "Documented POST /suppressions/blocklist (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post suppressions blocklist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/suppressions/blocklist"
+        }
+      ],
+      "operation": "mailersend.post.suppressions-blocklist",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post suppressions hard-bounces",
+      "summary": "Documented POST /suppressions/hard-bounces (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post suppressions hard-bounces --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/suppressions/hard-bounces"
+        }
+      ],
+      "operation": "mailersend.post.suppressions-hard-bounces",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post suppressions spam-complaints",
+      "summary": "Documented POST /suppressions/spam-complaints (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post suppressions spam-complaints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/suppressions/spam-complaints"
+        }
+      ],
+      "operation": "mailersend.post.suppressions-spam-complaints",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post suppressions unsubscribes",
+      "summary": "Documented POST /suppressions/unsubscribes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post suppressions unsubscribes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/suppressions/unsubscribes"
+        }
+      ],
+      "operation": "mailersend.post.suppressions-unsubscribes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post templates identities identities identity-id resend inbound users invites invite-id resend token webhooks-and-verification-list-creation verification-endpoints",
+      "summary": "Documented POST /templates, /identities, /identities/{identity_id}/resend, /inbound, /users, /invites/{invite_id}/resend, /token, /webhooks and verification-list creation/verification endpoints (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post templates identities identities identity-id resend inbound users invites invite-id resend token webhooks-and-verification-list-creation verification-endpoints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/templates, /identities, /identities/{identity_id}/resend, /inbound, /users, /invites/{invite_id}/resend, /token, /webhooks and verification-list creation/verification endpoints"
+        }
+      ],
+      "operation": "mailersend.post.templates-identities-identities-identity-id-resend-inbound-users-invites-invite-id-resend-token-webhooks-and-verification-list-creation-verification-endpoints",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api post token",
+      "summary": "Documented POST /token (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/token"
+        }
+      ],
+      "operation": "mailersend.post.token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users",
+      "summary": "Documented POST /users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ],
+      "operation": "mailersend.post.users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhooks",
+      "summary": "Documented POST /webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api post webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "mailersend.post.webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put domains domain-id settings",
+      "summary": "Documented PUT /domains/{domain_id}/settings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api put domains domain-id settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/domains/{domain_id}/settings"
+        }
+      ],
+      "operation": "mailersend.put.domains-domain-id-settings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put domains domain-id smtp-users smtp-user-id",
+      "summary": "Documented PUT /domains/{domain_id}/smtp-users/{smtp_user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api put domains domain-id smtp-users smtp-user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/domains/{domain_id}/smtp-users/{smtp_user_id}"
+        }
+      ],
+      "operation": "mailersend.put.domains-domain-id-smtp-users-smtp-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put identities email client-email-com",
+      "summary": "Documented PUT /identities/email/{client@email.com} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api put identities email client-email-com --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/identities/email/{client@email.com}"
+        }
+      ],
+      "operation": "mailersend.put.identities-email-client-email-com",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put identities identity-id",
+      "summary": "Documented PUT /identities/{identity_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api put identities identity-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/identities/{identity_id}"
+        }
+      ],
+      "operation": "mailersend.put.identities-identity-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put inbound inbound-id",
+      "summary": "Documented PUT /inbound/{inbound_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api put inbound inbound-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/inbound/{inbound_id}"
+        }
+      ],
+      "operation": "mailersend.put.inbound-inbound-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put sms-inbounds sms-inbound-id",
+      "summary": "Documented PUT /sms-inbounds/{sms_inbound_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api put sms-inbounds sms-inbound-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sms-inbounds/{sms_inbound_id}"
+        }
+      ],
+      "operation": "mailersend.put.sms-inbounds-sms-inbound-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put sms-numbers sms-number-id",
+      "summary": "Documented PUT /sms-numbers/{sms_number_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api put sms-numbers sms-number-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sms-numbers/{sms_number_id}"
+        }
+      ],
+      "operation": "mailersend.put.sms-numbers-sms-number-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put sms-recipients sms-recipient-id",
+      "summary": "Documented PUT /sms-recipients/{sms_recipient_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api put sms-recipients sms-recipient-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sms-recipients/{sms_recipient_id}"
+        }
+      ],
+      "operation": "mailersend.put.sms-recipients-sms-recipient-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put sms-webhooks sms-webhook-id",
+      "summary": "Documented PUT /sms-webhooks/{sms_webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api put sms-webhooks sms-webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sms-webhooks/{sms_webhook_id}"
+        }
+      ],
+      "operation": "mailersend.put.sms-webhooks-sms-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put templates template-id operation identities identity-id operation identities email email operation inbound inbound-id operation users user-id operation token token-id operation webhooks webhook-id domain-settings-and-sms-configuration-update-endpoints",
+      "summary": "Documented PUT /templates/{template_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /token/{token_id}, /webhooks/{webhook_id}, domain settings and SMS configuration update endpoints (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api put templates template-id operation identities identity-id operation identities email email operation inbound inbound-id operation users user-id operation token token-id operation webhooks webhook-id domain-settings-and-sms-configuration-update-endpoints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/templates/{template_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /token/{token_id}, /webhooks/{webhook_id}, domain settings and SMS configuration update endpoints"
+        }
+      ],
+      "operation": "mailersend.put.templates-template-id-identities-identity-id-identities-email-email-inbound-inbound-id-users-user-id-token-token-id-webhooks-webhook-id-domain-settings-and-sms-configuration-update-endpoints",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api put token token-id settings",
+      "summary": "Documented PUT /token/{token_id}/settings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api put token token-id settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/token/{token_id}/settings"
+        }
+      ],
+      "operation": "mailersend.put.token-token-id-settings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put users user-id",
+      "summary": "Documented PUT /users/{user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api put users user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{user_id}"
+        }
+      ],
+      "operation": "mailersend.put.users-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put webhooks webhook-id",
+      "summary": "Documented PUT /webhooks/{webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend api put webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/webhooks/{webhook_id}"
+        }
+      ],
+      "operation": "mailersend.put.webhooks-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "domains list",
+      "summary": "Run the domains ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "domains",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend domains list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/domains"
+        }
+      ]
+    },
+    {
+      "path": "inbound routes list",
+      "summary": "Run the inbound routes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "inbound_routes",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend inbound routes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/inbound"
+        }
+      ]
+    },
+    {
+      "path": "invites list",
+      "summary": "Run the invites ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invites",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend invites list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invites"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "messages list",
+      "summary": "Run the messages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "messages",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend messages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/messages"
+        }
+      ]
+    },
+    {
+      "path": "recipients list",
+      "summary": "Run the recipients ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "recipients",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend recipients list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recipients"
+        }
+      ]
+    },
+    {
+      "path": "scheduled messages list",
+      "summary": "Run the scheduled messages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scheduled_messages",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend scheduled messages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/message-schedules"
+        }
+      ]
+    },
+    {
+      "path": "sender identities list",
+      "summary": "Run the sender identities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sender_identities",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend sender identities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/identities"
+        }
+      ]
+    },
+    {
+      "path": "templates list",
+      "summary": "Run the templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/templates"
+        }
+      ]
+    },
+    {
+      "path": "tokens list",
+      "summary": "Run the tokens ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tokens",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend tokens list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/token"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "examples": [
+        "pm mailersend webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ]
+    }
+  ]
+}

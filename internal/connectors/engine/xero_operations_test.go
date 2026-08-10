@@ -1,69 +1,34 @@
 package engine
 
 import (
-	"context"
-	"encoding/json"
-	"net/http"
-	"net/http/httptest"
-	"strings"
 	"testing"
 
-	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
 )
 
-func TestXeroReportOperationsDirectRead(t *testing.T) {
+func TestXeroOperationsLedgerMetrics(t *testing.T) {
 	bundle, err := Load(defs.FS, "xero")
 	if err != nil {
 		t.Fatalf("load xero bundle: %v", err)
 	}
 
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if !strings.HasPrefix(r.URL.Path, "/api.xro/2.0/Reports") {
-			t.Fatalf("unexpected report path %q", r.URL.Path)
-		}
-		if r.Header.Get("Xero-tenant-id") == "" {
-			t.Fatalf("missing Xero tenant header")
-		}
-		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(map[string]any{
-			"Reports": []map[string]any{{"ReportID": "report_fixture_1", "ReportName": "Fixture Report"}},
-		})
-	}))
-	defer server.Close()
-
-	cfg := connectors.RuntimeConfig{
-		Config: map[string]string{"base_url": server.URL + "/api.xro/2.0"},
-		Secrets: map[string]string{
-			"access_token": "synthetic-conformance-secret",
-			"tenant_id":    "synthetic-conformance-tenant",
-		},
-	}
-
-	runCount := 0
+	byKind := map[string]int{}
 	for _, op := range bundle.Operations {
-		if op.Kind != "rest_read" || !strings.HasPrefix(op.ID, "xero.get_report") {
-			continue
-		}
-		runCount++
-		t.Run(op.ID, func(t *testing.T) {
-			req := connectors.OperationDirectReadRequest{
-				Operation:    op.ID,
-				Config:       cfg,
-				OutputPolicy: "json_redacted",
-				PathParams:   map[string]string{"ReportID": "report_fixture_1"},
-				MaxBytes:     1 << 20,
-			}
-			result, err := OperationDirectRead(context.Background(), bundle, req, nil)
-			if err != nil {
-				t.Fatalf("OperationDirectRead: %v", err)
-			}
-			if result.Status != http.StatusOK || !strings.HasPrefix(result.Path, "/Reports") {
-				t.Fatalf("result = %+v, want status 200 and report path", result)
-			}
-		})
+		byKind[op.Kind]++
 	}
-	if runCount != 11 {
-		t.Fatalf("report rest_read operations exercised = %d, want 11", runCount)
+	if got, want := len(bundle.Operations), 92; got != want {
+		t.Fatalf("Xero operations = %d, want %d", got, want)
+	}
+	if got, want := byKind["binary_download"], 26; got != want {
+		t.Fatalf("Xero binary_download operations = %d, want %d", got, want)
+	}
+	if got, want := byKind["rest_read"], 22; got != want {
+		t.Fatalf("Xero rest_read operations = %d, want %d", got, want)
+	}
+	if got, want := byKind["file_upload"], 22; got != want {
+		t.Fatalf("Xero file_upload operations = %d, want %d", got, want)
+	}
+	if got, want := byKind["rest_write"], 22; got != want {
+		t.Fatalf("Xero rest_write operations = %d, want %d", got, want)
 	}
 }

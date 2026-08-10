@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-031-amazon-sqs-unversioned-reference-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "amazon-sqs",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2508706837f5b4d52b6813e8a715ce167ee7e59574f12556b5019bfdfcb40243"
+      },
+      "artifact_operations": 23,
+      "declared_operations": 23,
+      "operation_split": {
+        "executable": 23,
+        "provider_blocked": 0,
+        "excluded": 0
+      },
+      "cli_commands": 23,
+      "implemented_commands": 23,
+      "named_dependency_commands": 0,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 6
+    }
+  ],
+  "dropped": []
+}

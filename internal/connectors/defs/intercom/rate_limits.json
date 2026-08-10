@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developers.intercom.com/docs/references/1.4/rest-api/errors/rate-limiting (retrieved 2026-08-06): Intercom publishes separate workspace and app budgets by access-token type, but the bundle has no non-secret workspace or app scope property."
+}

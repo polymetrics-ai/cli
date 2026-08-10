@@ -18,6 +18,8 @@
         "properties": {
           "id": { "type": "string" },
           "url": { "type": "string" },
+          "kind": { "type": "string" },
+          "version": { "type": "string" },
           "retrieved_at": { "type": "string" },
           "sha256": { "type": "string" }
         }
@@ -31,12 +33,37 @@
         "properties": {
           "method": { "type": "string" },
           "path": { "type": "string" },
+          "discrepancy": {
+            "type": "string",
+            "enum": ["present-in-surface-absent-from-artifact"]
+          },
           "provenance": {
             "type": "object",
             "additionalProperties": false,
             "properties": {
               "artifact": { "type": "string" },
-              "source_url": { "type": "string" }
+              "source_url": { "type": "string" },
+              "source_kind": { "type": "string" },
+              "version": { "type": "string" },
+              "retrieved_at": { "type": "string" },
+              "sha256": { "type": "string" },
+              "coordinate": { "type": "string" },
+              "alternatives": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["source_url"],
+                  "properties": {
+                    "source_url": { "type": "string" },
+                    "source_kind": { "type": "string" },
+                    "version": { "type": "string" },
+                    "retrieved_at": { "type": "string" },
+                    "sha256": { "type": "string" },
+                    "coordinate": { "type": "string" }
+                  }
+                }
+              }
             }
           },
           "covered_by": {
@@ -44,6 +71,10 @@
             "additionalProperties": false,
             "properties": {
               "stream": { "type": "string" },
+              "streams": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
               "write": { "type": "string" },
               "writes": {
                 "type": "array",

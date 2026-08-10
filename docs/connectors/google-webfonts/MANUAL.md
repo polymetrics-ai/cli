@@ -65,6 +65,17 @@ SECURITY
   approval: none; read-only public font catalog API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Google Webfonts's declared streams and reverse-ETL actions.
+  Usage: pm google-webfonts <command> [flags]
+  Read streams
+  Other Commands
+    alpha fonts list - Run the alpha fonts ETL stream [intent=etl availability=implemented stream=alpha_fonts]
+    newest fonts list - Run the newest fonts ETL stream [intent=etl availability=implemented stream=newest_fonts]
+    popular fonts list - Run the popular fonts ETL stream [intent=etl availability=implemented stream=popular_fonts]
+    trending fonts list - Run the trending fonts ETL stream [intent=etl availability=implemented stream=trending_fonts]
+    webfonts list - Run the webfonts ETL stream [intent=etl availability=implemented stream=webfonts]
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect google-webfonts

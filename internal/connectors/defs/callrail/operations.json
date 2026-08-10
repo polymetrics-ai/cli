@@ -1,0 +1,588 @@
+{
+  "operations": [
+    {
+      "id": "callrail.get.a-account-id-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}.json",
+      "description": "single-account detail; identical record shape to the accounts list stream's per-item object, already covered by that stream",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-caller-ids-caller-ids-id-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/caller_ids/{caller_ids_id}.json",
+      "description": "single-outbound-caller-id detail; identical record shape to the caller_ids list stream's per-item object, already covered by that stream",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/caller_ids/{caller_ids_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-calls-summary-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/calls/summary.json",
+      "description": "returns grouped aggregate statistics (total/missed/answered calls, average duration) bucketed by source/keywords/campaign/company, not a row-per-record syncable object; Pass B breadth-vs-cost triage",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/calls/summary.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-calls-timeseries-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/calls/timeseries.json",
+      "description": "returns a time-bucketed aggregate series (calls per day/hour), not a row-per-record syncable object; Pass B breadth-vs-cost triage",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/calls/timeseries.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-calls-call-id-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/calls/{call_id}.json",
+      "description": "single-call detail; identical record shape to the calls list stream's per-item object, already covered by that stream",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/calls/{call_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-calls-call-id-recording-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/calls/{call_id}/recording.json",
+      "description": "returns a single ephemeral (often 24-hour-expiring; permanent for HIPAA accounts only as a re-fetchable pointer) signed playback URL, not a syncable data object; the docs explicitly warn never to store the returned URL",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/calls/{call_id}/recording.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.put.a-account-id-companies-bulk-update-json",
+      "kind": "rest_write",
+      "summary": "PUT /a/{account_id}/companies/bulk_update.json",
+      "description": "batch variant of PUT /companies/{company_id}.json applying the same field set to several company ids in one request body; the engine's write dialect is one-request-per-record, and update_company already covers the identical per-company field-update shape",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/a/{account_id}/companies/bulk_update.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-companies-company-id-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/companies/{company_id}.json",
+      "description": "single-company detail; identical record shape to the companies list stream's per-item object, already covered by that stream",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/companies/{company_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.delete.a-account-id-companies-company-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /a/{account_id}/companies/{company_id}.json",
+      "description": "the docs section is titled 'Disabling a Company', not deleting; the same effect is achieved via update_company setting status to disabled, already covered as a non-destructive field update rather than a separate delete verb",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/a/{account_id}/companies/{company_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.post.a-account-id-form-submissions-json",
+      "kind": "rest_write",
+      "summary": "POST /a/{account_id}/form_submissions.json",
+      "description": "synthetically injects a new inbound form-submission event into CallRail's attribution pipeline (the mechanism customers use to feed their own website's form-tracking snippet), not an ordinary CRUD create of a plain data record; out of scope for a data-sync connector",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/a/{account_id}/form_submissions.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-form-submissions-ignored-fields-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/form_submissions/ignored_fields.json",
+      "description": "account-level field-ignore configuration list, not a syncable form-submission record stream",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/form_submissions/ignored_fields.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.put.a-account-id-form-submissions-form-submission-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /a/{account_id}/form_submissions/{form_submission_id}.json",
+      "description": "same attribution-pipeline write path as creating a form submission; not a plain data-record update",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/a/{account_id}/form_submissions/{form_submission_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-forms-summary-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/forms/summary.json",
+      "description": "returns grouped aggregate form statistics (total/first forms, leads) bucketed by source/campaign/form_name, not a row-per-record syncable object; Pass B breadth-vs-cost triage",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/forms/summary.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-integration-triggers-integration-trigger-id-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/integration_triggers/{integration_trigger_id}.json",
+      "description": "single-integration-filter detail; identical record shape to the integration_filters list stream's per-item object, already covered by that stream",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/integration_triggers/{integration_trigger_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-integrations-configurations",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/integrations/configurations",
+      "description": "returns the static schema/menu of available integration TYPES and their configurable fields (a form-builder metadata document), not a syncable object collection",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/integrations/configurations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-integrations-integration-id-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/integrations/{integration_id}.json",
+      "description": "single-integration detail; identical record shape to the integrations list stream's per-item object, already covered by that stream",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/integrations/{integration_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-message-flows-configurations",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/message-flows/configurations",
+      "description": "returns the static schema/menu of available message-flow step TYPES and their configurable fields (a form-builder metadata document), not a syncable object collection",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/message-flows/configurations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-message-flows-message-flow-id-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/message-flows/{message_flow_id}.json",
+      "description": "single-message-flow detail; identical record shape to the message_flows list stream's per-item object, already covered by that stream",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/message-flows/{message_flow_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-sms-threads-thread-id-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/sms-threads/{thread_id}.json",
+      "description": "single-SMS-thread detail; identical record shape to the sms_threads list stream's per-item object, already covered by that stream",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/sms-threads/{thread_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-summary-emails-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/summary_emails.json",
+      "description": "per-user summary-email notification-preference subscriptions (which stats sections a user receives by email, and how often), an admin config object rather than call/lead tracking data; Pass B breadth-vs-cost triage alongside integrations/configurations",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/summary_emails.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.post.a-account-id-summary-emails-json",
+      "kind": "rest_write",
+      "summary": "POST /a/{account_id}/summary_emails.json",
+      "description": "create counterpart of the excluded summary_emails read stream; not implemented in this pass",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/a/{account_id}/summary_emails.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-summary-emails-summary-email-id-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/summary_emails/{summary_email_id}.json",
+      "description": "single-subscription detail of the excluded summary_emails resource",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/summary_emails/{summary_email_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.put.a-account-id-summary-emails-summary-email-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /a/{account_id}/summary_emails/{summary_email_id}.json",
+      "description": "update counterpart of the excluded summary_emails resource; not implemented in this pass",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/a/{account_id}/summary_emails/{summary_email_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.delete.a-account-id-summary-emails-summary-email-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /a/{account_id}/summary_emails/{summary_email_id}.json",
+      "description": "delete counterpart of the excluded summary_emails resource; not implemented in this pass",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/a/{account_id}/summary_emails/{summary_email_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-text-messages-conversation-id-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/text-messages/{conversation_id}.json",
+      "description": "single-conversation detail; identical record shape to the text_messages list stream's per-item object, already covered by that stream",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/text-messages/{conversation_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.post.a-account-id-trackers-json",
+      "kind": "rest_write",
+      "summary": "POST /a/{account_id}/trackers.json",
+      "description": "creating a session tracker allocates and provisions a real, billable CallRail tracking phone number (destination routing, call-flow, and SMS provisioning); a materially higher-risk provisioning action than an ordinary data-record create, out of scope for this pass",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/a/{account_id}/trackers.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-trackers-request-number-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/trackers/request_number.json",
+      "description": "searches CallRail's available phone-number inventory for a number to allocate; a provisioning-support lookup, not a syncable data stream",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/trackers/request_number.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-trackers-tracker-id-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/trackers/{tracker_id}.json",
+      "description": "single-tracker detail; identical record shape to the trackers list stream's per-item object, already covered by that stream",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/trackers/{tracker_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.delete.a-account-id-trackers-tracker-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /a/{account_id}/trackers/{tracker_id}.json",
+      "description": "the docs section is titled 'Disabling a Tracker' - it deprovisions a live tracking phone number, permanently breaking any campaign/creative still pointing at it; destructive relative to update_tracker's plain field-update shape, and legacy never implemented tracker writes at all",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/a/{account_id}/trackers/{tracker_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.a-account-id-users-user-id-json",
+      "kind": "rest_read",
+      "summary": "GET /a/{account_id}/users/{user_id}.json",
+      "description": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/a/{account_id}/users/{user_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.post.a-agency-id-trackers-json",
+      "kind": "rest_write",
+      "summary": "POST /a/{agency_id}/trackers.json",
+      "description": "creating a source tracker likewise provisions a real, billable tracking phone number at the agency level; same provisioning-risk exclusion as the session-tracker create",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/a/{agency_id}/trackers.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.v3-a-account-id-calls-444941612-json",
+      "kind": "rest_read",
+      "summary": "GET /v3/a/{account_id}/calls/444941612.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/a/{account_id}/calls/444941612.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.post.v3-a-account-id-companies-bulk-update-json",
+      "kind": "rest_write",
+      "summary": "POST /v3/a/{account_id}/companies/bulk_update.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/a/{account_id}/companies/bulk_update.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.post.v3-a-account-id-form-submissions-ignored-fields-json",
+      "kind": "rest_write",
+      "summary": "POST /v3/a/{account_id}/form_submissions/ignored_fields.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/a/{account_id}/form_submissions/ignored_fields.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.v3-a-account-id-integration-triggers-integration-triggers-id-json",
+      "kind": "rest_read",
+      "summary": "GET /v3/a/{account_id}/integration_triggers/{integration_triggers_id}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/a/{account_id}/integration_triggers/{integration_triggers_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.delete.v3-a-account-id-integration-triggers-integration-triggers-id-json",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/a/{account_id}/integration_triggers/{integration_triggers_id}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/a/{account_id}/integration_triggers/{integration_triggers_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.put.v3-a-account-id-message-flows-message-flow-id-json",
+      "kind": "rest_write",
+      "summary": "PUT /v3/a/{account_id}/message-flows/{message_flow_id}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/a/{account_id}/message-flows/{message_flow_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "callrail.get.v3-a-account-id-summary-emails",
+      "kind": "rest_read",
+      "summary": "GET /v3/a/{account_id}/summary_emails",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://apidocs.callrail.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/a/{account_id}/summary_emails",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

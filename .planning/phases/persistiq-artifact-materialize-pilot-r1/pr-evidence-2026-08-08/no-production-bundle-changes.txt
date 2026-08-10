@@ -1,0 +1,10 @@
+production_connector_bundle_paths=
+       0
+changed_runtime_or_generator_paths=
+cmd/connectorgen/batch_materialize.go
+cmd/connectorgen/batch_test.go
+cmd/connectorgen/main_test.go
+cmd/connectorgen/validate.go
+internal/connectors/engine/bundle.go
+internal/connectors/engine/schema/api_surface.schema.json
+internal/connectors/engine/schema/cli_surface.schema.json

@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 5,
+    "min_operations": 20,
+    "max_operations": 250,
+    "criteria": "status=done; authoritative artifact_kind=openapi|swagger|openapi_fragments|postman|html_reference; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope"
+  },
+  "connectors": [
+    {
+      "connector": "avni",
+      "operations_total": 31,
+      "operations_read": 13,
+      "operations_write": 18,
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+        "kind": "openapi",
+        "version": "1.0.0; OpenAPI 3.0.0; master",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://github.com/avniproject/avni-server/blob/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "provider-owned avniproject/avni-server external API OpenAPI definition",
+      "counting_note": "Counted all HTTP operation objects in Avni's provider-published external-api.yaml. GET/HEAD are reads; remaining verbs are writes.",
+      "processed_at": "2026-08-05T17:39:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "algolia",
+      "operations_total": 58,
+      "operations_read": 27,
+      "operations_write": 31,
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/search/spec.yml",
+        "kind": "openapi",
+        "version": "main",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://www.algolia.com/doc/rest-api/search/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published algolia/api-clients-automation Search API spec root and its referenced path fragments",
+      "counting_note": "Resolved every /1/* path reference from Algolia's provider-maintained Search API OpenAPI 3.0.2 root specification (43 referenced path fragments). Counted 18 GET reads plus nine semantically read-only POST operations (search, browse, and retrieve-record actions); the remaining 17 POST, 7 PUT, and 7 DELETE operations are writes. Excluded generic client helpers and the wildcard custom-request wrapper, which are not provider REST endpoints.",
+      "processed_at": "2026-08-05T16:39:50Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "akeneo",
+      "operations_total": 152,
+      "operations_read": 75,
+      "operations_write": 77,
+      "artifact": {
+        "url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+        "kind": "openapi",
+        "version": "1.0.0",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://api.akeneo.com/api-reference.html",
+      "auth_model": "unknown",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published https://api.akeneo.com/ links this OpenAPI JSON",
+      "counting_note": "Counted provider-published OpenAPI 3.1.0 operations across 92 paths: 75 GET reads; 30 POST, 36 PATCH, 2 PUT, and 9 DELETE writes. Webhook/event types are not operation entries in this REST artifact.",
+      "processed_at": "2026-08-05T16:36:31Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "apify-dataset",
+      "operations_total": 231,
+      "operations_read": 97,
+      "operations_write": 134,
+      "artifact": {
+        "url": "https://docs.apify.com/api/openapi.json",
+        "kind": "openapi",
+        "version": "v2-2026-08-05T133145Z",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://docs.apify.com/api/v2",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published https://docs.apify.com/api/v2 links this complete OpenAPI JSON",
+      "counting_note": "Counted provider-published Apify API OpenAPI 3.1.2 operations across 131 paths: 95 GET and 2 HEAD reads; 63 POST, 34 PUT, and 37 DELETE writes. Webhook event types are not operation entries in this REST artifact.",
+      "processed_at": "2026-08-05T16:45:24Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "basecamp",
+      "operations_total": 247,
+      "operations_read": 125,
+      "operations_write": 122,
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/basecamp/basecamp-sdk/main/openapi.json",
+        "kind": "openapi",
+        "version": "2026-08-03; OpenAPI 3.1.0; b0567a77e6f1dc13161a47bcccd366261cb76fa4",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://github.com/basecamp/bc3-api",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; basecamp/bc3-api README links the provider-published basecamp/basecamp-sdk OpenAPI specification",
+      "counting_note": "Counted every HTTP operation object in Basecamp's provider-published SDK OpenAPI specification: 125 GET reads; 48 POST, 50 PUT, and 24 DELETE writes. The POST operations are all documented creates, subscriptions, state changes, moves, or uploads, so none are semantic read queries. Current flat routes are counted; the reference's equivalent legacy project-scoped routes are excluded.",
+      "processed_at": "2026-08-05T17:38:45Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    }
+  ]
+}

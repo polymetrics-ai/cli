@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/manifest.json",
+  "candidates": 1,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "persistiq",
+      "stage": "coverage",
+      "reason": "executable coverage GET /v1/mailboxes is absent from the cited artifact"
+    }
+  ]
+}

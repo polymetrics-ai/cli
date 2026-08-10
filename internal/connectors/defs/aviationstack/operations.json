@@ -1,0 +1,109 @@
+{
+  "operations": [
+    {
+      "id": "aviationstack.get.v1-aircraft-types",
+      "kind": "rest_read",
+      "summary": "GET /v1/aircraft_types",
+      "description": "aircraft-type reference-data resource (IATA code + aircraft name), distinct from the already-covered airplanes (individual tail-numbered aircraft) stream; not part of legacy's covered surface, Pass B breadth-vs-cost triage",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/aircraft_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aviationstack.get.v1-cities",
+      "kind": "rest_read",
+      "summary": "GET /v1/cities",
+      "description": "additional geographic reference-data resource (city name/IATA/geoname_id/lat-long/timezone); this migration had no paid-tier account to confirm live field shapes against, and it is not part of legacy's own covered surface — Pass B breadth-vs-cost triage, not assumed free-tier-reachable",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/cities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aviationstack.get.v1-flightsfuture",
+      "kind": "rest_read",
+      "summary": "GET /v1/flightsFuture",
+      "description": "future flight schedules are explicitly gated to aviationstack's paid Basic tier and above (confirmed on aviationstack.com/pricing); not available on the Free plan this migration assumes",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/flightsFuture",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aviationstack.get.v1-historical",
+      "kind": "rest_read",
+      "summary": "GET /v1/historical",
+      "description": "historical flight status is explicitly gated to aviationstack's paid Basic tier and above (confirmed on aviationstack.com/pricing); not available on the Free plan this migration assumes",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/historical",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aviationstack.get.v1-routes",
+      "kind": "rest_read",
+      "summary": "GET /v1/routes",
+      "description": "airline route data is explicitly gated to aviationstack's paid Basic tier and above (confirmed on aviationstack.com/pricing); not available on the Free plan this migration assumes",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/routes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aviationstack.get.v1-taxes",
+      "kind": "rest_read",
+      "summary": "GET /v1/taxes",
+      "description": "aviation-tax reference-data resource (tax name + IATA code); same reasoning as cities — not part of legacy's covered surface, Pass B breadth-vs-cost triage",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/taxes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aviationstack.get.v1-timetable",
+      "kind": "rest_read",
+      "summary": "GET /v1/timetable",
+      "description": "requires a premium aviationstack plan not assumed available for this migration",
+      "source_url": "https://api.swaggerhub.com/apis/apilayer-863/AviationstackAPI/1.0.0/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/timetable",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

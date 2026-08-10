@@ -1,0 +1,2678 @@
+{
+  "tagline": "Run Recharge's declared streams and reverse-ETL actions.",
+  "usage": "pm recharge \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get accounts",
+        "api get accounts id",
+        "api get addresses",
+        "api get addresses id",
+        "api get api orders",
+        "api get async-batches",
+        "api get async-batches batch-id",
+        "api get async-batches batch-id tasks",
+        "api get async-batches id",
+        "api get bundle-selections",
+        "api get bundle-selections id",
+        "api get charges",
+        "api get charges id",
+        "api get checkout checkout-token shipping-rates",
+        "api get checkouts token",
+        "api get checkouts token shipping-rates",
+        "api get collection-products",
+        "api get collections",
+        "api get collections id",
+        "api get credit-accounts",
+        "api get credit-accounts id",
+        "api get credit-accounts id credit-adjustments",
+        "api get credit-adjustments",
+        "api get customer-entitlements",
+        "api get customers id",
+        "api get customers id credit-summary",
+        "api get customers id delivery-schedule",
+        "api get discounts",
+        "api get discounts id",
+        "api get events",
+        "api get metafields",
+        "api get metafields id",
+        "api get metafields metafield-id",
+        "api get onetimes",
+        "api get onetimes id",
+        "api get orders",
+        "api get orders id",
+        "api get payment-methods",
+        "api get payment-methods id",
+        "api get plans",
+        "api get products",
+        "api get products external-product-id",
+        "api get products operation",
+        "api get store",
+        "api get subscriptions id",
+        "api get token-information",
+        "api get webhooks",
+        "api get webhooks id",
+        "customers list",
+        "orders list",
+        "subscriptions list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete addresses id",
+        "api delete bundle-selections id",
+        "api delete collections id",
+        "api delete collections id collection-products-bulk",
+        "api delete customer-entitlements id",
+        "api delete customers id",
+        "api delete discounts id",
+        "api delete metafields id",
+        "api delete onetimes id",
+        "api delete orders id",
+        "api delete payment-methods id",
+        "api delete plans id",
+        "api delete products external-product-id",
+        "api delete products external-product-id plans-bulk",
+        "api delete subscriptions id",
+        "api delete webhooks id",
+        "api post addresses",
+        "api post addresses id charges skip",
+        "api post addresses merge",
+        "api post async-batches",
+        "api post async-batches batch-id process",
+        "api post async-batches batch-id tasks",
+        "api post bundle-selections",
+        "api post charges charge-id remove-discount",
+        "api post charges id add-free-gift",
+        "api post charges id apply-discount",
+        "api post charges id capture-payment",
+        "api post charges id process",
+        "api post charges id refund",
+        "api post charges id remove-discount",
+        "api post charges id remove-free-gift",
+        "api post charges id skip",
+        "api post charges id unskip",
+        "api post checkouts",
+        "api post checkouts token charge",
+        "api post collections",
+        "api post collections id collection-products-bulk",
+        "api post credit-accounts",
+        "api post credit-accounts id credit-adjustments",
+        "api post customer-entitlements",
+        "api post customers",
+        "api post customers id notifications",
+        "api post discounts",
+        "api post metafields",
+        "api post onetimes",
+        "api post orders id clone",
+        "api post orders id delay",
+        "api post payment-methods",
+        "api post plans",
+        "api post products",
+        "api post products external-product-id plans-bulk",
+        "api post subscriptions",
+        "api post subscriptions id activate",
+        "api post subscriptions id cancel",
+        "api post subscriptions id change-address",
+        "api post subscriptions id set-next-charge-date",
+        "api post subscriptions skip-gift",
+        "api post webhooks",
+        "api post webhooks id test",
+        "api put addresses id",
+        "api put bundle-selections id",
+        "api put checkouts token",
+        "api put collections id",
+        "api put credit-accounts id",
+        "api put customer-entitlements id",
+        "api put customers id",
+        "api put discounts id",
+        "api put metafields id",
+        "api put onetimes id",
+        "api put orders id",
+        "api put payment-methods id",
+        "api put plans id",
+        "api put products external-product-id",
+        "api put products external-product-id plans-bulk",
+        "api put subscriptions id",
+        "api put webhooks id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete addresses id",
+      "summary": "Documented DELETE /addresses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete addresses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/addresses/{id}"
+        }
+      ],
+      "operation": "recharge.delete.addresses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete bundle-selections id",
+      "summary": "Documented DELETE /bundle_selections/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete bundle-selections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/bundle_selections/{id}"
+        }
+      ],
+      "operation": "recharge.delete.bundle-selections-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete collections id",
+      "summary": "Documented DELETE /collections/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete collections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/collections/{id}"
+        }
+      ],
+      "operation": "recharge.delete.collections-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete collections id collection-products-bulk",
+      "summary": "Documented DELETE /collections/{id}/collection_products-bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete collections id collection-products-bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/collections/{id}/collection_products-bulk"
+        }
+      ],
+      "operation": "recharge.delete.collections-id-collection-products-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customer-entitlements id",
+      "summary": "Documented DELETE /customer_entitlements/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete customer-entitlements id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customer_entitlements/{id}"
+        }
+      ],
+      "operation": "recharge.delete.customer-entitlements-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers id",
+      "summary": "Documented DELETE /customers/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete customers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{id}"
+        }
+      ],
+      "operation": "recharge.delete.customers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete discounts id",
+      "summary": "Documented DELETE /discounts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete discounts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/discounts/{id}"
+        }
+      ],
+      "operation": "recharge.delete.discounts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete metafields id",
+      "summary": "Documented DELETE /metafields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete metafields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/metafields/{id}"
+        }
+      ],
+      "operation": "recharge.delete.metafields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete onetimes id",
+      "summary": "Documented DELETE /onetimes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete onetimes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/onetimes/{id}"
+        }
+      ],
+      "operation": "recharge.delete.onetimes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete orders id",
+      "summary": "Documented DELETE /orders/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete orders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/orders/{id}"
+        }
+      ],
+      "operation": "recharge.delete.orders-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete payment-methods id",
+      "summary": "Documented DELETE /payment_methods/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete payment-methods id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/payment_methods/{id}"
+        }
+      ],
+      "operation": "recharge.delete.payment-methods-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete plans id",
+      "summary": "Documented DELETE /plans/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete plans id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/plans/{id}"
+        }
+      ],
+      "operation": "recharge.delete.plans-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete products external-product-id",
+      "summary": "Documented DELETE /products/{external_product_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete products external-product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{external_product_id}"
+        }
+      ],
+      "operation": "recharge.delete.products-external-product-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete products external-product-id plans-bulk",
+      "summary": "Documented DELETE /products/{external_product_id}/plans-bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete products external-product-id plans-bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{external_product_id}/plans-bulk"
+        }
+      ],
+      "operation": "recharge.delete.products-external-product-id-plans-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete subscriptions id",
+      "summary": "Documented DELETE /subscriptions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete subscriptions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/subscriptions/{id}"
+        }
+      ],
+      "operation": "recharge.delete.subscriptions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete webhooks id",
+      "summary": "Documented DELETE /webhooks/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api delete webhooks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{id}"
+        }
+      ],
+      "operation": "recharge.delete.webhooks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get accounts",
+      "summary": "Documented GET /accounts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts"
+        }
+      ],
+      "operation": "recharge.get.accounts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get accounts id",
+      "summary": "Documented GET /accounts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get accounts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/{id}"
+        }
+      ],
+      "operation": "recharge.get.accounts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get addresses",
+      "summary": "Documented GET /addresses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get addresses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/addresses"
+        }
+      ],
+      "operation": "recharge.get.addresses",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get addresses id",
+      "summary": "Documented GET /addresses/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get addresses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/addresses/{id}"
+        }
+      ],
+      "operation": "recharge.get.addresses-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api orders",
+      "summary": "Documented GET /api/orders/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get api orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/orders/"
+        }
+      ],
+      "operation": "recharge.get.api-orders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get async-batches",
+      "summary": "Documented GET /async_batches (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get async-batches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/async_batches"
+        }
+      ],
+      "operation": "recharge.get.async-batches",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get async-batches batch-id",
+      "summary": "Documented GET /async_batches/{batch_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get async-batches batch-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/async_batches/{batch_id}"
+        }
+      ],
+      "operation": "recharge.get.async-batches-batch-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get async-batches batch-id tasks",
+      "summary": "Documented GET /async_batches/{batch_id}/tasks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get async-batches batch-id tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/async_batches/{batch_id}/tasks"
+        }
+      ],
+      "operation": "recharge.get.async-batches-batch-id-tasks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get async-batches id",
+      "summary": "Documented GET /async_batches/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get async-batches id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/async_batches/{id}"
+        }
+      ],
+      "operation": "recharge.get.async-batches-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bundle-selections",
+      "summary": "Documented GET /bundle_selections (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get bundle-selections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bundle_selections"
+        }
+      ],
+      "operation": "recharge.get.bundle-selections",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bundle-selections id",
+      "summary": "Documented GET /bundle_selections/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get bundle-selections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bundle_selections/{id}"
+        }
+      ],
+      "operation": "recharge.get.bundle-selections-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get charges",
+      "summary": "Documented GET /charges (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get charges --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/charges"
+        }
+      ],
+      "operation": "recharge.get.charges",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get charges id",
+      "summary": "Documented GET /charges/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get charges id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/charges/{id}"
+        }
+      ],
+      "operation": "recharge.get.charges-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get checkout checkout-token shipping-rates",
+      "summary": "Documented GET /checkout/{checkout_token}/shipping_rates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get checkout checkout-token shipping-rates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/checkout/{checkout_token}/shipping_rates"
+        }
+      ],
+      "operation": "recharge.get.checkout-checkout-token-shipping-rates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get checkouts token",
+      "summary": "Documented GET /checkouts/{token} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get checkouts token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/checkouts/{token}"
+        }
+      ],
+      "operation": "recharge.get.checkouts-token",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get checkouts token shipping-rates",
+      "summary": "Documented GET /checkouts/{token}/shipping_rates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get checkouts token shipping-rates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/checkouts/{token}/shipping_rates"
+        }
+      ],
+      "operation": "recharge.get.checkouts-token-shipping-rates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get collection-products",
+      "summary": "Documented GET /collection_products (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get collection-products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collection_products"
+        }
+      ],
+      "operation": "recharge.get.collection-products",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get collections",
+      "summary": "Documented GET /collections (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get collections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collections"
+        }
+      ],
+      "operation": "recharge.get.collections",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get collections id",
+      "summary": "Documented GET /collections/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get collections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collections/{id}"
+        }
+      ],
+      "operation": "recharge.get.collections-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credit-accounts",
+      "summary": "Documented GET /credit_accounts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get credit-accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_accounts"
+        }
+      ],
+      "operation": "recharge.get.credit-accounts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credit-accounts id",
+      "summary": "Documented GET /credit_accounts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get credit-accounts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_accounts/{id}"
+        }
+      ],
+      "operation": "recharge.get.credit-accounts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credit-accounts id credit-adjustments",
+      "summary": "Documented GET /credit_accounts/{id}/credit_adjustments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get credit-accounts id credit-adjustments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_accounts/{id}/credit_adjustments"
+        }
+      ],
+      "operation": "recharge.get.credit-accounts-id-credit-adjustments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credit-adjustments",
+      "summary": "Documented GET /credit_adjustments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get credit-adjustments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_adjustments"
+        }
+      ],
+      "operation": "recharge.get.credit-adjustments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer-entitlements",
+      "summary": "Documented GET /customer_entitlements (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get customer-entitlements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer_entitlements"
+        }
+      ],
+      "operation": "recharge.get.customer-entitlements",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers id",
+      "summary": "Documented GET /customers/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get customers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{id}"
+        }
+      ],
+      "operation": "recharge.get.customers-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers id credit-summary",
+      "summary": "Documented GET /customers/{id}/credit_summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get customers id credit-summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{id}/credit_summary"
+        }
+      ],
+      "operation": "recharge.get.customers-id-credit-summary",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers id delivery-schedule",
+      "summary": "Documented GET /customers/{id}/delivery_schedule (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get customers id delivery-schedule --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{id}/delivery_schedule"
+        }
+      ],
+      "operation": "recharge.get.customers-id-delivery-schedule",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get discounts",
+      "summary": "Documented GET /discounts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get discounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discounts"
+        }
+      ],
+      "operation": "recharge.get.discounts",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get discounts id",
+      "summary": "Documented GET /discounts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get discounts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discounts/{id}"
+        }
+      ],
+      "operation": "recharge.get.discounts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events",
+      "summary": "Documented GET /events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ],
+      "operation": "recharge.get.events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get metafields",
+      "summary": "Documented GET /metafields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get metafields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metafields"
+        }
+      ],
+      "operation": "recharge.get.metafields",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get metafields id",
+      "summary": "Documented GET /metafields/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get metafields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metafields/{id}"
+        }
+      ],
+      "operation": "recharge.get.metafields-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get metafields metafield-id",
+      "summary": "Documented GET /metafields/{metafield_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get metafields metafield-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metafields/{metafield_id}"
+        }
+      ],
+      "operation": "recharge.get.metafields-metafield-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onetimes",
+      "summary": "Documented GET /onetimes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get onetimes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onetimes"
+        }
+      ],
+      "operation": "recharge.get.onetimes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get onetimes id",
+      "summary": "Documented GET /onetimes/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get onetimes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/onetimes/{id}"
+        }
+      ],
+      "operation": "recharge.get.onetimes-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get orders",
+      "summary": "Documented GET /orders/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders/"
+        }
+      ],
+      "operation": "recharge.get.orders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get orders id",
+      "summary": "Documented GET /orders/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get orders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders/{id}"
+        }
+      ],
+      "operation": "recharge.get.orders-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get payment-methods",
+      "summary": "Documented GET /payment_methods (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get payment-methods --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payment_methods"
+        }
+      ],
+      "operation": "recharge.get.payment-methods",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get payment-methods id",
+      "summary": "Documented GET /payment_methods/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get payment-methods id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payment_methods/{id}"
+        }
+      ],
+      "operation": "recharge.get.payment-methods-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plans",
+      "summary": "Documented GET /plans (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get plans --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans"
+        }
+      ],
+      "operation": "recharge.get.plans",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products",
+      "summary": "Documented GET /products (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products"
+        }
+      ],
+      "operation": "recharge.get.products",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products external-product-id",
+      "summary": "Documented GET /products/{external_product_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get products external-product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{external_product_id}"
+        }
+      ],
+      "operation": "recharge.get.products-external-product-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products operation",
+      "summary": "Documented GET /products/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get products operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/"
+        }
+      ],
+      "operation": "recharge.get.products-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get store",
+      "summary": "Documented GET /store (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get store --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/store"
+        }
+      ],
+      "operation": "recharge.get.store",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscriptions id",
+      "summary": "Documented GET /subscriptions/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get subscriptions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions/{id}"
+        }
+      ],
+      "operation": "recharge.get.subscriptions-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get token-information",
+      "summary": "Documented GET /token_information (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get token-information --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/token_information"
+        }
+      ],
+      "operation": "recharge.get.token-information",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks",
+      "summary": "Documented GET /webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "recharge.get.webhooks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks id",
+      "summary": "Documented GET /webhooks/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api get webhooks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks/{id}"
+        }
+      ],
+      "operation": "recharge.get.webhooks-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post addresses",
+      "summary": "Documented POST /addresses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post addresses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/addresses"
+        }
+      ],
+      "operation": "recharge.post.addresses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post addresses id charges skip",
+      "summary": "Documented POST /addresses/{id}/charges/skip (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post addresses id charges skip --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/addresses/{id}/charges/skip"
+        }
+      ],
+      "operation": "recharge.post.addresses-id-charges-skip",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post addresses merge",
+      "summary": "Documented POST /addresses/merge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post addresses merge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/addresses/merge"
+        }
+      ],
+      "operation": "recharge.post.addresses-merge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post async-batches",
+      "summary": "Documented POST /async_batches (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post async-batches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/async_batches"
+        }
+      ],
+      "operation": "recharge.post.async-batches",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post async-batches batch-id process",
+      "summary": "Documented POST /async_batches/{batch_id}/process (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post async-batches batch-id process --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/async_batches/{batch_id}/process"
+        }
+      ],
+      "operation": "recharge.post.async-batches-batch-id-process",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post async-batches batch-id tasks",
+      "summary": "Documented POST /async_batches/{batch_id}/tasks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post async-batches batch-id tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/async_batches/{batch_id}/tasks"
+        }
+      ],
+      "operation": "recharge.post.async-batches-batch-id-tasks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post bundle-selections",
+      "summary": "Documented POST /bundle_selections (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post bundle-selections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bundle_selections"
+        }
+      ],
+      "operation": "recharge.post.bundle-selections",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charges charge-id remove-discount",
+      "summary": "Documented POST /charges/{charge_id}/remove_discount/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post charges charge-id remove-discount --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charges/{charge_id}/remove_discount/"
+        }
+      ],
+      "operation": "recharge.post.charges-charge-id-remove-discount",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charges id add-free-gift",
+      "summary": "Documented POST /charges/{id}/add_free_gift (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post charges id add-free-gift --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charges/{id}/add_free_gift"
+        }
+      ],
+      "operation": "recharge.post.charges-id-add-free-gift",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charges id apply-discount",
+      "summary": "Documented POST /charges/{id}/apply_discount (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post charges id apply-discount --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charges/{id}/apply_discount"
+        }
+      ],
+      "operation": "recharge.post.charges-id-apply-discount",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charges id capture-payment",
+      "summary": "Documented POST /charges/{id}/capture_payment (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post charges id capture-payment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charges/{id}/capture_payment"
+        }
+      ],
+      "operation": "recharge.post.charges-id-capture-payment",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charges id process",
+      "summary": "Documented POST /charges/{id}/process (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post charges id process --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charges/{id}/process"
+        }
+      ],
+      "operation": "recharge.post.charges-id-process",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charges id refund",
+      "summary": "Documented POST /charges/{id}/refund (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post charges id refund --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charges/{id}/refund"
+        }
+      ],
+      "operation": "recharge.post.charges-id-refund",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charges id remove-discount",
+      "summary": "Documented POST /charges/{id}/remove_discount (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post charges id remove-discount --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charges/{id}/remove_discount"
+        }
+      ],
+      "operation": "recharge.post.charges-id-remove-discount",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charges id remove-free-gift",
+      "summary": "Documented POST /charges/{id}/remove_free_gift (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post charges id remove-free-gift --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charges/{id}/remove_free_gift"
+        }
+      ],
+      "operation": "recharge.post.charges-id-remove-free-gift",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charges id skip",
+      "summary": "Documented POST /charges/{id}/skip (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post charges id skip --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charges/{id}/skip"
+        }
+      ],
+      "operation": "recharge.post.charges-id-skip",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charges id unskip",
+      "summary": "Documented POST /charges/{id}/unskip (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post charges id unskip --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charges/{id}/unskip"
+        }
+      ],
+      "operation": "recharge.post.charges-id-unskip",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post checkouts",
+      "summary": "Documented POST /checkouts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post checkouts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checkouts"
+        }
+      ],
+      "operation": "recharge.post.checkouts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post checkouts token charge",
+      "summary": "Documented POST /checkouts/{token}/charge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post checkouts token charge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checkouts/{token}/charge"
+        }
+      ],
+      "operation": "recharge.post.checkouts-token-charge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post collections",
+      "summary": "Documented POST /collections (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post collections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/collections"
+        }
+      ],
+      "operation": "recharge.post.collections",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post collections id collection-products-bulk",
+      "summary": "Documented POST /collections/{id}/collection_products-bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post collections id collection-products-bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/collections/{id}/collection_products-bulk"
+        }
+      ],
+      "operation": "recharge.post.collections-id-collection-products-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post credit-accounts",
+      "summary": "Documented POST /credit_accounts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post credit-accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/credit_accounts"
+        }
+      ],
+      "operation": "recharge.post.credit-accounts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post credit-accounts id credit-adjustments",
+      "summary": "Documented POST /credit_accounts/{id}/credit_adjustments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post credit-accounts id credit-adjustments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/credit_accounts/{id}/credit_adjustments"
+        }
+      ],
+      "operation": "recharge.post.credit-accounts-id-credit-adjustments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customer-entitlements",
+      "summary": "Documented POST /customer_entitlements (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post customer-entitlements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer_entitlements"
+        }
+      ],
+      "operation": "recharge.post.customer-entitlements",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers",
+      "summary": "Documented POST /customers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers"
+        }
+      ],
+      "operation": "recharge.post.customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers id notifications",
+      "summary": "Documented POST /customers/{id}/notifications (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post customers id notifications --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{id}/notifications"
+        }
+      ],
+      "operation": "recharge.post.customers-id-notifications",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post discounts",
+      "summary": "Documented POST /discounts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post discounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/discounts"
+        }
+      ],
+      "operation": "recharge.post.discounts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post metafields",
+      "summary": "Documented POST /metafields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post metafields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/metafields"
+        }
+      ],
+      "operation": "recharge.post.metafields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post onetimes",
+      "summary": "Documented POST /onetimes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post onetimes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/onetimes"
+        }
+      ],
+      "operation": "recharge.post.onetimes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post orders id clone",
+      "summary": "Documented POST /orders/{id}/clone (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post orders id clone --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orders/{id}/clone"
+        }
+      ],
+      "operation": "recharge.post.orders-id-clone",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post orders id delay",
+      "summary": "Documented POST /orders/{id}/delay (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post orders id delay --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orders/{id}/delay"
+        }
+      ],
+      "operation": "recharge.post.orders-id-delay",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post payment-methods",
+      "summary": "Documented POST /payment_methods (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post payment-methods --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/payment_methods"
+        }
+      ],
+      "operation": "recharge.post.payment-methods",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post plans",
+      "summary": "Documented POST /plans (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post plans --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/plans"
+        }
+      ],
+      "operation": "recharge.post.plans",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post products",
+      "summary": "Documented POST /products (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products"
+        }
+      ],
+      "operation": "recharge.post.products",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post products external-product-id plans-bulk",
+      "summary": "Documented POST /products/{external_product_id}/plans-bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post products external-product-id plans-bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{external_product_id}/plans-bulk"
+        }
+      ],
+      "operation": "recharge.post.products-external-product-id-plans-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions",
+      "summary": "Documented POST /subscriptions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions"
+        }
+      ],
+      "operation": "recharge.post.subscriptions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions id activate",
+      "summary": "Documented POST /subscriptions/{id}/activate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post subscriptions id activate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{id}/activate"
+        }
+      ],
+      "operation": "recharge.post.subscriptions-id-activate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions id cancel",
+      "summary": "Documented POST /subscriptions/{id}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post subscriptions id cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{id}/cancel"
+        }
+      ],
+      "operation": "recharge.post.subscriptions-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions id change-address",
+      "summary": "Documented POST /subscriptions/{id}/change_address (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post subscriptions id change-address --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{id}/change_address"
+        }
+      ],
+      "operation": "recharge.post.subscriptions-id-change-address",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions id set-next-charge-date",
+      "summary": "Documented POST /subscriptions/{id}/set_next_charge_date (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post subscriptions id set-next-charge-date --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{id}/set_next_charge_date"
+        }
+      ],
+      "operation": "recharge.post.subscriptions-id-set-next-charge-date",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions skip-gift",
+      "summary": "Documented POST /subscriptions/skip_gift (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post subscriptions skip-gift --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/skip_gift"
+        }
+      ],
+      "operation": "recharge.post.subscriptions-skip-gift",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhooks",
+      "summary": "Documented POST /webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "recharge.post.webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhooks id test",
+      "summary": "Documented POST /webhooks/{id}/test (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api post webhooks id test --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks/{id}/test"
+        }
+      ],
+      "operation": "recharge.post.webhooks-id-test",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put addresses id",
+      "summary": "Documented PUT /addresses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put addresses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/addresses/{id}"
+        }
+      ],
+      "operation": "recharge.put.addresses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put bundle-selections id",
+      "summary": "Documented PUT /bundle_selections/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put bundle-selections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/bundle_selections/{id}"
+        }
+      ],
+      "operation": "recharge.put.bundle-selections-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put checkouts token",
+      "summary": "Documented PUT /checkouts/{token} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put checkouts token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/checkouts/{token}"
+        }
+      ],
+      "operation": "recharge.put.checkouts-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put collections id",
+      "summary": "Documented PUT /collections/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put collections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/collections/{id}"
+        }
+      ],
+      "operation": "recharge.put.collections-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put credit-accounts id",
+      "summary": "Documented PUT /credit_accounts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put credit-accounts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/credit_accounts/{id}"
+        }
+      ],
+      "operation": "recharge.put.credit-accounts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put customer-entitlements id",
+      "summary": "Documented PUT /customer_entitlements/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put customer-entitlements id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customer_entitlements/{id}"
+        }
+      ],
+      "operation": "recharge.put.customer-entitlements-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put customers id",
+      "summary": "Documented PUT /customers/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put customers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customers/{id}"
+        }
+      ],
+      "operation": "recharge.put.customers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put discounts id",
+      "summary": "Documented PUT /discounts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put discounts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/discounts/{id}"
+        }
+      ],
+      "operation": "recharge.put.discounts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put metafields id",
+      "summary": "Documented PUT /metafields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put metafields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/metafields/{id}"
+        }
+      ],
+      "operation": "recharge.put.metafields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put onetimes id",
+      "summary": "Documented PUT /onetimes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put onetimes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/onetimes/{id}"
+        }
+      ],
+      "operation": "recharge.put.onetimes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put orders id",
+      "summary": "Documented PUT /orders/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put orders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/orders/{id}"
+        }
+      ],
+      "operation": "recharge.put.orders-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put payment-methods id",
+      "summary": "Documented PUT /payment_methods/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put payment-methods id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/payment_methods/{id}"
+        }
+      ],
+      "operation": "recharge.put.payment-methods-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put plans id",
+      "summary": "Documented PUT /plans/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put plans id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/plans/{id}"
+        }
+      ],
+      "operation": "recharge.put.plans-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put products external-product-id",
+      "summary": "Documented PUT /products/{external_product_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put products external-product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{external_product_id}"
+        }
+      ],
+      "operation": "recharge.put.products-external-product-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put products external-product-id plans-bulk",
+      "summary": "Documented PUT /products/{external_product_id}/plans-bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put products external-product-id plans-bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{external_product_id}/plans-bulk"
+        }
+      ],
+      "operation": "recharge.put.products-external-product-id-plans-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put subscriptions id",
+      "summary": "Documented PUT /subscriptions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put subscriptions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/subscriptions/{id}"
+        }
+      ],
+      "operation": "recharge.put.subscriptions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put webhooks id",
+      "summary": "Documented PUT /webhooks/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge api put webhooks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/webhooks/{id}"
+        }
+      ],
+      "operation": "recharge.put.webhooks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "customers list",
+      "summary": "Run the customers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge customers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers"
+        }
+      ]
+    },
+    {
+      "path": "orders list",
+      "summary": "Run the orders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "orders",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge orders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders"
+        }
+      ]
+    },
+    {
+      "path": "subscriptions list",
+      "summary": "Run the subscriptions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscriptions",
+      "source_url": "https://developer.rechargepayments.com/2021-11/",
+      "examples": [
+        "pm recharge subscriptions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions"
+        }
+      ]
+    }
+  ]
+}

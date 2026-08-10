@@ -1,0 +1,2782 @@
+{
+  "tagline": "Run Capsule CRM's declared streams and reverse-ETL actions.",
+  "usage": "pm capsule-crm \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get activitytypes",
+        "api get activitytypes icons",
+        "api get activitytypes id",
+        "api get boards id",
+        "api get boards id stages",
+        "api get categories id",
+        "api get countries",
+        "api get currencies",
+        "api get customfields id",
+        "api get entries",
+        "api get entries id",
+        "api get entries id attachments attachmentid",
+        "api get goalperiods",
+        "api get goals",
+        "api get goals id",
+        "api get kases deleted",
+        "api get kases id",
+        "api get kases id parties",
+        "api get kases ids",
+        "api get kases search",
+        "api get lostreasons id",
+        "api get milestones id",
+        "api get opportunities deleted",
+        "api get opportunities id",
+        "api get opportunities id kases",
+        "api get opportunities id parties",
+        "api get opportunities ids",
+        "api get opportunities search",
+        "api get parties deleted",
+        "api get parties id",
+        "api get parties id kases",
+        "api get parties id opportunities",
+        "api get parties id people",
+        "api get parties ids",
+        "api get parties search",
+        "api get pipelines id",
+        "api get pipelines id milestones",
+        "api get pipelines ids",
+        "api get projects",
+        "api get site",
+        "api get stages id",
+        "api get tags id",
+        "api get tasks id",
+        "api get teams id",
+        "api get titles",
+        "api get trackdefinitions",
+        "api get trackdefinitions id",
+        "api get tracks",
+        "api get tracks id",
+        "api get user",
+        "api get users id",
+        "api get webhooks",
+        "api get webhooks id",
+        "boards list",
+        "categories list",
+        "custom fields list",
+        "kases list",
+        "lost reasons list",
+        "milestones list",
+        "opportunities list",
+        "parties list",
+        "pipelines list",
+        "stages list",
+        "tags list",
+        "tasks list",
+        "teams list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete activitytypes id",
+        "api delete categories id",
+        "api delete customfields id",
+        "api delete entries id",
+        "api delete goals id",
+        "api delete kases id parties partyid",
+        "api delete lostreasons id",
+        "api delete milestones id",
+        "api delete opportunities id parties partyid",
+        "api delete stages id",
+        "api delete tags id",
+        "api delete titles id",
+        "api delete trackdefinitions id",
+        "api delete tracks id",
+        "api delete webhooks id",
+        "api post activitytypes",
+        "api post boards",
+        "api post boards id archive",
+        "api post boards id restore",
+        "api post categories",
+        "api post customfields",
+        "api post entries",
+        "api post entries id attachments",
+        "api post filters query",
+        "api post goals",
+        "api post kases id parties partyid",
+        "api post lostreasons",
+        "api post milestones",
+        "api post opportunities id parties partyid",
+        "api post pipelines",
+        "api post pipelines id archive",
+        "api post pipelines id duplicate",
+        "api post pipelines id restore",
+        "api post stages",
+        "api post tags",
+        "api post titles",
+        "api post trackdefinitions",
+        "api post tracks",
+        "api post webhooks",
+        "api put activitytypes id",
+        "api put boards id",
+        "api put categories id",
+        "api put customfields id",
+        "api put entries id",
+        "api put goals id",
+        "api put lostreasons id",
+        "api put milestones id",
+        "api put pipelines id",
+        "api put stages id",
+        "api put tags id",
+        "api put trackdefinitions id",
+        "api put tracks id",
+        "api put users id",
+        "create kase apply",
+        "create opportunity apply",
+        "create party apply",
+        "create task apply",
+        "delete kase apply",
+        "delete opportunity apply",
+        "delete party apply",
+        "delete task apply",
+        "update kase apply",
+        "update opportunity apply",
+        "update party apply",
+        "update task apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete activitytypes id",
+      "summary": "Documented DELETE /activitytypes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete activitytypes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/activitytypes/{id}"
+        }
+      ],
+      "operation": "capsule-crm.delete.activitytypes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete categories id",
+      "summary": "Documented DELETE /categories/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete categories id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/categories/{id}"
+        }
+      ],
+      "operation": "capsule-crm.delete.categories-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customfields id",
+      "summary": "Documented DELETE /customfields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete customfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customfields/{id}"
+        }
+      ],
+      "operation": "capsule-crm.delete.customfields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete entries id",
+      "summary": "Documented DELETE /entries/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete entries id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/entries/{id}"
+        }
+      ],
+      "operation": "capsule-crm.delete.entries-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete goals id",
+      "summary": "Documented DELETE /goals/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete goals id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/goals/{id}"
+        }
+      ],
+      "operation": "capsule-crm.delete.goals-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete kases id parties partyid",
+      "summary": "Documented DELETE /kases/{id}/parties/{partyId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete kases id parties partyid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/kases/{id}/parties/{partyId}"
+        }
+      ],
+      "operation": "capsule-crm.delete.kases-id-parties-partyid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete lostreasons id",
+      "summary": "Documented DELETE /lostreasons/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete lostreasons id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/lostreasons/{id}"
+        }
+      ],
+      "operation": "capsule-crm.delete.lostreasons-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete milestones id",
+      "summary": "Documented DELETE /milestones/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete milestones id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/milestones/{id}"
+        }
+      ],
+      "operation": "capsule-crm.delete.milestones-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete opportunities id parties partyid",
+      "summary": "Documented DELETE /opportunities/{id}/parties/{partyId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete opportunities id parties partyid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/opportunities/{id}/parties/{partyId}"
+        }
+      ],
+      "operation": "capsule-crm.delete.opportunities-id-parties-partyid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete stages id",
+      "summary": "Documented DELETE /stages/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete stages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/stages/{id}"
+        }
+      ],
+      "operation": "capsule-crm.delete.stages-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete tags id",
+      "summary": "Documented DELETE /tags/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tags/{id}"
+        }
+      ],
+      "operation": "capsule-crm.delete.tags-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete titles id",
+      "summary": "Documented DELETE /titles/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete titles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/titles/{id}"
+        }
+      ],
+      "operation": "capsule-crm.delete.titles-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete trackdefinitions id",
+      "summary": "Documented DELETE /trackdefinitions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete trackdefinitions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/trackdefinitions/{id}"
+        }
+      ],
+      "operation": "capsule-crm.delete.trackdefinitions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete tracks id",
+      "summary": "Documented DELETE /tracks/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete tracks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tracks/{id}"
+        }
+      ],
+      "operation": "capsule-crm.delete.tracks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete webhooks id",
+      "summary": "Documented DELETE /webhooks/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api delete webhooks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{id}"
+        }
+      ],
+      "operation": "capsule-crm.delete.webhooks-id",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api get activitytypes",
+      "summary": "Documented GET /activitytypes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get activitytypes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activitytypes"
+        }
+      ],
+      "operation": "capsule-crm.get.activitytypes",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get activitytypes icons",
+      "summary": "Documented GET /activitytypes/icons (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get activitytypes icons --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activitytypes/icons"
+        }
+      ],
+      "operation": "capsule-crm.get.activitytypes-icons",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get activitytypes id",
+      "summary": "Documented GET /activitytypes/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get activitytypes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activitytypes/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.activitytypes-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get boards id",
+      "summary": "Documented GET /boards/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get boards id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/boards/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.boards-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get boards id stages",
+      "summary": "Documented GET /boards/{id}/stages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get boards id stages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/boards/{id}/stages"
+        }
+      ],
+      "operation": "capsule-crm.get.boards-id-stages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get categories id",
+      "summary": "Documented GET /categories/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get categories id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/categories/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.categories-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get countries",
+      "summary": "Documented GET /countries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get countries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/countries"
+        }
+      ],
+      "operation": "capsule-crm.get.countries",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get currencies",
+      "summary": "Documented GET /currencies (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get currencies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/currencies"
+        }
+      ],
+      "operation": "capsule-crm.get.currencies",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customfields id",
+      "summary": "Documented GET /customfields/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get customfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customfields/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.customfields-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get entries",
+      "summary": "Documented GET /entries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get entries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/entries"
+        }
+      ],
+      "operation": "capsule-crm.get.entries",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get entries id",
+      "summary": "Documented GET /entries/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get entries id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/entries/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.entries-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get entries id attachments attachmentid",
+      "summary": "Documented GET /entries/{id}/attachments/{attachmentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get entries id attachments attachmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/entries/{id}/attachments/{attachmentId}"
+        }
+      ],
+      "operation": "capsule-crm.get.entries-id-attachments-attachmentid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get goalperiods",
+      "summary": "Documented GET /goalperiods (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get goalperiods --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/goalperiods"
+        }
+      ],
+      "operation": "capsule-crm.get.goalperiods",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get goals",
+      "summary": "Documented GET /goals (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get goals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/goals"
+        }
+      ],
+      "operation": "capsule-crm.get.goals",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get goals id",
+      "summary": "Documented GET /goals/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get goals id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/goals/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.goals-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get kases deleted",
+      "summary": "Documented GET /kases/deleted (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get kases deleted --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kases/deleted"
+        }
+      ],
+      "operation": "capsule-crm.get.kases-deleted",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get kases id",
+      "summary": "Documented GET /kases/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get kases id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kases/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.kases-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get kases id parties",
+      "summary": "Documented GET /kases/{id}/parties (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get kases id parties --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kases/{id}/parties"
+        }
+      ],
+      "operation": "capsule-crm.get.kases-id-parties",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get kases ids",
+      "summary": "Documented GET /kases/{ids} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get kases ids --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kases/{ids}"
+        }
+      ],
+      "operation": "capsule-crm.get.kases-ids",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get kases search",
+      "summary": "Documented GET /kases/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get kases search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kases/search"
+        }
+      ],
+      "operation": "capsule-crm.get.kases-search",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get lostreasons id",
+      "summary": "Documented GET /lostreasons/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get lostreasons id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lostreasons/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.lostreasons-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get milestones id",
+      "summary": "Documented GET /milestones/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get milestones id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/milestones/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.milestones-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get opportunities deleted",
+      "summary": "Documented GET /opportunities/deleted (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get opportunities deleted --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/deleted"
+        }
+      ],
+      "operation": "capsule-crm.get.opportunities-deleted",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get opportunities id",
+      "summary": "Documented GET /opportunities/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get opportunities id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.opportunities-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get opportunities id kases",
+      "summary": "Documented GET /opportunities/{id}/kases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get opportunities id kases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{id}/kases"
+        }
+      ],
+      "operation": "capsule-crm.get.opportunities-id-kases",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get opportunities id parties",
+      "summary": "Documented GET /opportunities/{id}/parties (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get opportunities id parties --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{id}/parties"
+        }
+      ],
+      "operation": "capsule-crm.get.opportunities-id-parties",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get opportunities ids",
+      "summary": "Documented GET /opportunities/{ids} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get opportunities ids --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{ids}"
+        }
+      ],
+      "operation": "capsule-crm.get.opportunities-ids",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get opportunities search",
+      "summary": "Documented GET /opportunities/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get opportunities search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/search"
+        }
+      ],
+      "operation": "capsule-crm.get.opportunities-search",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get parties deleted",
+      "summary": "Documented GET /parties/deleted (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get parties deleted --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/parties/deleted"
+        }
+      ],
+      "operation": "capsule-crm.get.parties-deleted",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get parties id",
+      "summary": "Documented GET /parties/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get parties id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/parties/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.parties-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get parties id kases",
+      "summary": "Documented GET /parties/{id}/kases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get parties id kases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/parties/{id}/kases"
+        }
+      ],
+      "operation": "capsule-crm.get.parties-id-kases",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get parties id opportunities",
+      "summary": "Documented GET /parties/{id}/opportunities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get parties id opportunities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/parties/{id}/opportunities"
+        }
+      ],
+      "operation": "capsule-crm.get.parties-id-opportunities",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get parties id people",
+      "summary": "Documented GET /parties/{id}/people (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get parties id people --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/parties/{id}/people"
+        }
+      ],
+      "operation": "capsule-crm.get.parties-id-people",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get parties ids",
+      "summary": "Documented GET /parties/{ids} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get parties ids --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/parties/{ids}"
+        }
+      ],
+      "operation": "capsule-crm.get.parties-ids",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get parties search",
+      "summary": "Documented GET /parties/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get parties search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/parties/search"
+        }
+      ],
+      "operation": "capsule-crm.get.parties-search",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipelines id",
+      "summary": "Documented GET /pipelines/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get pipelines id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipelines/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.pipelines-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipelines id milestones",
+      "summary": "Documented GET /pipelines/{id}/milestones (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get pipelines id milestones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipelines/{id}/milestones"
+        }
+      ],
+      "operation": "capsule-crm.get.pipelines-id-milestones",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipelines ids",
+      "summary": "Documented GET /pipelines/{ids} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get pipelines ids --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipelines/{ids}"
+        }
+      ],
+      "operation": "capsule-crm.get.pipelines-ids",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects",
+      "summary": "Documented GET /projects (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get projects --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects"
+        }
+      ],
+      "operation": "capsule-crm.get.projects",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get site",
+      "summary": "Documented GET /site (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get site --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/site"
+        }
+      ],
+      "operation": "capsule-crm.get.site",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stages id",
+      "summary": "Documented GET /stages/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get stages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stages/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.stages-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tags id",
+      "summary": "Documented GET /tags/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.tags-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tasks id",
+      "summary": "Documented GET /tasks/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get tasks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.tasks-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get teams id",
+      "summary": "Documented GET /teams/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get teams id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.teams-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get titles",
+      "summary": "Documented GET /titles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get titles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/titles"
+        }
+      ],
+      "operation": "capsule-crm.get.titles",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get trackdefinitions",
+      "summary": "Documented GET /trackdefinitions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get trackdefinitions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/trackdefinitions"
+        }
+      ],
+      "operation": "capsule-crm.get.trackdefinitions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get trackdefinitions id",
+      "summary": "Documented GET /trackdefinitions/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get trackdefinitions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/trackdefinitions/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.trackdefinitions-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tracks",
+      "summary": "Documented GET /tracks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get tracks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tracks"
+        }
+      ],
+      "operation": "capsule-crm.get.tracks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tracks id",
+      "summary": "Documented GET /tracks/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get tracks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tracks/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.tracks-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get user",
+      "summary": "Documented GET /user (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get user --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user"
+        }
+      ],
+      "operation": "capsule-crm.get.user",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id",
+      "summary": "Documented GET /users/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.users-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks",
+      "summary": "Documented GET /webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "capsule-crm.get.webhooks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks id",
+      "summary": "Documented GET /webhooks/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api get webhooks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks/{id}"
+        }
+      ],
+      "operation": "capsule-crm.get.webhooks-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post activitytypes",
+      "summary": "Documented POST /activitytypes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post activitytypes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/activitytypes"
+        }
+      ],
+      "operation": "capsule-crm.post.activitytypes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post boards",
+      "summary": "Documented POST /boards (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post boards --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/boards"
+        }
+      ],
+      "operation": "capsule-crm.post.boards",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post boards id archive",
+      "summary": "Documented POST /boards/{id}/archive (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post boards id archive --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/boards/{id}/archive"
+        }
+      ],
+      "operation": "capsule-crm.post.boards-id-archive",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post boards id restore",
+      "summary": "Documented POST /boards/{id}/restore (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post boards id restore --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/boards/{id}/restore"
+        }
+      ],
+      "operation": "capsule-crm.post.boards-id-restore",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post categories",
+      "summary": "Documented POST /categories (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post categories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/categories"
+        }
+      ],
+      "operation": "capsule-crm.post.categories",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customfields",
+      "summary": "Documented POST /customfields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post customfields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customfields"
+        }
+      ],
+      "operation": "capsule-crm.post.customfields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post entries",
+      "summary": "Documented POST /entries (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post entries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/entries"
+        }
+      ],
+      "operation": "capsule-crm.post.entries",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post entries id attachments",
+      "summary": "Documented POST /entries/{id}/attachments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post entries id attachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/entries/{id}/attachments"
+        }
+      ],
+      "operation": "capsule-crm.post.entries-id-attachments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post filters query",
+      "summary": "Documented POST /filters/query (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post filters query --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/filters/query"
+        }
+      ],
+      "operation": "capsule-crm.post.filters-query",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post goals",
+      "summary": "Documented POST /goals (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post goals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/goals"
+        }
+      ],
+      "operation": "capsule-crm.post.goals",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post kases id parties partyid",
+      "summary": "Documented POST /kases/{id}/parties/{partyId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post kases id parties partyid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/kases/{id}/parties/{partyId}"
+        }
+      ],
+      "operation": "capsule-crm.post.kases-id-parties-partyid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post lostreasons",
+      "summary": "Documented POST /lostreasons (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post lostreasons --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lostreasons"
+        }
+      ],
+      "operation": "capsule-crm.post.lostreasons",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post milestones",
+      "summary": "Documented POST /milestones (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post milestones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/milestones"
+        }
+      ],
+      "operation": "capsule-crm.post.milestones",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post opportunities id parties partyid",
+      "summary": "Documented POST /opportunities/{id}/parties/{partyId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post opportunities id parties partyid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities/{id}/parties/{partyId}"
+        }
+      ],
+      "operation": "capsule-crm.post.opportunities-id-parties-partyid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post pipelines",
+      "summary": "Documented POST /pipelines (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post pipelines --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pipelines"
+        }
+      ],
+      "operation": "capsule-crm.post.pipelines",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post pipelines id archive",
+      "summary": "Documented POST /pipelines/{id}/archive (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post pipelines id archive --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pipelines/{id}/archive"
+        }
+      ],
+      "operation": "capsule-crm.post.pipelines-id-archive",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post pipelines id duplicate",
+      "summary": "Documented POST /pipelines/{id}/duplicate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post pipelines id duplicate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pipelines/{id}/duplicate"
+        }
+      ],
+      "operation": "capsule-crm.post.pipelines-id-duplicate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post pipelines id restore",
+      "summary": "Documented POST /pipelines/{id}/restore (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post pipelines id restore --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pipelines/{id}/restore"
+        }
+      ],
+      "operation": "capsule-crm.post.pipelines-id-restore",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post stages",
+      "summary": "Documented POST /stages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post stages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/stages"
+        }
+      ],
+      "operation": "capsule-crm.post.stages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tags",
+      "summary": "Documented POST /tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tags"
+        }
+      ],
+      "operation": "capsule-crm.post.tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post titles",
+      "summary": "Documented POST /titles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post titles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/titles"
+        }
+      ],
+      "operation": "capsule-crm.post.titles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post trackdefinitions",
+      "summary": "Documented POST /trackdefinitions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post trackdefinitions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/trackdefinitions"
+        }
+      ],
+      "operation": "capsule-crm.post.trackdefinitions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tracks",
+      "summary": "Documented POST /tracks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post tracks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tracks"
+        }
+      ],
+      "operation": "capsule-crm.post.tracks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhooks",
+      "summary": "Documented POST /webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api post webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "capsule-crm.post.webhooks",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api put activitytypes id",
+      "summary": "Documented PUT /activitytypes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put activitytypes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/activitytypes/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.activitytypes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put boards id",
+      "summary": "Documented PUT /boards/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put boards id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/boards/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.boards-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put categories id",
+      "summary": "Documented PUT /categories/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put categories id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/categories/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.categories-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put customfields id",
+      "summary": "Documented PUT /customfields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put customfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customfields/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.customfields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put entries id",
+      "summary": "Documented PUT /entries/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put entries id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/entries/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.entries-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put goals id",
+      "summary": "Documented PUT /goals/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put goals id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/goals/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.goals-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put lostreasons id",
+      "summary": "Documented PUT /lostreasons/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put lostreasons id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/lostreasons/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.lostreasons-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put milestones id",
+      "summary": "Documented PUT /milestones/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put milestones id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/milestones/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.milestones-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put pipelines id",
+      "summary": "Documented PUT /pipelines/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put pipelines id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pipelines/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.pipelines-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put stages id",
+      "summary": "Documented PUT /stages/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put stages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/stages/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.stages-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put tags id",
+      "summary": "Documented PUT /tags/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tags/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.tags-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put trackdefinitions id",
+      "summary": "Documented PUT /trackdefinitions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put trackdefinitions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/trackdefinitions/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.trackdefinitions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put tracks id",
+      "summary": "Documented PUT /tracks/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put tracks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tracks/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.tracks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put users id",
+      "summary": "Documented PUT /users/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm api put users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "capsule-crm.put.users-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "boards list",
+      "summary": "Run the boards ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "boards",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm boards list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/boards"
+        }
+      ]
+    },
+    {
+      "path": "categories list",
+      "summary": "Run the categories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "categories",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm categories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/categories"
+        }
+      ]
+    },
+    {
+      "path": "create kase apply",
+      "summary": "Plan and execute the create kase reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_kase",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm create kase apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/kases"
+        }
+      ],
+      "risk": "external mutation; creates a live Capsule CRM case/project; approval required. Body wraps the record under a top-level \"kase\" key (Capsule kept the \"kase\" spelling in the API after renaming Cases to Projects in the product UI, to avoid a breaking change; see docs.md).",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create opportunity apply",
+      "summary": "Plan and execute the create opportunity reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_opportunity",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm create opportunity apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities"
+        }
+      ],
+      "risk": "external mutation; creates a live Capsule CRM sales opportunity; approval required. Body wraps the record under a top-level \"opportunity\" key.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create party apply",
+      "summary": "Plan and execute the create party reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_party",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm create party apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/parties"
+        }
+      ],
+      "risk": "external mutation; creates a live Capsule CRM contact; approval required. Body wraps the record under a top-level \"party\" key (Capsule's resource-envelope convention) — the record itself must carry that wrapper, since the engine's write dialect sends record fields verbatim as the JSON body with no nested-wrapper construction primitive.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create task apply",
+      "summary": "Plan and execute the create task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_task",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm create task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks"
+        }
+      ],
+      "risk": "external mutation; creates a live Capsule CRM task/reminder; approval required. Body wraps the record under a top-level \"task\" key.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "custom fields list",
+      "summary": "Run the custom fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm custom fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customfields"
+        }
+      ]
+    },
+    {
+      "path": "delete kase apply",
+      "summary": "Plan and execute the delete kase reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_kase",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm capsule-crm delete kase apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/kases/{id}"
+        }
+      ],
+      "risk": "external mutation; irreversibly deletes a live Capsule CRM case/project; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete opportunity apply",
+      "summary": "Plan and execute the delete opportunity reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_opportunity",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm capsule-crm delete opportunity apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/opportunities/{id}"
+        }
+      ],
+      "risk": "external mutation; irreversibly deletes a live Capsule CRM sales opportunity; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete party apply",
+      "summary": "Plan and execute the delete party reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_party",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm capsule-crm delete party apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/parties/{id}"
+        }
+      ],
+      "risk": "external mutation; irreversibly deletes a live Capsule CRM contact and its associated history; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete task apply",
+      "summary": "Plan and execute the delete task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_task",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm capsule-crm delete task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "risk": "external mutation; irreversibly deletes a live Capsule CRM task; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "kases list",
+      "summary": "Run the kases ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "kases",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm kases list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kases"
+        }
+      ]
+    },
+    {
+      "path": "lost reasons list",
+      "summary": "Run the lost reasons ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lost_reasons",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm lost reasons list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lostreasons"
+        }
+      ]
+    },
+    {
+      "path": "milestones list",
+      "summary": "Run the milestones ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "milestones",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm milestones list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/milestones"
+        }
+      ]
+    },
+    {
+      "path": "opportunities list",
+      "summary": "Run the opportunities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunities",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm opportunities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities"
+        }
+      ]
+    },
+    {
+      "path": "parties list",
+      "summary": "Run the parties ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "parties",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm parties list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/parties"
+        }
+      ]
+    },
+    {
+      "path": "pipelines list",
+      "summary": "Run the pipelines ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pipelines",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm pipelines list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipelines"
+        }
+      ]
+    },
+    {
+      "path": "stages list",
+      "summary": "Run the stages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stages",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm stages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stages"
+        }
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ]
+    },
+    {
+      "path": "tasks list",
+      "summary": "Run the tasks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm tasks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks"
+        }
+      ]
+    },
+    {
+      "path": "teams list",
+      "summary": "Run the teams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm teams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams"
+        }
+      ]
+    },
+    {
+      "path": "update kase apply",
+      "summary": "Plan and execute the update kase reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_kase",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm update kase apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/kases/{id}"
+        }
+      ],
+      "risk": "external mutation; updates a live Capsule CRM case/project, including closing it; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update opportunity apply",
+      "summary": "Plan and execute the update opportunity reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_opportunity",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm update opportunity apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/opportunities/{id}"
+        }
+      ],
+      "risk": "external mutation; updates a live Capsule CRM sales opportunity (including moving pipeline stage or closing/losing it); approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update party apply",
+      "summary": "Plan and execute the update party reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_party",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm update party apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/parties/{id}"
+        }
+      ],
+      "risk": "external mutation; updates a live Capsule CRM contact; approval required. Body wraps the record under a top-level \"party\" key; \"id\" is path-only (path_fields) and excluded from the body via body_fields.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update task apply",
+      "summary": "Plan and execute the update task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_task",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm update task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "risk": "external mutation; updates a live Capsule CRM task, including marking it complete; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "examples": [
+        "pm capsule-crm users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ]
+    }
+  ]
+}

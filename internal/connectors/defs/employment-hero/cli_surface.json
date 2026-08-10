@@ -1,0 +1,3046 @@
+{
+  "tagline": "Run Employment Hero's declared streams and reverse-ETL actions.",
+  "usage": "pm employment-hero \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get https oauth-employmenthero-com oauth2 authorize",
+        "api get oauth2 authorize",
+        "api get v1 organisations id",
+        "api get v1 organisations organisation-id awards-and-classifications",
+        "api get v1 organisations organisation-id benefits",
+        "api get v1 organisations organisation-id certifications polling-status",
+        "api get v1 organisations organisation-id employee-benefits",
+        "api get v1 organisations organisation-id employees employee-id employee-benefits",
+        "api get v1 organisations organisation-id employees id",
+        "api get v1 organisations organisation-id employees onboard polling-status",
+        "api get v1 organisations organisation-id leave-requests id",
+        "api get v1 organisations organisation-id rostered-shifts cost",
+        "api get v1 organisations organisation-id rostered-shifts id",
+        "api get v1 organisations organisation-id rostered-shifts job-status job-id",
+        "api get v1 organisations organisation-id unavailabilities id",
+        "bank accounts v1 list",
+        "bank accounts v2 list",
+        "certification list",
+        "certifications list",
+        "contractor job histories list",
+        "cost centres list",
+        "custom fields list",
+        "documents list",
+        "emergency contacts list",
+        "employee certification details list",
+        "employee custom fields list",
+        "employee list",
+        "employees list",
+        "employing entities list",
+        "employment histories list",
+        "form assignments list",
+        "form categories list",
+        "form list",
+        "form response list",
+        "form responses list",
+        "form template list",
+        "form templates list",
+        "forms list",
+        "goal comments list",
+        "goal key result list",
+        "goal key results list",
+        "goal list",
+        "goals list",
+        "kiosk members list",
+        "leave balances list",
+        "leave categories list",
+        "leave request list",
+        "leave requests list",
+        "member form responses list",
+        "organisation list",
+        "organisations list",
+        "pay categories list",
+        "pay details list",
+        "payslip list",
+        "payslips list",
+        "policies list",
+        "roles list",
+        "rostered shift list",
+        "rostered shifts list",
+        "superannuation detail v1 list",
+        "superannuation detail v2 list",
+        "tax declaration v1 list",
+        "tax declaration v2 list",
+        "team employees list",
+        "teams list",
+        "timesheet entries list",
+        "unavailabilities list",
+        "unavailability list",
+        "work eligibility list",
+        "work locations list",
+        "work sites list",
+        "work types list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v1 organisations organisation-id employees employee-id employee-benefits employee-benefit-id",
+        "api delete v1 organisations organisation-id goals goal-id",
+        "api delete v1 organisations organisation-id goals goal-id key-results key-result-id",
+        "api patch v1 organisations organisation-id employees employee-id custom-fields bulk",
+        "api patch v1 organisations organisation-id employees employee-id custom-fields custom-field-id",
+        "api patch v1 organisations organisation-id employees employee-id employee-benefits employee-benefit-id",
+        "api patch v1 organisations organisation-id forms form-id",
+        "api patch v1 organisations organisation-id goals goal-id",
+        "api patch v1 organisations organisation-id goals goal-id key-results key-result-id",
+        "api patch v1 organisations organisation-id goals goal-id key-results key-result-id archive-status",
+        "api patch v1 organisations organisation-id goals goal-id key-results key-result-id status",
+        "api patch v1 organisations organisation-id goals goal-id status",
+        "api post https oauth-employmenthero-com oauth2 token",
+        "api post https oauth-employmenthero-com oauth2 token-refresh",
+        "api post oauth2 token",
+        "api post v1 organisations organisation-id certifications file-uploads",
+        "api post v1 organisations organisation-id employees employee-id certifications file-uploads",
+        "api post v1 organisations organisation-id employees employee-id documents",
+        "api post v1 organisations organisation-id employees employee-id employee-benefits",
+        "api post v1 organisations organisation-id employees employee-id pay-details salary-versions",
+        "api post v1 organisations organisation-id forms",
+        "api post v1 organisations organisation-id forms form-id archive",
+        "api post v1 organisations organisation-id forms form-id assign",
+        "api post v1 organisations organisation-id forms form-id close",
+        "api post v1 organisations organisation-id forms form-id publish",
+        "api post v1 organisations organisation-id forms form-id responses response-id approve",
+        "api post v1 organisations organisation-id forms form-id responses response-id decline",
+        "api post v1 organisations organisation-id goals",
+        "api post v1 organisations organisation-id goals file-uploads",
+        "api post v1 organisations organisation-id goals goal-id key-results",
+        "api put v1 organisations organisation-id employees employee-id pay-details work-hours",
+        "api put v1 organisations organisation-id employees employee-id payslips payslip-id pdf-gen",
+        "archive certification apply",
+        "bulk create rostered shifts apply",
+        "bulk grant kiosk access apply",
+        "bulk revoke kiosk access apply",
+        "create certification apply",
+        "create department apply",
+        "create form category apply",
+        "create form template apply",
+        "create leave request apply",
+        "create position apply",
+        "create timesheet entries apply",
+        "create work site apply",
+        "delete certification apply",
+        "delete employee apply",
+        "delete form apply",
+        "delete form category apply",
+        "delete form template apply",
+        "onboard employee async apply",
+        "quick add contractor apply",
+        "quick add employee apply",
+        "update certification apply",
+        "update department apply",
+        "update employee certification apply",
+        "update employee contractor details apply",
+        "update employee employment details apply",
+        "update employee personal details apply",
+        "update form category apply",
+        "update form template apply",
+        "update goal archive status apply",
+        "update goal health status apply",
+        "update leave balance apply",
+        "update position apply",
+        "update work site apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v1 organisations organisation-id employees employee-id employee-benefits employee-benefit-id",
+      "summary": "Documented DELETE /v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits/{employee_benefit_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api delete v1 organisations organisation-id employees employee-id employee-benefits employee-benefit-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits/{employee_benefit_id}"
+        }
+      ],
+      "operation": "employment-hero.delete.v1-organisations-organisation-id-employees-employee-id-employee-benefits-employee-benefit-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 organisations organisation-id goals goal-id",
+      "summary": "Documented DELETE /v1/organisations/{organisation_id}/goals/{goal_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api delete v1 organisations organisation-id goals goal-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}"
+        }
+      ],
+      "operation": "employment-hero.delete.v1-organisations-organisation-id-goals-goal-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 organisations organisation-id goals goal-id key-results key-result-id",
+      "summary": "Documented DELETE /v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api delete v1 organisations organisation-id goals goal-id key-results key-result-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}"
+        }
+      ],
+      "operation": "employment-hero.delete.v1-organisations-organisation-id-goals-goal-id-key-results-key-result-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get https oauth-employmenthero-com oauth2 authorize",
+      "summary": "Documented GET https://oauth.employmenthero.com/oauth2/authorize (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get https oauth-employmenthero-com oauth2 authorize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "https://oauth.employmenthero.com/oauth2/authorize"
+        }
+      ],
+      "operation": "employment-hero.get.https-oauth-employmenthero-com-oauth2-authorize",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get oauth2 authorize",
+      "summary": "Documented GET /oauth2/authorize (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get oauth2 authorize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/oauth2/authorize"
+        }
+      ],
+      "operation": "employment-hero.get.oauth2-authorize",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organisations id",
+      "summary": "Documented GET /v1/organisations/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get v1 organisations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{id}"
+        }
+      ],
+      "operation": "employment-hero.get.v1-organisations-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organisations organisation-id awards-and-classifications",
+      "summary": "Documented GET /v1/organisations/{organisation_id}/awards_and_classifications (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get v1 organisations organisation-id awards-and-classifications --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/awards_and_classifications"
+        }
+      ],
+      "operation": "employment-hero.get.v1-organisations-organisation-id-awards-and-classifications",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organisations organisation-id benefits",
+      "summary": "Documented GET /v1/organisations/{organisation_id}/benefits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get v1 organisations organisation-id benefits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/benefits"
+        }
+      ],
+      "operation": "employment-hero.get.v1-organisations-organisation-id-benefits",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organisations organisation-id certifications polling-status",
+      "summary": "Documented GET /v1/organisations/{organisation_id}/certifications/polling_status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get v1 organisations organisation-id certifications polling-status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/certifications/polling_status"
+        }
+      ],
+      "operation": "employment-hero.get.v1-organisations-organisation-id-certifications-polling-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organisations organisation-id employee-benefits",
+      "summary": "Documented GET /v1/organisations/{organisation_id}/employee_benefits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get v1 organisations organisation-id employee-benefits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employee_benefits"
+        }
+      ],
+      "operation": "employment-hero.get.v1-organisations-organisation-id-employee-benefits",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organisations organisation-id employees employee-id employee-benefits",
+      "summary": "Documented GET /v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get v1 organisations organisation-id employees employee-id employee-benefits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits"
+        }
+      ],
+      "operation": "employment-hero.get.v1-organisations-organisation-id-employees-employee-id-employee-benefits",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organisations organisation-id employees id",
+      "summary": "Documented GET /v1/organisations/{organisation_id}/employees/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get v1 organisations organisation-id employees id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{id}"
+        }
+      ],
+      "operation": "employment-hero.get.v1-organisations-organisation-id-employees-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organisations organisation-id employees onboard polling-status",
+      "summary": "Documented GET /v1/organisations/{organisation_id}/employees/onboard/polling_status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get v1 organisations organisation-id employees onboard polling-status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/onboard/polling_status"
+        }
+      ],
+      "operation": "employment-hero.get.v1-organisations-organisation-id-employees-onboard-polling-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organisations organisation-id leave-requests id",
+      "summary": "Documented GET /v1/organisations/{organisation_id}/leave_requests/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get v1 organisations organisation-id leave-requests id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/leave_requests/{id}"
+        }
+      ],
+      "operation": "employment-hero.get.v1-organisations-organisation-id-leave-requests-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organisations organisation-id rostered-shifts cost",
+      "summary": "Documented GET /v1/organisations/{organisation_id}/rostered_shifts/cost (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get v1 organisations organisation-id rostered-shifts cost --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/rostered_shifts/cost"
+        }
+      ],
+      "operation": "employment-hero.get.v1-organisations-organisation-id-rostered-shifts-cost",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organisations organisation-id rostered-shifts id",
+      "summary": "Documented GET /v1/organisations/{organisation_id}/rostered_shifts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get v1 organisations organisation-id rostered-shifts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/rostered_shifts/{id}"
+        }
+      ],
+      "operation": "employment-hero.get.v1-organisations-organisation-id-rostered-shifts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organisations organisation-id rostered-shifts job-status job-id",
+      "summary": "Documented GET /v1/organisations/{organisation_id}/rostered_shifts/job_status/{job_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get v1 organisations organisation-id rostered-shifts job-status job-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/rostered_shifts/job_status/{job_id}"
+        }
+      ],
+      "operation": "employment-hero.get.v1-organisations-organisation-id-rostered-shifts-job-status-job-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 organisations organisation-id unavailabilities id",
+      "summary": "Documented GET /v1/organisations/{organisation_id}/unavailabilities/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api get v1 organisations organisation-id unavailabilities id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/unavailabilities/{id}"
+        }
+      ],
+      "operation": "employment-hero.get.v1-organisations-organisation-id-unavailabilities-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch v1 organisations organisation-id employees employee-id custom-fields bulk",
+      "summary": "Documented PATCH /v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields/bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api patch v1 organisations organisation-id employees employee-id custom-fields bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields/bulk"
+        }
+      ],
+      "operation": "employment-hero.patch.v1-organisations-organisation-id-employees-employee-id-custom-fields-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 organisations organisation-id employees employee-id custom-fields custom-field-id",
+      "summary": "Documented PATCH /v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields/{custom_field_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api patch v1 organisations organisation-id employees employee-id custom-fields custom-field-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields/{custom_field_id}"
+        }
+      ],
+      "operation": "employment-hero.patch.v1-organisations-organisation-id-employees-employee-id-custom-fields-custom-field-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 organisations organisation-id employees employee-id employee-benefits employee-benefit-id",
+      "summary": "Documented PATCH /v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits/{employee_benefit_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api patch v1 organisations organisation-id employees employee-id employee-benefits employee-benefit-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits/{employee_benefit_id}"
+        }
+      ],
+      "operation": "employment-hero.patch.v1-organisations-organisation-id-employees-employee-id-employee-benefits-employee-benefit-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 organisations organisation-id forms form-id",
+      "summary": "Documented PATCH /v1/organisations/{organisation_id}/forms/{form_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api patch v1 organisations organisation-id forms form-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/forms/{form_id}"
+        }
+      ],
+      "operation": "employment-hero.patch.v1-organisations-organisation-id-forms-form-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 organisations organisation-id goals goal-id",
+      "summary": "Documented PATCH /v1/organisations/{organisation_id}/goals/{goal_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api patch v1 organisations organisation-id goals goal-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}"
+        }
+      ],
+      "operation": "employment-hero.patch.v1-organisations-organisation-id-goals-goal-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 organisations organisation-id goals goal-id key-results key-result-id",
+      "summary": "Documented PATCH /v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api patch v1 organisations organisation-id goals goal-id key-results key-result-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}"
+        }
+      ],
+      "operation": "employment-hero.patch.v1-organisations-organisation-id-goals-goal-id-key-results-key-result-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 organisations organisation-id goals goal-id key-results key-result-id archive-status",
+      "summary": "Documented PATCH /v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}/archive_status (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api patch v1 organisations organisation-id goals goal-id key-results key-result-id archive-status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}/archive_status"
+        }
+      ],
+      "operation": "employment-hero.patch.v1-organisations-organisation-id-goals-goal-id-key-results-key-result-id-archive-status",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 organisations organisation-id goals goal-id key-results key-result-id status",
+      "summary": "Documented PATCH /v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}/status (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api patch v1 organisations organisation-id goals goal-id key-results key-result-id status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}/status"
+        }
+      ],
+      "operation": "employment-hero.patch.v1-organisations-organisation-id-goals-goal-id-key-results-key-result-id-status",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 organisations organisation-id goals goal-id status",
+      "summary": "Documented PATCH /v1/organisations/{organisation_id}/goals/{goal_id}/status (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api patch v1 organisations organisation-id goals goal-id status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/status"
+        }
+      ],
+      "operation": "employment-hero.patch.v1-organisations-organisation-id-goals-goal-id-status",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post https oauth-employmenthero-com oauth2 token",
+      "summary": "Documented POST https://oauth.employmenthero.com/oauth2/token (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post https oauth-employmenthero-com oauth2 token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "https://oauth.employmenthero.com/oauth2/token"
+        }
+      ],
+      "operation": "employment-hero.post.https-oauth-employmenthero-com-oauth2-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post https oauth-employmenthero-com oauth2 token-refresh",
+      "summary": "Documented POST https://oauth.employmenthero.com/oauth2/token (refresh) (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post https oauth-employmenthero-com oauth2 token-refresh --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "https://oauth.employmenthero.com/oauth2/token (refresh)"
+        }
+      ],
+      "operation": "employment-hero.post.https-oauth-employmenthero-com-oauth2-token-refresh",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post oauth2 token",
+      "summary": "Documented POST /oauth2/token (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post oauth2 token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/oauth2/token"
+        }
+      ],
+      "operation": "employment-hero.post.oauth2-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id certifications file-uploads",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/certifications/file_uploads (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id certifications file-uploads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/certifications/file_uploads"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-certifications-file-uploads",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id employees employee-id certifications file-uploads",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/employees/{employee_id}/certifications/file_uploads (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id employees employee-id certifications file-uploads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/certifications/file_uploads"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-employees-employee-id-certifications-file-uploads",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id employees employee-id documents",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/employees/{employee_id}/documents (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id employees employee-id documents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/documents"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-employees-employee-id-documents",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id employees employee-id employee-benefits",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id employees employee-id employee-benefits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-employees-employee-id-employee-benefits",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id employees employee-id pay-details salary-versions",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/employees/{employee_id}/pay_details/salary_versions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id employees employee-id pay-details salary-versions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/pay_details/salary_versions"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-employees-employee-id-pay-details-salary-versions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id forms",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/forms (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id forms --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/forms"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-forms",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id forms form-id archive",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/forms/{form_id}/archive (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id forms form-id archive --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/forms/{form_id}/archive"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-forms-form-id-archive",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id forms form-id assign",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/forms/{form_id}/assign (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id forms form-id assign --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/forms/{form_id}/assign"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-forms-form-id-assign",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id forms form-id close",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/forms/{form_id}/close (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id forms form-id close --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/forms/{form_id}/close"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-forms-form-id-close",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id forms form-id publish",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/forms/{form_id}/publish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id forms form-id publish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/forms/{form_id}/publish"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-forms-form-id-publish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id forms form-id responses response-id approve",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}/approve (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id forms form-id responses response-id approve --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}/approve"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-forms-form-id-responses-response-id-approve",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id forms form-id responses response-id decline",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}/decline (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id forms form-id responses response-id decline --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}/decline"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-forms-form-id-responses-response-id-decline",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id goals",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/goals (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id goals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/goals"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-goals",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id goals file-uploads",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/goals/file_uploads (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id goals file-uploads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/goals/file_uploads"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-goals-file-uploads",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 organisations organisation-id goals goal-id key-results",
+      "summary": "Documented POST /v1/organisations/{organisation_id}/goals/{goal_id}/key_results (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api post v1 organisations organisation-id goals goal-id key-results --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results"
+        }
+      ],
+      "operation": "employment-hero.post.v1-organisations-organisation-id-goals-goal-id-key-results",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 organisations organisation-id employees employee-id pay-details work-hours",
+      "summary": "Documented PUT /v1/organisations/{organisation_id}/employees/{employee_id}/pay_details/work_hours (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api put v1 organisations organisation-id employees employee-id pay-details work-hours --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/pay_details/work_hours"
+        }
+      ],
+      "operation": "employment-hero.put.v1-organisations-organisation-id-employees-employee-id-pay-details-work-hours",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 organisations organisation-id employees employee-id payslips payslip-id pdf-gen",
+      "summary": "Documented PUT /v1/organisations/{organisation_id}/employees/{employee_id}/payslips/{payslip_id}/pdf_gen (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero api put v1 organisations organisation-id employees employee-id payslips payslip-id pdf-gen --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/payslips/{payslip_id}/pdf_gen"
+        }
+      ],
+      "operation": "employment-hero.put.v1-organisations-organisation-id-employees-employee-id-payslips-payslip-id-pdf-gen",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "archive certification apply",
+      "summary": "Plan and execute the archive certification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "archive_certification",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero archive certification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}/archive_status"
+        }
+      ],
+      "risk": "archives or restores an Employment Hero certification configuration",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "bank accounts v1 list",
+      "summary": "Run the bank accounts v1 ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_accounts_v1",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero bank accounts v1 list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/bank_accounts"
+        }
+      ]
+    },
+    {
+      "path": "bank accounts v2 list",
+      "summary": "Run the bank accounts v2 ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_accounts_v2",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero bank accounts v2 list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organisations/{organisation_id}/employees/{employee_id}/bank_accounts"
+        }
+      ]
+    },
+    {
+      "path": "bulk create rostered shifts apply",
+      "summary": "Plan and execute the bulk create rostered shifts reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "bulk_create_rostered_shifts",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "end_date_time",
+          "type": "string",
+          "summary": "Required end date time record field.",
+          "maps_to": "record.end_date_time",
+          "required": true
+        },
+        {
+          "name": "number_of_shifts",
+          "type": "integer",
+          "summary": "Required number of shifts record field.",
+          "maps_to": "record.number_of_shifts",
+          "required": true
+        },
+        {
+          "name": "start_date_time",
+          "type": "string",
+          "summary": "Required start date time record field.",
+          "maps_to": "record.start_date_time",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero bulk create rostered shifts apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/rostered_shifts/bulk_create"
+        }
+      ],
+      "risk": "creates rostered shifts in bulk and may publish them",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "bulk grant kiosk access apply",
+      "summary": "Plan and execute the bulk grant kiosk access reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "bulk_grant_kiosk_access",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero bulk grant kiosk access apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/kiosk_members/bulk_grant_access"
+        }
+      ],
+      "risk": "grants kiosk access to multiple members",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "bulk revoke kiosk access apply",
+      "summary": "Plan and execute the bulk revoke kiosk access reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "bulk_revoke_kiosk_access",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero bulk revoke kiosk access apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/kiosk_members/bulk_revoke_access"
+        }
+      ],
+      "risk": "revokes kiosk access from multiple members",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "certification list",
+      "summary": "Run the certification ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "certification",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero certification list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}"
+        }
+      ]
+    },
+    {
+      "path": "certifications list",
+      "summary": "Run the certifications ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "certifications",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero certifications list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/certifications"
+        }
+      ]
+    },
+    {
+      "path": "contractor job histories list",
+      "summary": "Run the contractor job histories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contractor_job_histories",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero contractor job histories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/job_histories"
+        }
+      ]
+    },
+    {
+      "path": "cost centres list",
+      "summary": "Run the cost centres ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "cost_centres",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero cost centres list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/cost_centres"
+        }
+      ]
+    },
+    {
+      "path": "create certification apply",
+      "summary": "Plan and execute the create certification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_certification",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero create certification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/certifications"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create department apply",
+      "summary": "Plan and execute the create department reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_department",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero create department apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/departments"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create form category apply",
+      "summary": "Plan and execute the create form category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_form_category",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero create form category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/form_categories"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create form template apply",
+      "summary": "Plan and execute the create form template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_form_template",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero create form template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/form_templates"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create leave request apply",
+      "summary": "Plan and execute the create leave request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_leave_request",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "employee_id",
+          "type": "string",
+          "summary": "Required employee id record field.",
+          "maps_to": "record.employee_id",
+          "required": true
+        },
+        {
+          "name": "end_date",
+          "type": "string",
+          "summary": "Required end date record field.",
+          "maps_to": "record.end_date",
+          "required": true
+        },
+        {
+          "name": "leave_category_id",
+          "type": "string",
+          "summary": "Required leave category id record field.",
+          "maps_to": "record.leave_category_id",
+          "required": true
+        },
+        {
+          "name": "start_date",
+          "type": "string",
+          "summary": "Required start date record field.",
+          "maps_to": "record.start_date",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero create leave request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/leave_requests"
+        }
+      ],
+      "risk": "creates an employee leave request",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create position apply",
+      "summary": "Plan and execute the create position reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_position",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero create position apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/positions"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create timesheet entries apply",
+      "summary": "Plan and execute the create timesheet entries reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_timesheet_entries",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero create timesheet entries apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/timesheet_entries"
+        }
+      ],
+      "risk": "creates employee timesheet entries",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create work site apply",
+      "summary": "Plan and execute the create work site reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_work_site",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero create work site apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/work_sites"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "custom fields list",
+      "summary": "Run the custom fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero custom fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/custom_fields"
+        }
+      ]
+    },
+    {
+      "path": "delete certification apply",
+      "summary": "Plan and execute the delete certification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_certification",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "certification_id",
+          "type": "string",
+          "summary": "Required certification id record field.",
+          "maps_to": "record.certification_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero delete certification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}"
+        }
+      ],
+      "risk": "deletes an Employment Hero certification configuration",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete employee apply",
+      "summary": "Plan and execute the delete employee reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_employee",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "employee_id",
+          "type": "string",
+          "summary": "Required employee id record field.",
+          "maps_to": "record.employee_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero delete employee apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}"
+        }
+      ],
+      "risk": "deletes or removes an Employment Hero employee record",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete form apply",
+      "summary": "Plan and execute the delete form reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_form",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "form_id",
+          "type": "string",
+          "summary": "Required form id record field.",
+          "maps_to": "record.form_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero delete form apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/organisations/{organisation_id}/forms/{form_id}"
+        }
+      ],
+      "risk": "deletes an Employment Hero form",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete form category apply",
+      "summary": "Plan and execute the delete form category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_form_category",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "form_category_id",
+          "type": "string",
+          "summary": "Required form category id record field.",
+          "maps_to": "record.form_category_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero delete form category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/organisations/{organisation_id}/form_categories/{form_category_id}"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete form template apply",
+      "summary": "Plan and execute the delete form template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_form_template",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "template_id",
+          "type": "string",
+          "summary": "Required template id record field.",
+          "maps_to": "record.template_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero delete form template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/organisations/{organisation_id}/form_templates/{template_id}"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "documents list",
+      "summary": "Run the documents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero documents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/documents"
+        }
+      ]
+    },
+    {
+      "path": "emergency contacts list",
+      "summary": "Run the emergency contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "emergency_contacts",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero emergency contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/emergency_contacts"
+        }
+      ]
+    },
+    {
+      "path": "employee certification details list",
+      "summary": "Run the employee certification details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "employee_certification_details",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero employee certification details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/certifications"
+        }
+      ]
+    },
+    {
+      "path": "employee custom fields list",
+      "summary": "Run the employee custom fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "employee_custom_fields",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero employee custom fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields"
+        }
+      ]
+    },
+    {
+      "path": "employee list",
+      "summary": "Run the employee ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "employee",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero employee list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "employees list",
+      "summary": "Run the employees ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "employees",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero employees list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees"
+        }
+      ]
+    },
+    {
+      "path": "employing entities list",
+      "summary": "Run the employing entities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "employing_entities",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero employing entities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employing_entities"
+        }
+      ]
+    },
+    {
+      "path": "employment histories list",
+      "summary": "Run the employment histories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "employment_histories",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero employment histories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employment_histories"
+        }
+      ]
+    },
+    {
+      "path": "form assignments list",
+      "summary": "Run the form assignments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "form_assignments",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero form assignments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/forms/{form_id}/assignments"
+        }
+      ]
+    },
+    {
+      "path": "form categories list",
+      "summary": "Run the form categories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "form_categories",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero form categories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/form_categories"
+        }
+      ]
+    },
+    {
+      "path": "form list",
+      "summary": "Run the form ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "form",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero form list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/forms/{form_id}"
+        }
+      ]
+    },
+    {
+      "path": "form response list",
+      "summary": "Run the form response ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "form_response",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero form response list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}"
+        }
+      ]
+    },
+    {
+      "path": "form responses list",
+      "summary": "Run the form responses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "form_responses",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero form responses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses"
+        }
+      ]
+    },
+    {
+      "path": "form template list",
+      "summary": "Run the form template ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "form_template",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero form template list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/form_templates/{template_id}"
+        }
+      ]
+    },
+    {
+      "path": "form templates list",
+      "summary": "Run the form templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "form_templates",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero form templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/form_templates"
+        }
+      ]
+    },
+    {
+      "path": "forms list",
+      "summary": "Run the forms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "forms",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero forms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/forms"
+        }
+      ]
+    },
+    {
+      "path": "goal comments list",
+      "summary": "Run the goal comments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "goal_comments",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero goal comments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/comments"
+        }
+      ]
+    },
+    {
+      "path": "goal key result list",
+      "summary": "Run the goal key result ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "goal_key_result",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero goal key result list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}"
+        }
+      ]
+    },
+    {
+      "path": "goal key results list",
+      "summary": "Run the goal key results ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "goal_key_results",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero goal key results list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results"
+        }
+      ]
+    },
+    {
+      "path": "goal list",
+      "summary": "Run the goal ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "goal",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero goal list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}"
+        }
+      ]
+    },
+    {
+      "path": "goals list",
+      "summary": "Run the goals ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "goals",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero goals list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/goals"
+        }
+      ]
+    },
+    {
+      "path": "kiosk members list",
+      "summary": "Run the kiosk members ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "kiosk_members",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero kiosk members list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/kiosk_members"
+        }
+      ]
+    },
+    {
+      "path": "leave balances list",
+      "summary": "Run the leave balances ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "leave_balances",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero leave balances list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/leave_balances"
+        }
+      ]
+    },
+    {
+      "path": "leave categories list",
+      "summary": "Run the leave categories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "leave_categories",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero leave categories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/leave_categories"
+        }
+      ]
+    },
+    {
+      "path": "leave request list",
+      "summary": "Run the leave request ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "leave_request",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero leave request list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/leave_requests/{leave_request_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "leave requests list",
+      "summary": "Run the leave requests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "leave_requests",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero leave requests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/leave_requests"
+        }
+      ]
+    },
+    {
+      "path": "member form responses list",
+      "summary": "Run the member form responses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "member_form_responses",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero member form responses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/members/{member_id}/form_responses"
+        }
+      ]
+    },
+    {
+      "path": "onboard employee async apply",
+      "summary": "Plan and execute the onboard employee async reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "onboard_employee_async",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero onboard employee async apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/employees/polling_onboard_employee"
+        }
+      ],
+      "risk": "starts an asynchronous employee onboarding job; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "organisation list",
+      "summary": "Run the organisation ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organisation",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero organisation list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "organisations list",
+      "summary": "Run the organisations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organisations",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero organisations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations"
+        }
+      ]
+    },
+    {
+      "path": "pay categories list",
+      "summary": "Run the pay categories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pay_categories",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero pay categories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/pay_categories"
+        }
+      ]
+    },
+    {
+      "path": "pay details list",
+      "summary": "Run the pay details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pay_details",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero pay details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/pay_details"
+        }
+      ]
+    },
+    {
+      "path": "payslip list",
+      "summary": "Run the payslip ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payslip",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero payslip list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/payslips/{payslip_id}"
+        }
+      ]
+    },
+    {
+      "path": "payslips list",
+      "summary": "Run the payslips ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payslips",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero payslips list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/payslips"
+        }
+      ]
+    },
+    {
+      "path": "policies list",
+      "summary": "Run the policies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "policies",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero policies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/policies"
+        }
+      ]
+    },
+    {
+      "path": "quick add contractor apply",
+      "summary": "Plan and execute the quick add contractor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "quick_add_contractor",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "first_name",
+          "type": "string",
+          "summary": "Required first name record field.",
+          "maps_to": "record.first_name",
+          "required": true
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "summary": "Required last name record field.",
+          "maps_to": "record.last_name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero quick add contractor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/employees/quick_add_contractor"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "quick add employee apply",
+      "summary": "Plan and execute the quick add employee reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "quick_add_employee",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "first_name",
+          "type": "string",
+          "summary": "Required first name record field.",
+          "maps_to": "record.first_name",
+          "required": true
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "summary": "Required last name record field.",
+          "maps_to": "record.last_name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero quick add employee apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organisations/{organisation_id}/employees/quick_add_employee"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "roles list",
+      "summary": "Run the roles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "roles",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero roles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/roles"
+        }
+      ]
+    },
+    {
+      "path": "rostered shift list",
+      "summary": "Run the rostered shift ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "rostered_shift",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero rostered shift list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/rostered_shifts/{rostered_shift_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "rostered shifts list",
+      "summary": "Run the rostered shifts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "rostered_shifts",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero rostered shifts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/rostered_shifts"
+        }
+      ]
+    },
+    {
+      "path": "superannuation detail v1 list",
+      "summary": "Run the superannuation detail v1 ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "superannuation_detail_v1",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero superannuation detail v1 list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/superannuation_detail"
+        }
+      ]
+    },
+    {
+      "path": "superannuation detail v2 list",
+      "summary": "Run the superannuation detail v2 ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "superannuation_detail_v2",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero superannuation detail v2 list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organisations/{organisation_id}/employees/{employee_id}/superannuation_detail"
+        }
+      ]
+    },
+    {
+      "path": "tax declaration v1 list",
+      "summary": "Run the tax declaration v1 ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tax_declaration_v1",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero tax declaration v1 list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/tax_declaration"
+        }
+      ]
+    },
+    {
+      "path": "tax declaration v2 list",
+      "summary": "Run the tax declaration v2 ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tax_declaration_v2",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero tax declaration v2 list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organisations/{organisation_id}/employees/{employee_id}/tax_declaration"
+        }
+      ]
+    },
+    {
+      "path": "team employees list",
+      "summary": "Run the team employees ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "team_employees",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero team employees list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/teams/{team_id}/employees"
+        }
+      ]
+    },
+    {
+      "path": "teams list",
+      "summary": "Run the teams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero teams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/teams"
+        }
+      ]
+    },
+    {
+      "path": "timesheet entries list",
+      "summary": "Run the timesheet entries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "timesheet_entries",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero timesheet entries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/timesheet_entries"
+        }
+      ]
+    },
+    {
+      "path": "unavailabilities list",
+      "summary": "Run the unavailabilities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "unavailabilities",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero unavailabilities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/unavailabilities"
+        }
+      ]
+    },
+    {
+      "path": "unavailability list",
+      "summary": "Run the unavailability ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "unavailability",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero unavailability list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/unavailabilities/{unavailability_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "update certification apply",
+      "summary": "Plan and execute the update certification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_certification",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "certification_id",
+          "type": "string",
+          "summary": "Required certification id record field.",
+          "maps_to": "record.certification_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero update certification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update department apply",
+      "summary": "Plan and execute the update department reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_department",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "department_id",
+          "type": "string",
+          "summary": "Required department id record field.",
+          "maps_to": "record.department_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero update department apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/departments/{department_id}"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update employee certification apply",
+      "summary": "Plan and execute the update employee certification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_employee_certification",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "employee_id",
+          "type": "string",
+          "summary": "Required employee id record field.",
+          "maps_to": "record.employee_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero update employee certification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/certifications/{id}"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update employee contractor details apply",
+      "summary": "Plan and execute the update employee contractor details reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_employee_contractor_details",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "employee_id",
+          "type": "string",
+          "summary": "Required employee id record field.",
+          "maps_to": "record.employee_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero update employee contractor details apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/contractor_details"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update employee employment details apply",
+      "summary": "Plan and execute the update employee employment details reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_employee_employment_details",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "employee_id",
+          "type": "string",
+          "summary": "Required employee id record field.",
+          "maps_to": "record.employee_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero update employee employment details apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employment_details"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update employee personal details apply",
+      "summary": "Plan and execute the update employee personal details reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_employee_personal_details",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "employee_id",
+          "type": "string",
+          "summary": "Required employee id record field.",
+          "maps_to": "record.employee_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero update employee personal details apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/personal_details"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update form category apply",
+      "summary": "Plan and execute the update form category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_form_category",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "form_category_id",
+          "type": "string",
+          "summary": "Required form category id record field.",
+          "maps_to": "record.form_category_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero update form category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/form_categories/{form_category_id}"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update form template apply",
+      "summary": "Plan and execute the update form template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_form_template",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "template_id",
+          "type": "string",
+          "summary": "Required template id record field.",
+          "maps_to": "record.template_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero update form template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/form_templates/{template_id}"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update goal archive status apply",
+      "summary": "Plan and execute the update goal archive status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_goal_archive_status",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "goal_id",
+          "type": "string",
+          "summary": "Required goal id record field.",
+          "maps_to": "record.goal_id",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Required status record field.",
+          "maps_to": "record.status",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero update goal archive status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/archive_status"
+        }
+      ],
+      "risk": "archives or restores an Employment Hero goal",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update goal health status apply",
+      "summary": "Plan and execute the update goal health status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_goal_health_status",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "goal_id",
+          "type": "string",
+          "summary": "Required goal id record field.",
+          "maps_to": "record.goal_id",
+          "required": true
+        },
+        {
+          "name": "health_status",
+          "type": "string",
+          "summary": "Required health status record field.",
+          "maps_to": "record.health_status",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero update goal health status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/update_status"
+        }
+      ],
+      "risk": "changes an Employment Hero goal health status",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update leave balance apply",
+      "summary": "Plan and execute the update leave balance reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_leave_balance",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "employee_id",
+          "type": "string",
+          "summary": "Required employee id record field.",
+          "maps_to": "record.employee_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero update leave balance apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/leave_balances/{id}"
+        }
+      ],
+      "risk": "adjusts an employee leave balance",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update position apply",
+      "summary": "Plan and execute the update position reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_position",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "position_id",
+          "type": "string",
+          "summary": "Required position id record field.",
+          "maps_to": "record.position_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero update position apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/organisations/{organisation_id}/positions/{position_id}"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update work site apply",
+      "summary": "Plan and execute the update work site reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_work_site",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "flags": [
+        {
+          "name": "work_site_id",
+          "type": "string",
+          "summary": "Required work site id record field.",
+          "maps_to": "record.work_site_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm employment-hero update work site apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/organisations/{organisation_id}/work_sites/{work_site_id}"
+        }
+      ],
+      "risk": "external Employment Hero mutation; approval required before execution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "work eligibility list",
+      "summary": "Run the work eligibility ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "work_eligibility",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero work eligibility list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/work_eligibility"
+        }
+      ]
+    },
+    {
+      "path": "work locations list",
+      "summary": "Run the work locations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "work_locations",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero work locations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/work_locations"
+        }
+      ]
+    },
+    {
+      "path": "work sites list",
+      "summary": "Run the work sites ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "work_sites",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero work sites list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/work_sites"
+        }
+      ]
+    },
+    {
+      "path": "work types list",
+      "summary": "Run the work types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "work_types",
+      "source_url": "https://developer.employmenthero.com/postman-collection.json",
+      "examples": [
+        "pm employment-hero work types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organisations/{organisation_id}/work_types"
+        }
+      ]
+    }
+  ]
+}

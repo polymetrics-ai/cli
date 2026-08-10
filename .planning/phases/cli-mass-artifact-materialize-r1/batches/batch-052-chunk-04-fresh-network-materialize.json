@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-052-unattempted-retry-chunk-04-manifest.json",
+  "candidates": 29,
+  "included": [
+    {
+      "connector": "tally",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developers.tally.so/api-reference/introduction",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02"
+      },
+      "artifact_operations": 35,
+      "declared_operations": 38,
+      "operation_split": {
+        "executable": 12,
+        "provider_blocked": 0,
+        "excluded": 26
+      },
+      "cli_commands": 38,
+      "implemented_commands": 11,
+      "named_dependency_commands": 27,
+      "flagged_discrepancies": 3,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 26
+    },
+    {
+      "connector": "ticketmaster",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2"
+      },
+      "artifact_operations": 13,
+      "declared_operations": 19,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 13,
+        "excluded": 2
+      },
+      "cli_commands": 19,
+      "implemented_commands": 4,
+      "named_dependency_commands": 15,
+      "flagged_discrepancies": 6,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 15
+    },
+    {
+      "connector": "tyntec-sms",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://api.tyntec.com/reference/sms/current.html",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce"
+      },
+      "artifact_operations": 15,
+      "declared_operations": 20,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 9,
+        "excluded": 6
+      },
+      "cli_commands": 20,
+      "implemented_commands": 5,
+      "named_dependency_commands": 15,
+      "flagged_discrepancies": 5,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 15
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "systeme",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://help.systeme.io/article/2329-how-to-use-systeme-io-public-api\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "taboola",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link that failed URL admission), and official reference fallback \"https://developers.taboola.com/backstage-api/reference/authentication-basics\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "the-guardian-api",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "thrive-learning",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 9 operation(s), below the ledger's 47"
+    },
+    {
+      "connector": "timely",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 30: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "todoist",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 14: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "toggl",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 25: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "track-pms",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "tremendous",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "trustpilot",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "tvmaze-schedule",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference \"https://www.tvmaze.com/static/manifest.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "twilio-taskrouter",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "typeform",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://www.typeform.com/developers/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "unleash",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://docs.getunleash.io/api\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "veeqo",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://developers.veeqo.com/sitemap-0.xml\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document), and official reference fallback \"https://developers.veeqo.com/api/\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "visma-economic",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://www.e-conomic.com/developer/about-the-rest-api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "vitally",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 1 operation(s), below the ledger's 100"
+    },
+    {
+      "connector": "vwo",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://developers.wingify.com/llms.txt\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "waiteraid",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "wasabi-stats-api",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://docs.wasabi.com/apidocs/wasabi-stats-api\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "webflow",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the bounded 67108864-byte source budget"
+    },
+    {
+      "connector": "when-i-work",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation GET /2/openshiftapprovalrequests has unsupported field \"post\"), and official reference fallback \"https://apidocs.wheniwork.com/external/index.html\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "woocommerce",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developer.woocommerce.com/docs/apis/rest-api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "wordpress",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link that failed URL admission), and official reference fallback \"https://developer.wordpress.org/rest-api/\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "workable",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://workable.readme.io/reference/generate-an-access-token\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "workramp",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developers.workramp.com/reference/getting-started\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    }
+  ]
+}

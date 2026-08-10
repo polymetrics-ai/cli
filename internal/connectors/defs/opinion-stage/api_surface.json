@@ -1,11 +1,153 @@
 {
-  "api": "Opinion Stage Public Result API (https://api.opinionstage.com; https://api.opinionstage.com/api-docs/api/v2/openapi.yaml)",
+  "api": "Opinion Stage Public Result API (https://api.opinionstage.com; https://api.opinionstage.com/api-docs/api/v2/openapi.yaml); provider artifact version: Public Result API v1.0.0 (OpenAPI 3.0.0)",
   "docs": "https://www.opinionstage.com/api",
-  "reviewed_at": "2026-07-03",
-  "scope": "Declarative migration of legacy internal/connectors/opinion-stage read streams. The responses/questions substreams use stream.fan_out to list item ids from /api/v2/items, then read each per-item child endpoint and stamp item_id.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (5 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "opinion-stage-artifact-2026-08-09",
+      "url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+      "kind": "openapi",
+      "version": "3.0.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "d9855725d832fec94ff68922772b0b305e7a3be288f68fda1903b1d2af9bec9e"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/api/v2/items", "covered_by": { "stream": "items" } },
-    { "method": "GET", "path": "/api/v2/items/{id}/responses", "covered_by": { "stream": "responses" } },
-    { "method": "GET", "path": "/api/v2/items/{id}/questions", "covered_by": { "stream": "questions" } }
+    {
+      "method": "GET",
+      "path": "/api/v2/items",
+      "provenance": {
+        "artifact": "opinion-stage-artifact-2026-08-09",
+        "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d9855725d832fec94ff68922772b0b305e7a3be288f68fda1903b1d2af9bec9e",
+        "coordinate": "paths[\"/api/v2/items\"].get"
+      },
+      "covered_by": {
+        "stream": "items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/items/{id}/questions",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "opinion-stage-artifact-2026-08-09",
+        "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "Public Result API v1.0.0 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d9855725d832fec94ff68922772b0b305e7a3be288f68fda1903b1d2af9bec9e",
+        "coordinate": "existing-surface[GET /api/v2/items/{id}/questions]"
+      },
+      "covered_by": {
+        "stream": "questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/items/{id}/responses",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "opinion-stage-artifact-2026-08-09",
+        "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "Public Result API v1.0.0 (OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d9855725d832fec94ff68922772b0b305e7a3be288f68fda1903b1d2af9bec9e",
+        "coordinate": "existing-surface[GET /api/v2/items/{id}/responses]"
+      },
+      "covered_by": {
+        "stream": "responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/items/{itemId}",
+      "provenance": {
+        "artifact": "opinion-stage-artifact-2026-08-09",
+        "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d9855725d832fec94ff68922772b0b305e7a3be288f68fda1903b1d2af9bec9e",
+        "coordinate": "paths[\"/api/v2/items/{itemId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/items/{itemId}/questions",
+      "provenance": {
+        "artifact": "opinion-stage-artifact-2026-08-09",
+        "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d9855725d832fec94ff68922772b0b305e7a3be288f68fda1903b1d2af9bec9e",
+        "coordinate": "paths[\"/api/v2/items/{itemId}/questions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/items/{itemId}/responses",
+      "provenance": {
+        "artifact": "opinion-stage-artifact-2026-08-09",
+        "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d9855725d832fec94ff68922772b0b305e7a3be288f68fda1903b1d2af9bec9e",
+        "coordinate": "paths[\"/api/v2/items/{itemId}/responses\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/items/{itemId}/responses/#{responseId}",
+      "provenance": {
+        "artifact": "opinion-stage-artifact-2026-08-09",
+        "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d9855725d832fec94ff68922772b0b305e7a3be288f68fda1903b1d2af9bec9e",
+        "coordinate": "paths[\"/api/v2/items/{itemId}/responses/#{responseId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    }
   ]
 }

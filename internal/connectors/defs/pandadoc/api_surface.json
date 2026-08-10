@@ -1,47 +1,53 @@
 {
-  "api": "PandaDoc Public API (https://api.pandadoc.com)",
+  "api": "PandaDoc Public API (https://api.pandadoc.com); provider artifact version: PandaDoc Public API v8.10.0; OpenAPI 3.0.3",
   "docs": "https://developers.pandadoc.com/reference/about",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B expansion over the current official PandaDoc reference. JSON GET list/detail endpoints are streams; JSON/no-body mutations are write actions; uploads, downloads, OAuth, and token/key/secret operations are excluded with concrete reasons.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (129 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "pandadoc-artifact-2026-08-09",
+      "url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "kind": "openapi",
+      "version": "3.0.3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665"
+    }
+  ],
   "endpoints": [
     {
-      "method": "GET",
-      "path": "/public/beta/documents/{document_id}/ai-metadata",
-      "covered_by": {
-        "stream": "documents_document_id_ai_metadata"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/beta/documents/{document_id}/content",
-      "covered_by": {
-        "stream": "documents_document_id_content"
-      }
-    },
-    {
       "method": "POST",
-      "path": "/public/beta/documents/{document_id}/docx-export-tasks",
-      "covered_by": {
-        "write": "post_documents_document_id_docx_export_tasks"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/beta/documents/{document_id}/docx-export-tasks/{task_id}",
-      "covered_by": {
-        "stream": "documents_document_id_docx_export_tasks_task_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/beta/documents/{document_id}/summary",
-      "covered_by": {
-        "stream": "documents_document_id_summary"
+      "path": "/oauth2/access_token",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/oauth2/access_token\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth token exchange endpoint; credential lifecycle is not a connector data stream or reverse-ETL action.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
       "path": "/public/beta/documents/ai-metadata",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/beta/documents/ai-metadata\"].post"
+      },
       "covered_by": {
         "write": "post_documents_ai_metadata"
       }
@@ -49,13 +55,111 @@
     {
       "method": "GET",
       "path": "/public/beta/documents/search",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/beta/documents/search\"].get"
+      },
       "covered_by": {
         "stream": "documents_search"
       }
     },
     {
       "method": "GET",
+      "path": "/public/beta/documents/{document_id}/ai-metadata",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/beta/documents/{document_id}/ai-metadata\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_document_id_ai_metadata"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/beta/documents/{document_id}/content",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/beta/documents/{document_id}/content\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_document_id_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/beta/documents/{document_id}/docx-export-tasks",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/beta/documents/{document_id}/docx-export-tasks\"].post"
+      },
+      "covered_by": {
+        "write": "post_documents_document_id_docx_export_tasks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/beta/documents/{document_id}/docx-export-tasks/{task_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/beta/documents/{document_id}/docx-export-tasks/{task_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_document_id_docx_export_tasks_task_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/beta/documents/{document_id}/summary",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/beta/documents/{document_id}/summary\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_document_id_summary"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/public/v1/contacts",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/contacts\"].get"
+      },
       "covered_by": {
         "stream": "contacts"
       }
@@ -63,20 +167,31 @@
     {
       "method": "POST",
       "path": "/public/v1/contacts",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/contacts\"].post"
+      },
       "covered_by": {
         "write": "post_contacts"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/public/v1/contacts/{id}",
-      "covered_by": {
-        "write": "delete_contacts_id"
-      }
-    },
-    {
       "method": "GET",
       "path": "/public/v1/contacts/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/contacts/{id}\"].get"
+      },
       "covered_by": {
         "stream": "contacts_id"
       }
@@ -84,13 +199,47 @@
     {
       "method": "PATCH",
       "path": "/public/v1/contacts/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/contacts/{id}\"].patch"
+      },
       "covered_by": {
         "write": "patch_contacts_id"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/public/v1/contacts/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/contacts/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_contacts_id"
+      }
+    },
+    {
       "method": "GET",
       "path": "/public/v1/content-library-items",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/content-library-items\"].get"
+      },
       "covered_by": {
         "stream": "content_library_items"
       }
@@ -98,21 +247,31 @@
     {
       "method": "POST",
       "path": "/public/v1/content-library-items",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/content-library-items\"].post"
+      },
       "covered_by": {
         "write": "post_content_library_items"
       }
     },
     {
-      "method": "POST",
-      "path": "/public/v1/content-library-items?upload",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct."
-      }
-    },
-    {
       "method": "GET",
       "path": "/public/v1/content-library-items/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/content-library-items/{id}\"].get"
+      },
       "covered_by": {
         "stream": "content_library_items_id"
       }
@@ -120,20 +279,52 @@
     {
       "method": "GET",
       "path": "/public/v1/content-library-items/{id}/details",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/content-library-items/{id}/details\"].get"
+      },
       "covered_by": {
         "stream": "content_library_items_id_details"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/public/v1/documents",
-      "covered_by": {
-        "write": "delete_documents"
+      "method": "POST",
+      "path": "/public/v1/content-library-items?upload",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/content-library-items?upload\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/public/v1/documents",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents\"].get"
+      },
       "covered_by": {
         "stream": "documents"
       }
@@ -141,328 +332,47 @@
     {
       "method": "POST",
       "path": "/public/v1/documents",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents\"].post"
+      },
       "covered_by": {
         "write": "post_documents"
       }
     },
     {
-      "method": "POST",
-      "path": "/public/v1/documents?upload",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{document_id}/auto-reminders",
-      "covered_by": {
-        "stream": "documents_document_id_auto_reminders"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/public/v1/documents/{document_id}/auto-reminders",
-      "covered_by": {
-        "write": "patch_documents_document_id_auto_reminders"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{document_id}/auto-reminders/status",
-      "covered_by": {
-        "stream": "documents_document_id_auto_reminders_status"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{document_id}/esign-disclosure",
-      "covered_by": {
-        "stream": "documents_document_id_esign_disclosure"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/public/v1/documents/{document_id}/quotes/{quote_id}",
-      "covered_by": {
-        "write": "put_documents_document_id_quotes_quote_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{document_id}/sections",
-      "covered_by": {
-        "stream": "documents_document_id_sections"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{document_id}/sections",
-      "covered_by": {
-        "write": "post_documents_document_id_sections"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{document_id}/sections?upload",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct."
-      }
-    },
-    {
       "method": "DELETE",
-      "path": "/public/v1/documents/{document_id}/sections/{section_id}",
+      "path": "/public/v1/documents",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents\"].delete"
+      },
       "covered_by": {
-        "write": "delete_documents_document_id_sections_section_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{document_id}/sections/{section_id}",
-      "covered_by": {
-        "stream": "documents_document_id_sections_section_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{document_id}/sections/uploads/{upload_id}",
-      "covered_by": {
-        "stream": "documents_document_id_sections_uploads_upload_id"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{document_id}/send-reminder",
-      "covered_by": {
-        "write": "post_documents_document_id_send_reminder"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/public/v1/documents/{id}",
-      "covered_by": {
-        "write": "delete_documents_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{id}",
-      "covered_by": {
-        "stream": "documents_id"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/public/v1/documents/{id}",
-      "covered_by": {
-        "write": "patch_documents_id"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{id}/append-content-library-item",
-      "covered_by": {
-        "write": "post_documents_id_append_content_library_item"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{id}/attachments",
-      "covered_by": {
-        "stream": "documents_id_attachments"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{id}/attachments",
-      "covered_by": {
-        "write": "post_documents_id_attachments"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{id}/attachments?upload",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/public/v1/documents/{id}/attachments/{attachment_id}",
-      "covered_by": {
-        "write": "delete_documents_id_attachments_attachment_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{id}/attachments/{attachment_id}",
-      "covered_by": {
-        "stream": "documents_id_attachments_attachment_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{id}/attachments/{attachment_id}/download",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Returns a binary file payload rather than a JSON record stream."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{id}/details",
-      "covered_by": {
-        "stream": "documents_id_details"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{id}/download",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Returns a binary file payload rather than a JSON record stream."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{id}/download-protected",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Returns a binary file payload rather than a JSON record stream."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{id}/draft",
-      "covered_by": {
-        "write": "post_documents_id_draft"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{id}/editing-sessions",
-      "covered_by": {
-        "write": "post_documents_id_editing_sessions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{id}/fields",
-      "covered_by": {
-        "stream": "documents_id_fields"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/public/v1/documents/{id}/fields",
-      "covered_by": {
-        "write": "patch_documents_id_fields"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{id}/fields",
-      "covered_by": {
-        "write": "post_documents_id_fields"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/documents/{id}/linked-objects",
-      "covered_by": {
-        "stream": "documents_id_linked_objects"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{id}/linked-objects",
-      "covered_by": {
-        "write": "post_documents_id_linked_objects"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/public/v1/documents/{id}/linked-objects/{linked_object_id}",
-      "covered_by": {
-        "write": "delete_documents_id_linked_objects_linked_object_id"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{id}/move-to-folder/{folder_id}",
-      "covered_by": {
-        "write": "post_documents_id_move_to_folder_folder_id"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/public/v1/documents/{id}/ownership",
-      "covered_by": {
-        "write": "patch_documents_id_ownership"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{id}/recipients",
-      "covered_by": {
-        "write": "post_documents_id_recipients"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/public/v1/documents/{id}/recipients/{recipient_id}",
-      "covered_by": {
-        "write": "delete_documents_id_recipients_recipient_id"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{id}/recipients/{recipient_id}/reassign",
-      "covered_by": {
-        "write": "post_documents_id_recipients_recipient_id_reassign"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/public/v1/documents/{id}/recipients/recipient/{recipient_id}",
-      "covered_by": {
-        "write": "patch_documents_id_recipients_recipient_recipient_id"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{id}/send",
-      "covered_by": {
-        "write": "post_documents_id_send"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/documents/{id}/session",
-      "covered_by": {
-        "write": "post_documents_id_session"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/public/v1/documents/{id}/status",
-      "covered_by": {
-        "write": "patch_documents_id_status"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/public/v1/documents/{id}/status?upload",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct."
+        "write": "delete_documents"
       }
     },
     {
       "method": "GET",
       "path": "/public/v1/documents/folders",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/folders\"].get"
+      },
       "covered_by": {
         "stream": "documents_folders"
       }
@@ -470,6 +380,15 @@
     {
       "method": "POST",
       "path": "/public/v1/documents/folders",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/folders\"].post"
+      },
       "covered_by": {
         "write": "post_documents_folders"
       }
@@ -477,6 +396,15 @@
     {
       "method": "PUT",
       "path": "/public/v1/documents/folders/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/folders/{id}\"].put"
+      },
       "covered_by": {
         "write": "put_documents_folders_id"
       }
@@ -484,6 +412,15 @@
     {
       "method": "GET",
       "path": "/public/v1/documents/linked-objects",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/linked-objects\"].get"
+      },
       "covered_by": {
         "stream": "documents_linked_objects"
       }
@@ -491,13 +428,835 @@
     {
       "method": "PATCH",
       "path": "/public/v1/documents/ownership",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/ownership\"].patch"
+      },
       "covered_by": {
         "write": "patch_documents_ownership"
       }
     },
     {
       "method": "GET",
+      "path": "/public/v1/documents/{document_id}/auto-reminders",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{document_id}/auto-reminders\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_document_id_auto_reminders"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{document_id}/auto-reminders",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{document_id}/auto-reminders\"].patch"
+      },
+      "covered_by": {
+        "write": "patch_documents_document_id_auto_reminders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{document_id}/auto-reminders/status",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{document_id}/auto-reminders/status\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_document_id_auto_reminders_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{document_id}/esign-disclosure",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{document_id}/esign-disclosure\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_document_id_esign_disclosure"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/public/v1/documents/{document_id}/quotes/{quote_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{document_id}/quotes/{quote_id}\"].put"
+      },
+      "covered_by": {
+        "write": "put_documents_document_id_quotes_quote_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{document_id}/sections",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{document_id}/sections\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_document_id_sections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{document_id}/sections",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "PandaDoc Public API v8.10.0; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "existing-surface[POST /public/v1/documents/{document_id}/sections]"
+      },
+      "covered_by": {
+        "write": "post_documents_document_id_sections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{document_id}/sections/uploads",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{document_id}/sections/uploads\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{document_id}/sections/uploads/{upload_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{document_id}/sections/uploads/{upload_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_document_id_sections_uploads_upload_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{document_id}/sections/uploads?upload",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{document_id}/sections/uploads?upload\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{document_id}/sections/{section_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{document_id}/sections/{section_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_document_id_sections_section_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/documents/{document_id}/sections/{section_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{document_id}/sections/{section_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_documents_document_id_sections_section_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{document_id}/sections?upload",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "PandaDoc Public API v8.10.0; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "existing-surface[POST /public/v1/documents/{document_id}/sections?upload]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{document_id}/send-reminder",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{document_id}/send-reminder\"].post"
+      },
+      "covered_by": {
+        "write": "post_documents_document_id_send_reminder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}\"].patch"
+      },
+      "covered_by": {
+        "write": "patch_documents_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/documents/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_documents_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/append-content-library-item",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/append-content-library-item\"].post"
+      },
+      "covered_by": {
+        "write": "post_documents_id_append_content_library_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/attachments",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/attachments\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_id_attachments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/attachments",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/attachments\"].post"
+      },
+      "covered_by": {
+        "write": "post_documents_id_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/attachments/{attachment_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/attachments/{attachment_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_id_attachments_attachment_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/documents/{id}/attachments/{attachment_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/attachments/{attachment_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_documents_id_attachments_attachment_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/attachments/{attachment_id}/download",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/attachments/{attachment_id}/download\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Returns a binary file payload rather than a JSON record stream.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/attachments?upload",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/attachments?upload\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/details",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/details\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_id_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/download",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/download\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Returns a binary file payload rather than a JSON record stream.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/download-protected",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/download-protected\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Returns a binary file payload rather than a JSON record stream.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/draft",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/draft\"].post"
+      },
+      "covered_by": {
+        "write": "post_documents_id_draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/editing-sessions",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/editing-sessions\"].post"
+      },
+      "covered_by": {
+        "write": "post_documents_id_editing_sessions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/fields",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/fields\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_id_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/fields",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/fields\"].post"
+      },
+      "covered_by": {
+        "write": "post_documents_id_fields"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{id}/fields",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/fields\"].patch"
+      },
+      "covered_by": {
+        "write": "patch_documents_id_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/documents/{id}/linked-objects",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/linked-objects\"].get"
+      },
+      "covered_by": {
+        "stream": "documents_id_linked_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/linked-objects",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/linked-objects\"].post"
+      },
+      "covered_by": {
+        "write": "post_documents_id_linked_objects"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/documents/{id}/linked-objects/{linked_object_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/linked-objects/{linked_object_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_documents_id_linked_objects_linked_object_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/move-to-folder/{folder_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/move-to-folder/{folder_id}\"].post"
+      },
+      "covered_by": {
+        "write": "post_documents_id_move_to_folder_folder_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{id}/ownership",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/ownership\"].patch"
+      },
+      "covered_by": {
+        "write": "patch_documents_id_ownership"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/recipients",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/recipients\"].post"
+      },
+      "covered_by": {
+        "write": "post_documents_id_recipients"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{id}/recipients/recipient/{recipient_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/recipients/recipient/{recipient_id}\"].patch"
+      },
+      "covered_by": {
+        "write": "patch_documents_id_recipients_recipient_recipient_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/documents/{id}/recipients/{recipient_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/recipients/{recipient_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_documents_id_recipients_recipient_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/recipients/{recipient_id}/reassign",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/recipients/{recipient_id}/reassign\"].post"
+      },
+      "covered_by": {
+        "write": "post_documents_id_recipients_recipient_id_reassign"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/send",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/send\"].post"
+      },
+      "covered_by": {
+        "write": "post_documents_id_send"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents/{id}/session",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/session\"].post"
+      },
+      "covered_by": {
+        "write": "post_documents_id_session"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{id}/status",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/status\"].patch"
+      },
+      "covered_by": {
+        "write": "patch_documents_id_status"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/documents/{id}/status?upload",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents/{id}/status?upload\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents?upload",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents?upload\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/documents?upload-markdown",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/documents?upload-markdown\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/public/v1/forms",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/forms\"].get"
+      },
       "covered_by": {
         "stream": "forms"
       }
@@ -505,6 +1264,15 @@
     {
       "method": "GET",
       "path": "/public/v1/logs",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/logs\"].get"
+      },
       "covered_by": {
         "stream": "logs"
       }
@@ -512,6 +1280,15 @@
     {
       "method": "GET",
       "path": "/public/v1/logs/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/logs/{id}\"].get"
+      },
       "covered_by": {
         "stream": "logs_id"
       }
@@ -519,13 +1296,47 @@
     {
       "method": "GET",
       "path": "/public/v1/members",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/members\"].get"
+      },
       "covered_by": {
         "stream": "members"
       }
     },
     {
       "method": "GET",
+      "path": "/public/v1/members/current",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/members/current\"].get"
+      },
+      "covered_by": {
+        "stream": "members_current"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/public/v1/members/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/members/{id}\"].get"
+      },
       "covered_by": {
         "stream": "members_id"
       }
@@ -533,21 +1344,36 @@
     {
       "method": "POST",
       "path": "/public/v1/members/{member_id}/token",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "Creates a member-scoped access token; token-generation endpoints are excluded from ordinary write actions."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/members/current",
-      "covered_by": {
-        "stream": "members_current"
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/members/{member_id}/token\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Creates a member-scoped access token; token-generation endpoints are excluded from ordinary write actions.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/public/v1/sms-opt-outs",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/sms-opt-outs\"].get"
+      },
       "covered_by": {
         "stream": "sms_opt_outs"
       }
@@ -555,6 +1381,15 @@
     {
       "method": "GET",
       "path": "/public/v1/templates",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates\"].get"
+      },
       "covered_by": {
         "stream": "templates"
       }
@@ -562,56 +1397,31 @@
     {
       "method": "POST",
       "path": "/public/v1/templates",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates\"].post"
+      },
       "covered_by": {
         "write": "post_templates"
       }
     },
     {
-      "method": "POST",
-      "path": "/public/v1/templates?upload",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/public/v1/templates/{id}",
-      "covered_by": {
-        "write": "delete_templates_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/templates/{id}",
-      "covered_by": {
-        "stream": "templates_id"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/public/v1/templates/{id}",
-      "covered_by": {
-        "write": "patch_templates_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/public/v1/templates/{id}/details",
-      "covered_by": {
-        "stream": "templates_id_details"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/public/v1/templates/{id}/editing-sessions",
-      "covered_by": {
-        "write": "post_templates_id_editing_sessions"
-      }
-    },
-    {
       "method": "GET",
       "path": "/public/v1/templates/folders",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates/folders\"].get"
+      },
       "covered_by": {
         "stream": "templates_folders"
       }
@@ -619,6 +1429,15 @@
     {
       "method": "POST",
       "path": "/public/v1/templates/folders",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates/folders\"].post"
+      },
       "covered_by": {
         "write": "post_templates_folders"
       }
@@ -626,13 +1445,195 @@
     {
       "method": "PUT",
       "path": "/public/v1/templates/folders/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates/folders/{id}\"].put"
+      },
       "covered_by": {
         "write": "put_templates_folders_id"
       }
     },
     {
       "method": "GET",
+      "path": "/public/v1/templates/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates/{id}\"].get"
+      },
+      "covered_by": {
+        "stream": "templates_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/v1/templates/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates/{id}\"].patch"
+      },
+      "covered_by": {
+        "write": "patch_templates_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/public/v1/templates/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_templates_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/templates/{id}/details",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates/{id}/details\"].get"
+      },
+      "covered_by": {
+        "stream": "templates_id_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/templates/{id}/duplicate",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates/{id}/duplicate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/templates/{id}/editing-sessions",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates/{id}/editing-sessions\"].post"
+      },
+      "covered_by": {
+        "write": "post_templates_id_editing_sessions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/v1/templates/{template_id}/shares",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates/{template_id}/shares\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/public/v1/templates/{template_id}/shares",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates/{template_id}/shares\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/v1/templates?upload",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/templates?upload\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/public/v1/users",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/users\"].get"
+      },
       "covered_by": {
         "stream": "users"
       }
@@ -640,6 +1641,15 @@
     {
       "method": "POST",
       "path": "/public/v1/users",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/users\"].post"
+      },
       "covered_by": {
         "write": "post_users"
       }
@@ -647,6 +1657,15 @@
     {
       "method": "GET",
       "path": "/public/v1/users/{user_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/users/{user_id}\"].get"
+      },
       "covered_by": {
         "stream": "users_user_id"
       }
@@ -654,6 +1673,15 @@
     {
       "method": "GET",
       "path": "/public/v1/webhook-events",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/webhook-events\"].get"
+      },
       "covered_by": {
         "stream": "webhook_events"
       }
@@ -661,6 +1689,15 @@
     {
       "method": "GET",
       "path": "/public/v1/webhook-events/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/webhook-events/{id}\"].get"
+      },
       "covered_by": {
         "stream": "webhook_events_id"
       }
@@ -668,6 +1705,15 @@
     {
       "method": "GET",
       "path": "/public/v1/webhook-subscriptions",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/webhook-subscriptions\"].get"
+      },
       "covered_by": {
         "stream": "webhook_subscriptions"
       }
@@ -675,20 +1721,31 @@
     {
       "method": "POST",
       "path": "/public/v1/webhook-subscriptions",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/webhook-subscriptions\"].post"
+      },
       "covered_by": {
         "write": "post_webhook_subscriptions"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/public/v1/webhook-subscriptions/{id}",
-      "covered_by": {
-        "write": "delete_webhook_subscriptions_id"
-      }
-    },
-    {
       "method": "GET",
       "path": "/public/v1/webhook-subscriptions/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/webhook-subscriptions/{id}\"].get"
+      },
       "covered_by": {
         "stream": "webhook_subscriptions_id"
       }
@@ -696,21 +1753,68 @@
     {
       "method": "PATCH",
       "path": "/public/v1/webhook-subscriptions/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/webhook-subscriptions/{id}\"].patch"
+      },
       "covered_by": {
         "write": "patch_webhook_subscriptions_id"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/public/v1/webhook-subscriptions/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/webhook-subscriptions/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_webhook_subscriptions_id"
+      }
+    },
+    {
       "method": "PATCH",
       "path": "/public/v1/webhook-subscriptions/{id}/shared-key",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "Rotates or updates a webhook shared secret; secret material is excluded from ordinary write records and fixtures."
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/webhook-subscriptions/{id}/shared-key\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Rotates or updates a webhook shared secret; secret material is excluded from ordinary write records and fixtures.",
+        "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/public/v1/workspaces",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/workspaces\"].get"
+      },
       "covered_by": {
         "stream": "workspaces"
       }
@@ -718,6 +1822,15 @@
     {
       "method": "POST",
       "path": "/public/v1/workspaces",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/workspaces\"].post"
+      },
       "covered_by": {
         "write": "post_workspaces"
       }
@@ -725,14 +1838,36 @@
     {
       "method": "POST",
       "path": "/public/v1/workspaces/{workspace_id}/api-keys",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "Generates a workspace API key secret and requires elevated organization/workspace administration."
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/workspaces/{workspace_id}/api-keys\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Generates a workspace API key secret and requires elevated organization/workspace administration.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
       "path": "/public/v1/workspaces/{workspace_id}/deactivate",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/workspaces/{workspace_id}/deactivate\"].post"
+      },
       "covered_by": {
         "write": "post_workspaces_workspace_id_deactivate"
       }
@@ -740,6 +1875,15 @@
     {
       "method": "POST",
       "path": "/public/v1/workspaces/{workspace_id}/members",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/workspaces/{workspace_id}/members\"].post"
+      },
       "covered_by": {
         "write": "post_workspaces_workspace_id_members"
       }
@@ -747,6 +1891,15 @@
     {
       "method": "DELETE",
       "path": "/public/v1/workspaces/{workspace_id}/members/{member_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/workspaces/{workspace_id}/members/{member_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_workspaces_workspace_id_members_member_id"
       }
@@ -754,6 +1907,15 @@
     {
       "method": "PATCH",
       "path": "/public/v1/workspaces/{workspace_id}/members/{member_id}/role",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v1/workspaces/{workspace_id}/members/{member_id}/role\"].patch"
+      },
       "covered_by": {
         "write": "patch_workspaces_workspace_id_members_member_id_role"
       }
@@ -761,6 +1923,15 @@
     {
       "method": "GET",
       "path": "/public/v2/documents/{document_id}/audit-trail",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/documents/{document_id}/audit-trail\"].get"
+      },
       "covered_by": {
         "stream": "documents_document_id_audit_trail"
       }
@@ -768,6 +1939,15 @@
     {
       "method": "GET",
       "path": "/public/v2/documents/{document_id}/settings",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/documents/{document_id}/settings\"].get"
+      },
       "covered_by": {
         "stream": "documents_document_id_settings"
       }
@@ -775,13 +1955,52 @@
     {
       "method": "PATCH",
       "path": "/public/v2/documents/{document_id}/settings",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/documents/{document_id}/settings\"].patch"
+      },
       "covered_by": {
         "write": "patch_documents_document_id_settings"
       }
     },
     {
+      "method": "POST",
+      "path": "/public/v2/dsv/{document_id}/add-named-items",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/dsv/{document_id}/add-named-items\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
       "path": "/public/v2/logs",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/logs\"].get"
+      },
       "covered_by": {
         "stream": "logs_detail"
       }
@@ -789,6 +2008,15 @@
     {
       "method": "GET",
       "path": "/public/v2/logs/{id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/logs/{id}\"].get"
+      },
       "covered_by": {
         "stream": "logs_id_detail"
       }
@@ -796,6 +2024,15 @@
     {
       "method": "GET",
       "path": "/public/v2/notary/notaries",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/notary/notaries\"].get"
+      },
       "covered_by": {
         "stream": "notary_notaries"
       }
@@ -803,6 +2040,15 @@
     {
       "method": "GET",
       "path": "/public/v2/notary/notarization-requests",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/notary/notarization-requests\"].get"
+      },
       "covered_by": {
         "stream": "notary_notarization_requests"
       }
@@ -810,41 +2056,95 @@
     {
       "method": "POST",
       "path": "/public/v2/notary/notarization-requests",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/notary/notarization-requests\"].post"
+      },
       "covered_by": {
         "write": "post_notary_notarization_requests"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/public/v2/notary/notarization-requests/{session_request_id}",
-      "covered_by": {
-        "write": "delete_notary_notarization_requests_session_request_id"
-      }
-    },
-    {
       "method": "GET",
       "path": "/public/v2/notary/notarization-requests/{session_request_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/notary/notarization-requests/{session_request_id}\"].get"
+      },
       "covered_by": {
         "stream": "notary_notarization_requests_session_request_id"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/public/v2/notary/notarization-requests/{session_request_id}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/notary/notarization-requests/{session_request_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_notary_notarization_requests_session_request_id"
+      }
+    },
+    {
       "method": "POST",
       "path": "/public/v2/product-catalog/items",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/product-catalog/items\"].post"
+      },
       "covered_by": {
         "write": "post_product_catalog_items"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/public/v2/product-catalog/items/{item_uuid}",
+      "method": "GET",
+      "path": "/public/v2/product-catalog/items/search",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/product-catalog/items/search\"].get"
+      },
       "covered_by": {
-        "write": "delete_product_catalog_items_item_uuid"
+        "stream": "product_catalog_items_search"
       }
     },
     {
       "method": "GET",
       "path": "/public/v2/product-catalog/items/{item_uuid}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/product-catalog/items/{item_uuid}\"].get"
+      },
       "covered_by": {
         "stream": "product_catalog_items_item_uuid"
       }
@@ -852,20 +2152,47 @@
     {
       "method": "PATCH",
       "path": "/public/v2/product-catalog/items/{item_uuid}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/product-catalog/items/{item_uuid}\"].patch"
+      },
       "covered_by": {
         "write": "patch_product_catalog_items_item_uuid"
       }
     },
     {
-      "method": "GET",
-      "path": "/public/v2/product-catalog/items/search",
+      "method": "DELETE",
+      "path": "/public/v2/product-catalog/items/{item_uuid}",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/product-catalog/items/{item_uuid}\"].delete"
+      },
       "covered_by": {
-        "stream": "product_catalog_items_search"
+        "write": "delete_product_catalog_items_item_uuid"
       }
     },
     {
       "method": "GET",
       "path": "/public/v2/templates/{template_id}/settings",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/templates/{template_id}/settings\"].get"
+      },
       "covered_by": {
         "stream": "templates_template_id_settings"
       }
@@ -873,16 +2200,17 @@
     {
       "method": "PATCH",
       "path": "/public/v2/templates/{template_id}/settings",
+      "provenance": {
+        "artifact": "pandadoc-artifact-2026-08-09",
+        "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2be1f6ce8517913d922ac1298450506717cf6b1f430cf21e400dcb282daaf665",
+        "coordinate": "paths[\"/public/v2/templates/{template_id}/settings\"].patch"
+      },
       "covered_by": {
         "write": "patch_templates_template_id_settings"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/oauth2/access_token",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "OAuth token exchange endpoint; credential lifecycle is not a connector data stream or reverse-ETL action."
       }
     }
   ]

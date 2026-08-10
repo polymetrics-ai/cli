@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "results": [
+    {
+      "connector": "appsflyer",
+      "status": "fetched",
+      "bytes": 973498
+    },
+    {
+      "connector": "buzzsprout",
+      "status": "fetched",
+      "bytes": 256230
+    },
+    {
+      "connector": "campayn",
+      "status": "fetched",
+      "bytes": 260777
+    },
+    {
+      "connector": "cimis",
+      "status": "fetched",
+      "bytes": 70487
+    },
+    {
+      "connector": "clazar",
+      "status": "fetched",
+      "bytes": 2804
+    },
+    {
+      "connector": "countercyclical",
+      "status": "fetched",
+      "bytes": 408162
+    },
+    {
+      "connector": "customerly",
+      "status": "fetched",
+      "bytes": 46609
+    },
+    {
+      "connector": "datascope",
+      "status": "fetched",
+      "bytes": 209165
+    },
+    {
+      "connector": "ebay-finance",
+      "status": "failed",
+      "bytes": 0
+    },
+    {
+      "connector": "ebay-fulfillment",
+      "status": "failed",
+      "bytes": 0
+    },
+    {
+      "connector": "eventee",
+      "status": "fetched",
+      "bytes": 5691
+    },
+    {
+      "connector": "exchange-rates",
+      "status": "fetched",
+      "bytes": 185721
+    },
+    {
+      "connector": "freshcaller",
+      "status": "fetched",
+      "bytes": 200517
+    },
+    {
+      "connector": "giphy",
+      "status": "fetched",
+      "bytes": 173068
+    },
+    {
+      "connector": "gnews",
+      "status": "fetched",
+      "bytes": 19706
+    },
+    {
+      "connector": "gutendex",
+      "status": "fetched",
+      "bytes": 10372
+    },
+    {
+      "connector": "hugging-face-datasets",
+      "status": "fetched",
+      "bytes": 95723
+    },
+    {
+      "connector": "kissmetrics",
+      "status": "fetched",
+      "bytes": 135528
+    },
+    {
+      "connector": "linkrunner",
+      "status": "fetched",
+      "bytes": 593765
+    },
+    {
+      "connector": "mailjet-sms",
+      "status": "fetched",
+      "bytes": 16768
+    },
+    {
+      "connector": "mailosaur",
+      "status": "fetched",
+      "bytes": 498494
+    },
+    {
+      "connector": "marketstack",
+      "status": "fetched",
+      "bytes": 190924
+    },
+    {
+      "connector": "news-api",
+      "status": "fetched",
+      "bytes": 17208
+    },
+    {
+      "connector": "open-exchange-rates",
+      "status": "fetched",
+      "bytes": 132965
+    },
+    {
+      "connector": "openweather",
+      "status": "fetched",
+      "bytes": 958787
+    },
+    {
+      "connector": "pexels-api",
+      "status": "failed",
+      "bytes": 0
+    },
+    {
+      "connector": "plausible",
+      "status": "fetched",
+      "bytes": 117221
+    },
+    {
+      "connector": "poplar",
+      "status": "fetched",
+      "bytes": 10050
+    },
+    {
+      "connector": "pypi",
+      "status": "fetched",
+      "bytes": 112286
+    },
+    {
+      "connector": "qualaroo",
+      "status": "fetched",
+      "bytes": 103974
+    },
+    {
+      "connector": "rentcast",
+      "status": "fetched",
+      "bytes": 142863
+    },
+    {
+      "connector": "savvycal",
+      "status": "fetched",
+      "bytes": 16073
+    },
+    {
+      "connector": "searxng",
+      "status": "fetched",
+      "bytes": 46384
+    },
+    {
+      "connector": "simfin",
+      "status": "fetched",
+      "bytes": 2656
+    },
+    {
+      "connector": "smaily",
+      "status": "fetched",
+      "bytes": 203904
+    },
+    {
+      "connector": "smartreach",
+      "status": "fetched",
+      "bytes": 50339
+    },
+    {
+      "connector": "stockdata",
+      "status": "fetched",
+      "bytes": 224874
+    },
+    {
+      "connector": "the-guardian-api",
+      "status": "fetched",
+      "bytes": 5610
+    },
+    {
+      "connector": "ticketmaster",
+      "status": "fetched",
+      "bytes": 1417565
+    },
+    {
+      "connector": "weatherstack",
+      "status": "fetched",
+      "bytes": 82569
+    }
+  ]
+}

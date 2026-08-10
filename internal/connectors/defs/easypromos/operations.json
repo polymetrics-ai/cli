@@ -1,0 +1,403 @@
+{
+  "operations": [
+    {
+      "id": "easypromos.get.coin-transactions-promotion-id",
+      "kind": "rest_read",
+      "summary": "GET /coin_transactions/{promotion_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/coin_transactions/{promotion_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.post.coin-transactions-promotion-id",
+      "kind": "rest_write",
+      "summary": "POST /coin_transactions/{promotion_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/coin_transactions/{promotion_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.coin-transactions-promotion-id-users-user-id",
+      "kind": "rest_read",
+      "summary": "GET /coin_transactions/{promotion_id}/users/{user_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/coin_transactions/{promotion_id}/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.put.coins-promotion-id",
+      "kind": "rest_write",
+      "summary": "PUT /coins/{promotion_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/coins/{promotion_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.coins-promotion-id-users-user-id",
+      "kind": "rest_read",
+      "summary": "GET /coins/{promotion_id}/users/{user_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/coins/{promotion_id}/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.organizing-brands-organizing-brand-id",
+      "kind": "rest_read",
+      "summary": "GET /organizing_brands/{organizing_brand_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizing_brands/{organizing_brand_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.organizing-brands-organizing-brand-id-promotions",
+      "kind": "rest_read",
+      "summary": "GET /organizing_brands/{organizing_brand_id}/promotions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizing_brands/{organizing_brand_id}/promotions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.post.participations-promotion-id",
+      "kind": "rest_write",
+      "summary": "POST /participations/{promotion_id}",
+      "description": "legacy connector never implemented participation creation; not implemented in this bundle",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/participations/{promotion_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.post.participations-promotion-id-check-requirement-stage-id",
+      "kind": "rest_write",
+      "summary": "POST /participations/{promotion_id}/check_requirement/{stage_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/participations/{promotion_id}/check_requirement/{stage_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.post.participations-promotion-id-participate-stage-id",
+      "kind": "rest_write",
+      "summary": "POST /participations/{promotion_id}/participate/{stage_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/participations/{promotion_id}/participate/{stage_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.participations-promotion-id-remaining-stage-id-user-id",
+      "kind": "rest_read",
+      "summary": "GET /participations/{promotion_id}/remaining/{stage_id}/{user_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/participations/{promotion_id}/remaining/{stage_id}/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.participations-promotion-id-users-user-id",
+      "kind": "rest_read",
+      "summary": "GET /participations/{promotion_id}/users/{user_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/participations/{promotion_id}/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.post.participations-promotion-id-validate-code-stage-id",
+      "kind": "rest_write",
+      "summary": "POST /participations/{promotion_id}/validate_code/{stage_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/participations/{promotion_id}/validate_code/{stage_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.participations-promotion-id-participation-id",
+      "kind": "rest_read",
+      "summary": "GET /participations/{promotion_id}/{participation_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/participations/{promotion_id}/{participation_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.pos-promotion-id",
+      "kind": "rest_read",
+      "summary": "GET /pos/{promotion_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pos/{promotion_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.prizes-inventory-promotion-id",
+      "kind": "rest_read",
+      "summary": "GET /prizes/inventory/{promotion_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/prizes/inventory/{promotion_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.prizes-promotion-id-users-user-id",
+      "kind": "rest_read",
+      "summary": "GET /prizes/{promotion_id}/users/{user_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/prizes/{promotion_id}/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.promotions-promotion-id",
+      "kind": "rest_read",
+      "summary": "GET /promotions/{promotion_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/promotions/{promotion_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.promotions-promotion-id-registration-fields",
+      "kind": "rest_read",
+      "summary": "GET /promotions/{promotion_id}/registration_fields",
+      "description": "not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/promotions/{promotion_id}/registration_fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.ranking-promotion-id",
+      "kind": "rest_read",
+      "summary": "GET /ranking/{promotion_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ranking/{promotion_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.stages-promotion-id-stage-id",
+      "kind": "rest_read",
+      "summary": "GET /stages/{promotion_id}/{stage_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stages/{promotion_id}/{stage_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.post.users-autologin-promotion-id",
+      "kind": "rest_write",
+      "summary": "POST /users/autologin/{promotion_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/autologin/{promotion_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.users-logintoken-promotion-id-user-id",
+      "kind": "rest_read",
+      "summary": "GET /users/logintoken/{promotion_id}/{user_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/logintoken/{promotion_id}/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.post.users-segments-promotion-id",
+      "kind": "rest_write",
+      "summary": "POST /users/segments/{promotion_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/segments/{promotion_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.delete.users-segments-promotion-id",
+      "kind": "rest_write",
+      "summary": "DELETE /users/segments/{promotion_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/users/segments/{promotion_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "easypromos.get.users-promotion-id-user-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{promotion_id}/{user_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://easypromos-apiref.redoc.ly/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{promotion_id}/{user_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

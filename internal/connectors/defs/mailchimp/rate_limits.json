@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://mailchimp.com/developer/marketing/api/ (retrieved 2026-08-06): Mailchimp's Marketing API reference does not publish an enumerable request-rate policy for this bundle."
+}

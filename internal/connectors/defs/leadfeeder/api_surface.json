@@ -1,51 +1,1495 @@
 {
-  "api": "Leadfeeder JSON:API (https://api.leadfeeder.com)",
+  "api": "Leadfeeder JSON:API (https://api.leadfeeder.com); provider artifact version: 2026-08-05 (OpenAPI 3.1.1)",
   "docs": "https://docs.leadfeeder.com/api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: all 4 legacy-parity read streams (accounts, leads, visits, custom_feeds); every other Leadfeeder resource (users, feed rules, webhook/integration management, and all write/mutation endpoints) is out of scope until Pass B",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (65 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "leadfeeder-artifact-2026-08-09",
+      "url": "https://api.leadfeeder.com/openapi.yaml",
+      "kind": "openapi",
+      "version": "3.1.1",
+      "retrieved_at": "2026-08-09",
+      "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
       "path": "/accounts",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "2026-08-05 (OpenAPI 3.1.1)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "existing-surface[GET /accounts]"
+      },
       "covered_by": {
         "stream": "accounts"
       }
     },
     {
       "method": "GET",
+      "path": "/accounts/{account_id}/custom-feeds",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "2026-08-05 (OpenAPI 3.1.1)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "existing-surface[GET /accounts/{account_id}/custom-feeds]"
+      },
+      "covered_by": {
+        "stream": "custom_feeds"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/accounts/{account_id}/leads",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "2026-08-05 (OpenAPI 3.1.1)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "existing-surface[GET /accounts/{account_id}/leads]"
+      },
       "covered_by": {
         "stream": "leads"
       }
     },
     {
+      "method": "*",
+      "path": "/accounts/{account_id}/users, feed-rule and webhook/integration management endpoints",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "2026-08-05 (OpenAPI 3.1.1)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "existing-surface[* /accounts/{account_id}/users, feed-rule and webhook/integration management endpoints]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/accounts/{account_id}/users, feed-rule and webhook/integration management endpoints is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+        "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+      }
+    },
+    {
       "method": "GET",
       "path": "/accounts/{account_id}/visits",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "2026-08-05 (OpenAPI 3.1.1)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "existing-surface[GET /accounts/{account_id}/visits]"
+      },
       "covered_by": {
         "stream": "visits"
       }
     },
     {
       "method": "GET",
-      "path": "/accounts/{account_id}/custom-feeds",
-      "covered_by": {
-        "stream": "custom_feeds"
+      "path": "/v1/accounts",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/accounts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
-      "method": "*",
-      "path": "/accounts/{account_id}/users, feed-rule and webhook/integration management endpoints",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/accounts/{account_id}/users, feed-rule and webhook/integration management endpoints is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      "method": "GET",
+      "path": "/v1/buyer-personas",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/buyer-personas\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/buyer-personas/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/buyer-personas/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/campaigns\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/campaigns/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/campaigns/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/campaigns/{id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/campaigns/{id}/stats",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/campaigns/{id}/stats\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/companies",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/companies/enrichment-jobs",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/enrichment-jobs\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/companies/enrichment-jobs/estimate",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/enrichment-jobs/estimate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/companies/enrichment-jobs/{job_id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/enrichment-jobs/{job_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/companies/ips",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/ips\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/companies/match",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/match\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/companies/search",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/search\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/companies/signals",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/signals\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/companies/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/companies/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/{id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/companies/{id}/financials",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/{id}/financials\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/companies/{id}/lists",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/{id}/lists\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/companies/{id}/lists",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/{id}/lists\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/companies/{id}/tags",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/{id}/tags\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/companies/{id}/tags",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/companies/{id}/tags\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/contacts",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/contacts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/contacts/find-contact-data-jobs",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/contacts/find-contact-data-jobs\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/contacts/find-contact-data-jobs/estimate",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/contacts/find-contact-data-jobs/estimate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/contacts/find-contact-data-jobs/{job_id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/contacts/find-contact-data-jobs/{job_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/contacts/search",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/contacts/search\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/contacts/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/contacts/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/contacts/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/contacts/{id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/contacts/{id}/lists",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/contacts/{id}/lists\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/contacts/{id}/lists",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/contacts/{id}/lists\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/custom-fields",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/custom-fields\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/custom-fields",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/custom-fields\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/custom-fields/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/custom-fields/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/custom-fields/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/custom-fields/{id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/custom-fields/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/custom-fields/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/icps",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/icps\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/icps/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/icps/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ip/enrich",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/ip/enrich\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/lists",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/lists\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/lists",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/lists\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/lists/batch-add-to-list-jobs",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/lists/batch-add-to-list-jobs\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/lists/batch-add-to-list-jobs/{job_id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/lists/batch-add-to-list-jobs/{job_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/lists/batch-remove-from-list-jobs",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/lists/batch-remove-from-list-jobs\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/lists/batch-remove-from-list-jobs/{job_id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/lists/batch-remove-from-list-jobs/{job_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/lists/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/lists/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/lists/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/lists/{id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/lists/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/lists/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/lists/{id}/items",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/lists/{id}/items\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tags",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/tags\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/tags",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/tags\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tags/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/tags/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/tags/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/tags/{id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/tags/{id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/tags/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/usage",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/usage\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users/me",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/users/me\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/web-visits",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/web-visits\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/web-visits/companies",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/web-visits/companies\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/web-visits/custom-feeds",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/web-visits/custom-feeds\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/web-visits/custom-feeds",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/web-visits/custom-feeds\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/web-visits/custom-feeds-folders",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/web-visits/custom-feeds-folders\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/web-visits/custom-feeds/{custom_feed_id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/web-visits/custom-feeds/{custom_feed_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/web-visits/custom-feeds/{custom_feed_id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/web-visits/custom-feeds/{custom_feed_id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/web-visits/custom-feeds/{custom_feed_id}",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/web-visits/custom-feeds/{custom_feed_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/web-visits/tracker",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "paths[\"/v1/web-visits/tracker\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST/PATCH/DELETE",
       "path": "all Leadfeeder mutation endpoints",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy itself is read-only (capabilities.write: false)"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "leadfeeder-artifact-2026-08-09",
+        "source_url": "https://api.leadfeeder.com/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "2026-08-05 (OpenAPI 3.1.1)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18",
+        "coordinate": "existing-surface[POST/PATCH/DELETE all Leadfeeder mutation endpoints]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Legacy itself is read-only (capabilities.write: false)",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     }
   ]

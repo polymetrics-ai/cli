@@ -1,0 +1,789 @@
+{
+  "tagline": "Run PayFit's declared streams and reverse-ETL actions.",
+  "usage": "pm payfit \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "absences list",
+        "accounting v2 entries list",
+        "api get companies companyid accounting",
+        "api get companies companyid collaborators collaboratorid contracts contractid payslips payslipid",
+        "api get companies companyid documents documentid",
+        "api get companies companyid payment-files",
+        "api get https oauth-payfit-com webhooks",
+        "auto enrolment documents list",
+        "collaborator list",
+        "collaborator meal vouchers list",
+        "collaborator payslips list",
+        "collaborators list",
+        "companies list",
+        "company contract fr list",
+        "company contract list",
+        "company contracts fr list",
+        "company contracts list",
+        "company fr list",
+        "company list",
+        "contracts list",
+        "employees list",
+        "health insurance contracts list",
+        "income tax documents list",
+        "payroll status list",
+        "provident fund contracts list",
+        "worked time by contract list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api post companies companyid billing-declarations",
+        "api post companies-fr companyid health-insurance-setup-sheets",
+        "api post https oauth-payfit-com introspect",
+        "cancel absence apply",
+        "create absence apply",
+        "create collaborator apply",
+        "create contract apply",
+        "request health insurance regularization apply",
+        "update contract health insurance apply",
+        "update contract provident fund apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "absences list",
+      "summary": "Run the absences ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "absences",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit absences list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/absences"
+        }
+      ]
+    },
+    {
+      "path": "accounting v2 entries list",
+      "summary": "Run the accounting v2 entries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounting_v2_entries",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit accounting v2 entries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/accounting-v2"
+        }
+      ]
+    },
+    {
+      "path": "api get companies companyid accounting",
+      "summary": "Documented GET /companies/{companyId}/accounting (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit api get companies companyid accounting --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/accounting"
+        }
+      ],
+      "operation": "payfit.get.companies-companyid-accounting",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get companies companyid collaborators collaboratorid contracts contractid payslips payslipid",
+      "summary": "Documented GET /companies/{companyId}/collaborators/{collaboratorId}/contracts/{contractId}/payslips/{payslipId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit api get companies companyid collaborators collaboratorid contracts contractid payslips payslipid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/collaborators/{collaboratorId}/contracts/{contractId}/payslips/{payslipId}"
+        }
+      ],
+      "operation": "payfit.get.companies-companyid-collaborators-collaboratorid-contracts-contractid-payslips-payslipid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get companies companyid documents documentid",
+      "summary": "Documented GET /companies/{companyId}/documents/{documentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit api get companies companyid documents documentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/documents/{documentId}"
+        }
+      ],
+      "operation": "payfit.get.companies-companyid-documents-documentid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get companies companyid payment-files",
+      "summary": "Documented GET /companies/{companyId}/payment-files (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit api get companies companyid payment-files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/payment-files"
+        }
+      ],
+      "operation": "payfit.get.companies-companyid-payment-files",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get https oauth-payfit-com webhooks",
+      "summary": "Documented GET https://oauth.payfit.com/webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit api get https oauth-payfit-com webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "https://oauth.payfit.com/webhooks"
+        }
+      ],
+      "operation": "payfit.get.https-oauth-payfit-com-webhooks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post companies companyid billing-declarations",
+      "summary": "Documented POST /companies/{companyId}/billing-declarations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit api post companies companyid billing-declarations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies/{companyId}/billing-declarations"
+        }
+      ],
+      "operation": "payfit.post.companies-companyid-billing-declarations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post companies-fr companyid health-insurance-setup-sheets",
+      "summary": "Documented POST /companies-fr/{companyId}/health-insurance-setup-sheets (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit api post companies-fr companyid health-insurance-setup-sheets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies-fr/{companyId}/health-insurance-setup-sheets"
+        }
+      ],
+      "operation": "payfit.post.companies-fr-companyid-health-insurance-setup-sheets",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post https oauth-payfit-com introspect",
+      "summary": "Documented POST https://oauth.payfit.com/introspect (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit api post https oauth-payfit-com introspect --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "https://oauth.payfit.com/introspect"
+        }
+      ],
+      "operation": "payfit.post.https-oauth-payfit-com-introspect",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "auto enrolment documents list",
+      "summary": "Run the auto enrolment documents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "auto_enrolment_documents",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit auto enrolment documents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/auto-enrolment-documents"
+        }
+      ]
+    },
+    {
+      "path": "cancel absence apply",
+      "summary": "Plan and execute the cancel absence reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_absence",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "flags": [
+        {
+          "name": "absence_id",
+          "type": "string",
+          "summary": "Required absence id record field.",
+          "maps_to": "record.absence_id",
+          "required": true
+        },
+        {
+          "name": "company_id",
+          "type": "string",
+          "summary": "Required company id record field.",
+          "maps_to": "record.company_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm payfit cancel absence apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/companies/{companyId}/absences/{absenceId}"
+        }
+      ],
+      "risk": "external mutation; cancels an existing PayFit absence; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "collaborator list",
+      "summary": "Run the collaborator ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collaborator",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit collaborator list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/collaborators/{collaboratorId}"
+        }
+      ]
+    },
+    {
+      "path": "collaborator meal vouchers list",
+      "summary": "Run the collaborator meal vouchers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collaborator_meal_vouchers",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit collaborator meal vouchers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/collaborators/meal-vouchers"
+        }
+      ]
+    },
+    {
+      "path": "collaborator payslips list",
+      "summary": "Run the collaborator payslips ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collaborator_payslips",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit collaborator payslips list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/collaborators/{collaboratorId}/payslips"
+        }
+      ]
+    },
+    {
+      "path": "collaborators list",
+      "summary": "Run the collaborators ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collaborators",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit collaborators list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/collaborators"
+        }
+      ]
+    },
+    {
+      "path": "companies list",
+      "summary": "Run the companies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit companies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/companies"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "company contract fr list",
+      "summary": "Run the company contract fr ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_contract_fr",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit company contract fr list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/contracts-fr/{contractId}"
+        }
+      ]
+    },
+    {
+      "path": "company contract list",
+      "summary": "Run the company contract ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_contract",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit company contract list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/contracts/{contractId}"
+        }
+      ]
+    },
+    {
+      "path": "company contracts fr list",
+      "summary": "Run the company contracts fr ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_contracts_fr",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit company contracts fr list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/contracts-fr"
+        }
+      ]
+    },
+    {
+      "path": "company contracts list",
+      "summary": "Run the company contracts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_contracts",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit company contracts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/contracts"
+        }
+      ]
+    },
+    {
+      "path": "company fr list",
+      "summary": "Run the company fr ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_fr",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit company fr list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies-fr/{companyId}"
+        }
+      ]
+    },
+    {
+      "path": "company list",
+      "summary": "Run the company ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit company list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}"
+        }
+      ]
+    },
+    {
+      "path": "contracts list",
+      "summary": "Run the contracts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contracts",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit contracts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/contracts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "create absence apply",
+      "summary": "Plan and execute the create absence reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_absence",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit create absence apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies/{companyId}/absences"
+        }
+      ],
+      "risk": "external PayFit mutation; create absence; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create collaborator apply",
+      "summary": "Plan and execute the create collaborator reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_collaborator",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "flags": [
+        {
+          "name": "company_id",
+          "type": "string",
+          "summary": "Required company id record field.",
+          "maps_to": "record.company_id",
+          "required": true
+        },
+        {
+          "name": "firstName",
+          "type": "string",
+          "summary": "Required firstName record field.",
+          "maps_to": "record.firstName",
+          "required": true
+        },
+        {
+          "name": "lastName",
+          "type": "string",
+          "summary": "Required lastName record field.",
+          "maps_to": "record.lastName",
+          "required": true
+        },
+        {
+          "name": "personalEmail",
+          "type": "string",
+          "summary": "Required personalEmail record field.",
+          "maps_to": "record.personalEmail",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm payfit create collaborator apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies/{companyId}/collaborators"
+        }
+      ],
+      "risk": "external PayFit mutation; create collaborator; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create contract apply",
+      "summary": "Plan and execute the create contract reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contract",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "flags": [
+        {
+          "name": "collaborator_id",
+          "type": "string",
+          "summary": "Required collaborator id record field.",
+          "maps_to": "record.collaborator_id",
+          "required": true
+        },
+        {
+          "name": "company_id",
+          "type": "string",
+          "summary": "Required company id record field.",
+          "maps_to": "record.company_id",
+          "required": true
+        },
+        {
+          "name": "jobTitle",
+          "type": "string",
+          "summary": "Required jobTitle record field.",
+          "maps_to": "record.jobTitle",
+          "required": true
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "summary": "Required startDate record field.",
+          "maps_to": "record.startDate",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm payfit create contract apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies/{companyId}/collaborators/{collaboratorId}/contracts"
+        }
+      ],
+      "risk": "external PayFit mutation; create contract; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "employees list",
+      "summary": "Run the employees ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "employees",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit employees list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/employees"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "health insurance contracts list",
+      "summary": "Run the health insurance contracts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "health_insurance_contracts",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit health insurance contracts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/health-insurance-contracts"
+        }
+      ]
+    },
+    {
+      "path": "income tax documents list",
+      "summary": "Run the income tax documents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "income_tax_documents",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit income tax documents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/income-taxes-documents"
+        }
+      ]
+    },
+    {
+      "path": "payroll status list",
+      "summary": "Run the payroll status ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payroll_status",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit payroll status list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/payroll-status"
+        }
+      ]
+    },
+    {
+      "path": "provident fund contracts list",
+      "summary": "Run the provident fund contracts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "provident_fund_contracts",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit provident fund contracts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/provident-fund-contracts"
+        }
+      ]
+    },
+    {
+      "path": "request health insurance regularization apply",
+      "summary": "Plan and execute the request health insurance regularization reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "request_health_insurance_regularization",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit request health insurance regularization apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies/{companyId}/contracts-fr/{contractId}/regularization"
+        }
+      ],
+      "risk": "external PayFit mutation; request health insurance regularization; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update contract health insurance apply",
+      "summary": "Plan and execute the update contract health insurance reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_contract_health_insurance",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit update contract health insurance apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/companies/{companyId}/contracts-fr/{contractId}/health-insurance"
+        }
+      ],
+      "risk": "external PayFit mutation; update contract health insurance; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update contract provident fund apply",
+      "summary": "Plan and execute the update contract provident fund reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_contract_provident_fund",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit update contract provident fund apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/companies/{companyId}/contracts-fr/{contractId}/provident-fund"
+        }
+      ],
+      "risk": "external PayFit mutation; update contract provident fund; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "worked time by contract list",
+      "summary": "Run the worked time by contract ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "worked_time_by_contract",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "examples": [
+        "pm payfit worked time by contract list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/contracts/time"
+        }
+      ]
+    }
+  ]
+}

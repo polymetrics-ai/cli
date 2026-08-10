@@ -1,0 +1,3977 @@
+{
+  "tagline": "Run Twelve Data's declared streams and reverse-ETL actions.",
+  "usage": "pm twelve-data \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get ad",
+        "api get add",
+        "api get adosc",
+        "api get adx",
+        "api get adxr",
+        "api get analyst-ratings light",
+        "api get analyst-ratings us-equities",
+        "api get api-usage",
+        "api get apo",
+        "api get aroon",
+        "api get aroonosc",
+        "api get atr",
+        "api get avg",
+        "api get avgprice",
+        "api get balance-sheet",
+        "api get balance-sheet consolidated",
+        "api get bbands",
+        "api get beta",
+        "api get bonds",
+        "api get bop",
+        "api get cash-flow",
+        "api get cash-flow consolidated",
+        "api get cci",
+        "api get ceil",
+        "api get cmo",
+        "api get commodities",
+        "api get coppock",
+        "api get correl",
+        "api get countries",
+        "api get cross-listings",
+        "api get crsi",
+        "api get cryptocurrencies",
+        "api get cryptocurrency-exchanges",
+        "api get currency-conversion",
+        "api get dema",
+        "api get direct-holders",
+        "api get div",
+        "api get dividends",
+        "api get dividends-calendar",
+        "api get dpo",
+        "api get dx",
+        "api get earliest-timestamp",
+        "api get earnings",
+        "api get earnings-calendar",
+        "api get earnings-estimate",
+        "api get edgar-filings archive",
+        "api get ema",
+        "api get eod",
+        "api get eps-revisions",
+        "api get eps-trend",
+        "api get etf",
+        "api get etfs",
+        "api get etfs family",
+        "api get etfs list",
+        "api get etfs type",
+        "api get etfs world",
+        "api get etfs world composition",
+        "api get etfs world performance",
+        "api get etfs world risk",
+        "api get etfs world summary",
+        "api get exchange-rate",
+        "api get exchange-schedule",
+        "api get exchanges",
+        "api get exp",
+        "api get floor",
+        "api get fund-holders",
+        "api get funds",
+        "api get growth-estimates",
+        "api get heikinashicandles",
+        "api get hlc3",
+        "api get ht-dcperiod",
+        "api get ht-dcphase",
+        "api get ht-phasor",
+        "api get ht-sine",
+        "api get ht-trendline",
+        "api get ht-trendmode",
+        "api get ichimoku",
+        "api get income-statement",
+        "api get income-statement consolidated",
+        "api get indices",
+        "api get insider-transactions",
+        "api get institutional-holders",
+        "api get instrument-type",
+        "api get intervals",
+        "api get ipo-calendar",
+        "api get kama",
+        "api get keltner",
+        "api get key-executives",
+        "api get kst",
+        "api get last-change endpoint",
+        "api get linearreg",
+        "api get linearregangle",
+        "api get linearregintercept",
+        "api get linearregslope",
+        "api get ln",
+        "api get log10",
+        "api get logo",
+        "api get ma",
+        "api get macd",
+        "api get macd-slope",
+        "api get macdext",
+        "api get mama",
+        "api get market-cap",
+        "api get market-movers market",
+        "api get market-state",
+        "api get max",
+        "api get maxindex",
+        "api get mcginley-dynamic",
+        "api get medprice",
+        "api get mfi",
+        "api get midpoint",
+        "api get midprice",
+        "api get min",
+        "api get minindex",
+        "api get minmax",
+        "api get minmaxindex",
+        "api get minus-di",
+        "api get minus-dm",
+        "api get mom",
+        "api get money-market-funds list",
+        "api get money-market-funds world",
+        "api get mult",
+        "api get mutual-funds family",
+        "api get mutual-funds list",
+        "api get mutual-funds type",
+        "api get mutual-funds world",
+        "api get mutual-funds world composition",
+        "api get mutual-funds world performance",
+        "api get mutual-funds world purchase-info",
+        "api get mutual-funds world ratings",
+        "api get mutual-funds world risk",
+        "api get mutual-funds world summary",
+        "api get mutual-funds world sustainability",
+        "api get natr",
+        "api get obv",
+        "api get percent-b",
+        "api get pivot-points-hl",
+        "api get plus-di",
+        "api get plus-dm",
+        "api get ppo",
+        "api get press-releases",
+        "api get price",
+        "api get price-target",
+        "api get profile",
+        "api get recommendations",
+        "api get revenue-estimate",
+        "api get roc",
+        "api get rocp",
+        "api get rocr",
+        "api get rocr100",
+        "api get rsi",
+        "api get rvol",
+        "api get sanctions source",
+        "api get sar",
+        "api get sarext",
+        "api get sma",
+        "api get splits",
+        "api get splits-calendar",
+        "api get sqrt",
+        "api get statistics",
+        "api get stddev",
+        "api get stoch",
+        "api get stochf",
+        "api get stochrsi",
+        "api get sub",
+        "api get sum",
+        "api get supertrend",
+        "api get supertrend-heikinashicandles",
+        "api get symbol-search",
+        "api get t3ma",
+        "api get tax-info",
+        "api get technical-indicators",
+        "api get tema",
+        "api get time-series cross",
+        "api get trange",
+        "api get trima",
+        "api get tsf",
+        "api get typprice",
+        "api get ultosc",
+        "api get var",
+        "api get vwap",
+        "api get wclprice",
+        "api get willr",
+        "api get wma",
+        "forex pairs list",
+        "quote list",
+        "stocks list",
+        "time series list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api post batch"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get ad",
+      "summary": "Documented GET /ad (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ad --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ad"
+        }
+      ],
+      "operation": "twelve-data.get.ad",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get add",
+      "summary": "Documented GET /add (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get add --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/add"
+        }
+      ],
+      "operation": "twelve-data.get.add",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get adosc",
+      "summary": "Documented GET /adosc (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get adosc --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/adosc"
+        }
+      ],
+      "operation": "twelve-data.get.adosc",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get adx",
+      "summary": "Documented GET /adx (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get adx --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/adx"
+        }
+      ],
+      "operation": "twelve-data.get.adx",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get adxr",
+      "summary": "Documented GET /adxr (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get adxr --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/adxr"
+        }
+      ],
+      "operation": "twelve-data.get.adxr",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get analyst-ratings light",
+      "summary": "Documented GET /analyst_ratings/light (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get analyst-ratings light --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analyst_ratings/light"
+        }
+      ],
+      "operation": "twelve-data.get.analyst-ratings-light",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get analyst-ratings us-equities",
+      "summary": "Documented GET /analyst_ratings/us_equities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get analyst-ratings us-equities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analyst_ratings/us_equities"
+        }
+      ],
+      "operation": "twelve-data.get.analyst-ratings-us-equities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api-usage",
+      "summary": "Documented GET /api_usage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get api-usage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api_usage"
+        }
+      ],
+      "operation": "twelve-data.get.api-usage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get apo",
+      "summary": "Documented GET /apo (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get apo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/apo"
+        }
+      ],
+      "operation": "twelve-data.get.apo",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get aroon",
+      "summary": "Documented GET /aroon (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get aroon --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/aroon"
+        }
+      ],
+      "operation": "twelve-data.get.aroon",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get aroonosc",
+      "summary": "Documented GET /aroonosc (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get aroonosc --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/aroonosc"
+        }
+      ],
+      "operation": "twelve-data.get.aroonosc",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get atr",
+      "summary": "Documented GET /atr (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get atr --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/atr"
+        }
+      ],
+      "operation": "twelve-data.get.atr",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get avg",
+      "summary": "Documented GET /avg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get avg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/avg"
+        }
+      ],
+      "operation": "twelve-data.get.avg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get avgprice",
+      "summary": "Documented GET /avgprice (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get avgprice --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/avgprice"
+        }
+      ],
+      "operation": "twelve-data.get.avgprice",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get balance-sheet",
+      "summary": "Documented GET /balance_sheet (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get balance-sheet --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/balance_sheet"
+        }
+      ],
+      "operation": "twelve-data.get.balance-sheet",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get balance-sheet consolidated",
+      "summary": "Documented GET /balance_sheet/consolidated (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get balance-sheet consolidated --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/balance_sheet/consolidated"
+        }
+      ],
+      "operation": "twelve-data.get.balance-sheet-consolidated",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bbands",
+      "summary": "Documented GET /bbands (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get bbands --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bbands"
+        }
+      ],
+      "operation": "twelve-data.get.bbands",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get beta",
+      "summary": "Documented GET /beta (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get beta --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/beta"
+        }
+      ],
+      "operation": "twelve-data.get.beta",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bonds",
+      "summary": "Documented GET /bonds (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get bonds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bonds"
+        }
+      ],
+      "operation": "twelve-data.get.bonds",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bop",
+      "summary": "Documented GET /bop (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get bop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bop"
+        }
+      ],
+      "operation": "twelve-data.get.bop",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cash-flow",
+      "summary": "Documented GET /cash_flow (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get cash-flow --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cash_flow"
+        }
+      ],
+      "operation": "twelve-data.get.cash-flow",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cash-flow consolidated",
+      "summary": "Documented GET /cash_flow/consolidated (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get cash-flow consolidated --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cash_flow/consolidated"
+        }
+      ],
+      "operation": "twelve-data.get.cash-flow-consolidated",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cci",
+      "summary": "Documented GET /cci (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get cci --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cci"
+        }
+      ],
+      "operation": "twelve-data.get.cci",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ceil",
+      "summary": "Documented GET /ceil (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ceil --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ceil"
+        }
+      ],
+      "operation": "twelve-data.get.ceil",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cmo",
+      "summary": "Documented GET /cmo (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get cmo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cmo"
+        }
+      ],
+      "operation": "twelve-data.get.cmo",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get commodities",
+      "summary": "Documented GET /commodities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get commodities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/commodities"
+        }
+      ],
+      "operation": "twelve-data.get.commodities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coppock",
+      "summary": "Documented GET /coppock (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get coppock --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coppock"
+        }
+      ],
+      "operation": "twelve-data.get.coppock",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get correl",
+      "summary": "Documented GET /correl (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get correl --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/correl"
+        }
+      ],
+      "operation": "twelve-data.get.correl",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get countries",
+      "summary": "Documented GET /countries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get countries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/countries"
+        }
+      ],
+      "operation": "twelve-data.get.countries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cross-listings",
+      "summary": "Documented GET /cross_listings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get cross-listings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cross_listings"
+        }
+      ],
+      "operation": "twelve-data.get.cross-listings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get crsi",
+      "summary": "Documented GET /crsi (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get crsi --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/crsi"
+        }
+      ],
+      "operation": "twelve-data.get.crsi",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cryptocurrencies",
+      "summary": "Documented GET /cryptocurrencies (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get cryptocurrencies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cryptocurrencies"
+        }
+      ],
+      "operation": "twelve-data.get.cryptocurrencies",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get cryptocurrency-exchanges",
+      "summary": "Documented GET /cryptocurrency_exchanges (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get cryptocurrency-exchanges --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/cryptocurrency_exchanges"
+        }
+      ],
+      "operation": "twelve-data.get.cryptocurrency-exchanges",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get currency-conversion",
+      "summary": "Documented GET /currency_conversion (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get currency-conversion --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/currency_conversion"
+        }
+      ],
+      "operation": "twelve-data.get.currency-conversion",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dema",
+      "summary": "Documented GET /dema (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get dema --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dema"
+        }
+      ],
+      "operation": "twelve-data.get.dema",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get direct-holders",
+      "summary": "Documented GET /direct_holders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get direct-holders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/direct_holders"
+        }
+      ],
+      "operation": "twelve-data.get.direct-holders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get div",
+      "summary": "Documented GET /div (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get div --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/div"
+        }
+      ],
+      "operation": "twelve-data.get.div",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dividends",
+      "summary": "Documented GET /dividends (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get dividends --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dividends"
+        }
+      ],
+      "operation": "twelve-data.get.dividends",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dividends-calendar",
+      "summary": "Documented GET /dividends_calendar (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get dividends-calendar --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dividends_calendar"
+        }
+      ],
+      "operation": "twelve-data.get.dividends-calendar",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dpo",
+      "summary": "Documented GET /dpo (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get dpo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dpo"
+        }
+      ],
+      "operation": "twelve-data.get.dpo",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dx",
+      "summary": "Documented GET /dx (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get dx --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dx"
+        }
+      ],
+      "operation": "twelve-data.get.dx",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get earliest-timestamp",
+      "summary": "Documented GET /earliest_timestamp (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get earliest-timestamp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/earliest_timestamp"
+        }
+      ],
+      "operation": "twelve-data.get.earliest-timestamp",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get earnings",
+      "summary": "Documented GET /earnings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get earnings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/earnings"
+        }
+      ],
+      "operation": "twelve-data.get.earnings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get earnings-calendar",
+      "summary": "Documented GET /earnings_calendar (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get earnings-calendar --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/earnings_calendar"
+        }
+      ],
+      "operation": "twelve-data.get.earnings-calendar",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get earnings-estimate",
+      "summary": "Documented GET /earnings_estimate (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get earnings-estimate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/earnings_estimate"
+        }
+      ],
+      "operation": "twelve-data.get.earnings-estimate",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get edgar-filings archive",
+      "summary": "Documented GET /edgar_filings/archive (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get edgar-filings archive --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/edgar_filings/archive"
+        }
+      ],
+      "operation": "twelve-data.get.edgar-filings-archive",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ema",
+      "summary": "Documented GET /ema (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ema --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ema"
+        }
+      ],
+      "operation": "twelve-data.get.ema",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get eod",
+      "summary": "Documented GET /eod (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get eod --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/eod"
+        }
+      ],
+      "operation": "twelve-data.get.eod",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get eps-revisions",
+      "summary": "Documented GET /eps_revisions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get eps-revisions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/eps_revisions"
+        }
+      ],
+      "operation": "twelve-data.get.eps-revisions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get eps-trend",
+      "summary": "Documented GET /eps_trend (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get eps-trend --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/eps_trend"
+        }
+      ],
+      "operation": "twelve-data.get.eps-trend",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get etf",
+      "summary": "Documented GET /etf (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get etf --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/etf"
+        }
+      ],
+      "operation": "twelve-data.get.etf",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get etfs",
+      "summary": "Documented GET /etfs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get etfs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/etfs"
+        }
+      ],
+      "operation": "twelve-data.get.etfs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get etfs family",
+      "summary": "Documented GET /etfs/family (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get etfs family --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/etfs/family"
+        }
+      ],
+      "operation": "twelve-data.get.etfs-family",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get etfs list",
+      "summary": "Documented GET /etfs/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get etfs list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/etfs/list"
+        }
+      ],
+      "operation": "twelve-data.get.etfs-list",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get etfs type",
+      "summary": "Documented GET /etfs/type (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get etfs type --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/etfs/type"
+        }
+      ],
+      "operation": "twelve-data.get.etfs-type",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get etfs world",
+      "summary": "Documented GET /etfs/world (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get etfs world --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/etfs/world"
+        }
+      ],
+      "operation": "twelve-data.get.etfs-world",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get etfs world composition",
+      "summary": "Documented GET /etfs/world/composition (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get etfs world composition --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/etfs/world/composition"
+        }
+      ],
+      "operation": "twelve-data.get.etfs-world-composition",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get etfs world performance",
+      "summary": "Documented GET /etfs/world/performance (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get etfs world performance --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/etfs/world/performance"
+        }
+      ],
+      "operation": "twelve-data.get.etfs-world-performance",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get etfs world risk",
+      "summary": "Documented GET /etfs/world/risk (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get etfs world risk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/etfs/world/risk"
+        }
+      ],
+      "operation": "twelve-data.get.etfs-world-risk",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get etfs world summary",
+      "summary": "Documented GET /etfs/world/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get etfs world summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/etfs/world/summary"
+        }
+      ],
+      "operation": "twelve-data.get.etfs-world-summary",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get exchange-rate",
+      "summary": "Documented GET /exchange_rate (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get exchange-rate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exchange_rate"
+        }
+      ],
+      "operation": "twelve-data.get.exchange-rate",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get exchange-schedule",
+      "summary": "Documented GET /exchange_schedule (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get exchange-schedule --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exchange_schedule"
+        }
+      ],
+      "operation": "twelve-data.get.exchange-schedule",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get exchanges",
+      "summary": "Documented GET /exchanges (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get exchanges --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exchanges"
+        }
+      ],
+      "operation": "twelve-data.get.exchanges",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get exp",
+      "summary": "Documented GET /exp (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get exp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/exp"
+        }
+      ],
+      "operation": "twelve-data.get.exp",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get floor",
+      "summary": "Documented GET /floor (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get floor --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/floor"
+        }
+      ],
+      "operation": "twelve-data.get.floor",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get fund-holders",
+      "summary": "Documented GET /fund_holders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get fund-holders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fund_holders"
+        }
+      ],
+      "operation": "twelve-data.get.fund-holders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get funds",
+      "summary": "Documented GET /funds (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get funds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/funds"
+        }
+      ],
+      "operation": "twelve-data.get.funds",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get growth-estimates",
+      "summary": "Documented GET /growth_estimates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get growth-estimates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/growth_estimates"
+        }
+      ],
+      "operation": "twelve-data.get.growth-estimates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get heikinashicandles",
+      "summary": "Documented GET /heikinashicandles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get heikinashicandles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/heikinashicandles"
+        }
+      ],
+      "operation": "twelve-data.get.heikinashicandles",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get hlc3",
+      "summary": "Documented GET /hlc3 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get hlc3 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/hlc3"
+        }
+      ],
+      "operation": "twelve-data.get.hlc3",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ht-dcperiod",
+      "summary": "Documented GET /ht_dcperiod (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ht-dcperiod --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ht_dcperiod"
+        }
+      ],
+      "operation": "twelve-data.get.ht-dcperiod",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ht-dcphase",
+      "summary": "Documented GET /ht_dcphase (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ht-dcphase --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ht_dcphase"
+        }
+      ],
+      "operation": "twelve-data.get.ht-dcphase",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ht-phasor",
+      "summary": "Documented GET /ht_phasor (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ht-phasor --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ht_phasor"
+        }
+      ],
+      "operation": "twelve-data.get.ht-phasor",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ht-sine",
+      "summary": "Documented GET /ht_sine (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ht-sine --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ht_sine"
+        }
+      ],
+      "operation": "twelve-data.get.ht-sine",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ht-trendline",
+      "summary": "Documented GET /ht_trendline (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ht-trendline --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ht_trendline"
+        }
+      ],
+      "operation": "twelve-data.get.ht-trendline",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ht-trendmode",
+      "summary": "Documented GET /ht_trendmode (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ht-trendmode --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ht_trendmode"
+        }
+      ],
+      "operation": "twelve-data.get.ht-trendmode",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ichimoku",
+      "summary": "Documented GET /ichimoku (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ichimoku --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ichimoku"
+        }
+      ],
+      "operation": "twelve-data.get.ichimoku",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get income-statement",
+      "summary": "Documented GET /income_statement (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get income-statement --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/income_statement"
+        }
+      ],
+      "operation": "twelve-data.get.income-statement",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get income-statement consolidated",
+      "summary": "Documented GET /income_statement/consolidated (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get income-statement consolidated --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/income_statement/consolidated"
+        }
+      ],
+      "operation": "twelve-data.get.income-statement-consolidated",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get indices",
+      "summary": "Documented GET /indices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get indices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/indices"
+        }
+      ],
+      "operation": "twelve-data.get.indices",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get insider-transactions",
+      "summary": "Documented GET /insider_transactions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get insider-transactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insider_transactions"
+        }
+      ],
+      "operation": "twelve-data.get.insider-transactions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get institutional-holders",
+      "summary": "Documented GET /institutional_holders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get institutional-holders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/institutional_holders"
+        }
+      ],
+      "operation": "twelve-data.get.institutional-holders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get instrument-type",
+      "summary": "Documented GET /instrument_type (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get instrument-type --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/instrument_type"
+        }
+      ],
+      "operation": "twelve-data.get.instrument-type",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get intervals",
+      "summary": "Documented GET /intervals (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get intervals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/intervals"
+        }
+      ],
+      "operation": "twelve-data.get.intervals",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ipo-calendar",
+      "summary": "Documented GET /ipo_calendar (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ipo-calendar --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ipo_calendar"
+        }
+      ],
+      "operation": "twelve-data.get.ipo-calendar",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get kama",
+      "summary": "Documented GET /kama (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get kama --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kama"
+        }
+      ],
+      "operation": "twelve-data.get.kama",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get keltner",
+      "summary": "Documented GET /keltner (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get keltner --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/keltner"
+        }
+      ],
+      "operation": "twelve-data.get.keltner",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get key-executives",
+      "summary": "Documented GET /key_executives (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get key-executives --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/key_executives"
+        }
+      ],
+      "operation": "twelve-data.get.key-executives",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get kst",
+      "summary": "Documented GET /kst (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get kst --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kst"
+        }
+      ],
+      "operation": "twelve-data.get.kst",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get last-change endpoint",
+      "summary": "Documented GET /last_change/{endpoint} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get last-change endpoint --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/last_change/{endpoint}"
+        }
+      ],
+      "operation": "twelve-data.get.last-change-endpoint",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get linearreg",
+      "summary": "Documented GET /linearreg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get linearreg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/linearreg"
+        }
+      ],
+      "operation": "twelve-data.get.linearreg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get linearregangle",
+      "summary": "Documented GET /linearregangle (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get linearregangle --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/linearregangle"
+        }
+      ],
+      "operation": "twelve-data.get.linearregangle",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get linearregintercept",
+      "summary": "Documented GET /linearregintercept (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get linearregintercept --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/linearregintercept"
+        }
+      ],
+      "operation": "twelve-data.get.linearregintercept",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get linearregslope",
+      "summary": "Documented GET /linearregslope (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get linearregslope --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/linearregslope"
+        }
+      ],
+      "operation": "twelve-data.get.linearregslope",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ln",
+      "summary": "Documented GET /ln (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ln --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ln"
+        }
+      ],
+      "operation": "twelve-data.get.ln",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get log10",
+      "summary": "Documented GET /log10 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get log10 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/log10"
+        }
+      ],
+      "operation": "twelve-data.get.log10",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get logo",
+      "summary": "Documented GET /logo (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get logo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/logo"
+        }
+      ],
+      "operation": "twelve-data.get.logo",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ma",
+      "summary": "Documented GET /ma (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ma --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ma"
+        }
+      ],
+      "operation": "twelve-data.get.ma",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get macd",
+      "summary": "Documented GET /macd (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get macd --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/macd"
+        }
+      ],
+      "operation": "twelve-data.get.macd",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get macd-slope",
+      "summary": "Documented GET /macd_slope (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get macd-slope --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/macd_slope"
+        }
+      ],
+      "operation": "twelve-data.get.macd-slope",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get macdext",
+      "summary": "Documented GET /macdext (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get macdext --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/macdext"
+        }
+      ],
+      "operation": "twelve-data.get.macdext",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mama",
+      "summary": "Documented GET /mama (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mama --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mama"
+        }
+      ],
+      "operation": "twelve-data.get.mama",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get market-cap",
+      "summary": "Documented GET /market_cap (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get market-cap --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/market_cap"
+        }
+      ],
+      "operation": "twelve-data.get.market-cap",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get market-movers market",
+      "summary": "Documented GET /market_movers/{market} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get market-movers market --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/market_movers/{market}"
+        }
+      ],
+      "operation": "twelve-data.get.market-movers-market",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get market-state",
+      "summary": "Documented GET /market_state (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get market-state --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/market_state"
+        }
+      ],
+      "operation": "twelve-data.get.market-state",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get max",
+      "summary": "Documented GET /max (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get max --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/max"
+        }
+      ],
+      "operation": "twelve-data.get.max",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get maxindex",
+      "summary": "Documented GET /maxindex (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get maxindex --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/maxindex"
+        }
+      ],
+      "operation": "twelve-data.get.maxindex",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mcginley-dynamic",
+      "summary": "Documented GET /mcginley_dynamic (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mcginley-dynamic --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mcginley_dynamic"
+        }
+      ],
+      "operation": "twelve-data.get.mcginley-dynamic",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get medprice",
+      "summary": "Documented GET /medprice (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get medprice --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/medprice"
+        }
+      ],
+      "operation": "twelve-data.get.medprice",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mfi",
+      "summary": "Documented GET /mfi (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mfi --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mfi"
+        }
+      ],
+      "operation": "twelve-data.get.mfi",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get midpoint",
+      "summary": "Documented GET /midpoint (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get midpoint --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/midpoint"
+        }
+      ],
+      "operation": "twelve-data.get.midpoint",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get midprice",
+      "summary": "Documented GET /midprice (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get midprice --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/midprice"
+        }
+      ],
+      "operation": "twelve-data.get.midprice",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get min",
+      "summary": "Documented GET /min (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get min --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/min"
+        }
+      ],
+      "operation": "twelve-data.get.min",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get minindex",
+      "summary": "Documented GET /minindex (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get minindex --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/minindex"
+        }
+      ],
+      "operation": "twelve-data.get.minindex",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get minmax",
+      "summary": "Documented GET /minmax (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get minmax --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/minmax"
+        }
+      ],
+      "operation": "twelve-data.get.minmax",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get minmaxindex",
+      "summary": "Documented GET /minmaxindex (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get minmaxindex --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/minmaxindex"
+        }
+      ],
+      "operation": "twelve-data.get.minmaxindex",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get minus-di",
+      "summary": "Documented GET /minus_di (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get minus-di --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/minus_di"
+        }
+      ],
+      "operation": "twelve-data.get.minus-di",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get minus-dm",
+      "summary": "Documented GET /minus_dm (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get minus-dm --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/minus_dm"
+        }
+      ],
+      "operation": "twelve-data.get.minus-dm",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mom",
+      "summary": "Documented GET /mom (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mom --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mom"
+        }
+      ],
+      "operation": "twelve-data.get.mom",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get money-market-funds list",
+      "summary": "Documented GET /money_market_funds/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get money-market-funds list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/money_market_funds/list"
+        }
+      ],
+      "operation": "twelve-data.get.money-market-funds-list",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get money-market-funds world",
+      "summary": "Documented GET /money_market_funds/world (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get money-market-funds world --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/money_market_funds/world"
+        }
+      ],
+      "operation": "twelve-data.get.money-market-funds-world",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mult",
+      "summary": "Documented GET /mult (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mult --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mult"
+        }
+      ],
+      "operation": "twelve-data.get.mult",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mutual-funds family",
+      "summary": "Documented GET /mutual_funds/family (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mutual-funds family --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mutual_funds/family"
+        }
+      ],
+      "operation": "twelve-data.get.mutual-funds-family",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mutual-funds list",
+      "summary": "Documented GET /mutual_funds/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mutual-funds list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mutual_funds/list"
+        }
+      ],
+      "operation": "twelve-data.get.mutual-funds-list",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mutual-funds type",
+      "summary": "Documented GET /mutual_funds/type (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mutual-funds type --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mutual_funds/type"
+        }
+      ],
+      "operation": "twelve-data.get.mutual-funds-type",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mutual-funds world",
+      "summary": "Documented GET /mutual_funds/world (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mutual-funds world --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mutual_funds/world"
+        }
+      ],
+      "operation": "twelve-data.get.mutual-funds-world",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mutual-funds world composition",
+      "summary": "Documented GET /mutual_funds/world/composition (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mutual-funds world composition --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mutual_funds/world/composition"
+        }
+      ],
+      "operation": "twelve-data.get.mutual-funds-world-composition",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mutual-funds world performance",
+      "summary": "Documented GET /mutual_funds/world/performance (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mutual-funds world performance --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mutual_funds/world/performance"
+        }
+      ],
+      "operation": "twelve-data.get.mutual-funds-world-performance",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mutual-funds world purchase-info",
+      "summary": "Documented GET /mutual_funds/world/purchase_info (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mutual-funds world purchase-info --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mutual_funds/world/purchase_info"
+        }
+      ],
+      "operation": "twelve-data.get.mutual-funds-world-purchase-info",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mutual-funds world ratings",
+      "summary": "Documented GET /mutual_funds/world/ratings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mutual-funds world ratings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mutual_funds/world/ratings"
+        }
+      ],
+      "operation": "twelve-data.get.mutual-funds-world-ratings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mutual-funds world risk",
+      "summary": "Documented GET /mutual_funds/world/risk (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mutual-funds world risk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mutual_funds/world/risk"
+        }
+      ],
+      "operation": "twelve-data.get.mutual-funds-world-risk",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mutual-funds world summary",
+      "summary": "Documented GET /mutual_funds/world/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mutual-funds world summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mutual_funds/world/summary"
+        }
+      ],
+      "operation": "twelve-data.get.mutual-funds-world-summary",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mutual-funds world sustainability",
+      "summary": "Documented GET /mutual_funds/world/sustainability (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get mutual-funds world sustainability --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mutual_funds/world/sustainability"
+        }
+      ],
+      "operation": "twelve-data.get.mutual-funds-world-sustainability",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get natr",
+      "summary": "Documented GET /natr (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get natr --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/natr"
+        }
+      ],
+      "operation": "twelve-data.get.natr",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get obv",
+      "summary": "Documented GET /obv (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get obv --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/obv"
+        }
+      ],
+      "operation": "twelve-data.get.obv",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get percent-b",
+      "summary": "Documented GET /percent_b (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get percent-b --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/percent_b"
+        }
+      ],
+      "operation": "twelve-data.get.percent-b",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pivot-points-hl",
+      "summary": "Documented GET /pivot_points_hl (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get pivot-points-hl --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pivot_points_hl"
+        }
+      ],
+      "operation": "twelve-data.get.pivot-points-hl",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plus-di",
+      "summary": "Documented GET /plus_di (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get plus-di --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plus_di"
+        }
+      ],
+      "operation": "twelve-data.get.plus-di",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plus-dm",
+      "summary": "Documented GET /plus_dm (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get plus-dm --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plus_dm"
+        }
+      ],
+      "operation": "twelve-data.get.plus-dm",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ppo",
+      "summary": "Documented GET /ppo (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ppo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ppo"
+        }
+      ],
+      "operation": "twelve-data.get.ppo",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get press-releases",
+      "summary": "Documented GET /press_releases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get press-releases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/press_releases"
+        }
+      ],
+      "operation": "twelve-data.get.press-releases",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get price",
+      "summary": "Documented GET /price (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get price --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/price"
+        }
+      ],
+      "operation": "twelve-data.get.price",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get price-target",
+      "summary": "Documented GET /price_target (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get price-target --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/price_target"
+        }
+      ],
+      "operation": "twelve-data.get.price-target",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get profile",
+      "summary": "Documented GET /profile (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get profile --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/profile"
+        }
+      ],
+      "operation": "twelve-data.get.profile",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recommendations",
+      "summary": "Documented GET /recommendations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get recommendations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recommendations"
+        }
+      ],
+      "operation": "twelve-data.get.recommendations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get revenue-estimate",
+      "summary": "Documented GET /revenue_estimate (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get revenue-estimate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/revenue_estimate"
+        }
+      ],
+      "operation": "twelve-data.get.revenue-estimate",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get roc",
+      "summary": "Documented GET /roc (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get roc --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/roc"
+        }
+      ],
+      "operation": "twelve-data.get.roc",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get rocp",
+      "summary": "Documented GET /rocp (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get rocp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rocp"
+        }
+      ],
+      "operation": "twelve-data.get.rocp",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get rocr",
+      "summary": "Documented GET /rocr (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get rocr --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rocr"
+        }
+      ],
+      "operation": "twelve-data.get.rocr",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get rocr100",
+      "summary": "Documented GET /rocr100 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get rocr100 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rocr100"
+        }
+      ],
+      "operation": "twelve-data.get.rocr100",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get rsi",
+      "summary": "Documented GET /rsi (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get rsi --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rsi"
+        }
+      ],
+      "operation": "twelve-data.get.rsi",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get rvol",
+      "summary": "Documented GET /rvol (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get rvol --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rvol"
+        }
+      ],
+      "operation": "twelve-data.get.rvol",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sanctions source",
+      "summary": "Documented GET /sanctions/{source} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get sanctions source --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sanctions/{source}"
+        }
+      ],
+      "operation": "twelve-data.get.sanctions-source",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sar",
+      "summary": "Documented GET /sar (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get sar --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sar"
+        }
+      ],
+      "operation": "twelve-data.get.sar",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sarext",
+      "summary": "Documented GET /sarext (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get sarext --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sarext"
+        }
+      ],
+      "operation": "twelve-data.get.sarext",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sma",
+      "summary": "Documented GET /sma (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get sma --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sma"
+        }
+      ],
+      "operation": "twelve-data.get.sma",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get splits",
+      "summary": "Documented GET /splits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get splits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/splits"
+        }
+      ],
+      "operation": "twelve-data.get.splits",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get splits-calendar",
+      "summary": "Documented GET /splits_calendar (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get splits-calendar --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/splits_calendar"
+        }
+      ],
+      "operation": "twelve-data.get.splits-calendar",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sqrt",
+      "summary": "Documented GET /sqrt (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get sqrt --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sqrt"
+        }
+      ],
+      "operation": "twelve-data.get.sqrt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get statistics",
+      "summary": "Documented GET /statistics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get statistics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/statistics"
+        }
+      ],
+      "operation": "twelve-data.get.statistics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stddev",
+      "summary": "Documented GET /stddev (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get stddev --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stddev"
+        }
+      ],
+      "operation": "twelve-data.get.stddev",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stoch",
+      "summary": "Documented GET /stoch (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get stoch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stoch"
+        }
+      ],
+      "operation": "twelve-data.get.stoch",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stochf",
+      "summary": "Documented GET /stochf (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get stochf --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stochf"
+        }
+      ],
+      "operation": "twelve-data.get.stochf",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stochrsi",
+      "summary": "Documented GET /stochrsi (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get stochrsi --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stochrsi"
+        }
+      ],
+      "operation": "twelve-data.get.stochrsi",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sub",
+      "summary": "Documented GET /sub (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get sub --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sub"
+        }
+      ],
+      "operation": "twelve-data.get.sub",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sum",
+      "summary": "Documented GET /sum (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get sum --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sum"
+        }
+      ],
+      "operation": "twelve-data.get.sum",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get supertrend",
+      "summary": "Documented GET /supertrend (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get supertrend --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/supertrend"
+        }
+      ],
+      "operation": "twelve-data.get.supertrend",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get supertrend-heikinashicandles",
+      "summary": "Documented GET /supertrend_heikinashicandles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get supertrend-heikinashicandles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/supertrend_heikinashicandles"
+        }
+      ],
+      "operation": "twelve-data.get.supertrend-heikinashicandles",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get symbol-search",
+      "summary": "Documented GET /symbol_search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get symbol-search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/symbol_search"
+        }
+      ],
+      "operation": "twelve-data.get.symbol-search",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get t3ma",
+      "summary": "Documented GET /t3ma (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get t3ma --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/t3ma"
+        }
+      ],
+      "operation": "twelve-data.get.t3ma",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tax-info",
+      "summary": "Documented GET /tax_info (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get tax-info --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tax_info"
+        }
+      ],
+      "operation": "twelve-data.get.tax-info",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get technical-indicators",
+      "summary": "Documented GET /technical_indicators (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get technical-indicators --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/technical_indicators"
+        }
+      ],
+      "operation": "twelve-data.get.technical-indicators",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tema",
+      "summary": "Documented GET /tema (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get tema --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tema"
+        }
+      ],
+      "operation": "twelve-data.get.tema",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get time-series cross",
+      "summary": "Documented GET /time_series/cross (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get time-series cross --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/time_series/cross"
+        }
+      ],
+      "operation": "twelve-data.get.time-series-cross",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get trange",
+      "summary": "Documented GET /trange (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get trange --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/trange"
+        }
+      ],
+      "operation": "twelve-data.get.trange",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get trima",
+      "summary": "Documented GET /trima (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get trima --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/trima"
+        }
+      ],
+      "operation": "twelve-data.get.trima",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tsf",
+      "summary": "Documented GET /tsf (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get tsf --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tsf"
+        }
+      ],
+      "operation": "twelve-data.get.tsf",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get typprice",
+      "summary": "Documented GET /typprice (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get typprice --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/typprice"
+        }
+      ],
+      "operation": "twelve-data.get.typprice",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ultosc",
+      "summary": "Documented GET /ultosc (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get ultosc --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ultosc"
+        }
+      ],
+      "operation": "twelve-data.get.ultosc",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get var",
+      "summary": "Documented GET /var (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get var --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/var"
+        }
+      ],
+      "operation": "twelve-data.get.var",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get vwap",
+      "summary": "Documented GET /vwap (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get vwap --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vwap"
+        }
+      ],
+      "operation": "twelve-data.get.vwap",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get wclprice",
+      "summary": "Documented GET /wclprice (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get wclprice --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/wclprice"
+        }
+      ],
+      "operation": "twelve-data.get.wclprice",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get willr",
+      "summary": "Documented GET /willr (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get willr --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/willr"
+        }
+      ],
+      "operation": "twelve-data.get.willr",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get wma",
+      "summary": "Documented GET /wma (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api get wma --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/wma"
+        }
+      ],
+      "operation": "twelve-data.get.wma",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post batch",
+      "summary": "Documented POST /batch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data api post batch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/batch"
+        }
+      ],
+      "operation": "twelve-data.post.batch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "forex pairs list",
+      "summary": "Run the forex pairs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "forex_pairs",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data forex pairs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forex_pairs"
+        }
+      ]
+    },
+    {
+      "path": "quote list",
+      "summary": "Run the quote ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "quote",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data quote list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/quote"
+        }
+      ]
+    },
+    {
+      "path": "stocks list",
+      "summary": "Run the stocks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stocks",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data stocks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks"
+        }
+      ]
+    },
+    {
+      "path": "time series list",
+      "summary": "Run the time series ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "time_series",
+      "source_url": "https://api.twelvedata.com/doc/swagger/openapi.json",
+      "examples": [
+        "pm twelve-data time series list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/time_series"
+        }
+      ]
+    }
+  ]
+}

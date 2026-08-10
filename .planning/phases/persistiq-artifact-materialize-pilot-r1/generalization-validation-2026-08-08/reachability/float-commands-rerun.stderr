@@ -1,0 +1,5516 @@
+NAME
+  pm float api get milestones - Documented GET /milestones (not implemented)
+
+SYNOPSIS
+  pm float api get milestones [flags]
+  pm float api get milestones --help
+
+DESCRIPTION
+  Documented GET /milestones (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.milestones
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete clients client-id - Documented DELETE /clients/{client_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete clients client-id [flags]
+  pm float api delete clients client-id --help
+
+DESCRIPTION
+  Documented DELETE /clients/{client_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.clients-client-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get milestones milestone-id - Documented GET /milestones/{milestone_id} (not implemented)
+
+SYNOPSIS
+  pm float api get milestones milestone-id [flags]
+  pm float api get milestones milestone-id --help
+
+DESCRIPTION
+  Documented GET /milestones/{milestone_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.milestones-milestone-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete currencies currency-id - Documented DELETE /currencies/{currency_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete currencies currency-id [flags]
+  pm float api delete currencies currency-id --help
+
+DESCRIPTION
+  Documented DELETE /currencies/{currency_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.currencies-currency-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get people people-id - Documented GET /people/{people_id} (not implemented)
+
+SYNOPSIS
+  pm float api get people people-id [flags]
+  pm float api get people people-id --help
+
+DESCRIPTION
+  Documented GET /people/{people_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.people-people-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete departments department-id - Documented DELETE /departments/{department_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete departments department-id [flags]
+  pm float api delete departments department-id --help
+
+DESCRIPTION
+  Documented DELETE /departments/{department_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.departments-department-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get phases - Documented GET /phases (not implemented)
+
+SYNOPSIS
+  pm float api get phases [flags]
+  pm float api get phases --help
+
+DESCRIPTION
+  Documented GET /phases (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.phases
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete holidays holiday-id - Documented DELETE /holidays/{holiday_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete holidays holiday-id [flags]
+  pm float api delete holidays holiday-id --help
+
+DESCRIPTION
+  Documented DELETE /holidays/{holiday_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.holidays-holiday-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get phases phase-id - Documented GET /phases/{phase_id} (not implemented)
+
+SYNOPSIS
+  pm float api get phases phase-id [flags]
+  pm float api get phases phase-id --help
+
+DESCRIPTION
+  Documented GET /phases/{phase_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.phases-phase-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete logged-time logged-time-id - Documented DELETE /logged-time/{logged_time_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete logged-time logged-time-id [flags]
+  pm float api delete logged-time logged-time-id --help
+
+DESCRIPTION
+  Documented DELETE /logged-time/{logged_time_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.logged-time-logged-time-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-expenses - Documented GET /project-expenses (not implemented)
+
+SYNOPSIS
+  pm float api get project-expenses [flags]
+  pm float api get project-expenses --help
+
+DESCRIPTION
+  Documented GET /project-expenses (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-expenses
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete milestones milestone-id - Documented DELETE /milestones/{milestone_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete milestones milestone-id [flags]
+  pm float api delete milestones milestone-id --help
+
+DESCRIPTION
+  Documented DELETE /milestones/{milestone_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.milestones-milestone-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-expenses project-expense-id - Documented GET /project-expenses/{project_expense_id} (not implemented)
+
+SYNOPSIS
+  pm float api get project-expenses project-expense-id [flags]
+  pm float api get project-expenses project-expense-id --help
+
+DESCRIPTION
+  Documented GET /project-expenses/{project_expense_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-expenses-project-expense-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete people people-id - Documented DELETE /people/{people_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete people people-id [flags]
+  pm float api delete people people-id --help
+
+DESCRIPTION
+  Documented DELETE /people/{people_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.people-people-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-stages - Documented GET /project-stages (not implemented)
+
+SYNOPSIS
+  pm float api get project-stages [flags]
+  pm float api get project-stages --help
+
+DESCRIPTION
+  Documented GET /project-stages (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-stages
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete phases phase-id - Documented DELETE /phases/{phase_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete phases phase-id [flags]
+  pm float api delete phases phase-id --help
+
+DESCRIPTION
+  Documented DELETE /phases/{phase_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.phases-phase-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-stages id - Documented GET /project-stages/{id} (not implemented)
+
+SYNOPSIS
+  pm float api get project-stages id [flags]
+  pm float api get project-stages id --help
+
+DESCRIPTION
+  Documented GET /project-stages/{id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-stages-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete project-expenses project-expense-id - Documented DELETE /project-expenses/{project_expense_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete project-expenses project-expense-id [flags]
+  pm float api delete project-expenses project-expense-id --help
+
+DESCRIPTION
+  Documented DELETE /project-expenses/{project_expense_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.project-expenses-project-expense-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-tasks - Documented GET /project-tasks (not implemented)
+
+SYNOPSIS
+  pm float api get project-tasks [flags]
+  pm float api get project-tasks --help
+
+DESCRIPTION
+  Documented GET /project-tasks (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-tasks
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete project-stages id - Documented DELETE /project-stages/{id} (not implemented)
+
+SYNOPSIS
+  pm float api delete project-stages id [flags]
+  pm float api delete project-stages id --help
+
+DESCRIPTION
+  Documented DELETE /project-stages/{id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.project-stages-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-tasks project-task-id - Documented GET /project-tasks/{project_task_id} (not implemented)
+
+SYNOPSIS
+  pm float api get project-tasks project-task-id [flags]
+  pm float api get project-tasks project-task-id --help
+
+DESCRIPTION
+  Documented GET /project-tasks/{project_task_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-tasks-project-task-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete project-tasks project-task-id - Documented DELETE /project-tasks/{project_task_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete project-tasks project-task-id [flags]
+  pm float api delete project-tasks project-task-id --help
+
+DESCRIPTION
+  Documented DELETE /project-tasks/{project_task_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.project-tasks-project-task-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-templates - Documented GET /project-templates (not implemented)
+
+SYNOPSIS
+  pm float api get project-templates [flags]
+  pm float api get project-templates --help
+
+DESCRIPTION
+  Documented GET /project-templates (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-templates
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete projects project-id - Documented DELETE /projects/{project_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete projects project-id [flags]
+  pm float api delete projects project-id --help
+
+DESCRIPTION
+  Documented DELETE /projects/{project_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.projects-project-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-templates project-template-id - Documented GET /project-templates/{project_template_id} (not implemented)
+
+SYNOPSIS
+  pm float api get project-templates project-template-id [flags]
+  pm float api get project-templates project-template-id --help
+
+DESCRIPTION
+  Documented GET /project-templates/{project_template_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-templates-project-template-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete rate-cards rate-card-id - Documented DELETE /rate-cards/{rate_card_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete rate-cards rate-card-id [flags]
+  pm float api delete rate-cards rate-card-id --help
+
+DESCRIPTION
+  Documented DELETE /rate-cards/{rate_card_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.rate-cards-rate-card-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get projects project-id - Documented GET /projects/{project_id} (not implemented)
+
+SYNOPSIS
+  pm float api get projects project-id [flags]
+  pm float api get projects project-id --help
+
+DESCRIPTION
+  Documented GET /projects/{project_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.projects-project-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete roles role-id - Documented DELETE /roles/{role_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete roles role-id [flags]
+  pm float api delete roles role-id --help
+
+DESCRIPTION
+  Documented DELETE /roles/{role_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.roles-role-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get public-holidays - Documented GET /public-holidays (not implemented)
+
+SYNOPSIS
+  pm float api get public-holidays [flags]
+  pm float api get public-holidays --help
+
+DESCRIPTION
+  Documented GET /public-holidays (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.public-holidays
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete status status-id - Documented DELETE /status/{status_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete status status-id [flags]
+  pm float api delete status status-id --help
+
+DESCRIPTION
+  Documented DELETE /status/{status_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.status-status-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get public-holidays public-holiday-id - Documented GET /public-holidays/{public_holiday_id} (not implemented)
+
+SYNOPSIS
+  pm float api get public-holidays public-holiday-id [flags]
+  pm float api get public-holidays public-holiday-id --help
+
+DESCRIPTION
+  Documented GET /public-holidays/{public_holiday_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.public-holidays-public-holiday-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete tasks task-id - Documented DELETE /tasks/{task_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete tasks task-id [flags]
+  pm float api delete tasks task-id --help
+
+DESCRIPTION
+  Documented DELETE /tasks/{task_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.tasks-task-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get rate-cards - Documented GET /rate-cards (not implemented)
+
+SYNOPSIS
+  pm float api get rate-cards [flags]
+  pm float api get rate-cards --help
+
+DESCRIPTION
+  Documented GET /rate-cards (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.rate-cards
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api delete timeoffs timeoff-id - Documented DELETE /timeoffs/{timeoff_id} (not implemented)
+
+SYNOPSIS
+  pm float api delete timeoffs timeoff-id [flags]
+  pm float api delete timeoffs timeoff-id --help
+
+DESCRIPTION
+  Documented DELETE /timeoffs/{timeoff_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.delete.timeoffs-timeoff-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get rate-cards rate-card-id - Documented GET /rate-cards/{rate_card_id} (not implemented)
+
+SYNOPSIS
+  pm float api get rate-cards rate-card-id [flags]
+  pm float api get rate-cards rate-card-id --help
+
+DESCRIPTION
+  Documented GET /rate-cards/{rate_card_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.rate-cards-rate-card-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get accounts - Documented GET /accounts (not implemented)
+
+SYNOPSIS
+  pm float api get accounts [flags]
+  pm float api get accounts --help
+
+DESCRIPTION
+  Documented GET /accounts (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.accounts
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get reports people - Documented GET /reports/people (not implemented)
+
+SYNOPSIS
+  pm float api get reports people [flags]
+  pm float api get reports people --help
+
+DESCRIPTION
+  Documented GET /reports/people (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.reports-people
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get accounts account-id - Documented GET /accounts/{account_id} (not implemented)
+
+SYNOPSIS
+  pm float api get accounts account-id [flags]
+  pm float api get accounts account-id --help
+
+DESCRIPTION
+  Documented GET /accounts/{account_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.accounts-account-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get reports projects - Documented GET /reports/projects (not implemented)
+
+SYNOPSIS
+  pm float api get reports projects [flags]
+  pm float api get reports projects --help
+
+DESCRIPTION
+  Documented GET /reports/projects (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.reports-projects
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get allocations - Documented GET /allocations (not implemented)
+
+SYNOPSIS
+  pm float api get allocations [flags]
+  pm float api get allocations --help
+
+DESCRIPTION
+  Documented GET /allocations (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.allocations
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get roles - Documented GET /roles (not implemented)
+
+SYNOPSIS
+  pm float api get roles [flags]
+  pm float api get roles --help
+
+DESCRIPTION
+  Documented GET /roles (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.roles
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get clients client-id - Documented GET /clients/{client_id} (not implemented)
+
+SYNOPSIS
+  pm float api get clients client-id [flags]
+  pm float api get clients client-id --help
+
+DESCRIPTION
+  Documented GET /clients/{client_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.clients-client-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get roles role-id - Documented GET /roles/{role_id} (not implemented)
+
+SYNOPSIS
+  pm float api get roles role-id [flags]
+  pm float api get roles role-id --help
+
+DESCRIPTION
+  Documented GET /roles/{role_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.roles-role-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get currencies - Documented GET /currencies (not implemented)
+
+SYNOPSIS
+  pm float api get currencies [flags]
+  pm float api get currencies --help
+
+DESCRIPTION
+  Documented GET /currencies (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.currencies
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get status - Documented GET /status (not implemented)
+
+SYNOPSIS
+  pm float api get status [flags]
+  pm float api get status --help
+
+DESCRIPTION
+  Documented GET /status (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.status
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get currencies currency-id - Documented GET /currencies/{currency_id} (not implemented)
+
+SYNOPSIS
+  pm float api get currencies currency-id [flags]
+  pm float api get currencies currency-id --help
+
+DESCRIPTION
+  Documented GET /currencies/{currency_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.currencies-currency-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get status status-id - Documented GET /status/{status_id} (not implemented)
+
+SYNOPSIS
+  pm float api get status status-id [flags]
+  pm float api get status status-id --help
+
+DESCRIPTION
+  Documented GET /status/{status_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.status-status-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get deleted logged-time - Documented GET /deleted/logged-time (not implemented)
+
+SYNOPSIS
+  pm float api get deleted logged-time [flags]
+  pm float api get deleted logged-time --help
+
+DESCRIPTION
+  Documented GET /deleted/logged-time (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.deleted-logged-time
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get statuses - Documented GET /statuses (not implemented)
+
+SYNOPSIS
+  pm float api get statuses [flags]
+  pm float api get statuses --help
+
+DESCRIPTION
+  Documented GET /statuses (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.statuses
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get deleted tasks - Documented GET /deleted/tasks (not implemented)
+
+SYNOPSIS
+  pm float api get deleted tasks [flags]
+  pm float api get deleted tasks --help
+
+DESCRIPTION
+  Documented GET /deleted/tasks (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.deleted-tasks
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get tasks task-id - Documented GET /tasks/{task_id} (not implemented)
+
+SYNOPSIS
+  pm float api get tasks task-id [flags]
+  pm float api get tasks task-id --help
+
+DESCRIPTION
+  Documented GET /tasks/{task_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.tasks-task-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get deleted timeoffs - Documented GET /deleted/timeoffs (not implemented)
+
+SYNOPSIS
+  pm float api get deleted timeoffs [flags]
+  pm float api get deleted timeoffs --help
+
+DESCRIPTION
+  Documented GET /deleted/timeoffs (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.deleted-timeoffs
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get timeoff-types - Documented GET /timeoff-types (not implemented)
+
+SYNOPSIS
+  pm float api get timeoff-types [flags]
+  pm float api get timeoff-types --help
+
+DESCRIPTION
+  Documented GET /timeoff-types (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.timeoff-types
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get departments department-id - Documented GET /departments/{department_id} (not implemented)
+
+SYNOPSIS
+  pm float api get departments department-id [flags]
+  pm float api get departments department-id --help
+
+DESCRIPTION
+  Documented GET /departments/{department_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.departments-department-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get timeoff-types timeoff-type-id - Documented GET /timeoff-types/{timeoff_type_id} (not implemented)
+
+SYNOPSIS
+  pm float api get timeoff-types timeoff-type-id [flags]
+  pm float api get timeoff-types timeoff-type-id --help
+
+DESCRIPTION
+  Documented GET /timeoff-types/{timeoff_type_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.timeoff-types-timeoff-type-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get holidays - Documented GET /holidays (not implemented)
+
+SYNOPSIS
+  pm float api get holidays [flags]
+  pm float api get holidays --help
+
+DESCRIPTION
+  Documented GET /holidays (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.holidays
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get timeoffs - Documented GET /timeoffs (not implemented)
+
+SYNOPSIS
+  pm float api get timeoffs [flags]
+  pm float api get timeoffs --help
+
+DESCRIPTION
+  Documented GET /timeoffs (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.timeoffs
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get holidays holiday-id - Documented GET /holidays/{holiday_id} (not implemented)
+
+SYNOPSIS
+  pm float api get holidays holiday-id [flags]
+  pm float api get holidays holiday-id --help
+
+DESCRIPTION
+  Documented GET /holidays/{holiday_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.holidays-holiday-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get timeoffs timeoff-id - Documented GET /timeoffs/{timeoff_id} (not implemented)
+
+SYNOPSIS
+  pm float api get timeoffs timeoff-id [flags]
+  pm float api get timeoffs timeoff-id --help
+
+DESCRIPTION
+  Documented GET /timeoffs/{timeoff_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.timeoffs-timeoff-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get logged-time - Documented GET /logged-time (not implemented)
+
+SYNOPSIS
+  pm float api get logged-time [flags]
+  pm float api get logged-time --help
+
+DESCRIPTION
+  Documented GET /logged-time (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.logged-time
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch clients client-id - Documented PATCH /clients/{client_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch clients client-id [flags]
+  pm float api patch clients client-id --help
+
+DESCRIPTION
+  Documented PATCH /clients/{client_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.clients-client-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get logged-time logged-time-id - Documented GET /logged-time/{logged_time_id} (not implemented)
+
+SYNOPSIS
+  pm float api get logged-time logged-time-id [flags]
+  pm float api get logged-time logged-time-id --help
+
+DESCRIPTION
+  Documented GET /logged-time/{logged_time_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.logged-time-logged-time-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch currencies currency-id - Documented PATCH /currencies/{currency_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch currencies currency-id [flags]
+  pm float api patch currencies currency-id --help
+
+DESCRIPTION
+  Documented PATCH /currencies/{currency_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.currencies-currency-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get milestones - Documented GET /milestones (not implemented)
+
+SYNOPSIS
+  pm float api get milestones [flags]
+  pm float api get milestones --help
+
+DESCRIPTION
+  Documented GET /milestones (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.milestones
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get milestones milestone-id - Documented GET /milestones/{milestone_id} (not implemented)
+
+SYNOPSIS
+  pm float api get milestones milestone-id [flags]
+  pm float api get milestones milestone-id --help
+
+DESCRIPTION
+  Documented GET /milestones/{milestone_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.milestones-milestone-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch departments department-id - Documented PATCH /departments/{department_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch departments department-id [flags]
+  pm float api patch departments department-id --help
+
+DESCRIPTION
+  Documented PATCH /departments/{department_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.departments-department-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get people people-id - Documented GET /people/{people_id} (not implemented)
+
+SYNOPSIS
+  pm float api get people people-id [flags]
+  pm float api get people people-id --help
+
+DESCRIPTION
+  Documented GET /people/{people_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.people-people-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch holidays holiday-id - Documented PATCH /holidays/{holiday_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch holidays holiday-id [flags]
+  pm float api patch holidays holiday-id --help
+
+DESCRIPTION
+  Documented PATCH /holidays/{holiday_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.holidays-holiday-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch logged-time logged-time-id - Documented PATCH /logged-time/{logged_time_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch logged-time logged-time-id [flags]
+  pm float api patch logged-time logged-time-id --help
+
+DESCRIPTION
+  Documented PATCH /logged-time/{logged_time_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.logged-time-logged-time-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get phases - Documented GET /phases (not implemented)
+
+SYNOPSIS
+  pm float api get phases [flags]
+  pm float api get phases --help
+
+DESCRIPTION
+  Documented GET /phases (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.phases
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch milestones milestone-id - Documented PATCH /milestones/{milestone_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch milestones milestone-id [flags]
+  pm float api patch milestones milestone-id --help
+
+DESCRIPTION
+  Documented PATCH /milestones/{milestone_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.milestones-milestone-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get phases phase-id - Documented GET /phases/{phase_id} (not implemented)
+
+SYNOPSIS
+  pm float api get phases phase-id [flags]
+  pm float api get phases phase-id --help
+
+DESCRIPTION
+  Documented GET /phases/{phase_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.phases-phase-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get project-expenses - Documented GET /project-expenses (not implemented)
+
+SYNOPSIS
+  pm float api get project-expenses [flags]
+  pm float api get project-expenses --help
+
+DESCRIPTION
+  Documented GET /project-expenses (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-expenses
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch people people-id - Documented PATCH /people/{people_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch people people-id [flags]
+  pm float api patch people people-id --help
+
+DESCRIPTION
+  Documented PATCH /people/{people_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.people-people-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch phases phase-id - Documented PATCH /phases/{phase_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch phases phase-id [flags]
+  pm float api patch phases phase-id --help
+
+DESCRIPTION
+  Documented PATCH /phases/{phase_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.phases-phase-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-expenses project-expense-id - Documented GET /project-expenses/{project_expense_id} (not implemented)
+
+SYNOPSIS
+  pm float api get project-expenses project-expense-id [flags]
+  pm float api get project-expenses project-expense-id --help
+
+DESCRIPTION
+  Documented GET /project-expenses/{project_expense_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-expenses-project-expense-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch project-expenses project-expense-id - Documented PATCH /project-expenses/{project_expense_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch project-expenses project-expense-id [flags]
+  pm float api patch project-expenses project-expense-id --help
+
+DESCRIPTION
+  Documented PATCH /project-expenses/{project_expense_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.project-expenses-project-expense-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-stages - Documented GET /project-stages (not implemented)
+
+SYNOPSIS
+  pm float api get project-stages [flags]
+  pm float api get project-stages --help
+
+DESCRIPTION
+  Documented GET /project-stages (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-stages
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api get project-stages id - Documented GET /project-stages/{id} (not implemented)
+
+SYNOPSIS
+  pm float api get project-stages id [flags]
+  pm float api get project-stages id --help
+
+DESCRIPTION
+  Documented GET /project-stages/{id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-stages-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch project-stages id - Documented PATCH /project-stages/{id} (not implemented)
+
+SYNOPSIS
+  pm float api patch project-stages id [flags]
+  pm float api patch project-stages id --help
+
+DESCRIPTION
+  Documented PATCH /project-stages/{id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.project-stages-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch project-tasks project-task-id - Documented PATCH /project-tasks/{project_task_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch project-tasks project-task-id [flags]
+  pm float api patch project-tasks project-task-id --help
+
+DESCRIPTION
+  Documented PATCH /project-tasks/{project_task_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.project-tasks-project-task-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-tasks - Documented GET /project-tasks (not implemented)
+
+SYNOPSIS
+  pm float api get project-tasks [flags]
+  pm float api get project-tasks --help
+
+DESCRIPTION
+  Documented GET /project-tasks (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-tasks
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch projects project-id - Documented PATCH /projects/{project_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch projects project-id [flags]
+  pm float api patch projects project-id --help
+
+DESCRIPTION
+  Documented PATCH /projects/{project_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.projects-project-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-tasks project-task-id - Documented GET /project-tasks/{project_task_id} (not implemented)
+
+SYNOPSIS
+  pm float api get project-tasks project-task-id [flags]
+  pm float api get project-tasks project-task-id --help
+
+DESCRIPTION
+  Documented GET /project-tasks/{project_task_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-tasks-project-task-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch rate-cards rate-card-id - Documented PATCH /rate-cards/{rate_card_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch rate-cards rate-card-id [flags]
+  pm float api patch rate-cards rate-card-id --help
+
+DESCRIPTION
+  Documented PATCH /rate-cards/{rate_card_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.rate-cards-rate-card-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-templates - Documented GET /project-templates (not implemented)
+
+SYNOPSIS
+  pm float api get project-templates [flags]
+  pm float api get project-templates --help
+
+DESCRIPTION
+  Documented GET /project-templates (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-templates
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch roles role-id - Documented PATCH /roles/{role_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch roles role-id [flags]
+  pm float api patch roles role-id --help
+
+DESCRIPTION
+  Documented PATCH /roles/{role_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.roles-role-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get project-templates project-template-id - Documented GET /project-templates/{project_template_id} (not implemented)
+
+SYNOPSIS
+  pm float api get project-templates project-template-id [flags]
+  pm float api get project-templates project-template-id --help
+
+DESCRIPTION
+  Documented GET /project-templates/{project_template_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.project-templates-project-template-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch status status-id - Documented PATCH /status/{status_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch status status-id [flags]
+  pm float api patch status status-id --help
+
+DESCRIPTION
+  Documented PATCH /status/{status_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.status-status-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get projects project-id - Documented GET /projects/{project_id} (not implemented)
+
+SYNOPSIS
+  pm float api get projects project-id [flags]
+  pm float api get projects project-id --help
+
+DESCRIPTION
+  Documented GET /projects/{project_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.projects-project-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch tasks task-id - Documented PATCH /tasks/{task_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch tasks task-id [flags]
+  pm float api patch tasks task-id --help
+
+DESCRIPTION
+  Documented PATCH /tasks/{task_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.tasks-task-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get public-holidays - Documented GET /public-holidays (not implemented)
+
+SYNOPSIS
+  pm float api get public-holidays [flags]
+  pm float api get public-holidays --help
+
+DESCRIPTION
+  Documented GET /public-holidays (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.public-holidays
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch timeoff-types timeoff-type-id - Documented PATCH /timeoff-types/{timeoff_type_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch timeoff-types timeoff-type-id [flags]
+  pm float api patch timeoff-types timeoff-type-id --help
+
+DESCRIPTION
+  Documented PATCH /timeoff-types/{timeoff_type_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.timeoff-types-timeoff-type-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get public-holidays public-holiday-id - Documented GET /public-holidays/{public_holiday_id} (not implemented)
+
+SYNOPSIS
+  pm float api get public-holidays public-holiday-id [flags]
+  pm float api get public-holidays public-holiday-id --help
+
+DESCRIPTION
+  Documented GET /public-holidays/{public_holiday_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.public-holidays-public-holiday-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch timeoffs timeoff-id - Documented PATCH /timeoffs/{timeoff_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch timeoffs timeoff-id [flags]
+  pm float api patch timeoffs timeoff-id --help
+
+DESCRIPTION
+  Documented PATCH /timeoffs/{timeoff_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.timeoffs-timeoff-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get rate-cards - Documented GET /rate-cards (not implemented)
+
+SYNOPSIS
+  pm float api get rate-cards [flags]
+  pm float api get rate-cards --help
+
+DESCRIPTION
+  Documented GET /rate-cards (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.rate-cards
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api post clients - Documented POST /clients (not implemented)
+
+SYNOPSIS
+  pm float api post clients [flags]
+  pm float api post clients --help
+
+DESCRIPTION
+  Documented POST /clients (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.clients
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get rate-cards rate-card-id - Documented GET /rate-cards/{rate_card_id} (not implemented)
+
+SYNOPSIS
+  pm float api get rate-cards rate-card-id [flags]
+  pm float api get rate-cards rate-card-id --help
+
+DESCRIPTION
+  Documented GET /rate-cards/{rate_card_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.rate-cards-rate-card-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api post currencies - Documented POST /currencies (not implemented)
+
+SYNOPSIS
+  pm float api post currencies [flags]
+  pm float api post currencies --help
+
+DESCRIPTION
+  Documented POST /currencies (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.currencies
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get reports people - Documented GET /reports/people (not implemented)
+
+SYNOPSIS
+  pm float api get reports people [flags]
+  pm float api get reports people --help
+
+DESCRIPTION
+  Documented GET /reports/people (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.reports-people
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api post departments - Documented POST /departments (not implemented)
+
+SYNOPSIS
+  pm float api post departments [flags]
+  pm float api post departments --help
+
+DESCRIPTION
+  Documented POST /departments (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.departments
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get reports projects - Documented GET /reports/projects (not implemented)
+
+SYNOPSIS
+  pm float api get reports projects [flags]
+  pm float api get reports projects --help
+
+DESCRIPTION
+  Documented GET /reports/projects (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.reports-projects
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api post holidays - Documented POST /holidays (not implemented)
+
+SYNOPSIS
+  pm float api post holidays [flags]
+  pm float api post holidays --help
+
+DESCRIPTION
+  Documented POST /holidays (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.holidays
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get roles - Documented GET /roles (not implemented)
+
+SYNOPSIS
+  pm float api get roles [flags]
+  pm float api get roles --help
+
+DESCRIPTION
+  Documented GET /roles (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.roles
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api post logged-time - Documented POST /logged-time (not implemented)
+
+SYNOPSIS
+  pm float api post logged-time [flags]
+  pm float api post logged-time --help
+
+DESCRIPTION
+  Documented POST /logged-time (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.logged-time
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get roles role-id - Documented GET /roles/{role_id} (not implemented)
+
+SYNOPSIS
+  pm float api get roles role-id [flags]
+  pm float api get roles role-id --help
+
+DESCRIPTION
+  Documented GET /roles/{role_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.roles-role-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api post milestones - Documented POST /milestones (not implemented)
+
+SYNOPSIS
+  pm float api post milestones [flags]
+  pm float api post milestones --help
+
+DESCRIPTION
+  Documented POST /milestones (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.milestones
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get status - Documented GET /status (not implemented)
+
+SYNOPSIS
+  pm float api get status [flags]
+  pm float api get status --help
+
+DESCRIPTION
+  Documented GET /status (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.status
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api post people - Documented POST /people (not implemented)
+
+SYNOPSIS
+  pm float api post people [flags]
+  pm float api post people --help
+
+DESCRIPTION
+  Documented POST /people (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.people
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get status status-id - Documented GET /status/{status_id} (not implemented)
+
+SYNOPSIS
+  pm float api get status status-id [flags]
+  pm float api get status status-id --help
+
+DESCRIPTION
+  Documented GET /status/{status_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.status-status-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api post phases - Documented POST /phases (not implemented)
+
+SYNOPSIS
+  pm float api post phases [flags]
+  pm float api post phases --help
+
+DESCRIPTION
+  Documented POST /phases (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.phases
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get statuses - Documented GET /statuses (not implemented)
+
+SYNOPSIS
+  pm float api get statuses [flags]
+  pm float api get statuses --help
+
+DESCRIPTION
+  Documented GET /statuses (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.statuses
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api post project-expenses - Documented POST /project-expenses (not implemented)
+
+SYNOPSIS
+  pm float api post project-expenses [flags]
+  pm float api post project-expenses --help
+
+DESCRIPTION
+  Documented POST /project-expenses (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.project-expenses
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get tasks task-id - Documented GET /tasks/{task_id} (not implemented)
+
+SYNOPSIS
+  pm float api get tasks task-id [flags]
+  pm float api get tasks task-id --help
+
+DESCRIPTION
+  Documented GET /tasks/{task_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.tasks-task-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api post project-stages - Documented POST /project-stages (not implemented)
+
+SYNOPSIS
+  pm float api post project-stages [flags]
+  pm float api post project-stages --help
+
+DESCRIPTION
+  Documented POST /project-stages (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.project-stages
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get timeoff-types - Documented GET /timeoff-types (not implemented)
+
+SYNOPSIS
+  pm float api get timeoff-types [flags]
+  pm float api get timeoff-types --help
+
+DESCRIPTION
+  Documented GET /timeoff-types (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.timeoff-types
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api post project-tasks - Documented POST /project-tasks (not implemented)
+
+SYNOPSIS
+  pm float api post project-tasks [flags]
+  pm float api post project-tasks --help
+
+DESCRIPTION
+  Documented POST /project-tasks (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.project-tasks
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get timeoff-types timeoff-type-id - Documented GET /timeoff-types/{timeoff_type_id} (not implemented)
+
+SYNOPSIS
+  pm float api get timeoff-types timeoff-type-id [flags]
+  pm float api get timeoff-types timeoff-type-id --help
+
+DESCRIPTION
+  Documented GET /timeoff-types/{timeoff_type_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.timeoff-types-timeoff-type-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api post project-tasks merge - Documented POST /project-tasks/merge (not implemented)
+
+SYNOPSIS
+  pm float api post project-tasks merge [flags]
+  pm float api post project-tasks merge --help
+
+DESCRIPTION
+  Documented POST /project-tasks/merge (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.project-tasks-merge
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get timeoffs - Documented GET /timeoffs (not implemented)
+
+SYNOPSIS
+  pm float api get timeoffs [flags]
+  pm float api get timeoffs --help
+
+DESCRIPTION
+  Documented GET /timeoffs (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.timeoffs
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api post projects - Documented POST /projects (not implemented)
+
+SYNOPSIS
+  pm float api post projects [flags]
+  pm float api post projects --help
+
+DESCRIPTION
+  Documented POST /projects (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.projects
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api get timeoffs timeoff-id - Documented GET /timeoffs/{timeoff_id} (not implemented)
+
+SYNOPSIS
+  pm float api get timeoffs timeoff-id [flags]
+  pm float api get timeoffs timeoff-id --help
+
+DESCRIPTION
+  Documented GET /timeoffs/{timeoff_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.get.timeoffs-timeoff-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm float api patch clients client-id - Documented PATCH /clients/{client_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch clients client-id [flags]
+  pm float api patch clients client-id --help
+
+DESCRIPTION
+  Documented PATCH /clients/{client_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.clients-client-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post projects from-template project-template-id - Documented POST /projects/from-template/{project_template_id} (not implemented)
+
+SYNOPSIS
+  pm float api post projects from-template project-template-id [flags]
+  pm float api post projects from-template project-template-id --help
+
+DESCRIPTION
+  Documented POST /projects/from-template/{project_template_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.projects-from-template-project-template-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch currencies currency-id - Documented PATCH /currencies/{currency_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch currencies currency-id [flags]
+  pm float api patch currencies currency-id --help
+
+DESCRIPTION
+  Documented PATCH /currencies/{currency_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.currencies-currency-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post rate-cards - Documented POST /rate-cards (not implemented)
+
+SYNOPSIS
+  pm float api post rate-cards [flags]
+  pm float api post rate-cards --help
+
+DESCRIPTION
+  Documented POST /rate-cards (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.rate-cards
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch departments department-id - Documented PATCH /departments/{department_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch departments department-id [flags]
+  pm float api patch departments department-id --help
+
+DESCRIPTION
+  Documented PATCH /departments/{department_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.departments-department-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post roles - Documented POST /roles (not implemented)
+
+SYNOPSIS
+  pm float api post roles [flags]
+  pm float api post roles --help
+
+DESCRIPTION
+  Documented POST /roles (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.roles
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch holidays holiday-id - Documented PATCH /holidays/{holiday_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch holidays holiday-id [flags]
+  pm float api patch holidays holiday-id --help
+
+DESCRIPTION
+  Documented PATCH /holidays/{holiday_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.holidays-holiday-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post status - Documented POST /status (not implemented)
+
+SYNOPSIS
+  pm float api post status [flags]
+  pm float api post status --help
+
+DESCRIPTION
+  Documented POST /status (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.status
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch logged-time logged-time-id - Documented PATCH /logged-time/{logged_time_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch logged-time logged-time-id [flags]
+  pm float api patch logged-time logged-time-id --help
+
+DESCRIPTION
+  Documented PATCH /logged-time/{logged_time_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.logged-time-logged-time-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post tasks - Documented POST /tasks (not implemented)
+
+SYNOPSIS
+  pm float api post tasks [flags]
+  pm float api post tasks --help
+
+DESCRIPTION
+  Documented POST /tasks (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.tasks
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch milestones milestone-id - Documented PATCH /milestones/{milestone_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch milestones milestone-id [flags]
+  pm float api patch milestones milestone-id --help
+
+DESCRIPTION
+  Documented PATCH /milestones/{milestone_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.milestones-milestone-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post timeoff-types - Documented POST /timeoff-types (not implemented)
+
+SYNOPSIS
+  pm float api post timeoff-types [flags]
+  pm float api post timeoff-types --help
+
+DESCRIPTION
+  Documented POST /timeoff-types (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.timeoff-types
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post timeoffs - Documented POST /timeoffs (not implemented)
+
+SYNOPSIS
+  pm float api post timeoffs [flags]
+  pm float api post timeoffs --help
+
+DESCRIPTION
+  Documented POST /timeoffs (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.timeoffs
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch people people-id - Documented PATCH /people/{people_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch people people-id [flags]
+  pm float api patch people people-id --help
+
+DESCRIPTION
+  Documented PATCH /people/{people_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.people-people-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float clients list - Run the clients ETL stream
+
+SYNOPSIS
+  pm float clients list [flags]
+  pm float clients list --json
+
+DESCRIPTION
+  Run the clients ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  clients
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch phases phase-id - Documented PATCH /phases/{phase_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch phases phase-id [flags]
+  pm float api patch phases phase-id --help
+
+DESCRIPTION
+  Documented PATCH /phases/{phase_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.phases-phase-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float departments list - Run the departments ETL stream
+
+SYNOPSIS
+  pm float departments list [flags]
+  pm float departments list --json
+
+DESCRIPTION
+  Run the departments ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  departments
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch project-expenses project-expense-id - Documented PATCH /project-expenses/{project_expense_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch project-expenses project-expense-id [flags]
+  pm float api patch project-expenses project-expense-id --help
+
+DESCRIPTION
+  Documented PATCH /project-expenses/{project_expense_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.project-expenses-project-expense-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float people list - Run the people ETL stream
+
+SYNOPSIS
+  pm float people list [flags]
+  pm float people list --json
+
+DESCRIPTION
+  Run the people ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  people
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch project-stages id - Documented PATCH /project-stages/{id} (not implemented)
+
+SYNOPSIS
+  pm float api patch project-stages id [flags]
+  pm float api patch project-stages id --help
+
+DESCRIPTION
+  Documented PATCH /project-stages/{id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.project-stages-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float projects list - Run the projects ETL stream
+
+SYNOPSIS
+  pm float projects list [flags]
+  pm float projects list --json
+
+DESCRIPTION
+  Run the projects ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  projects
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch project-tasks project-task-id - Documented PATCH /project-tasks/{project_task_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch project-tasks project-task-id [flags]
+  pm float api patch project-tasks project-task-id --help
+
+DESCRIPTION
+  Documented PATCH /project-tasks/{project_task_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.project-tasks-project-task-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch projects project-id - Documented PATCH /projects/{project_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch projects project-id [flags]
+  pm float api patch projects project-id --help
+
+DESCRIPTION
+  Documented PATCH /projects/{project_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.projects-project-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float tasks list - Run the tasks ETL stream
+
+SYNOPSIS
+  pm float tasks list [flags]
+  pm float tasks list --json
+
+DESCRIPTION
+  Run the tasks ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  tasks
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch rate-cards rate-card-id - Documented PATCH /rate-cards/{rate_card_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch rate-cards rate-card-id [flags]
+  pm float api patch rate-cards rate-card-id --help
+
+DESCRIPTION
+  Documented PATCH /rate-cards/{rate_card_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.rate-cards-rate-card-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch roles role-id - Documented PATCH /roles/{role_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch roles role-id [flags]
+  pm float api patch roles role-id --help
+
+DESCRIPTION
+  Documented PATCH /roles/{role_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.roles-role-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch status status-id - Documented PATCH /status/{status_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch status status-id [flags]
+  pm float api patch status status-id --help
+
+DESCRIPTION
+  Documented PATCH /status/{status_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.status-status-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch tasks task-id - Documented PATCH /tasks/{task_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch tasks task-id [flags]
+  pm float api patch tasks task-id --help
+
+DESCRIPTION
+  Documented PATCH /tasks/{task_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.tasks-task-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch timeoff-types timeoff-type-id - Documented PATCH /timeoff-types/{timeoff_type_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch timeoff-types timeoff-type-id [flags]
+  pm float api patch timeoff-types timeoff-type-id --help
+
+DESCRIPTION
+  Documented PATCH /timeoff-types/{timeoff_type_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.timeoff-types-timeoff-type-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api patch timeoffs timeoff-id - Documented PATCH /timeoffs/{timeoff_id} (not implemented)
+
+SYNOPSIS
+  pm float api patch timeoffs timeoff-id [flags]
+  pm float api patch timeoffs timeoff-id --help
+
+DESCRIPTION
+  Documented PATCH /timeoffs/{timeoff_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.patch.timeoffs-timeoff-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post clients - Documented POST /clients (not implemented)
+
+SYNOPSIS
+  pm float api post clients [flags]
+  pm float api post clients --help
+
+DESCRIPTION
+  Documented POST /clients (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.clients
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post currencies - Documented POST /currencies (not implemented)
+
+SYNOPSIS
+  pm float api post currencies [flags]
+  pm float api post currencies --help
+
+DESCRIPTION
+  Documented POST /currencies (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.currencies
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post departments - Documented POST /departments (not implemented)
+
+SYNOPSIS
+  pm float api post departments [flags]
+  pm float api post departments --help
+
+DESCRIPTION
+  Documented POST /departments (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.departments
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post holidays - Documented POST /holidays (not implemented)
+
+SYNOPSIS
+  pm float api post holidays [flags]
+  pm float api post holidays --help
+
+DESCRIPTION
+  Documented POST /holidays (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.holidays
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post logged-time - Documented POST /logged-time (not implemented)
+
+SYNOPSIS
+  pm float api post logged-time [flags]
+  pm float api post logged-time --help
+
+DESCRIPTION
+  Documented POST /logged-time (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.logged-time
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post milestones - Documented POST /milestones (not implemented)
+
+SYNOPSIS
+  pm float api post milestones [flags]
+  pm float api post milestones --help
+
+DESCRIPTION
+  Documented POST /milestones (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.milestones
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post people - Documented POST /people (not implemented)
+
+SYNOPSIS
+  pm float api post people [flags]
+  pm float api post people --help
+
+DESCRIPTION
+  Documented POST /people (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.people
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post phases - Documented POST /phases (not implemented)
+
+SYNOPSIS
+  pm float api post phases [flags]
+  pm float api post phases --help
+
+DESCRIPTION
+  Documented POST /phases (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.phases
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post project-expenses - Documented POST /project-expenses (not implemented)
+
+SYNOPSIS
+  pm float api post project-expenses [flags]
+  pm float api post project-expenses --help
+
+DESCRIPTION
+  Documented POST /project-expenses (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.project-expenses
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post project-stages - Documented POST /project-stages (not implemented)
+
+SYNOPSIS
+  pm float api post project-stages [flags]
+  pm float api post project-stages --help
+
+DESCRIPTION
+  Documented POST /project-stages (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.project-stages
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post project-tasks - Documented POST /project-tasks (not implemented)
+
+SYNOPSIS
+  pm float api post project-tasks [flags]
+  pm float api post project-tasks --help
+
+DESCRIPTION
+  Documented POST /project-tasks (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.project-tasks
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post project-tasks merge - Documented POST /project-tasks/merge (not implemented)
+
+SYNOPSIS
+  pm float api post project-tasks merge [flags]
+  pm float api post project-tasks merge --help
+
+DESCRIPTION
+  Documented POST /project-tasks/merge (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.project-tasks-merge
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post projects - Documented POST /projects (not implemented)
+
+SYNOPSIS
+  pm float api post projects [flags]
+  pm float api post projects --help
+
+DESCRIPTION
+  Documented POST /projects (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.projects
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post projects from-template project-template-id - Documented POST /projects/from-template/{project_template_id} (not implemented)
+
+SYNOPSIS
+  pm float api post projects from-template project-template-id [flags]
+  pm float api post projects from-template project-template-id --help
+
+DESCRIPTION
+  Documented POST /projects/from-template/{project_template_id} (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.projects-from-template-project-template-id
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post rate-cards - Documented POST /rate-cards (not implemented)
+
+SYNOPSIS
+  pm float api post rate-cards [flags]
+  pm float api post rate-cards --help
+
+DESCRIPTION
+  Documented POST /rate-cards (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.rate-cards
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post roles - Documented POST /roles (not implemented)
+
+SYNOPSIS
+  pm float api post roles [flags]
+  pm float api post roles --help
+
+DESCRIPTION
+  Documented POST /roles (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.roles
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post status - Documented POST /status (not implemented)
+
+SYNOPSIS
+  pm float api post status [flags]
+  pm float api post status --help
+
+DESCRIPTION
+  Documented POST /status (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.status
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post tasks - Documented POST /tasks (not implemented)
+
+SYNOPSIS
+  pm float api post tasks [flags]
+  pm float api post tasks --help
+
+DESCRIPTION
+  Documented POST /tasks (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.tasks
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post timeoff-types - Documented POST /timeoff-types (not implemented)
+
+SYNOPSIS
+  pm float api post timeoff-types [flags]
+  pm float api post timeoff-types --help
+
+DESCRIPTION
+  Documented POST /timeoff-types (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.timeoff-types
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float api post timeoffs - Documented POST /timeoffs (not implemented)
+
+SYNOPSIS
+  pm float api post timeoffs [flags]
+  pm float api post timeoffs --help
+
+DESCRIPTION
+  Documented POST /timeoffs (not implemented)
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  float.post.timeoffs
+
+APPROVAL
+  not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+RISK
+  high
+
+NOTES
+  named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float clients list - Run the clients ETL stream
+
+SYNOPSIS
+  pm float clients list [flags]
+  pm float clients list --json
+
+DESCRIPTION
+  Run the clients ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  clients
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float departments list - Run the departments ETL stream
+
+SYNOPSIS
+  pm float departments list [flags]
+  pm float departments list --json
+
+DESCRIPTION
+  Run the departments ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  departments
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float people list - Run the people ETL stream
+
+SYNOPSIS
+  pm float people list [flags]
+  pm float people list --json
+
+DESCRIPTION
+  Run the people ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  people
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float projects list - Run the projects ETL stream
+
+SYNOPSIS
+  pm float projects list [flags]
+  pm float projects list --json
+
+DESCRIPTION
+  Run the projects ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  projects
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm float tasks list - Run the tasks ETL stream
+
+SYNOPSIS
+  pm float tasks list [flags]
+  pm float tasks list --json
+
+DESCRIPTION
+  Run the tasks ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  tasks
+
+FLAGS
+  No command-specific flags.

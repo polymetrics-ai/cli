@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-009-manifest.json",
+  "candidates": 1,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "gitlab",
+      "stage": "artifact_fetch",
+      "reason": "inspect artifact cache root: lstat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-009-empty-artifacts: no such file or directory"
+    }
+  ]
+}

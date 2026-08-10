@@ -1,0 +1,97 @@
+{
+  "operations": [
+    {
+      "id": "revenuecat.get.projects-project-id-customers-customer-id-events",
+      "kind": "rest_read",
+      "summary": "GET /projects/{project_id}/customers/{customer_id}/events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_id}/customers/{customer_id}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revenuecat.get.projects-project-id-customers-customer-id-invoices-invoice-id-file",
+      "kind": "rest_read",
+      "summary": "GET /projects/{project_id}/customers/{customer_id}/invoices/{invoice_id}/file",
+      "description": "invoice file endpoint returns a binary or document payload rather than JSON records",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_id}/customers/{customer_id}/invoices/{invoice_id}/file",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revenuecat.post.projects-project-id-media-assets",
+      "kind": "rest_write",
+      "summary": "POST /projects/{project_id}/media_assets",
+      "description": "media asset upload is multipart/binary payload handling outside the declarative JSON write dialect",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{project_id}/media_assets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revenuecat.post.projects-project-id-paywalls-paywall-id-actions-publish",
+      "kind": "rest_write",
+      "summary": "POST /projects/{project_id}/paywalls/{paywall_id}/actions/publish",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{project_id}/paywalls/{paywall_id}/actions/publish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revenuecat.post.projects-project-id-paywalls-paywall-id-actions-unpublish",
+      "kind": "rest_write",
+      "summary": "POST /projects/{project_id}/paywalls/{paywall_id}/actions/unpublish",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{project_id}/paywalls/{paywall_id}/actions/unpublish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revenuecat.get.projects-project-id-paywalls-paywall-id-versions-version-id",
+      "kind": "rest_read",
+      "summary": "GET /projects/{project_id}/paywalls/{paywall_id}/versions/{version_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_id}/paywalls/{paywall_id}/versions/{version_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,4075 @@
+{
+  "tagline": "Run ClickUp's declared streams and reverse-ETL actions.",
+  "usage": "pm clickup-api \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v2 attachment",
+        "api get v2 comment comment-id reply",
+        "api get v2 folder folder-id",
+        "api get v2 folder folder-id field",
+        "api get v2 folder folder-id list",
+        "api get v2 folder folder-id view",
+        "api get v2 goal goal-id",
+        "api get v2 group",
+        "api get v2 list list-id",
+        "api get v2 list list-id comment",
+        "api get v2 list list-id field",
+        "api get v2 list list-id member",
+        "api get v2 list list-id task",
+        "api get v2 list list-id view",
+        "api get v2 oauth token",
+        "api get v2 space space-id",
+        "api get v2 space space-id field",
+        "api get v2 space space-id view",
+        "api get v2 task bulk-time-in-status",
+        "api get v2 task bulk-time-in-status task-ids",
+        "api get v2 task task-id",
+        "api get v2 task task-id comment",
+        "api get v2 task task-id member",
+        "api get v2 task task-id time",
+        "api get v2 task task-id time-in-status",
+        "api get v2 team team-id custom-item",
+        "api get v2 team team-id customroles",
+        "api get v2 team team-id field",
+        "api get v2 team team-id folder-template",
+        "api get v2 team team-id foldertemplate",
+        "api get v2 team team-id goal goal-id",
+        "api get v2 team team-id group",
+        "api get v2 team team-id guest guest-id",
+        "api get v2 team team-id list-template",
+        "api get v2 team team-id listtemplate",
+        "api get v2 team team-id plan",
+        "api get v2 team team-id seats",
+        "api get v2 team team-id shared",
+        "api get v2 team team-id task",
+        "api get v2 team team-id task filtered-team-tasks",
+        "api get v2 team team-id tasktemplate",
+        "api get v2 team team-id time-entries",
+        "api get v2 team team-id time-entries current",
+        "api get v2 team team-id time-entries operation",
+        "api get v2 team team-id time-entries tags",
+        "api get v2 team team-id time-entries timer-id",
+        "api get v2 team team-id time-entries timer-id history",
+        "api get v2 team team-id user user-id",
+        "api get v2 team team-id view",
+        "api get v2 user",
+        "api get v2 view view-id",
+        "api get v2 view view-id comment",
+        "api get v2 view view-id task",
+        "api get v2 workspaces workspace-id channels",
+        "api get v2 workspaces workspace-id channels channel-id",
+        "api get v2 workspaces workspace-id channels channel-id followers",
+        "api get v2 workspaces workspace-id channels channel-id members",
+        "api get v2 workspaces workspace-id channels channel-id messages",
+        "api get v2 workspaces workspace-id messages message-id reactions",
+        "api get v2 workspaces workspace-id messages message-id replies",
+        "api get v2 workspaces workspace-id messages message-id tagged-users",
+        "api get v2 workspaces workspace-id subtypes",
+        "api get v3 workspaces workspace-id docs",
+        "api get v3 workspaces workspace-id docs doc-id",
+        "api get v3 workspaces workspace-id docs doc-id pagelisting",
+        "api get v3 workspaces workspace-id docs doc-id pages",
+        "api get v3 workspaces workspace-id docs doc-id pages page-id",
+        "folders list",
+        "goals list",
+        "lists list",
+        "space tags list",
+        "spaces list",
+        "tasks list",
+        "teams list",
+        "webhooks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add tag to task apply",
+        "api delete v2 checklist checklist-id",
+        "api delete v2 checklist checklist-id checklist-item checklist-item-id",
+        "api delete v2 comment comment-id",
+        "api delete v2 folder folder-id guest guest-id",
+        "api delete v2 goal goal-id",
+        "api delete v2 group group-id",
+        "api delete v2 key-result key-result-id",
+        "api delete v2 list list-id guest guest-id",
+        "api delete v2 list list-id task task-id",
+        "api delete v2 space space-id tag tag-name",
+        "api delete v2 task task-id dependency",
+        "api delete v2 task task-id field field-id",
+        "api delete v2 task task-id guest guest-id",
+        "api delete v2 task task-id link links-to",
+        "api delete v2 task task-id time",
+        "api delete v2 task task-id time interval-id",
+        "api delete v2 team team-id guest guest-id",
+        "api delete v2 team team-id time-entries tags",
+        "api delete v2 team team-id time-entries timer-id",
+        "api delete v2 team team-id user user-id",
+        "api delete v2 view view-id",
+        "api delete v2 workspaces workspace-id channels channel-id",
+        "api delete v2 workspaces workspace-id messages message-id",
+        "api delete v2 workspaces workspace-id messages message-id reactions reaction",
+        "api patch v2 workspaces workspace-id channels channel-id",
+        "api patch v2 workspaces workspace-id messages message-id",
+        "api post v2 attachment",
+        "api post v2 checklist checklist-id checklist-item",
+        "api post v2 comment comment-id reply",
+        "api post v2 folder folder-id guest guest-id",
+        "api post v2 folder folder-id list-template template-id",
+        "api post v2 folder folder-id view",
+        "api post v2 goal goal-id key-result",
+        "api post v2 list list-id comment",
+        "api post v2 list list-id guest guest-id",
+        "api post v2 list list-id task task-id",
+        "api post v2 list list-id tasktemplate template-id",
+        "api post v2 list list-id view",
+        "api post v2 oauth token",
+        "api post v2 space space-id folder-template template-id",
+        "api post v2 space space-id list",
+        "api post v2 space space-id list-template template-id",
+        "api post v2 space space-id tag",
+        "api post v2 space space-id view",
+        "api post v2 task task-id attachment",
+        "api post v2 task task-id checklist",
+        "api post v2 task task-id dependency",
+        "api post v2 task task-id guest guest-id",
+        "api post v2 task task-id link links-to",
+        "api post v2 task task-id list list-id",
+        "api post v2 task task-id merge",
+        "api post v2 task task-id time",
+        "api post v2 task task-id time-estimate",
+        "api post v2 task task-id time-estimate bulk",
+        "api post v2 team team-id auditlogs",
+        "api post v2 team team-id group",
+        "api post v2 team team-id guest",
+        "api post v2 team team-id time-entries",
+        "api post v2 team team-id time-entries operation",
+        "api post v2 team team-id time-entries start",
+        "api post v2 team team-id time-entries start operation",
+        "api post v2 team team-id time-entries stop",
+        "api post v2 team team-id time-entries tags",
+        "api post v2 team team-id user",
+        "api post v2 team team-id view",
+        "api post v2 view view-id comment",
+        "api post v2 workspaces workspace-id channels",
+        "api post v2 workspaces workspace-id channels channel-id messages",
+        "api post v2 workspaces workspace-id channels location",
+        "api post v2 workspaces workspace-id direct-messages",
+        "api post v2 workspaces workspace-id messages message-id reactions",
+        "api post v2 workspaces workspace-id messages message-id replies",
+        "api post v3 workspaces workspace-id docs",
+        "api post v3 workspaces workspace-id docs doc-id pages",
+        "api put v2 checklist checklist-id",
+        "api put v2 checklist checklist-id checklist-item checklist-item-id",
+        "api put v2 comment comment-id",
+        "api put v2 goal goal-id",
+        "api put v2 group group-id",
+        "api put v2 key-result key-result-id",
+        "api put v2 object-type object-id acl",
+        "api put v2 space space-id tag tag-name",
+        "api put v2 task task-id time",
+        "api put v2 task task-id time interval-id",
+        "api put v2 team team-id guest guest-id",
+        "api put v2 team team-id time-entries tags",
+        "api put v2 team team-id time-entries timer-id",
+        "api put v2 team team-id user user-id",
+        "api put v2 view view-id",
+        "api put v3 workspaces workspace-id docs doc-id pages page-id",
+        "create folder apply",
+        "create goal apply",
+        "create list apply",
+        "create space apply",
+        "create task apply",
+        "create task comment apply",
+        "create webhook apply",
+        "delete folder apply",
+        "delete list apply",
+        "delete space apply",
+        "delete task apply",
+        "delete webhook apply",
+        "remove tag from task apply",
+        "set custom field value apply",
+        "update folder apply",
+        "update list apply",
+        "update space apply",
+        "update task apply",
+        "update webhook apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add tag to task apply",
+      "summary": "Plan and execute the add tag to task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_tag_to_task",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "tag_name",
+          "type": "string",
+          "summary": "Required tag name record field.",
+          "maps_to": "record.tag_name",
+          "required": true
+        },
+        {
+          "name": "task_id",
+          "type": "string",
+          "summary": "Required task id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api add tag to task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/task/{task_id}/tag/{tag_name}"
+        }
+      ],
+      "risk": "attaches an existing Space Tag to a task; low-risk",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "api delete v2 checklist checklist-id",
+      "summary": "Documented DELETE /v2/checklist/{checklist_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 checklist checklist-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/checklist/{checklist_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-checklist-checklist-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 checklist checklist-id checklist-item checklist-item-id",
+      "summary": "Documented DELETE /v2/checklist/{checklist_id}/checklist_item/{checklist_item_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 checklist checklist-id checklist-item checklist-item-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/checklist/{checklist_id}/checklist_item/{checklist_item_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-checklist-checklist-id-checklist-item-checklist-item-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 comment comment-id",
+      "summary": "Documented DELETE /v2/comment/{comment_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 comment comment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/comment/{comment_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-comment-comment-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 folder folder-id guest guest-id",
+      "summary": "Documented DELETE /v2/folder/{folder_id}/guest/{guest_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 folder folder-id guest guest-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/folder/{folder_id}/guest/{guest_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-folder-folder-id-guest-guest-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 goal goal-id",
+      "summary": "Documented DELETE /v2/goal/{goal_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 goal goal-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/goal/{goal_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-goal-goal-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 group group-id",
+      "summary": "Documented DELETE /v2/group/{group_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 group group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/group/{group_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-group-group-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 key-result key-result-id",
+      "summary": "Documented DELETE /v2/key_result/{key_result_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 key-result key-result-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/key_result/{key_result_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-key-result-key-result-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 list list-id guest guest-id",
+      "summary": "Documented DELETE /v2/list/{list_id}/guest/{guest_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 list list-id guest guest-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/list/{list_id}/guest/{guest_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-list-list-id-guest-guest-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 list list-id task task-id",
+      "summary": "Documented DELETE /v2/list/{list_id}/task/{task_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 list list-id task task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/list/{list_id}/task/{task_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-list-list-id-task-task-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 space space-id tag tag-name",
+      "summary": "Documented DELETE /v2/space/{space_id}/tag/{tag_name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 space space-id tag tag-name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/space/{space_id}/tag/{tag_name}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-space-space-id-tag-tag-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 task task-id dependency",
+      "summary": "Documented DELETE /v2/task/{task_id}/dependency (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 task task-id dependency --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/task/{task_id}/dependency"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-task-task-id-dependency",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 task task-id field field-id",
+      "summary": "Documented DELETE /v2/task/{task_id}/field/{field_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 task task-id field field-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/task/{task_id}/field/{field_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-task-task-id-field-field-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 task task-id guest guest-id",
+      "summary": "Documented DELETE /v2/task/{task_id}/guest/{guest_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 task task-id guest guest-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/task/{task_id}/guest/{guest_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-task-task-id-guest-guest-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 task task-id link links-to",
+      "summary": "Documented DELETE /v2/task/{task_id}/link/{links_to} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 task task-id link links-to --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/task/{task_id}/link/{links_to}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-task-task-id-link-links-to",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 task task-id time",
+      "summary": "Documented DELETE /v2/task/{task_id}/time (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 task task-id time --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/task/{task_id}/time"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-task-task-id-time",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 task task-id time interval-id",
+      "summary": "Documented DELETE /v2/task/{task_id}/time/{interval_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 task task-id time interval-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/task/{task_id}/time/{interval_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-task-task-id-time-interval-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 team team-id guest guest-id",
+      "summary": "Documented DELETE /v2/team/{team_id}/guest/{guest_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 team team-id guest guest-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/team/{team_id}/guest/{guest_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-team-team-id-guest-guest-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 team team-id time-entries tags",
+      "summary": "Documented DELETE /v2/team/{team_id}/time_entries/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 team team-id time-entries tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/team/{team_id}/time_entries/tags"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-team-team-id-time-entries-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 team team-id time-entries timer-id",
+      "summary": "Documented DELETE /v2/team/{team_id}/time_entries/{timer_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 team team-id time-entries timer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/team/{team_id}/time_entries/{timer_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-team-team-id-time-entries-timer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 team team-id user user-id",
+      "summary": "Documented DELETE /v2/team/{team_id}/user/{user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 team team-id user user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/team/{team_id}/user/{user_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-team-team-id-user-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 view view-id",
+      "summary": "Documented DELETE /v2/view/{view_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 view view-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/view/{view_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-view-view-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 workspaces workspace-id channels channel-id",
+      "summary": "Documented DELETE /v2/workspaces/{workspace_id}/channels/{channel_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 workspaces workspace-id channels channel-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-workspaces-workspace-id-channels-channel-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 workspaces workspace-id messages message-id",
+      "summary": "Documented DELETE /v2/workspaces/{workspace_id}/messages/{message_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 workspaces workspace-id messages message-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/workspaces/{workspace_id}/messages/{message_id}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-workspaces-workspace-id-messages-message-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 workspaces workspace-id messages message-id reactions reaction",
+      "summary": "Documented DELETE /v2/workspaces/{workspace_id}/messages/{message_id}/reactions/{reaction} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api delete v2 workspaces workspace-id messages message-id reactions reaction --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/reactions/{reaction}"
+        }
+      ],
+      "operation": "clickup-api.delete.v2-workspaces-workspace-id-messages-message-id-reactions-reaction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v2 attachment",
+      "summary": "Documented GET /v2/attachment (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 attachment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/attachment"
+        }
+      ],
+      "operation": "clickup-api.get.v2-attachment",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 comment comment-id reply",
+      "summary": "Documented GET /v2/comment/{comment_id}/reply (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 comment comment-id reply --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/comment/{comment_id}/reply"
+        }
+      ],
+      "operation": "clickup-api.get.v2-comment-comment-id-reply",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 folder folder-id",
+      "summary": "Documented GET /v2/folder/{folder_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 folder folder-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/folder/{folder_id}"
+        }
+      ],
+      "operation": "clickup-api.get.v2-folder-folder-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 folder folder-id field",
+      "summary": "Documented GET /v2/folder/{folder_id}/field (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 folder folder-id field --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/folder/{folder_id}/field"
+        }
+      ],
+      "operation": "clickup-api.get.v2-folder-folder-id-field",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 folder folder-id list",
+      "summary": "Documented GET /v2/folder/{folder_id}/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 folder folder-id list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/folder/{folder_id}/list"
+        }
+      ],
+      "operation": "clickup-api.get.v2-folder-folder-id-list",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 folder folder-id view",
+      "summary": "Documented GET /v2/folder/{folder_id}/view (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 folder folder-id view --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/folder/{folder_id}/view"
+        }
+      ],
+      "operation": "clickup-api.get.v2-folder-folder-id-view",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 goal goal-id",
+      "summary": "Documented GET /v2/goal/{goal_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 goal goal-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/goal/{goal_id}"
+        }
+      ],
+      "operation": "clickup-api.get.v2-goal-goal-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 group",
+      "summary": "Documented GET /v2/group (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 group --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/group"
+        }
+      ],
+      "operation": "clickup-api.get.v2-group",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 list list-id",
+      "summary": "Documented GET /v2/list/{list_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 list list-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/list/{list_id}"
+        }
+      ],
+      "operation": "clickup-api.get.v2-list-list-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 list list-id comment",
+      "summary": "Documented GET /v2/list/{list_id}/comment (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 list list-id comment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/list/{list_id}/comment"
+        }
+      ],
+      "operation": "clickup-api.get.v2-list-list-id-comment",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 list list-id field",
+      "summary": "Documented GET /v2/list/{list_id}/field (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 list list-id field --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/list/{list_id}/field"
+        }
+      ],
+      "operation": "clickup-api.get.v2-list-list-id-field",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 list list-id member",
+      "summary": "Documented GET /v2/list/{list_id}/member (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 list list-id member --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/list/{list_id}/member"
+        }
+      ],
+      "operation": "clickup-api.get.v2-list-list-id-member",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 list list-id task",
+      "summary": "Documented GET /v2/list/{list_id}/task (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 list list-id task --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/list/{list_id}/task"
+        }
+      ],
+      "operation": "clickup-api.get.v2-list-list-id-task",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 list list-id view",
+      "summary": "Documented GET /v2/list/{list_id}/view (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 list list-id view --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/list/{list_id}/view"
+        }
+      ],
+      "operation": "clickup-api.get.v2-list-list-id-view",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 oauth token",
+      "summary": "Documented GET /v2/oauth/token (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 oauth token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/oauth/token"
+        }
+      ],
+      "operation": "clickup-api.get.v2-oauth-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 space space-id",
+      "summary": "Documented GET /v2/space/{space_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 space space-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/space/{space_id}"
+        }
+      ],
+      "operation": "clickup-api.get.v2-space-space-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 space space-id field",
+      "summary": "Documented GET /v2/space/{space_id}/field (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 space space-id field --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/space/{space_id}/field"
+        }
+      ],
+      "operation": "clickup-api.get.v2-space-space-id-field",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 space space-id view",
+      "summary": "Documented GET /v2/space/{space_id}/view (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 space space-id view --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/space/{space_id}/view"
+        }
+      ],
+      "operation": "clickup-api.get.v2-space-space-id-view",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 task bulk-time-in-status",
+      "summary": "Documented GET /v2/task/bulk_time_in_status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 task bulk-time-in-status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/task/bulk_time_in_status"
+        }
+      ],
+      "operation": "clickup-api.get.v2-task-bulk-time-in-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 task bulk-time-in-status task-ids",
+      "summary": "Documented GET /v2/task/bulk_time_in_status/task_ids (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 task bulk-time-in-status task-ids --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/task/bulk_time_in_status/task_ids"
+        }
+      ],
+      "operation": "clickup-api.get.v2-task-bulk-time-in-status-task-ids",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 task task-id",
+      "summary": "Documented GET /v2/task/{task_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 task task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/task/{task_id}"
+        }
+      ],
+      "operation": "clickup-api.get.v2-task-task-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 task task-id comment",
+      "summary": "Documented GET /v2/task/{task_id}/comment (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 task task-id comment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/task/{task_id}/comment"
+        }
+      ],
+      "operation": "clickup-api.get.v2-task-task-id-comment",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 task task-id member",
+      "summary": "Documented GET /v2/task/{task_id}/member (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 task task-id member --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/task/{task_id}/member"
+        }
+      ],
+      "operation": "clickup-api.get.v2-task-task-id-member",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 task task-id time",
+      "summary": "Documented GET /v2/task/{task_id}/time (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 task task-id time --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/task/{task_id}/time"
+        }
+      ],
+      "operation": "clickup-api.get.v2-task-task-id-time",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 task task-id time-in-status",
+      "summary": "Documented GET /v2/task/{task_id}/time_in_status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 task task-id time-in-status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/task/{task_id}/time_in_status"
+        }
+      ],
+      "operation": "clickup-api.get.v2-task-task-id-time-in-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id custom-item",
+      "summary": "Documented GET /v2/team/{team_id}/custom_item (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id custom-item --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/custom_item"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-custom-item",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id customroles",
+      "summary": "Documented GET /v2/team/{team_id}/customroles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id customroles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/customroles"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-customroles",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id field",
+      "summary": "Documented GET /v2/team/{team_id}/field (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id field --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/field"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-field",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id folder-template",
+      "summary": "Documented GET /v2/team/{team_id}/folder_template (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id folder-template --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/folder_template"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-folder-template",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id foldertemplate",
+      "summary": "Documented GET /v2/team/{team_id}/folderTemplate (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id foldertemplate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/folderTemplate"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-foldertemplate",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id goal goal-id",
+      "summary": "Documented GET /v2/team/{team_id}/goal/{goal_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id goal goal-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/goal/{goal_id}"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-goal-goal-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id group",
+      "summary": "Documented GET /v2/team/{team_id}/group (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id group --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/group"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-group",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id guest guest-id",
+      "summary": "Documented GET /v2/team/{team_id}/guest/{guest_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id guest guest-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/guest/{guest_id}"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-guest-guest-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id list-template",
+      "summary": "Documented GET /v2/team/{team_id}/list_template (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id list-template --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/list_template"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-list-template",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id listtemplate",
+      "summary": "Documented GET /v2/team/{team_id}/listTemplate (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id listtemplate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/listTemplate"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-listtemplate",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id plan",
+      "summary": "Documented GET /v2/team/{team_id}/plan (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id plan --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/plan"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-plan",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id seats",
+      "summary": "Documented GET /v2/team/{team_id}/seats (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id seats --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/seats"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-seats",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id shared",
+      "summary": "Documented GET /v2/team/{team_id}/shared (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id shared --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/shared"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-shared",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id task",
+      "summary": "Documented GET /v2/team/{team_Id}/task (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id task --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_Id}/task"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-task",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id task filtered-team-tasks",
+      "summary": "Documented GET /v2/team/{team_id}/task/filtered_team_tasks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id task filtered-team-tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/task/filtered_team_tasks"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-task-filtered-team-tasks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id tasktemplate",
+      "summary": "Documented GET /v2/team/{team_id}/taskTemplate (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id tasktemplate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/taskTemplate"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-tasktemplate",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id time-entries",
+      "summary": "Documented GET /v2/team/{team_Id}/time_entries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id time-entries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_Id}/time_entries"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-time-entries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id time-entries current",
+      "summary": "Documented GET /v2/team/{team_id}/time_entries/current (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id time-entries current --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/time_entries/current"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-time-entries-current",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id time-entries operation",
+      "summary": "Documented GET /v2/team/{team_id}/time_entries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id time-entries operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/time_entries"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-time-entries-2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id time-entries tags",
+      "summary": "Documented GET /v2/team/{team_id}/time_entries/tags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id time-entries tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/time_entries/tags"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-time-entries-tags",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id time-entries timer-id",
+      "summary": "Documented GET /v2/team/{team_id}/time_entries/{timer_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id time-entries timer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/time_entries/{timer_id}"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-time-entries-timer-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id time-entries timer-id history",
+      "summary": "Documented GET /v2/team/{team_id}/time_entries/{timer_id}/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id time-entries timer-id history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/time_entries/{timer_id}/history"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-time-entries-timer-id-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id user user-id",
+      "summary": "Documented GET /v2/team/{team_id}/user/{user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id user user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/user/{user_id}"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-user-user-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 team team-id view",
+      "summary": "Documented GET /v2/team/{team_id}/view (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 team team-id view --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/view"
+        }
+      ],
+      "operation": "clickup-api.get.v2-team-team-id-view",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 user",
+      "summary": "Documented GET /v2/user (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 user --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/user"
+        }
+      ],
+      "operation": "clickup-api.get.v2-user",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 view view-id",
+      "summary": "Documented GET /v2/view/{view_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 view view-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/view/{view_id}"
+        }
+      ],
+      "operation": "clickup-api.get.v2-view-view-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 view view-id comment",
+      "summary": "Documented GET /v2/view/{view_id}/comment (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 view view-id comment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/view/{view_id}/comment"
+        }
+      ],
+      "operation": "clickup-api.get.v2-view-view-id-comment",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 view view-id task",
+      "summary": "Documented GET /v2/view/{view_id}/task (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 view view-id task --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/view/{view_id}/task"
+        }
+      ],
+      "operation": "clickup-api.get.v2-view-view-id-task",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workspaces workspace-id channels",
+      "summary": "Documented GET /v2/workspaces/{workspace_id}/channels (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 workspaces workspace-id channels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workspaces/{workspace_id}/channels"
+        }
+      ],
+      "operation": "clickup-api.get.v2-workspaces-workspace-id-channels",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workspaces workspace-id channels channel-id",
+      "summary": "Documented GET /v2/workspaces/{workspace_id}/channels/{channel_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 workspaces workspace-id channels channel-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}"
+        }
+      ],
+      "operation": "clickup-api.get.v2-workspaces-workspace-id-channels-channel-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workspaces workspace-id channels channel-id followers",
+      "summary": "Documented GET /v2/workspaces/{workspace_id}/channels/{channel_id}/followers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 workspaces workspace-id channels channel-id followers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}/followers"
+        }
+      ],
+      "operation": "clickup-api.get.v2-workspaces-workspace-id-channels-channel-id-followers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workspaces workspace-id channels channel-id members",
+      "summary": "Documented GET /v2/workspaces/{workspace_id}/channels/{channel_id}/members (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 workspaces workspace-id channels channel-id members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}/members"
+        }
+      ],
+      "operation": "clickup-api.get.v2-workspaces-workspace-id-channels-channel-id-members",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workspaces workspace-id channels channel-id messages",
+      "summary": "Documented GET /v2/workspaces/{workspace_id}/channels/{channel_id}/messages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 workspaces workspace-id channels channel-id messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}/messages"
+        }
+      ],
+      "operation": "clickup-api.get.v2-workspaces-workspace-id-channels-channel-id-messages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workspaces workspace-id messages message-id reactions",
+      "summary": "Documented GET /v2/workspaces/{workspace_id}/messages/{message_id}/reactions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 workspaces workspace-id messages message-id reactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/reactions"
+        }
+      ],
+      "operation": "clickup-api.get.v2-workspaces-workspace-id-messages-message-id-reactions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workspaces workspace-id messages message-id replies",
+      "summary": "Documented GET /v2/workspaces/{workspace_id}/messages/{message_id}/replies (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 workspaces workspace-id messages message-id replies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/replies"
+        }
+      ],
+      "operation": "clickup-api.get.v2-workspaces-workspace-id-messages-message-id-replies",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workspaces workspace-id messages message-id tagged-users",
+      "summary": "Documented GET /v2/workspaces/{workspace_id}/messages/{message_id}/tagged_users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 workspaces workspace-id messages message-id tagged-users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/tagged_users"
+        }
+      ],
+      "operation": "clickup-api.get.v2-workspaces-workspace-id-messages-message-id-tagged-users",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workspaces workspace-id subtypes",
+      "summary": "Documented GET /v2/workspaces/{workspace_id}/subtypes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v2 workspaces workspace-id subtypes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workspaces/{workspace_id}/subtypes"
+        }
+      ],
+      "operation": "clickup-api.get.v2-workspaces-workspace-id-subtypes",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 workspaces workspace-id docs",
+      "summary": "Documented GET /v3/workspaces/{workspace_id}/docs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v3 workspaces workspace-id docs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/workspaces/{workspace_id}/docs"
+        }
+      ],
+      "operation": "clickup-api.get.v3-workspaces-workspace-id-docs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 workspaces workspace-id docs doc-id",
+      "summary": "Documented GET /v3/workspaces/{workspace_id}/docs/{doc_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v3 workspaces workspace-id docs doc-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}"
+        }
+      ],
+      "operation": "clickup-api.get.v3-workspaces-workspace-id-docs-doc-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 workspaces workspace-id docs doc-id pagelisting",
+      "summary": "Documented GET /v3/workspaces/{workspace_id}/docs/{doc_id}/pageListing (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v3 workspaces workspace-id docs doc-id pagelisting --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pageListing"
+        }
+      ],
+      "operation": "clickup-api.get.v3-workspaces-workspace-id-docs-doc-id-pagelisting",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 workspaces workspace-id docs doc-id pages",
+      "summary": "Documented GET /v3/workspaces/{workspace_id}/docs/{doc_id}/pages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v3 workspaces workspace-id docs doc-id pages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pages"
+        }
+      ],
+      "operation": "clickup-api.get.v3-workspaces-workspace-id-docs-doc-id-pages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 workspaces workspace-id docs doc-id pages page-id",
+      "summary": "Documented GET /v3/workspaces/{workspace_id}/docs/{doc_id}/pages/{page_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api get v3 workspaces workspace-id docs doc-id pages page-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pages/{page_id}"
+        }
+      ],
+      "operation": "clickup-api.get.v3-workspaces-workspace-id-docs-doc-id-pages-page-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch v2 workspaces workspace-id channels channel-id",
+      "summary": "Documented PATCH /v2/workspaces/{workspace_id}/channels/{channel_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api patch v2 workspaces workspace-id channels channel-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}"
+        }
+      ],
+      "operation": "clickup-api.patch.v2-workspaces-workspace-id-channels-channel-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v2 workspaces workspace-id messages message-id",
+      "summary": "Documented PATCH /v2/workspaces/{workspace_id}/messages/{message_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api patch v2 workspaces workspace-id messages message-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/workspaces/{workspace_id}/messages/{message_id}"
+        }
+      ],
+      "operation": "clickup-api.patch.v2-workspaces-workspace-id-messages-message-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 attachment",
+      "summary": "Documented POST /v2/attachment (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 attachment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/attachment"
+        }
+      ],
+      "operation": "clickup-api.post.v2-attachment",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 checklist checklist-id checklist-item",
+      "summary": "Documented POST /v2/checklist/{checklist_id}/checklist_item (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 checklist checklist-id checklist-item --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/checklist/{checklist_id}/checklist_item"
+        }
+      ],
+      "operation": "clickup-api.post.v2-checklist-checklist-id-checklist-item",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 comment comment-id reply",
+      "summary": "Documented POST /v2/comment/{comment_id}/reply (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 comment comment-id reply --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/comment/{comment_id}/reply"
+        }
+      ],
+      "operation": "clickup-api.post.v2-comment-comment-id-reply",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 folder folder-id guest guest-id",
+      "summary": "Documented POST /v2/folder/{folder_id}/guest/{guest_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 folder folder-id guest guest-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/folder/{folder_id}/guest/{guest_id}"
+        }
+      ],
+      "operation": "clickup-api.post.v2-folder-folder-id-guest-guest-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 folder folder-id list-template template-id",
+      "summary": "Documented POST /v2/folder/{folder_id}/list_template/{template_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 folder folder-id list-template template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/folder/{folder_id}/list_template/{template_id}"
+        }
+      ],
+      "operation": "clickup-api.post.v2-folder-folder-id-list-template-template-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 folder folder-id view",
+      "summary": "Documented POST /v2/folder/{folder_id}/view (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 folder folder-id view --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/folder/{folder_id}/view"
+        }
+      ],
+      "operation": "clickup-api.post.v2-folder-folder-id-view",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 goal goal-id key-result",
+      "summary": "Documented POST /v2/goal/{goal_id}/key_result (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 goal goal-id key-result --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/goal/{goal_id}/key_result"
+        }
+      ],
+      "operation": "clickup-api.post.v2-goal-goal-id-key-result",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 list list-id comment",
+      "summary": "Documented POST /v2/list/{list_id}/comment (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 list list-id comment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/list/{list_id}/comment"
+        }
+      ],
+      "operation": "clickup-api.post.v2-list-list-id-comment",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 list list-id guest guest-id",
+      "summary": "Documented POST /v2/list/{list_id}/guest/{guest_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 list list-id guest guest-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/list/{list_id}/guest/{guest_id}"
+        }
+      ],
+      "operation": "clickup-api.post.v2-list-list-id-guest-guest-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 list list-id task task-id",
+      "summary": "Documented POST /v2/list/{list_id}/task/{task_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 list list-id task task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/list/{list_id}/task/{task_id}"
+        }
+      ],
+      "operation": "clickup-api.post.v2-list-list-id-task-task-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 list list-id tasktemplate template-id",
+      "summary": "Documented POST /v2/list/{list_id}/taskTemplate/{template_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 list list-id tasktemplate template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/list/{list_id}/taskTemplate/{template_id}"
+        }
+      ],
+      "operation": "clickup-api.post.v2-list-list-id-tasktemplate-template-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 list list-id view",
+      "summary": "Documented POST /v2/list/{list_id}/view (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 list list-id view --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/list/{list_id}/view"
+        }
+      ],
+      "operation": "clickup-api.post.v2-list-list-id-view",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 oauth token",
+      "summary": "Documented POST /v2/oauth/token (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 oauth token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/oauth/token"
+        }
+      ],
+      "operation": "clickup-api.post.v2-oauth-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 space space-id folder-template template-id",
+      "summary": "Documented POST /v2/space/{space_id}/folder_template/{template_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 space space-id folder-template template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/space/{space_id}/folder_template/{template_id}"
+        }
+      ],
+      "operation": "clickup-api.post.v2-space-space-id-folder-template-template-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 space space-id list",
+      "summary": "Documented POST /v2/space/{space_id}/list (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 space space-id list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/space/{space_id}/list"
+        }
+      ],
+      "operation": "clickup-api.post.v2-space-space-id-list",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 space space-id list-template template-id",
+      "summary": "Documented POST /v2/space/{space_id}/list_template/{template_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 space space-id list-template template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/space/{space_id}/list_template/{template_id}"
+        }
+      ],
+      "operation": "clickup-api.post.v2-space-space-id-list-template-template-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 space space-id tag",
+      "summary": "Documented POST /v2/space/{space_id}/tag (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 space space-id tag --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/space/{space_id}/tag"
+        }
+      ],
+      "operation": "clickup-api.post.v2-space-space-id-tag",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 space space-id view",
+      "summary": "Documented POST /v2/space/{space_id}/view (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 space space-id view --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/space/{space_id}/view"
+        }
+      ],
+      "operation": "clickup-api.post.v2-space-space-id-view",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 task task-id attachment",
+      "summary": "Documented POST /v2/task/{task_id}/attachment (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 task task-id attachment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/task/{task_id}/attachment"
+        }
+      ],
+      "operation": "clickup-api.post.v2-task-task-id-attachment",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 task task-id checklist",
+      "summary": "Documented POST /v2/task/{task_id}/checklist (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 task task-id checklist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/task/{task_id}/checklist"
+        }
+      ],
+      "operation": "clickup-api.post.v2-task-task-id-checklist",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 task task-id dependency",
+      "summary": "Documented POST /v2/task/{task_id}/dependency (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 task task-id dependency --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/task/{task_id}/dependency"
+        }
+      ],
+      "operation": "clickup-api.post.v2-task-task-id-dependency",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 task task-id guest guest-id",
+      "summary": "Documented POST /v2/task/{task_id}/guest/{guest_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 task task-id guest guest-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/task/{task_id}/guest/{guest_id}"
+        }
+      ],
+      "operation": "clickup-api.post.v2-task-task-id-guest-guest-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 task task-id link links-to",
+      "summary": "Documented POST /v2/task/{task_id}/link/{links_to} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 task task-id link links-to --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/task/{task_id}/link/{links_to}"
+        }
+      ],
+      "operation": "clickup-api.post.v2-task-task-id-link-links-to",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 task task-id list list-id",
+      "summary": "Documented POST /v2/task/{task_id}/list/{list_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 task task-id list list-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/task/{task_id}/list/{list_id}"
+        }
+      ],
+      "operation": "clickup-api.post.v2-task-task-id-list-list-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 task task-id merge",
+      "summary": "Documented POST /v2/task/{task_id}/merge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 task task-id merge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/task/{task_id}/merge"
+        }
+      ],
+      "operation": "clickup-api.post.v2-task-task-id-merge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 task task-id time",
+      "summary": "Documented POST /v2/task/{task_id}/time (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 task task-id time --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/task/{task_id}/time"
+        }
+      ],
+      "operation": "clickup-api.post.v2-task-task-id-time",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 task task-id time-estimate",
+      "summary": "Documented POST /v2/task/{task_id}/time_estimate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 task task-id time-estimate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/task/{task_id}/time_estimate"
+        }
+      ],
+      "operation": "clickup-api.post.v2-task-task-id-time-estimate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 task task-id time-estimate bulk",
+      "summary": "Documented POST /v2/task/{task_id}/time_estimate/bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 task task-id time-estimate bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/task/{task_id}/time_estimate/bulk"
+        }
+      ],
+      "operation": "clickup-api.post.v2-task-task-id-time-estimate-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 team team-id auditlogs",
+      "summary": "Documented POST /v2/team/{team_id}/auditlogs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 team team-id auditlogs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_id}/auditlogs"
+        }
+      ],
+      "operation": "clickup-api.post.v2-team-team-id-auditlogs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 team team-id group",
+      "summary": "Documented POST /v2/team/{team_id}/group (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 team team-id group --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_id}/group"
+        }
+      ],
+      "operation": "clickup-api.post.v2-team-team-id-group",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 team team-id guest",
+      "summary": "Documented POST /v2/team/{team_id}/guest (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 team team-id guest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_id}/guest"
+        }
+      ],
+      "operation": "clickup-api.post.v2-team-team-id-guest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 team team-id time-entries",
+      "summary": "Documented POST /v2/team/{team_Id}/time_entries (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 team team-id time-entries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_Id}/time_entries"
+        }
+      ],
+      "operation": "clickup-api.post.v2-team-team-id-time-entries",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 team team-id time-entries operation",
+      "summary": "Documented POST /v2/team/{team_id}/time_entries (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 team team-id time-entries operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_id}/time_entries"
+        }
+      ],
+      "operation": "clickup-api.post.v2-team-team-id-time-entries-2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 team team-id time-entries start",
+      "summary": "Documented POST /v2/team/{team_Id}/time_entries/start (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 team team-id time-entries start --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_Id}/time_entries/start"
+        }
+      ],
+      "operation": "clickup-api.post.v2-team-team-id-time-entries-start",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 team team-id time-entries start operation",
+      "summary": "Documented POST /v2/team/{team_id}/time_entries/start (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 team team-id time-entries start operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_id}/time_entries/start"
+        }
+      ],
+      "operation": "clickup-api.post.v2-team-team-id-time-entries-start-2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 team team-id time-entries stop",
+      "summary": "Documented POST /v2/team/{team_id}/time_entries/stop (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 team team-id time-entries stop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_id}/time_entries/stop"
+        }
+      ],
+      "operation": "clickup-api.post.v2-team-team-id-time-entries-stop",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 team team-id time-entries tags",
+      "summary": "Documented POST /v2/team/{team_id}/time_entries/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 team team-id time-entries tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_id}/time_entries/tags"
+        }
+      ],
+      "operation": "clickup-api.post.v2-team-team-id-time-entries-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 team team-id user",
+      "summary": "Documented POST /v2/team/{team_id}/user (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 team team-id user --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_id}/user"
+        }
+      ],
+      "operation": "clickup-api.post.v2-team-team-id-user",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 team team-id view",
+      "summary": "Documented POST /v2/team/{team_id}/view (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 team team-id view --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_id}/view"
+        }
+      ],
+      "operation": "clickup-api.post.v2-team-team-id-view",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 view view-id comment",
+      "summary": "Documented POST /v2/view/{view_id}/comment (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 view view-id comment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/view/{view_id}/comment"
+        }
+      ],
+      "operation": "clickup-api.post.v2-view-view-id-comment",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 workspaces workspace-id channels",
+      "summary": "Documented POST /v2/workspaces/{workspace_id}/channels (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 workspaces workspace-id channels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/workspaces/{workspace_id}/channels"
+        }
+      ],
+      "operation": "clickup-api.post.v2-workspaces-workspace-id-channels",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 workspaces workspace-id channels channel-id messages",
+      "summary": "Documented POST /v2/workspaces/{workspace_id}/channels/{channel_id}/messages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 workspaces workspace-id channels channel-id messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/workspaces/{workspace_id}/channels/{channel_id}/messages"
+        }
+      ],
+      "operation": "clickup-api.post.v2-workspaces-workspace-id-channels-channel-id-messages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 workspaces workspace-id channels location",
+      "summary": "Documented POST /v2/workspaces/{workspace_id}/channels/location (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 workspaces workspace-id channels location --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/workspaces/{workspace_id}/channels/location"
+        }
+      ],
+      "operation": "clickup-api.post.v2-workspaces-workspace-id-channels-location",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 workspaces workspace-id direct-messages",
+      "summary": "Documented POST /v2/workspaces/{workspace_id}/direct_messages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 workspaces workspace-id direct-messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/workspaces/{workspace_id}/direct_messages"
+        }
+      ],
+      "operation": "clickup-api.post.v2-workspaces-workspace-id-direct-messages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 workspaces workspace-id messages message-id reactions",
+      "summary": "Documented POST /v2/workspaces/{workspace_id}/messages/{message_id}/reactions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 workspaces workspace-id messages message-id reactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/reactions"
+        }
+      ],
+      "operation": "clickup-api.post.v2-workspaces-workspace-id-messages-message-id-reactions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 workspaces workspace-id messages message-id replies",
+      "summary": "Documented POST /v2/workspaces/{workspace_id}/messages/{message_id}/replies (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v2 workspaces workspace-id messages message-id replies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/workspaces/{workspace_id}/messages/{message_id}/replies"
+        }
+      ],
+      "operation": "clickup-api.post.v2-workspaces-workspace-id-messages-message-id-replies",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 workspaces workspace-id docs",
+      "summary": "Documented POST /v3/workspaces/{workspace_id}/docs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v3 workspaces workspace-id docs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/workspaces/{workspace_id}/docs"
+        }
+      ],
+      "operation": "clickup-api.post.v3-workspaces-workspace-id-docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 workspaces workspace-id docs doc-id pages",
+      "summary": "Documented POST /v3/workspaces/{workspace_id}/docs/{doc_id}/pages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api post v3 workspaces workspace-id docs doc-id pages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pages"
+        }
+      ],
+      "operation": "clickup-api.post.v3-workspaces-workspace-id-docs-doc-id-pages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 checklist checklist-id",
+      "summary": "Documented PUT /v2/checklist/{checklist_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 checklist checklist-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/checklist/{checklist_id}"
+        }
+      ],
+      "operation": "clickup-api.put.v2-checklist-checklist-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 checklist checklist-id checklist-item checklist-item-id",
+      "summary": "Documented PUT /v2/checklist/{checklist_id}/checklist_item/{checklist_item_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 checklist checklist-id checklist-item checklist-item-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/checklist/{checklist_id}/checklist_item/{checklist_item_id}"
+        }
+      ],
+      "operation": "clickup-api.put.v2-checklist-checklist-id-checklist-item-checklist-item-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 comment comment-id",
+      "summary": "Documented PUT /v2/comment/{comment_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 comment comment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/comment/{comment_id}"
+        }
+      ],
+      "operation": "clickup-api.put.v2-comment-comment-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 goal goal-id",
+      "summary": "Documented PUT /v2/goal/{goal_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 goal goal-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/goal/{goal_id}"
+        }
+      ],
+      "operation": "clickup-api.put.v2-goal-goal-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 group group-id",
+      "summary": "Documented PUT /v2/group/{group_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 group group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/group/{group_id}"
+        }
+      ],
+      "operation": "clickup-api.put.v2-group-group-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 key-result key-result-id",
+      "summary": "Documented PUT /v2/key_result/{key_result_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 key-result key-result-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/key_result/{key_result_id}"
+        }
+      ],
+      "operation": "clickup-api.put.v2-key-result-key-result-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 object-type object-id acl",
+      "summary": "Documented PUT /v2/{object_type}/{object_id}/acl (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 object-type object-id acl --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/{object_type}/{object_id}/acl"
+        }
+      ],
+      "operation": "clickup-api.put.v2-object-type-object-id-acl",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 space space-id tag tag-name",
+      "summary": "Documented PUT /v2/space/{space_id}/tag/{tag_name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 space space-id tag tag-name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/space/{space_id}/tag/{tag_name}"
+        }
+      ],
+      "operation": "clickup-api.put.v2-space-space-id-tag-tag-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 task task-id time",
+      "summary": "Documented PUT /v2/task/{task_id}/time (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 task task-id time --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/task/{task_id}/time"
+        }
+      ],
+      "operation": "clickup-api.put.v2-task-task-id-time",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 task task-id time interval-id",
+      "summary": "Documented PUT /v2/task/{task_id}/time/{interval_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 task task-id time interval-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/task/{task_id}/time/{interval_id}"
+        }
+      ],
+      "operation": "clickup-api.put.v2-task-task-id-time-interval-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 team team-id guest guest-id",
+      "summary": "Documented PUT /v2/team/{team_id}/guest/{guest_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 team team-id guest guest-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/team/{team_id}/guest/{guest_id}"
+        }
+      ],
+      "operation": "clickup-api.put.v2-team-team-id-guest-guest-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 team team-id time-entries tags",
+      "summary": "Documented PUT /v2/team/{team_id}/time_entries/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 team team-id time-entries tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/team/{team_id}/time_entries/tags"
+        }
+      ],
+      "operation": "clickup-api.put.v2-team-team-id-time-entries-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 team team-id time-entries timer-id",
+      "summary": "Documented PUT /v2/team/{team_id}/time_entries/{timer_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 team team-id time-entries timer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/team/{team_id}/time_entries/{timer_id}"
+        }
+      ],
+      "operation": "clickup-api.put.v2-team-team-id-time-entries-timer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 team team-id user user-id",
+      "summary": "Documented PUT /v2/team/{team_id}/user/{user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 team team-id user user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/team/{team_id}/user/{user_id}"
+        }
+      ],
+      "operation": "clickup-api.put.v2-team-team-id-user-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 view view-id",
+      "summary": "Documented PUT /v2/view/{view_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v2 view view-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/view/{view_id}"
+        }
+      ],
+      "operation": "clickup-api.put.v2-view-view-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 workspaces workspace-id docs doc-id pages page-id",
+      "summary": "Documented PUT /v3/workspaces/{workspace_id}/docs/{doc_id}/pages/{page_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api api put v3 workspaces workspace-id docs doc-id pages page-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/workspaces/{workspace_id}/docs/{doc_id}/pages/{page_id}"
+        }
+      ],
+      "operation": "clickup-api.put.v3-workspaces-workspace-id-docs-doc-id-pages-page-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "create folder apply",
+      "summary": "Plan and execute the create folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_folder",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api create folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/space/{space_id}/folder"
+        }
+      ],
+      "risk": "creates a new Folder in the configured space; low-risk (additive)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create goal apply",
+      "summary": "Plan and execute the create goal reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_goal",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api create goal apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_id}/goal"
+        }
+      ],
+      "risk": "creates a new ClickUp Goal in the configured team/workspace; low-risk (additive)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create list apply",
+      "summary": "Plan and execute the create list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_list",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api create list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/folder/{folder_id}/list"
+        }
+      ],
+      "risk": "creates a new List in the configured Folder; low-risk (additive)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create space apply",
+      "summary": "Plan and execute the create space reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_space",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api create space apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_id}/space"
+        }
+      ],
+      "risk": "creates a new Space in the configured Workspace; low-risk (additive)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create task apply",
+      "summary": "Plan and execute the create task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_task",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api create task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/list/{list_id}/task"
+        }
+      ],
+      "risk": "creates a new ClickUp task in the configured list; low-risk (additive)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create task comment apply",
+      "summary": "Plan and execute the create task comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_task_comment",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "comment_text",
+          "type": "string",
+          "summary": "Required comment text record field.",
+          "maps_to": "record.comment_text",
+          "required": true
+        },
+        {
+          "name": "notify_all",
+          "type": "boolean",
+          "summary": "Required notify all record field.",
+          "maps_to": "record.notify_all",
+          "required": true
+        },
+        {
+          "name": "task_id",
+          "type": "string",
+          "summary": "Required task id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api create task comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/task/{task_id}/comment"
+        }
+      ],
+      "risk": "adds a new comment to a ClickUp task, visible to all task watchers when notify_all is true; low-risk",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_webhook",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/team/{team_id}/webhook"
+        }
+      ],
+      "risk": "registers or repoints an outbound event-delivery URL of the caller's choosing; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete folder apply",
+      "summary": "Plan and execute the delete folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_folder",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api delete folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/folder/{folder_id}"
+        }
+      ],
+      "risk": "permanently deletes a ClickUp Folder and every List/task inside it; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete list apply",
+      "summary": "Plan and execute the delete list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_list",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api delete list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/list/{list_id}"
+        }
+      ],
+      "risk": "permanently deletes a ClickUp List and every task inside it; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete space apply",
+      "summary": "Plan and execute the delete space reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_space",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api delete space apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/space/{space_id}"
+        }
+      ],
+      "risk": "permanently deletes a ClickUp Space and every Folder/List/task inside it; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete task apply",
+      "summary": "Plan and execute the delete task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_task",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api delete task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/task/{task_id}"
+        }
+      ],
+      "risk": "permanently deletes a ClickUp task; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api delete webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/webhook/{webhook_id}"
+        }
+      ],
+      "risk": "stops event delivery to a registered webhook endpoint; approval required (irreversible without re-registering)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "folders list",
+      "summary": "Run the folders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "folders",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api folders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/space/{space_id}/folder"
+        }
+      ]
+    },
+    {
+      "path": "goals list",
+      "summary": "Run the goals ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "goals",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api goals list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/goal"
+        }
+      ]
+    },
+    {
+      "path": "lists list",
+      "summary": "Run the lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lists",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/space/{space_id}/list"
+        }
+      ]
+    },
+    {
+      "path": "remove tag from task apply",
+      "summary": "Plan and execute the remove tag from task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_tag_from_task",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "tag_name",
+          "type": "string",
+          "summary": "Required tag name record field.",
+          "maps_to": "record.tag_name",
+          "required": true
+        },
+        {
+          "name": "task_id",
+          "type": "string",
+          "summary": "Required task id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api remove tag from task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/task/{task_id}/tag/{tag_name}"
+        }
+      ],
+      "risk": "removes a tag from a task (does not delete the tag from the Space); low-risk",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "set custom field value apply",
+      "summary": "Plan and execute the set custom field value reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "set_custom_field_value",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api set custom field value apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/task/{task_id}/field/{field_id}"
+        }
+      ],
+      "risk": "sets a Custom Field value on a task; the accepted value shape varies by the field's type (text/number/date/dropdown/label/people/task-relationship/manual-progress/location/button); approval required since an incorrectly-typed value can silently fail or corrupt a differently-typed field",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "space tags list",
+      "summary": "Run the space tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "space_tags",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api space tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/space/{space_id}/tag"
+        }
+      ]
+    },
+    {
+      "path": "spaces list",
+      "summary": "Run the spaces ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "spaces",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api spaces list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/space"
+        }
+      ]
+    },
+    {
+      "path": "tasks list",
+      "summary": "Run the tasks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api tasks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/task"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "teams list",
+      "summary": "Run the teams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api teams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team"
+        }
+      ]
+    },
+    {
+      "path": "update folder apply",
+      "summary": "Plan and execute the update folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_folder",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api update folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/folder/{folder_id}"
+        }
+      ],
+      "risk": "renames an existing ClickUp Folder; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update list apply",
+      "summary": "Plan and execute the update list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_list",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api update list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/list/{list_id}"
+        }
+      ],
+      "risk": "updates an existing ClickUp List's name/description/due date/priority/assignee/color; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update space apply",
+      "summary": "Plan and execute the update space reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_space",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api update space apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/space/{space_id}"
+        }
+      ],
+      "risk": "updates an existing ClickUp Space's name/color/privacy/ClickApp feature toggles; ClickUp's own docs mark every body field required (a partial update still needs the full current feature set re-sent to avoid resetting unspecified features); approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update task apply",
+      "summary": "Plan and execute the update task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_task",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api update task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/task/{task_id}"
+        }
+      ],
+      "risk": "updates fields on an existing ClickUp task (name, description, status, dates, priority, archived); approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "Plan and execute the update webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm clickup-api update webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/webhook/{webhook_id}"
+        }
+      ],
+      "risk": "changes which events are delivered to (or repoints) an existing outbound webhook; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://developer.clickup.com/openapi/clickup-api-v2-reference.json",
+      "examples": [
+        "pm clickup-api webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/team/{team_id}/webhook"
+        }
+      ]
+    }
+  ]
+}

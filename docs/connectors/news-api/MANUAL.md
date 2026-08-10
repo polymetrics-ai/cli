@@ -61,6 +61,15 @@ SECURITY
   read risk: external News API read of article and source metadata
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run News API's declared streams and reverse-ETL actions.
+  Usage: pm news-api <command> [flags]
+  Read streams
+  Other Commands
+    everything list - Run the everything ETL stream [intent=etl availability=implemented stream=everything]
+    sources list - Run the sources ETL stream [intent=etl availability=implemented stream=sources]
+    top headlines list - Run the top headlines ETL stream [intent=etl availability=implemented stream=top_headlines]
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect news-api

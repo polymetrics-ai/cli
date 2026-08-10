@@ -1,0 +1,2241 @@
+{
+  "operations": [
+    {
+      "id": "railz.get.v2-accounting-accountingtransactions",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/accountingTransactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/accountingTransactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-accounts",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-accounts",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/accounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-accounts-batch",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/accounts/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/accounts/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-accounts-batch",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/accounts/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/accounts/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-accounts-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/accounts/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/accounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-apaging",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/apAging",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/apAging",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-araging",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/arAging",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/arAging",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-attachments",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/attachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-attachments",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/attachments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-balancesheets",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/balanceSheets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/balanceSheets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-balancesheets-report",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/balanceSheets/report",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/balanceSheets/report",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-bankaccounts",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/bankAccounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/bankAccounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-bankaccounts",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/bankAccounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/bankAccounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-banktransactions",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/bankTransactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/bankTransactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-banktransactions",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/bankTransactions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/bankTransactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-banktransactions-batch",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/bankTransactions/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/bankTransactions/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-banktransactions-batch",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/bankTransactions/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/bankTransactions/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-banktransactions-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/bankTransactions/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/bankTransactions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-banktransfers",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/bankTransfers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/bankTransfers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-banktransfers",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/bankTransfers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/bankTransfers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-bills",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/bills",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/bills",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-bills",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/bills",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/bills",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-bills-creditnotes",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/bills/creditNotes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/bills/creditNotes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-bills-creditnotes",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/bills/creditNotes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/bills/creditNotes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-bills-paymentrequests",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/bills/paymentRequests",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/bills/paymentRequests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-bills-paymentrequests",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/bills/paymentRequests",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/bills/paymentRequests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.patch.v2-accounting-bills-paymentrequests-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v2/accounting/bills/paymentRequests/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/accounting/bills/paymentRequests/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-bills-payments",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/bills/payments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/bills/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-bills-payments",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/bills/payments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/bills/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-bills-payments-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/bills/payments/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/bills/payments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.delete.v2-accounting-bills-payments-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/accounting/bills/payments/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/accounting/bills/payments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-bills-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/bills/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/bills/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.delete.v2-accounting-bills-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/accounting/bills/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/accounting/bills/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-budgets",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/budgets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/budgets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-cashflowstatements",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/cashflowStatements",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/cashflowStatements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-cashflowstatements-report",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/cashflowStatements/report",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/cashflowStatements/report",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-contacts",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-customers",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/customers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-customers",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/customers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-customers-bankaccounts",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/customers/bankAccounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/customers/bankAccounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-customers-bankaccounts",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/customers/bankAccounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/customers/bankAccounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-customers-batch",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/customers/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/customers/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-customers-batch",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/customers/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/customers/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-customers-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/customers/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/customers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-deposits",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/deposits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/deposits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-deposits",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/deposits",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/deposits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-estimates",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/estimates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/estimates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-estimates",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/estimates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/estimates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-expenses",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/expenses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/expenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-expenses",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/expenses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/expenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-fileupload-type",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/fileUpload/{type}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/fileUpload/{type}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-incomestatements",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/incomeStatements",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/incomeStatements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-incomestatements-report",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/incomeStatements/report",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/incomeStatements/report",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-inventory",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/inventory",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/inventory",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-inventory",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/inventory",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/inventory",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-inventory-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/inventory/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/inventory/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-invoices",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/invoices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-invoices",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/invoices",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-invoices-creditnotes",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/invoices/creditNotes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/invoices/creditNotes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-invoices-creditnotes",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/invoices/creditNotes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/invoices/creditNotes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-invoices-payments",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/invoices/payments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/invoices/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-invoices-payments",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/invoices/payments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/invoices/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-invoices-payments-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/invoices/payments/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/invoices/payments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.delete.v2-accounting-invoices-payments-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/accounting/invoices/payments/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/accounting/invoices/payments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-invoices-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/invoices/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/invoices/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.delete.v2-accounting-invoices-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/accounting/invoices/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/accounting/invoices/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-journalentries",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/journalEntries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/journalEntries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-journalentries",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/journalEntries",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/journalEntries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-journalentries-batch",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/journalEntries/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/journalEntries/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-journalentries-batch",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/journalEntries/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/journalEntries/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-journalentries-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/journalEntries/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/journalEntries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-journals",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/journals",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/journals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-journals",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/journals",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/journals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-journals-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/journals/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/journals/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-paymentmethods",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/paymentMethods",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/paymentMethods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-payrolltransactions",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/payrollTransactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/payrollTransactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-purchaseorders",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/purchaseOrders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/purchaseOrders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-purchaseorders",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/purchaseOrders",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/purchaseOrders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-refunds",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/refunds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/refunds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-refunds",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/refunds",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/refunds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-taxauthority",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/taxAuthority",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/taxAuthority",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-taxrates",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/taxRates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/taxRates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-taxrates",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/taxRates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/taxRates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-trackingcategories",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/trackingCategories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/trackingCategories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-trackingcategories",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/trackingCategories",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/trackingCategories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-trialbalances",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/trialBalances",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/trialBalances",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-vendors",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/vendors",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/vendors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-vendors",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/vendors",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/vendors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-accounting-vendors-bankaccounts",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounting/vendors/bankAccounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounting/vendors/bankAccounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-vendors-bankaccounts",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/vendors/bankAccounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/vendors/bankAccounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-vendors-bankaccounts-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/vendors/bankAccounts/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/vendors/bankAccounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-accounting-vendors-batch",
+      "kind": "rest_write",
+      "summary": "POST /v2/accounting/vendors/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accounting/vendors/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-vendors-batch",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/vendors/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/vendors/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-accounting-vendors-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accounting/vendors/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accounting/vendors/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-analytics-bankreconciliation",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/bankReconciliation",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/bankReconciliation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-analytics-businessvaluations",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/businessValuations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/businessValuations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-analytics-creditratings",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/creditRatings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/creditRatings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-analytics-creditscores",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/creditScores",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/creditScores",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-analytics-financialbenchmarking",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/financialBenchmarking",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/financialBenchmarking",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-analytics-financialforecasts",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/financialForecasts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/financialForecasts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-analytics-financialratios",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/financialRatios",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/financialRatios",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-analytics-fraudriskmetrics",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/fraudRiskMetrics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/fraudRiskMetrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-analytics-portfoliometrics",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/portfolioMetrics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/portfolioMetrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-analytics-probabilityofdefault",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/probabilityOfDefault",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/probabilityOfDefault",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-analytics-taxbenchmarking",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/taxBenchmarking",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/taxBenchmarking",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-banking-bankaccounts",
+      "kind": "rest_read",
+      "summary": "GET /v2/banking/bankAccounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/banking/bankAccounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-banking-bankassets",
+      "kind": "rest_read",
+      "summary": "GET /v2/banking/bankAssets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/banking/bankAssets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-banking-banktransactions",
+      "kind": "rest_read",
+      "summary": "GET /v2/banking/bankTransactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/banking/bankTransactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-businesses",
+      "kind": "rest_read",
+      "summary": "GET /v2/businesses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/businesses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-businesses",
+      "kind": "rest_write",
+      "summary": "POST /v2/businesses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/businesses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-businesses-generateurl",
+      "kind": "rest_write",
+      "summary": "POST /v2/businesses/generateUrl",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/businesses/generateUrl",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-businesses-info",
+      "kind": "rest_read",
+      "summary": "GET /v2/businesses/info",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/businesses/info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-businesses-uuid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/businesses/{uuid}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/businesses/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.delete.v2-businesses-uuid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/businesses/{uuid}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/businesses/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-businesses-uuid-connection-migrate",
+      "kind": "rest_write",
+      "summary": "POST /v2/businesses/{uuid}/connection/migrate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/businesses/{uuid}/connection/migrate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-commerce-disputes",
+      "kind": "rest_read",
+      "summary": "GET /v2/commerce/disputes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/commerce/disputes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-commerce-orders",
+      "kind": "rest_read",
+      "summary": "GET /v2/commerce/orders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/commerce/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-commerce-products",
+      "kind": "rest_read",
+      "summary": "GET /v2/commerce/products",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/commerce/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-commerce-transactions",
+      "kind": "rest_read",
+      "summary": "GET /v2/commerce/transactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/commerce/transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-connections",
+      "kind": "rest_read",
+      "summary": "GET /v2/connections",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/connections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.put.v2-connections-disconnect",
+      "kind": "rest_write",
+      "summary": "PUT /v2/connections/disconnect",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/connections/disconnect",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-data-deletestatus",
+      "kind": "rest_read",
+      "summary": "GET /v2/data/deleteStatus",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/data/deleteStatus",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-data-pushoptions",
+      "kind": "rest_read",
+      "summary": "GET /v2/data/pushOptions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/data/pushOptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-data-pushstatus",
+      "kind": "rest_read",
+      "summary": "GET /v2/data/pushStatus",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/data/pushStatus",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-data-sync",
+      "kind": "rest_write",
+      "summary": "POST /v2/data/sync",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/data/sync",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-data-syncinfo",
+      "kind": "rest_read",
+      "summary": "GET /v2/data/syncInfo",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/data/syncInfo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-data-syncstatus",
+      "kind": "rest_read",
+      "summary": "GET /v2/data/syncStatus",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/data/syncStatus",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.post.v2-sandbox-firewebhooks",
+      "kind": "rest_write",
+      "summary": "POST /v2/sandbox/fireWebhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/sandbox/fireWebhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-balancesheets",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/balanceSheets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/balanceSheets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-bankaccounts",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/bankAccounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/bankAccounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-bankreconciliation",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/bankReconciliation",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/bankReconciliation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-bills",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/bills",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/bills",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-businessvaluations",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/businessValuations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/businessValuations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-cashflowstatements",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/cashflowStatements",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/cashflowStatements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-credits",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/credits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/credits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-expenses",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/expenses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/expenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-financialforecasts",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/financialForecasts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/financialForecasts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-financialforecasts-summaryeligibility",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/financialForecasts/summaryEligibility",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/financialForecasts/summaryEligibility",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-financialratios",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/financialRatios",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/financialRatios",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-incomestatements",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/incomeStatements",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/incomeStatements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-invoices",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/invoices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-railzscore",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/railzScore",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/railzScore",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-revenue",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/revenue",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/revenue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "railz.get.v2-visualizations-taxbenchmarking",
+      "kind": "rest_read",
+      "summary": "GET /v2/visualizations/taxBenchmarking",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.railz.ai/openapi/69c553fd21928d7b745b35b6",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/visualizations/taxBenchmarking",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

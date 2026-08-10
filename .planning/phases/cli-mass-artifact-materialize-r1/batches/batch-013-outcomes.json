@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "batch": "batch-013",
+  "manifest": "batches/batch-013-manifest.json",
+  "outcomes": [
+    {
+      "connector": "blogger",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-013-materialize.json"
+    },
+    {
+      "connector": "google-ads",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-013-retry-v5-materialize.json"
+    },
+    {
+      "connector": "google-calendar",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-013-materialize.json"
+    },
+    {
+      "connector": "google-classroom",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-013-materialize.json"
+    },
+    {
+      "connector": "google-directory",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-013-materialize.json"
+    },
+    {
+      "connector": "google-forms",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-013-retry-v5-materialize.json"
+    },
+    {
+      "connector": "google-pagespeed-insights",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-013-materialize.json"
+    },
+    {
+      "connector": "google-search-console",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": false,
+      "evidence": "batches/batch-013-retry-v5-materialize.json"
+    },
+    {
+      "connector": "google-tasks",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-013-materialize.json"
+    },
+    {
+      "connector": "google-webfonts",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": false,
+      "evidence": "batches/batch-013-retry-v5-materialize.json"
+    }
+  ]
+}

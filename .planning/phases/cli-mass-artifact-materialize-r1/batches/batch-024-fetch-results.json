@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "batch": "batch-024",
+  "results": [
+    {
+      "connector": "countercyclical",
+      "status": "fetched",
+      "detail": "21463"
+    },
+    {
+      "connector": "ebay-finance",
+      "status": "failed",
+      "detail": "22"
+    },
+    {
+      "connector": "hugging-face-datasets",
+      "status": "fetched",
+      "detail": "95723"
+    },
+    {
+      "connector": "buzzsprout",
+      "status": "fetched",
+      "detail": "51561"
+    },
+    {
+      "connector": "mailjet-sms",
+      "status": "fetched",
+      "detail": "16778"
+    },
+    {
+      "connector": "freshsales",
+      "status": "fetched",
+      "detail": "1196721"
+    },
+    {
+      "connector": "campayn",
+      "status": "fetched",
+      "detail": "267586"
+    },
+    {
+      "connector": "lemlist",
+      "status": "fetched",
+      "detail": "325032"
+    },
+    {
+      "connector": "harvest",
+      "status": "fetched",
+      "detail": "16588"
+    },
+    {
+      "connector": "sonar-cloud",
+      "status": "fetched",
+      "detail": "209481"
+    },
+    {
+      "connector": "buildkite",
+      "status": "fetched",
+      "detail": "30811"
+    },
+    {
+      "connector": "cimis",
+      "status": "fetched",
+      "detail": "8271"
+    },
+    {
+      "connector": "planhat",
+      "status": "fetched",
+      "detail": "454884"
+    },
+    {
+      "connector": "marketstack",
+      "status": "failed",
+      "detail": "1"
+    },
+    {
+      "connector": "serpstat",
+      "status": "fetched",
+      "detail": "443874"
+    },
+    {
+      "connector": "mux",
+      "status": "fetched",
+      "detail": "2807714"
+    },
+    {
+      "connector": "mailjet-mail",
+      "status": "fetched",
+      "detail": "16746"
+    },
+    {
+      "connector": "ticketmaster",
+      "status": "fetched",
+      "detail": "1417565"
+    },
+    {
+      "connector": "miro",
+      "status": "fetched",
+      "detail": "586908"
+    },
+    {
+      "connector": "webflow",
+      "status": "fetched",
+      "detail": "835231"
+    },
+    {
+      "connector": "sparkpost",
+      "status": "fetched",
+      "detail": "296603"
+    },
+    {
+      "connector": "capsule-crm",
+      "status": "fetched",
+      "detail": "119524"
+    },
+    {
+      "connector": "sentry",
+      "status": "fetched",
+      "detail": "19514"
+    },
+    {
+      "connector": "freshdesk",
+      "status": "fetched",
+      "detail": "3228889"
+    },
+    {
+      "connector": "nylas",
+      "status": "fetched",
+      "detail": "434802"
+    },
+    {
+      "connector": "bing-ads",
+      "status": "fetched",
+      "detail": "91432"
+    },
+    {
+      "connector": "free-agent-connector",
+      "status": "fetched",
+      "detail": "15202"
+    },
+    {
+      "connector": "grafana",
+      "status": "fetched",
+      "detail": "322892"
+    },
+    {
+      "connector": "katana",
+      "status": "fetched",
+      "detail": "704196"
+    },
+    {
+      "connector": "shopwired",
+      "status": "fetched",
+      "detail": "32563"
+    },
+    {
+      "connector": "salesloft",
+      "status": "fetched",
+      "detail": "85268"
+    },
+    {
+      "connector": "prestashop",
+      "status": "fetched",
+      "detail": "644383"
+    },
+    {
+      "connector": "discord",
+      "status": "fetched",
+      "detail": "29202"
+    },
+    {
+      "connector": "firehydrant",
+      "status": "fetched",
+      "detail": "758880"
+    },
+    {
+      "connector": "pretix",
+      "status": "fetched",
+      "detail": "71218"
+    },
+    {
+      "connector": "freshservice",
+      "status": "fetched",
+      "detail": "7155224"
+    },
+    {
+      "connector": "high-level",
+      "status": "fetched",
+      "detail": "13449"
+    },
+    {
+      "connector": "signnow",
+      "status": "fetched",
+      "detail": "463972"
+    },
+    {
+      "connector": "pinterest",
+      "status": "fetched",
+      "detail": "649811"
+    },
+    {
+      "connector": "hubspot",
+      "status": "fetched",
+      "detail": "1341857"
+    }
+  ]
+}

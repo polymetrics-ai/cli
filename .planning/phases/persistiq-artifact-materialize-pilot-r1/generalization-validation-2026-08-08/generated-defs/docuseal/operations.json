@@ -1,0 +1,374 @@
+{
+  "operations": [
+    {
+      "id": "docuseal.post.submissions-docx",
+      "kind": "rest_write",
+      "summary": "POST /submissions/docx",
+      "description": "requires a base64/URL-embedded DOCX document payload; same binary-body limitation as /submissions/pdf",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/submissions/docx",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "docuseal.post.submissions-emails",
+      "kind": "rest_write",
+      "summary": "POST /submissions/emails",
+      "description": "creates a submission by parsing signature requests from inbound emails; a niche ingestion path with no legacy precedent, not a general-purpose reverse-ETL write",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/submissions/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "docuseal.post.submissions-html",
+      "kind": "rest_write",
+      "summary": "POST /submissions/html",
+      "description": "creates a submission directly from raw HTML document markup; a document-authoring path, not a reverse-ETL data write on an existing template/submission resource",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/submissions/html",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "docuseal.post.submissions-pdf",
+      "kind": "rest_write",
+      "summary": "POST /submissions/pdf",
+      "description": "requires a base64/URL-embedded PDF document payload; the declarative write dialect has no multipart/binary body support (conventions.md §1 Tier-2 trigger list — multipart/binary bodies are a hook-only capability, and no hook package is being added in this pass)",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/submissions/pdf",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "docuseal.get.submissions-id",
+      "kind": "rest_read",
+      "summary": "GET /submissions/{id}",
+      "description": "single-submission detail retrieval (nested submitters/documents/events) not modeled as its own stream; the `submissions` list stream already surfaces every scalar field this bundle's schema projects, and a per-id detail fan-out is not implemented this pass",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/submissions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "docuseal.put.submissions-id",
+      "kind": "rest_write",
+      "summary": "PUT /submissions/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/submissions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "docuseal.get.submissions-id-documents",
+      "kind": "rest_read",
+      "summary": "GET /submissions/{id}/documents",
+      "description": "returns signed document file references/binary content, not tabular record data",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/submissions/{id}/documents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "docuseal.get.submitters-id",
+      "kind": "rest_read",
+      "summary": "GET /submitters/{id}",
+      "description": "single-submitter detail retrieval not modeled as its own stream; the `submitters` list stream already covers every field this bundle's schema projects",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/submitters/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "docuseal.post.templates-docx",
+      "kind": "rest_write",
+      "summary": "POST /templates/docx",
+      "description": "requires a base64/URL-embedded DOCX document payload to create a new template; same binary-body limitation",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/templates/docx",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "docuseal.post.templates-html",
+      "kind": "rest_write",
+      "summary": "POST /templates/html",
+      "description": "creates a template directly from raw HTML document markup; a document-authoring path, not a reverse-ETL data write",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/templates/html",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "docuseal.post.templates-merge",
+      "kind": "rest_write",
+      "summary": "POST /templates/merge",
+      "description": "merges multiple existing templates' documents into one new template; a document-composition operation with no legacy precedent and no natural single-record write shape",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/templates/merge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "docuseal.post.templates-pdf",
+      "kind": "rest_write",
+      "summary": "POST /templates/pdf",
+      "description": "requires a base64/URL-embedded PDF document payload to create a new template; same binary-body limitation as /submissions/pdf",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/templates/pdf",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "docuseal.put.templates-id-documents",
+      "kind": "rest_write",
+      "summary": "PUT /templates/{id}/documents",
+      "description": "replaces a template's underlying document files; requires a base64/URL file payload, same binary-body limitation",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/templates/{id}/documents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "docuseal.webhook.formcompletedwebhook-post",
+      "kind": "composite",
+      "summary": "WEBHOOK formCompletedWebhook#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK formCompletedWebhook#POST"
+        ]
+      }
+    },
+    {
+      "id": "docuseal.webhook.formdeclinedwebhook-post",
+      "kind": "composite",
+      "summary": "WEBHOOK formDeclinedWebhook#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK formDeclinedWebhook#POST"
+        ]
+      }
+    },
+    {
+      "id": "docuseal.webhook.formstartedwebhook-post",
+      "kind": "composite",
+      "summary": "WEBHOOK formStartedWebhook#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK formStartedWebhook#POST"
+        ]
+      }
+    },
+    {
+      "id": "docuseal.webhook.formviewedwebhook-post",
+      "kind": "composite",
+      "summary": "WEBHOOK formViewedWebhook#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK formViewedWebhook#POST"
+        ]
+      }
+    },
+    {
+      "id": "docuseal.webhook.submissionarchivedwebhook-post",
+      "kind": "composite",
+      "summary": "WEBHOOK submissionArchivedWebhook#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK submissionArchivedWebhook#POST"
+        ]
+      }
+    },
+    {
+      "id": "docuseal.webhook.submissioncompletedwebhook-post",
+      "kind": "composite",
+      "summary": "WEBHOOK submissionCompletedWebhook#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK submissionCompletedWebhook#POST"
+        ]
+      }
+    },
+    {
+      "id": "docuseal.webhook.submissioncreatedwebhook-post",
+      "kind": "composite",
+      "summary": "WEBHOOK submissionCreatedWebhook#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK submissionCreatedWebhook#POST"
+        ]
+      }
+    },
+    {
+      "id": "docuseal.webhook.submissionexpiredwebhook-post",
+      "kind": "composite",
+      "summary": "WEBHOOK submissionExpiredWebhook#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK submissionExpiredWebhook#POST"
+        ]
+      }
+    },
+    {
+      "id": "docuseal.webhook.templatearchivedwebhook-post",
+      "kind": "composite",
+      "summary": "WEBHOOK templateArchivedWebhook#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK templateArchivedWebhook#POST"
+        ]
+      }
+    },
+    {
+      "id": "docuseal.webhook.templatecreatedwebhook-post",
+      "kind": "composite",
+      "summary": "WEBHOOK templateCreatedWebhook#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK templateCreatedWebhook#POST"
+        ]
+      }
+    },
+    {
+      "id": "docuseal.webhook.templateupdatedwebhook-post",
+      "kind": "composite",
+      "summary": "WEBHOOK templateUpdatedWebhook#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK templateUpdatedWebhook#POST"
+        ]
+      }
+    }
+  ]
+}

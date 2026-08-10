@@ -1,0 +1,126 @@
+{
+  "operations": [
+    {
+      "id": "plausible.get.api-v1-stats-aggregate",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stats/aggregate",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stats/aggregate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "plausible.get.api-v1-stats-breakdown",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stats/breakdown",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stats/breakdown",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "plausible.get.api-v1-stats-realtime-visitors",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stats/realtime/visitors",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stats/realtime/visitors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "plausible.get.api-v1-stats-timeseries",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/stats/timeseries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/stats/timeseries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "plausible.post.v1-sites",
+      "kind": "rest_write",
+      "summary": "POST /v1/sites",
+      "description": "/v1/sites is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/sites",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "plausible.delete.v1-sites",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/sites",
+      "description": "/v1/sites is a destructive/admin mutation and is not exposed as a reverse-ETL action in this bundle",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/sites",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "plausible.get.v1-stats-goal-breakdown",
+      "kind": "rest_read",
+      "summary": "GET /v1/stats/goal/breakdown",
+      "description": "/v1/stats/goal/breakdown is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/stats/goal/breakdown",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "plausible.get.v1-stats-realtime-visitors",
+      "kind": "rest_read",
+      "summary": "GET /v1/stats/realtime/visitors",
+      "description": "/v1/stats/realtime/visitors is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it",
+      "source_url": "https://plausible.io/docs/stats-api-v1",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/stats/realtime/visitors",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

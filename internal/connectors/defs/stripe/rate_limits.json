@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://docs.stripe.com/rate-limits (retrieved 2026-08-06): Stripe documents different live-mode and sandbox limits, but the bundle has no non-secret mode selector."
+}

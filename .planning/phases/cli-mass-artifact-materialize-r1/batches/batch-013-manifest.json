@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "connectors": [
+    {
+      "connector": "blogger",
+      "operations_total": 33,
+      "operations_read": 17,
+      "operations_write": 16,
+      "artifact": {
+        "url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+        "kind": "openapi",
+        "version": "v3; discovery revision 20260804",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.google.com/blogger/docs/3.0/reference",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Google Blogger v3 discovery document",
+      "counting_note": "Recursively counted every documented method in Google's provider-published Blogger v3 discovery document: 17 GET reads, nine POST, two PATCH, two PUT, and three DELETE writes. The POST methods approve/remove/spam-mark comments and insert/publish/revert posts or pages, so none are semantic queries.",
+      "processed_at": "2026-08-05T17:45:46Z",
+      "selection_reason": "isolated retry after the bounded Google Discovery extractor; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-ads",
+      "operations_total": 163,
+      "operations_read": 45,
+      "operations_write": 118,
+      "artifact": {
+        "url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+        "kind": "openapi",
+        "version": "v22",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.google.com/google-ads/api/rest/reference/rest",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official Ads v22 Discovery methods; RPC actions classified semantically. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "isolated retry after the bounded Google Discovery extractor; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-calendar",
+      "operations_total": 38,
+      "operations_read": 12,
+      "operations_write": 26,
+      "artifact": {
+        "url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "kind": "openapi",
+        "version": "v3",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.google.com/workspace/calendar/api/v3/reference",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official Calendar v3 Discovery methods; freebusy.query is a read. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "isolated retry after the bounded Google Discovery extractor; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-classroom",
+      "operations_total": 104,
+      "operations_read": 43,
+      "operations_write": 61,
+      "artifact": {
+        "url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+        "kind": "openapi",
+        "version": "Google Classroom API v1; discovery revision 20260803",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.google.com/workspace/classroom/reference/rest",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; live Google Classroom REST reference which directly links its provider-published v1 Discovery document",
+      "counting_note": "Recursively counted every provider-documented method in the live Google Classroom v1 Discovery document: 43 GET, 25 POST, 17 PATCH, one PUT, and 18 DELETE. GET methods are reads. All POST methods explicitly create, accept, modify, return/reclaim/turn-in, or register notification delivery; none is a semantic query. PATCH/PUT/DELETE methods are writes. The Registration API creates a notification registration and is callable configuration, so it is retained; inbound notifications are not Discovery-method rows.",
+      "processed_at": "2026-08-06T03:30:00Z",
+      "selection_reason": "isolated retry after the bounded Google Discovery extractor; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-directory",
+      "operations_total": 128,
+      "operations_read": 46,
+      "operations_write": 82,
+      "artifact": {
+        "url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+        "kind": "openapi",
+        "version": "Admin SDK Directory API directory_v1; discovery revision 20260802",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.google.com/admin-sdk/directory/reference/rest",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "enterprise",
+      "evidence_source": "metadata docs_url; live Google Admin SDK Directory provider Discovery document",
+      "counting_note": "Recursively counted every provider-documented method in the live Admin SDK Directory Discovery document: 46 GET, 36 POST, 14 PATCH, 12 PUT, and 20 DELETE. GET methods are reads. Every POST explicitly inserts, issues an administrative command, changes status, creates a watch registration, manages users/devices/groups/resources, or changes verification/authentication state; none is a semantic query. PATCH/PUT/DELETE methods are writes. Watch registrations are callable configuration and retained; inbound change notifications are not method rows.",
+      "processed_at": "2026-08-06T03:35:00Z",
+      "selection_reason": "isolated retry after the bounded Google Discovery extractor; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-forms",
+      "operations_total": 10,
+      "operations_read": 4,
+      "operations_write": 6,
+      "artifact": {
+        "url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+        "kind": "openapi",
+        "version": "Google Forms API v1; discovery revision 20260729",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.google.com/workspace/forms/api/reference/rest",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; live Google Forms provider Discovery document linked from its official REST reference",
+      "counting_note": "Recursively counted every provider-documented method in the live Google Forms v1 Discovery document: four GET, five POST, and one DELETE. GET methods are reads. The POST methods create a form, batch-update a form, update publish settings, create a watch, or renew a watch, so all are writes; watch registrations are callable configuration and retained. The DELETE removes a watch. Inbound watch deliveries are not method rows and are excluded.",
+      "processed_at": "2026-08-06T00:37:39Z",
+      "selection_reason": "isolated retry after the bounded Google Discovery extractor; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-pagespeed-insights",
+      "operations_total": 1,
+      "operations_read": 1,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://pagespeedonline.googleapis.com/$discovery/rest?version=v5",
+        "kind": "openapi",
+        "version": "PageSpeed Insights API v5; discovery revision 20260804",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.google.com/speed/docs/insights/rest/v5/pagespeedapi/runpagespeed",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; official Google PageSpeed Insights documentation and live provider Discovery document",
+      "counting_note": "The live provider Discovery document contains one documented callable method: GET pagespeedapi.runpagespeed. It runs analysis and returns scores/suggestions, so it is a read.",
+      "processed_at": "2026-08-06T00:38:23Z",
+      "selection_reason": "isolated retry after the bounded Google Discovery extractor; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-search-console",
+      "operations_total": 11,
+      "operations_read": 7,
+      "operations_write": 4,
+      "artifact": {
+        "url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+        "kind": "openapi",
+        "version": "v1",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.google.com/webmaster-tools/v1/api_reference_index",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official Search Console v1 Discovery methods; query/test/inspect POSTs are reads. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "isolated retry after the bounded Google Discovery extractor; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-tasks",
+      "operations_total": 14,
+      "operations_read": 4,
+      "operations_write": 10,
+      "artifact": {
+        "url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+        "kind": "openapi",
+        "version": "Google Tasks API v1; discovery revision 20260804",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.google.com/workspace/tasks/reference/rest",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; live Google Tasks provider Discovery document linked from its official REST reference",
+      "counting_note": "Recursively counted every provider-documented method in the live Google Tasks v1 Discovery document: four GET, four POST, two PATCH, two PUT, and two DELETE. GET methods are reads. Each POST creates, clears, or moves a task/task list, so none is a semantic query; every non-GET method is a write.",
+      "processed_at": "2026-08-06T00:39:02Z",
+      "selection_reason": "isolated retry after the bounded Google Discovery extractor; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-webfonts",
+      "operations_total": 1,
+      "operations_read": 1,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://www.googleapis.com/discovery/v1/apis/webfonts/v1/rest",
+        "kind": "openapi",
+        "version": "Web Fonts Developer API v1; discovery revision 20260729",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.google.com/fonts/docs/developer_api",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; live Google Web Fonts provider Discovery document and official Developer API reference",
+      "counting_note": "The live provider Discovery document contains one documented callable method: GET webfonts.list, which retrieves the current font list and is a read. Sort and filter parameters do not create additional operations.",
+      "processed_at": "2026-08-06T00:39:40Z",
+      "selection_reason": "isolated retry after the bounded Google Discovery extractor; account access is not an execution prerequisite"
+    }
+  ]
+}

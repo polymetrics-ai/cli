@@ -1,0 +1,1981 @@
+{
+  "operations": [
+    {
+      "id": "n8n.post.api-v1-credentials",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/credentials",
+      "description": "Creates credentials with write-only secret data; connector rules prohibit requesting or storing secret values in write records.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/credentials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.patch.api-v1-credentials-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/credentials/{id}",
+      "description": "Updates credentials and can carry write-only secret data; connector rules prohibit requesting or storing secret values in write records.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/credentials/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.api-v1-credentials-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/credentials/{id}",
+      "description": "Deletes a credential from the n8n instance; destructive credential deletes are not exposed as reverse-ETL writes.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/credentials/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.api-v1-data-tables-datatableid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/data-tables/{dataTableId}",
+      "description": "Deletes a data table; destructive table deletes are not exposed as reverse-ETL writes.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/data-tables/{dataTableId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.api-v1-data-tables-datatableid-columns-columnid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/data-tables/{dataTableId}/columns/{columnId}",
+      "description": "Deletes a data table column; destructive schema deletes are not exposed as reverse-ETL writes.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/data-tables/{dataTableId}/columns/{columnId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.api-v1-data-tables-datatableid-rows-delete",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/data-tables/{dataTableId}/rows/delete",
+      "description": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this DELETE operation carries filter/returnData/dryRun as query parameters, but writes.json has no query field.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/data-tables/{dataTableId}/rows/delete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.api-v1-executions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/executions/{id}",
+      "description": "Deletes execution history from the n8n instance; destructive administrative deletes are not exposed as reverse-ETL writes.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/executions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.api-v1-executions-id-tags",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/executions/{id}/tags",
+      "description": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this endpoint requires a root JSON array body, but writes.json can only construct object bodies from record fields.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/executions/{id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.api-v1-projects-projectid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/projects/{projectId}",
+      "description": "Deletes an n8n project; destructive project-administration deletes are not exposed as reverse-ETL writes.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/projects/{projectId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.api-v1-projects-projectid-users-userid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/projects/{projectId}/users/{userId}",
+      "description": "Removes a user from a project; destructive membership removals are not exposed as reverse-ETL writes.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/projects/{projectId}/users/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.api-v1-tags-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/tags/{id}",
+      "description": "Deletes a tag from the n8n instance; destructive deletes are not exposed as reverse-ETL writes.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/tags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.api-v1-users",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/users",
+      "description": "Creates/invites n8n users and requires instance user administration; the request body is also a root array, which the current write dialect cannot construct.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.api-v1-users-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/users/{id}",
+      "description": "Deletes an n8n user account; destructive user-administration actions are not exposed as reverse-ETL writes.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.patch.api-v1-users-id-role",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/users/{id}/role",
+      "description": "Changes a user global role and requires elevated instance administration.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/users/{id}/role",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.api-v1-variables-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/variables/{id}",
+      "description": "Deletes an n8n variable; destructive deletes are not exposed as reverse-ETL writes.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/variables/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.api-v1-workflows-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/workflows/{id}",
+      "description": "Deletes a workflow from the n8n instance; destructive administrative lifecycle actions are not exposed as reverse-ETL writes.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/workflows/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.api-v1-workflows-id-tags",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/workflows/{id}/tags",
+      "description": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this endpoint requires a root JSON array body, but writes.json can only construct object bodies from record fields.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/workflows/{id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.audit",
+      "kind": "rest_write",
+      "summary": "POST /audit",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/audit",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.community-packages",
+      "kind": "rest_read",
+      "summary": "GET /community-packages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/community-packages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.community-packages",
+      "kind": "rest_write",
+      "summary": "POST /community-packages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/community-packages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.patch.community-packages-name",
+      "kind": "rest_write",
+      "summary": "PATCH /community-packages/{name}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/community-packages/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.community-packages-name",
+      "kind": "rest_write",
+      "summary": "DELETE /community-packages/{name}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/community-packages/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.credentials",
+      "kind": "rest_read",
+      "summary": "GET /credentials",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credentials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.credentials",
+      "kind": "rest_write",
+      "summary": "POST /credentials",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/credentials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.credentials-schema-credentialtypename",
+      "kind": "rest_read",
+      "summary": "GET /credentials/schema/{credentialTypeName}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credentials/schema/{credentialTypeName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.credentials-id",
+      "kind": "rest_read",
+      "summary": "GET /credentials/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/credentials/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.patch.credentials-id",
+      "kind": "rest_write",
+      "summary": "PATCH /credentials/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/credentials/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.credentials-id",
+      "kind": "rest_write",
+      "summary": "DELETE /credentials/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/credentials/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.credentials-id-test",
+      "kind": "rest_write",
+      "summary": "POST /credentials/{id}/test",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/credentials/{id}/test",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.credentials-id-transfer",
+      "kind": "rest_write",
+      "summary": "PUT /credentials/{id}/transfer",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/credentials/{id}/transfer",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.data-tables",
+      "kind": "rest_read",
+      "summary": "GET /data-tables",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/data-tables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.data-tables",
+      "kind": "rest_write",
+      "summary": "POST /data-tables",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/data-tables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.data-tables-datatableid",
+      "kind": "rest_read",
+      "summary": "GET /data-tables/{dataTableId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/data-tables/{dataTableId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.patch.data-tables-datatableid",
+      "kind": "rest_write",
+      "summary": "PATCH /data-tables/{dataTableId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/data-tables/{dataTableId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.data-tables-datatableid",
+      "kind": "rest_write",
+      "summary": "DELETE /data-tables/{dataTableId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/data-tables/{dataTableId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.data-tables-datatableid-columns",
+      "kind": "rest_read",
+      "summary": "GET /data-tables/{dataTableId}/columns",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/data-tables/{dataTableId}/columns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.data-tables-datatableid-columns",
+      "kind": "rest_write",
+      "summary": "POST /data-tables/{dataTableId}/columns",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/data-tables/{dataTableId}/columns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.patch.data-tables-datatableid-columns-columnid",
+      "kind": "rest_write",
+      "summary": "PATCH /data-tables/{dataTableId}/columns/{columnId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/data-tables/{dataTableId}/columns/{columnId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.data-tables-datatableid-columns-columnid",
+      "kind": "rest_write",
+      "summary": "DELETE /data-tables/{dataTableId}/columns/{columnId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/data-tables/{dataTableId}/columns/{columnId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.data-tables-datatableid-rows",
+      "kind": "rest_read",
+      "summary": "GET /data-tables/{dataTableId}/rows",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/data-tables/{dataTableId}/rows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.data-tables-datatableid-rows",
+      "kind": "rest_write",
+      "summary": "POST /data-tables/{dataTableId}/rows",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/data-tables/{dataTableId}/rows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.data-tables-datatableid-rows-clear",
+      "kind": "rest_write",
+      "summary": "DELETE /data-tables/{dataTableId}/rows/clear",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/data-tables/{dataTableId}/rows/clear",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.data-tables-datatableid-rows-delete",
+      "kind": "rest_write",
+      "summary": "DELETE /data-tables/{dataTableId}/rows/delete",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/data-tables/{dataTableId}/rows/delete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.patch.data-tables-datatableid-rows-update",
+      "kind": "rest_write",
+      "summary": "PATCH /data-tables/{dataTableId}/rows/update",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/data-tables/{dataTableId}/rows/update",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.data-tables-datatableid-rows-upsert",
+      "kind": "rest_write",
+      "summary": "POST /data-tables/{dataTableId}/rows/upsert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/data-tables/{dataTableId}/rows/upsert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.discover",
+      "kind": "rest_read",
+      "summary": "GET /discover",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discover",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.executions",
+      "kind": "rest_read",
+      "summary": "GET /executions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/executions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.executions-stop",
+      "kind": "rest_write",
+      "summary": "POST /executions/stop",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/executions/stop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.executions-id",
+      "kind": "rest_read",
+      "summary": "GET /executions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/executions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.executions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /executions/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/executions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.executions-id-retry",
+      "kind": "rest_write",
+      "summary": "POST /executions/{id}/retry",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/executions/{id}/retry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.executions-id-stop",
+      "kind": "rest_write",
+      "summary": "POST /executions/{id}/stop",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/executions/{id}/stop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.executions-id-tags",
+      "kind": "rest_read",
+      "summary": "GET /executions/{id}/tags",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/executions/{id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.executions-id-tags",
+      "kind": "rest_write",
+      "summary": "PUT /executions/{id}/tags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/executions/{id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.insights-summary",
+      "kind": "rest_read",
+      "summary": "GET /insights/summary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/insights/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.n8n-packages-export",
+      "kind": "rest_write",
+      "summary": "POST /n8n-packages/export",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/n8n-packages/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.n8n-packages-import",
+      "kind": "rest_write",
+      "summary": "POST /n8n-packages/import",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/n8n-packages/import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.projects",
+      "kind": "rest_read",
+      "summary": "GET /projects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.projects",
+      "kind": "rest_write",
+      "summary": "POST /projects",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.projects-projectid",
+      "kind": "rest_write",
+      "summary": "PUT /projects/{projectId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/projects/{projectId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.projects-projectid",
+      "kind": "rest_write",
+      "summary": "DELETE /projects/{projectId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{projectId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.projects-projectid-folders",
+      "kind": "rest_read",
+      "summary": "GET /projects/{projectId}/folders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{projectId}/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.projects-projectid-folders",
+      "kind": "rest_write",
+      "summary": "POST /projects/{projectId}/folders",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{projectId}/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.projects-projectid-folders-folderid",
+      "kind": "rest_read",
+      "summary": "GET /projects/{projectId}/folders/{folderId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{projectId}/folders/{folderId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.patch.projects-projectid-folders-folderid",
+      "kind": "rest_write",
+      "summary": "PATCH /projects/{projectId}/folders/{folderId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/projects/{projectId}/folders/{folderId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.projects-projectid-folders-folderid",
+      "kind": "rest_write",
+      "summary": "DELETE /projects/{projectId}/folders/{folderId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{projectId}/folders/{folderId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.projects-projectid-users",
+      "kind": "rest_read",
+      "summary": "GET /projects/{projectId}/users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{projectId}/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.projects-projectid-users",
+      "kind": "rest_write",
+      "summary": "POST /projects/{projectId}/users",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{projectId}/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.patch.projects-projectid-users-userid",
+      "kind": "rest_write",
+      "summary": "PATCH /projects/{projectId}/users/{userId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/projects/{projectId}/users/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.projects-projectid-users-userid",
+      "kind": "rest_write",
+      "summary": "DELETE /projects/{projectId}/users/{userId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{projectId}/users/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.settings-ldap",
+      "kind": "rest_read",
+      "summary": "GET /settings/ldap",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings/ldap",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.settings-ldap",
+      "kind": "rest_write",
+      "summary": "PUT /settings/ldap",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/settings/ldap",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.settings-ldap-sync",
+      "kind": "rest_read",
+      "summary": "GET /settings/ldap/sync",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings/ldap/sync",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.settings-ldap-sync",
+      "kind": "rest_write",
+      "summary": "POST /settings/ldap/sync",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/settings/ldap/sync",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.settings-log-streaming-destinations",
+      "kind": "rest_read",
+      "summary": "GET /settings/log-streaming/destinations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings/log-streaming/destinations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.settings-log-streaming-destinations",
+      "kind": "rest_write",
+      "summary": "POST /settings/log-streaming/destinations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/settings/log-streaming/destinations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.settings-log-streaming-destinations-id",
+      "kind": "rest_read",
+      "summary": "GET /settings/log-streaming/destinations/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings/log-streaming/destinations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.settings-log-streaming-destinations-id",
+      "kind": "rest_write",
+      "summary": "PUT /settings/log-streaming/destinations/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/settings/log-streaming/destinations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.settings-log-streaming-destinations-id",
+      "kind": "rest_write",
+      "summary": "DELETE /settings/log-streaming/destinations/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/settings/log-streaming/destinations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.settings-log-streaming-destinations-id-test",
+      "kind": "rest_write",
+      "summary": "POST /settings/log-streaming/destinations/{id}/test",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/settings/log-streaming/destinations/{id}/test",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.settings-log-streaming-event-types",
+      "kind": "rest_read",
+      "summary": "GET /settings/log-streaming/event-types",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings/log-streaming/event-types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.settings-otel",
+      "kind": "rest_read",
+      "summary": "GET /settings/otel",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings/otel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.settings-otel",
+      "kind": "rest_write",
+      "summary": "PUT /settings/otel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/settings/otel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.settings-otel-test-trace",
+      "kind": "rest_write",
+      "summary": "POST /settings/otel/test-trace",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/settings/otel/test-trace",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.settings-security-policy",
+      "kind": "rest_read",
+      "summary": "GET /settings/security-policy",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings/security-policy",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.settings-security-policy",
+      "kind": "rest_write",
+      "summary": "PUT /settings/security-policy",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/settings/security-policy",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.settings-sso-oidc",
+      "kind": "rest_read",
+      "summary": "GET /settings/sso/oidc",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings/sso/oidc",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.settings-sso-oidc",
+      "kind": "rest_write",
+      "summary": "PUT /settings/sso/oidc",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/settings/sso/oidc",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.settings-sso-saml",
+      "kind": "rest_read",
+      "summary": "GET /settings/sso/saml",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings/sso/saml",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.settings-sso-saml",
+      "kind": "rest_write",
+      "summary": "PUT /settings/sso/saml",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/settings/sso/saml",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.source-control-pull",
+      "kind": "rest_write",
+      "summary": "POST /source-control/pull",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/source-control/pull",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.tags",
+      "kind": "rest_read",
+      "summary": "GET /tags",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.tags",
+      "kind": "rest_write",
+      "summary": "POST /tags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.tags-id",
+      "kind": "rest_read",
+      "summary": "GET /tags/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.tags-id",
+      "kind": "rest_write",
+      "summary": "PUT /tags/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.tags-id",
+      "kind": "rest_write",
+      "summary": "DELETE /tags/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.users",
+      "kind": "rest_read",
+      "summary": "GET /users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.users",
+      "kind": "rest_write",
+      "summary": "POST /users",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.users-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.users-id",
+      "kind": "rest_write",
+      "summary": "DELETE /users/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.patch.users-id-role",
+      "kind": "rest_write",
+      "summary": "PATCH /users/{id}/role",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/users/{id}/role",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.variables",
+      "kind": "rest_read",
+      "summary": "GET /variables",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/variables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.variables",
+      "kind": "rest_write",
+      "summary": "POST /variables",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/variables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.variables-id",
+      "kind": "rest_write",
+      "summary": "PUT /variables/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/variables/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.variables-id",
+      "kind": "rest_write",
+      "summary": "DELETE /variables/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/variables/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.workflows",
+      "kind": "rest_read",
+      "summary": "GET /workflows",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workflows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.workflows",
+      "kind": "rest_write",
+      "summary": "POST /workflows",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workflows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.workflows-id",
+      "kind": "rest_read",
+      "summary": "GET /workflows/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workflows/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.workflows-id",
+      "kind": "rest_write",
+      "summary": "PUT /workflows/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/workflows/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.delete.workflows-id",
+      "kind": "rest_write",
+      "summary": "DELETE /workflows/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/workflows/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.workflows-id-activate",
+      "kind": "rest_write",
+      "summary": "POST /workflows/{id}/activate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workflows/{id}/activate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.workflows-id-archive",
+      "kind": "rest_write",
+      "summary": "POST /workflows/{id}/archive",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workflows/{id}/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.workflows-id-deactivate",
+      "kind": "rest_write",
+      "summary": "POST /workflows/{id}/deactivate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workflows/{id}/deactivate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.workflows-id-history",
+      "kind": "rest_read",
+      "summary": "GET /workflows/{id}/history",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workflows/{id}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.workflows-id-publish",
+      "kind": "rest_write",
+      "summary": "POST /workflows/{id}/publish",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workflows/{id}/publish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.workflows-id-tags",
+      "kind": "rest_read",
+      "summary": "GET /workflows/{id}/tags",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workflows/{id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.workflows-id-tags",
+      "kind": "rest_write",
+      "summary": "PUT /workflows/{id}/tags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/workflows/{id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.workflows-id-test-runs",
+      "kind": "rest_read",
+      "summary": "GET /workflows/{id}/test-runs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workflows/{id}/test-runs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.workflows-id-test-runs",
+      "kind": "rest_write",
+      "summary": "POST /workflows/{id}/test-runs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workflows/{id}/test-runs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.workflows-id-test-runs-runid",
+      "kind": "rest_read",
+      "summary": "GET /workflows/{id}/test-runs/{runId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workflows/{id}/test-runs/{runId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.workflows-id-test-runs-runid-cancel",
+      "kind": "rest_write",
+      "summary": "POST /workflows/{id}/test-runs/{runId}/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workflows/{id}/test-runs/{runId}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.workflows-id-test-runs-runid-test-cases",
+      "kind": "rest_read",
+      "summary": "GET /workflows/{id}/test-runs/{runId}/test-cases",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workflows/{id}/test-runs/{runId}/test-cases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.put.workflows-id-transfer",
+      "kind": "rest_write",
+      "summary": "PUT /workflows/{id}/transfer",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/workflows/{id}/transfer",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.workflows-id-unarchive",
+      "kind": "rest_write",
+      "summary": "POST /workflows/{id}/unarchive",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workflows/{id}/unarchive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.post.workflows-id-unpublish",
+      "kind": "rest_write",
+      "summary": "POST /workflows/{id}/unpublish",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workflows/{id}/unpublish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "n8n.get.workflows-id-versionid",
+      "kind": "rest_read",
+      "summary": "GET /workflows/{id}/{versionId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workflows/{id}/{versionId}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

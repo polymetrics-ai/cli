@@ -1,75 +1,3023 @@
 {
-  "api": "Shortcut REST API v3 (https://developer.shortcut.com/api/rest/v3)",
+  "api": "Shortcut REST API v3 (https://developer.shortcut.com/api/rest/v3); provider artifact version: Shortcut REST API v3; OpenAPI 3.0.0; info.version 3.0",
   "docs": "https://developer.shortcut.com/api/rest/v3",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (stories, epics, projects, iterations). Shortcut's write endpoints (story/epic create/update, comments, workflows) are out of scope for this wave (legacy itself ships no writes; capabilities.write is false).",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (143 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "shortcut-artifact-2026-08-09",
+      "url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "kind": "openapi",
+      "version": "3.0.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/api/v3/stories",
-      "covered_by": {
-        "stream": "stories"
+      "path": "/api/v3/categories",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/categories\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/categories",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/categories\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/categories/{category-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/categories/{category-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/categories/{category-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/categories/{category-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/categories/{category-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/categories/{category-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/categories/{category-public-id}/milestones",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/categories/{category-public-id}/milestones\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/categories/{category-public-id}/objectives",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/categories/{category-public-id}/objectives\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/custom-fields",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/custom-fields\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/custom-fields/{custom-field-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/custom-fields/{custom-field-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/custom-fields/{custom-field-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/custom-fields/{custom-field-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/custom-fields/{custom-field-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/custom-fields/{custom-field-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/documents",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/documents\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/documents",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/documents\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/documents/{doc-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/documents/{doc-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/documents/{doc-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/documents/{doc-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/documents/{doc-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/documents/{doc-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/documents/{doc-public-id}/epics",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/documents/{doc-public-id}/epics\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/documents/{doc-public-id}/epics/{epic-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/documents/{doc-public-id}/epics/{epic-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/documents/{doc-public-id}/epics/{epic-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/documents/{doc-public-id}/epics/{epic-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/entity-templates",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/entity-templates\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/entity-templates",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/entity-templates\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/entity-templates/disable",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/entity-templates/disable\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/entity-templates/enable",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/entity-templates/enable\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/entity-templates/{entity-template-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/entity-templates/{entity-template-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/entity-templates/{entity-template-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/entity-templates/{entity-template-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/entity-templates/{entity-template-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/entity-templates/{entity-template-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/epic-workflow",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epic-workflow\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/api/v3/epics",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics\"].get"
+      },
       "covered_by": {
         "stream": "epics"
       }
     },
     {
+      "method": "POST",
+      "path": "/api/v3/epics",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
-      "path": "/api/v3/projects",
-      "covered_by": {
-        "stream": "projects"
+      "path": "/api/v3/epics/paginated",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/paginated\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/epics/{epic-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/epics/{epic-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/epics/{epic-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/epics/{epic-public-id}/comments",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}/comments\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/epics/{epic-public-id}/comments",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}/comments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/epics/{epic-public-id}/comments/{comment-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}/comments/{comment-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/epics/{epic-public-id}/comments/{comment-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}/comments/{comment-public-id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/epics/{epic-public-id}/comments/{comment-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}/comments/{comment-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/epics/{epic-public-id}/comments/{comment-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}/comments/{comment-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/epics/{epic-public-id}/documents",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}/documents\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/epics/{epic-public-id}/health",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}/health\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/epics/{epic-public-id}/health",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}/health\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/epics/{epic-public-id}/health-history",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}/health-history\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/epics/{epic-public-id}/stories",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/epics/{epic-public-id}/stories\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/external-link/stories",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/external-link/stories\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/files",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/files\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/files",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/files\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/files/{file-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/files/{file-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/files/{file-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/files/{file-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/files/{file-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/files/{file-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/groups",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/groups\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/groups",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/groups\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/groups/{group-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/groups/{group-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/groups/{group-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/groups/{group-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/groups/{group-public-id}/stories",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/groups/{group-public-id}/stories\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/health/{health-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/health/{health-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/integrations/webhook",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/integrations/webhook\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/integrations/webhook/{integration-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/integrations/webhook/{integration-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/integrations/webhook/{integration-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/integrations/webhook/{integration-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/api/v3/iterations",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/iterations\"].get"
+      },
       "covered_by": {
         "stream": "iterations"
       }
     },
     {
       "method": "POST",
-      "path": "/api/v3/stories",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy connector never implemented story creation; not implemented in this bundle"
+      "path": "/api/v3/iterations",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/iterations\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "PUT",
-      "path": "/api/v3/stories/{story-public-id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy connector never implemented story updates; not implemented in this bundle"
+      "path": "/api/v3/iterations/disable",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/iterations/disable\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/iterations/enable",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/iterations/enable\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v3/workflows",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not modeled by legacy; not implemented in this bundle"
+      "path": "/api/v3/iterations/{iteration-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/iterations/{iteration-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/iterations/{iteration-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/iterations/{iteration-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/iterations/{iteration-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/iterations/{iteration-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/iterations/{iteration-public-id}/stories",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/iterations/{iteration-public-id}/stories\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/key-results/{key-result-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/key-results/{key-result-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/key-results/{key-result-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/key-results/{key-result-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/api/v3/labels",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not modeled by legacy; not implemented in this bundle"
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/labels\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not modeled by legacy; not implemented in this bundle",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/labels",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/labels\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/labels/{label-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/labels/{label-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/labels/{label-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/labels/{label-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/labels/{label-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/labels/{label-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/labels/{label-public-id}/epics",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/labels/{label-public-id}/epics\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/labels/{label-public-id}/stories",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/labels/{label-public-id}/stories\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/linked-files",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/linked-files\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/linked-files",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/linked-files\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/linked-files/{linked-file-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/linked-files/{linked-file-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/linked-files/{linked-file-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/linked-files/{linked-file-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/linked-files/{linked-file-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/linked-files/{linked-file-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/api/v3/member",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "authenticated-member profile introspection, not a syncable object stream"
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/member\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "authenticated-member profile introspection, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/members",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/members\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/members/{member-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/members/{member-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/milestones",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/milestones\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/milestones",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/milestones\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/milestones/{milestone-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/milestones/{milestone-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/milestones/{milestone-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/milestones/{milestone-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/milestones/{milestone-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/milestones/{milestone-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/milestones/{milestone-public-id}/epics",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/milestones/{milestone-public-id}/epics\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/objectives",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/objectives\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/objectives",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/objectives\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/objectives/{objective-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/objectives/{objective-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/objectives/{objective-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/objectives/{objective-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/objectives/{objective-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/objectives/{objective-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/objectives/{objective-public-id}/epics",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/objectives/{objective-public-id}/epics\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/objectives/{objective-public-id}/health",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/objectives/{objective-public-id}/health\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/objectives/{objective-public-id}/health",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/objectives/{objective-public-id}/health\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/objectives/{objective-public-id}/health-history",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/objectives/{objective-public-id}/health-history\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/projects",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/projects\"].get"
+      },
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/projects",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/projects\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/projects/{project-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/projects/{project-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/projects/{project-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/projects/{project-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/projects/{project-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/projects/{project-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/projects/{project-public-id}/stories",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/projects/{project-public-id}/stories\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/repositories",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/repositories\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/repositories/{repo-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/repositories/{repo-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/search",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/search\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/search/documents",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/search/documents\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/search/epics",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/search/epics\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/search/iterations",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/search/iterations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/search/milestones",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/search/milestones\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/search/objectives",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/search/objectives\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/search/stories",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/search/stories\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/stories",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "Shortcut REST API v3; OpenAPI 3.0.0; info.version 3.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "existing-surface[GET /api/v3/stories]"
+      },
+      "covered_by": {
+        "stream": "stories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/stories",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "legacy connector never implemented story creation; not implemented in this bundle",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/stories/bulk",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/bulk\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/stories/bulk",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/bulk\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/stories/bulk",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/bulk\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/stories/from-template",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/from-template\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/stories/search",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/search\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/stories/{story-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/stories/{story-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "legacy connector never implemented story updates; not implemented in this bundle",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/stories/{story-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/stories/{story-public-id}/comments",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/comments\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/stories/{story-public-id}/comments",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/comments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/comments/{comment-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/comments/{comment-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/comments/{comment-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}/reactions",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/comments/{comment-public-id}/reactions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}/reactions",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/comments/{comment-public-id}/reactions\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}/unlink-from-slack",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/comments/{comment-public-id}/unlink-from-slack\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/stories/{story-public-id}/history",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/history\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/stories/{story-public-id}/sub-tasks",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/sub-tasks\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/stories/{story-public-id}/tasks",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/tasks\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/stories/{story-public-id}/tasks/{task-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/tasks/{task-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/stories/{story-public-id}/tasks/{task-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/tasks/{task-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/stories/{story-public-id}/tasks/{task-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/stories/{story-public-id}/tasks/{task-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v3/story-links",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/story-links\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/story-links/{story-link-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/story-links/{story-link-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v3/story-links/{story-link-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/story-links/{story-link-public-id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v3/story-links/{story-link-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/story-links/{story-link-public-id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/workflows",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/workflows\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not modeled by legacy; not implemented in this bundle",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v3/workflows/{workflow-public-id}",
+      "provenance": {
+        "artifact": "shortcut-artifact-2026-08-09",
+        "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9",
+        "coordinate": "paths[\"/api/v3/workflows/{workflow-public-id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

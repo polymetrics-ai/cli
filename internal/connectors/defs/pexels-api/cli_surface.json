@@ -1,0 +1,182 @@
+{
+  "tagline": "Run Pexels API's declared streams and reverse-ETL actions.",
+  "usage": "pm pexels-api \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v1 photos id",
+        "api get v1 videos videos id",
+        "collection media list",
+        "curated photos list",
+        "featured collections list",
+        "my collections list",
+        "photos list",
+        "popular videos list",
+        "videos list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get v1 photos id",
+      "summary": "Documented GET /v1/photos/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "examples": [
+        "pm pexels-api api get v1 photos id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/photos/{id}"
+        }
+      ],
+      "operation": "pexels-api.get.v1-photos-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 videos videos id",
+      "summary": "Documented GET /v1/videos/videos/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "examples": [
+        "pm pexels-api api get v1 videos videos id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/videos/videos/{id}"
+        }
+      ],
+      "operation": "pexels-api.get.v1-videos-videos-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "collection media list",
+      "summary": "Run the collection media ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collection_media",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "examples": [
+        "pm pexels-api collection media list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/collections/{id}"
+        }
+      ]
+    },
+    {
+      "path": "curated photos list",
+      "summary": "Run the curated photos ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "curated_photos",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "examples": [
+        "pm pexels-api curated photos list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/curated"
+        }
+      ]
+    },
+    {
+      "path": "featured collections list",
+      "summary": "Run the featured collections ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "featured_collections",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "examples": [
+        "pm pexels-api featured collections list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/collections/featured"
+        }
+      ]
+    },
+    {
+      "path": "my collections list",
+      "summary": "Run the my collections ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "my_collections",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "examples": [
+        "pm pexels-api my collections list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/collections"
+        }
+      ]
+    },
+    {
+      "path": "photos list",
+      "summary": "Run the photos ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "photos",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "examples": [
+        "pm pexels-api photos list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/search"
+        }
+      ]
+    },
+    {
+      "path": "popular videos list",
+      "summary": "Run the popular videos ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "popular_videos",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "examples": [
+        "pm pexels-api popular videos list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/videos/popular"
+        }
+      ]
+    },
+    {
+      "path": "videos list",
+      "summary": "Run the videos ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "videos",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "examples": [
+        "pm pexels-api videos list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/videos/search"
+        }
+      ]
+    }
+  ]
+}

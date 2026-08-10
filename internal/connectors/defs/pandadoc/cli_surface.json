@@ -1,0 +1,3020 @@
+{
+  "tagline": "Run PandaDoc's declared streams and reverse-ETL actions.",
+  "usage": "pm pandadoc \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get public v1 documents id attachments attachment-id download",
+        "api get public v1 documents id download",
+        "api get public v1 documents id download-protected",
+        "api get public v1 templates template-id shares",
+        "contacts id list",
+        "contacts list",
+        "content library items id details list",
+        "content library items id list",
+        "content library items list",
+        "documents document id ai metadata list",
+        "documents document id audit trail list",
+        "documents document id auto reminders list",
+        "documents document id auto reminders status list",
+        "documents document id content list",
+        "documents document id docx export tasks task id list",
+        "documents document id esign disclosure list",
+        "documents document id sections list",
+        "documents document id sections section id list",
+        "documents document id sections uploads upload id list",
+        "documents document id settings list",
+        "documents document id summary list",
+        "documents folders list",
+        "documents id attachments attachment id list",
+        "documents id attachments list",
+        "documents id details list",
+        "documents id fields list",
+        "documents id linked objects list",
+        "documents id list",
+        "documents linked objects list",
+        "documents list",
+        "documents search list",
+        "forms list",
+        "logs detail list",
+        "logs id detail list",
+        "logs id list",
+        "logs list",
+        "members current list",
+        "members id list",
+        "members list",
+        "notary notaries list",
+        "notary notarization requests list",
+        "notary notarization requests session request id list",
+        "product catalog items item uuid list",
+        "product catalog items search list",
+        "sms opt outs list",
+        "templates folders list",
+        "templates id details list",
+        "templates id list",
+        "templates list",
+        "templates template id settings list",
+        "users list",
+        "users user id list",
+        "webhook events id list",
+        "webhook events list",
+        "webhook subscriptions id list",
+        "webhook subscriptions list",
+        "workspaces list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api patch public v1 documents id status-upload",
+        "api patch public v1 webhook-subscriptions id shared-key",
+        "api post oauth2 access-token",
+        "api post public v1 content-library-items-upload",
+        "api post public v1 documents document-id sections uploads",
+        "api post public v1 documents document-id sections uploads-upload",
+        "api post public v1 documents document-id sections-upload",
+        "api post public v1 documents id attachments-upload",
+        "api post public v1 documents-upload",
+        "api post public v1 documents-upload-markdown",
+        "api post public v1 members member-id token",
+        "api post public v1 templates id duplicate",
+        "api post public v1 templates-upload",
+        "api post public v1 workspaces workspace-id api-keys",
+        "api post public v2 dsv document-id add-named-items",
+        "api put public v1 templates template-id shares",
+        "delete contacts id apply",
+        "delete documents apply",
+        "delete documents document id sections section id apply",
+        "delete documents id apply",
+        "delete documents id attachments attachment id apply",
+        "delete documents id linked objects linked object id apply",
+        "delete documents id recipients recipient id apply",
+        "delete notary notarization requests session request id apply",
+        "delete product catalog items item uuid apply",
+        "delete templates id apply",
+        "delete webhook subscriptions id apply",
+        "delete workspaces workspace id members member id apply",
+        "patch contacts id apply",
+        "patch documents document id auto reminders apply",
+        "patch documents document id settings apply",
+        "patch documents id apply",
+        "patch documents id fields apply",
+        "patch documents id ownership apply",
+        "patch documents id recipients recipient recipient id apply",
+        "patch documents id status apply",
+        "patch documents ownership apply",
+        "patch product catalog items item uuid apply",
+        "patch templates id apply",
+        "patch templates template id settings apply",
+        "patch webhook subscriptions id apply",
+        "patch workspaces workspace id members member id role apply",
+        "post contacts apply",
+        "post content library items apply",
+        "post documents ai metadata apply",
+        "post documents apply",
+        "post documents document id docx export tasks apply",
+        "post documents document id sections apply",
+        "post documents document id send reminder apply",
+        "post documents folders apply",
+        "post documents id append content library item apply",
+        "post documents id attachments apply",
+        "post documents id draft apply",
+        "post documents id editing sessions apply",
+        "post documents id fields apply",
+        "post documents id linked objects apply",
+        "post documents id move to folder folder id apply",
+        "post documents id recipients apply",
+        "post documents id recipients recipient id reassign apply",
+        "post documents id send apply",
+        "post documents id session apply",
+        "post notary notarization requests apply",
+        "post product catalog items apply",
+        "post templates apply",
+        "post templates folders apply",
+        "post templates id editing sessions apply",
+        "post users apply",
+        "post webhook subscriptions apply",
+        "post workspaces apply",
+        "post workspaces workspace id deactivate apply",
+        "post workspaces workspace id members apply",
+        "put documents document id quotes quote id apply",
+        "put documents folders id apply",
+        "put templates folders id apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get public v1 documents id attachments attachment-id download",
+      "summary": "Documented GET /public/v1/documents/{id}/attachments/{attachment_id}/download (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api get public v1 documents id attachments attachment-id download --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{id}/attachments/{attachment_id}/download"
+        }
+      ],
+      "operation": "pandadoc.get.public-v1-documents-id-attachments-attachment-id-download",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get public v1 documents id download",
+      "summary": "Documented GET /public/v1/documents/{id}/download (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api get public v1 documents id download --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{id}/download"
+        }
+      ],
+      "operation": "pandadoc.get.public-v1-documents-id-download",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get public v1 documents id download-protected",
+      "summary": "Documented GET /public/v1/documents/{id}/download-protected (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api get public v1 documents id download-protected --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{id}/download-protected"
+        }
+      ],
+      "operation": "pandadoc.get.public-v1-documents-id-download-protected",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get public v1 templates template-id shares",
+      "summary": "Documented GET /public/v1/templates/{template_id}/shares (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api get public v1 templates template-id shares --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/templates/{template_id}/shares"
+        }
+      ],
+      "operation": "pandadoc.get.public-v1-templates-template-id-shares",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch public v1 documents id status-upload",
+      "summary": "Documented PATCH /public/v1/documents/{id}/status?upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api patch public v1 documents id status-upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v1/documents/{id}/status?upload"
+        }
+      ],
+      "operation": "pandadoc.patch.public-v1-documents-id-status-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch public v1 webhook-subscriptions id shared-key",
+      "summary": "Documented PATCH /public/v1/webhook-subscriptions/{id}/shared-key (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api patch public v1 webhook-subscriptions id shared-key --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v1/webhook-subscriptions/{id}/shared-key"
+        }
+      ],
+      "operation": "pandadoc.patch.public-v1-webhook-subscriptions-id-shared-key",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api post oauth2 access-token",
+      "summary": "Documented POST /oauth2/access_token (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api post oauth2 access-token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/oauth2/access_token"
+        }
+      ],
+      "operation": "pandadoc.post.oauth2-access-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post public v1 content-library-items-upload",
+      "summary": "Documented POST /public/v1/content-library-items?upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api post public v1 content-library-items-upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/content-library-items?upload"
+        }
+      ],
+      "operation": "pandadoc.post.public-v1-content-library-items-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post public v1 documents document-id sections uploads",
+      "summary": "Documented POST /public/v1/documents/{document_id}/sections/uploads (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api post public v1 documents document-id sections uploads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{document_id}/sections/uploads"
+        }
+      ],
+      "operation": "pandadoc.post.public-v1-documents-document-id-sections-uploads",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post public v1 documents document-id sections uploads-upload",
+      "summary": "Documented POST /public/v1/documents/{document_id}/sections/uploads?upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api post public v1 documents document-id sections uploads-upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{document_id}/sections/uploads?upload"
+        }
+      ],
+      "operation": "pandadoc.post.public-v1-documents-document-id-sections-uploads-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post public v1 documents document-id sections-upload",
+      "summary": "Documented POST /public/v1/documents/{document_id}/sections?upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api post public v1 documents document-id sections-upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{document_id}/sections?upload"
+        }
+      ],
+      "operation": "pandadoc.post.public-v1-documents-document-id-sections-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post public v1 documents id attachments-upload",
+      "summary": "Documented POST /public/v1/documents/{id}/attachments?upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api post public v1 documents id attachments-upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{id}/attachments?upload"
+        }
+      ],
+      "operation": "pandadoc.post.public-v1-documents-id-attachments-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post public v1 documents-upload",
+      "summary": "Documented POST /public/v1/documents?upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api post public v1 documents-upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents?upload"
+        }
+      ],
+      "operation": "pandadoc.post.public-v1-documents-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post public v1 documents-upload-markdown",
+      "summary": "Documented POST /public/v1/documents?upload-markdown (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api post public v1 documents-upload-markdown --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents?upload-markdown"
+        }
+      ],
+      "operation": "pandadoc.post.public-v1-documents-upload-markdown",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post public v1 members member-id token",
+      "summary": "Documented POST /public/v1/members/{member_id}/token (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api post public v1 members member-id token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/members/{member_id}/token"
+        }
+      ],
+      "operation": "pandadoc.post.public-v1-members-member-id-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post public v1 templates id duplicate",
+      "summary": "Documented POST /public/v1/templates/{id}/duplicate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api post public v1 templates id duplicate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/templates/{id}/duplicate"
+        }
+      ],
+      "operation": "pandadoc.post.public-v1-templates-id-duplicate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post public v1 templates-upload",
+      "summary": "Documented POST /public/v1/templates?upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api post public v1 templates-upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/templates?upload"
+        }
+      ],
+      "operation": "pandadoc.post.public-v1-templates-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post public v1 workspaces workspace-id api-keys",
+      "summary": "Documented POST /public/v1/workspaces/{workspace_id}/api-keys (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api post public v1 workspaces workspace-id api-keys --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/workspaces/{workspace_id}/api-keys"
+        }
+      ],
+      "operation": "pandadoc.post.public-v1-workspaces-workspace-id-api-keys",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post public v2 dsv document-id add-named-items",
+      "summary": "Documented POST /public/v2/dsv/{document_id}/add-named-items (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api post public v2 dsv document-id add-named-items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v2/dsv/{document_id}/add-named-items"
+        }
+      ],
+      "operation": "pandadoc.post.public-v2-dsv-document-id-add-named-items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put public v1 templates template-id shares",
+      "summary": "Documented PUT /public/v1/templates/{template_id}/shares (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc api put public v1 templates template-id shares --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/public/v1/templates/{template_id}/shares"
+        }
+      ],
+      "operation": "pandadoc.put.public-v1-templates-template-id-shares",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "contacts id list",
+      "summary": "Run the contacts id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc contacts id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/contacts/{id}"
+        }
+      ]
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/contacts"
+        }
+      ]
+    },
+    {
+      "path": "content library items id details list",
+      "summary": "Run the content library items id details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "content_library_items_id_details",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc content library items id details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/content-library-items/{id}/details"
+        }
+      ]
+    },
+    {
+      "path": "content library items id list",
+      "summary": "Run the content library items id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "content_library_items_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc content library items id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/content-library-items/{id}"
+        }
+      ]
+    },
+    {
+      "path": "content library items list",
+      "summary": "Run the content library items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "content_library_items",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc content library items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/content-library-items"
+        }
+      ]
+    },
+    {
+      "path": "delete contacts id apply",
+      "summary": "Plan and execute the delete contacts id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contacts_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc delete contacts id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/public/v1/contacts/{id}"
+        }
+      ],
+      "risk": "deletes PandaDoc resource via /public/v1/contacts/{id}; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete documents apply",
+      "summary": "Plan and execute the delete documents reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_documents",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc delete documents apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/public/v1/documents"
+        }
+      ],
+      "risk": "deletes PandaDoc resource via /public/v1/documents; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete documents document id sections section id apply",
+      "summary": "Plan and execute the delete documents document id sections section id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_documents_document_id_sections_section_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "document_id",
+          "type": "string",
+          "summary": "Required document id record field.",
+          "maps_to": "record.document_id",
+          "required": true
+        },
+        {
+          "name": "section_id",
+          "type": "string",
+          "summary": "Required section id record field.",
+          "maps_to": "record.section_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc delete documents document id sections section id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/public/v1/documents/{document_id}/sections/{section_id}"
+        }
+      ],
+      "risk": "deletes PandaDoc resource via /public/v1/documents/{document_id}/sections/{section_id}; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete documents id apply",
+      "summary": "Plan and execute the delete documents id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_documents_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc delete documents id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/public/v1/documents/{id}"
+        }
+      ],
+      "risk": "deletes PandaDoc resource via /public/v1/documents/{id}; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete documents id attachments attachment id apply",
+      "summary": "Plan and execute the delete documents id attachments attachment id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_documents_id_attachments_attachment_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "attachment_id",
+          "type": "string",
+          "summary": "Required attachment id record field.",
+          "maps_to": "record.attachment_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc delete documents id attachments attachment id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/public/v1/documents/{id}/attachments/{attachment_id}"
+        }
+      ],
+      "risk": "deletes PandaDoc resource via /public/v1/documents/{id}/attachments/{attachment_id}; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete documents id linked objects linked object id apply",
+      "summary": "Plan and execute the delete documents id linked objects linked object id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_documents_id_linked_objects_linked_object_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "linked_object_id",
+          "type": "string",
+          "summary": "Required linked object id record field.",
+          "maps_to": "record.linked_object_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc delete documents id linked objects linked object id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/public/v1/documents/{id}/linked-objects/{linked_object_id}"
+        }
+      ],
+      "risk": "deletes PandaDoc resource via /public/v1/documents/{id}/linked-objects/{linked_object_id}; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete documents id recipients recipient id apply",
+      "summary": "Plan and execute the delete documents id recipients recipient id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_documents_id_recipients_recipient_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "recipient_id",
+          "type": "string",
+          "summary": "Required recipient id record field.",
+          "maps_to": "record.recipient_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc delete documents id recipients recipient id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/public/v1/documents/{id}/recipients/{recipient_id}"
+        }
+      ],
+      "risk": "deletes PandaDoc resource via /public/v1/documents/{id}/recipients/{recipient_id}; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete notary notarization requests session request id apply",
+      "summary": "Plan and execute the delete notary notarization requests session request id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_notary_notarization_requests_session_request_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "session_request_id",
+          "type": "string",
+          "summary": "Required session request id record field.",
+          "maps_to": "record.session_request_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc delete notary notarization requests session request id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/public/v2/notary/notarization-requests/{session_request_id}"
+        }
+      ],
+      "risk": "deletes PandaDoc resource via /public/v2/notary/notarization-requests/{session_request_id}; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete product catalog items item uuid apply",
+      "summary": "Plan and execute the delete product catalog items item uuid reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_product_catalog_items_item_uuid",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "item_uuid",
+          "type": "string",
+          "summary": "Required item uuid record field.",
+          "maps_to": "record.item_uuid",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc delete product catalog items item uuid apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/public/v2/product-catalog/items/{item_uuid}"
+        }
+      ],
+      "risk": "deletes PandaDoc resource via /public/v2/product-catalog/items/{item_uuid}; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete templates id apply",
+      "summary": "Plan and execute the delete templates id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_templates_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc delete templates id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/public/v1/templates/{id}"
+        }
+      ],
+      "risk": "deletes PandaDoc resource via /public/v1/templates/{id}; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook subscriptions id apply",
+      "summary": "Plan and execute the delete webhook subscriptions id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook_subscriptions_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc delete webhook subscriptions id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/public/v1/webhook-subscriptions/{id}"
+        }
+      ],
+      "risk": "deletes PandaDoc resource via /public/v1/webhook-subscriptions/{id}; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete workspaces workspace id members member id apply",
+      "summary": "Plan and execute the delete workspaces workspace id members member id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workspaces_workspace_id_members_member_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "member_id",
+          "type": "string",
+          "summary": "Required member id record field.",
+          "maps_to": "record.member_id",
+          "required": true
+        },
+        {
+          "name": "workspace_id",
+          "type": "string",
+          "summary": "Required workspace id record field.",
+          "maps_to": "record.workspace_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc delete workspaces workspace id members member id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/public/v1/workspaces/{workspace_id}/members/{member_id}"
+        }
+      ],
+      "risk": "deletes PandaDoc resource via /public/v1/workspaces/{workspace_id}/members/{member_id}; destructive external mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "documents document id ai metadata list",
+      "summary": "Run the documents document id ai metadata ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_document_id_ai_metadata",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents document id ai metadata list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/beta/documents/{document_id}/ai-metadata"
+        }
+      ]
+    },
+    {
+      "path": "documents document id audit trail list",
+      "summary": "Run the documents document id audit trail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_document_id_audit_trail",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents document id audit trail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v2/documents/{document_id}/audit-trail"
+        }
+      ]
+    },
+    {
+      "path": "documents document id auto reminders list",
+      "summary": "Run the documents document id auto reminders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_document_id_auto_reminders",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents document id auto reminders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{document_id}/auto-reminders"
+        }
+      ]
+    },
+    {
+      "path": "documents document id auto reminders status list",
+      "summary": "Run the documents document id auto reminders status ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_document_id_auto_reminders_status",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents document id auto reminders status list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{document_id}/auto-reminders/status"
+        }
+      ]
+    },
+    {
+      "path": "documents document id content list",
+      "summary": "Run the documents document id content ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_document_id_content",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents document id content list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/beta/documents/{document_id}/content"
+        }
+      ]
+    },
+    {
+      "path": "documents document id docx export tasks task id list",
+      "summary": "Run the documents document id docx export tasks task id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_document_id_docx_export_tasks_task_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents document id docx export tasks task id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/beta/documents/{document_id}/docx-export-tasks/{task_id}"
+        }
+      ]
+    },
+    {
+      "path": "documents document id esign disclosure list",
+      "summary": "Run the documents document id esign disclosure ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_document_id_esign_disclosure",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents document id esign disclosure list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{document_id}/esign-disclosure"
+        }
+      ]
+    },
+    {
+      "path": "documents document id sections list",
+      "summary": "Run the documents document id sections ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_document_id_sections",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents document id sections list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{document_id}/sections"
+        }
+      ]
+    },
+    {
+      "path": "documents document id sections section id list",
+      "summary": "Run the documents document id sections section id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_document_id_sections_section_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents document id sections section id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{document_id}/sections/{section_id}"
+        }
+      ]
+    },
+    {
+      "path": "documents document id sections uploads upload id list",
+      "summary": "Run the documents document id sections uploads upload id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_document_id_sections_uploads_upload_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents document id sections uploads upload id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{document_id}/sections/uploads/{upload_id}"
+        }
+      ]
+    },
+    {
+      "path": "documents document id settings list",
+      "summary": "Run the documents document id settings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_document_id_settings",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents document id settings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v2/documents/{document_id}/settings"
+        }
+      ]
+    },
+    {
+      "path": "documents document id summary list",
+      "summary": "Run the documents document id summary ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_document_id_summary",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents document id summary list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/beta/documents/{document_id}/summary"
+        }
+      ]
+    },
+    {
+      "path": "documents folders list",
+      "summary": "Run the documents folders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_folders",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents folders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/folders"
+        }
+      ]
+    },
+    {
+      "path": "documents id attachments attachment id list",
+      "summary": "Run the documents id attachments attachment id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_id_attachments_attachment_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents id attachments attachment id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{id}/attachments/{attachment_id}"
+        }
+      ]
+    },
+    {
+      "path": "documents id attachments list",
+      "summary": "Run the documents id attachments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_id_attachments",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents id attachments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{id}/attachments"
+        }
+      ]
+    },
+    {
+      "path": "documents id details list",
+      "summary": "Run the documents id details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_id_details",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents id details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{id}/details"
+        }
+      ]
+    },
+    {
+      "path": "documents id fields list",
+      "summary": "Run the documents id fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_id_fields",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents id fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{id}/fields"
+        }
+      ]
+    },
+    {
+      "path": "documents id linked objects list",
+      "summary": "Run the documents id linked objects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_id_linked_objects",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents id linked objects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{id}/linked-objects"
+        }
+      ]
+    },
+    {
+      "path": "documents id list",
+      "summary": "Run the documents id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/{id}"
+        }
+      ]
+    },
+    {
+      "path": "documents linked objects list",
+      "summary": "Run the documents linked objects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_linked_objects",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents linked objects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents/linked-objects"
+        }
+      ]
+    },
+    {
+      "path": "documents list",
+      "summary": "Run the documents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/documents"
+        }
+      ]
+    },
+    {
+      "path": "documents search list",
+      "summary": "Run the documents search ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents_search",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc documents search list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/beta/documents/search"
+        }
+      ]
+    },
+    {
+      "path": "forms list",
+      "summary": "Run the forms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "forms",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc forms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/forms"
+        }
+      ]
+    },
+    {
+      "path": "logs detail list",
+      "summary": "Run the logs detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "logs_detail",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc logs detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v2/logs"
+        }
+      ]
+    },
+    {
+      "path": "logs id detail list",
+      "summary": "Run the logs id detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "logs_id_detail",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc logs id detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v2/logs/{id}"
+        }
+      ]
+    },
+    {
+      "path": "logs id list",
+      "summary": "Run the logs id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "logs_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc logs id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/logs/{id}"
+        }
+      ]
+    },
+    {
+      "path": "logs list",
+      "summary": "Run the logs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "logs",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc logs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/logs"
+        }
+      ]
+    },
+    {
+      "path": "members current list",
+      "summary": "Run the members current ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "members_current",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc members current list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/members/current"
+        }
+      ]
+    },
+    {
+      "path": "members id list",
+      "summary": "Run the members id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "members_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc members id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/members/{id}"
+        }
+      ]
+    },
+    {
+      "path": "members list",
+      "summary": "Run the members ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "members",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc members list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/members"
+        }
+      ]
+    },
+    {
+      "path": "notary notaries list",
+      "summary": "Run the notary notaries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notary_notaries",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc notary notaries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v2/notary/notaries"
+        }
+      ]
+    },
+    {
+      "path": "notary notarization requests list",
+      "summary": "Run the notary notarization requests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notary_notarization_requests",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc notary notarization requests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v2/notary/notarization-requests"
+        }
+      ]
+    },
+    {
+      "path": "notary notarization requests session request id list",
+      "summary": "Run the notary notarization requests session request id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notary_notarization_requests_session_request_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc notary notarization requests session request id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v2/notary/notarization-requests/{session_request_id}"
+        }
+      ]
+    },
+    {
+      "path": "patch contacts id apply",
+      "summary": "Plan and execute the patch contacts id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_contacts_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc patch contacts id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v1/contacts/{id}"
+        }
+      ],
+      "risk": "PATCH /public/v1/contacts/{id} mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch documents document id auto reminders apply",
+      "summary": "Plan and execute the patch documents document id auto reminders reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_documents_document_id_auto_reminders",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "document_id",
+          "type": "string",
+          "summary": "Required document id record field.",
+          "maps_to": "record.document_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc patch documents document id auto reminders apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v1/documents/{document_id}/auto-reminders"
+        }
+      ],
+      "risk": "PATCH /public/v1/documents/{document_id}/auto-reminders mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch documents document id settings apply",
+      "summary": "Plan and execute the patch documents document id settings reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_documents_document_id_settings",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "document_id",
+          "type": "string",
+          "summary": "Required document id record field.",
+          "maps_to": "record.document_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc patch documents document id settings apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v2/documents/{document_id}/settings"
+        }
+      ],
+      "risk": "PATCH /public/v2/documents/{document_id}/settings mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch documents id apply",
+      "summary": "Plan and execute the patch documents id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_documents_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc patch documents id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v1/documents/{id}"
+        }
+      ],
+      "risk": "PATCH /public/v1/documents/{id} mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch documents id fields apply",
+      "summary": "Plan and execute the patch documents id fields reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_documents_id_fields",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc patch documents id fields apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v1/documents/{id}/fields"
+        }
+      ],
+      "risk": "PATCH /public/v1/documents/{id}/fields mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch documents id ownership apply",
+      "summary": "Plan and execute the patch documents id ownership reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_documents_id_ownership",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc patch documents id ownership apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v1/documents/{id}/ownership"
+        }
+      ],
+      "risk": "PATCH /public/v1/documents/{id}/ownership mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch documents id recipients recipient recipient id apply",
+      "summary": "Plan and execute the patch documents id recipients recipient recipient id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_documents_id_recipients_recipient_recipient_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "recipient_id",
+          "type": "string",
+          "summary": "Required recipient id record field.",
+          "maps_to": "record.recipient_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc patch documents id recipients recipient recipient id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v1/documents/{id}/recipients/recipient/{recipient_id}"
+        }
+      ],
+      "risk": "PATCH /public/v1/documents/{id}/recipients/recipient/{recipient_id} mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch documents id status apply",
+      "summary": "Plan and execute the patch documents id status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_documents_id_status",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc patch documents id status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v1/documents/{id}/status"
+        }
+      ],
+      "risk": "PATCH /public/v1/documents/{id}/status mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch documents ownership apply",
+      "summary": "Plan and execute the patch documents ownership reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_documents_ownership",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc patch documents ownership apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v1/documents/ownership"
+        }
+      ],
+      "risk": "PATCH /public/v1/documents/ownership mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch product catalog items item uuid apply",
+      "summary": "Plan and execute the patch product catalog items item uuid reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_product_catalog_items_item_uuid",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "item_uuid",
+          "type": "string",
+          "summary": "Required item uuid record field.",
+          "maps_to": "record.item_uuid",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc patch product catalog items item uuid apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v2/product-catalog/items/{item_uuid}"
+        }
+      ],
+      "risk": "PATCH /public/v2/product-catalog/items/{item_uuid} mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch templates id apply",
+      "summary": "Plan and execute the patch templates id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_templates_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc patch templates id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v1/templates/{id}"
+        }
+      ],
+      "risk": "PATCH /public/v1/templates/{id} mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch templates template id settings apply",
+      "summary": "Plan and execute the patch templates template id settings reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_templates_template_id_settings",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "template_id",
+          "type": "string",
+          "summary": "Required template id record field.",
+          "maps_to": "record.template_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc patch templates template id settings apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v2/templates/{template_id}/settings"
+        }
+      ],
+      "risk": "PATCH /public/v2/templates/{template_id}/settings mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch webhook subscriptions id apply",
+      "summary": "Plan and execute the patch webhook subscriptions id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_webhook_subscriptions_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc patch webhook subscriptions id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v1/webhook-subscriptions/{id}"
+        }
+      ],
+      "risk": "PATCH /public/v1/webhook-subscriptions/{id} mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch workspaces workspace id members member id role apply",
+      "summary": "Plan and execute the patch workspaces workspace id members member id role reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_workspaces_workspace_id_members_member_id_role",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "member_id",
+          "type": "string",
+          "summary": "Required member id record field.",
+          "maps_to": "record.member_id",
+          "required": true
+        },
+        {
+          "name": "workspace_id",
+          "type": "string",
+          "summary": "Required workspace id record field.",
+          "maps_to": "record.workspace_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc patch workspaces workspace id members member id role apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/public/v1/workspaces/{workspace_id}/members/{member_id}/role"
+        }
+      ],
+      "risk": "PATCH /public/v1/workspaces/{workspace_id}/members/{member_id}/role mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post contacts apply",
+      "summary": "Plan and execute the post contacts reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_contacts",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc post contacts apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/contacts"
+        }
+      ],
+      "risk": "POST /public/v1/contacts mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post content library items apply",
+      "summary": "Plan and execute the post content library items reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_content_library_items",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc post content library items apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/content-library-items"
+        }
+      ],
+      "risk": "POST /public/v1/content-library-items mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents ai metadata apply",
+      "summary": "Plan and execute the post documents ai metadata reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_ai_metadata",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc post documents ai metadata apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/beta/documents/ai-metadata"
+        }
+      ],
+      "risk": "POST /public/beta/documents/ai-metadata mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents apply",
+      "summary": "Plan and execute the post documents reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc post documents apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents"
+        }
+      ],
+      "risk": "POST /public/v1/documents mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents document id docx export tasks apply",
+      "summary": "Plan and execute the post documents document id docx export tasks reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_document_id_docx_export_tasks",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "document_id",
+          "type": "string",
+          "summary": "Required document id record field.",
+          "maps_to": "record.document_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents document id docx export tasks apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/beta/documents/{document_id}/docx-export-tasks"
+        }
+      ],
+      "risk": "POST /public/beta/documents/{document_id}/docx-export-tasks mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents document id sections apply",
+      "summary": "Plan and execute the post documents document id sections reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_document_id_sections",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "document_id",
+          "type": "string",
+          "summary": "Required document id record field.",
+          "maps_to": "record.document_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents document id sections apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{document_id}/sections"
+        }
+      ],
+      "risk": "POST /public/v1/documents/{document_id}/sections mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents document id send reminder apply",
+      "summary": "Plan and execute the post documents document id send reminder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_document_id_send_reminder",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "document_id",
+          "type": "string",
+          "summary": "Required document id record field.",
+          "maps_to": "record.document_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents document id send reminder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{document_id}/send-reminder"
+        }
+      ],
+      "risk": "POST /public/v1/documents/{document_id}/send-reminder mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents folders apply",
+      "summary": "Plan and execute the post documents folders reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_folders",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc post documents folders apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/folders"
+        }
+      ],
+      "risk": "POST /public/v1/documents/folders mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents id append content library item apply",
+      "summary": "Plan and execute the post documents id append content library item reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_id_append_content_library_item",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents id append content library item apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{id}/append-content-library-item"
+        }
+      ],
+      "risk": "POST /public/v1/documents/{id}/append-content-library-item mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents id attachments apply",
+      "summary": "Plan and execute the post documents id attachments reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_id_attachments",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents id attachments apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{id}/attachments"
+        }
+      ],
+      "risk": "POST /public/v1/documents/{id}/attachments mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents id draft apply",
+      "summary": "Plan and execute the post documents id draft reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_id_draft",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents id draft apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{id}/draft"
+        }
+      ],
+      "risk": "POST /public/v1/documents/{id}/draft mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents id editing sessions apply",
+      "summary": "Plan and execute the post documents id editing sessions reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_id_editing_sessions",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents id editing sessions apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{id}/editing-sessions"
+        }
+      ],
+      "risk": "POST /public/v1/documents/{id}/editing-sessions mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents id fields apply",
+      "summary": "Plan and execute the post documents id fields reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_id_fields",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents id fields apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{id}/fields"
+        }
+      ],
+      "risk": "POST /public/v1/documents/{id}/fields mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents id linked objects apply",
+      "summary": "Plan and execute the post documents id linked objects reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_id_linked_objects",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents id linked objects apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{id}/linked-objects"
+        }
+      ],
+      "risk": "POST /public/v1/documents/{id}/linked-objects mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents id move to folder folder id apply",
+      "summary": "Plan and execute the post documents id move to folder folder id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_id_move_to_folder_folder_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "folder_id",
+          "type": "string",
+          "summary": "Required folder id record field.",
+          "maps_to": "record.folder_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents id move to folder folder id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{id}/move-to-folder/{folder_id}"
+        }
+      ],
+      "risk": "POST /public/v1/documents/{id}/move-to-folder/{folder_id} mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents id recipients apply",
+      "summary": "Plan and execute the post documents id recipients reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_id_recipients",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents id recipients apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{id}/recipients"
+        }
+      ],
+      "risk": "POST /public/v1/documents/{id}/recipients mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents id recipients recipient id reassign apply",
+      "summary": "Plan and execute the post documents id recipients recipient id reassign reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_id_recipients_recipient_id_reassign",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "recipient_id",
+          "type": "string",
+          "summary": "Required recipient id record field.",
+          "maps_to": "record.recipient_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents id recipients recipient id reassign apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{id}/recipients/{recipient_id}/reassign"
+        }
+      ],
+      "risk": "POST /public/v1/documents/{id}/recipients/{recipient_id}/reassign mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents id send apply",
+      "summary": "Plan and execute the post documents id send reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_id_send",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents id send apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{id}/send"
+        }
+      ],
+      "risk": "POST /public/v1/documents/{id}/send mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post documents id session apply",
+      "summary": "Plan and execute the post documents id session reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_documents_id_session",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post documents id session apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/documents/{id}/session"
+        }
+      ],
+      "risk": "POST /public/v1/documents/{id}/session mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post notary notarization requests apply",
+      "summary": "Plan and execute the post notary notarization requests reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_notary_notarization_requests",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc post notary notarization requests apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v2/notary/notarization-requests"
+        }
+      ],
+      "risk": "POST /public/v2/notary/notarization-requests mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post product catalog items apply",
+      "summary": "Plan and execute the post product catalog items reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_product_catalog_items",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc post product catalog items apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v2/product-catalog/items"
+        }
+      ],
+      "risk": "POST /public/v2/product-catalog/items mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post templates apply",
+      "summary": "Plan and execute the post templates reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_templates",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc post templates apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/templates"
+        }
+      ],
+      "risk": "POST /public/v1/templates mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post templates folders apply",
+      "summary": "Plan and execute the post templates folders reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_templates_folders",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc post templates folders apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/templates/folders"
+        }
+      ],
+      "risk": "POST /public/v1/templates/folders mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post templates id editing sessions apply",
+      "summary": "Plan and execute the post templates id editing sessions reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_templates_id_editing_sessions",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post templates id editing sessions apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/templates/{id}/editing-sessions"
+        }
+      ],
+      "risk": "POST /public/v1/templates/{id}/editing-sessions mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post users apply",
+      "summary": "Plan and execute the post users reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_users",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc post users apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/users"
+        }
+      ],
+      "risk": "POST /public/v1/users mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post webhook subscriptions apply",
+      "summary": "Plan and execute the post webhook subscriptions reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_webhook_subscriptions",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc post webhook subscriptions apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/webhook-subscriptions"
+        }
+      ],
+      "risk": "POST /public/v1/webhook-subscriptions mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post workspaces apply",
+      "summary": "Plan and execute the post workspaces reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_workspaces",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc post workspaces apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/workspaces"
+        }
+      ],
+      "risk": "POST /public/v1/workspaces mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post workspaces workspace id deactivate apply",
+      "summary": "Plan and execute the post workspaces workspace id deactivate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_workspaces_workspace_id_deactivate",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "workspace_id",
+          "type": "string",
+          "summary": "Required workspace id record field.",
+          "maps_to": "record.workspace_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post workspaces workspace id deactivate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/workspaces/{workspace_id}/deactivate"
+        }
+      ],
+      "risk": "POST /public/v1/workspaces/{workspace_id}/deactivate mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post workspaces workspace id members apply",
+      "summary": "Plan and execute the post workspaces workspace id members reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_workspaces_workspace_id_members",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "workspace_id",
+          "type": "string",
+          "summary": "Required workspace id record field.",
+          "maps_to": "record.workspace_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc post workspaces workspace id members apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/public/v1/workspaces/{workspace_id}/members"
+        }
+      ],
+      "risk": "POST /public/v1/workspaces/{workspace_id}/members mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "product catalog items item uuid list",
+      "summary": "Run the product catalog items item uuid ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product_catalog_items_item_uuid",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc product catalog items item uuid list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v2/product-catalog/items/{item_uuid}"
+        }
+      ]
+    },
+    {
+      "path": "product catalog items search list",
+      "summary": "Run the product catalog items search ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product_catalog_items_search",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc product catalog items search list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v2/product-catalog/items/search"
+        }
+      ]
+    },
+    {
+      "path": "put documents document id quotes quote id apply",
+      "summary": "Plan and execute the put documents document id quotes quote id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_documents_document_id_quotes_quote_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "document_id",
+          "type": "string",
+          "summary": "Required document id record field.",
+          "maps_to": "record.document_id",
+          "required": true
+        },
+        {
+          "name": "quote_id",
+          "type": "string",
+          "summary": "Required quote id record field.",
+          "maps_to": "record.quote_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc put documents document id quotes quote id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/public/v1/documents/{document_id}/quotes/{quote_id}"
+        }
+      ],
+      "risk": "PUT /public/v1/documents/{document_id}/quotes/{quote_id} mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "put documents folders id apply",
+      "summary": "Plan and execute the put documents folders id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_documents_folders_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc put documents folders id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/public/v1/documents/folders/{id}"
+        }
+      ],
+      "risk": "PUT /public/v1/documents/folders/{id} mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "put templates folders id apply",
+      "summary": "Plan and execute the put templates folders id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_templates_folders_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pandadoc put templates folders id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/public/v1/templates/folders/{id}"
+        }
+      ],
+      "risk": "PUT /public/v1/templates/folders/{id} mutates PandaDoc data or workflow state",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "sms opt outs list",
+      "summary": "Run the sms opt outs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sms_opt_outs",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc sms opt outs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/sms-opt-outs"
+        }
+      ]
+    },
+    {
+      "path": "templates folders list",
+      "summary": "Run the templates folders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates_folders",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc templates folders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/templates/folders"
+        }
+      ]
+    },
+    {
+      "path": "templates id details list",
+      "summary": "Run the templates id details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates_id_details",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc templates id details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/templates/{id}/details"
+        }
+      ]
+    },
+    {
+      "path": "templates id list",
+      "summary": "Run the templates id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc templates id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/templates/{id}"
+        }
+      ]
+    },
+    {
+      "path": "templates list",
+      "summary": "Run the templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/templates"
+        }
+      ]
+    },
+    {
+      "path": "templates template id settings list",
+      "summary": "Run the templates template id settings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates_template_id_settings",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc templates template id settings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v2/templates/{template_id}/settings"
+        }
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/users"
+        }
+      ]
+    },
+    {
+      "path": "users user id list",
+      "summary": "Run the users user id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users_user_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc users user id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/users/{user_id}"
+        }
+      ]
+    },
+    {
+      "path": "webhook events id list",
+      "summary": "Run the webhook events id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook_events_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc webhook events id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/webhook-events/{id}"
+        }
+      ]
+    },
+    {
+      "path": "webhook events list",
+      "summary": "Run the webhook events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook_events",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc webhook events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/webhook-events"
+        }
+      ]
+    },
+    {
+      "path": "webhook subscriptions id list",
+      "summary": "Run the webhook subscriptions id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook_subscriptions_id",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc webhook subscriptions id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/webhook-subscriptions/{id}"
+        }
+      ]
+    },
+    {
+      "path": "webhook subscriptions list",
+      "summary": "Run the webhook subscriptions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook_subscriptions",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc webhook subscriptions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/webhook-subscriptions"
+        }
+      ]
+    },
+    {
+      "path": "workspaces list",
+      "summary": "Run the workspaces ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workspaces",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "examples": [
+        "pm pandadoc workspaces list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/v1/workspaces"
+        }
+      ]
+    }
+  ]
+}

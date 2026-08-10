@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-machine-plus-root-manifest.json",
+  "candidates": 2,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "emailoctopus",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 25 operation(s), below the ledger's 34"
+    },
+    {
+      "connector": "strava",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    }
+  ]
+}

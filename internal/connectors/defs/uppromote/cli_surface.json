@@ -1,0 +1,757 @@
+{
+  "tagline": "Run UpPromote's declared streams and reverse-ETL actions.",
+  "usage": "pm uppromote \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "affiliates list",
+        "api get api v2 affiliates",
+        "api get api v2 affiliates id",
+        "api get api v2 payments id",
+        "api get api v2 payments total-paid",
+        "api get api v2 programs id",
+        "api get api v2 programs id excluded",
+        "api get api v2 referrals id",
+        "api get api v2 webhook-subscriptions",
+        "coupons list",
+        "paid payments list",
+        "programs list",
+        "referrals list",
+        "unpaid payments list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add referral adjustment apply",
+        "api post api affiliates",
+        "approve deny affiliate apply",
+        "approve deny referral apply",
+        "assign coupon to affiliate apply",
+        "connect customer to affiliate apply",
+        "create affiliate apply",
+        "create referral apply",
+        "delete webhook subscription apply",
+        "mark as paid manual payment apply",
+        "move affiliate to program apply",
+        "set upline affiliate apply",
+        "subscribe webhook event apply",
+        "update webhook subscription apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add referral adjustment apply",
+      "summary": "Plan and execute the add referral adjustment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_referral_adjustment",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "flags": [
+        {
+          "name": "adjustment",
+          "type": "number",
+          "summary": "Required adjustment record field.",
+          "maps_to": "record.adjustment",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm uppromote add referral adjustment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/referral/{id}/adjustment"
+        }
+      ],
+      "risk": "adds a positive or negative commission adjustment to an existing referral, directly changing affiliate payout amounts; no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "affiliates list",
+      "summary": "Run the affiliates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "affiliates",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote affiliates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/affiliates"
+        }
+      ]
+    },
+    {
+      "path": "api get api v2 affiliates",
+      "summary": "Documented GET /api/v2/affiliates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote api get api v2 affiliates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/affiliates"
+        }
+      ],
+      "operation": "uppromote.get.api-v2-affiliates",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 affiliates id",
+      "summary": "Documented GET /api/v2/affiliates/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote api get api v2 affiliates id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/affiliates/{id}"
+        }
+      ],
+      "operation": "uppromote.get.api-v2-affiliates-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 payments id",
+      "summary": "Documented GET /api/v2/payments/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote api get api v2 payments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/payments/{id}"
+        }
+      ],
+      "operation": "uppromote.get.api-v2-payments-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 payments total-paid",
+      "summary": "Documented GET /api/v2/payments/total-paid (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote api get api v2 payments total-paid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/payments/total-paid"
+        }
+      ],
+      "operation": "uppromote.get.api-v2-payments-total-paid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 programs id",
+      "summary": "Documented GET /api/v2/programs/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote api get api v2 programs id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/programs/{id}"
+        }
+      ],
+      "operation": "uppromote.get.api-v2-programs-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 programs id excluded",
+      "summary": "Documented GET /api/v2/programs/{id}/excluded (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote api get api v2 programs id excluded --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/programs/{id}/excluded"
+        }
+      ],
+      "operation": "uppromote.get.api-v2-programs-id-excluded",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 referrals id",
+      "summary": "Documented GET /api/v2/referrals/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote api get api v2 referrals id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/referrals/{id}"
+        }
+      ],
+      "operation": "uppromote.get.api-v2-referrals-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 webhook-subscriptions",
+      "summary": "Documented GET /api/v2/webhook-subscriptions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote api get api v2 webhook-subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/webhook-subscriptions"
+        }
+      ],
+      "operation": "uppromote.get.api-v2-webhook-subscriptions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post api affiliates",
+      "summary": "Documented POST /api/affiliates (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote api post api affiliates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/affiliates"
+        }
+      ],
+      "operation": "uppromote.post.api-affiliates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "approve deny affiliate apply",
+      "summary": "Plan and execute the approve deny affiliate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "approve_deny_affiliate",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "flags": [
+        {
+          "name": "affiliate_email",
+          "type": "string",
+          "summary": "Required affiliate email record field.",
+          "maps_to": "record.affiliate_email",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Required status record field.",
+          "maps_to": "record.status",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm uppromote approve deny affiliate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/affiliate/active"
+        }
+      ],
+      "risk": "approves or denies a pending affiliate application; low-risk, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "approve deny referral apply",
+      "summary": "Plan and execute the approve deny referral reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "approve_deny_referral",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Required status record field.",
+          "maps_to": "record.status",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm uppromote approve deny referral apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/referral/{id}/status"
+        }
+      ],
+      "risk": "approves or denies a pending referral, affecting affiliate payout eligibility; no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "assign coupon to affiliate apply",
+      "summary": "Plan and execute the assign coupon to affiliate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "assign_coupon_to_affiliate",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "flags": [
+        {
+          "name": "affiliate_email",
+          "type": "string",
+          "summary": "Required affiliate email record field.",
+          "maps_to": "record.affiliate_email",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm uppromote assign coupon to affiliate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/coupons/assign"
+        }
+      ],
+      "risk": "assigns a discount coupon code to an affiliate for referral tracking; low-risk, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "connect customer to affiliate apply",
+      "summary": "Plan and execute the connect customer to affiliate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "connect_customer_to_affiliate",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "flags": [
+        {
+          "name": "affiliate_email",
+          "type": "string",
+          "summary": "Required affiliate email record field.",
+          "maps_to": "record.affiliate_email",
+          "required": true
+        },
+        {
+          "name": "customer_email",
+          "type": "string",
+          "summary": "Required customer email record field.",
+          "maps_to": "record.customer_email",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm uppromote connect customer to affiliate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/affiliate/create-connect-customer"
+        }
+      ],
+      "risk": "links a Shopify customer email to an affiliate for future referral attribution; low-risk, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "coupons list",
+      "summary": "Run the coupons ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "coupons",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote coupons list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/coupons"
+        }
+      ]
+    },
+    {
+      "path": "create affiliate apply",
+      "summary": "Plan and execute the create affiliate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_affiliate",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm uppromote create affiliate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/affiliates"
+        }
+      ],
+      "risk": "creates a new affiliate account; low-risk, no approval required (UpPromote caps this at 150 affiliates/day per its own API)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create referral apply",
+      "summary": "Plan and execute the create referral reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_referral",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "flags": [
+        {
+          "name": "affiliate_email",
+          "type": "string",
+          "summary": "Required affiliate email record field.",
+          "maps_to": "record.affiliate_email",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm uppromote create referral apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/referrals"
+        }
+      ],
+      "risk": "creates a manual commission-bearing referral for an affiliate, either tied to a Shopify order or as a fixed amount; affects payout totals, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook subscription apply",
+      "summary": "Plan and execute the delete webhook subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook_subscription",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "flags": [
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "Required event record field.",
+          "maps_to": "record.event",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm uppromote delete webhook subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/webhook-subscriptions"
+        }
+      ],
+      "risk": "removes a webhook subscription; the external endpoint stops receiving that event type, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "mark as paid manual payment apply",
+      "summary": "Plan and execute the mark as paid manual payment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "mark_as_paid_manual_payment",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "flags": [
+        {
+          "name": "affiliate_email",
+          "type": "string",
+          "summary": "Required affiliate email record field.",
+          "maps_to": "record.affiliate_email",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm uppromote mark as paid manual payment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/payments/mark-as-paid"
+        }
+      ],
+      "risk": "marks approved referrals as manually paid outside UpPromote's own payout processing; affects financial records, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "move affiliate to program apply",
+      "summary": "Plan and execute the move affiliate to program reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "move_affiliate_to_program",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "flags": [
+        {
+          "name": "affiliate_email",
+          "type": "string",
+          "summary": "Required affiliate email record field.",
+          "maps_to": "record.affiliate_email",
+          "required": true
+        },
+        {
+          "name": "program_id",
+          "type": "integer",
+          "summary": "Required program id record field.",
+          "maps_to": "record.program_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm uppromote move affiliate to program apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/affiliate/move-affiliate-to-program"
+        }
+      ],
+      "risk": "reassigns an affiliate to a different commission program, changing future commission rules; no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "paid payments list",
+      "summary": "Run the paid payments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "paid_payments",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote paid payments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/payments/paid"
+        }
+      ]
+    },
+    {
+      "path": "programs list",
+      "summary": "Run the programs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "programs",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote programs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/programs"
+        }
+      ]
+    },
+    {
+      "path": "referrals list",
+      "summary": "Run the referrals ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "referrals",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote referrals list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/referrals"
+        }
+      ]
+    },
+    {
+      "path": "set upline affiliate apply",
+      "summary": "Plan and execute the set upline affiliate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "set_upline_affiliate",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "flags": [
+        {
+          "name": "affiliate_email",
+          "type": "string",
+          "summary": "Required affiliate email record field.",
+          "maps_to": "record.affiliate_email",
+          "required": true
+        },
+        {
+          "name": "upline_affiliate_email",
+          "type": "string",
+          "summary": "Required upline affiliate email record field.",
+          "maps_to": "record.upline_affiliate_email",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm uppromote set upline affiliate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/affiliate/set-upline"
+        }
+      ],
+      "risk": "sets the referring (upline) affiliate for a downline affiliate, affecting multi-tier commission attribution; no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "subscribe webhook event apply",
+      "summary": "Plan and execute the subscribe webhook event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "subscribe_webhook_event",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "flags": [
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "Required event record field.",
+          "maps_to": "record.event",
+          "required": true
+        },
+        {
+          "name": "target_url",
+          "type": "string",
+          "summary": "Required target url record field.",
+          "maps_to": "record.target_url",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm uppromote subscribe webhook event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/webhook-subscriptions"
+        }
+      ],
+      "risk": "registers a new outbound webhook subscription that will deliver event payloads to an external URL; low-risk, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "unpaid payments list",
+      "summary": "Run the unpaid payments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "unpaid_payments",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "examples": [
+        "pm uppromote unpaid payments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/payments/unpaid"
+        }
+      ]
+    },
+    {
+      "path": "update webhook subscription apply",
+      "summary": "Plan and execute the update webhook subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook_subscription",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "flags": [
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "Required event record field.",
+          "maps_to": "record.event",
+          "required": true
+        },
+        {
+          "name": "target_url",
+          "type": "string",
+          "summary": "Required target url record field.",
+          "maps_to": "record.target_url",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm uppromote update webhook subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v2/webhook-subscriptions"
+        }
+      ],
+      "risk": "updates an existing webhook subscription's target URL; low-risk, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    }
+  ]
+}

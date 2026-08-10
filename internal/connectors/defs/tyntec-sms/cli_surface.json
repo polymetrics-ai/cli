@@ -1,0 +1,454 @@
+{
+  "tagline": "Run tyntec SMS's declared streams and reverse-ETL actions.",
+  "usage": "pm tyntec-sms \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get byon contacts v1",
+        "api get byon contacts v1 contactid",
+        "api get byon phonebook v1 numbers",
+        "api get byon phonebook v1 numbers phonenumber",
+        "api get byon provisioning v1",
+        "api get byon provisioning v1 requestid",
+        "api get messaging v1 messages requestid",
+        "api get messaging v1 sms",
+        "delivery reports list",
+        "messages list",
+        "sender ids list",
+        "templates list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete byon contacts v1 contactid",
+        "api post byon contacts v1",
+        "api post byon contacts v1 contactid",
+        "api post byon provisioning v1",
+        "api post incoming",
+        "api post messaging v1 conversion",
+        "api post messaging v1 sms",
+        "send message apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete byon contacts v1 contactid",
+      "summary": "Documented DELETE /byon/contacts/v1/{contactId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api delete byon contacts v1 contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/byon/contacts/v1/{contactId}"
+        }
+      ],
+      "operation": "tyntec-sms.delete.byon-contacts-v1-contactid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get byon contacts v1",
+      "summary": "Documented GET /byon/contacts/v1 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api get byon contacts v1 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/byon/contacts/v1"
+        }
+      ],
+      "operation": "tyntec-sms.get.byon-contacts-v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get byon contacts v1 contactid",
+      "summary": "Documented GET /byon/contacts/v1/{contactId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api get byon contacts v1 contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/byon/contacts/v1/{contactId}"
+        }
+      ],
+      "operation": "tyntec-sms.get.byon-contacts-v1-contactid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get byon phonebook v1 numbers",
+      "summary": "Documented GET /byon/phonebook/v1/numbers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api get byon phonebook v1 numbers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/byon/phonebook/v1/numbers"
+        }
+      ],
+      "operation": "tyntec-sms.get.byon-phonebook-v1-numbers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get byon phonebook v1 numbers phonenumber",
+      "summary": "Documented GET /byon/phonebook/v1/numbers/{phoneNumber} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api get byon phonebook v1 numbers phonenumber --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/byon/phonebook/v1/numbers/{phoneNumber}"
+        }
+      ],
+      "operation": "tyntec-sms.get.byon-phonebook-v1-numbers-phonenumber",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get byon provisioning v1",
+      "summary": "Documented GET /byon/provisioning/v1 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api get byon provisioning v1 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/byon/provisioning/v1"
+        }
+      ],
+      "operation": "tyntec-sms.get.byon-provisioning-v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get byon provisioning v1 requestid",
+      "summary": "Documented GET /byon/provisioning/v1/{requestId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api get byon provisioning v1 requestid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/byon/provisioning/v1/{requestId}"
+        }
+      ],
+      "operation": "tyntec-sms.get.byon-provisioning-v1-requestid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get messaging v1 messages requestid",
+      "summary": "Documented GET /messaging/v1/messages/{requestId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api get messaging v1 messages requestid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/messaging/v1/messages/{requestId}"
+        }
+      ],
+      "operation": "tyntec-sms.get.messaging-v1-messages-requestid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get messaging v1 sms",
+      "summary": "Documented GET /messaging/v1/sms (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api get messaging v1 sms --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/messaging/v1/sms"
+        }
+      ],
+      "operation": "tyntec-sms.get.messaging-v1-sms",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post byon contacts v1",
+      "summary": "Documented POST /byon/contacts/v1 (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api post byon contacts v1 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/byon/contacts/v1"
+        }
+      ],
+      "operation": "tyntec-sms.post.byon-contacts-v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post byon contacts v1 contactid",
+      "summary": "Documented POST /byon/contacts/v1/{contactId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api post byon contacts v1 contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/byon/contacts/v1/{contactId}"
+        }
+      ],
+      "operation": "tyntec-sms.post.byon-contacts-v1-contactid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post byon provisioning v1",
+      "summary": "Documented POST /byon/provisioning/v1 (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api post byon provisioning v1 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/byon/provisioning/v1"
+        }
+      ],
+      "operation": "tyntec-sms.post.byon-provisioning-v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post incoming",
+      "summary": "Documented POST /incoming (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api post incoming --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/incoming"
+        }
+      ],
+      "operation": "tyntec-sms.post.incoming",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post messaging v1 conversion",
+      "summary": "Documented POST /messaging/v1/conversion (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api post messaging v1 conversion --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/messaging/v1/conversion"
+        }
+      ],
+      "operation": "tyntec-sms.post.messaging-v1-conversion",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post messaging v1 sms",
+      "summary": "Documented POST /messaging/v1/sms (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms api post messaging v1 sms --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/messaging/v1/sms"
+        }
+      ],
+      "operation": "tyntec-sms.post.messaging-v1-sms",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "delivery reports list",
+      "summary": "Run the delivery reports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "delivery_reports",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms delivery reports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms/v1/reports"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "messages list",
+      "summary": "Run the messages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "messages",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms messages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms/v1/messages"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "send message apply",
+      "summary": "Plan and execute the send message reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "send_message",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "flags": [
+        {
+          "name": "from",
+          "type": "string",
+          "summary": "Required from record field.",
+          "maps_to": "record.from",
+          "required": true
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Required text record field.",
+          "maps_to": "record.text",
+          "required": true
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "summary": "Required to record field.",
+          "maps_to": "record.to",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tyntec-sms send message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sms/v1/messages"
+        }
+      ],
+      "risk": "sends a billable SMS message to the recipient phone number and may notify an external user",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "sender ids list",
+      "summary": "Run the sender ids ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sender_ids",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms sender ids list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms/v1/sender-ids"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "templates list",
+      "summary": "Run the templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "examples": [
+        "pm tyntec-sms templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms/v1/templates"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

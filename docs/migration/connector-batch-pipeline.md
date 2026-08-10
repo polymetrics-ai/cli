@@ -36,8 +36,8 @@ adding a competing provenance shape.
 | `surface-reconcile` | Derive direct-read `api_surface` coverage and blocked reasons from runtime preflight | Use `--check` to review a stale-reason cohort separately from `batch gate`; it never promotes a command. |
 | `boundary` | Detect connector-specific policy outside definition ownership | Run against the final branch as a repository gate. |
 | `ownership` | Check changed paths for an owned connector scope | Run for each authored connector slice. |
-| `batch plan` | New: turn live ledger evidence into a deterministic manifest | Prepare a 1–40 connector batch without mutating a bundle or calling a provider. |
-| `batch materialize` | New: read a selected public OpenAPI/Swagger artifact into the shared v2 operation ledger | Reads a source bundle root and writes only a newly created destination bundle; it fetches only the manifest URL (or an explicit offline cache), records URL/date/SHA evidence, preserves real stream/write bindings, and derives a reachable command surface. |
+| `batch plan` | New: turn live ledger evidence into a deterministic manifest | Prepare a 1–40 connector batch without mutating a bundle or calling a provider. Accepted source kinds are OpenAPI, Swagger, OpenAPI fragments, Postman collections, and bounded official HTML references. |
+| `batch materialize` | New: read a selected authoritative artifact into the shared v2 operation ledger | Reads a source bundle root and writes only a newly created destination bundle; it records source URL/date/SHA evidence, preserves real stream/write bindings, retains source-backed direct or binary commands, and creates named-dependency metadata for every remaining blocked operation. |
 | `batch gate` | New: run each candidate's existing checks independently | Produce included/drop results rather than stopping at the first bad bundle. |
 
 The new `batch` command is genuinely needed because none of the existing
@@ -70,8 +70,9 @@ The command validates an explicit candidate before admitting it:
 
 - `status: done`, `scope_in_current_defs: true`, and a measured total/read/write
   triple;
-- `artifact_kind: openapi` or `swagger`, an absolute HTTPS artifact URL, a
-  non-empty version, and an ISO full-date `retrieved_at`;
+- an accepted `artifact_kind` (`openapi`, `swagger`, `openapi_fragments`,
+  `postman`, or `html_reference`), an absolute HTTPS artifact URL, a non-empty
+  version, and an ISO full-date `retrieved_at`;
 - public access, a stated auth model, evidence source, counting note, and
   processing timestamp;
 - a bounded operation count (default 20–250, configurable).
@@ -113,8 +114,8 @@ sidecar provenance schema or invents a `covered_by` relation. The source root
 is a read-only pre-batch bundle snapshot. The source and destination bundle
 paths must not overlap, and the destination root must not already contain the
 selected connector: a pre-existing directory is recorded as a `bundle_collision`
-drop before any artifact request or file mutation. Fetch only the manifest URL
-(or use a verified offline cache for a repeatable local run):
+drop before any artifact request or file mutation. Fetch the manifest artifact,
+or use a verified offline cache for a repeatable local run:
 
 ```bash
 go run ./cmd/connectorgen batch materialize \
@@ -124,6 +125,13 @@ go run ./cmd/connectorgen batch materialize \
   --retrieved-at 2026-08-06 \
   --report docs/migration/batches/cli-provider-artifact-sweep-r1-batch-001-materialize.json
 ```
+
+Use `--cached-references-only --artifact-dir <dir>` to require that every
+artifact or reference is already cached. `--existing-surface-evidence` is the
+narrow fallback for a preserved source surface whose endpoint count exactly
+matches the manifest's immutable survey count; it still fetches and hashes the
+cited official reference, and an unversioned official HTML reference requires
+this fallback.
 
 For each selected manifest record:
 
@@ -138,7 +146,9 @@ For each selected manifest record:
    exact version, and every endpoint joins to the cited artifact through its
    local provenance row. No credential and no live provider API call is
    allowed.
-2. Enumerate each provider operation from the artifact. Local Path Item
+2. Enumerate each provider operation from the artifact. The format-specific
+   parser handles the accepted machine-readable formats and follows official
+   reference links only within its bounded traversal budget. Local Path Item
    references and every HTTP method, including `TRACE`, are resolved. A form
    that cannot be exhaustively represented—such as a non-empty top-level
    OpenAPI 3.1 `webhooks` container, callbacks, an external reference, or an
@@ -156,16 +166,18 @@ For each selected manifest record:
    provider-mutation rows.
 3. Copy the reviewed source bundle into the fresh, batch-owned destination,
    then generate its `operations.json` and `cli_surface.json` from the
-   reviewed artifact inventory. In this first lane `operations.json` is an
-   explicit empty direct-executor catalog: provider operation classification
-   lives in the v2 `api_surface.json`, and no direct read can be promoted while
-   its only runtime policy is redacting. Stream and existing reverse-ETL write
-   commands are derived only from real bindings and pass production runtime
-   preflight before any write; zero reachable implemented commands or a
-   preflight failure is a named drop. A write action with a required structured
-   object/object-array record is intentionally not exposed as a scalar-flag
-   namespace command; it remains available through the existing generic plan →
-   preview → approval → execute workflow.
+   reviewed artifact inventory. `operations.json` retains real executor
+   declarations and adds typed metadata for each remaining blocked operation.
+   Existing implemented direct-read or binary commands are retained only when
+   their cited surface binding remains exact; newly discovered operations stay
+   `not_implemented` with a named dependency until they have a reviewed runtime
+   contract. Stream and reverse-ETL command bindings are derived only from real
+   bindings and pass production runtime preflight before any write; zero
+   reachable implemented commands or a preflight failure is a named drop. A
+   write action with a required structured object/object-array record is
+   intentionally not exposed as a scalar-flag namespace command; it remains
+   available through the existing generic plan → preview → approval → execute
+   workflow.
 4. Only promote a command to `availability: implemented` after it has a real
    executor and the v2 `api_surface.json` contains its cited method/path row.
    Every other operation stays provider-blocked or justified-excluded with its

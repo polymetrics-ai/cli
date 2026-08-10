@@ -1,0 +1,116 @@
+{
+  "connector": "persistiq",
+  "counts": {
+    "direct_read": 1,
+    "direct_write": 2,
+    "etl": 11,
+    "reverse_etl": 7
+  },
+  "operations": [
+    {
+      "classification": "etl",
+      "method": "GET",
+      "path": "/v1/campaigns/{campaign_id}/leads"
+    },
+    {
+      "classification": "reverse_etl",
+      "method": "POST",
+      "path": "/v1/campaigns/{campaign_id}/leads"
+    },
+    {
+      "classification": "reverse_etl",
+      "method": "DELETE",
+      "path": "/v1/campaigns/{campaign_id}/leads/{id}"
+    },
+    {
+      "classification": "etl",
+      "method": "GET",
+      "path": "/v1/campaigns"
+    },
+    {
+      "classification": "reverse_etl",
+      "method": "POST",
+      "path": "/v1/campaigns"
+    },
+    {
+      "classification": "reverse_etl",
+      "method": "POST",
+      "path": "/v1/campaigns/duplicate"
+    },
+    {
+      "classification": "etl",
+      "method": "GET",
+      "path": "/v1/dnc_domains"
+    },
+    {
+      "classification": "reverse_etl",
+      "method": "POST",
+      "path": "/v1/dnc_domains"
+    },
+    {
+      "classification": "etl",
+      "method": "GET",
+      "path": "/v1/events"
+    },
+    {
+      "classification": "etl",
+      "method": "GET",
+      "path": "/v1/lead_fields"
+    },
+    {
+      "classification": "etl",
+      "method": "GET",
+      "path": "/v1/lead_statuses"
+    },
+    {
+      "classification": "etl",
+      "method": "GET",
+      "path": "/v1/leads"
+    },
+    {
+      "classification": "direct_write",
+      "method": "POST",
+      "path": "/v1/leads"
+    },
+    {
+      "classification": "direct_read",
+      "method": "GET",
+      "path": "/v1/leads/{id}"
+    },
+    {
+      "classification": "reverse_etl",
+      "method": "PATCH",
+      "path": "/v1/leads/{id}"
+    },
+    {
+      "classification": "etl",
+      "method": "GET",
+      "path": "/v1/campaigns/{campaign_id}/replies"
+    },
+    {
+      "classification": "reverse_etl",
+      "method": "POST",
+      "path": "/v1/campaigns/{campaign_id}/replies"
+    },
+    {
+      "classification": "etl",
+      "method": "GET",
+      "path": "/v1/tags"
+    },
+    {
+      "classification": "etl",
+      "method": "GET",
+      "path": "/v1/users"
+    },
+    {
+      "classification": "etl",
+      "method": "GET",
+      "path": "/v1/webhook_plugin"
+    },
+    {
+      "classification": "direct_write",
+      "method": "PUT",
+      "path": "/v1/webhook_plugin"
+    }
+  ]
+}

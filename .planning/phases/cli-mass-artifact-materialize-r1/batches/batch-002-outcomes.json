@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "batch": "batch-002",
+  "manifest": "batches/batch-002-manifest.json",
+  "outcomes": [
+    {
+      "connector": "oncehub",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "oura",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "nebius-ai",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "coin-api",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "pingdom",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "dbt",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "recreation",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "leadfeeder",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "shippo",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "salesflare",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "dropbox-sign",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "tavus",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "thinkific",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "thinkific-courses",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "coingecko-coins",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "bitly",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "paddle",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "pokeapi",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "shutterstock",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "elasticemail",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "revenuecat",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "coinmarketcap",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "circleci",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "concord",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "configcat",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "coda",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "pylon",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "gocardless",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "shortcut",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "tmdb",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "clockodo",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "orb",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-002-materialize.json"
+    },
+    {
+      "connector": "judge-me-reviews",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-002-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact path \"reviews/{id}\" must be non-empty and connector-relative), and official reference fallback \"https://judge.me/api/docs\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "printify",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-002-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 40 operation(s), below the ledger's 44; official reference fallback \"https://developers.printify.com/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "squarespace",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-002-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation POST /1.0/webhook_subscriptions contains callbacks that cannot be represented as provider request paths), and official reference fallback \"https://developers.squarespace.com/commerce-apis/contacts\" failed: artifact operation inventory is unknown: official reference \"https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact operation inventory is unknown: operation POST /1.0/webhook_subscriptions contains callbacks that cannot be represented as provider request paths; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "k6-cloud",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-002-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 51 operation(s), below the ledger's 57; official reference fallback \"https://grafana.com/docs/grafana-cloud/testing/k6/reference/cloud-rest-api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "luma",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-002-materialize.json",
+      "stage": "coverage",
+      "reason": "existing api surface duplicates GET /v1/events/get"
+    },
+    {
+      "connector": "finnhub",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-002-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation POST /ai-chat has unsupported field \"examples\"), and official reference fallback \"https://finnhub.io/docs/api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "dixa",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-002-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://docs.dixa.io/openapi/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "clickup-api",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-002-materialize.json",
+      "stage": "cli_surface",
+      "reason": "write action \"set_custom_field_value\" flags: record field \"value\" is not declared"
+    }
+  ]
+}

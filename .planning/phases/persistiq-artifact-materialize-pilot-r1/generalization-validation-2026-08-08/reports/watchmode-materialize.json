@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/raw/watchmode-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "watchmode",
+      "artifact": {
+        "url": "https://api.watchmode.com/openapi.json",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48"
+      },
+      "artifact_operations": 23,
+      "declared_operations": 45,
+      "operation_split": {
+        "executable": 13,
+        "provider_blocked": 23,
+        "excluded": 9
+      },
+      "cli_commands": 45,
+      "implemented_commands": 13,
+      "named_dependency_commands": 32,
+      "flagged_discrepancies": 22,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 32
+    }
+  ],
+  "dropped": []
+}

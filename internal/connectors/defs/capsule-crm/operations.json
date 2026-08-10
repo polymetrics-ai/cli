@@ -1,0 +1,1647 @@
+{
+  "operations": [
+    {
+      "id": "capsule-crm.get.activitytypes",
+      "kind": "rest_read",
+      "summary": "GET /activitytypes",
+      "description": "activity-type configuration (calendar/history event kinds) has no corresponding stream declared this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activitytypes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.activitytypes",
+      "kind": "rest_write",
+      "summary": "POST /activitytypes",
+      "description": "creates an account-wide activity type; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/activitytypes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.activitytypes-icons",
+      "kind": "rest_read",
+      "summary": "GET /activitytypes/icons",
+      "description": "returns a static list of icon identifiers for UI rendering, not CRM record data",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activitytypes/icons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.activitytypes-id",
+      "kind": "rest_read",
+      "summary": "GET /activitytypes/{id}",
+      "description": "activitytypes stream itself is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activitytypes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.activitytypes-id",
+      "kind": "rest_write",
+      "summary": "PUT /activitytypes/{id}",
+      "description": "updates an account-wide activity type; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/activitytypes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.activitytypes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activitytypes/{id}",
+      "description": "deletes an account-wide activity type; account-administration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activitytypes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.boards",
+      "kind": "rest_write",
+      "summary": "POST /boards",
+      "description": "creates an account-wide kanban board; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/boards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.boards-id",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}",
+      "description": "single-board detail is a subset of the boards list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.boards-id",
+      "kind": "rest_write",
+      "summary": "PUT /boards/{id}",
+      "description": "updates an account-wide kanban board; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/boards/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.boards-id-archive",
+      "kind": "rest_write",
+      "summary": "POST /boards/{id}/archive",
+      "description": "archives an account-wide kanban board; account-administration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/boards/{id}/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.boards-id-restore",
+      "kind": "rest_write",
+      "summary": "POST /boards/{id}/restore",
+      "description": "restores an archived account-wide kanban board; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/boards/{id}/restore",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.boards-id-stages",
+      "kind": "rest_read",
+      "summary": "GET /boards/{id}/stages",
+      "description": "per-board stage listing is a filtered subset of the stages list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/boards/{id}/stages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.categories",
+      "kind": "rest_write",
+      "summary": "POST /categories",
+      "description": "creates an account-wide task category; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.categories-id",
+      "kind": "rest_read",
+      "summary": "GET /categories/{id}",
+      "description": "single-task-category detail is a subset of the categories list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/categories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.categories-id",
+      "kind": "rest_write",
+      "summary": "PUT /categories/{id}",
+      "description": "updates an account-wide task category; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/categories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.categories-id",
+      "kind": "rest_write",
+      "summary": "DELETE /categories/{id}",
+      "description": "deletes an account-wide task category, affecting every task in it; account-administration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/categories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.countries",
+      "kind": "rest_read",
+      "summary": "GET /countries",
+      "description": "static ISO country reference list, not account CRM data",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/countries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.currencies",
+      "kind": "rest_read",
+      "summary": "GET /currencies",
+      "description": "static currency reference list, not account CRM data",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/currencies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.customfields",
+      "kind": "rest_write",
+      "summary": "POST /customfields",
+      "description": "creates an account-wide custom field definition; account-configuration mutation, not a CRM-record write",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customfields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.customfields-id",
+      "kind": "rest_read",
+      "summary": "GET /customfields/{id}",
+      "description": "single-custom-field-definition detail is a subset of the custom_fields list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customfields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.customfields-id",
+      "kind": "rest_write",
+      "summary": "PUT /customfields/{id}",
+      "description": "updates an account-wide custom field definition; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customfields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.customfields-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customfields/{id}",
+      "description": "deletes an account-wide custom field definition, discarding its values on every record; account-administration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customfields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.entries",
+      "kind": "rest_read",
+      "summary": "GET /entries",
+      "description": "activity-log/history entries are a cross-entity timeline feed with no single stable records-path shape declared in this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.entries",
+      "kind": "rest_write",
+      "summary": "POST /entries",
+      "description": "logs a note/activity entry against an arbitrary entity; entries stream/write is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.entries-id",
+      "kind": "rest_read",
+      "summary": "GET /entries/{id}",
+      "description": "single-entry detail; entries stream itself is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/entries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.entries-id",
+      "kind": "rest_write",
+      "summary": "PUT /entries/{id}",
+      "description": "entries write surface is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/entries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.entries-id",
+      "kind": "rest_write",
+      "summary": "DELETE /entries/{id}",
+      "description": "deletes an activity-log entry; entries surface is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/entries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.entries-id-attachments",
+      "kind": "rest_write",
+      "summary": "POST /entries/{id}/attachments",
+      "description": "multipart file upload; the dialect's write actions send a single JSON/form body, not multipart",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/entries/{id}/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.entries-id-attachments-attachmentid",
+      "kind": "rest_read",
+      "summary": "GET /entries/{id}/attachments/{attachmentId}",
+      "description": "returns a raw binary file download, not a JSON record",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/entries/{id}/attachments/{attachmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.filters-query",
+      "kind": "rest_write",
+      "summary": "POST /filters/query",
+      "description": "ad hoc structured-query endpoint; not a fixed catalog stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/filters/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.goalperiods",
+      "kind": "rest_read",
+      "summary": "GET /goalperiods",
+      "description": "goal-period configuration is a dependency of the out-of-scope goals surface",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/goalperiods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.goals",
+      "kind": "rest_read",
+      "summary": "GET /goals",
+      "description": "sales-goal tracking has no corresponding stream declared this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/goals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.goals",
+      "kind": "rest_write",
+      "summary": "POST /goals",
+      "description": "creates an account-wide sales goal; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/goals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.goals-id",
+      "kind": "rest_read",
+      "summary": "GET /goals/{id}",
+      "description": "single-goal detail; goals stream itself is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/goals/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.goals-id",
+      "kind": "rest_write",
+      "summary": "PUT /goals/{id}",
+      "description": "updates an account-wide sales goal; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/goals/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.goals-id",
+      "kind": "rest_write",
+      "summary": "DELETE /goals/{id}",
+      "description": "deletes an account-wide sales goal; account-administration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/goals/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.kases-deleted",
+      "kind": "rest_read",
+      "summary": "GET /kases/deleted",
+      "description": "tombstone/deleted-records feed has no corresponding schema-projected read shape declared in this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/kases/deleted",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.kases-search",
+      "kind": "rest_read",
+      "summary": "GET /kases/search",
+      "description": "ad hoc free-text search is a query-time operation, not a catalog stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/kases/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.kases-ids",
+      "kind": "rest_read",
+      "summary": "GET /kases/{ids}",
+      "description": "multi-case show-by-ids is a subset of the kases list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/kases/{ids}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.kases-id",
+      "kind": "rest_read",
+      "summary": "GET /kases/{id}",
+      "description": "single-case detail is a subset of the kases list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/kases/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.kases-id-parties",
+      "kind": "rest_read",
+      "summary": "GET /kases/{id}/parties",
+      "description": "additional-parties sub-listing on a case; no fan_out config surface declared for it in this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/kases/{id}/parties",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.kases-id-parties-partyid",
+      "kind": "rest_write",
+      "summary": "POST /kases/{id}/parties/{partyId}",
+      "description": "attaches an additional party to a case; a link-only mutation with no record-shaped body distinct from the kase write actions already covered",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/kases/{id}/parties/{partyId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.kases-id-parties-partyid",
+      "kind": "rest_write",
+      "summary": "DELETE /kases/{id}/parties/{partyId}",
+      "description": "detaches an additional party from a case; same reasoning as the corresponding POST",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/kases/{id}/parties/{partyId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.lostreasons",
+      "kind": "rest_write",
+      "summary": "POST /lostreasons",
+      "description": "creates an account-wide lost-reason definition; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/lostreasons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.lostreasons-id",
+      "kind": "rest_read",
+      "summary": "GET /lostreasons/{id}",
+      "description": "single-lost-reason detail is a subset of the lost_reasons list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lostreasons/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.lostreasons-id",
+      "kind": "rest_write",
+      "summary": "PUT /lostreasons/{id}",
+      "description": "updates an account-wide lost-reason definition; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/lostreasons/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.lostreasons-id",
+      "kind": "rest_write",
+      "summary": "DELETE /lostreasons/{id}",
+      "description": "deletes an account-wide lost-reason definition; account-administration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/lostreasons/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.milestones",
+      "kind": "rest_write",
+      "summary": "POST /milestones",
+      "description": "creates an account-wide pipeline milestone; account-configuration mutation, not a CRM-record write",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/milestones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.milestones-id",
+      "kind": "rest_read",
+      "summary": "GET /milestones/{id}",
+      "description": "single-milestone detail is a subset of the milestones list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/milestones/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.milestones-id",
+      "kind": "rest_write",
+      "summary": "PUT /milestones/{id}",
+      "description": "updates an account-wide pipeline milestone; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/milestones/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.milestones-id",
+      "kind": "rest_write",
+      "summary": "DELETE /milestones/{id}",
+      "description": "deletes an account-wide pipeline milestone, affecting every opportunity on it; account-administration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/milestones/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.opportunities-deleted",
+      "kind": "rest_read",
+      "summary": "GET /opportunities/deleted",
+      "description": "tombstone/deleted-records feed has no corresponding schema-projected read shape declared in this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/deleted",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.opportunities-search",
+      "kind": "rest_read",
+      "summary": "GET /opportunities/search",
+      "description": "ad hoc free-text search is a query-time operation, not a catalog stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.opportunities-ids",
+      "kind": "rest_read",
+      "summary": "GET /opportunities/{ids}",
+      "description": "multi-opportunity show-by-ids is a subset of the opportunities list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{ids}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.opportunities-id",
+      "kind": "rest_read",
+      "summary": "GET /opportunities/{id}",
+      "description": "single-opportunity detail is a subset of the opportunities list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.opportunities-id-kases",
+      "kind": "rest_read",
+      "summary": "GET /opportunities/{id}/kases",
+      "description": "associated-cases listing per opportunity is a filtered subset of the kases list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{id}/kases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.opportunities-id-parties",
+      "kind": "rest_read",
+      "summary": "GET /opportunities/{id}/parties",
+      "description": "additional-parties sub-listing on an opportunity; no fan_out config surface declared for it in this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{id}/parties",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.opportunities-id-parties-partyid",
+      "kind": "rest_write",
+      "summary": "POST /opportunities/{id}/parties/{partyId}",
+      "description": "attaches an additional party to an opportunity; a link-only mutation with no record-shaped body distinct from the opportunity write actions already covered",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities/{id}/parties/{partyId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.opportunities-id-parties-partyid",
+      "kind": "rest_write",
+      "summary": "DELETE /opportunities/{id}/parties/{partyId}",
+      "description": "detaches an additional party from an opportunity; same reasoning as the corresponding POST",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/opportunities/{id}/parties/{partyId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.parties-deleted",
+      "kind": "rest_read",
+      "summary": "GET /parties/deleted",
+      "description": "tombstone/deleted-records feed has no corresponding schema-projected read shape declared in this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/parties/deleted",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.parties-search",
+      "kind": "rest_read",
+      "summary": "GET /parties/search",
+      "description": "ad hoc free-text search is a query-time operation, not a catalog stream; no search capability is declared in metadata.json",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/parties/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.parties-ids",
+      "kind": "rest_read",
+      "summary": "GET /parties/{ids}",
+      "description": "multi-party show-by-ids is a subset of the parties list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/parties/{ids}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.parties-id",
+      "kind": "rest_read",
+      "summary": "GET /parties/{id}",
+      "description": "single-party detail is a subset of the parties list stream; the dialect has no per-id detail-stream primitive distinct from list",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/parties/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.parties-id-kases",
+      "kind": "rest_read",
+      "summary": "GET /parties/{id}/kases",
+      "description": "per-party case listing is a filtered subset of the kases list stream (Capsule documents Case under the Project resource; the /kases path is unchanged)",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/parties/{id}/kases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.parties-id-opportunities",
+      "kind": "rest_read",
+      "summary": "GET /parties/{id}/opportunities",
+      "description": "per-party opportunity listing is a filtered subset of the opportunities list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/parties/{id}/opportunities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.parties-id-people",
+      "kind": "rest_read",
+      "summary": "GET /parties/{id}/people",
+      "description": "per-organisation employee sub-listing; not a legacy-parity stream and no fan_out config surface declared for it in this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/parties/{id}/people",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.pipelines",
+      "kind": "rest_write",
+      "summary": "POST /pipelines",
+      "description": "creates an account-wide sales pipeline; account-configuration mutation, not a CRM-record write",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/pipelines",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.pipelines-ids",
+      "kind": "rest_read",
+      "summary": "GET /pipelines/{ids}",
+      "description": "multi-pipeline show-by-ids is a subset of the pipelines list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipelines/{ids}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.pipelines-id",
+      "kind": "rest_read",
+      "summary": "GET /pipelines/{id}",
+      "description": "single-pipeline detail is a subset of the pipelines list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipelines/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.pipelines-id",
+      "kind": "rest_write",
+      "summary": "PUT /pipelines/{id}",
+      "description": "updates an account-wide sales pipeline; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/pipelines/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.pipelines-id-archive",
+      "kind": "rest_write",
+      "summary": "POST /pipelines/{id}/archive",
+      "description": "archives an account-wide sales pipeline, affecting every opportunity on it; account-administration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/pipelines/{id}/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.pipelines-id-duplicate",
+      "kind": "rest_write",
+      "summary": "POST /pipelines/{id}/duplicate",
+      "description": "duplicates an account-wide sales pipeline; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/pipelines/{id}/duplicate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.pipelines-id-milestones",
+      "kind": "rest_read",
+      "summary": "GET /pipelines/{id}/milestones",
+      "description": "per-pipeline milestone listing is a filtered subset of the milestones list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipelines/{id}/milestones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.pipelines-id-restore",
+      "kind": "rest_write",
+      "summary": "POST /pipelines/{id}/restore",
+      "description": "restores an archived account-wide sales pipeline; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/pipelines/{id}/restore",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.projects",
+      "kind": "rest_read",
+      "summary": "GET /projects",
+      "description": "Project is the current-product-naming alias of Case; the API's kases endpoints (covered by the kases stream and write actions) are the unchanged underlying resource",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.site",
+      "kind": "rest_read",
+      "summary": "GET /site",
+      "description": "returns only the account's own postal address; not CRM record data",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/site",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.stages",
+      "kind": "rest_write",
+      "summary": "POST /stages",
+      "description": "creates an account-wide board stage; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/stages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.stages-id",
+      "kind": "rest_read",
+      "summary": "GET /stages/{id}",
+      "description": "single-stage detail is a subset of the stages list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.stages-id",
+      "kind": "rest_write",
+      "summary": "PUT /stages/{id}",
+      "description": "updates an account-wide board stage; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/stages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.stages-id",
+      "kind": "rest_write",
+      "summary": "DELETE /stages/{id}",
+      "description": "deletes an account-wide board stage, affecting every record on it; account-administration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/stages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.tags",
+      "kind": "rest_write",
+      "summary": "POST /tags",
+      "description": "creates an account-wide tag definition; account-configuration mutation, not a CRM-record write",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.tags-id",
+      "kind": "rest_read",
+      "summary": "GET /tags/{id}",
+      "description": "single-tag-definition detail is a subset of the tags list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.tags-id",
+      "kind": "rest_write",
+      "summary": "PUT /tags/{id}",
+      "description": "updates an account-wide tag definition; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.tags-id",
+      "kind": "rest_write",
+      "summary": "DELETE /tags/{id}",
+      "description": "deletes an account-wide tag definition affecting every tagged record; account-administration mutation, not a per-record CRM write",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.tasks-id",
+      "kind": "rest_read",
+      "summary": "GET /tasks/{id}",
+      "description": "single-task detail is a subset of the tasks list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.teams-id",
+      "kind": "rest_read",
+      "summary": "GET /teams/{id}",
+      "description": "single-team detail is a subset of the teams list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/teams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.titles",
+      "kind": "rest_read",
+      "summary": "GET /titles",
+      "description": "custom contact-title definitions (Mr/Mrs/Dr/etc.) have no corresponding stream declared this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/titles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.titles",
+      "kind": "rest_write",
+      "summary": "POST /titles",
+      "description": "creates an account-wide custom title; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/titles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.titles-id",
+      "kind": "rest_write",
+      "summary": "DELETE /titles/{id}",
+      "description": "deletes an account-wide custom title; account-administration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/titles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.trackdefinitions",
+      "kind": "rest_read",
+      "summary": "GET /trackdefinitions",
+      "description": "track-definition configuration is a dependency of the out-of-scope tracks surface",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/trackdefinitions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.trackdefinitions",
+      "kind": "rest_write",
+      "summary": "POST /trackdefinitions",
+      "description": "creates an account-wide track definition; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/trackdefinitions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.trackdefinitions-id",
+      "kind": "rest_read",
+      "summary": "GET /trackdefinitions/{id}",
+      "description": "single-track-definition detail; trackdefinitions stream itself is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/trackdefinitions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.trackdefinitions-id",
+      "kind": "rest_write",
+      "summary": "PUT /trackdefinitions/{id}",
+      "description": "updates an account-wide track definition; account-configuration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/trackdefinitions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.trackdefinitions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /trackdefinitions/{id}",
+      "description": "deletes an account-wide track definition; account-administration mutation",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/trackdefinitions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.tracks",
+      "kind": "rest_read",
+      "summary": "GET /tracks",
+      "description": "sales/onboarding process tracks are a distinct configuration surface not modeled as a stream this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tracks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.tracks",
+      "kind": "rest_write",
+      "summary": "POST /tracks",
+      "description": "tracks write surface is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tracks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.tracks-id",
+      "kind": "rest_read",
+      "summary": "GET /tracks/{id}",
+      "description": "tracks stream itself is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tracks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.tracks-id",
+      "kind": "rest_write",
+      "summary": "PUT /tracks/{id}",
+      "description": "tracks write surface is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tracks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.tracks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /tracks/{id}",
+      "description": "removes a track from an entity; tracks surface is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tracks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.user",
+      "kind": "rest_read",
+      "summary": "GET /user",
+      "description": "the current-user shortcut is covered by the users stream (same record shape, filtered to one row)",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/user",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.users-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}",
+      "description": "single-user detail is a subset of the users list stream",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.put.users-id",
+      "kind": "rest_write",
+      "summary": "PUT /users/{id}",
+      "description": "updates another user's account preferences/permissions; an account-administration mutation outside this connector's CRM-record write scope",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.webhooks",
+      "kind": "rest_read",
+      "summary": "GET /webhooks",
+      "description": "REST hook subscription management is an integration/notification concern, not CRM record data",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.post.webhooks",
+      "kind": "rest_write",
+      "summary": "POST /webhooks",
+      "description": "subscribes a REST hook; webhooks surface is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.get.webhooks-id",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{id}",
+      "description": "webhooks surface is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "capsule-crm.delete.webhooks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /webhooks/{id}",
+      "description": "unsubscribes a REST hook; webhooks surface is out of scope this wave",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "tagline": "Run GNews's declared streams and reverse-ETL actions.",
+  "usage": "pm gnews \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "search list",
+        "top headlines list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "search list",
+      "summary": "Run the search ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "search",
+      "source_url": "https://docs.gnews.io/",
+      "examples": [
+        "pm gnews search list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search"
+        }
+      ]
+    },
+    {
+      "path": "top headlines list",
+      "summary": "Run the top headlines ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "top_headlines",
+      "source_url": "https://docs.gnews.io/",
+      "examples": [
+        "pm gnews top headlines list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/top-headlines"
+        }
+      ]
+    }
+  ]
+}

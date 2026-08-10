@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "batch": "batch-025-static-assets-retry",
+  "manifest": "batches/batch-022-machine-plus-root-manifest.json",
+  "source_materialize": "batches/batch-025-static-assets-retry-materialize.json",
+  "outcomes": [
+    {
+      "connector": "emailoctopus",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-025-static-assets-retry-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 25 operation(s), below the ledger's 34"
+    },
+    {
+      "connector": "strava",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-025-static-assets-retry-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    }
+  ]
+}

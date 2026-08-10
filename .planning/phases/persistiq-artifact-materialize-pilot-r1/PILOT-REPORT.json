@@ -1,0 +1,106 @@
+{
+  "connector": "persistiq",
+  "status": "passed_static_gates",
+  "policy": "captain_complete_inventory_and_single_final_gate",
+  "scope": {
+    "connectors_attempted": 1,
+    "second_connector_started": false,
+    "eligible_pool_touched": 0
+  },
+  "artifact": {
+    "url": "https://persistiq.com/api-docs/v1/swagger.json",
+    "format": "openapi",
+    "version": "3.0.1",
+    "bytes": 47796,
+    "sha256": "0bf3e1ecbfbf6215360b5bb8f9d4fda816df4e1872470a00b529fb3e8b80946f",
+    "paths": 14,
+    "operations": 21,
+    "method_split": {"GET": 12, "POST": 6, "PATCH": 1, "PUT": 1, "DELETE": 1},
+    "fetched": 1,
+    "parsed": 1
+  },
+  "operation_mapping": {
+    "etl": 11,
+    "direct_read": 1,
+    "reverse_etl": 7,
+    "direct_write": 2,
+    "binary_download": 0,
+    "unclassified": 0,
+    "evidence": "rerun-2026-08-08/operation-mapping.json"
+  },
+  "materialization": {
+    "mapped": 21,
+    "surface_rows": 24,
+    "implemented": 21,
+    "named_dependency": 3,
+    "flagged_discrepancy": 3,
+    "reachable": 24,
+    "implemented_reachable": 21,
+    "failed": 0,
+    "discrepancy_reason": "present-in-surface-absent-from-artifact",
+    "discrepancies": [
+      "GET /v1/mailboxes",
+      "GET /v1/activities",
+      "GET /v1/accounts"
+    ],
+    "named_dependencies": {
+      "GET /v1/leads/{id}": "engine.direct_read_executor",
+      "POST /v1/leads": "engine.rest_write_body_envelope",
+      "PUT /v1/webhook_plugin": "review.webhook_url_mutation"
+    }
+  },
+  "gates": {
+    "connectorgen_validate": {"passed": true, "findings": 0},
+    "surface_sync_check": {"passed": true, "drift": false},
+    "batch_gate": {"passed": true, "included": 1, "dropped": 0, "commands_checked": 21},
+    "TestEveryImplementedCommandPassesRuntimePreflight": {"passed": true},
+    "real_binary": {
+      "passed": true,
+      "help_paths": 24,
+      "reachable": 24,
+      "unknown_commands": 0,
+      "not_implemented_visible": 3,
+      "not_implemented_blocked_before_network": 3
+    }
+  },
+  "timings_seconds": {
+    "identify_link": 0.03,
+    "map_operations": 0.03,
+    "fetch_digest_parse": 2.70,
+    "materialize_and_static_gates": 13.60,
+    "binary_reachability": 34.10,
+    "report": 0.09,
+    "total": 52.92,
+    "substeps": {
+      "batch_plan": 3.73,
+      "batch_materialize": 1.46,
+      "validate": 0.90,
+      "surface_sync_derive": 1.48,
+      "surface_sync_check": 0.78,
+      "batch_gate": 0.71,
+      "runtime_preflight_test": 4.54,
+      "binary_build": 1.68,
+      "binary_help_sweep": 28.73,
+      "blocked_command_sweep": 3.69,
+      "bare_namespace": 2.37
+    }
+  },
+  "counts": {
+    "fetched": 1,
+    "parsed": 1,
+    "materialized": 1,
+    "gated": 1,
+    "reachable": 24,
+    "failed": 0
+  },
+  "certification": {
+    "status": "withheld",
+    "provider_exercised": false,
+    "note": "implemented, not certified, never exercised against the provider"
+  },
+  "superseded_attempt": {
+    "status": "failed_at_materialization_under_old_policy",
+    "reason": "executable coverage GET /v1/mailboxes is absent from the cited artifact",
+    "superseded_by": "captain_complete_inventory_and_single_final_gate"
+  }
+}

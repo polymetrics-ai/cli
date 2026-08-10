@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "source_ledger": ".planning/phases/cli-mass-artifact-materialize-r1/RATE-LIMIT-SOURCE-LEDGER.json",
+  "offset": 0,
+  "requested_size": 40,
+  "entries": [
+    {
+      "connector": "100ms",
+      "state": "unknown",
+      "file": "internal/connectors/defs/100ms/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "7shifts",
+      "state": "unknown",
+      "file": "internal/connectors/defs/7shifts/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "activecampaign",
+      "state": "unknown",
+      "file": "internal/connectors/defs/activecampaign/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "adjust",
+      "state": "unknown",
+      "file": "internal/connectors/defs/adjust/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "agilecrm",
+      "state": "unknown",
+      "file": "internal/connectors/defs/agilecrm/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "aha",
+      "state": "declared",
+      "file": "internal/connectors/defs/aha/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "aircall",
+      "state": "unknown",
+      "file": "internal/connectors/defs/aircall/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "airtable",
+      "state": "unknown",
+      "file": "internal/connectors/defs/airtable/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "akeneo",
+      "state": "unknown",
+      "file": "internal/connectors/defs/akeneo/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "algolia",
+      "state": "unknown",
+      "file": "internal/connectors/defs/algolia/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "alpaca-broker-api",
+      "state": "unknown",
+      "file": "internal/connectors/defs/alpaca-broker-api/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "alpha-vantage",
+      "state": "unknown",
+      "file": "internal/connectors/defs/alpha-vantage/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "amazon-sqs",
+      "state": "unknown",
+      "file": "internal/connectors/defs/amazon-sqs/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "apify-dataset",
+      "state": "unknown",
+      "file": "internal/connectors/defs/apify-dataset/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "appcues",
+      "state": "unknown",
+      "file": "internal/connectors/defs/appcues/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "appfigures",
+      "state": "unknown",
+      "file": "internal/connectors/defs/appfigures/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "appfollow",
+      "state": "unknown",
+      "file": "internal/connectors/defs/appfollow/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "apple-search-ads",
+      "state": "unknown",
+      "file": "internal/connectors/defs/apple-search-ads/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "appsflyer",
+      "state": "unknown",
+      "file": "internal/connectors/defs/appsflyer/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "asana",
+      "state": "unknown",
+      "file": "internal/connectors/defs/asana/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "ashby",
+      "state": "unknown",
+      "file": "internal/connectors/defs/ashby/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "assemblyai",
+      "state": "unknown",
+      "file": "internal/connectors/defs/assemblyai/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "auth0",
+      "state": "unknown",
+      "file": "internal/connectors/defs/auth0/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "aviationstack",
+      "state": "unknown",
+      "file": "internal/connectors/defs/aviationstack/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "avni",
+      "state": "unknown",
+      "file": "internal/connectors/defs/avni/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "awin-advertiser",
+      "state": "unknown",
+      "file": "internal/connectors/defs/awin-advertiser/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "aws-cloudtrail",
+      "state": "unknown",
+      "file": "internal/connectors/defs/aws-cloudtrail/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "bamboo-hr",
+      "state": "unknown",
+      "file": "internal/connectors/defs/bamboo-hr/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "basecamp",
+      "state": "unknown",
+      "file": "internal/connectors/defs/basecamp/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "beamer",
+      "state": "unknown",
+      "file": "internal/connectors/defs/beamer/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "bigmailer",
+      "state": "unknown",
+      "file": "internal/connectors/defs/bigmailer/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "bing-ads",
+      "state": "unknown",
+      "file": "internal/connectors/defs/bing-ads/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "bitbucket",
+      "state": "unknown",
+      "file": "internal/connectors/defs/bitbucket/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "bitly",
+      "state": "unknown",
+      "file": "internal/connectors/defs/bitly/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "blogger",
+      "state": "unknown",
+      "file": "internal/connectors/defs/blogger/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "bluetally",
+      "state": "unknown",
+      "file": "internal/connectors/defs/bluetally/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "box",
+      "state": "unknown",
+      "file": "internal/connectors/defs/box/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "box-data-extract",
+      "state": "unknown",
+      "file": "internal/connectors/defs/box-data-extract/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "braze",
+      "state": "unknown",
+      "file": "internal/connectors/defs/braze/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "breezy-hr",
+      "state": "unknown",
+      "file": "internal/connectors/defs/breezy-hr/rate_limits.json",
+      "status": "written"
+    }
+  ],
+  "counts": {
+    "declared": 1,
+    "unknown": 39,
+    "not_applicable": 0,
+    "file_total": 40
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "connector": "100ms",
+  "state": "retry_pending",
+  "route": "official Postman collection or SDK endpoint source",
+  "stage": "artifact_inventory_unknown",
+  "reason": "The provider-owned Postman setup guide links collection 22726679-47dcd974-29d5-4965-a35b-bf9b74a8b25a, but its public fork page exposes no static collection export. The provider-linked 100mslive/server-sdks repository tree exposes Node SDK wrappers but no OpenAPI/Postman contract. Neither narrow source yielded a complete 73-operation static artifact; the connector remains pending the documented-reference traversal route.",
+  "sources": [
+    {
+      "url": "https://www.100ms.live/docs/server-side/v2/how-to-guides/set-up-postman",
+      "kind": "official_reference",
+      "sha256": "28129a23ab062b84ecbc90235b5093322de087e45a4fc513bd02ad52be799cef"
+    },
+    {
+      "url": "https://god.gw.postman.com/run-collection/22726679-47dcd974-29d5-4965-a35b-bf9b74a8b25a?action=collection%2Ffork&collection-url=entityId%3D22726679-47dcd974-29d5-4965-a35b-bf9b74a8b25a%26entityType%3Dcollection%26workspaceId%3Dd9145dd6-337b-4761-81d6-21a30b4147a2",
+      "kind": "provider_linked_postman_fork",
+      "sha256": "7b18fee2d42af13b3c403732828ee35371061d40044c432fa31af527c1e44a84"
+    },
+    {
+      "url": "https://github.com/100mslive/server-sdks",
+      "kind": "provider_linked_sdk_source",
+      "sha256": "4d3f1e27f891db14fa8d58894310d2db4ebaac751d26e053add297ce830d285d"
+    }
+  ]
+}

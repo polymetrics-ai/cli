@@ -177,9 +177,7 @@
       "binary": {
         "method": "GET",
         "path": "/Accounts/{AccountID}/Attachments/{FileName}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -194,9 +192,7 @@
       "binary": {
         "method": "GET",
         "path": "/Accounts/{AccountID}/Attachments/{AttachmentID}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -225,9 +221,7 @@
       "binary": {
         "method": "GET",
         "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -242,9 +236,7 @@
       "binary": {
         "method": "GET",
         "path": "/BankTransactions/{BankTransactionID}/Attachments/{AttachmentID}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -273,9 +265,7 @@
       "binary": {
         "method": "GET",
         "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -290,9 +280,7 @@
       "binary": {
         "method": "GET",
         "path": "/BankTransfers/{BankTransferID}/Attachments/{AttachmentID}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -321,9 +309,7 @@
       "binary": {
         "method": "GET",
         "path": "/Contacts/{ContactID}/Attachments/{FileName}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -338,9 +324,7 @@
       "binary": {
         "method": "GET",
         "path": "/Contacts/{ContactID}/Attachments/{AttachmentID}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -369,9 +353,7 @@
       "binary": {
         "method": "GET",
         "path": "/CreditNotes/{CreditNoteID}/pdf",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -386,9 +368,7 @@
       "binary": {
         "method": "GET",
         "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -403,9 +383,7 @@
       "binary": {
         "method": "GET",
         "path": "/CreditNotes/{CreditNoteID}/Attachments/{AttachmentID}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -434,9 +412,7 @@
       "binary": {
         "method": "GET",
         "path": "/Invoices/{InvoiceID}/pdf",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -451,9 +427,7 @@
       "binary": {
         "method": "GET",
         "path": "/Invoices/{InvoiceID}/Attachments/{FileName}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -468,9 +442,7 @@
       "binary": {
         "method": "GET",
         "path": "/Invoices/{InvoiceID}/Attachments/{AttachmentID}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -499,9 +471,7 @@
       "binary": {
         "method": "GET",
         "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -516,9 +486,7 @@
       "binary": {
         "method": "GET",
         "path": "/ManualJournals/{ManualJournalID}/Attachments/{AttachmentID}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -547,9 +515,7 @@
       "binary": {
         "method": "GET",
         "path": "/PurchaseOrders/{PurchaseOrderID}/pdf",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -564,9 +530,7 @@
       "binary": {
         "method": "GET",
         "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -581,9 +545,7 @@
       "binary": {
         "method": "GET",
         "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{AttachmentID}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -612,9 +574,7 @@
       "binary": {
         "method": "GET",
         "path": "/Quotes/{QuoteID}/pdf",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -629,9 +589,7 @@
       "binary": {
         "method": "GET",
         "path": "/Quotes/{QuoteID}/Attachments/{FileName}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -646,9 +604,7 @@
       "binary": {
         "method": "GET",
         "path": "/Quotes/{QuoteID}/Attachments/{AttachmentID}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -677,9 +633,7 @@
       "binary": {
         "method": "GET",
         "path": "/Receipts/{ReceiptID}/Attachments/{FileName}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -694,9 +648,7 @@
       "binary": {
         "method": "GET",
         "path": "/Receipts/{ReceiptID}/Attachments/{AttachmentID}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -725,9 +677,7 @@
       "binary": {
         "method": "GET",
         "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -742,9 +692,7 @@
       "binary": {
         "method": "GET",
         "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{AttachmentID}",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
       }
     },
     {
@@ -1078,6 +1026,358 @@
       "file": {
         "direction": "upload",
         "max_bytes": 26214400
+      }
+    },
+    {
+      "id": "xero.post.accounts-accountid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "POST /Accounts/{AccountID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/Accounts/{AccountID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.put.accounts-accountid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "PUT /Accounts/{AccountID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/Accounts/{AccountID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.post.banktransactions-banktransactionid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "POST /BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.put.banktransactions-banktransactionid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "PUT /BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.post.banktransfers-banktransferid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "POST /BankTransfers/{BankTransferID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.put.banktransfers-banktransferid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "PUT /BankTransfers/{BankTransferID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.post.contacts-contactid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "POST /Contacts/{ContactID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/Contacts/{ContactID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.put.contacts-contactid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "PUT /Contacts/{ContactID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/Contacts/{ContactID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.post.creditnotes-creditnoteid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "POST /CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.put.creditnotes-creditnoteid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "PUT /CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.post.invoices-invoiceid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "POST /Invoices/{InvoiceID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/Invoices/{InvoiceID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.put.invoices-invoiceid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "PUT /Invoices/{InvoiceID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/Invoices/{InvoiceID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.post.manualjournals-manualjournalid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "POST /ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.put.manualjournals-manualjournalid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "PUT /ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.post.purchaseorders-purchaseorderid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "POST /PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.put.purchaseorders-purchaseorderid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "PUT /PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.post.quotes-quoteid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "POST /Quotes/{QuoteID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/Quotes/{QuoteID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.put.quotes-quoteid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "PUT /Quotes/{QuoteID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/Quotes/{QuoteID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.post.receipts-receiptid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "POST /Receipts/{ReceiptID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/Receipts/{ReceiptID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.put.receipts-receiptid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "PUT /Receipts/{ReceiptID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/Receipts/{ReceiptID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.post.repeatinginvoices-repeatinginvoiceid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "POST /RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "xero.put.repeatinginvoices-repeatinginvoiceid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "PUT /RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+      "description": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+        "max_bytes": 16777216
       }
     }
   ]

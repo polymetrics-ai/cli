@@ -1,0 +1,484 @@
+{
+  "operations": [
+    {
+      "id": "watchmode.get.autocomplete-search",
+      "kind": "rest_read",
+      "summary": "GET /autocomplete-search",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/autocomplete-search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.changes-new-people",
+      "kind": "rest_read",
+      "summary": "GET /changes/new_people",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/changes/new_people",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.changes-new-titles",
+      "kind": "rest_read",
+      "summary": "GET /changes/new_titles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/changes/new_titles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.changes-titles-details-changed",
+      "kind": "rest_read",
+      "summary": "GET /changes/titles_details_changed",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/changes/titles_details_changed",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.changes-titles-episodes-changed",
+      "kind": "rest_read",
+      "summary": "GET /changes/titles_episodes_changed",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/changes/titles_episodes_changed",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.changes-titles-sources-changed",
+      "kind": "rest_read",
+      "summary": "GET /changes/titles_sources_changed",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/changes/titles_sources_changed",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.genres",
+      "kind": "rest_read",
+      "summary": "GET /genres",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/genres",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.list-titles",
+      "kind": "rest_read",
+      "summary": "GET /list-titles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/list-titles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.networks",
+      "kind": "rest_read",
+      "summary": "GET /networks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/networks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.person-person-id",
+      "kind": "rest_read",
+      "summary": "GET /person/{person_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/person/{person_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.regions",
+      "kind": "rest_read",
+      "summary": "GET /regions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/regions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.releases",
+      "kind": "rest_read",
+      "summary": "GET /releases",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/releases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.search",
+      "kind": "rest_read",
+      "summary": "GET /search",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.sources",
+      "kind": "rest_read",
+      "summary": "GET /sources",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.status",
+      "kind": "rest_read",
+      "summary": "GET /status",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.title-release-dates",
+      "kind": "rest_read",
+      "summary": "GET /title-release-dates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/title-release-dates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.title-title-id-cast-crew",
+      "kind": "rest_read",
+      "summary": "GET /title/{title_id}/cast-crew",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/title/{title_id}/cast-crew",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.title-title-id-details",
+      "kind": "rest_read",
+      "summary": "GET /title/{title_id}/details",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/title/{title_id}/details",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.title-title-id-episodes",
+      "kind": "rest_read",
+      "summary": "GET /title/{title_id}/episodes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/title/{title_id}/episodes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.title-title-id-episodes-episode-id",
+      "kind": "rest_read",
+      "summary": "GET /title/{title_id}/episodes/{episode_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/title/{title_id}/episodes/{episode_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.title-title-id-incorrect-data",
+      "kind": "rest_read",
+      "summary": "GET /title/{title_id}/incorrect-data",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/title/{title_id}/incorrect-data",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.title-title-id-seasons",
+      "kind": "rest_read",
+      "summary": "GET /title/{title_id}/seasons",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/title/{title_id}/seasons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.title-title-id-sources",
+      "kind": "rest_read",
+      "summary": "GET /title/{title_id}/sources",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/title/{title_id}/sources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.v1-autocomplete-search",
+      "kind": "rest_read",
+      "summary": "GET /v1/autocomplete-search/",
+      "description": "typeahead/autocomplete helper for building a search UI, not a syncable object stream",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/autocomplete-search/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.v1-changes-new-people",
+      "kind": "rest_read",
+      "summary": "GET /v1/changes/new_people/",
+      "description": "ENGINE_GAP: identical bare-scalar-array response shape as changes/new_titles (`{\"people\": [123, 456], ...}`) with no declarative fan-out-of-scalars mechanism; also paid-plan-gated",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/changes/new_people/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.v1-changes-new-titles",
+      "kind": "rest_read",
+      "summary": "GET /v1/changes/new_titles/",
+      "description": "ENGINE_GAP: response body is a bare JSON array of scalar title-id integers (`{\"titles\": [123, 456], ...}`), not an array of objects; connsdk.RecordsAt (and records.keyed_object, which only explodes object-valued map entries) both silently drop every element of a scalar-typed array, so no declarative stream shape can represent this endpoint's real wire response without either fabricating object structure the API doesn't return or emitting zero records; also gated to paid Watchmode plans (401 on this connector's free-tier key)",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/changes/new_titles/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.v1-changes-titles-details-changed",
+      "kind": "rest_read",
+      "summary": "GET /v1/changes/titles_details_changed/",
+      "description": "ENGINE_GAP: identical bare-scalar-array response shape as changes/new_titles; also paid-plan-gated",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/changes/titles_details_changed/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.v1-changes-titles-episodes-changed",
+      "kind": "rest_read",
+      "summary": "GET /v1/changes/titles_episodes_changed/",
+      "description": "ENGINE_GAP: identical bare-scalar-array response shape as changes/new_titles; also paid-plan-gated",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/changes/titles_episodes_changed/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.v1-changes-titles-sources-changed",
+      "kind": "rest_read",
+      "summary": "GET /v1/changes/titles_sources_changed/",
+      "description": "ENGINE_GAP: identical bare-scalar-array response shape (`{\"titles\": [123, 456], ...}`) as changes/new_titles; also paid-plan-gated",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/changes/titles_sources_changed/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.v1-status",
+      "kind": "rest_read",
+      "summary": "GET /v1/status/",
+      "description": "account API-quota/usage snapshot, not a syncable object stream",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/status/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.v1-title-release-dates",
+      "kind": "rest_read",
+      "summary": "GET /v1/title-release-dates/",
+      "description": "advanced release-dates feed is gated to paid Watchmode plans only (theatrical + streaming release dates); the free/base API key this connector is provisioned with returns 401 for this endpoint",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/title-release-dates/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "watchmode.get.v1-title-title-id-incorrect-data",
+      "kind": "rest_read",
+      "summary": "GET /v1/title/{title_id}/incorrect-data/",
+      "description": "a GET-shaped user-feedback submission endpoint (reports incorrect metadata for a title via query parameters); it is a write-like side effect (email dispatch to Watchmode's team per SDK docs), not a stream to sync, and its only mutation shape is a same-request GET the dialect has no write action verb for",
+      "source_url": "https://api.watchmode.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/title/{title_id}/incorrect-data/",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

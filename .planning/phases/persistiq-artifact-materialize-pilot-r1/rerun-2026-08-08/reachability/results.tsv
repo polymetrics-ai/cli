@@ -1,0 +1,24 @@
+accounts list	implemented	reachable
+activities list	implemented	reachable
+add dnc domain apply	implemented	reachable
+add lead to campaign apply	implemented	reachable
+api get v1 leads id	not_implemented	reachable
+api post v1 leads	not_implemented	reachable
+api put v1 webhook-plugin	not_implemented	reachable
+campaign leads list	implemented	reachable
+campaign replies list	implemented	reachable
+campaigns list	implemented	reachable
+create campaign apply	implemented	reachable
+dnc domains list	implemented	reachable
+duplicate campaign apply	implemented	reachable
+events list	implemented	reachable
+lead fields list	implemented	reachable
+lead statuses list	implemented	reachable
+leads list	implemented	reachable
+mailboxes list	implemented	reachable
+remove lead from campaign apply	implemented	reachable
+reply to campaign message apply	implemented	reachable
+tags list	implemented	reachable
+update lead apply	implemented	reachable
+users list	implemented	reachable
+webhook plugin list	implemented	reachable

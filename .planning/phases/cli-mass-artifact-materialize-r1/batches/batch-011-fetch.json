@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "batch": "batch-011",
+  "source": "official primary artifact retrieval",
+  "retrievals": [
+    {
+      "connector": "airtable",
+      "status": "fetched",
+      "evidence": "  623149"
+    },
+    {
+      "connector": "bing-ads",
+      "status": "fetched",
+      "evidence": "   91432"
+    },
+    {
+      "connector": "bitbucket",
+      "status": "fetched",
+      "evidence": " 1485729"
+    },
+    {
+      "connector": "care-quality-commission",
+      "status": "fetched",
+      "evidence": "     799"
+    },
+    {
+      "connector": "castor-edc",
+      "status": "fetched",
+      "evidence": "  335118"
+    },
+    {
+      "connector": "confluence",
+      "status": "failed",
+      "evidence": "curl_exit_22"
+    },
+    {
+      "connector": "employment-hero",
+      "status": "fetched",
+      "evidence": "  166880"
+    },
+    {
+      "connector": "flowlu",
+      "status": "fetched",
+      "evidence": " 1267557"
+    },
+    {
+      "connector": "front",
+      "status": "fetched",
+      "evidence": "  239230"
+    },
+    {
+      "connector": "gong",
+      "status": "fetched",
+      "evidence": "  453605"
+    },
+    {
+      "connector": "google-ads",
+      "status": "fetched",
+      "evidence": " 2936865"
+    },
+    {
+      "connector": "google-analytics-data-api",
+      "status": "fetched",
+      "evidence": "  117897"
+    },
+    {
+      "connector": "google-classroom",
+      "status": "fetched",
+      "evidence": "  350554"
+    },
+    {
+      "connector": "google-directory",
+      "status": "fetched",
+      "evidence": "  386140"
+    },
+    {
+      "connector": "google-forms",
+      "status": "fetched",
+      "evidence": "   69010"
+    },
+    {
+      "connector": "google-pagespeed-insights",
+      "status": "fetched",
+      "evidence": "   37953"
+    },
+    {
+      "connector": "google-search-console",
+      "status": "fetched",
+      "evidence": "   57160"
+    },
+    {
+      "connector": "gorgias",
+      "status": "fetched",
+      "evidence": "  293719"
+    },
+    {
+      "connector": "guru",
+      "status": "fetched",
+      "evidence": "  414384"
+    },
+    {
+      "connector": "hibob",
+      "status": "fetched",
+      "evidence": "  192596"
+    },
+    {
+      "connector": "hubplanner",
+      "status": "fetched",
+      "evidence": "  285711"
+    },
+    {
+      "connector": "insightful",
+      "status": "fetched",
+      "evidence": " 3752660"
+    },
+    {
+      "connector": "mailersend",
+      "status": "fetched",
+      "evidence": "   49517"
+    },
+    {
+      "connector": "mailgun",
+      "status": "fetched",
+      "evidence": " 1130747"
+    },
+    {
+      "connector": "marketo",
+      "status": "fetched",
+      "evidence": "   93147"
+    },
+    {
+      "connector": "mendeley",
+      "status": "fetched",
+      "evidence": "     949"
+    },
+    {
+      "connector": "mixmax",
+      "status": "fetched",
+      "evidence": "  166619"
+    },
+    {
+      "connector": "monday",
+      "status": "fetched",
+      "evidence": " 1201966"
+    },
+    {
+      "connector": "pendo",
+      "status": "fetched",
+      "evidence": " 1076070"
+    },
+    {
+      "connector": "productive",
+      "status": "fetched",
+      "evidence": " 3797652"
+    },
+    {
+      "connector": "reddit",
+      "status": "failed",
+      "evidence": "curl_exit_22"
+    },
+    {
+      "connector": "ringcentral",
+      "status": "fetched",
+      "evidence": " 1717172"
+    },
+    {
+      "connector": "smartsheets",
+      "status": "fetched",
+      "evidence": " 1815513"
+    },
+    {
+      "connector": "square",
+      "status": "fetched",
+      "evidence": " 3269568"
+    },
+    {
+      "connector": "teamtailor",
+      "status": "fetched",
+      "evidence": "  895253"
+    },
+    {
+      "connector": "teamwork",
+      "status": "fetched",
+      "evidence": " 3294557"
+    },
+    {
+      "connector": "trello",
+      "status": "fetched",
+      "evidence": "  261671"
+    },
+    {
+      "connector": "whisky-hunter",
+      "status": "fetched",
+      "evidence": "    2057"
+    },
+    {
+      "connector": "youtube-analytics",
+      "status": "fetched",
+      "evidence": "   35631"
+    },
+    {
+      "connector": "zoom",
+      "status": "fetched",
+      "evidence": "   56554"
+    }
+  ]
+}

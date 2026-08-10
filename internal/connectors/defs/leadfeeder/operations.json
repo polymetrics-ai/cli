@@ -1,0 +1,1041 @@
+{
+  "operations": [
+    {
+      "id": "leadfeeder.operation.accounts-account-id-users-feed-rule-and-webhook-integration-management-endpoints",
+      "kind": "composite",
+      "summary": "* /accounts/{account_id}/users, feed-rule and webhook/integration management endpoints",
+      "description": "/accounts/{account_id}/users, feed-rule and webhook/integration management endpoints is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "* /accounts/{account_id}/users, feed-rule and webhook/integration management endpoints"
+        ]
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-accounts",
+      "kind": "rest_read",
+      "summary": "GET /v1/accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-buyer-personas",
+      "kind": "rest_read",
+      "summary": "GET /v1/buyer-personas",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/buyer-personas",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-buyer-personas-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/buyer-personas/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/buyer-personas/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-campaigns",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-campaigns-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.patch.v1-campaigns-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/campaigns/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/campaigns/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-campaigns-id-stats",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{id}/stats",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{id}/stats",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-companies",
+      "kind": "rest_read",
+      "summary": "GET /v1/companies",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/companies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-companies-enrichment-jobs",
+      "kind": "rest_write",
+      "summary": "POST /v1/companies/enrichment-jobs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/companies/enrichment-jobs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-companies-enrichment-jobs-estimate",
+      "kind": "rest_write",
+      "summary": "POST /v1/companies/enrichment-jobs/estimate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/companies/enrichment-jobs/estimate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-companies-enrichment-jobs-job-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/companies/enrichment-jobs/{job_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/companies/enrichment-jobs/{job_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-companies-ips",
+      "kind": "rest_read",
+      "summary": "GET /v1/companies/ips",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/companies/ips",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-companies-match",
+      "kind": "rest_write",
+      "summary": "POST /v1/companies/match",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/companies/match",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-companies-search",
+      "kind": "rest_write",
+      "summary": "POST /v1/companies/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/companies/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-companies-signals",
+      "kind": "rest_write",
+      "summary": "POST /v1/companies/signals",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/companies/signals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-companies-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/companies/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/companies/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.patch.v1-companies-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/companies/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/companies/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-companies-id-financials",
+      "kind": "rest_read",
+      "summary": "GET /v1/companies/{id}/financials",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/companies/{id}/financials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-companies-id-lists",
+      "kind": "rest_write",
+      "summary": "POST /v1/companies/{id}/lists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/companies/{id}/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.delete.v1-companies-id-lists",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/companies/{id}/lists",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/companies/{id}/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-companies-id-tags",
+      "kind": "rest_write",
+      "summary": "POST /v1/companies/{id}/tags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/companies/{id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.delete.v1-companies-id-tags",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/companies/{id}/tags",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/companies/{id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-contacts",
+      "kind": "rest_read",
+      "summary": "GET /v1/contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-contacts-find-contact-data-jobs",
+      "kind": "rest_write",
+      "summary": "POST /v1/contacts/find-contact-data-jobs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/contacts/find-contact-data-jobs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-contacts-find-contact-data-jobs-estimate",
+      "kind": "rest_write",
+      "summary": "POST /v1/contacts/find-contact-data-jobs/estimate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/contacts/find-contact-data-jobs/estimate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-contacts-find-contact-data-jobs-job-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/contacts/find-contact-data-jobs/{job_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/contacts/find-contact-data-jobs/{job_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-contacts-search",
+      "kind": "rest_write",
+      "summary": "POST /v1/contacts/search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/contacts/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-contacts-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/contacts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/contacts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.patch.v1-contacts-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/contacts/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/contacts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-contacts-id-lists",
+      "kind": "rest_write",
+      "summary": "POST /v1/contacts/{id}/lists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/contacts/{id}/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.delete.v1-contacts-id-lists",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/contacts/{id}/lists",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/contacts/{id}/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-custom-fields",
+      "kind": "rest_read",
+      "summary": "GET /v1/custom-fields",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/custom-fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-custom-fields",
+      "kind": "rest_write",
+      "summary": "POST /v1/custom-fields",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/custom-fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-custom-fields-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/custom-fields/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/custom-fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.patch.v1-custom-fields-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/custom-fields/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/custom-fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.delete.v1-custom-fields-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/custom-fields/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/custom-fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-icps",
+      "kind": "rest_read",
+      "summary": "GET /v1/icps",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/icps",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-icps-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/icps/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/icps/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-ip-enrich",
+      "kind": "rest_read",
+      "summary": "GET /v1/ip/enrich",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/ip/enrich",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-lists",
+      "kind": "rest_read",
+      "summary": "GET /v1/lists",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-lists",
+      "kind": "rest_write",
+      "summary": "POST /v1/lists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-lists-batch-add-to-list-jobs",
+      "kind": "rest_write",
+      "summary": "POST /v1/lists/batch-add-to-list-jobs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/lists/batch-add-to-list-jobs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-lists-batch-add-to-list-jobs-job-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/lists/batch-add-to-list-jobs/{job_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/lists/batch-add-to-list-jobs/{job_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-lists-batch-remove-from-list-jobs",
+      "kind": "rest_write",
+      "summary": "POST /v1/lists/batch-remove-from-list-jobs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/lists/batch-remove-from-list-jobs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-lists-batch-remove-from-list-jobs-job-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/lists/batch-remove-from-list-jobs/{job_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/lists/batch-remove-from-list-jobs/{job_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-lists-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/lists/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/lists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.patch.v1-lists-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/lists/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/lists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.delete.v1-lists-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/lists/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/lists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-lists-id-items",
+      "kind": "rest_read",
+      "summary": "GET /v1/lists/{id}/items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/lists/{id}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-tags",
+      "kind": "rest_read",
+      "summary": "GET /v1/tags",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-tags",
+      "kind": "rest_write",
+      "summary": "POST /v1/tags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-tags-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/tags/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/tags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.patch.v1-tags-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/tags/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/tags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.delete.v1-tags-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/tags/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/tags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-usage",
+      "kind": "rest_read",
+      "summary": "GET /v1/usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-users-me",
+      "kind": "rest_read",
+      "summary": "GET /v1/users/me",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-web-visits",
+      "kind": "rest_write",
+      "summary": "POST /v1/web-visits",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/web-visits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-web-visits-companies",
+      "kind": "rest_read",
+      "summary": "GET /v1/web-visits/companies",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/web-visits/companies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-web-visits-custom-feeds",
+      "kind": "rest_read",
+      "summary": "GET /v1/web-visits/custom-feeds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/web-visits/custom-feeds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post.v1-web-visits-custom-feeds",
+      "kind": "rest_write",
+      "summary": "POST /v1/web-visits/custom-feeds",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/web-visits/custom-feeds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-web-visits-custom-feeds-folders",
+      "kind": "rest_read",
+      "summary": "GET /v1/web-visits/custom-feeds-folders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/web-visits/custom-feeds-folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-web-visits-custom-feeds-custom-feed-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/web-visits/custom-feeds/{custom_feed_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/web-visits/custom-feeds/{custom_feed_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.patch.v1-web-visits-custom-feeds-custom-feed-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/web-visits/custom-feeds/{custom_feed_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/web-visits/custom-feeds/{custom_feed_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.delete.v1-web-visits-custom-feeds-custom-feed-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/web-visits/custom-feeds/{custom_feed_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/web-visits/custom-feeds/{custom_feed_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.get.v1-web-visits-tracker",
+      "kind": "rest_read",
+      "summary": "GET /v1/web-visits/tracker",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/web-visits/tracker",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "leadfeeder.post-patch-delete.all-leadfeeder-mutation-endpoints",
+      "kind": "composite",
+      "summary": "POST/PATCH/DELETE all Leadfeeder mutation endpoints",
+      "description": "Legacy itself is read-only (capabilities.write: false)",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST/PATCH/DELETE all Leadfeeder mutation endpoints"
+        ]
+      }
+    }
+  ]
+}

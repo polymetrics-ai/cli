@@ -1,36 +1,96 @@
 {
-  "api": "7shifts API v2 (https://api.7shifts.com, reference version 2026-01-01)",
+  "api": "7shifts API v2 (https://api.7shifts.com, reference version 2026-01-01); provider artifact version: 2026-06-01",
   "docs": "https://developers.7shifts.com/reference",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion from the 2026-01-01 ReadMe/OpenAPI reference. Non-deprecated GET endpoints are streams except side-effect/non-data endpoints; single-request object-body mutations are write actions; deprecated endpoints, auth/setup endpoints, elevated partner account creation, and root-array request bodies are explicitly excluded.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (147 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "7shifts-artifact-2026-08-09",
+      "url": "https://developers.7shifts.com/llms.txt",
+      "kind": "openapi",
+      "version": "3.0.2",
+      "retrieved_at": "2026-08-09",
+      "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e"
+    }
+  ],
   "endpoints": [
     {
       "method": "POST",
       "path": "/oauth2/token",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "OAuth token issuance is an authentication flow, not a data stream or reverse-ETL mutation, and the bundle uses an existing bearer token."
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/oauth2/token\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth token issuance is an authentication flow, not a data stream or reverse-ETL mutation, and the bundle uses an existing bearer token.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
       "path": "/v2/batch/company/{company_id}/location/{location_id}/forecast_override",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "2026-06-01",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "existing-surface[POST /v2/batch/company/{company_id}/location/{location_id}/forecast_override]"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
       "path": "/v2/batch/company/{company_id}/users/role_assignments",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Request body is a root JSON array; the declarative write engine can send JSON objects only."
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/batch/company/{company_id}/users/role_assignments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Request body is a root JSON array; the declarative write engine can send JSON objects only.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/v2/companies",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/companies\"].get"
+      },
       "covered_by": {
         "stream": "companies"
       }
@@ -38,6 +98,15 @@
     {
       "method": "GET",
       "path": "/v2/companies/{id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/companies/{id}\"].get"
+      },
       "covered_by": {
         "stream": "view_company"
       }
@@ -45,6 +114,15 @@
     {
       "method": "PATCH",
       "path": "/v2/companies/{id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/companies/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_company"
       }
@@ -52,6 +130,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/availabilities",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/availabilities\"].get"
+      },
       "covered_by": {
         "stream": "list_availabilities"
       }
@@ -59,20 +146,31 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/availabilities",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/availabilities\"].post"
+      },
       "covered_by": {
         "write": "create_availability"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/availabilities/{availability_id}",
-      "covered_by": {
-        "write": "delete_availability"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v2/company/{company_id}/availabilities/{availability_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/availabilities/{availability_id}\"].get"
+      },
       "covered_by": {
         "stream": "get_availability_by_id"
       }
@@ -80,13 +178,47 @@
     {
       "method": "PUT",
       "path": "/v2/company/{company_id}/availabilities/{availability_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/availabilities/{availability_id}\"].put"
+      },
       "covered_by": {
         "write": "edit_availability"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/availabilities/{availability_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/availabilities/{availability_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_availability"
+      }
+    },
+    {
       "method": "PUT",
       "path": "/v2/company/{company_id}/availabilities/{availability_id}/status",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/availabilities/{availability_id}/status\"].put"
+      },
       "covered_by": {
         "write": "update_availability_status"
       }
@@ -94,6 +226,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/availability_reasons",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/availability_reasons\"].get"
+      },
       "covered_by": {
         "stream": "list_availability_reasons"
       }
@@ -101,27 +242,63 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/availability_reasons",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/availability_reasons\"].post"
+      },
       "covered_by": {
         "write": "create_availability_reason"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/availability_reasons/{availability_reason_id}",
-      "covered_by": {
-        "write": "delete_availability_reason"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/v2/company/{company_id}/availability_reasons/{availability_reason_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/availability_reasons/{availability_reason_id}\"].put"
+      },
       "covered_by": {
         "write": "edit_availability_reason"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/availability_reasons/{availability_reason_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/availability_reasons/{availability_reason_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_availability_reason"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v2/company/{company_id}/bulk_employment_records",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/bulk_employment_records\"].post"
+      },
       "covered_by": {
         "write": "upsert_bulk_employment_records"
       }
@@ -129,6 +306,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/contacts",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/contacts\"].get"
+      },
       "covered_by": {
         "stream": "list_user_contacts"
       }
@@ -136,6 +322,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/contacts/{identifier}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/contacts/{identifier}\"].get"
+      },
       "covered_by": {
         "stream": "retrieve_user_contact"
       }
@@ -143,14 +338,36 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/create_many_users",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Request body is a root JSON array; the declarative write engine can send JSON objects only."
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/create_many_users\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Request body is a root JSON array; the declarative write engine can send JSON objects only.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/day_part/settings",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/day_part/settings\"].get"
+      },
       "covered_by": {
         "stream": "retrieve_day_part_settings"
       }
@@ -158,6 +375,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/departments",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/departments\"].get"
+      },
       "covered_by": {
         "stream": "departments"
       }
@@ -165,20 +391,31 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/departments",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/departments\"].post"
+      },
       "covered_by": {
         "write": "create_department"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/departments/{department_id}",
-      "covered_by": {
-        "write": "delete_department"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v2/company/{company_id}/departments/{department_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/departments/{department_id}\"].get"
+      },
       "covered_by": {
         "stream": "retrieve_department"
       }
@@ -186,27 +423,79 @@
     {
       "method": "PUT",
       "path": "/v2/company/{company_id}/departments/{department_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/departments/{department_id}\"].put"
+      },
       "covered_by": {
         "write": "update_department"
       }
     },
     {
       "method": "DELETE",
-      "path": "/v2/company/{company_id}/employment_record/{uuid}",
+      "path": "/v2/company/{company_id}/departments/{department_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/departments/{department_id}\"].delete"
+      },
       "covered_by": {
-        "write": "delete_employment_record"
+        "write": "delete_department"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/company/{company_id}/employment_record/{uuid}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/employment_record/{uuid}\"].put"
+      },
       "covered_by": {
         "write": "update_employment_record"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/employment_record/{uuid}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/employment_record/{uuid}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_employment_record"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v2/company/{company_id}/employment_records",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/employment_records\"].get"
+      },
       "covered_by": {
         "stream": "list_employment_record"
       }
@@ -214,6 +503,15 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/employment_records",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/employment_records\"].post"
+      },
       "covered_by": {
         "write": "create_employment_record"
       }
@@ -221,6 +519,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/events",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/events\"].get"
+      },
       "covered_by": {
         "stream": "get_events"
       }
@@ -228,20 +535,31 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/events",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/events\"].post"
+      },
       "covered_by": {
         "write": "create_event"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/events/{event_id}",
-      "covered_by": {
-        "write": "delete_event"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v2/company/{company_id}/events/{event_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/events/{event_id}\"].get"
+      },
       "covered_by": {
         "stream": "get_event"
       }
@@ -249,13 +567,47 @@
     {
       "method": "PATCH",
       "path": "/v2/company/{company_id}/events/{event_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/events/{event_id}\"].patch"
+      },
       "covered_by": {
         "write": "edit_event"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/events/{event_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/events/{event_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_event"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v2/company/{company_id}/external_user_mappings",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/external_user_mappings\"].get"
+      },
       "covered_by": {
         "stream": "list_external_user_mappings"
       }
@@ -263,20 +615,31 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/external_user_mappings",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/external_user_mappings\"].post"
+      },
       "covered_by": {
         "write": "create_external_user_mappings"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/external_user_mappings/{identifier}",
-      "covered_by": {
-        "write": "delete_external_user_mappings"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v2/company/{company_id}/external_user_mappings/{identifier}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/external_user_mappings/{identifier}\"].get"
+      },
       "covered_by": {
         "stream": "retrieve_external_user_mapping"
       }
@@ -284,13 +647,47 @@
     {
       "method": "PUT",
       "path": "/v2/company/{company_id}/external_user_mappings/{identifier}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/external_user_mappings/{identifier}\"].put"
+      },
       "covered_by": {
         "write": "update_external_user_mappings"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/external_user_mappings/{identifier}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/external_user_mappings/{identifier}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_external_user_mappings"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v2/company/{company_id}/external_user_mappings_bulk",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/external_user_mappings_bulk\"].post"
+      },
       "covered_by": {
         "write": "create_user_mappings_bulk"
       }
@@ -298,6 +695,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/inactive_reasons",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/inactive_reasons\"].get"
+      },
       "covered_by": {
         "stream": "list_inactive_reasons"
       }
@@ -305,6 +711,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/labor_settings",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/labor_settings\"].get"
+      },
       "covered_by": {
         "stream": "retrieve_company_labor_settings"
       }
@@ -312,6 +727,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/location/{location_id}/daily_stats",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/location/{location_id}/daily_stats\"].get"
+      },
       "covered_by": {
         "stream": "retrieve_daily_stats"
       }
@@ -319,68 +743,179 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "2026-06-01",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "existing-surface[GET /v2/company/{company_id}/location/{location_id}/external_user_mappings]"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "2026-06-01",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "existing-surface[POST /v2/company/{company_id}/location/{location_id}/external_user_mappings]"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "2026-06-01",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "existing-surface[GET /v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}]"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "2026-06-01",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "existing-surface[PUT /v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}]"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "2026-06-01",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "existing-surface[DELETE /v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}]"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings_bulk",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource."
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "2026-06-01",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "existing-surface[POST /v2/company/{company_id}/location/{location_id}/external_user_mappings_bulk]"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/location/{location_id}/forecast_override",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/location/{location_id}/forecast_override\"].post"
+      },
+      "covered_by": {
+        "write": "create_forecast_override"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/company/{company_id}/location/{location_id}/forecast_override",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/location/{location_id}/forecast_override\"].delete"
+      },
       "covered_by": {
         "write": "delete_forecast_override"
       }
     },
     {
       "method": "POST",
-      "path": "/v2/company/{company_id}/location/{location_id}/forecast_override",
-      "covered_by": {
-        "write": "create_forecast_override"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/v2/company/{company_id}/location/{location_id}/forecast_overrides",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/location/{location_id}/forecast_overrides\"].post"
+      },
       "covered_by": {
         "write": "create_bulk_forecast_overrides"
       }
@@ -388,6 +923,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/locations",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/locations\"].get"
+      },
       "covered_by": {
         "stream": "locations"
       }
@@ -395,20 +939,31 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/locations",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/locations\"].post"
+      },
       "covered_by": {
         "write": "create_location"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/locations/{location_id}",
-      "covered_by": {
-        "write": "delete_location"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v2/company/{company_id}/locations/{location_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/locations/{location_id}\"].get"
+      },
       "covered_by": {
         "stream": "get_location_by_id"
       }
@@ -416,42 +971,116 @@
     {
       "method": "PUT",
       "path": "/v2/company/{company_id}/locations/{location_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/locations/{location_id}\"].put"
+      },
       "covered_by": {
         "write": "update_location"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/locations/{location_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/locations/{location_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_location"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v2/company/{company_id}/locations/{location_id}/engage_overview",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/locations/{location_id}/engage_overview\"].get"
+      },
       "covered_by": {
         "stream": "get_engage_overview_by_location_id"
       }
     },
     {
+      "method": "POST",
+      "path": "/v2/company/{company_id}/locations/{location_id}/forecast_override_interval",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/locations/{location_id}/forecast_override_interval\"].post"
+      },
+      "covered_by": {
+        "write": "create_projected_sales_interval_override"
+      }
+    },
+    {
       "method": "DELETE",
       "path": "/v2/company/{company_id}/locations/{location_id}/forecast_override_interval",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/locations/{location_id}/forecast_override_interval\"].delete"
+      },
       "covered_by": {
         "write": "sync_overridden_projected_sales_interval"
       }
     },
     {
       "method": "POST",
-      "path": "/v2/company/{company_id}/locations/{location_id}/forecast_override_interval",
-      "covered_by": {
-        "write": "create_projected_sales_interval_override"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/v2/company/{company_id}/locations/{location_id}/forecast_overrides_intervals",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Request body is a root JSON array; the declarative write engine can send JSON objects only."
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/locations/{location_id}/forecast_overrides_intervals\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Request body is a root JSON array; the declarative write engine can send JSON objects only.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/locations/{location_id}/tip_pool_detailed_report",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/locations/{location_id}/tip_pool_detailed_report\"].get"
+      },
       "covered_by": {
         "stream": "retrieve_tip_pool_detailed_report"
       }
@@ -459,6 +1088,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/locations/{location_id}/tip_pool_summary_report",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/locations/{location_id}/tip_pool_summary_report\"].get"
+      },
       "covered_by": {
         "stream": "retrieve_tip_pool_summary_report"
       }
@@ -466,6 +1104,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/log_book_categories",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/log_book_categories\"].get"
+      },
       "covered_by": {
         "stream": "list_log_book_categories"
       }
@@ -473,27 +1120,63 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/log_book_categories",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/log_book_categories\"].post"
+      },
       "covered_by": {
         "write": "create_log_book_category"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/log_book_categories/{id}",
-      "covered_by": {
-        "write": "delete_log_book_category"
-      }
-    },
-    {
       "method": "PATCH",
       "path": "/v2/company/{company_id}/log_book_categories/{id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/log_book_categories/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_log_book_category"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/log_book_categories/{id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/log_book_categories/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_log_book_category"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v2/company/{company_id}/log_book_comments",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/log_book_comments\"].get"
+      },
       "covered_by": {
         "stream": "list_log_book_comments"
       }
@@ -501,27 +1184,63 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/log_book_comments",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/log_book_comments\"].post"
+      },
       "covered_by": {
         "write": "create_log_book_comment"
       }
     },
     {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/log_book_comments/{id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/log_book_comments/{id}\"].get"
+      },
+      "covered_by": {
+        "stream": "retrieve_log_book_comment"
+      }
+    },
+    {
       "method": "DELETE",
       "path": "/v2/company/{company_id}/log_book_comments/{id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/log_book_comments/{id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_log_book_comment"
       }
     },
     {
       "method": "GET",
-      "path": "/v2/company/{company_id}/log_book_comments/{id}",
-      "covered_by": {
-        "stream": "retrieve_log_book_comment"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/v2/company/{company_id}/log_book_posts",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/log_book_posts\"].get"
+      },
       "covered_by": {
         "stream": "list_log_book_posts"
       }
@@ -529,27 +1248,63 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/log_book_posts",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/log_book_posts\"].post"
+      },
       "covered_by": {
         "write": "create_log_book_post"
       }
     },
     {
+      "method": "GET",
+      "path": "/v2/company/{company_id}/log_book_posts/{id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/log_book_posts/{id}\"].get"
+      },
+      "covered_by": {
+        "stream": "retrieve_log_book_post"
+      }
+    },
+    {
       "method": "DELETE",
       "path": "/v2/company/{company_id}/log_book_posts/{id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/log_book_posts/{id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_log_book_post"
       }
     },
     {
       "method": "GET",
-      "path": "/v2/company/{company_id}/log_book_posts/{id}",
-      "covered_by": {
-        "stream": "retrieve_log_book_post"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/v2/company/{company_id}/payroll_periods/{payroll_period_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/payroll_periods/{payroll_period_id}\"].get"
+      },
       "covered_by": {
         "stream": "get_time_clocking_payroll_period"
       }
@@ -557,6 +1312,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/receipts",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/receipts\"].get"
+      },
       "covered_by": {
         "stream": "list_sales_receipts"
       }
@@ -564,6 +1328,15 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/receipts",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/receipts\"].post"
+      },
       "covered_by": {
         "write": "create_complete_receipt"
       }
@@ -571,6 +1344,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/receipts/{receipt_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/receipts/{receipt_id}\"].get"
+      },
       "covered_by": {
         "stream": "get_receipt"
       }
@@ -578,6 +1360,15 @@
     {
       "method": "PUT",
       "path": "/v2/company/{company_id}/receipts/{receipt_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/receipts/{receipt_id}\"].put"
+      },
       "covered_by": {
         "write": "update_complete_receipt"
       }
@@ -585,6 +1376,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/receipts_summary",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/receipts_summary\"].get"
+      },
       "covered_by": {
         "stream": "retrieve_receipts_summary"
       }
@@ -592,6 +1392,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/roles",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/roles\"].get"
+      },
       "covered_by": {
         "stream": "roles"
       }
@@ -599,20 +1408,31 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/roles",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/roles\"].post"
+      },
       "covered_by": {
         "write": "create_role"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/roles/{role_id}",
-      "covered_by": {
-        "write": "delete_role"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v2/company/{company_id}/roles/{role_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/roles/{role_id}\"].get"
+      },
       "covered_by": {
         "stream": "retrieve_role"
       }
@@ -620,13 +1440,47 @@
     {
       "method": "PUT",
       "path": "/v2/company/{company_id}/roles/{role_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/roles/{role_id}\"].put"
+      },
       "covered_by": {
         "write": "update_role"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/roles/{role_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/roles/{role_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_role"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v2/company/{company_id}/shift_feedback",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/shift_feedback\"].get"
+      },
       "covered_by": {
         "stream": "list_shift_feedback"
       }
@@ -634,6 +1488,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/shifts",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/shifts\"].get"
+      },
       "covered_by": {
         "stream": "shifts"
       }
@@ -641,20 +1504,31 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/shifts",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/shifts\"].post"
+      },
       "covered_by": {
         "write": "post_shift"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/shifts/{shift_id}",
-      "covered_by": {
-        "write": "delete_shift"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v2/company/{company_id}/shifts/{shift_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/shifts/{shift_id}\"].get"
+      },
       "covered_by": {
         "stream": "retrieve_shift"
       }
@@ -662,13 +1536,47 @@
     {
       "method": "PUT",
       "path": "/v2/company/{company_id}/shifts/{shift_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/shifts/{shift_id}\"].put"
+      },
       "covered_by": {
         "write": "update_shift"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/shifts/{shift_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/shifts/{shift_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_shift"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v2/company/{company_id}/shifts_scheduled/{id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/shifts_scheduled/{id}\"].get"
+      },
       "covered_by": {
         "stream": "list_scheduled_shifts"
       }
@@ -676,6 +1584,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/task_list_daily_summary",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/task_list_daily_summary\"].get"
+      },
       "covered_by": {
         "stream": "get_task_list_daily_summary"
       }
@@ -683,6 +1600,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/task_list_templates",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/task_list_templates\"].get"
+      },
       "covered_by": {
         "stream": "get_task_list_templates"
       }
@@ -690,20 +1616,31 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/task_list_templates",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/task_list_templates\"].post"
+      },
       "covered_by": {
         "write": "create_task_list_template"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/task_list_templates/{uuid}",
-      "covered_by": {
-        "write": "delete_task_list_template"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v2/company/{company_id}/task_list_templates/{uuid}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/task_list_templates/{uuid}\"].get"
+      },
       "covered_by": {
         "stream": "get_task_list_template"
       }
@@ -711,13 +1648,47 @@
     {
       "method": "PUT",
       "path": "/v2/company/{company_id}/task_list_templates/{uuid}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/task_list_templates/{uuid}\"].put"
+      },
       "covered_by": {
         "write": "edit_task_list_template"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/task_list_templates/{uuid}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/task_list_templates/{uuid}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_task_list_template"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v2/company/{company_id}/task_lists",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/task_lists\"].get"
+      },
       "covered_by": {
         "stream": "get_task_lists"
       }
@@ -725,6 +1696,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/task_lists/{list_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/task_lists/{list_id}\"].get"
+      },
       "covered_by": {
         "stream": "get_task_list"
       }
@@ -732,6 +1712,15 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/task_lists/{list_id}/tasks/{task_id}/clear",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/task_lists/{list_id}/tasks/{task_id}/clear\"].post"
+      },
       "covered_by": {
         "write": "clear_task"
       }
@@ -739,6 +1728,15 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/task_lists/{list_id}/tasks/{task_id}/complete",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/task_lists/{list_id}/tasks/{task_id}/complete\"].post"
+      },
       "covered_by": {
         "write": "complete_task"
       }
@@ -746,35 +1744,84 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/task_management_settings",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/task_management_settings\"].get"
+      },
       "covered_by": {
         "stream": "get_task_management_settings"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/task_tags",
-      "covered_by": {
-        "write": "delete_task_tags"
-      }
-    },
-    {
       "method": "POST",
       "path": "/v2/company/{company_id}/task_tags",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/task_tags\"].post"
+      },
       "covered_by": {
         "write": "create_task_tags"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/task_tags",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/task_tags\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_task_tags"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v2/company/{company_id}/test_webhook",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "Sends a test webhook notification and does not return a stable data resource for ETL."
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/test_webhook\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Sends a test webhook notification and does not return a stable data resource for ETL.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/time_punches",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/time_punches\"].get"
+      },
       "covered_by": {
         "stream": "time_punches"
       }
@@ -782,20 +1829,31 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/time_punches",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/time_punches\"].post"
+      },
       "covered_by": {
         "write": "post_time_punch"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/time_punches/{time_punch_id}",
-      "covered_by": {
-        "write": "delete_time_punch_by_id"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v2/company/{company_id}/time_punches/{time_punch_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/time_punches/{time_punch_id}\"].get"
+      },
       "covered_by": {
         "stream": "get_time_punch_by_id"
       }
@@ -803,13 +1861,47 @@
     {
       "method": "PUT",
       "path": "/v2/company/{company_id}/time_punches/{time_punch_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/time_punches/{time_punch_id}\"].put"
+      },
       "covered_by": {
         "write": "put_time_punch"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/time_punches/{time_punch_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/time_punches/{time_punch_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_time_punch_by_id"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v2/company/{company_id}/tip_pool/{tip_pool_settings_uuid}/manual_entry",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/tip_pool/{tip_pool_settings_uuid}/manual_entry\"].get"
+      },
       "covered_by": {
         "stream": "fetch_tip_pool_manual_entry"
       }
@@ -817,6 +1909,15 @@
     {
       "method": "PUT",
       "path": "/v2/company/{company_id}/tip_pool/{tip_pool_settings_uuid}/manual_entry",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/tip_pool/{tip_pool_settings_uuid}/manual_entry\"].put"
+      },
       "covered_by": {
         "write": "save_tip_pool_manual_entry"
       }
@@ -824,6 +1925,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/tip_pool_settings",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/tip_pool_settings\"].get"
+      },
       "covered_by": {
         "stream": "get_tip_pool_settings"
       }
@@ -831,6 +1941,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/users",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users\"].get"
+      },
       "covered_by": {
         "stream": "users"
       }
@@ -838,20 +1957,31 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/users",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users\"].post"
+      },
       "covered_by": {
         "write": "post_user"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/users/{identifier}",
-      "covered_by": {
-        "write": "deactivate_user"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v2/company/{company_id}/users/{identifier}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{identifier}\"].get"
+      },
       "covered_by": {
         "stream": "get_user"
       }
@@ -859,13 +1989,47 @@
     {
       "method": "PUT",
       "path": "/v2/company/{company_id}/users/{identifier}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{identifier}\"].put"
+      },
       "covered_by": {
         "write": "put_user"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/users/{identifier}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{identifier}\"].delete"
+      },
+      "covered_by": {
+        "write": "deactivate_user"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v2/company/{company_id}/users/{user_id}/assignments",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/assignments\"].get"
+      },
       "covered_by": {
         "stream": "get_assignments"
       }
@@ -873,6 +2037,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/users/{user_id}/authorized_locations",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/authorized_locations\"].get"
+      },
       "covered_by": {
         "stream": "list_users_authorized_locations"
       }
@@ -880,6 +2053,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/users/{user_id}/department_assignments",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/department_assignments\"].get"
+      },
       "covered_by": {
         "stream": "list_department_assignments"
       }
@@ -887,6 +2069,15 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/users/{user_id}/department_assignments",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/department_assignments\"].post"
+      },
       "covered_by": {
         "write": "create_department_assignment"
       }
@@ -894,6 +2085,15 @@
     {
       "method": "DELETE",
       "path": "/v2/company/{company_id}/users/{user_id}/department_assignments/{department_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/department_assignments/{department_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_department_assignment"
       }
@@ -901,6 +2101,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/users/{user_id}/location_assignments",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/location_assignments\"].get"
+      },
       "covered_by": {
         "stream": "list_location_assignments"
       }
@@ -908,6 +2117,15 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/users/{user_id}/location_assignments",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/location_assignments\"].post"
+      },
       "covered_by": {
         "write": "create_location_assignment"
       }
@@ -915,6 +2133,15 @@
     {
       "method": "DELETE",
       "path": "/v2/company/{company_id}/users/{user_id}/location_assignments/{location_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/location_assignments/{location_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_location_assignment"
       }
@@ -922,6 +2149,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/users/{user_id}/role_assignments",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/role_assignments\"].get"
+      },
       "covered_by": {
         "stream": "get_role_assignments"
       }
@@ -929,27 +2165,63 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/users/{user_id}/role_assignments",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/role_assignments\"].post"
+      },
       "covered_by": {
         "write": "create_role_assignment"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/users/{user_id}/role_assignments/{role_id}",
-      "covered_by": {
-        "write": "delete_role_assignment"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/v2/company/{company_id}/users/{user_id}/role_assignments/{role_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/role_assignments/{role_id}\"].put"
+      },
       "covered_by": {
         "write": "update_role_assignment"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/users/{user_id}/role_assignments/{role_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/role_assignments/{role_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_role_assignment"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v2/company/{company_id}/users/{user_id}/wages",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/wages\"].get"
+      },
       "covered_by": {
         "stream": "get_user_wages"
       }
@@ -957,6 +2229,15 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/users/{user_id}/wages",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/users/{user_id}/wages\"].post"
+      },
       "covered_by": {
         "write": "create_user_wages"
       }
@@ -964,6 +2245,15 @@
     {
       "method": "GET",
       "path": "/v2/company/{company_id}/webhooks",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/webhooks\"].get"
+      },
       "covered_by": {
         "stream": "list_company_webhooks"
       }
@@ -971,35 +2261,84 @@
     {
       "method": "POST",
       "path": "/v2/company/{company_id}/webhooks",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/webhooks\"].post"
+      },
       "covered_by": {
         "write": "create_webhook"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/company/{company_id}/webhooks/{webhook_id}",
-      "covered_by": {
-        "write": "delete_company_webhook"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/v2/company/{company_id}/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/webhooks/{webhook_id}\"].put"
+      },
       "covered_by": {
         "write": "edit_company_webhook"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/company/{company_id}/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/company/{company_id}/webhooks/{webhook_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_company_webhook"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v2/partner_company_creation",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "Creates trial accounts through the partner setup surface and is not an ordinary tenant-scoped reverse-ETL action."
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/partner_company_creation\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Creates trial accounts through the partner setup surface and is not an ordinary tenant-scoped reverse-ETL action.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/daily_sales_and_labor",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/reports/daily_sales_and_labor\"].get"
+      },
       "covered_by": {
         "stream": "get_daily_sales_and_labor"
       }
@@ -1007,6 +2346,15 @@
     {
       "method": "GET",
       "path": "/v2/reports/hours_and_wages",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/reports/hours_and_wages\"].get"
+      },
       "covered_by": {
         "stream": "get_hours_and_wages"
       }
@@ -1014,6 +2362,15 @@
     {
       "method": "GET",
       "path": "/v2/time_clocking/payroll_periods",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/time_clocking/payroll_periods\"].get"
+      },
       "covered_by": {
         "stream": "get_time_clocking_payroll_periods"
       }
@@ -1021,6 +2378,15 @@
     {
       "method": "GET",
       "path": "/v2/time_off",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/time_off\"].get"
+      },
       "covered_by": {
         "stream": "get_time_off_list"
       }
@@ -1028,6 +2394,15 @@
     {
       "method": "POST",
       "path": "/v2/time_off",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/time_off\"].post"
+      },
       "covered_by": {
         "write": "create_time_off"
       }
@@ -1035,20 +2410,31 @@
     {
       "method": "GET",
       "path": "/v2/time_off/total_hours",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/time_off/total_hours\"].get"
+      },
       "covered_by": {
         "stream": "get_total_hours"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v2/time_off/{time_off_id}",
-      "covered_by": {
-        "write": "delete_time_off"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v2/time_off/{time_off_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/time_off/{time_off_id}\"].get"
+      },
       "covered_by": {
         "stream": "find_by_id"
       }
@@ -1056,13 +2442,47 @@
     {
       "method": "PATCH",
       "path": "/v2/time_off/{time_off_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/time_off/{time_off_id}\"].patch"
+      },
       "covered_by": {
         "write": "edit_time_off"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v2/time_off/{time_off_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/time_off/{time_off_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_time_off"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v2/time_off/{time_off_id}/approve",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/time_off/{time_off_id}/approve\"].post"
+      },
       "covered_by": {
         "write": "approve_time_off"
       }
@@ -1070,6 +2490,15 @@
     {
       "method": "POST",
       "path": "/v2/time_off/{time_off_id}/decline",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/time_off/{time_off_id}/decline\"].post"
+      },
       "covered_by": {
         "write": "decline_time_off"
       }
@@ -1077,6 +2506,15 @@
     {
       "method": "GET",
       "path": "/v2/time_off_settings/{company_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/time_off_settings/{company_id}\"].get"
+      },
       "covered_by": {
         "stream": "get_time_off_settings"
       }
@@ -1084,6 +2522,15 @@
     {
       "method": "POST",
       "path": "/v2/time_off_settings/{company_id}",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/time_off_settings/{company_id}\"].post"
+      },
       "covered_by": {
         "write": "save_time_off_settings"
       }
@@ -1091,6 +2538,15 @@
     {
       "method": "GET",
       "path": "/v2/whoami",
+      "provenance": {
+        "artifact": "7shifts-artifact-2026-08-09",
+        "source_url": "https://developers.7shifts.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "3.0.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+        "coordinate": "paths[\"/v2/whoami\"].get"
+      },
       "covered_by": {
         "stream": "who_am_i"
       }

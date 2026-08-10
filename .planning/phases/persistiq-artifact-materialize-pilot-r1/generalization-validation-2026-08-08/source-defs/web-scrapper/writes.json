@@ -1,0 +1,107 @@
+{
+  "actions": [
+    {
+      "name": "create_sitemap",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sitemap",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["_id", "startUrl", "selectors"],
+        "properties": {
+          "_id": { "type": "string" },
+          "startUrl": { "type": "array", "items": { "type": "string" } },
+          "selectors": { "type": "array" }
+        }
+      },
+      "risk": "creates a new sitemap (scraper configuration) in the caller's Web Scraper Cloud account; low-risk, does not itself start scraping any site"
+    },
+    {
+      "name": "update_sitemap",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sitemap/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "json",
+      "body_fields": ["_id", "startUrl", "selectors"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "_id", "startUrl", "selectors"],
+        "properties": {
+          "id": { "type": "integer" },
+          "_id": { "type": "string" },
+          "startUrl": { "type": "array", "items": { "type": "string" } },
+          "selectors": { "type": "array" }
+        }
+      },
+      "risk": "overwrites an existing sitemap's start URLs and selector configuration; any scraping job created from this sitemap after the update uses the new configuration"
+    },
+    {
+      "name": "delete_sitemap",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sitemap/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently removes a sitemap; any scraping job history tied to it is not itself deleted but the configuration can no longer be reused or edited"
+    },
+    {
+      "name": "create_scraping_job",
+      "kind": "create",
+      "method": "POST",
+      "path": "/scraping-job",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["sitemap_id"],
+        "properties": {
+          "sitemap_id": { "type": "integer" },
+          "driver": { "type": "string" },
+          "page_load_delay": { "type": "integer" },
+          "request_interval": { "type": "integer" },
+          "proxy": { "type": "integer" },
+          "start_urls": { "type": "array", "items": { "type": "string" } },
+          "custom_id": { "type": "string" }
+        }
+      },
+      "risk": "starts a real scraping run against the sitemap's (or start_urls override's) target site(s); consumes page credits from the caller's Web Scraper Cloud account for every page scraped"
+    },
+    {
+      "name": "delete_scraping_job",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/scraping-job/{{ record.id }}",
+      "path_fields": ["id"],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [404]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "risk": "permanently removes a scraping job and its scraped data; any already-downloaded export is unaffected, but the job's stored records become unrecoverable through the API"
+    }
+  ]
+}

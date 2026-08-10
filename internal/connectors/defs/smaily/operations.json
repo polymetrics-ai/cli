@@ -1,0 +1,112 @@
+{
+  "operations": [
+    {
+      "id": "smaily.post.api-campaign-php",
+      "kind": "rest_write",
+      "summary": "POST api/campaign.php",
+      "description": "campaign create-and-launch is a full compound send-a-real-campaign action (recipient list selection, content, scheduling) beyond a single-record declarative write; Pass B breadth-vs-cost triage for this pass",
+      "source_url": "https://smaily.com/help/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "api/campaign.php",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smaily.get.api-campaign-php-id",
+      "kind": "rest_read",
+      "summary": "GET api/campaign.php?id=...",
+      "description": "single-campaign statistics detail keyed by id; overlaps the campaigns list stream's own per-item shape for the object-identity fields, and the campaign-statistics-specific fields are an analytics rollup outside this pass's scope",
+      "source_url": "https://smaily.com/help/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "api/campaign.php?id=...",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smaily.get.api-message-action-log-php",
+      "kind": "rest_read",
+      "summary": "GET api/message/action/log.php",
+      "description": "message engagement-action log (sends/opens/clicks/opt-outs) explicitly time-windowed to the last 30 days by the API itself; an analytics/audit log, not a stable syncable object stream",
+      "source_url": "https://smaily.com/help/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "api/message/action/log.php",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smaily.get.api-split-php-id",
+      "kind": "rest_read",
+      "summary": "GET api/split.php?id=...",
+      "description": "single-A/B-test overview/detailed statistics keyed by id; overlaps the ab_tests list stream's own per-item shape for the object-identity fields, and the statistics-specific fields are an analytics rollup outside this pass's scope",
+      "source_url": "https://smaily.com/help/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "api/split.php?id=...",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smaily.get.api-subscribers-action-log-php",
+      "kind": "rest_read",
+      "summary": "GET api/subscribers/action/log.php",
+      "description": "subscriber engagement-action log, same shape/rationale as the message action log above",
+      "source_url": "https://smaily.com/help/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "api/subscribers/action/log.php",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smaily.post.api-subscribers-forget-php",
+      "kind": "rest_write",
+      "summary": "POST api/subscribers/forget.php",
+      "description": "irreversibly erases a subscriber's personal data account-wide (GDPR right-to-be-forgotten action), a materially higher-risk operation than this pass's covered mutations",
+      "source_url": "https://smaily.com/help/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "api/subscribers/forget.php",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smaily.post.api-subscribers-opt-in-php",
+      "kind": "rest_write",
+      "summary": "POST api/subscribers/opt-in.php",
+      "description": "bulk opt-in confirmation action, narrower value than the already-covered create/update-subscriber write; Pass B breadth-vs-cost triage",
+      "source_url": "https://smaily.com/help/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "api/subscribers/opt-in.php",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

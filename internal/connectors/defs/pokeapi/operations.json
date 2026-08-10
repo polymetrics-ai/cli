@@ -1,0 +1,1504 @@
+{
+  "operations": [
+    {
+      "id": "pokeapi.get.api-v2-ability",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/ability/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/ability/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-ability-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/ability/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/ability/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-berry-firmness",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/berry-firmness/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/berry-firmness/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-berry-firmness-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/berry-firmness/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/berry-firmness/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-berry-flavor",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/berry-flavor/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/berry-flavor/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-berry-flavor-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/berry-flavor/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/berry-flavor/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-berry",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/berry/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/berry/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-berry-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/berry/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/berry/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-characteristic",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/characteristic/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/characteristic/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-characteristic-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/characteristic/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/characteristic/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-contest-effect",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/contest-effect/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/contest-effect/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-contest-effect-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/contest-effect/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/contest-effect/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-contest-type",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/contest-type/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/contest-type/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-contest-type-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/contest-type/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/contest-type/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-currency",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/currency/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/currency/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-currency-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/currency/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/currency/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-egg-group",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/egg-group/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/egg-group/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-egg-group-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/egg-group/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/egg-group/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-encounter-condition-value",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/encounter-condition-value/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/encounter-condition-value/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-encounter-condition-value-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/encounter-condition-value/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/encounter-condition-value/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-encounter-condition",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/encounter-condition/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/encounter-condition/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-encounter-condition-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/encounter-condition/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/encounter-condition/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-encounter-method",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/encounter-method/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/encounter-method/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-encounter-method-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/encounter-method/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/encounter-method/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-evolution-chain",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/evolution-chain/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/evolution-chain/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-evolution-chain-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/evolution-chain/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/evolution-chain/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-evolution-trigger",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/evolution-trigger/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/evolution-trigger/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-evolution-trigger-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/evolution-trigger/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/evolution-trigger/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-gender",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/gender/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/gender/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-gender-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/gender/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/gender/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-generation",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/generation/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/generation/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-generation-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/generation/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/generation/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-growth-rate",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/growth-rate/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/growth-rate/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-growth-rate-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/growth-rate/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/growth-rate/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-item-attribute",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/item-attribute/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/item-attribute/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-item-attribute-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/item-attribute/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/item-attribute/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-item-category",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/item-category/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/item-category/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-item-category-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/item-category/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/item-category/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-item-fling-effect",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/item-fling-effect/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/item-fling-effect/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-item-fling-effect-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/item-fling-effect/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/item-fling-effect/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-item-pocket",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/item-pocket/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/item-pocket/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-item-pocket-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/item-pocket/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/item-pocket/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-item",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/item/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/item/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-item-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/item/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/item/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-language",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/language/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/language/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-language-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/language/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/language/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-location-area",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/location-area/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/location-area/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-location-area-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/location-area/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/location-area/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-location",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/location/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/location/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-location-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/location/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/location/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-machine",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/machine/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/machine/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-machine-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/machine/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/machine/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-meta",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/meta/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/meta/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move-ailment",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move-ailment/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move-ailment/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move-ailment-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move-ailment/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move-ailment/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move-battle-style",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move-battle-style/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move-battle-style/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move-battle-style-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move-battle-style/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move-battle-style/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move-category",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move-category/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move-category/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move-category-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move-category/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move-category/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move-damage-class",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move-damage-class/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move-damage-class/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move-damage-class-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move-damage-class/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move-damage-class/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move-learn-method",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move-learn-method/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move-learn-method/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move-learn-method-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move-learn-method/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move-learn-method/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move-target",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move-target/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move-target/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move-target-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move-target/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move-target/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-move-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/move/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/move/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-nature",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/nature/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/nature/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-nature-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/nature/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/nature/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pal-park-area",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pal-park-area/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pal-park-area/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pal-park-area-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pal-park-area/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pal-park-area/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokeathlon-stat",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokeathlon-stat/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokeathlon-stat/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokeathlon-stat-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokeathlon-stat/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokeathlon-stat/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokedex",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokedex/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokedex/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokedex-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokedex/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokedex/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokemon-color",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokemon-color/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokemon-color/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokemon-color-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokemon-color/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokemon-color/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokemon-form",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokemon-form/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokemon-form/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokemon-form-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokemon-form/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokemon-form/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokemon-habitat",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokemon-habitat/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokemon-habitat/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokemon-habitat-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokemon-habitat/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokemon-habitat/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokemon-shape",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokemon-shape/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokemon-shape/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokemon-shape-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokemon-shape/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokemon-shape/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokemon-species",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokemon-species/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokemon-species/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokemon-species-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokemon-species/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokemon-species/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokemon",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokemon/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokemon/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokemon-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokemon/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokemon/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-pokemon-pokemon-id-encounters",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/pokemon/{pokemon_id}/encounters",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/pokemon/{pokemon_id}/encounters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-region",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/region/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/region/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-region-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/region/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/region/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-stat",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/stat/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/stat/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-stat-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/stat/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/stat/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-super-contest-effect",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/super-contest-effect/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/super-contest-effect/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-super-contest-effect-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/super-contest-effect/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/super-contest-effect/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-type",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/type/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/type/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-type-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/type/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/type/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-version-group",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/version-group/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/version-group/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-version-group-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/version-group/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/version-group/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-version",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/version/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/version/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pokeapi.get.api-v2-version-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/version/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/version/{id}/",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

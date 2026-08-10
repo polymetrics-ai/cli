@@ -1,106 +1,1427 @@
 {
-  "api": "Recreation Information Database (RIDB) API v1 (https://ridb.recreation.gov/api/v1)",
+  "api": "Recreation Information Database (RIDB) API v1 (https://ridb.recreation.gov/api/v1); provider artifact version: RIDB API 1.0.0; OpenAPI 3.0.0",
   "docs": "https://ridb.recreation.gov/docs",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (facilities, campsites, activities, organizations, recareas); legacy itself ships no writes (capabilities.write is false) and no other RIDB resource is modeled.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (62 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "recreation-artifact-2026-08-09",
+      "url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "kind": "openapi",
+      "version": "3.0.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/facilities",
-      "covered_by": {
-        "stream": "facilities"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/campsites",
-      "covered_by": {
-        "stream": "campsites"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/activities",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/activities\"].get"
+      },
       "covered_by": {
         "stream": "activities"
       }
     },
     {
       "method": "GET",
+      "path": "/activities/{activityId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/activities/{activityId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campsites",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/campsites\"].get"
+      },
+      "covered_by": {
+        "stream": "campsites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campsites/{campsiteId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/campsites/{campsiteId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campsites/{campsiteId}/attributes",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/campsites/{campsiteId}/attributes\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/events\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{eventId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/events/{eventId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities\"].get"
+      },
+      "covered_by": {
+        "stream": "facilities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/activities",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/activities\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/activities/{activityId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/activities/{activityId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/campsites",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/campsites\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/campsites/{campsiteId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/campsites/{campsiteId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/events",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/events\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/events/{eventId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/events/{eventId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/facilityaddresses",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/facilityaddresses\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/facilityaddresses/{facilityAddressId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/facilityaddresses/{facilityAddressId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/links",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/links\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/links/{linkId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/links/{linkId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/media",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/media\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/media/{mediaId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/media/{mediaId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/permitentrances",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/permitentrances\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/permitentrances/{permitEntranceId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/permitentrances/{permitEntranceId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/tours",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/tours\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{facilityId}/tours/{tourId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilities/{facilityId}/tours/{tourId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "RIDB API 1.0.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "existing-surface[GET /facilities/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Legacy connector never implemented single-facility detail lookups",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{id}/campsites",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "RIDB API 1.0.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "existing-surface[GET /facilities/{id}/campsites]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Legacy connector never implemented facility-scoped sub-resource fan-out",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{id}/events",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "RIDB API 1.0.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "existing-surface[GET /facilities/{id}/events]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Events not modeled by legacy",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilities/{id}/media",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "RIDB API 1.0.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "existing-surface[GET /facilities/{id}/media]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Media not modeled by legacy",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilityaddresses",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilityaddresses\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/facilityaddresses/{facilityAddressId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/facilityaddresses/{facilityAddressId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/linkinfo",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "RIDB API 1.0.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "existing-surface[GET /linkinfo]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "reference lookup table (link relationship types), not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/links",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/links\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/links/{linkId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/links/{linkId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/media",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/media\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/media/{mediaId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/media/{mediaId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/organizations",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/organizations\"].get"
+      },
       "covered_by": {
         "stream": "organizations"
       }
     },
     {
       "method": "GET",
+      "path": "/organizations/{orgId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/organizations/{orgId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{orgId}/facilities",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/organizations/{orgId}/facilities\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{orgId}/facilities/{facilityId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/organizations/{orgId}/facilities/{facilityId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{orgId}/recareas",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/organizations/{orgId}/recareas\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{orgId}/recareas/{recAreaId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/organizations/{orgId}/recareas/{recAreaId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/permitentrances",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/permitentrances\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Permit entrances not modeled by legacy",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/permitentrances/{permitEntranceId}/attributes",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/permitentrances/{permitEntranceId}/attributes\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/permitentrances/{permitEntranceId}/zones",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/permitentrances/{permitEntranceId}/zones\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/permitentrances/{permitEntranceId}/zones/{zoneId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/permitentrances/{permitEntranceId}/zones/{zoneId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/permitentrances/{permitentranceId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/permitentrances/{permitentranceId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareaaddresses",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareaaddresses\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareaaddresses/{recAreaAddressId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareaaddresses/{recAreaAddressId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/recareas",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas\"].get"
+      },
       "covered_by": {
         "stream": "recareas"
       }
     },
     {
       "method": "GET",
-      "path": "/facilities/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented single-facility detail lookups"
+      "path": "/recareas/{id}/activities",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "RIDB API 1.0.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "existing-surface[GET /recareas/{id}/activities]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Recarea-scoped sub-resource fan-out not modeled by legacy",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/facilities/{id}/campsites",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented facility-scoped sub-resource fan-out"
+      "path": "/recareas/{recAreaId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas/{recAreaId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/facilities/{id}/events",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Events not modeled by legacy"
+      "path": "/recareas/{recAreaId}/activities",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas/{recAreaId}/activities\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/facilities/{id}/media",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Media not modeled by legacy"
+      "path": "/recareas/{recAreaId}/activities/{activityId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas/{recAreaId}/activities/{activityId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareas/{recAreaId}/events",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas/{recAreaId}/events\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareas/{recAreaId}/events/{eventId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas/{recAreaId}/events/{eventId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareas/{recAreaId}/facilities",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas/{recAreaId}/facilities\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareas/{recAreaId}/facilities/{facilityId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas/{recAreaId}/facilities/{facilityId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareas/{recAreaId}/links",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas/{recAreaId}/links\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareas/{recAreaId}/links/{linkId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas/{recAreaId}/links/{linkId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareas/{recAreaId}/media",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas/{recAreaId}/media\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareas/{recAreaId}/media/{mediaId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas/{recAreaId}/media/{mediaId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareas/{recAreaId}/recareaaddresses",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas/{recAreaId}/recareaaddresses\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recareas/{recAreaId}/recareaaddresses/{recAreaAddressId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/recareas/{recAreaId}/recareaaddresses/{recAreaAddressId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reservations",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/reservations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/tours",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Tours not modeled by legacy"
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/tours\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Tours not modeled by legacy",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/permitentrances",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Permit entrances not modeled by legacy"
+      "path": "/tours/{tourId}",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/tours/{tourId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/recareas/{id}/activities",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Recarea-scoped sub-resource fan-out not modeled by legacy"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/linkinfo",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "reference lookup table (link relationship types), not a syncable object stream"
+      "path": "/tours/{tourId}/attributes",
+      "provenance": {
+        "artifact": "recreation-artifact-2026-08-09",
+        "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f",
+        "coordinate": "paths[\"/tours/{tourId}/attributes\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

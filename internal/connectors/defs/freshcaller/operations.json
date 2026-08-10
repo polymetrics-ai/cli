@@ -1,0 +1,296 @@
+{
+  "operations": [
+    {
+      "id": "freshcaller.post.account-export",
+      "kind": "rest_write",
+      "summary": "POST /account/export",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/account/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.get.api-v1-business-calendars",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/business_calendars",
+      "description": "/api/v1/business_calendars is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/business_calendars",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.get.api-v1-call-metrics",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/call_metrics",
+      "description": "/api/v1/call_metrics is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/call_metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.get.api-v1-calls-call-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/calls/{call_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/calls/{call_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.get.api-v1-calls-call-id-call-metrics",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/calls/{call_id}/call_metrics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/calls/{call_id}/call_metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.get.api-v1-calls-call-id-recording-recording-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/calls/{call_id}/recording/{recording_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/calls/{call_id}/recording/{recording_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.delete.api-v1-calls-call-id-recording-recording-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/calls/{call_id}/recording/{recording_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/calls/{call_id}/recording/{recording_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.post.api-v1-calls-id-note",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/calls/{id}/note",
+      "description": "mutates call records; not a syncable read",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/calls/{id}/note",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.get.api-v1-ivrs",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/ivrs",
+      "description": "/api/v1/ivrs is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/ivrs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.post.api-v1-teams",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/teams",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/teams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.get.api-v1-teams-team-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/teams/{team_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/teams/{team_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.put.api-v1-teams-team-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/teams/{team_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/teams/{team_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.get.api-v1-user-statuses",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/user-statuses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/user-statuses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.get.api-v1-user-statuses-2",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/user_statuses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/user_statuses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.get.api-v1-users",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.post.api-v1-users",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/users",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.get.api-v1-users-user-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/users/{user_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.put.api-v1-users-user-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/users/{user_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshcaller.get.jobs-job-id",
+      "kind": "rest_read",
+      "summary": "GET /jobs/{job_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/jobs/{job_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

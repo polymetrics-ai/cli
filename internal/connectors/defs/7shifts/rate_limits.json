@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developers.7shifts.com/v2.2023.0501/docs/overview-1 (retrieved 2026-08-06): 7shifts documents 10 requests per second per access token; the token is secret and cannot be a rate-limit scope subject."
+}

@@ -1965,8 +1965,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_account",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "code",
@@ -1976,15 +1975,40 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly account create --code \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/accounts"
         }
       ],
-      "examples": [
-        "pm recurly account create --code \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "billing_info",
+        "billing_info.account_number",
+        "billing_info.adyen_risk_profile_reference_id",
+        "billing_info.amazon_billing_agreement_id",
+        "billing_info.cvv",
+        "billing_info.fraud_session_id",
+        "billing_info.gateway_attributes",
+        "billing_info.gateway_code",
+        "billing_info.gateway_token",
+        "billing_info.iban",
+        "billing_info.number",
+        "billing_info.payment_gateway_references",
+        "billing_info.paypal_billing_agreement_id",
+        "billing_info.roku_billing_agreement_id",
+        "billing_info.routing_number",
+        "billing_info.sort_code",
+        "billing_info.tax_identifier",
+        "billing_info.tax_identifier_type",
+        "billing_info.three_d_secure_action_result_token_id",
+        "billing_info.token_id",
+        "vat_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "account update",
@@ -1992,8 +2016,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_account",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2009,15 +2032,40 @@
           "maps_to": "record.email"
         }
       ],
+      "examples": [
+        "pm recurly account update --account-id \"<value>\" --email \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/accounts/{account_id}"
         }
       ],
-      "examples": [
-        "pm recurly account update --account-id \"<value>\" --email \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "billing_info",
+        "billing_info.account_number",
+        "billing_info.adyen_risk_profile_reference_id",
+        "billing_info.amazon_billing_agreement_id",
+        "billing_info.cvv",
+        "billing_info.fraud_session_id",
+        "billing_info.gateway_attributes",
+        "billing_info.gateway_code",
+        "billing_info.gateway_token",
+        "billing_info.iban",
+        "billing_info.number",
+        "billing_info.payment_gateway_references",
+        "billing_info.paypal_billing_agreement_id",
+        "billing_info.roku_billing_agreement_id",
+        "billing_info.routing_number",
+        "billing_info.sort_code",
+        "billing_info.tax_identifier",
+        "billing_info.tax_identifier_type",
+        "billing_info.three_d_secure_action_result_token_id",
+        "billing_info.token_id",
+        "vat_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "account deactivate",
@@ -2025,8 +2073,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "deactivate_account",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2043,15 +2090,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly account deactivate --account-id \"<value>\" --redact \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/accounts/{account_id}"
         }
       ],
-      "examples": [
-        "pm recurly account deactivate --account-id \"<value>\" --redact \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "account redact",
@@ -2059,8 +2108,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "redact_account",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2070,15 +2118,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly account redact --account-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/accounts/{account_id}/redact"
         }
       ],
-      "examples": [
-        "pm recurly account redact --account-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "account acquisition update",
@@ -2086,8 +2136,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_account_acquisition",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2106,7 +2155,6 @@
           "name": "channel",
           "type": "enum",
           "summary": "The channel through which the account was acquired.",
-          "maps_to": "record.channel",
           "values": [
             "advertising",
             "blog",
@@ -2121,8 +2169,12 @@
             "public_relations",
             "referral",
             "social_media"
-          ]
+          ],
+          "maps_to": "record.channel"
         }
+      ],
+      "examples": [
+        "pm recurly account acquisition update --account-id \"<value>\" --channel \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -2130,9 +2182,8 @@
           "path": "/accounts/{account_id}/acquisition"
         }
       ],
-      "examples": [
-        "pm recurly account acquisition update --account-id \"<value>\" --channel \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "account acquisition remove",
@@ -2140,8 +2191,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_account_acquisition",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2150,6 +2200,9 @@
           "maps_to": "record.account_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly account acquisition remove --account-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -2157,9 +2210,8 @@
           "path": "/accounts/{account_id}/acquisition"
         }
       ],
-      "examples": [
-        "pm recurly account acquisition remove --account-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "account reactivate",
@@ -2167,8 +2219,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "reactivate_account",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2177,6 +2228,9 @@
           "maps_to": "record.account_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly account reactivate --account-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -2184,9 +2238,8 @@
           "path": "/accounts/{account_id}/reactivate"
         }
       ],
-      "examples": [
-        "pm recurly account reactivate --account-id \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "billing info update",
@@ -2194,8 +2247,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_billing_info",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2211,15 +2263,41 @@
           "maps_to": "record.first_name"
         }
       ],
+      "examples": [
+        "pm recurly billing info update --account-id \"<value>\" --first-name \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/accounts/{account_id}/billing_info"
         }
       ],
-      "examples": [
-        "pm recurly billing info update --account-id \"<value>\" --first-name \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "account_number",
+        "adyen_risk_profile_reference_id",
+        "amazon_billing_agreement_id",
+        "card_network_preference",
+        "card_type",
+        "cvv",
+        "fraud_session_id",
+        "gateway_attributes",
+        "gateway_code",
+        "gateway_token",
+        "iban",
+        "number",
+        "payment_gateway_references",
+        "paypal_billing_agreement_id",
+        "roku_billing_agreement_id",
+        "routing_number",
+        "sort_code",
+        "tax_identifier",
+        "tax_identifier_type",
+        "three_d_secure_action_result_token_id",
+        "token_id",
+        "vat_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "billing info remove",
@@ -2227,8 +2305,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_billing_info",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2237,6 +2314,9 @@
           "maps_to": "record.account_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly billing info remove --account-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -2244,9 +2324,8 @@
           "path": "/accounts/{account_id}/billing_info"
         }
       ],
-      "examples": [
-        "pm recurly billing info remove --account-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "billing info verify",
@@ -2254,8 +2333,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "verify_billing_info",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2264,6 +2342,9 @@
           "maps_to": "record.account_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly billing info verify --account-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -2271,9 +2352,12 @@
           "path": "/accounts/{account_id}/billing_info/verify"
         }
       ],
-      "examples": [
-        "pm recurly billing info verify --account-id \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "gateway_code",
+        "three_d_secure_action_result_token_id"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "billing info cvv verify",
@@ -2281,8 +2365,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "verify_billing_info_cvv",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2291,6 +2374,9 @@
           "maps_to": "record.account_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly billing info cvv verify --account-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -2298,9 +2384,14 @@
           "path": "/accounts/{account_id}/billing_info/verify_cvv"
         }
       ],
-      "examples": [
-        "pm recurly billing info cvv verify --account-id \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "gateway_code",
+        "three_d_secure_action_result_token_id",
+        "token_id",
+        "verification_value"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "billing info create",
@@ -2308,8 +2399,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_billing_info",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2324,6 +2414,9 @@
           "summary": "Typed Recurly request field `first_name`.",
           "maps_to": "record.first_name"
         }
+      ],
+      "examples": [
+        "pm recurly billing info create --account-id \"<value>\" --first-name \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -2331,9 +2424,32 @@
           "path": "/accounts/{account_id}/billing_infos"
         }
       ],
-      "examples": [
-        "pm recurly billing info create --account-id \"<value>\" --first-name \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "account_number",
+        "adyen_risk_profile_reference_id",
+        "amazon_billing_agreement_id",
+        "card_network_preference",
+        "card_type",
+        "cvv",
+        "fraud_session_id",
+        "gateway_attributes",
+        "gateway_code",
+        "gateway_token",
+        "iban",
+        "number",
+        "payment_gateway_references",
+        "paypal_billing_agreement_id",
+        "roku_billing_agreement_id",
+        "routing_number",
+        "sort_code",
+        "tax_identifier",
+        "tax_identifier_type",
+        "three_d_secure_action_result_token_id",
+        "token_id",
+        "vat_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "a billing info update",
@@ -2341,8 +2457,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_a_billing_info",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2365,15 +2480,42 @@
           "maps_to": "record.first_name"
         }
       ],
+      "examples": [
+        "pm recurly a billing info update --account-id \"<value>\" --billing-info-id \"<value>\" --first-name \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/accounts/{account_id}/billing_infos/{billing_info_id}"
         }
       ],
-      "examples": [
-        "pm recurly a billing info update --account-id \"<value>\" --billing-info-id \"<value>\" --first-name \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "account_number",
+        "adyen_risk_profile_reference_id",
+        "amazon_billing_agreement_id",
+        "billing_info_id",
+        "card_network_preference",
+        "card_type",
+        "cvv",
+        "fraud_session_id",
+        "gateway_attributes",
+        "gateway_code",
+        "gateway_token",
+        "iban",
+        "number",
+        "payment_gateway_references",
+        "paypal_billing_agreement_id",
+        "roku_billing_agreement_id",
+        "routing_number",
+        "sort_code",
+        "tax_identifier",
+        "tax_identifier_type",
+        "three_d_secure_action_result_token_id",
+        "token_id",
+        "vat_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "a billing info remove",
@@ -2381,8 +2523,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_a_billing_info",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2398,6 +2539,9 @@
           "maps_to": "record.billing_info_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly a billing info remove --account-id \"<value>\" --billing-info-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -2405,9 +2549,11 @@
           "path": "/accounts/{account_id}/billing_infos/{billing_info_id}"
         }
       ],
-      "examples": [
-        "pm recurly a billing info remove --account-id \"<value>\" --billing-info-id \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "billing_info_id"
+      ],
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "billing infos verify",
@@ -2415,8 +2561,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "verify_billing_infos",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2432,6 +2577,9 @@
           "maps_to": "record.billing_info_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly billing infos verify --account-id \"<value>\" --billing-info-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -2439,9 +2587,13 @@
           "path": "/accounts/{account_id}/billing_infos/{billing_info_id}/verify"
         }
       ],
-      "examples": [
-        "pm recurly billing infos verify --account-id \"<value>\" --billing-info-id \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "billing_info_id",
+        "gateway_code",
+        "three_d_secure_action_result_token_id"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "billing infos cvv verify",
@@ -2449,8 +2601,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "verify_billing_infos_cvv",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2467,15 +2618,24 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly billing infos cvv verify --account-id \"<value>\" --billing-info-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/accounts/{account_id}/billing_infos/{billing_info_id}/verify_cvv"
         }
       ],
-      "examples": [
-        "pm recurly billing infos cvv verify --account-id \"<value>\" --billing-info-id \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "billing_info_id",
+        "gateway_code",
+        "three_d_secure_action_result_token_id",
+        "token_id",
+        "verification_value"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "coupon redemption create",
@@ -2483,8 +2643,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_coupon_redemption",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2501,15 +2660,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly coupon redemption create --account-id \"<value>\" --coupon-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/accounts/{account_id}/coupon_redemptions/active"
         }
       ],
-      "examples": [
-        "pm recurly coupon redemption create --account-id \"<value>\" --coupon-id \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "coupon redemption remove",
@@ -2517,8 +2678,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_coupon_redemption",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2528,15 +2688,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly coupon redemption remove --account-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/accounts/{account_id}/coupon_redemptions/active"
         }
       ],
-      "examples": [
-        "pm recurly coupon redemption remove --account-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "coupon redemption by id remove",
@@ -2544,8 +2706,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_coupon_redemption_by_id",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2562,15 +2723,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly coupon redemption by id remove --account-id \"<value>\" --coupon-redemption-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/accounts/{account_id}/coupon_redemptions/{coupon_redemption_id}"
         }
       ],
-      "examples": [
-        "pm recurly coupon redemption by id remove --account-id \"<value>\" --coupon-redemption-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "account external account create",
@@ -2578,8 +2741,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_account_external_account",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2603,15 +2765,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly account external account create --account-id \"<value>\" --external-account-code \"<value>\" --external-connection-type \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/accounts/{account_id}/external_accounts"
         }
       ],
-      "examples": [
-        "pm recurly account external account create --account-id \"<value>\" --external-account-code \"<value>\" --external-connection-type \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "account external account update",
@@ -2619,8 +2783,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_account_external_account",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2636,6 +2799,9 @@
           "maps_to": "record.external_account_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly account external account update --account-id \"<value>\" --external-account-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -2643,9 +2809,8 @@
           "path": "/accounts/{account_id}/external_accounts/{external_account_id}"
         }
       ],
-      "examples": [
-        "pm recurly account external account update --account-id \"<value>\" --external-account-id \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "account external account delete",
@@ -2653,8 +2818,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_account_external_account",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2671,15 +2835,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly account external account delete --account-id \"<value>\" --external-account-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/accounts/{account_id}/external_accounts/{external_account_id}"
         }
       ],
-      "examples": [
-        "pm recurly account external account delete --account-id \"<value>\" --external-account-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "invoice create",
@@ -2687,8 +2853,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_invoice",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2705,15 +2870,20 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly invoice create --account-id \"<value>\" --currency \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/accounts/{account_id}/invoices"
         }
       ],
-      "examples": [
-        "pm recurly invoice create --account-id \"<value>\" --currency \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "po_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "line item create",
@@ -2721,8 +2891,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_line_item",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2742,11 +2911,11 @@
           "name": "type",
           "type": "enum",
           "summary": "Line item type. If `item_code`/`item_id` is present then `type` should not be present. If `item_code`/`item_id` is not present then `type` is required.",
-          "maps_to": "record.type",
           "values": [
             "charge",
             "credit"
           ],
+          "maps_to": "record.type",
           "required": true
         },
         {
@@ -2757,15 +2926,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly line item create --account-id \"<value>\" --currency \"<value>\" --type \"<value>\" --unit-amount \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/accounts/{account_id}/line_items"
         }
       ],
-      "examples": [
-        "pm recurly line item create --account-id \"<value>\" --currency \"<value>\" --type \"<value>\" --unit-amount \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "account note create",
@@ -2773,8 +2944,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_account_note",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2791,15 +2961,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly account note create --account-id \"<value>\" --message \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/accounts/{account_id}/notes"
         }
       ],
-      "examples": [
-        "pm recurly account note create --account-id \"<value>\" --message \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "account note remove",
@@ -2807,8 +2979,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_account_note",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2825,15 +2996,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly account note remove --account-id \"<value>\" --account-note-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/accounts/{account_id}/notes/{account_note_id}"
         }
       ],
-      "examples": [
-        "pm recurly account note remove --account-id \"<value>\" --account-note-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "shipping address create",
@@ -2841,8 +3014,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_shipping_address",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2894,15 +3066,20 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly shipping address create --account-id \"<value>\" --city \"<value>\" --country \"<value>\" --first-name \"<value>\" --last-name \"<value>\" --postal-code \"<value>\" --street1 \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/accounts/{account_id}/shipping_addresses"
         }
       ],
-      "examples": [
-        "pm recurly shipping address create --account-id \"<value>\" --city \"<value>\" --country \"<value>\" --first-name \"<value>\" --last-name \"<value>\" --postal-code \"<value>\" --street1 \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "vat_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "shipping address update",
@@ -2910,8 +3087,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_shipping_address",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2934,15 +3110,20 @@
           "maps_to": "record.first_name"
         }
       ],
+      "examples": [
+        "pm recurly shipping address update --account-id \"<value>\" --shipping-address-id \"<value>\" --first-name \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/accounts/{account_id}/shipping_addresses/{shipping_address_id}"
         }
       ],
-      "examples": [
-        "pm recurly shipping address update --account-id \"<value>\" --shipping-address-id \"<value>\" --first-name \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "vat_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "shipping address remove",
@@ -2950,8 +3131,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_shipping_address",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-id",
@@ -2968,15 +3148,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly shipping address remove --account-id \"<value>\" --shipping-address-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/accounts/{account_id}/shipping_addresses/{shipping_address_id}"
         }
       ],
-      "examples": [
-        "pm recurly shipping address remove --account-id \"<value>\" --shipping-address-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "coupon create",
@@ -2984,8 +3166,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_coupon",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "code",
@@ -2998,12 +3179,12 @@
           "name": "discount-type",
           "type": "enum",
           "summary": "The type of discount provided by the coupon (how the amount discounted is calculated)",
-          "maps_to": "record.discount_type",
           "values": [
             "fixed",
             "free_trial",
             "percent"
           ],
+          "maps_to": "record.discount_type",
           "required": true
         },
         {
@@ -3012,6 +3193,9 @@
           "summary": "The internal name for the coupon.",
           "maps_to": "record.name"
         }
+      ],
+      "examples": [
+        "pm recurly coupon create --code \"<value>\" --discount-type \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -3019,9 +3203,8 @@
           "path": "/coupons"
         }
       ],
-      "examples": [
-        "pm recurly coupon create --code \"<value>\" --discount-type \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "coupon update",
@@ -3029,8 +3212,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_coupon",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "coupon-id",
@@ -3046,15 +3228,17 @@
           "maps_to": "record.name"
         }
       ],
+      "examples": [
+        "pm recurly coupon update --coupon-id \"<value>\" --name \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/coupons/{coupon_id}"
         }
       ],
-      "examples": [
-        "pm recurly coupon update --coupon-id \"<value>\" --name \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "coupon deactivate",
@@ -3062,8 +3246,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "deactivate_coupon",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "coupon-id",
@@ -3073,15 +3256,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly coupon deactivate --coupon-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/coupons/{coupon_id}"
         }
       ],
-      "examples": [
-        "pm recurly coupon deactivate --coupon-id \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "unique-coupon-codes generate",
@@ -3089,8 +3274,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "generate_unique_coupon_codes",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "coupon-id",
@@ -3106,15 +3290,20 @@
           "maps_to": "record.number_of_unique_codes"
         }
       ],
+      "examples": [
+        "pm recurly unique-coupon-codes generate --coupon-id \"<value>\" --number-of-unique-codes \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/coupons/{coupon_id}/generate"
         }
       ],
-      "examples": [
-        "pm recurly unique-coupon-codes generate --coupon-id \"<value>\" --number-of-unique-codes \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "number_of_unique_codes"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "unique-coupon-codes generate-sync",
@@ -3122,8 +3311,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "generate_unique_coupon_codes_sync",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "coupon-id",
@@ -3140,15 +3328,20 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly unique-coupon-codes generate-sync --coupon-id \"<value>\" --number-of-unique-codes \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/coupons/{coupon_id}/generate_sync"
         }
       ],
-      "examples": [
-        "pm recurly unique-coupon-codes generate-sync --coupon-id \"<value>\" --number-of-unique-codes \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "number_of_unique_codes"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "coupon restore",
@@ -3156,8 +3349,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "restore_coupon",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "coupon-id",
@@ -3173,15 +3365,17 @@
           "maps_to": "record.name"
         }
       ],
+      "examples": [
+        "pm recurly coupon restore --coupon-id \"<value>\" --name \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/coupons/{coupon_id}/restore"
         }
       ],
-      "examples": [
-        "pm recurly coupon restore --coupon-id \"<value>\" --name \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "general ledger account create",
@@ -3189,18 +3383,17 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_general_ledger_account",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-type",
           "type": "enum",
           "summary": "Type string value mapped to Recurly `account_type`.",
-          "maps_to": "record.account_type",
           "values": [
             "liability",
             "revenue"
-          ]
+          ],
+          "maps_to": "record.account_type"
         },
         {
           "name": "code",
@@ -3209,15 +3402,17 @@
           "maps_to": "record.code"
         }
       ],
+      "examples": [
+        "pm recurly general ledger account create --account-type \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/general_ledger_accounts"
         }
       ],
-      "examples": [
-        "pm recurly general ledger account create --account-type \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "general ledger account update",
@@ -3225,8 +3420,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_general_ledger_account",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "general-ledger-account-id",
@@ -3242,15 +3436,17 @@
           "maps_to": "record.code"
         }
       ],
+      "examples": [
+        "pm recurly general ledger account update --general-ledger-account-id \"<value>\" --code \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/general_ledger_accounts/{general_ledger_account_id}"
         }
       ],
-      "examples": [
-        "pm recurly general ledger account update --general-ledger-account-id \"<value>\" --code \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "item create",
@@ -3258,8 +3454,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_item",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "code",
@@ -3276,15 +3471,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly item create --code \"<value>\" --name \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/items"
         }
       ],
-      "examples": [
-        "pm recurly item create --code \"<value>\" --name \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "item update",
@@ -3292,8 +3489,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_item",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "item-id",
@@ -3309,15 +3505,17 @@
           "maps_to": "record.code"
         }
       ],
+      "examples": [
+        "pm recurly item update --item-id \"<value>\" --code \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/items/{item_id}"
         }
       ],
-      "examples": [
-        "pm recurly item update --item-id \"<value>\" --code \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "item deactivate",
@@ -3325,8 +3523,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "deactivate_item",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "item-id",
@@ -3335,6 +3532,9 @@
           "maps_to": "record.item_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly item deactivate --item-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -3342,9 +3542,8 @@
           "path": "/items/{item_id}"
         }
       ],
-      "examples": [
-        "pm recurly item deactivate --item-id \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "item reactivate",
@@ -3352,8 +3551,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "reactivate_item",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "item-id",
@@ -3363,15 +3561,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly item reactivate --item-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/items/{item_id}/reactivate"
         }
       ],
-      "examples": [
-        "pm recurly item reactivate --item-id \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "measured unit create",
@@ -3379,8 +3579,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_measured_unit",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "display-name",
@@ -3397,15 +3596,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly measured unit create --display-name \"<value>\" --name \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/measured_units"
         }
       ],
-      "examples": [
-        "pm recurly measured unit create --display-name \"<value>\" --name \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "measured unit update",
@@ -3413,8 +3614,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_measured_unit",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "measured-unit-id",
@@ -3430,15 +3630,17 @@
           "maps_to": "record.name"
         }
       ],
+      "examples": [
+        "pm recurly measured unit update --measured-unit-id \"<value>\" --name \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/measured_units/{measured_unit_id}"
         }
       ],
-      "examples": [
-        "pm recurly measured unit update --measured-unit-id \"<value>\" --name \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "measured unit remove",
@@ -3446,8 +3648,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_measured_unit",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "measured-unit-id",
@@ -3457,15 +3658,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly measured unit remove --measured-unit-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/measured_units/{measured_unit_id}"
         }
       ],
-      "examples": [
-        "pm recurly measured unit remove --measured-unit-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "external product create",
@@ -3473,8 +3676,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_external_product",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "name",
@@ -3484,15 +3686,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly external product create --name \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/external_products"
         }
       ],
-      "examples": [
-        "pm recurly external product create --name \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "external product update",
@@ -3500,8 +3704,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_external_product",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "external-product-id",
@@ -3518,15 +3721,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly external product update --external-product-id \"<value>\" --plan-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/external_products/{external_product_id}"
         }
       ],
-      "examples": [
-        "pm recurly external product update --external-product-id \"<value>\" --plan-id \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "external products deactivate",
@@ -3534,8 +3739,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "deactivate_external_products",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "external-product-id",
@@ -3545,15 +3749,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly external products deactivate --external-product-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/external_products/{external_product_id}"
         }
       ],
-      "examples": [
-        "pm recurly external products deactivate --external-product-id \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "external product external product reference create",
@@ -3561,8 +3767,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_external_product_external_product_reference",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "external-connection-type",
@@ -3584,15 +3789,17 @@
           "maps_to": "record.reference_code"
         }
       ],
+      "examples": [
+        "pm recurly external product external product reference create --external-product-id \"<value>\" --external-connection-type \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/external_products/{external_product_id}/external_product_references"
         }
       ],
-      "examples": [
-        "pm recurly external product external product reference create --external-product-id \"<value>\" --external-connection-type \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "external product external product reference deactivate",
@@ -3600,8 +3807,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "deactivate_external_product_external_product_reference",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "external-product-id",
@@ -3618,15 +3824,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly external product external product reference deactivate --external-product-id \"<value>\" --external-product-reference-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/external_products/{external_product_id}/external_product_references/{external_product_reference_id}"
         }
       ],
-      "examples": [
-        "pm recurly external product external product reference deactivate --external-product-id \"<value>\" --external-product-reference-id \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "external subscription create",
@@ -3634,8 +3842,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_external_subscription",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "activated-at",
@@ -3664,15 +3871,17 @@
           "maps_to": "record.quantity"
         }
       ],
+      "examples": [
+        "pm recurly external subscription create --activated-at \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/external_subscriptions"
         }
       ],
-      "examples": [
-        "pm recurly external subscription create --activated-at \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "external-subscriptions put",
@@ -3680,8 +3889,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "put_external_subscription",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "external-subscription-id",
@@ -3691,15 +3899,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly external-subscriptions put --external-subscription-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/external_subscriptions/{external_subscription_id}"
         }
       ],
-      "examples": [
-        "pm recurly external-subscriptions put --external-subscription-id \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "external invoice create",
@@ -3707,8 +3917,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_external_invoice",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "currency",
@@ -3743,10 +3952,10 @@
           "name": "state",
           "type": "enum",
           "summary": "Type string value mapped to Recurly `state`.",
-          "maps_to": "record.state",
           "values": [
             "paid"
           ],
+          "maps_to": "record.state",
           "required": true
         },
         {
@@ -3757,15 +3966,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly external invoice create --currency \"<value>\" --external-id \"<value>\" --external-subscription-id \"<value>\" --purchased-at \"<value>\" --state \"<value>\" --total \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/external_subscriptions/{external_subscription_id}/external_invoices"
         }
       ],
-      "examples": [
-        "pm recurly external invoice create --currency \"<value>\" --external-id \"<value>\" --external-subscription-id \"<value>\" --purchased-at \"<value>\" --state \"<value>\" --total \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "invoice update",
@@ -3773,8 +3984,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_invoice",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "invoice-id",
@@ -3796,15 +4006,21 @@
           "maps_to": "record.po_number"
         }
       ],
+      "examples": [
+        "pm recurly invoice update --invoice-id \"<value>\" --po-number \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/invoices/{invoice_id}"
         }
       ],
-      "examples": [
-        "pm recurly invoice update --invoice-id \"<value>\" --po-number \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "gateway_code",
+        "po_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "invoices apply-credit-balance",
@@ -3812,8 +4028,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "apply_credit_balance",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "invoice-id",
@@ -3822,6 +4037,9 @@
           "maps_to": "record.invoice_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly invoices apply-credit-balance --invoice-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -3829,9 +4047,8 @@
           "path": "/invoices/{invoice_id}/apply_credit_balance"
         }
       ],
-      "examples": [
-        "pm recurly invoices apply-credit-balance --invoice-id \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "invoice collect",
@@ -3839,8 +4056,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "collect_invoice",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "invoice-id",
@@ -3849,6 +4065,9 @@
           "maps_to": "record.invoice_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly invoice collect --invoice-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -3856,9 +4075,12 @@
           "path": "/invoices/{invoice_id}/collect"
         }
       ],
-      "examples": [
-        "pm recurly invoice collect --invoice-id \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "billing_info_id",
+        "three_d_secure_action_result_token_id"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "invoice failed mark",
@@ -3866,8 +4088,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "mark_invoice_failed",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "invoice-id",
@@ -3876,6 +4097,9 @@
           "maps_to": "record.invoice_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly invoice failed mark --invoice-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -3883,9 +4107,8 @@
           "path": "/invoices/{invoice_id}/mark_failed"
         }
       ],
-      "examples": [
-        "pm recurly invoice failed mark --invoice-id \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "invoice successful mark",
@@ -3893,8 +4116,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "mark_invoice_successful",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "invoice-id",
@@ -3903,6 +4125,9 @@
           "maps_to": "record.invoice_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly invoice successful mark --invoice-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -3910,9 +4135,8 @@
           "path": "/invoices/{invoice_id}/mark_successful"
         }
       ],
-      "examples": [
-        "pm recurly invoice successful mark --invoice-id \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "invoice reopen",
@@ -3920,8 +4144,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "reopen_invoice",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "invoice-id",
@@ -3930,6 +4153,9 @@
           "maps_to": "record.invoice_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly invoice reopen --invoice-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -3937,9 +4163,8 @@
           "path": "/invoices/{invoice_id}/reopen"
         }
       ],
-      "examples": [
-        "pm recurly invoice reopen --invoice-id \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "invoice void",
@@ -3947,8 +4172,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "void_invoice",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "invoice-id",
@@ -3958,15 +4182,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly invoice void --invoice-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/invoices/{invoice_id}/void"
         }
       ],
-      "examples": [
-        "pm recurly invoice void --invoice-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "invoices record-external-transaction",
@@ -3974,8 +4200,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "record_external_transaction",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "invoice-id",
@@ -3991,15 +4216,17 @@
           "maps_to": "record.amount"
         }
       ],
+      "examples": [
+        "pm recurly invoices record-external-transaction --invoice-id \"<value>\" --amount \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/invoices/{invoice_id}/transactions"
         }
       ],
-      "examples": [
-        "pm recurly invoices record-external-transaction --invoice-id \"<value>\" --amount \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "invoice refund",
@@ -4007,8 +4234,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "refund_invoice",
-      "risk": "critical — refund_invoice moves money by refunding an invoice; requires destructive confirmation and reverse ETL plan/preview/approval/execute. Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "invoice-id",
@@ -4021,14 +4247,17 @@
           "name": "type",
           "type": "enum",
           "summary": "The type of refund. Amount and line items cannot both be specified in the request.",
-          "maps_to": "record.type",
           "values": [
             "amount",
             "percentage",
             "line_items"
           ],
+          "maps_to": "record.type",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly invoice refund --invoice-id \"<value>\" --type \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -4036,9 +4265,8 @@
           "path": "/invoices/{invoice_id}/refund"
         }
       ],
-      "examples": [
-        "pm recurly invoice refund --invoice-id \"<value>\" --type \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 refund_invoice moves money by refunding an invoice; requires destructive confirmation and reverse ETL plan/preview/approval/execute. Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "invoices retries create",
@@ -4046,8 +4274,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_invoice_retry",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-billing-infos-0-gateway-code",
@@ -4060,11 +4287,11 @@
           "name": "account-billing-infos-0-payment-gateway-references-0-reference-type",
           "type": "enum",
           "summary": "Type string value mapped to Recurly `account.billing_infos.0.payment_gateway_references.0.reference_type`.",
-          "maps_to": "record.account.billing_infos.0.payment_gateway_references.0.reference_type",
           "values": [
             "stripe_confirmation_token",
             "upi_vpa"
           ],
+          "maps_to": "record.account.billing_infos.0.payment_gateway_references.0.reference_type",
           "required": true
         },
         {
@@ -4119,15 +4346,21 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly invoices retries create --account-billing-infos-0-gateway-code \"<value>\" --account-billing-infos-0-payment-gateway-references-0-reference-type \"<value>\" --account-billing-infos-0-transactions-0-attempted-collection-date \"<value>\" --account-billing-infos-0-transactions-0-gateway-error-code \"<value>\" --account-code \"<value>\" --currency \"<value>\" --due-at \"<value>\" --external-recovery-eligible \"<value>\" --line-items-0-unit-amount \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/invoices/recovery"
         }
       ],
-      "examples": [
-        "pm recurly invoices retries create --account-billing-infos-0-gateway-code \"<value>\" --account-billing-infos-0-payment-gateway-references-0-reference-type \"<value>\" --account-billing-infos-0-transactions-0-attempted-collection-date \"<value>\" --account-billing-infos-0-transactions-0-gateway-error-code \"<value>\" --account-code \"<value>\" --currency \"<value>\" --due-at \"<value>\" --external-recovery-eligible \"<value>\" --line-items-0-unit-amount \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "account.billing_infos",
+        "po_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "line item remove",
@@ -4135,8 +4368,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_line_item",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "line-item-id",
@@ -4146,15 +4378,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly line item remove --line-item-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/line_items/{line_item_id}"
         }
       ],
-      "examples": [
-        "pm recurly line item remove --line-item-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "plan create",
@@ -4162,8 +4396,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_plan",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "code",
@@ -4187,15 +4420,20 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly plan create --code \"<value>\" --currencies-0-currency \"<value>\" --name \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/plans"
         }
       ],
-      "examples": [
-        "pm recurly plan create --code \"<value>\" --currencies-0-currency \"<value>\" --name \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "trial_requires_billing_info"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "plan update",
@@ -4203,8 +4441,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_plan",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "plan-id",
@@ -4220,15 +4457,20 @@
           "maps_to": "record.code"
         }
       ],
+      "examples": [
+        "pm recurly plan update --plan-id \"<value>\" --code \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/plans/{plan_id}"
         }
       ],
-      "examples": [
-        "pm recurly plan update --plan-id \"<value>\" --code \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "trial_requires_billing_info"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "plan remove",
@@ -4236,8 +4478,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_plan",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "plan-id",
@@ -4247,15 +4488,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly plan remove --plan-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/plans/{plan_id}"
         }
       ],
-      "examples": [
-        "pm recurly plan remove --plan-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "plan add on create",
@@ -4263,8 +4506,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_plan_add_on",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "code",
@@ -4288,15 +4530,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly plan add on create --code \"<value>\" --name \"<value>\" --plan-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/plans/{plan_id}/add_ons"
         }
       ],
-      "examples": [
-        "pm recurly plan add on create --code \"<value>\" --name \"<value>\" --plan-id \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "plan add on update",
@@ -4304,8 +4548,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_plan_add_on",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "add-on-id",
@@ -4328,15 +4571,17 @@
           "maps_to": "record.code"
         }
       ],
+      "examples": [
+        "pm recurly plan add on update --add-on-id \"<value>\" --plan-id \"<value>\" --code \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/plans/{plan_id}/add_ons/{add_on_id}"
         }
       ],
-      "examples": [
-        "pm recurly plan add on update --add-on-id \"<value>\" --plan-id \"<value>\" --code \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "plan add on remove",
@@ -4344,8 +4589,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_plan_add_on",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "add-on-id",
@@ -4362,15 +4606,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly plan add on remove --add-on-id \"<value>\" --plan-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/plans/{plan_id}/add_ons/{add_on_id}"
         }
       ],
-      "examples": [
-        "pm recurly plan add on remove --add-on-id \"<value>\" --plan-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "shipping method create",
@@ -4378,8 +4624,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_shipping_method",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "code",
@@ -4396,15 +4641,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly shipping method create --code \"<value>\" --name \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/shipping_methods"
         }
       ],
-      "examples": [
-        "pm recurly shipping method create --code \"<value>\" --name \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "shipping method update",
@@ -4412,8 +4659,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_shipping_method",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "shipping-method-id",
@@ -4429,15 +4675,17 @@
           "maps_to": "record.code"
         }
       ],
+      "examples": [
+        "pm recurly shipping method update --shipping-method-id \"<value>\" --code \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/shipping_methods/{shipping_method_id}"
         }
       ],
-      "examples": [
-        "pm recurly shipping method update --shipping-method-id \"<value>\" --code \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "shipping method deactivate",
@@ -4445,8 +4693,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "deactivate_shipping_method",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "shipping-method-id",
@@ -4456,15 +4703,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly shipping method deactivate --shipping-method-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/shipping_methods/{shipping_method_id}"
         }
       ],
-      "examples": [
-        "pm recurly shipping method deactivate --shipping-method-id \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "subscription create",
@@ -4472,8 +4721,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_subscription",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-code",
@@ -4497,15 +4745,42 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly subscription create --account-code \"<value>\" --currency \"<value>\" --plan-code \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/subscriptions"
         }
       ],
-      "examples": [
-        "pm recurly subscription create --account-code \"<value>\" --currency \"<value>\" --plan-code \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "account.billing_info.account_number",
+        "account.billing_info.adyen_risk_profile_reference_id",
+        "account.billing_info.amazon_billing_agreement_id",
+        "account.billing_info.cvv",
+        "account.billing_info.fraud_session_id",
+        "account.billing_info.gateway_attributes",
+        "account.billing_info.gateway_code",
+        "account.billing_info.gateway_token",
+        "account.billing_info.iban",
+        "account.billing_info.number",
+        "account.billing_info.payment_gateway_references",
+        "account.billing_info.paypal_billing_agreement_id",
+        "account.billing_info.roku_billing_agreement_id",
+        "account.billing_info.routing_number",
+        "account.billing_info.sort_code",
+        "account.billing_info.tax_identifier",
+        "account.billing_info.tax_identifier_type",
+        "account.billing_info.three_d_secure_action_result_token_id",
+        "account.billing_info.token_id",
+        "billing_info_id",
+        "gateway_code",
+        "gift_card_redemption_code",
+        "po_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "subscription update",
@@ -4513,8 +4788,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_subscription",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "subscription-id",
@@ -4527,12 +4801,15 @@
           "name": "collection-method",
           "type": "enum",
           "summary": "Typed Recurly request field `collection_method`.",
-          "maps_to": "record.collection_method",
           "values": [
             "automatic",
             "manual"
-          ]
+          ],
+          "maps_to": "record.collection_method"
         }
+      ],
+      "examples": [
+        "pm recurly subscription update --subscription-id \"<value>\" --collection-method \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -4540,9 +4817,13 @@
           "path": "/subscriptions/{subscription_id}"
         }
       ],
-      "examples": [
-        "pm recurly subscription update --subscription-id \"<value>\" --collection-method \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "billing_info_id",
+        "gateway_code",
+        "po_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "subscription terminate",
@@ -4550,8 +4831,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "terminate_subscription",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "subscription-id",
@@ -4564,12 +4844,12 @@
           "name": "refund",
           "type": "enum",
           "summary": "Typed Recurly request field `refund`.",
-          "maps_to": "record.refund",
           "values": [
             "full",
             "none",
             "partial"
           ],
+          "maps_to": "record.refund",
           "required": true
         },
         {
@@ -4580,15 +4860,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly subscription terminate --subscription-id \"<value>\" --refund \"<value>\" --charge \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/subscriptions/{subscription_id}"
         }
       ],
-      "examples": [
-        "pm recurly subscription terminate --subscription-id \"<value>\" --refund \"<value>\" --charge \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "subscription cancel",
@@ -4596,8 +4878,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "cancel_subscription",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "subscription-id",
@@ -4606,6 +4887,9 @@
           "maps_to": "record.subscription_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly subscription cancel --subscription-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -4613,9 +4897,8 @@
           "path": "/subscriptions/{subscription_id}/cancel"
         }
       ],
-      "examples": [
-        "pm recurly subscription cancel --subscription-id \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "subscription reactivate",
@@ -4623,8 +4906,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "reactivate_subscription",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "subscription-id",
@@ -4634,15 +4916,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly subscription reactivate --subscription-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/subscriptions/{subscription_id}/reactivate"
         }
       ],
-      "examples": [
-        "pm recurly subscription reactivate --subscription-id \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "subscription pause",
@@ -4650,8 +4934,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "pause_subscription",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "remaining-pause-cycles",
@@ -4668,15 +4951,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly subscription pause --remaining-pause-cycles \"<value>\" --subscription-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/subscriptions/{subscription_id}/pause"
         }
       ],
-      "examples": [
-        "pm recurly subscription pause --remaining-pause-cycles \"<value>\" --subscription-id \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "subscription resume",
@@ -4684,8 +4969,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "resume_subscription",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "subscription-id",
@@ -4694,6 +4978,9 @@
           "maps_to": "record.subscription_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly subscription resume --subscription-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -4701,9 +4988,8 @@
           "path": "/subscriptions/{subscription_id}/resume"
         }
       ],
-      "examples": [
-        "pm recurly subscription resume --subscription-id \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "subscriptions convert-trial",
@@ -4711,8 +4997,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "convert_trial",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "subscription-id",
@@ -4722,15 +5007,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly subscriptions convert-trial --subscription-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/subscriptions/{subscription_id}/convert_trial"
         }
       ],
-      "examples": [
-        "pm recurly subscriptions convert-trial --subscription-id \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "subscription change create",
@@ -4738,8 +5025,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_subscription_change",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "subscription-id",
@@ -4755,15 +5041,22 @@
           "maps_to": "record.plan_code"
         }
       ],
+      "examples": [
+        "pm recurly subscription change create --subscription-id \"<value>\" --plan-code \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/subscriptions/{subscription_id}/change"
         }
       ],
-      "examples": [
-        "pm recurly subscription change create --subscription-id \"<value>\" --plan-code \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "billing_info",
+        "billing_info.three_d_secure_action_result_token_id",
+        "po_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "subscription change remove",
@@ -4771,8 +5064,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_subscription_change",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "subscription-id",
@@ -4782,15 +5074,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly subscription change remove --subscription-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/subscriptions/{subscription_id}/change"
         }
       ],
-      "examples": [
-        "pm recurly subscription change remove --subscription-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "subscription coupon redemption remove",
@@ -4798,8 +5092,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_subscription_coupon_redemption",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "coupon-redemption-id",
@@ -4816,15 +5109,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly subscription coupon redemption remove --coupon-redemption-id \"<value>\" --subscription-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/subscriptions/{subscription_id}/coupon_redemptions/{coupon_redemption_id}"
         }
       ],
-      "examples": [
-        "pm recurly subscription coupon redemption remove --coupon-redemption-id \"<value>\" --subscription-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "usage create",
@@ -4832,8 +5127,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_usage",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "add-on-id",
@@ -4856,15 +5150,17 @@
           "maps_to": "record.amount"
         }
       ],
+      "examples": [
+        "pm recurly usage create --add-on-id \"<value>\" --subscription-id \"<value>\" --amount \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/subscriptions/{subscription_id}/add_ons/{add_on_id}/usage"
         }
       ],
-      "examples": [
-        "pm recurly usage create --add-on-id \"<value>\" --subscription-id \"<value>\" --amount \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "usage update",
@@ -4872,8 +5168,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_usage",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "usage-id",
@@ -4889,15 +5184,17 @@
           "maps_to": "record.amount"
         }
       ],
+      "examples": [
+        "pm recurly usage update --usage-id \"<value>\" --amount \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/usage/{usage_id}"
         }
       ],
-      "examples": [
-        "pm recurly usage update --usage-id \"<value>\" --amount \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "usage remove",
@@ -4905,8 +5202,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_usage",
-      "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "usage-id",
@@ -4916,15 +5212,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly usage remove --usage-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/usage/{usage_id}"
         }
       ],
-      "examples": [
-        "pm recurly usage remove --usage-id \"<value>\" --json"
-      ]
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "unique coupon code deactivate",
@@ -4932,8 +5230,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "deactivate_unique_coupon_code",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "unique-coupon-code-id",
@@ -4942,6 +5239,9 @@
           "maps_to": "record.unique_coupon_code_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly unique coupon code deactivate --unique-coupon-code-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -4949,9 +5249,8 @@
           "path": "/unique_coupon_codes/{unique_coupon_code_id}"
         }
       ],
-      "examples": [
-        "pm recurly unique coupon code deactivate --unique-coupon-code-id \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "unique coupon code reactivate",
@@ -4959,8 +5258,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "reactivate_unique_coupon_code",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "unique-coupon-code-id",
@@ -4970,15 +5268,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly unique coupon code reactivate --unique-coupon-code-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/unique_coupon_codes/{unique_coupon_code_id}/restore"
         }
       ],
-      "examples": [
-        "pm recurly unique coupon code reactivate --unique-coupon-code-id \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "purchase create",
@@ -4986,8 +5286,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_purchase",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-code",
@@ -5003,6 +5302,9 @@
           "maps_to": "record.currency",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly purchase create --account-code \"<value>\" --currency \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -5010,9 +5312,33 @@
           "path": "/purchases"
         }
       ],
-      "examples": [
-        "pm recurly purchase create --account-code \"<value>\" --currency \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "account.billing_info.account_number",
+        "account.billing_info.adyen_risk_profile_reference_id",
+        "account.billing_info.amazon_billing_agreement_id",
+        "account.billing_info.cvv",
+        "account.billing_info.fraud_session_id",
+        "account.billing_info.gateway_attributes",
+        "account.billing_info.gateway_code",
+        "account.billing_info.gateway_token",
+        "account.billing_info.iban",
+        "account.billing_info.number",
+        "account.billing_info.payment_gateway_references",
+        "account.billing_info.paypal_billing_agreement_id",
+        "account.billing_info.roku_billing_agreement_id",
+        "account.billing_info.routing_number",
+        "account.billing_info.sort_code",
+        "account.billing_info.tax_identifier",
+        "account.billing_info.tax_identifier_type",
+        "account.billing_info.three_d_secure_action_result_token_id",
+        "account.billing_info.token_id",
+        "billing_info_id",
+        "gateway_code",
+        "gift_card_redemption_code",
+        "po_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "purchases create-pending",
@@ -5020,8 +5346,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_pending_purchase",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-code",
@@ -5037,6 +5362,9 @@
           "maps_to": "record.currency",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly purchases create-pending --account-code \"<value>\" --currency \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -5044,9 +5372,33 @@
           "path": "/purchases/pending"
         }
       ],
-      "examples": [
-        "pm recurly purchases create-pending --account-code \"<value>\" --currency \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "account.billing_info.account_number",
+        "account.billing_info.adyen_risk_profile_reference_id",
+        "account.billing_info.amazon_billing_agreement_id",
+        "account.billing_info.cvv",
+        "account.billing_info.fraud_session_id",
+        "account.billing_info.gateway_attributes",
+        "account.billing_info.gateway_code",
+        "account.billing_info.gateway_token",
+        "account.billing_info.iban",
+        "account.billing_info.number",
+        "account.billing_info.payment_gateway_references",
+        "account.billing_info.paypal_billing_agreement_id",
+        "account.billing_info.roku_billing_agreement_id",
+        "account.billing_info.routing_number",
+        "account.billing_info.sort_code",
+        "account.billing_info.tax_identifier",
+        "account.billing_info.tax_identifier_type",
+        "account.billing_info.three_d_secure_action_result_token_id",
+        "account.billing_info.token_id",
+        "billing_info_id",
+        "gateway_code",
+        "gift_card_redemption_code",
+        "po_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "purchases authorize",
@@ -5054,8 +5406,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_authorize_purchase",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "account-code",
@@ -5072,15 +5423,42 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly purchases authorize --account-code \"<value>\" --currency \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/purchases/authorize"
         }
       ],
-      "examples": [
-        "pm recurly purchases authorize --account-code \"<value>\" --currency \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "account.billing_info.account_number",
+        "account.billing_info.adyen_risk_profile_reference_id",
+        "account.billing_info.amazon_billing_agreement_id",
+        "account.billing_info.cvv",
+        "account.billing_info.fraud_session_id",
+        "account.billing_info.gateway_attributes",
+        "account.billing_info.gateway_code",
+        "account.billing_info.gateway_token",
+        "account.billing_info.iban",
+        "account.billing_info.number",
+        "account.billing_info.payment_gateway_references",
+        "account.billing_info.paypal_billing_agreement_id",
+        "account.billing_info.roku_billing_agreement_id",
+        "account.billing_info.routing_number",
+        "account.billing_info.sort_code",
+        "account.billing_info.tax_identifier",
+        "account.billing_info.tax_identifier_type",
+        "account.billing_info.three_d_secure_action_result_token_id",
+        "account.billing_info.token_id",
+        "billing_info_id",
+        "gateway_code",
+        "gift_card_redemption_code",
+        "po_number"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "purchases capture",
@@ -5088,8 +5466,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_capture_purchase",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "transaction-id",
@@ -5098,6 +5475,9 @@
           "maps_to": "record.transaction_id",
           "required": true
         }
+      ],
+      "examples": [
+        "pm recurly purchases capture --transaction-id \"<value>\" --json"
       ],
       "api_surface": [
         {
@@ -5105,9 +5485,8 @@
           "path": "/purchases/{transaction_id}/capture"
         }
       ],
-      "examples": [
-        "pm recurly purchases capture --transaction-id \"<value>\" --json"
-      ]
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "purchases cancel",
@@ -5115,8 +5494,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "cancel_purchase",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "transaction-id",
@@ -5126,15 +5504,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly purchases cancel --transaction-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/purchases/{transaction_id}/cancel/"
         }
       ],
-      "examples": [
-        "pm recurly purchases cancel --transaction-id \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "dunning-campaigns bulk-update",
@@ -5142,8 +5522,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "put_dunning_campaign_bulk_update",
-      "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "dunning-campaign-id",
@@ -5153,15 +5532,17 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly dunning-campaigns bulk-update --dunning-campaign-id \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "PUT",
           "path": "/dunning_campaigns/{dunning_campaign_id}/bulk_update"
         }
       ],
-      "examples": [
-        "pm recurly dunning-campaigns bulk-update --dunning-campaign-id \"<value>\" --json"
-      ]
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "gift card create",
@@ -5169,8 +5550,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_gift_card",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "currency",
@@ -5197,11 +5577,11 @@
           "name": "delivery-method",
           "type": "enum",
           "summary": "Whether the delivery method is email or postal service.",
-          "maps_to": "record.delivery.method",
           "values": [
             "email",
             "post"
           ],
+          "maps_to": "record.delivery.method",
           "required": true
         },
         {
@@ -5212,15 +5592,38 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly gift card create --currency \"<value>\" --product-code \"<value>\" --unit-amount \"<value>\" --delivery-method \"<value>\" --gifter-account-code \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/gift_cards"
         }
       ],
-      "examples": [
-        "pm recurly gift card create --currency \"<value>\" --product-code \"<value>\" --unit-amount \"<value>\" --delivery-method \"<value>\" --gifter-account-code \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "gifter_account.billing_info.account_number",
+        "gifter_account.billing_info.adyen_risk_profile_reference_id",
+        "gifter_account.billing_info.amazon_billing_agreement_id",
+        "gifter_account.billing_info.cvv",
+        "gifter_account.billing_info.fraud_session_id",
+        "gifter_account.billing_info.gateway_attributes",
+        "gifter_account.billing_info.gateway_code",
+        "gifter_account.billing_info.gateway_token",
+        "gifter_account.billing_info.iban",
+        "gifter_account.billing_info.number",
+        "gifter_account.billing_info.payment_gateway_references",
+        "gifter_account.billing_info.paypal_billing_agreement_id",
+        "gifter_account.billing_info.roku_billing_agreement_id",
+        "gifter_account.billing_info.routing_number",
+        "gifter_account.billing_info.sort_code",
+        "gifter_account.billing_info.tax_identifier",
+        "gifter_account.billing_info.tax_identifier_type",
+        "gifter_account.billing_info.three_d_secure_action_result_token_id",
+        "gifter_account.billing_info.token_id"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "gift card redeem",
@@ -5228,8 +5631,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "redeem_gift_card",
-      "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/",
       "flags": [
         {
           "name": "recipient-account-code",
@@ -5246,15 +5648,20 @@
           "required": true
         }
       ],
+      "examples": [
+        "pm recurly gift card redeem --recipient-account-code \"<value>\" --redemption-code \"<value>\" --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/gift_cards/{redemption_code}/redeem"
         }
       ],
-      "examples": [
-        "pm recurly gift card redeem --recipient-account-code \"<value>\" --redemption-code \"<value>\" --json"
-      ]
+      "redact_fields": [
+        "redemption_code"
+      ],
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation."
     },
     {
       "path": "invoices preview",

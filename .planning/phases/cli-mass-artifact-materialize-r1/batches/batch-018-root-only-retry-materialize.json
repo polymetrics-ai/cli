@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-018-reference-machine-manifest.json",
+  "candidates": 2,
+  "included": [
+    {
+      "connector": "plausible",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://plausible.io/docs/stats-api-v1",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd"
+      },
+      "artifact_operations": 4,
+      "declared_operations": 12,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 4,
+        "excluded": 4
+      },
+      "cli_commands": 12,
+      "implemented_commands": 4,
+      "named_dependency_commands": 8,
+      "flagged_discrepancies": 8,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 8
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "pypi",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://warehouse.pypa.io/api-reference/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    }
+  ]
+}

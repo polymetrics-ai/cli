@@ -1,0 +1,299 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-043-public-machine-manifest.json",
+  "candidates": 40,
+  "included": [
+    {
+      "connector": "countercyclical",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://docs.countercyclical.io/developers/endpoints",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7538be3e889e2a1bf0e6bd32f7cfbc34ede723e61b22626c3e6fb443c22a0344"
+      },
+      "artifact_operations": 12,
+      "declared_operations": 25,
+      "operation_split": {
+        "executable": 7,
+        "provider_blocked": 10,
+        "excluded": 8
+      },
+      "cli_commands": 25,
+      "implemented_commands": 7,
+      "named_dependency_commands": 18,
+      "flagged_discrepancies": 13,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 36
+    },
+    {
+      "connector": "beamer",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://getbeamer-api.pages.dev/",
+        "version": "0.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5ef3aea34b03b0d2d862a21da7211678a84fed0db56b608adcda1914261af985"
+      },
+      "artifact_operations": 49,
+      "declared_operations": 96,
+      "operation_split": {
+        "executable": 21,
+        "provider_blocked": 35,
+        "excluded": 40
+      },
+      "cli_commands": 96,
+      "implemented_commands": 21,
+      "named_dependency_commands": 75,
+      "flagged_discrepancies": 47,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 75
+    },
+    {
+      "connector": "coassemble",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developers.coassemble.com/",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919"
+      },
+      "artifact_operations": 53,
+      "declared_operations": 91,
+      "operation_split": {
+        "executable": 25,
+        "provider_blocked": 32,
+        "excluded": 34
+      },
+      "cli_commands": 91,
+      "implemented_commands": 25,
+      "named_dependency_commands": 66,
+      "flagged_discrepancies": 38,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 66
+    },
+    {
+      "connector": "callrail",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://apidocs.callrail.com/",
+        "version": "v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1b6b7cdf0579fdc8d3393658e327802cb7b92952430dde3be213d4916644b466"
+      },
+      "artifact_operations": 70,
+      "declared_operations": 82,
+      "operation_split": {
+        "executable": 44,
+        "provider_blocked": 4,
+        "excluded": 34
+      },
+      "cli_commands": 82,
+      "implemented_commands": 40,
+      "named_dependency_commands": 42,
+      "flagged_discrepancies": 12,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 38
+    },
+    {
+      "connector": "aircall",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developers.aircall.io/api-references",
+        "version": "1.92.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6"
+      },
+      "artifact_operations": 100,
+      "declared_operations": 133,
+      "operation_split": {
+        "executable": 27,
+        "provider_blocked": 21,
+        "excluded": 85
+      },
+      "cli_commands": 133,
+      "implemented_commands": 26,
+      "named_dependency_commands": 107,
+      "flagged_discrepancies": 33,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 106
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "ebay-finance",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no ebay-finance.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "ebay-fulfillment",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no ebay-fulfillment.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "eventzilla",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "datascope",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://app.mydatascope.com/api/external/docs/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "appsflyer",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://dev.appsflyer.com/hc/reference\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "clazar",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://developers.clazar.io/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "eventee",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "chargedesk",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://chargedesk.com/api-docs\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "drift",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://devdocs.drift.com/docs/platform-apis\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "appfollow",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 39 operation(s), below the ledger's 43; official reference fallback \"https://docs.api.appfollow.io/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "finnworlds",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 26: did not find expected \u003cdocument start\u003e"
+    },
+    {
+      "connector": "feishu",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "appfigures",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link that failed URL admission), and official reference fallback \"https://docs.appfigures.com/\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "canny",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "fastbill",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://apidocs.fastbill.com/fastbill/en/fundamentals.html\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "breezy-hr",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "appcues",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://docs.appcues.com/en_US/api\" failed: cached-references-only source pass has no cached external artifact \"https://docs.appcues.com/en_US/api\""
+    },
+    {
+      "connector": "finage",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://api.finage.co.uk/op/v1/endpoints/list\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document), and official reference fallback \"https://finage.co.uk/docs/api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "apple-search-ads",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://docs.developer.apple.com/tutorials/data/documentation/apple_ads.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items), and official reference fallback \"https://developer.apple.com/documentation/apple_search_ads\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "agilecrm",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link that failed URL admission), and official reference fallback \"https://github.com/agilecrm/rest-api/blob/8748e70b91e13afecff881d0b58546c3677e1794/README.md\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "chameleon",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 31 operation(s), below the ledger's 99"
+    },
+    {
+      "connector": "everhour",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 3 operation(s), below the ledger's 101; official reference fallback \"https://everhour.docs.apiary.io/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "chartmogul",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://dev.chartmogul.com/reference/metrics/customer-count/\" could not be fetched: cached-references-only source pass has no cached external artifact \"https://dev.chartmogul.com/reference/metrics/customer-count/\"), and official reference fallback \"https://dev.chartmogul.com/reference/\" failed: cached-references-only source pass has no cached external artifact \"https://dev.chartmogul.com/reference/\""
+    },
+    {
+      "connector": "easypost",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://docs.easypost.com/sitemap.xml\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document), and official reference fallback \"https://docs.easypost.com/docs/shipments\" failed: cached-references-only source pass has no cached external artifact \"https://docs.easypost.com/docs/shipments\""
+    },
+    {
+      "connector": "campaign-monitor",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://www.campaignmonitor.com/api/v3-2/\" could not be fetched: cached-references-only source pass has no cached external artifact \"https://www.campaignmonitor.com/api/v3-2/\"), and official reference fallback \"https://www.campaignmonitor.com/api/v3-3/getting-started/\" failed: cached-references-only source pass has no cached external artifact \"https://www.campaignmonitor.com/api/v3-3/getting-started/\""
+    },
+    {
+      "connector": "dixa",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://docs.dixa.io/openapi/\" failed: cached-references-only source pass has no cached external artifact \"https://docs.dixa.io/openapi/\""
+    },
+    {
+      "connector": "buildkite",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://buildkite.com/docs/apis/rest-api/access-token\" could not be fetched: cached-references-only source pass has no cached external artifact \"https://buildkite.com/docs/apis/rest-api/access-token\"), and official reference fallback \"https://buildkite.com/docs/apis/rest-api\" failed: cached-references-only source pass has no cached external artifact \"https://buildkite.com/docs/apis/rest-api\""
+    },
+    {
+      "connector": "castor-edc",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: path item is not a mapping), and official reference fallback \"https://data.castoredc.com/api\" failed: cached-references-only source pass has no cached external artifact \"https://data.castoredc.com/api\""
+    },
+    {
+      "connector": "clockify",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "confluence",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no confluence.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "bing-ads",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://learn.microsoft.com/en-us/advertising/customer-management-service/customer-management-service-operations?view=bingads-13\" failed: cached-references-only source pass has no cached external artifact \"https://learn.microsoft.com/en-us/advertising/customer-management-service/customer-management-service-operations?view=bingads-13\""
+    },
+    {
+      "connector": "discord",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://docs.discord.com/developers/components/reference.md\" could not be fetched: cached-references-only source pass has no cached external artifact \"https://docs.discord.com/developers/components/reference.md\"), and official reference fallback \"https://docs.discord.com/developers/reference\" failed: cached-references-only source pass has no cached external artifact \"https://docs.discord.com/developers/reference\""
+    },
+    {
+      "connector": "box",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: cached-references-only source pass has no cached external artifact \"https://developer.box.com/reference/\""
+    },
+    {
+      "connector": "box-data-extract",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: cached-references-only source pass has no cached external artifact \"https://developer.box.com/reference/\""
+    },
+    {
+      "connector": "fastly",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (Postman collection has no request items), and official reference fallback \"https://www.fastly.com/documentation/reference/api/\" failed: cached-references-only source pass has no cached external artifact \"https://www.fastly.com/documentation/reference/api/\""
+    }
+  ]
+}

@@ -1,0 +1,544 @@
+{
+  "operations": [
+    {
+      "id": "openaq.get.v3-countries-countries-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/countries/{countries_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/countries/{countries_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-instruments-instruments-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/instruments/{instruments_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/instruments/{instruments_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-licenses",
+      "kind": "rest_read",
+      "summary": "GET /v3/licenses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/licenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-licenses-licenses-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/licenses/{licenses_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/licenses/{licenses_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-locations-id-sensors",
+      "kind": "rest_read",
+      "summary": "GET /v3/locations/{id}/sensors",
+      "description": "/v3/locations/{id}/sensors is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/locations/{id}/sensors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-locations-locations-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/locations/{locations_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/locations/{locations_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-locations-locations-id-flags",
+      "kind": "rest_read",
+      "summary": "GET /v3/locations/{locations_id}/flags",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/locations/{locations_id}/flags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-locations-locations-id-latest",
+      "kind": "rest_read",
+      "summary": "GET /v3/locations/{locations_id}/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/locations/{locations_id}/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-locations-locations-id-sensors",
+      "kind": "rest_read",
+      "summary": "GET /v3/locations/{locations_id}/sensors",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/locations/{locations_id}/sensors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-manufacturers-manufacturers-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/manufacturers/{manufacturers_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/manufacturers/{manufacturers_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-manufacturers-manufacturers-id-instruments",
+      "kind": "rest_read",
+      "summary": "GET /v3/manufacturers/{manufacturers_id}/instruments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/manufacturers/{manufacturers_id}/instruments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-owners",
+      "kind": "rest_read",
+      "summary": "GET /v3/owners",
+      "description": "/v3/owners is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/owners",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-owners-owners-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/owners/{owners_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/owners/{owners_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-parameters-parameters-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/parameters/{parameters_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/parameters/{parameters_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-parameters-parameters-id-latest",
+      "kind": "rest_read",
+      "summary": "GET /v3/parameters/{parameters_id}/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/parameters/{parameters_id}/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-providers",
+      "kind": "rest_read",
+      "summary": "GET /v3/providers",
+      "description": "/v3/providers is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/providers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-providers-providers-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/providers/{providers_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/providers/{providers_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-id-measurements",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{id}/measurements",
+      "description": "/v3/sensors/{id}/measurements is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{id}/measurements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensor-id-flags",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensor_id}/flags",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensor_id}/flags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-days",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/days",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/days",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-days-dayofweek",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/days/dayofweek",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/days/dayofweek",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-days-monthly",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/days/monthly",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/days/monthly",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-days-monthofyear",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/days/monthofyear",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/days/monthofyear",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-days-yearly",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/days/yearly",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/days/yearly",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-hours",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/hours",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/hours",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-hours-daily",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/hours/daily",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/hours/daily",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-hours-dayofweek",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/hours/dayofweek",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/hours/dayofweek",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-hours-hourofday",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/hours/hourofday",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/hours/hourofday",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-hours-monthly",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/hours/monthly",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/hours/monthly",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-hours-monthofyear",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/hours/monthofyear",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/hours/monthofyear",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-hours-yearly",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/hours/yearly",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/hours/yearly",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-measurements",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/measurements",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/measurements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-measurements-daily",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/measurements/daily",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/measurements/daily",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-measurements-hourly",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/measurements/hourly",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/measurements/hourly",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "openaq.get.v3-sensors-sensors-id-years",
+      "kind": "rest_read",
+      "summary": "GET /v3/sensors/{sensors_id}/years",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.openaq.org/api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sensors/{sensors_id}/years",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

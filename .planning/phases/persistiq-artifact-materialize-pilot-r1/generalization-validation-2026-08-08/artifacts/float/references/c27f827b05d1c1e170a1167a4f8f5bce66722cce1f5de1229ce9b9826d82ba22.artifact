@@ -1,0 +1,192 @@
+definitions:
+  Role:
+    type: "object"
+    required:
+    - "name"
+    title: "Role"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+        description: "The ID of the role"
+        readOnly: true
+      name:
+        type: "string"
+        example: "Senior prompt engineer"
+        description: "The name of the role"
+        maxLength: 200
+      default_hourly_rate:
+        type: "string"
+        example: "260.000"
+        description: "Default hourly rate applied to a fee-based project/phase team member using this role"
+      created:
+        type: string
+        format: "ISODate"
+        example: "2024-04-03T13:02:00+00:00"
+        description: Date/time this record was created
+        readOnly: true
+      created_by:
+        type: integer
+        example: 87655
+        description: ID of the account that created this record
+        readOnly: true
+      modified:
+        type: string
+        format: "ISODate"
+        example: "2024-04-03T13:02:00+00:00"
+        description: Date/time this record was last modified
+        readOnly: true
+      modified_by:
+        type: integer
+        example: 87655
+        description: ID of the account that last modified this record
+        readOnly: true
+      cost_rate_history:
+        type: array
+        description: "`expand` field. List of cost rates applied to people with the role and the effective date when they apply from"
+        items:
+          $ref: '#/definitions/CostRate'
+      people_ids:
+        description: "`expand` field. List of all people by `people_id` that are currently assigned to the role"
+        type: array
+        items:
+          type: integer
+          example:
+          - 1234567
+          - 5544332
+          - 4959291
+      people_count:
+        type: integer
+        description: "`expand` field. Count of all people currently assigned to the role"
+        example: 4
+  
+  CostRate:
+    type: object
+    required:
+    - "rate"
+    - "effective_date"
+    properties:
+      rate:
+        title: "rate"
+        type: string
+        example: "250.5000"
+      effective_date:
+        title: "effective_date"
+        type: string
+        example: "2025-06-01"
+
+
+parameters:
+  expand:
+    name: "expand"
+    in: "query"
+    description: "Comma-delimited values expands the response with additional fields: `cost_rate_history`, `people_ids`,`people_count`"
+    type: "string"
+
+roles:
+  get:
+    tags:
+    - "Roles"
+    summary: "List roles"
+    operationId: "getRoles"
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "List of roles"
+        schema:
+          type: "array"
+          title: "Array of roles"
+          items:
+            $ref: "#/definitions/Role"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+  post:
+    tags:
+    - "Roles"
+    summary: "Add a new role"
+    operationId: "addRole"
+    parameters:
+    - in: "body"
+      name: "data"
+      description: "The role to create, read-only fields are ignored"
+      required: false
+      schema:
+        $ref: "#/definitions/Role"
+    responses:
+      201:
+        description: "The role was successfully created"
+        schema:
+          $ref: "#/definitions/Role"
+      422:
+        description: "Data validation failure, see error for details"
+
+role-id:
+  get:
+    tags:
+    - "Roles"
+    summary: "Retrieve a single role"
+    description: "Returns a single role."
+    operationId: "getRole"
+    parameters:
+    - name: "role_id"
+      in: "path"
+      description: "The role's ID"
+      required: true
+      type: "integer"
+    - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "A role"
+        schema:
+          $ref: "#/definitions/Role"
+  delete:
+    tags:
+    - "Roles"
+    summary: "Delete a role"
+    operationId: "deleteRole"
+    parameters:
+    - name: "role_id"
+      in: "path"
+      description: "The role's ID"
+      required: true
+      type: "integer"
+    responses:
+      204:
+        description: "Delete successful, if this Role `id` is currently used in by any person it will be set to `null`"
+      404:
+        description: "The role does not exist"
+  patch:
+    tags:
+    - "Roles"
+    summary: "Update a role, read-only fields are ignored."
+    description: To update `cost_rate_history` see [Role cost rate changes](/overview_changelog.html#june-2025)
+              
+    operationId: "updateRole"
+    parameters:
+    - name: "role_id"
+      in: "path"
+      description: "The role's ID"
+      required: true
+      type: "integer"
+    - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "Successful update of a role"
+        schema:
+          $ref: "#/definitions/Role"
+      422:
+        description: "Data validation failure, see error for details"

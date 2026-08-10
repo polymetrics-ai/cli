@@ -1,0 +1,493 @@
+{
+  "tagline": "Run Freshcaller's declared streams and reverse-ETL actions.",
+  "usage": "pm freshcaller \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "agents list",
+        "api get api v1 business-calendars",
+        "api get api v1 call-metrics",
+        "api get api v1 calls call-id",
+        "api get api v1 calls call-id call-metrics",
+        "api get api v1 calls call-id recording recording-id",
+        "api get api v1 ivrs",
+        "api get api v1 teams team-id",
+        "api get api v1 user-statuses",
+        "api get api v1 user-statuses operation",
+        "api get api v1 users",
+        "api get api v1 users user-id",
+        "api get jobs job-id",
+        "calls list",
+        "numbers list",
+        "teams list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete api v1 calls call-id recording recording-id",
+        "api post account export",
+        "api post api v1 calls id note",
+        "api post api v1 teams",
+        "api post api v1 users",
+        "api put api v1 teams team-id",
+        "api put api v1 users user-id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "agents list",
+      "summary": "Run the agents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agents",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller agents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/agents"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "api delete api v1 calls call-id recording recording-id",
+      "summary": "Documented DELETE /api/v1/calls/{call_id}/recording/{recording_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api delete api v1 calls call-id recording recording-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/calls/{call_id}/recording/{recording_id}"
+        }
+      ],
+      "operation": "freshcaller.delete.api-v1-calls-call-id-recording-recording-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api v1 business-calendars",
+      "summary": "Documented GET /api/v1/business_calendars (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api get api v1 business-calendars --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/business_calendars"
+        }
+      ],
+      "operation": "freshcaller.get.api-v1-business-calendars",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 call-metrics",
+      "summary": "Documented GET /api/v1/call_metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api get api v1 call-metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/call_metrics"
+        }
+      ],
+      "operation": "freshcaller.get.api-v1-call-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 calls call-id",
+      "summary": "Documented GET /api/v1/calls/{call_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api get api v1 calls call-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/calls/{call_id}"
+        }
+      ],
+      "operation": "freshcaller.get.api-v1-calls-call-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 calls call-id call-metrics",
+      "summary": "Documented GET /api/v1/calls/{call_id}/call_metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api get api v1 calls call-id call-metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/calls/{call_id}/call_metrics"
+        }
+      ],
+      "operation": "freshcaller.get.api-v1-calls-call-id-call-metrics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 calls call-id recording recording-id",
+      "summary": "Documented GET /api/v1/calls/{call_id}/recording/{recording_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api get api v1 calls call-id recording recording-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/calls/{call_id}/recording/{recording_id}"
+        }
+      ],
+      "operation": "freshcaller.get.api-v1-calls-call-id-recording-recording-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 ivrs",
+      "summary": "Documented GET /api/v1/ivrs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api get api v1 ivrs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/ivrs"
+        }
+      ],
+      "operation": "freshcaller.get.api-v1-ivrs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 teams team-id",
+      "summary": "Documented GET /api/v1/teams/{team_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api get api v1 teams team-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/teams/{team_id}"
+        }
+      ],
+      "operation": "freshcaller.get.api-v1-teams-team-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 user-statuses",
+      "summary": "Documented GET /api/v1/user-statuses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api get api v1 user-statuses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/user-statuses"
+        }
+      ],
+      "operation": "freshcaller.get.api-v1-user-statuses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 user-statuses operation",
+      "summary": "Documented GET /api/v1/user_statuses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api get api v1 user-statuses operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/user_statuses"
+        }
+      ],
+      "operation": "freshcaller.get.api-v1-user-statuses-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 users",
+      "summary": "Documented GET /api/v1/users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api get api v1 users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/users"
+        }
+      ],
+      "operation": "freshcaller.get.api-v1-users",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 users user-id",
+      "summary": "Documented GET /api/v1/users/{user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api get api v1 users user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/users/{user_id}"
+        }
+      ],
+      "operation": "freshcaller.get.api-v1-users-user-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get jobs job-id",
+      "summary": "Documented GET /jobs/{job_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api get jobs job-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/jobs/{job_id}"
+        }
+      ],
+      "operation": "freshcaller.get.jobs-job-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post account export",
+      "summary": "Documented POST /account/export (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api post account export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/account/export"
+        }
+      ],
+      "operation": "freshcaller.post.account-export",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 calls id note",
+      "summary": "Documented POST /api/v1/calls/{id}/note (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api post api v1 calls id note --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/calls/{id}/note"
+        }
+      ],
+      "operation": "freshcaller.post.api-v1-calls-id-note",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 teams",
+      "summary": "Documented POST /api/v1/teams (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api post api v1 teams --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/teams"
+        }
+      ],
+      "operation": "freshcaller.post.api-v1-teams",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 users",
+      "summary": "Documented POST /api/v1/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api post api v1 users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/users"
+        }
+      ],
+      "operation": "freshcaller.post.api-v1-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 teams team-id",
+      "summary": "Documented PUT /api/v1/teams/{team_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api put api v1 teams team-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/teams/{team_id}"
+        }
+      ],
+      "operation": "freshcaller.put.api-v1-teams-team-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 users user-id",
+      "summary": "Documented PUT /api/v1/users/{user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller api put api v1 users user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/users/{user_id}"
+        }
+      ],
+      "operation": "freshcaller.put.api-v1-users-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "calls list",
+      "summary": "Run the calls ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calls",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller calls list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/calls"
+        }
+      ]
+    },
+    {
+      "path": "numbers list",
+      "summary": "Run the numbers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "numbers",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller numbers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/numbers"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "teams list",
+      "summary": "Run the teams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_url": "https://developers.freshcaller.com/api/",
+      "examples": [
+        "pm freshcaller teams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/teams"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 1,
+    "min_operations": 0,
+    "max_operations": 250,
+    "criteria": "status=done; artifact_kind=openapi|swagger; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope"
+  },
+  "connectors": [
+    {
+      "connector": "docuseal",
+      "operations_total": 23,
+      "operations_read": 7,
+      "operations_write": 16,
+      "artifact": {
+        "url": "https://console.docuseal.com/openapi.yml",
+        "kind": "openapi",
+        "version": "DocuSeal API 1.0.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-05"
+      },
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; DocuSeal's provider-published OpenAPI YAML export",
+      "counting_note": "Counted every HTTP operation object in DocuSeal's provider-published OpenAPI artifact: seven GET, ten POST, four PUT, and two DELETE. GET actions are reads. Every non-GET action creates a submission/template, clones/merges a template, uploads/creates a document-derived object, updates, or deletes state, so is a write. The artifact has no inbound webhook event operation.",
+      "processed_at": "2026-08-05T21:24:23Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    }
+  ]
+}

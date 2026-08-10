@@ -1,0 +1,3251 @@
+{
+  "operations": [
+    {
+      "id": "incident-io.get.v1-actions",
+      "kind": "rest_read",
+      "summary": "GET /v1/actions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/actions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-actions-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/actions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/actions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-alert-notes",
+      "kind": "rest_read",
+      "summary": "GET /v1/alert_notes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/alert_notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-alert-notes",
+      "kind": "rest_write",
+      "summary": "POST /v1/alert_notes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/alert_notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-alert-notes-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/alert_notes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/alert_notes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v1-alert-notes-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/alert_notes/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/alert_notes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v1-alert-notes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/alert_notes/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/alert_notes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-alerts",
+      "kind": "rest_read",
+      "summary": "GET /v1/alerts",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-api-keys",
+      "kind": "rest_read",
+      "summary": "GET /v1/api_keys",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api_keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-api-keys",
+      "kind": "rest_write",
+      "summary": "POST /v1/api_keys",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/api_keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-api-keys-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/api_keys/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/api_keys/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v1-api-keys-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/api_keys/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/api_keys/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v1-api-keys-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/api_keys/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/api_keys/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-api-keys-id-actions-rotate",
+      "kind": "rest_write",
+      "summary": "POST /v1/api_keys/{id}/actions/rotate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/api_keys/{id}/actions/rotate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-custom-field-options",
+      "kind": "rest_read",
+      "summary": "GET /v1/custom_field_options",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/custom_field_options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-custom-field-options",
+      "kind": "rest_write",
+      "summary": "POST /v1/custom_field_options",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/custom_field_options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-custom-field-options-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/custom_field_options/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/custom_field_options/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v1-custom-field-options-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/custom_field_options/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/custom_field_options/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v1-custom-field-options-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/custom_field_options/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/custom_field_options/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-custom-fields",
+      "kind": "rest_read",
+      "summary": "GET /v1/custom_fields",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/custom_fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-custom-fields",
+      "kind": "rest_write",
+      "summary": "POST /v1/custom_fields",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/custom_fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-custom-fields-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/custom_fields/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/custom_fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v1-custom-fields-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/custom_fields/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/custom_fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v1-custom-fields-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/custom_fields/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/custom_fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-identity",
+      "kind": "rest_read",
+      "summary": "GET /v1/identity",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/identity",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-incident-attachments",
+      "kind": "rest_read",
+      "summary": "GET /v1/incident_attachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/incident_attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-incident-attachments",
+      "kind": "rest_write",
+      "summary": "POST /v1/incident_attachments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/incident_attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v1-incident-attachments-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/incident_attachments/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/incident_attachments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-incident-memberships",
+      "kind": "rest_write",
+      "summary": "POST /v1/incident_memberships",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/incident_memberships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-incident-memberships-actions-revoke",
+      "kind": "rest_write",
+      "summary": "POST /v1/incident_memberships/actions/revoke",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/incident_memberships/actions/revoke",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-incident-relationships",
+      "kind": "rest_read",
+      "summary": "GET /v1/incident_relationships",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/incident_relationships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-incident-roles",
+      "kind": "rest_read",
+      "summary": "GET /v1/incident_roles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/incident_roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-incident-roles",
+      "kind": "rest_write",
+      "summary": "POST /v1/incident_roles",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/incident_roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-incident-roles-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/incident_roles/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/incident_roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v1-incident-roles-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/incident_roles/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/incident_roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v1-incident-roles-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/incident_roles/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/incident_roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-incident-statuses",
+      "kind": "rest_read",
+      "summary": "GET /v1/incident_statuses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/incident_statuses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-incident-statuses",
+      "kind": "rest_write",
+      "summary": "POST /v1/incident_statuses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/incident_statuses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-incident-statuses-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/incident_statuses/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/incident_statuses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v1-incident-statuses-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/incident_statuses/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/incident_statuses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v1-incident-statuses-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/incident_statuses/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/incident_statuses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-incident-types",
+      "kind": "rest_read",
+      "summary": "GET /v1/incident_types",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/incident_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-incident-types-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/incident_types/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/incident_types/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-incidents",
+      "kind": "rest_read",
+      "summary": "GET /v1/incidents",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/incidents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-incidents",
+      "kind": "rest_write",
+      "summary": "POST /v1/incidents",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/incidents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-incidents-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/incidents/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/incidents/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-ip-allowlists",
+      "kind": "rest_read",
+      "summary": "GET /v1/ip_allowlists",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/ip_allowlists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v1-ip-allowlists",
+      "kind": "rest_write",
+      "summary": "PUT /v1/ip_allowlists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/ip_allowlists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-maintenance-windows",
+      "kind": "rest_read",
+      "summary": "GET /v1/maintenance_windows",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/maintenance_windows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-maintenance-windows",
+      "kind": "rest_write",
+      "summary": "POST /v1/maintenance_windows",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/maintenance_windows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-maintenance-windows-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/maintenance_windows/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/maintenance_windows/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v1-maintenance-windows-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/maintenance_windows/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/maintenance_windows/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v1-maintenance-windows-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/maintenance_windows/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/maintenance_windows/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-openapiv3-json",
+      "kind": "rest_read",
+      "summary": "GET /v1/openapiV3.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/openapiV3.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-postmortem-documents",
+      "kind": "rest_read",
+      "summary": "GET /v1/postmortem_documents",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/postmortem_documents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-postmortem-documents-actions-attach",
+      "kind": "rest_write",
+      "summary": "POST /v1/postmortem_documents/actions/attach",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/postmortem_documents/actions/attach",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-postmortem-documents-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/postmortem_documents/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/postmortem_documents/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v1-postmortem-documents-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/postmortem_documents/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/postmortem_documents/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-postmortem-documents-id-content",
+      "kind": "rest_read",
+      "summary": "GET /v1/postmortem_documents/{id}/content",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/postmortem_documents/{id}/content",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v1-severities",
+      "kind": "rest_write",
+      "summary": "POST /v1/severities",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/severities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-severities-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/severities/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/severities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v1-severities-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/severities/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/severities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v1-severities-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/severities/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/severities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v1-status-pages-id-incidents-incident-id-response-incidents",
+      "kind": "rest_read",
+      "summary": "GET /v1/status-pages/{id}/incidents/{incident_id}/response-incidents",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/status-pages/{id}/incidents/{incident_id}/response-incidents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-actions",
+      "kind": "rest_read",
+      "summary": "GET /v2/actions",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-actions",
+      "kind": "rest_write",
+      "summary": "POST /v2/actions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-actions-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/actions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-actions-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actions/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-actions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actions/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-alert-attributes",
+      "kind": "rest_read",
+      "summary": "GET /v2/alert_attributes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/alert_attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-alert-attributes",
+      "kind": "rest_write",
+      "summary": "POST /v2/alert_attributes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/alert_attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-alert-attributes-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/alert_attributes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/alert_attributes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-alert-attributes-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/alert_attributes/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/alert_attributes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-alert-attributes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/alert_attributes/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/alert_attributes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-alert-events-http-alert-source-config-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/alert_events/http/{alert_source_config_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/alert_events/http/{alert_source_config_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-alert-routes",
+      "kind": "rest_read",
+      "summary": "GET /v2/alert_routes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/alert_routes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-alert-routes",
+      "kind": "rest_write",
+      "summary": "POST /v2/alert_routes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/alert_routes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-alert-routes-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/alert_routes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/alert_routes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-alert-routes-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/alert_routes/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/alert_routes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-alert-routes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/alert_routes/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/alert_routes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-alert-sources",
+      "kind": "rest_read",
+      "summary": "GET /v2/alert_sources",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/alert_sources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-alert-sources",
+      "kind": "rest_write",
+      "summary": "POST /v2/alert_sources",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/alert_sources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-alert-sources-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/alert_sources/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/alert_sources/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-alert-sources-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/alert_sources/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/alert_sources/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-alert-sources-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/alert_sources/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/alert_sources/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-alerts",
+      "kind": "rest_read",
+      "summary": "GET /v2/alerts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-alerts-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/alerts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/alerts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-alerts-id-actions-resolve",
+      "kind": "rest_write",
+      "summary": "POST /v2/alerts/{id}/actions/resolve",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/alerts/{id}/actions/resolve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-catalog-entries",
+      "kind": "rest_read",
+      "summary": "GET /v2/catalog_entries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/catalog_entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-catalog-entries",
+      "kind": "rest_write",
+      "summary": "POST /v2/catalog_entries",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/catalog_entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-catalog-entries-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/catalog_entries/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/catalog_entries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-catalog-entries-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/catalog_entries/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/catalog_entries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-catalog-entries-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/catalog_entries/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/catalog_entries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-catalog-resources",
+      "kind": "rest_read",
+      "summary": "GET /v2/catalog_resources",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/catalog_resources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-catalog-types",
+      "kind": "rest_read",
+      "summary": "GET /v2/catalog_types",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/catalog_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-catalog-types",
+      "kind": "rest_write",
+      "summary": "POST /v2/catalog_types",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/catalog_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-catalog-types-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/catalog_types/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/catalog_types/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-catalog-types-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/catalog_types/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/catalog_types/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-catalog-types-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/catalog_types/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/catalog_types/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-catalog-types-id-actions-update-schema",
+      "kind": "rest_write",
+      "summary": "POST /v2/catalog_types/{id}/actions/update_schema",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/catalog_types/{id}/actions/update_schema",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-custom-fields",
+      "kind": "rest_read",
+      "summary": "GET /v2/custom_fields",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/custom_fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-custom-fields",
+      "kind": "rest_write",
+      "summary": "POST /v2/custom_fields",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/custom_fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-custom-fields-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/custom_fields/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/custom_fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-custom-fields-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/custom_fields/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/custom_fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-custom-fields-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/custom_fields/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/custom_fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-escalation-paths",
+      "kind": "rest_read",
+      "summary": "GET /v2/escalation_paths",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/escalation_paths",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-escalation-paths",
+      "kind": "rest_write",
+      "summary": "POST /v2/escalation_paths",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/escalation_paths",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-escalation-paths-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/escalation_paths/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/escalation_paths/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-escalation-paths-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/escalation_paths/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/escalation_paths/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-escalation-paths-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/escalation_paths/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/escalation_paths/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-escalations",
+      "kind": "rest_read",
+      "summary": "GET /v2/escalations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/escalations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-escalations",
+      "kind": "rest_write",
+      "summary": "POST /v2/escalations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/escalations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-escalations-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/escalations/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/escalations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-escalations-id-actions-cancel",
+      "kind": "rest_write",
+      "summary": "POST /v2/escalations/{id}/actions/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/escalations/{id}/actions/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-follow-ups",
+      "kind": "rest_write",
+      "summary": "POST /v2/follow_ups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/follow_ups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-follow-ups-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/follow_ups/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/follow_ups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-follow-ups-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/follow_ups/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/follow_ups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-follow-ups-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/follow_ups/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/follow_ups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-follow-ups-id-actions-connect-external-issue",
+      "kind": "rest_write",
+      "summary": "POST /v2/follow_ups/{id}/actions/connect_external_issue",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/follow_ups/{id}/actions/connect_external_issue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-heartbeat-alert-source-config-id-ping",
+      "kind": "rest_read",
+      "summary": "GET /v2/heartbeat/{alert_source_config_id}/ping",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/heartbeat/{alert_source_config_id}/ping",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-heartbeat-alert-source-config-id-ping",
+      "kind": "rest_write",
+      "summary": "POST /v2/heartbeat/{alert_source_config_id}/ping",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/heartbeat/{alert_source_config_id}/ping",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-incident-alerts",
+      "kind": "rest_read",
+      "summary": "GET /v2/incident_alerts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/incident_alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-incident-participant-workloads",
+      "kind": "rest_read",
+      "summary": "GET /v2/incident_participant_workloads",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/incident_participant_workloads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-incident-participants",
+      "kind": "rest_read",
+      "summary": "GET /v2/incident_participants",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/incident_participants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-incident-roles",
+      "kind": "rest_write",
+      "summary": "POST /v2/incident_roles",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/incident_roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-incident-roles-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/incident_roles/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/incident_roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-incident-roles-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/incident_roles/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/incident_roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-incident-roles-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/incident_roles/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/incident_roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-incident-timestamps",
+      "kind": "rest_read",
+      "summary": "GET /v2/incident_timestamps",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/incident_timestamps",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-incident-timestamps-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/incident_timestamps/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/incident_timestamps/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-incident-updates",
+      "kind": "rest_read",
+      "summary": "GET /v2/incident_updates",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/incident_updates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-incidents",
+      "kind": "rest_write",
+      "summary": "POST /v2/incidents",
+      "description": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/incidents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-incidents-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/incidents/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/incidents/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-incidents-id-actions-edit",
+      "kind": "rest_write",
+      "summary": "POST /v2/incidents/{id}/actions/edit",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/incidents/{id}/actions/edit",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-incidents-id-actions-import-postmortem-document",
+      "kind": "rest_write",
+      "summary": "POST /v2/incidents/{id}/actions/import_postmortem_document",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/incidents/{id}/actions/import_postmortem_document",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-schedule-entries",
+      "kind": "rest_read",
+      "summary": "GET /v2/schedule_entries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/schedule_entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-schedule-overrides",
+      "kind": "rest_read",
+      "summary": "GET /v2/schedule_overrides",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/schedule_overrides",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-schedule-overrides",
+      "kind": "rest_write",
+      "summary": "POST /v2/schedule_overrides",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/schedule_overrides",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-schedule-sync-targets",
+      "kind": "rest_read",
+      "summary": "GET /v2/schedule_sync_targets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/schedule_sync_targets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-schedule-sync-targets",
+      "kind": "rest_write",
+      "summary": "POST /v2/schedule_sync_targets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/schedule_sync_targets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-schedule-sync-targets-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/schedule_sync_targets/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/schedule_sync_targets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-schedule-sync-targets-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/schedule_sync_targets/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/schedule_sync_targets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-schedule-sync-targets-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/schedule_sync_targets/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/schedule_sync_targets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-schedules",
+      "kind": "rest_read",
+      "summary": "GET /v2/schedules",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/schedules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-schedules",
+      "kind": "rest_write",
+      "summary": "POST /v2/schedules",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/schedules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-schedules-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/schedules/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/schedules/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-schedules-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/schedules/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/schedules/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-schedules-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/schedules/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/schedules/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-schedules-id-actions-preview-entries",
+      "kind": "rest_write",
+      "summary": "POST /v2/schedules/{id}/actions/preview_entries",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/schedules/{id}/actions/preview_entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-schedules-schedule-id-replicas",
+      "kind": "rest_read",
+      "summary": "GET /v2/schedules/{schedule_id}/replicas",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/schedules/{schedule_id}/replicas",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-schedules-schedule-id-replicas",
+      "kind": "rest_write",
+      "summary": "POST /v2/schedules/{schedule_id}/replicas",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/schedules/{schedule_id}/replicas",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-schedules-schedule-id-replicas-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/schedules/{schedule_id}/replicas/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/schedules/{schedule_id}/replicas/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-schedules-schedule-id-replicas-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/schedules/{schedule_id}/replicas/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/schedules/{schedule_id}/replicas/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-schedules-schedule-id-sync-rules",
+      "kind": "rest_read",
+      "summary": "GET /v2/schedules/{schedule_id}/sync_rules",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/schedules/{schedule_id}/sync_rules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-schedules-schedule-id-sync-rules",
+      "kind": "rest_write",
+      "summary": "POST /v2/schedules/{schedule_id}/sync_rules",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/schedules/{schedule_id}/sync_rules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-schedules-schedule-id-sync-rules-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/schedules/{schedule_id}/sync_rules/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/schedules/{schedule_id}/sync_rules/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-schedules-schedule-id-sync-rules-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/schedules/{schedule_id}/sync_rules/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/schedules/{schedule_id}/sync_rules/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-schedules-schedule-id-sync-rules-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/schedules/{schedule_id}/sync_rules/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/schedules/{schedule_id}/sync_rules/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-secrets",
+      "kind": "rest_read",
+      "summary": "GET /v2/secrets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/secrets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-secrets",
+      "kind": "rest_write",
+      "summary": "POST /v2/secrets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/secrets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-secrets-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/secrets/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/secrets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-secrets-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/secrets/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/secrets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-secrets-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/secrets/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/secrets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-secrets-id-actions-rotate",
+      "kind": "rest_write",
+      "summary": "POST /v2/secrets/{id}/actions/rotate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/secrets/{id}/actions/rotate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-status-page-incident-updates",
+      "kind": "rest_write",
+      "summary": "POST /v2/status_page_incident_updates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/status_page_incident_updates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-status-page-incidents",
+      "kind": "rest_read",
+      "summary": "GET /v2/status_page_incidents",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/status_page_incidents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-status-page-incidents",
+      "kind": "rest_write",
+      "summary": "POST /v2/status_page_incidents",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/status_page_incidents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-status-page-incidents-status-page-incident-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/status_page_incidents/{status_page_incident_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/status_page_incidents/{status_page_incident_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-status-page-incidents-status-page-incident-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/status_page_incidents/{status_page_incident_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/status_page_incidents/{status_page_incident_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-status-page-maintenance-updates",
+      "kind": "rest_write",
+      "summary": "POST /v2/status_page_maintenance_updates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/status_page_maintenance_updates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-status-page-maintenances",
+      "kind": "rest_read",
+      "summary": "GET /v2/status_page_maintenances",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/status_page_maintenances",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-status-page-maintenances",
+      "kind": "rest_write",
+      "summary": "POST /v2/status_page_maintenances",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/status_page_maintenances",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-status-page-maintenances-status-page-maintenance-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/status_page_maintenances/{status_page_maintenance_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/status_page_maintenances/{status_page_maintenance_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-status-page-retrospective-incidents",
+      "kind": "rest_write",
+      "summary": "POST /v2/status_page_retrospective_incidents",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/status_page_retrospective_incidents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-status-page-structures-status-page-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/status_page_structures/{status_page_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/status_page_structures/{status_page_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-status-pages",
+      "kind": "rest_read",
+      "summary": "GET /v2/status_pages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/status_pages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-telemetry-data-sources-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/telemetry/data_sources/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/telemetry/data_sources/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-users-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-users-user-id-notification-methods",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/{user_id}/notification_methods",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{user_id}/notification_methods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-users-user-id-notification-rules",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/{user_id}/notification_rules",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{user_id}/notification_rules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-users-user-id-paging-provider",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/{user_id}/paging_provider",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{user_id}/paging_provider",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-users-user-id-paging-provider",
+      "kind": "rest_write",
+      "summary": "POST /v2/users/{user_id}/paging_provider",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users/{user_id}/paging_provider",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-workflow-runs",
+      "kind": "rest_read",
+      "summary": "GET /v2/workflow_runs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workflow_runs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-workflow-runs-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/workflow_runs/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workflow_runs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-workflows",
+      "kind": "rest_read",
+      "summary": "GET /v2/workflows",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workflows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v2-workflows",
+      "kind": "rest_write",
+      "summary": "POST /v2/workflows",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/workflows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v2-workflows-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/workflows/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workflows/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v2-workflows-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/workflows/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/workflows/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v2-workflows-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/workflows/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/workflows/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v3-alert-routes",
+      "kind": "rest_read",
+      "summary": "GET /v3/alert_routes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/alert_routes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v3-alert-routes",
+      "kind": "rest_write",
+      "summary": "POST /v3/alert_routes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/alert_routes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v3-alert-routes-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/alert_routes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/alert_routes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v3-alert-routes-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/alert_routes/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/alert_routes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v3-alert-routes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/alert_routes/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/alert_routes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v3-catalog-entries",
+      "kind": "rest_read",
+      "summary": "GET /v3/catalog_entries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/catalog_entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v3-catalog-entries",
+      "kind": "rest_write",
+      "summary": "POST /v3/catalog_entries",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/catalog_entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v3-catalog-entries-actions-bulk-update",
+      "kind": "rest_write",
+      "summary": "POST /v3/catalog_entries/actions/bulk_update",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/catalog_entries/actions/bulk_update",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v3-catalog-entries-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/catalog_entries/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/catalog_entries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v3-catalog-entries-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/catalog_entries/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/catalog_entries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v3-catalog-entries-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/catalog_entries/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/catalog_entries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v3-catalog-resources",
+      "kind": "rest_read",
+      "summary": "GET /v3/catalog_resources",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/catalog_resources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v3-catalog-types",
+      "kind": "rest_read",
+      "summary": "GET /v3/catalog_types",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/catalog_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v3-catalog-types",
+      "kind": "rest_write",
+      "summary": "POST /v3/catalog_types",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/catalog_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v3-catalog-types-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/catalog_types/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/catalog_types/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.put.v3-catalog-types-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/catalog_types/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/catalog_types/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.delete.v3-catalog-types-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/catalog_types/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/catalog_types/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.post.v3-catalog-types-id-actions-update-schema",
+      "kind": "rest_write",
+      "summary": "POST /v3/catalog_types/{id}/actions/update_schema",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/catalog_types/{id}/actions/update_schema",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v3-teams",
+      "kind": "rest_read",
+      "summary": "GET /v3/teams",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/teams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "incident-io.get.v3-teams-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/teams/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/teams/{id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

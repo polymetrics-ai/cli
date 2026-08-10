@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-039-7shifts-direct-reference-manifest.json",
+  "source_index": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-039-7shifts-source-index.json",
+  "materialize_report": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-039-7shifts-materialize.json",
+  "fetch_results": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-039-fetch-results.json",
+  "outcomes": [
+    {
+      "connector": "7shifts",
+      "state": "materialized",
+      "reachability": "reachable",
+      "foundation_pending": true,
+      "evidence": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-039-7shifts-materialize.json",
+      "route": "official non-recursive direct index extraction: 147 current OpenAPI fragments exactly match the immutable survey; seven legacy deprecated endpoints are retained as explicit artifact-absent discrepancies",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developers.7shifts.com/llms.txt",
+        "version": "OpenAPI 3.0.2; provider API version 2026-06-01",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e"
+      },
+      "artifact_operations": 147,
+      "declared_operations": 154,
+      "operation_split": {
+        "executable": 141,
+        "provider_blocked": 0,
+        "excluded": 13
+      },
+      "cli_commands": 154,
+      "foundation_note": "The JSON surface and static inspect are available. Twenty-five generated command entries remain not_implemented pending generic execution capabilities; no foundation work is part of this artifact sweep."
+    }
+  ]
+}

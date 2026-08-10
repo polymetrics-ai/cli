@@ -1,0 +1,82 @@
+{
+  "operations": [
+    {
+      "id": "thinkific-courses.get.api-v2-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/webhooks*",
+      "description": "Thinkific Webhooks API uses the separate https://api.thinkific.com/api/v2 base URL and bearer-style Authorization header, outside this Admin API v1 bundle",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/webhooks*",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific-courses.post.coupons",
+      "kind": "rest_write",
+      "summary": "POST /coupons",
+      "description": "coupon creation requires a promotion_id query parameter; writes.json has no query parameter field",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/coupons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific-courses.post.coupons-bulk-create",
+      "kind": "rest_write",
+      "summary": "POST /coupons/bulk_create",
+      "description": "bulk coupon creation requires a promotion_id query parameter; writes.json has no query parameter field",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/coupons/bulk_create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific-courses.post.course-reviews",
+      "kind": "rest_write",
+      "summary": "POST /course_reviews",
+      "description": "course review creation requires a course_id query parameter; writes.json has no query parameter field",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/course_reviews",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific-courses.get.oauth",
+      "kind": "rest_read",
+      "summary": "GET /oauth/*",
+      "description": "OAuth authorization endpoints are documented under a separate base URL on the Thinkific site subdomain, not the Admin API v1 base used by this connector",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/oauth/*",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

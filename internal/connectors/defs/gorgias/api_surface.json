@@ -1,13 +1,32 @@
 {
-  "api": "Gorgias REST API (OpenAPI 3.1.0)",
+  "api": "Gorgias REST API (OpenAPI 3.1.0); provider artifact version: provider-publishes-no-version-marker",
   "docs": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
-  "reviewed_at": "2026-08-07",
-  "operation_ledger_version": 1,
-  "scope": "Full documented-operation parity for the Gorgias REST API. 114 documented operations, re-derived 2026-08-07 from the provider's stable OpenAPI 3.1.0 document (gorgias-rest-api.json, ReadMe docs version 1.5.1), fetched via https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r: 61 paths, 114 operations (GET 46, POST 23, PUT 27, DELETE 18), 1 deprecated (still counted). The provider-artifact ledger recorded this artifact as html_reference and 114 operations; both the classification and the count reconcile exactly against the live spec once fetched as JSON. There is no top-level webhooks block and no webhook management surface. Every endpoint below is partitioned exactly once.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 114 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. The provider publishes no version marker; provenance records that documented absence. Prior source-surface scope: Full documented-operation parity for the Gorgias REST API. 114 documented operations, re-derived 2026-08-07 from the provider's stable OpenAPI 3.1.0 document (gorgias-rest-api.json, ReadMe docs version 1.5.1), fetched via https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r: 61 paths, 114 operations (GET 46, POST 23, PUT 27, DELETE 18), 1 deprecated (still counted). The provider-artifact ledger recorded this artifact as html_reference and 114 operations; both the classification and the count reconcile exactly against the live spec once fetched as JSON. There is no top-level webhooks block and no webhook management surface. Every endpoint below is partitioned exactly once.",
+  "artifacts": [
+    {
+      "id": "gorgias-artifact-2026-08-09",
+      "url": "https://developers.gorgias.com/reference",
+      "kind": "html_reference",
+      "version": "provider-publishes-no-version-marker",
+      "retrieved_at": "2026-08-09",
+      "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
       "path": "/api/account",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/account]"
+      },
       "covered_by": {
         "direct_read": "account get"
       }
@@ -15,6 +34,15 @@
     {
       "method": "GET",
       "path": "/api/account/settings",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/account/settings]"
+      },
       "covered_by": {
         "direct_read": "account settings list"
       }
@@ -22,6 +50,15 @@
     {
       "method": "POST",
       "path": "/api/account/settings",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/account/settings]"
+      },
       "covered_by": {
         "write": "create_account_setting"
       }
@@ -29,6 +66,15 @@
     {
       "method": "PUT",
       "path": "/api/account/settings/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/account/settings/{id}]"
+      },
       "covered_by": {
         "write": "update_account_setting"
       }
@@ -36,6 +82,15 @@
     {
       "method": "GET",
       "path": "/api/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/custom-fields]"
+      },
       "covered_by": {
         "direct_read": "custom-fields list"
       }
@@ -43,6 +98,15 @@
     {
       "method": "POST",
       "path": "/api/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/custom-fields]"
+      },
       "covered_by": {
         "write": "create_custom_field"
       }
@@ -50,6 +114,15 @@
     {
       "method": "PUT",
       "path": "/api/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/custom-fields]"
+      },
       "covered_by": {
         "write": "update_custom_fields"
       }
@@ -57,6 +130,15 @@
     {
       "method": "GET",
       "path": "/api/custom-fields/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/custom-fields/{id}]"
+      },
       "covered_by": {
         "direct_read": "custom-fields get"
       }
@@ -64,20 +146,31 @@
     {
       "method": "PUT",
       "path": "/api/custom-fields/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/custom-fields/{id}]"
+      },
       "covered_by": {
         "write": "update_custom_field"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/customers",
-      "covered_by": {
-        "write": "delete_customers"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/customers",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/customers]"
+      },
       "covered_by": {
         "stream": "customers"
       }
@@ -85,13 +178,47 @@
     {
       "method": "POST",
       "path": "/api/customers",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/customers]"
+      },
       "covered_by": {
         "write": "create_customer"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/customers",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/customers]"
+      },
+      "covered_by": {
+        "write": "delete_customers"
+      }
+    },
+    {
       "method": "PUT",
       "path": "/api/customers/merge",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/customers/merge]"
+      },
       "covered_by": {
         "write": "merge_customers"
       }
@@ -99,6 +226,15 @@
     {
       "method": "GET",
       "path": "/api/customers/{customer_id}/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/customers/{customer_id}/custom-fields]"
+      },
       "covered_by": {
         "direct_read": "customers custom-fields list"
       }
@@ -106,47 +242,84 @@
     {
       "method": "PUT",
       "path": "/api/customers/{customer_id}/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/customers/{customer_id}/custom-fields]"
+      },
       "covered_by": {
         "write": "update_customer_custom_field_values"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/customers/{customer_id}/custom-fields/{id}",
-      "covered_by": {
-        "write": "delete_customer_custom_field_value"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/api/customers/{customer_id}/custom-fields/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/customers/{customer_id}/custom-fields/{id}]"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "'Update customer field value' sends a bare top-level JSON scalar (string, integer, or boolean per its oneOf request schema) as the ENTIRE request body, not an object of record fields. This repository's write body_type dialect (json/form/json_array/multipart/base64_upload) always produces an object or array wrapper and has no mode for a bare scalar body. Source: https://developers.gorgias.com/reference/update-customer-custom-field-value",
-        "source_url": "https://developers.gorgias.com/reference/update-customer-custom-field-value",
         "notes": "named_dependency=a write body_type that sends a bare top-level JSON scalar rather than an object or array; artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/customers/{customer_id}/custom-fields/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/customers/{customer_id}/custom-fields/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_customer_custom_field_value"
       }
     },
     {
       "method": "PUT",
       "path": "/api/customers/{customer_id}/data",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/customers/{customer_id}/data]"
+      },
       "covered_by": {
         "write": "update_customer_data"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/customers/{id}",
-      "covered_by": {
-        "write": "delete_customer"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/customers/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/customers/{id}]"
+      },
       "covered_by": {
         "direct_read": "customers get"
       }
@@ -154,13 +327,47 @@
     {
       "method": "PUT",
       "path": "/api/customers/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/customers/{id}]"
+      },
       "covered_by": {
         "write": "update_customer"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/customers/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/customers/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_customer"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/events",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/events]"
+      },
       "covered_by": {
         "direct_read": "events list"
       }
@@ -168,6 +375,15 @@
     {
       "method": "GET",
       "path": "/api/events/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/events/{id}]"
+      },
       "covered_by": {
         "direct_read": "events get"
       }
@@ -175,6 +391,15 @@
     {
       "method": "GET",
       "path": "/api/integrations",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/integrations]"
+      },
       "covered_by": {
         "direct_read": "integrations list"
       }
@@ -182,20 +407,31 @@
     {
       "method": "POST",
       "path": "/api/integrations",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/integrations]"
+      },
       "covered_by": {
         "write": "create_integration"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/integrations/{id}",
-      "covered_by": {
-        "write": "delete_integration"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/integrations/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/integrations/{id}]"
+      },
       "covered_by": {
         "direct_read": "integrations get"
       }
@@ -203,13 +439,47 @@
     {
       "method": "PUT",
       "path": "/api/integrations/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/integrations/{id}]"
+      },
       "covered_by": {
         "write": "update_integration"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/integrations/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/integrations/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_integration"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/jobs",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/jobs]"
+      },
       "covered_by": {
         "direct_read": "jobs list"
       }
@@ -217,20 +487,31 @@
     {
       "method": "POST",
       "path": "/api/jobs",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/jobs]"
+      },
       "covered_by": {
         "write": "create_job"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/jobs/{id}",
-      "covered_by": {
-        "write": "cancel_job"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/jobs/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/jobs/{id}]"
+      },
       "covered_by": {
         "direct_read": "jobs get"
       }
@@ -238,13 +519,47 @@
     {
       "method": "PUT",
       "path": "/api/jobs/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/jobs/{id}]"
+      },
       "covered_by": {
         "write": "update_job"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/jobs/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/jobs/{id}]"
+      },
+      "covered_by": {
+        "write": "cancel_job"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/macros",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/macros]"
+      },
       "covered_by": {
         "direct_read": "macros list"
       }
@@ -252,6 +567,15 @@
     {
       "method": "POST",
       "path": "/api/macros",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/macros]"
+      },
       "covered_by": {
         "write": "create_macro"
       }
@@ -259,6 +583,15 @@
     {
       "method": "PUT",
       "path": "/api/macros/archive",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/macros/archive]"
+      },
       "covered_by": {
         "write": "bulk_archive_macros"
       }
@@ -266,20 +599,31 @@
     {
       "method": "PUT",
       "path": "/api/macros/unarchive",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/macros/unarchive]"
+      },
       "covered_by": {
         "write": "bulk_unarchive_macros"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/macros/{id}",
-      "covered_by": {
-        "write": "delete_macro"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/macros/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/macros/{id}]"
+      },
       "covered_by": {
         "direct_read": "macros get"
       }
@@ -287,13 +631,47 @@
     {
       "method": "PUT",
       "path": "/api/macros/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/macros/{id}]"
+      },
       "covered_by": {
         "write": "update_macro"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/macros/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/macros/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_macro"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/messages",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/messages]"
+      },
       "covered_by": {
         "stream": "messages"
       }
@@ -301,6 +679,15 @@
     {
       "method": "GET",
       "path": "/api/metric-cards",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/metric-cards]"
+      },
       "covered_by": {
         "direct_read": "metric-cards list"
       }
@@ -308,6 +695,15 @@
     {
       "method": "GET",
       "path": "/api/metric-cards/{slug}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/metric-cards/{slug}]"
+      },
       "covered_by": {
         "direct_read": "metric-cards get"
       }
@@ -315,6 +711,15 @@
     {
       "method": "POST",
       "path": "/api/metric-cards/{slug}/feedback",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/metric-cards/{slug}/feedback]"
+      },
       "covered_by": {
         "write": "create_metric_card_feedback"
       }
@@ -322,6 +727,15 @@
     {
       "method": "GET",
       "path": "/api/phone/voice-call-events",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/phone/voice-call-events]"
+      },
       "covered_by": {
         "direct_read": "voice-call-events list"
       }
@@ -329,6 +743,15 @@
     {
       "method": "GET",
       "path": "/api/phone/voice-call-events/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/phone/voice-call-events/{id}]"
+      },
       "covered_by": {
         "direct_read": "voice-call-events get"
       }
@@ -336,27 +759,63 @@
     {
       "method": "GET",
       "path": "/api/phone/voice-call-recordings",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/phone/voice-call-recordings]"
+      },
       "covered_by": {
         "direct_read": "voice-call-recordings list"
       }
     },
     {
+      "method": "GET",
+      "path": "/api/phone/voice-call-recordings/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/phone/voice-call-recordings/{id}]"
+      },
+      "covered_by": {
+        "direct_read": "voice-call-recordings get"
+      }
+    },
+    {
       "method": "DELETE",
       "path": "/api/phone/voice-call-recordings/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/phone/voice-call-recordings/{id}]"
+      },
       "covered_by": {
         "write": "delete_voice_call_recording"
       }
     },
     {
       "method": "GET",
-      "path": "/api/phone/voice-call-recordings/{id}",
-      "covered_by": {
-        "direct_read": "voice-call-recordings get"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/api/phone/voice-calls",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/phone/voice-calls]"
+      },
       "covered_by": {
         "direct_read": "voice-calls list"
       }
@@ -364,6 +823,15 @@
     {
       "method": "GET",
       "path": "/api/phone/voice-calls/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/phone/voice-calls/{id}]"
+      },
       "covered_by": {
         "direct_read": "voice-calls get"
       }
@@ -371,19 +839,36 @@
     {
       "method": "POST",
       "path": "/api/reporting/stats",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/reporting/stats]"
+      },
       "operation": {
         "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "'Retrieve a statistic' requires a top-level 'query' field whose schema is a 50-arm discriminated union implementing the Statistics API's recursive filter-expression grammar (and/or/comparison nodes), with no typed scalar leaf and no neutral empty default. This repository's authoring rule for an implemented direct-read POST command requires every required operations.json rest.body_schema path to be satisfied by a static rest.body or a required command flag mapped to body.*; no single flag or static literal can honestly stand in for an arbitrary filter tree. Source: https://developers.gorgias.com/reference/get-statistic",
-        "source_url": "https://developers.gorgias.com/reference/get-statistic",
         "notes": "named_dependency=a structured filter-expression command input (a DSL flag/builder) for the Statistics query grammar; artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
       }
     },
     {
       "method": "GET",
       "path": "/api/rules",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/rules]"
+      },
       "covered_by": {
         "direct_read": "rules list"
       }
@@ -391,6 +876,15 @@
     {
       "method": "POST",
       "path": "/api/rules",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/rules]"
+      },
       "covered_by": {
         "write": "create_rule"
       }
@@ -398,20 +892,31 @@
     {
       "method": "POST",
       "path": "/api/rules/priorities",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/rules/priorities]"
+      },
       "covered_by": {
         "write": "update_rules_priorities"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/rules/{id}",
-      "covered_by": {
-        "write": "delete_rule"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/rules/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/rules/{id}]"
+      },
       "covered_by": {
         "direct_read": "rules get"
       }
@@ -419,13 +924,47 @@
     {
       "method": "PUT",
       "path": "/api/rules/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/rules/{id}]"
+      },
       "covered_by": {
         "write": "update_rule"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/rules/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/rules/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_rule"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/satisfaction-surveys",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/satisfaction-surveys]"
+      },
       "covered_by": {
         "stream": "satisfaction_surveys"
       }
@@ -433,6 +972,15 @@
     {
       "method": "POST",
       "path": "/api/satisfaction-surveys",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/satisfaction-surveys]"
+      },
       "covered_by": {
         "write": "create_satisfaction_survey"
       }
@@ -440,6 +988,15 @@
     {
       "method": "GET",
       "path": "/api/satisfaction-surveys/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/satisfaction-surveys/{id}]"
+      },
       "covered_by": {
         "direct_read": "satisfaction-surveys get"
       }
@@ -447,6 +1004,15 @@
     {
       "method": "PUT",
       "path": "/api/satisfaction-surveys/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/satisfaction-surveys/{id}]"
+      },
       "covered_by": {
         "write": "update_satisfaction_survey"
       }
@@ -454,6 +1020,15 @@
     {
       "method": "POST",
       "path": "/api/search",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/search]"
+      },
       "covered_by": {
         "direct_read": "search"
       }
@@ -461,6 +1036,15 @@
     {
       "method": "POST",
       "path": "/api/stats/{name}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/stats/{name}]"
+      },
       "covered_by": {
         "direct_read": "stats get"
       }
@@ -468,26 +1052,36 @@
     {
       "method": "POST",
       "path": "/api/stats/{name}/download",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/stats/{name}/download]"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "'Download a statistic' returns text/csv from a POST request that carries a required JSON filter body. This repository's binary download executor (engine.OperationBinaryDownload / commandrunner.validateBinaryDownloadCommand) requires GET, so a POST-triggered CSV export cannot be wired through it. Source: https://developers.gorgias.com/reference/download-legacy-statistic",
-        "source_url": "https://developers.gorgias.com/reference/download-legacy-statistic",
         "notes": "named_dependency=a POST-capable binary/CSV download executor (the binary_download kind is GET-only today); artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/tags",
-      "covered_by": {
-        "write": "delete_tags"
       }
     },
     {
       "method": "GET",
       "path": "/api/tags",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/tags]"
+      },
       "covered_by": {
         "direct_read": "tags list"
       }
@@ -495,27 +1089,63 @@
     {
       "method": "POST",
       "path": "/api/tags",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/tags]"
+      },
       "covered_by": {
         "write": "create_tag"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/tags",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/tags]"
+      },
+      "covered_by": {
+        "write": "delete_tags"
+      }
+    },
+    {
       "method": "PUT",
       "path": "/api/tags/{destination_tag_id}/merge",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/tags/{destination_tag_id}/merge]"
+      },
       "covered_by": {
         "write": "merge_tags"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/tags/{id}",
-      "covered_by": {
-        "write": "delete_tag"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/tags/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/tags/{id}]"
+      },
       "covered_by": {
         "direct_read": "tags get"
       }
@@ -523,13 +1153,47 @@
     {
       "method": "PUT",
       "path": "/api/tags/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/tags/{id}]"
+      },
       "covered_by": {
         "write": "update_tag"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/tags/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/tags/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/teams",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/teams]"
+      },
       "covered_by": {
         "direct_read": "teams list"
       }
@@ -537,20 +1201,31 @@
     {
       "method": "POST",
       "path": "/api/teams",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/teams]"
+      },
       "covered_by": {
         "write": "create_team"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/teams/{id}",
-      "covered_by": {
-        "write": "delete_team"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/teams/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/teams/{id}]"
+      },
       "covered_by": {
         "direct_read": "teams get"
       }
@@ -558,13 +1233,47 @@
     {
       "method": "PUT",
       "path": "/api/teams/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/teams/{id}]"
+      },
       "covered_by": {
         "write": "update_team"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/teams/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/teams/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_team"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/tickets",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/tickets]"
+      },
       "covered_by": {
         "stream": "tickets"
       }
@@ -572,20 +1281,31 @@
     {
       "method": "POST",
       "path": "/api/tickets",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/tickets]"
+      },
       "covered_by": {
         "write": "create_ticket"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/tickets/{id}",
-      "covered_by": {
-        "write": "delete_ticket"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/tickets/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/tickets/{id}]"
+      },
       "covered_by": {
         "direct_read": "tickets get"
       }
@@ -593,13 +1313,47 @@
     {
       "method": "PUT",
       "path": "/api/tickets/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/tickets/{id}]"
+      },
       "covered_by": {
         "write": "update_ticket"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/tickets/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/tickets/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_ticket"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/tickets/{ticket_id}/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/tickets/{ticket_id}/custom-fields]"
+      },
       "covered_by": {
         "direct_read": "tickets custom-fields list"
       }
@@ -607,60 +1361,105 @@
     {
       "method": "PUT",
       "path": "/api/tickets/{ticket_id}/custom-fields",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/tickets/{ticket_id}/custom-fields]"
+      },
       "covered_by": {
         "write": "update_ticket_custom_fields"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
-      "covered_by": {
-        "write": "delete_ticket_custom_field"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/tickets/{ticket_id}/custom-fields/{id}]"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "'Update ticket field value' sends a bare top-level JSON scalar (string, integer, or boolean per its oneOf request schema) as the ENTIRE request body, not an object of record fields. This repository's write body_type dialect (json/form/json_array/multipart/base64_upload) always produces an object or array wrapper and has no mode for a bare scalar body. Source: https://developers.gorgias.com/reference/update-ticket-custom-field",
-        "source_url": "https://developers.gorgias.com/reference/update-ticket-custom-field",
         "notes": "named_dependency=a write body_type that sends a bare top-level JSON scalar rather than an object or array; artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/tickets/{ticket_id}/custom-fields/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_ticket_custom_field"
       }
     },
     {
       "method": "GET",
       "path": "/api/tickets/{ticket_id}/messages",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/tickets/{ticket_id}/messages]"
+      },
       "operation": {
         "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "Provider-deprecated 'List messages of a ticket' endpoint. The OpenAPI document marks it deprecated:true and its own description says 'Use list messages endpoint instead' (GET /api/messages, implemented here as the messages stream, which accepts a ticket_id filter). Source: https://developers.gorgias.com/reference/list-ticket-messages",
-        "source_url": "https://developers.gorgias.com/reference/list-ticket-messages",
         "notes": "named_dependency=none - provider-deprecated, superseded by the messages stream; artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
       }
     },
     {
       "method": "POST",
       "path": "/api/tickets/{ticket_id}/messages",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/tickets/{ticket_id}/messages]"
+      },
       "covered_by": {
         "write": "create_ticket_message"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/tickets/{ticket_id}/messages/{id}",
-      "covered_by": {
-        "write": "delete_ticket_message"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/tickets/{ticket_id}/messages/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/tickets/{ticket_id}/messages/{id}]"
+      },
       "covered_by": {
         "direct_read": "tickets messages get"
       }
@@ -668,20 +1467,47 @@
     {
       "method": "PUT",
       "path": "/api/tickets/{ticket_id}/messages/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/tickets/{ticket_id}/messages/{id}]"
+      },
       "covered_by": {
         "write": "update_ticket_message"
       }
     },
     {
       "method": "DELETE",
-      "path": "/api/tickets/{ticket_id}/tags",
+      "path": "/api/tickets/{ticket_id}/messages/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/tickets/{ticket_id}/messages/{id}]"
+      },
       "covered_by": {
-        "write": "delete_ticket_tags"
+        "write": "delete_ticket_message"
       }
     },
     {
       "method": "GET",
       "path": "/api/tickets/{ticket_id}/tags",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/tickets/{ticket_id}/tags]"
+      },
       "covered_by": {
         "direct_read": "tickets tags list"
       }
@@ -689,6 +1515,15 @@
     {
       "method": "POST",
       "path": "/api/tickets/{ticket_id}/tags",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/tickets/{ticket_id}/tags]"
+      },
       "covered_by": {
         "write": "create_ticket_tags"
       }
@@ -696,13 +1531,47 @@
     {
       "method": "PUT",
       "path": "/api/tickets/{ticket_id}/tags",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/tickets/{ticket_id}/tags]"
+      },
       "covered_by": {
         "write": "update_ticket_tags"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/tickets/{ticket_id}/tags",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/tickets/{ticket_id}/tags]"
+      },
+      "covered_by": {
+        "write": "delete_ticket_tags"
+      }
+    },
+    {
       "method": "POST",
       "path": "/api/upload",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/upload]"
+      },
       "covered_by": {
         "write": "upload_file"
       }
@@ -710,6 +1579,15 @@
     {
       "method": "GET",
       "path": "/api/users",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/users]"
+      },
       "covered_by": {
         "direct_read": "users list"
       }
@@ -717,20 +1595,31 @@
     {
       "method": "POST",
       "path": "/api/users",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/users]"
+      },
       "covered_by": {
         "write": "create_user"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/users/{id}",
-      "covered_by": {
-        "write": "delete_user"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/users/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/users/{id}]"
+      },
       "covered_by": {
         "direct_read": "users get"
       }
@@ -738,13 +1627,47 @@
     {
       "method": "PUT",
       "path": "/api/users/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/users/{id}]"
+      },
       "covered_by": {
         "write": "update_user"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/users/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/users/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_user"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/views",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/views]"
+      },
       "covered_by": {
         "direct_read": "views list"
       }
@@ -752,20 +1675,31 @@
     {
       "method": "POST",
       "path": "/api/views",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/views]"
+      },
       "covered_by": {
         "write": "create_view"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/views/{id}",
-      "covered_by": {
-        "write": "delete_view"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/views/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/views/{id}]"
+      },
       "covered_by": {
         "direct_read": "views get"
       }
@@ -773,13 +1707,47 @@
     {
       "method": "PUT",
       "path": "/api/views/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/views/{id}]"
+      },
       "covered_by": {
         "write": "update_view"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/views/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/views/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_view"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/views/{view_id}/items",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/views/{view_id}/items]"
+      },
       "covered_by": {
         "direct_read": "views items list"
       }
@@ -787,19 +1755,36 @@
     {
       "method": "PUT",
       "path": "/api/views/{view_id}/items",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/views/{view_id}/items]"
+      },
       "operation": {
         "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "'Search for view's items' takes its filter/order criteria in a request body but the provider requires PUT, not GET or POST. This repository's operation direct-read executor (commandrunner.validateOperationDirectReadCommand) accepts only GET or POST endpoints, so a PUT-bodied read cannot be wired through it. The common case (an unfiltered, cursor-paginated listing of a view's items) is already served by the GET sibling, implemented here as the 'views items list' direct read. Source: https://developers.gorgias.com/reference/update-view-items",
-        "source_url": "https://developers.gorgias.com/reference/update-view-items",
         "notes": "named_dependency=a PUT-capable operation direct-read executor (the runtime accepts only GET or POST today); artifact=https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r"
       }
     },
     {
       "method": "GET",
       "path": "/api/widgets",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/widgets]"
+      },
       "covered_by": {
         "direct_read": "widgets list"
       }
@@ -807,20 +1792,31 @@
     {
       "method": "POST",
       "path": "/api/widgets",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[POST /api/widgets]"
+      },
       "covered_by": {
         "write": "create_widget"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/widgets/{id}",
-      "covered_by": {
-        "write": "delete_widget"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/widgets/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/widgets/{id}]"
+      },
       "covered_by": {
         "direct_read": "widgets get"
       }
@@ -828,13 +1824,47 @@
     {
       "method": "PUT",
       "path": "/api/widgets/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[PUT /api/widgets/{id}]"
+      },
       "covered_by": {
         "write": "update_widget"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/widgets/{id}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[DELETE /api/widgets/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_widget"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/{file_type}/download/{domain_hash}/{resource_name}",
+      "provenance": {
+        "artifact": "gorgias-artifact-2026-08-09",
+        "source_url": "https://developers.gorgias.com/reference",
+        "source_kind": "html_reference",
+        "version": "provider-publishes-no-version-marker",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a4fc594e144be74d5161347eaabf84efa62313c13fce27f60c7c4ad9cabe23db",
+        "coordinate": "existing-complete-surface[GET /api/{file_type}/download/{domain_hash}/{resource_name}]"
+      },
       "covered_by": {
         "direct_reads": [
           "files download"

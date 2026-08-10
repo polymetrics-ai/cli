@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-041-activecampaign-direct-reference-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "activecampaign",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developers.activecampaign.com/llms.txt",
+        "version": "v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "38cc7a803cbf730fac0d67fea26af899e9e3cd7ea7169a3ffbd6a45d43af110a"
+      },
+      "artifact_operations": 87,
+      "declared_operations": 137,
+      "operation_split": {
+        "executable": 11,
+        "provider_blocked": 42,
+        "excluded": 84
+      },
+      "cli_commands": 137,
+      "implemented_commands": 11,
+      "named_dependency_commands": 126,
+      "flagged_discrepancies": 50,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 126
+    }
+  ],
+  "dropped": []
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "official_unversioned_reference_exact_evidence",
+    "requested_size": 1,
+    "min_operations": 0,
+    "max_operations": 10000,
+    "criteria": "Amazon SQS's provider-owned HTML action index publishes no version marker; its preserved source surface has exactly the immutable 23-operation survey count."
+  },
+  "connectors": [
+    {
+      "connector": "amazon-sqs",
+      "operations_total": 23,
+      "operations_read": 7,
+      "operations_write": 16,
+      "artifact": {
+        "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
+        "kind": "html_reference",
+        "version": "",
+        "unversioned_official_reference": true,
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
+      "auth_model": "hmac",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official action index; semantic classification by action name. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "official Amazon SQS action index exact-surface evidence fallback; provider publishes no artifact version marker"
+    }
+  ]
+}

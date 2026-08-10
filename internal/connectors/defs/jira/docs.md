@@ -3,10 +3,11 @@
 Reads and writes the documented Jira Cloud platform REST API v3 surface using HTTP Basic auth
 (email + API token).
 
-Current official operation ledger: 617 documented HTTP operations (276 GET, 134 POST, 118 PUT, 89
-DELETE). Implemented rows: 584 = 3 stream-backed reads + 292 bounded direct reads + 286 typed writes
-+ 3 binary downloads. Declared `partial` and not executable: 6 typed writes. Blocked/planned rows:
-27. Certified rows: 0 (fixture-only; no live provider calls were made).
+`api_surface.json` owns Jira's source-backed endpoint ledger, while `cli_surface.json` owns
+per-command availability. The bundle includes stream-backed reads, bounded direct and binary reads,
+typed reverse-ETL actions, and explicitly blocked or partial operations; use runtime help or
+`cli_surface.json` to determine which command paths are currently executable. Certification is
+fixture-only; no live provider calls were made.
 
 Readable streams: `issues`, `projects`, `users`.
 
@@ -48,26 +49,24 @@ Default pagination: offset/limit pagination; offset parameter `startAt`; limit p
 
 ## Write actions & risks
 
-The connector declares 292 typed write actions (106 POST creates, 102 PUT updates, 84 DELETE
-removals) across issues, projects, users, fields, workflows, dashboards, and instance
-administration.
+The connector declares typed write actions across issues, projects, users, fields, workflows,
+dashboards, and instance administration. `writes.json` owns those declarations; `cli_surface.json`
+records whether each action has an executable command path.
 
 Writes are only available through reverse ETL plan -> preview -> explicit approval -> execute. Every
 DELETE action is gated as destructive and additionally requires a typed confirmation. The bundle
 does not expose arbitrary request bodies, raw query strings, generic method/path/body, file bytes,
 shell commands, or passthrough HTTP tools.
 
-A further 25 documented mutations stay blocked under the `sensitive_reverse_etl` model, and 6
-declared write commands are `partial` and refuse execution.
+Some documented mutations remain blocked under the `sensitive_reverse_etl` model, and some declared
+write commands are `partial` and refuse execution; `api_surface.json` and `cli_surface.json` hold
+the current per-operation state.
 
 Read behavior: external Jira Cloud API read of issue, project, and user data.
 
 ## Known limits
 
 - Batch defaults: read_page_size=50.
-- API coverage includes 3 stream-backed endpoint group(s); the remaining documented reads are
-  exposed as bounded direct reads rather than ETL streams.
-- Other documented endpoints are not exposed by this connector where they are blocked in the
-  operation ledger as sensitive_reverse_etl=25, direct_read=2.
+- `api_surface.json` is the authoritative per-endpoint coverage and blocked-operation ledger.
 - Fixture-only evidence: no live Jira credentials, provider calls, provider writes, or
   certification run were used.

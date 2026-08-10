@@ -1,0 +1,352 @@
+{
+  "tagline": "Run Google Tasks's declared streams and reverse-ETL actions.",
+  "usage": "pm google-tasks \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get tasks v1 lists tasklist tasks",
+        "api get tasks v1 lists tasklist tasks task",
+        "api get tasks v1 users me lists",
+        "api get tasks v1 users me lists tasklist",
+        "tasklists list",
+        "tasks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete tasks v1 lists tasklist tasks task",
+        "api delete tasks v1 users me lists tasklist",
+        "api patch tasks v1 lists tasklist tasks task",
+        "api patch tasks v1 users me lists tasklist",
+        "api post tasks v1 lists tasklist clear",
+        "api post tasks v1 lists tasklist tasks",
+        "api post tasks v1 lists tasklist tasks task move",
+        "api post tasks v1 users me lists",
+        "api put tasks v1 lists tasklist tasks task",
+        "api put tasks v1 users me lists tasklist"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete tasks v1 lists tasklist tasks task",
+      "summary": "Documented DELETE /tasks/v1/lists/{tasklist}/tasks/{task} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api delete tasks v1 lists tasklist tasks task --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tasks/v1/lists/{tasklist}/tasks/{task}"
+        }
+      ],
+      "operation": "google-tasks.delete.tasks-v1-lists-tasklist-tasks-task",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete tasks v1 users me lists tasklist",
+      "summary": "Documented DELETE /tasks/v1/users/@me/lists/{tasklist} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api delete tasks v1 users me lists tasklist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tasks/v1/users/@me/lists/{tasklist}"
+        }
+      ],
+      "operation": "google-tasks.delete.tasks-v1-users-me-lists-tasklist",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get tasks v1 lists tasklist tasks",
+      "summary": "Documented GET /tasks/v1/lists/{tasklist}/tasks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api get tasks v1 lists tasklist tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks/v1/lists/{tasklist}/tasks"
+        }
+      ],
+      "operation": "google-tasks.get.tasks-v1-lists-tasklist-tasks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tasks v1 lists tasklist tasks task",
+      "summary": "Documented GET /tasks/v1/lists/{tasklist}/tasks/{task} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api get tasks v1 lists tasklist tasks task --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks/v1/lists/{tasklist}/tasks/{task}"
+        }
+      ],
+      "operation": "google-tasks.get.tasks-v1-lists-tasklist-tasks-task",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tasks v1 users me lists",
+      "summary": "Documented GET /tasks/v1/users/@me/lists (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api get tasks v1 users me lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks/v1/users/@me/lists"
+        }
+      ],
+      "operation": "google-tasks.get.tasks-v1-users-me-lists",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tasks v1 users me lists tasklist",
+      "summary": "Documented GET /tasks/v1/users/@me/lists/{tasklist} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api get tasks v1 users me lists tasklist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks/v1/users/@me/lists/{tasklist}"
+        }
+      ],
+      "operation": "google-tasks.get.tasks-v1-users-me-lists-tasklist",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch tasks v1 lists tasklist tasks task",
+      "summary": "Documented PATCH /tasks/v1/lists/{tasklist}/tasks/{task} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api patch tasks v1 lists tasklist tasks task --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/tasks/v1/lists/{tasklist}/tasks/{task}"
+        }
+      ],
+      "operation": "google-tasks.patch.tasks-v1-lists-tasklist-tasks-task",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch tasks v1 users me lists tasklist",
+      "summary": "Documented PATCH /tasks/v1/users/@me/lists/{tasklist} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api patch tasks v1 users me lists tasklist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/tasks/v1/users/@me/lists/{tasklist}"
+        }
+      ],
+      "operation": "google-tasks.patch.tasks-v1-users-me-lists-tasklist",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tasks v1 lists tasklist clear",
+      "summary": "Documented POST /tasks/v1/lists/{tasklist}/clear (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api post tasks v1 lists tasklist clear --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks/v1/lists/{tasklist}/clear"
+        }
+      ],
+      "operation": "google-tasks.post.tasks-v1-lists-tasklist-clear",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tasks v1 lists tasklist tasks",
+      "summary": "Documented POST /tasks/v1/lists/{tasklist}/tasks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api post tasks v1 lists tasklist tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks/v1/lists/{tasklist}/tasks"
+        }
+      ],
+      "operation": "google-tasks.post.tasks-v1-lists-tasklist-tasks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tasks v1 lists tasklist tasks task move",
+      "summary": "Documented POST /tasks/v1/lists/{tasklist}/tasks/{task}/move (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api post tasks v1 lists tasklist tasks task move --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks/v1/lists/{tasklist}/tasks/{task}/move"
+        }
+      ],
+      "operation": "google-tasks.post.tasks-v1-lists-tasklist-tasks-task-move",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tasks v1 users me lists",
+      "summary": "Documented POST /tasks/v1/users/@me/lists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api post tasks v1 users me lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks/v1/users/@me/lists"
+        }
+      ],
+      "operation": "google-tasks.post.tasks-v1-users-me-lists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put tasks v1 lists tasklist tasks task",
+      "summary": "Documented PUT /tasks/v1/lists/{tasklist}/tasks/{task} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api put tasks v1 lists tasklist tasks task --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tasks/v1/lists/{tasklist}/tasks/{task}"
+        }
+      ],
+      "operation": "google-tasks.put.tasks-v1-lists-tasklist-tasks-task",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put tasks v1 users me lists tasklist",
+      "summary": "Documented PUT /tasks/v1/users/@me/lists/{tasklist} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks api put tasks v1 users me lists tasklist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tasks/v1/users/@me/lists/{tasklist}"
+        }
+      ],
+      "operation": "google-tasks.put.tasks-v1-users-me-lists-tasklist",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "tasklists list",
+      "summary": "Run the tasklists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasklists",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks tasklists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/@me/lists"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "tasks list",
+      "summary": "Run the tasks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "examples": [
+        "pm google-tasks tasks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists/{tasklist}/tasks"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "phase": "persistiq-artifact-materialize-pilot-r1",
+  "program": "cli-mass-artifact-materialize-r1",
+  "connector": "persistiq",
+  "state": "passed_static_gates",
+  "policy": "captain_complete_inventory_multisource_and_single_final_gate",
+  "manual_gsd_fallback": {
+    "used": true,
+    "reason": "Pilot is not represented in ROADMAP.md and the available Codex runtime cannot provide the interactive Pi workers.",
+    "resolved_commands": ["discuss-phase", "plan-phase --tdd", "execute-phase", "verify-work", "code-review"]
+  },
+  "lifecycle": {
+    "discuss_phase": "manual evidence recorded in DISCUSSION-LOG.md",
+    "plan_phase": "manual TDD plan recorded in PLAN.md",
+    "execute_phase": "inline manual execution completed",
+    "verify_work": "captain-policy verification recorded in VERIFICATION.md",
+    "code_review": "manual review recorded in CODE-REVIEW.md",
+    "post_execution_checks": [
+      "go test -timeout 20m ./cmd/connectorgen",
+      "go test -timeout 20m ./internal/connectors/engine ./internal/connectors/commandrunner",
+      "go vet ./cmd/connectorgen",
+      "go build ./cmd/pm",
+      "go run ./cmd/agentcontractgen check",
+      "connectorgen validate existing 551-bundle corpus and staged pilots",
+      "surface-sync --check existing 551-bundle corpus and staged pilots",
+      "connectorgen batch gate combined staged pilots",
+      "TestEveryImplementedCommandPassesRuntimePreflight",
+      "real pm binary reachability sweep",
+      "git diff --check"
+    ]
+  },
+  "scope": {
+    "eligible_pool": 392,
+    "pilot_only": true,
+    "excluded_connectors_touched": 0,
+    "production_sweep_started": false,
+    "staged_generalization": ["watchmode", "docuseal", "float", "copper"]
+  },
+  "artifact": {
+    "url": "https://persistiq.com/api-docs/v1/swagger.json",
+    "kind_from_ledger": "openapi",
+    "kind_verified": "openapi",
+    "version_verified": "3.0.1",
+    "bytes": 47796,
+    "sha256": "0bf3e1ecbfbf6215360b5bb8f9d4fda816df4e1872470a00b529fb3e8b80946f",
+    "paths": 14,
+    "operations": 21,
+    "method_split": {"GET": 12, "POST": 6, "PATCH": 1, "PUT": 1, "DELETE": 1},
+    "parsed": true,
+    "step_wall_clock_seconds": 2.70
+  },
+  "operations": {
+    "ledger_total": 21,
+    "mapping": {
+      "etl": 11,
+      "direct_read": 1,
+      "reverse_etl": 7,
+      "direct_write": 2,
+      "binary_download": 0,
+      "unclassified": 0
+    },
+    "mapping_evidence": "rerun-2026-08-08/operation-mapping.json"
+  },
+  "materialization": {
+    "artifact_operations_mapped": 21,
+    "surface_rows": 24,
+    "implemented_commands": 21,
+    "named_dependency_commands": 3,
+    "flagged_discrepancies": 3,
+    "runtime_preflight_in_materialize": 0,
+    "materialize_dropped": 0,
+    "surface_only_discrepancy_reason": "present-in-surface-absent-from-artifact",
+    "discrepancy_paths": ["GET /v1/mailboxes", "GET /v1/activities", "GET /v1/accounts"],
+    "named_dependencies": [
+      "engine.direct_read_executor",
+      "engine.rest_write_body_envelope",
+      "review.webhook_url_mutation"
+    ]
+  },
+  "execution": {
+    "timings_seconds": {
+      "identify_link": 0.03,
+      "map_operations": 0.03,
+      "fetch_digest_parse": 2.70,
+      "materialize_and_static_gates": 13.60,
+      "binary_reachability": 34.10,
+      "report": 0.09,
+      "total": 52.92
+    },
+    "batch_plan": {"passed": true, "surveyed_operations": 21, "seconds": 3.73},
+    "batch_materialize": {
+      "passed": true,
+      "materialized": 1,
+      "dropped": 0,
+      "seconds": 1.46,
+      "runtime_preflight_commands": 0
+    },
+    "static_checks": {
+      "validate": "pass: 0 findings",
+      "surface_sync_check": "pass: no drift",
+      "batch_gate": "pass: 1 included, 0 dropped; 21 commands checked",
+      "repository_runtime_preflight_test": "pass: TestEveryImplementedCommandPassesRuntimePreflight"
+    },
+    "binary_reachability": {
+      "commands_total": 24,
+      "reachable": 24,
+      "implemented_commands": 21,
+      "implemented_reachable": 21,
+      "not_implemented_visible": 3,
+      "not_implemented_blocked_before_network": 3,
+      "unknown_commands": 0,
+      "bare_namespace": "pass: pm persistiq --help exit 0"
+    }
+  },
+  "counts": {
+    "fetched": 1,
+    "parsed": 1,
+    "materialized": 1,
+    "gated": 1,
+    "reachable": 24,
+    "failed": 0
+  },
+  "certification": {
+    "status": "withheld",
+    "provider_exercised": false,
+    "note": "implemented, not certified, never exercised against the provider"
+  },
+  "multi_source_generalization": {
+    "materialized": 4,
+    "gated": 4,
+    "dropped": 0,
+    "mapped": {"watchmode": 23, "docuseal": 34, "float": 102, "copper": 77},
+    "reachable": {"watchmode": "45/45", "docuseal": "34/34", "float": "104/104", "copper": "not_claimed_legacy_native_scaffold"},
+    "failed": 0,
+    "evidence": "generalization-validation-2026-08-08/GENERALIZATION-VALIDATION.md"
+  }
+}

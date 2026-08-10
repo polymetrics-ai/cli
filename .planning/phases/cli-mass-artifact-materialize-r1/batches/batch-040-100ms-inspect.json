@@ -1,0 +1,949 @@
+{
+  "api_version": "polymetrics.ai/v1",
+  "connector": {
+    "name": "100ms",
+    "display_name": "100ms",
+    "integration_type": "api",
+    "description": "Reads 100ms rooms, sessions, recordings, templates, live streams, external streams, recording assets, and webhook events, and writes room/template/room-code/recording lifecycle mutations, through the 100ms server-side REST API.",
+    "capabilities": {
+      "check": true,
+      "catalog": true,
+      "read": true,
+      "write": true,
+      "query": false
+    },
+    "icon": {
+      "id": "pm-sample",
+      "path": "icons/pm-sample.svg",
+      "source": "polymetrics",
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
+    }
+  },
+  "kind": "Connector",
+  "manifest": {
+    "metadata": {
+      "name": "100ms",
+      "display_name": "100ms",
+      "integration_type": "api",
+      "description": "Reads 100ms rooms, sessions, recordings, templates, live streams, external streams, recording assets, and webhook events, and writes room/template/room-code/recording lifecycle mutations, through the 100ms server-side REST API.",
+      "capabilities": {
+        "check": true,
+        "catalog": true,
+        "read": true,
+        "write": true,
+        "query": false
+      },
+      "icon": {
+        "id": "pm-sample",
+        "path": "icons/pm-sample.svg",
+        "source": "polymetrics",
+        "review_status": "polymetrics",
+        "review_url": "https://github.com/polymetrics-ai/cli"
+      }
+    },
+    "config_fields": [
+      {
+        "name": "base_url"
+      },
+      {
+        "name": "mode"
+      }
+    ],
+    "secret_fields": [
+      {
+        "name": "management_token"
+      }
+    ],
+    "streams": [
+      {
+        "name": "rooms",
+        "description": "",
+        "fields": [
+          {
+            "name": "created_at",
+            "type": "string"
+          },
+          {
+            "name": "customer_id",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "enabled",
+            "type": "boolean"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "large_room",
+            "type": "boolean"
+          },
+          {
+            "name": "max_duration_seconds",
+            "type": "integer"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "region",
+            "type": "string"
+          },
+          {
+            "name": "template_id",
+            "type": "string"
+          },
+          {
+            "name": "updated_at",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "created_at"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "100ms Room",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "created_at",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "enabled": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "description": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "customer_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "template_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "region": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "large_room": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "max_duration_seconds": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "created_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "updated_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "sessions",
+        "description": "",
+        "fields": [
+          {
+            "name": "active",
+            "type": "boolean"
+          },
+          {
+            "name": "created_at",
+            "type": "string"
+          },
+          {
+            "name": "customer_id",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "room_id",
+            "type": "string"
+          },
+          {
+            "name": "updated_at",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "created_at"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "100ms Session",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "created_at",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "room_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "customer_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "active": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "created_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "updated_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "recordings",
+        "description": "",
+        "fields": [
+          {
+            "name": "created_at",
+            "type": "string"
+          },
+          {
+            "name": "duration",
+            "type": "integer"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "room_id",
+            "type": "string"
+          },
+          {
+            "name": "session_id",
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "type": "integer"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "name": "updated_at",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "created_at"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "100ms Recording",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "created_at",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "room_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "session_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "size": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "duration": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "created_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "updated_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "templates",
+        "description": "",
+        "fields": [
+          {
+            "name": "created_at",
+            "type": "string"
+          },
+          {
+            "name": "customer_id",
+            "type": "string"
+          },
+          {
+            "name": "default",
+            "type": "boolean"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "updated_at",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "created_at"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "100ms Template",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "created_at",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "customer_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "default": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "created_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "updated_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "live_streams",
+        "description": "",
+        "fields": [
+          {
+            "name": "created_at",
+            "type": "string"
+          },
+          {
+            "name": "destination",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "meeting_url",
+            "type": "string"
+          },
+          {
+            "name": "room_id",
+            "type": "string"
+          },
+          {
+            "name": "session_id",
+            "type": "string"
+          },
+          {
+            "name": "started_at",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "name": "stopped_at",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "created_at"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "100ms Live Stream",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "created_at",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "room_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "session_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "destination": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "meeting_url": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "created_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "started_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "stopped_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "external_streams",
+        "description": "",
+        "fields": [
+          {
+            "name": "created_at",
+            "type": "string"
+          },
+          {
+            "name": "destination",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "meeting_url",
+            "type": "string"
+          },
+          {
+            "name": "recording",
+            "type": "boolean"
+          },
+          {
+            "name": "room_id",
+            "type": "string"
+          },
+          {
+            "name": "session_id",
+            "type": "string"
+          },
+          {
+            "name": "started_at",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "name": "stopped_at",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "created_at"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "100ms External Stream",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "created_at",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "room_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "session_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "destination": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "meeting_url": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "recording": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "created_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "started_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "stopped_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "recording_assets",
+        "description": "",
+        "fields": [
+          {
+            "name": "duration",
+            "type": "integer"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "job_id",
+            "type": "string"
+          },
+          {
+            "name": "path",
+            "type": "string"
+          },
+          {
+            "name": "room_id",
+            "type": "string"
+          },
+          {
+            "name": "session_id",
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "type": "integer"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": null,
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "100ms Recording Asset",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "job_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "room_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "session_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "type": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "path": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "duration": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "size": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "webhook_events",
+        "description": "",
+        "fields": [
+          {
+            "name": "event_id",
+            "type": "string"
+          },
+          {
+            "name": "event_name",
+            "type": "string"
+          },
+          {
+            "name": "event_timestamp",
+            "type": "string"
+          },
+          {
+            "name": "room_id",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "event_id"
+        ],
+        "cursor_fields": [
+          "event_timestamp"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "100ms Webhook Delivery Event",
+          "type": "object",
+          "x-primary-key": [
+            "event_id"
+          ],
+          "x-cursor-field": "event_timestamp",
+          "properties": {
+            "event_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "event_name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "room_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "event_timestamp": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "create_room",
+        "method": "POST",
+        "path": "/rooms",
+        "risk": "creates a new 100ms room, or upserts an existing room's template if the same name is reused (100ms's own documented create-with-existing-name behavior); external mutation, approval required"
+      },
+      {
+        "name": "update_room",
+        "required_fields": [
+          "id"
+        ],
+        "method": "POST",
+        "path": "/rooms/{{ record.id }}",
+        "risk": "mutates an existing room's metadata, or disables/re-enables it via the enabled field (100ms's disable/enable API is the same POST /rooms/{id} endpoint); disabling blocks all future joins to that room. External mutation, approval required"
+      },
+      {
+        "name": "create_template",
+        "required_fields": [
+          "name"
+        ],
+        "method": "POST",
+        "path": "/templates",
+        "risk": "creates a new room-policy template (roles/settings); external mutation, approval required"
+      },
+      {
+        "name": "create_room_code",
+        "required_fields": [
+          "room_id"
+        ],
+        "method": "POST",
+        "path": "/room-codes/room/{{ record.room_id }}",
+        "risk": "generates join-authentication room codes for every role in the named room; codes act as join credentials, external mutation, approval required"
+      },
+      {
+        "name": "update_room_code",
+        "required_fields": [
+          "code",
+          "enabled"
+        ],
+        "method": "POST",
+        "path": "/room-codes/code",
+        "risk": "enables or disables a specific join-credential room code; disabling revokes that code's ability to join. External mutation, approval required"
+      },
+      {
+        "name": "start_recording",
+        "required_fields": [
+          "room_id"
+        ],
+        "optional_fields": [
+          "meeting_url",
+          "resolution"
+        ],
+        "method": "POST",
+        "path": "/recordings/room/{{ record.room_id }}/start",
+        "risk": "starts a composite recording job for the named room; consumes recording/storage quota. External mutation, approval required"
+      },
+      {
+        "name": "stop_recording",
+        "required_fields": [
+          "room_id"
+        ],
+        "method": "POST",
+        "path": "/recordings/room/{{ record.room_id }}/stop",
+        "risk": "stops all recording jobs currently running in the named room; external mutation, approval required"
+      }
+    ],
+    "sync_modes": [
+      "full_refresh_append",
+      "full_refresh_overwrite",
+      "full_refresh_overwrite_deduped"
+    ],
+    "pagination": {},
+    "risk": {
+      "read": "external 100ms API read of rooms, sessions, recordings, templates, live streams, external streams, recording assets, and webhook events",
+      "write": "external 100ms mutation: creates/updates rooms, creates templates, creates/updates room join-codes, and starts/stops room recordings; approval required"
+    }
+  }
+}

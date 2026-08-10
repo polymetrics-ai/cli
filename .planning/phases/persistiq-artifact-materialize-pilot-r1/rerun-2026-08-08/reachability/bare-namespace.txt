@@ -1,0 +1,31 @@
+NAME
+  pm persistiq - PersistIQ command surface
+
+SYNOPSIS
+  pm persistiq <command> [flags]
+  pm persistiq <group> --help
+  pm persistiq <group> <command> --help
+
+DESCRIPTION
+  Run PersistIQ's declared streams and reverse-ETL actions.
+
+COMMAND GROUPS
+  accounts - see pm persistiq accounts --help
+  activities - see pm persistiq activities --help
+  add - see pm persistiq add --help
+  api - see pm persistiq api --help
+  campaign - see pm persistiq campaign --help
+  campaigns - see pm persistiq campaigns --help
+  create - see pm persistiq create --help
+  dnc - see pm persistiq dnc --help
+  duplicate - see pm persistiq duplicate --help
+  events - see pm persistiq events --help
+  lead - see pm persistiq lead --help
+  leads - see pm persistiq leads --help
+  mailboxes - see pm persistiq mailboxes --help
+  remove - see pm persistiq remove --help
+  reply - see pm persistiq reply --help
+  tags - see pm persistiq tags --help
+  update - see pm persistiq update --help
+  users - see pm persistiq users --help
+  webhook - see pm persistiq webhook --help

@@ -1,0 +1,1173 @@
+{
+  "operations": [
+    {
+      "id": "revolut-merchant.post.1-0-customers",
+      "kind": "rest_write",
+      "summary": "POST /1.0/customers",
+      "description": "legacy connector never implemented customer create/update; not implemented in this bundle",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1.0/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.1-0-orders",
+      "kind": "rest_write",
+      "summary": "POST /1.0/orders",
+      "description": "legacy connector never implemented order creation; not implemented in this bundle",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1.0/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.1-0-orders-order-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /1.0/orders/{order_id}/cancel",
+      "description": "order cancellation mutation; legacy never implemented writes",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1.0/orders/{order_id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.1-0-orders-order-id-capture",
+      "kind": "rest_write",
+      "summary": "POST /1.0/orders/{order_id}/capture",
+      "description": "legacy connector never implemented order capture; not implemented in this bundle",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1.0/orders/{order_id}/capture",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.1-0-orders-order-id-refund",
+      "kind": "rest_write",
+      "summary": "POST /1.0/orders/{order_id}/refund",
+      "description": "order refund mutation; legacy never implemented writes",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1.0/orders/{order_id}/refund",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.1-0-payouts",
+      "kind": "rest_read",
+      "summary": "GET /1.0/payouts",
+      "description": "payout endpoints not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1.0/payouts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.1-0-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /1.0/webhooks",
+      "description": "webhook management not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1.0/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-apple-pay-domains-register",
+      "kind": "rest_write",
+      "summary": "POST /api/apple-pay/domains/register",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/apple-pay/domains/register",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-apple-pay-domains-unregister",
+      "kind": "rest_write",
+      "summary": "POST /api/apple-pay/domains/unregister",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/apple-pay/domains/unregister",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-customers",
+      "kind": "rest_read",
+      "summary": "GET /api/customers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-customers",
+      "kind": "rest_write",
+      "summary": "POST /api/customers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-customers-customer-id",
+      "kind": "rest_read",
+      "summary": "GET /api/customers/{customer_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/customers/{customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.patch.api-customers-customer-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/customers/{customer_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/customers/{customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.delete.api-customers-customer-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/customers/{customer_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/customers/{customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-customers-customer-id-payment-methods",
+      "kind": "rest_read",
+      "summary": "GET /api/customers/{customer_id}/payment-methods",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/customers/{customer_id}/payment-methods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-customers-customer-id-payment-methods-payment-method-id",
+      "kind": "rest_read",
+      "summary": "GET /api/customers/{customer_id}/payment-methods/{payment_method_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/customers/{customer_id}/payment-methods/{payment_method_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.patch.api-customers-customer-id-payment-methods-payment-method-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/customers/{customer_id}/payment-methods/{payment_method_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/customers/{customer_id}/payment-methods/{payment_method_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.delete.api-customers-customer-id-payment-methods-payment-method-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/customers/{customer_id}/payment-methods/{payment_method_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/customers/{customer_id}/payment-methods/{payment_method_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-disputes",
+      "kind": "rest_read",
+      "summary": "GET /api/disputes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/disputes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-disputes-dispute-id",
+      "kind": "rest_read",
+      "summary": "GET /api/disputes/{dispute_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/disputes/{dispute_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-disputes-dispute-id-accept",
+      "kind": "rest_write",
+      "summary": "POST /api/disputes/{dispute_id}/accept",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/disputes/{dispute_id}/accept",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-disputes-dispute-id-challenge",
+      "kind": "rest_write",
+      "summary": "POST /api/disputes/{dispute_id}/challenge",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/disputes/{dispute_id}/challenge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-disputes-dispute-id-evidences",
+      "kind": "rest_write",
+      "summary": "POST /api/disputes/{dispute_id}/evidences",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/disputes/{dispute_id}/evidences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-locations",
+      "kind": "rest_read",
+      "summary": "GET /api/locations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/locations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-locations",
+      "kind": "rest_write",
+      "summary": "POST /api/locations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/locations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-locations-location-id",
+      "kind": "rest_read",
+      "summary": "GET /api/locations/{location_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/locations/{location_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.patch.api-locations-location-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/locations/{location_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/locations/{location_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.delete.api-locations-location-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/locations/{location_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/locations/{location_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-orders",
+      "kind": "rest_read",
+      "summary": "GET /api/orders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-orders",
+      "kind": "rest_write",
+      "summary": "POST /api/orders",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-orders-order-id",
+      "kind": "rest_read",
+      "summary": "GET /api/orders/{order_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/orders/{order_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.patch.api-orders-order-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/orders/{order_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/orders/{order_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-orders-order-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /api/orders/{order_id}/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/orders/{order_id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-orders-order-id-capture",
+      "kind": "rest_write",
+      "summary": "POST /api/orders/{order_id}/capture",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/orders/{order_id}/capture",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-orders-order-id-increment-authorisation",
+      "kind": "rest_write",
+      "summary": "POST /api/orders/{order_id}/increment-authorisation",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/orders/{order_id}/increment-authorisation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-orders-order-id-payment-intents",
+      "kind": "rest_write",
+      "summary": "POST /api/orders/{order_id}/payment-intents",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/orders/{order_id}/payment-intents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-orders-order-id-payments",
+      "kind": "rest_read",
+      "summary": "GET /api/orders/{order_id}/payments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/orders/{order_id}/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-orders-order-id-payments",
+      "kind": "rest_write",
+      "summary": "POST /api/orders/{order_id}/payments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/orders/{order_id}/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-orders-order-id-refund",
+      "kind": "rest_write",
+      "summary": "POST /api/orders/{order_id}/refund",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/orders/{order_id}/refund",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-payment-intents-payment-intent-id",
+      "kind": "rest_read",
+      "summary": "GET /api/payment-intents/{payment_intent_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/payment-intents/{payment_intent_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-payment-intents-payment-intent-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /api/payment-intents/{payment_intent_id}/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/payment-intents/{payment_intent_id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-payments-payment-id",
+      "kind": "rest_read",
+      "summary": "GET /api/payments/{payment_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/payments/{payment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-payouts",
+      "kind": "rest_read",
+      "summary": "GET /api/payouts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/payouts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-payouts-payout-id",
+      "kind": "rest_read",
+      "summary": "GET /api/payouts/{payout_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/payouts/{payout_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-report-runs",
+      "kind": "rest_write",
+      "summary": "POST /api/report-runs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/report-runs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-report-runs-report-run-id",
+      "kind": "rest_read",
+      "summary": "GET /api/report-runs/{report_run_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/report-runs/{report_run_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-report-runs-report-run-id-file",
+      "kind": "rest_read",
+      "summary": "GET /api/report-runs/{report_run_id}/file",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/report-runs/{report_run_id}/file",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-subscription-plans",
+      "kind": "rest_read",
+      "summary": "GET /api/subscription-plans",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/subscription-plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-subscription-plans",
+      "kind": "rest_write",
+      "summary": "POST /api/subscription-plans",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/subscription-plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-subscription-plans-subscription-plan-id",
+      "kind": "rest_read",
+      "summary": "GET /api/subscription-plans/{subscription_plan_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/subscription-plans/{subscription_plan_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-subscription-usages",
+      "kind": "rest_read",
+      "summary": "GET /api/subscription-usages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/subscription-usages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-subscription-usages",
+      "kind": "rest_write",
+      "summary": "POST /api/subscription-usages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/subscription-usages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-subscription-usages-usage-id",
+      "kind": "rest_read",
+      "summary": "GET /api/subscription-usages/{usage_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/subscription-usages/{usage_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.patch.api-subscription-usages-usage-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/subscription-usages/{usage_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/subscription-usages/{usage_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.delete.api-subscription-usages-usage-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/subscription-usages/{usage_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/subscription-usages/{usage_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-subscriptions",
+      "kind": "rest_read",
+      "summary": "GET /api/subscriptions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-subscriptions",
+      "kind": "rest_write",
+      "summary": "POST /api/subscriptions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-subscriptions-subscription-id",
+      "kind": "rest_read",
+      "summary": "GET /api/subscriptions/{subscription_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/subscriptions/{subscription_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.patch.api-subscriptions-subscription-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/subscriptions/{subscription_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/subscriptions/{subscription_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-subscriptions-subscription-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /api/subscriptions/{subscription_id}/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/subscriptions/{subscription_id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-subscriptions-subscription-id-change-plan",
+      "kind": "rest_write",
+      "summary": "POST /api/subscriptions/{subscription_id}/change-plan",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/subscriptions/{subscription_id}/change-plan",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-subscriptions-subscription-id-change-renewal-date",
+      "kind": "rest_write",
+      "summary": "POST /api/subscriptions/{subscription_id}/change-renewal-date",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/subscriptions/{subscription_id}/change-renewal-date",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-subscriptions-subscription-id-cycles",
+      "kind": "rest_read",
+      "summary": "GET /api/subscriptions/{subscription_id}/cycles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/subscriptions/{subscription_id}/cycles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-subscriptions-subscription-id-cycles-cycle-id",
+      "kind": "rest_read",
+      "summary": "GET /api/subscriptions/{subscription_id}/cycles/{cycle_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/subscriptions/{subscription_id}/cycles/{cycle_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-synchronous-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /api/synchronous-webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/synchronous-webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-synchronous-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /api/synchronous-webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/synchronous-webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.delete.api-synchronous-webhooks-synchronous-webhook-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/synchronous-webhooks/{synchronous_webhook_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/synchronous-webhooks/{synchronous_webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-terminals",
+      "kind": "rest_read",
+      "summary": "GET /api/terminals",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/terminals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /api/webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /api/webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.get.api-webhooks-webhook-id",
+      "kind": "rest_read",
+      "summary": "GET /api/webhooks/{webhook_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/webhooks/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.patch.api-webhooks-webhook-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/webhooks/{webhook_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/webhooks/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.delete.api-webhooks-webhook-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/webhooks/{webhook_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/webhooks/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.post.api-webhooks-webhook-id-rotate-signing-secret",
+      "kind": "rest_write",
+      "summary": "POST /api/webhooks/{webhook_id}/rotate-signing-secret",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/webhooks/{webhook_id}/rotate-signing-secret",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "revolut-merchant.webhook.webhookevent-post",
+      "kind": "composite",
+      "summary": "WEBHOOK webhookEvent#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK webhookEvent#POST"
+        ]
+      }
+    }
+  ]
+}

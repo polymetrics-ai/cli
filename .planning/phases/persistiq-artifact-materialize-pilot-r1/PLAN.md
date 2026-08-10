@@ -1,0 +1,178 @@
+# PersistIQ artifact materialization pilot - plan
+
+> **Scope locked by captain:** generator capability plus staged validation
+> pilots only. This phase is a documented
+> inline/manual GSD fallback because the pilot is not in `ROADMAP.md` and the
+> available Codex runtime cannot provide the interactive Pi phase workers.
+> The fallback does not waive red/green evidence or any static gate.
+
+## Goal
+
+Fetch the ledger-linked PersistIQ OpenAPI artifact, reconcile all 21 provider
+operations to the repository model, stage a materialized bundle with existing
+`connectorgen batch` tooling, run static/runtime-preflight gates, invoke every
+generated command through the real no-credential `pm` binary, and report exact
+wall-clock timing and counts. Before the generator PR merges, validate the
+same policy against three deliberately different eligible shapes: a
+read-only OpenAPI connector, a write-heavy OpenAPI connector, and a public
+Swagger-2 connector. Add Copper as a non-OpenAPI Postman fallback proof. All
+generated bundles are evidence-only; do not add them to
+`internal/connectors/defs` or start the eligible-392 generation.
+
+The multi-source generalization result is recorded in
+[`generalization-validation-2026-08-08/GENERALIZATION-VALIDATION.md`](generalization-validation-2026-08-08/GENERALIZATION-VALIDATION.md).
+Watchmode, DocuSeal, and Float pass after top-level webhook and external
+path-item support. Copper's staged static fallback passes; its current native
+scaffold has no embedded command surface, so its real-binary reachability is
+explicitly not claimed.
+
+## Timed pilot slices
+
+### Slice 1 — identify the link (completed before this plan)
+
+- Read the external ledger record for `persistiq` and emit its
+  `artifact_url`.
+- Evidence: `https://persistiq.com/api-docs/v1/swagger.json`; shell `real`
+  time `0.02s`.
+
+### Slice 2 — map the operation model (completed before this plan)
+
+- Map the ledger's 21 operations by method/path using the existing PersistIQ
+  surface inventory, without fetching a new artifact.
+- Evidence: 11 `etl`, 1 `direct_read`, 7 `reverse_etl`, 2 `direct_write`, 0
+  `binary_download`, 0 unclassified; shell `real` time `0.04s`.
+- Reconcile every row after fetch; a count or method/path mismatch is a
+  reportable failure, not a reason to invent coverage.
+
+### Slice 3 — fetch and parse the artifact
+
+- Fetch exactly the ledger URL once into the phase-local artifact cache with a
+  bounded timeout and redirect handling.
+- Record exact byte count and SHA-256 in the phase report/summary.
+- Parse as YAML/JSON and require OpenAPI 3.x or Swagger 2.x. The existing
+  batch parser remains authoritative; a failed parse is a failed pilot stage.
+- No credentials or provider requests beyond the public artifact fetch.
+
+### Slice 4 — materialize and gate
+
+- Run `connectorgen batch plan` with `--connector persistiq --size 1` against
+  the ledger.
+- Copy the current PersistIQ source bundle to a phase-local source root and
+  materialize into a separate phase-local destination, using the existing
+  `batch materialize --artifact-dir` path.
+- Run `connectorgen validate` (0 findings), `surface-sync --check` (no drift),
+  `batch gate`/runtime preflight, the repository's implemented-command test,
+  and all applicable package/build gates.
+- Every artifact operation must be represented. Missing executors are recorded
+  as `not_implemented` with a machine-checkable named dependency and remain
+  visible to validation/help; they are not materialization drops. Preserve the
+  three source-surface-only PersistIQ streams with the exact discrepancy marker
+  `present-in-surface-absent-from-artifact`.
+- Structural parse/provenance failures still fail the pilot. Do not
+  hand-author a replacement generator or weaken a gate.
+
+### Batch efficiency ruling
+
+The captain's measured baseline separates the cheap per-connector work from
+the repository-wide gate. `batch materialize` therefore performs no runtime
+preflight; `batch gate` remains the single gate over the staged result. For a
+future eligible-pool run, fetches are bounded/concurrent, materialization is
+performed in review-sized batches, and validate/surface-sync/runtime
+preflight/reachability run once over the combined staged result. A failed
+combined gate is then narrowed to the implicated batch for diagnosis.
+
+### Slice 5 — real binary reachability and report
+
+- Build the real `pm` binary from the staged/installed PersistIQ bundle.
+- Run `pm persistiq` bare namespace and every generated command with safe help
+  arguments; count reachable versus failed commands and record command names.
+- State explicitly: implemented only if static gates pass; not certified and
+  never provider-exercised in either case.
+- Report wall-clock times for all five slices and the total.
+
+### Generalization evidence extension
+
+- Apply the eligible-pool exclusions before selecting candidates.
+- Use `watchmode`, `docuseal`, and `float` as the deliberately different
+  shapes; record the Web Scraper partner-gated planner refusal and Ding
+  Connect HTTP 403 substitution in the evidence.
+- Run one combined static gate over the staged Watchmode, DocuSeal, Float, and
+  optional Copper outputs. A candidate dropped by artifact inventory is a
+  generator failure, not a success with zero commands.
+- Run real-binary reachability for every command of the three runtime-capable
+  structured pilots. Record Copper's legacy-scaffold limitation rather than
+  manufacturing a reachability claim.
+- The required three pilots now pass; this remains generator evidence, not
+  provider certification, and the eligible-392 sweep remains deferred.
+
+### Multi-source contract extension
+
+- Read `CAPTAIN-ORDER-multisource-mapping.md` before implementation.
+- Source order is OpenAPI/Swagger plus local/remote references and webhooks,
+  then provider machine exports such as Postman, then bounded official
+  HTML/Markdown/source traversal.
+- Normalize every operation with URL, kind, version, retrieval date, hash, and
+  exact coordinate. Merge canonically; preserve source disagreements as
+  alternatives; never let a narrow artifact delete an existing operation.
+- Keep fallback/traversal bounded, HTTPS-safe, connector-scoped, cached, and
+  resumable. Unknown or ambiguous extraction remains visible and cannot become
+  an implemented command.
+
+## Captain-ruling rerun policy
+
+The first run recorded a Red caused by the old materializer's executable
+coverage refusal. That Red remains historical evidence. The rerun must add
+tests for complete artifact inventory, named dependencies, and source-surface
+discrepancies before production edits, then record a new Green only after the
+static gates and real binary reachability sweep pass.
+
+## TDD evidence plan
+
+1. **RED:** Before production bundle edits, run a real PersistIQ command against
+   the baseline bundle and capture the observed unknown-command/missing-surface
+   failure. The red assertion is that the pilot's generated command set is not
+   fully reachable before materialization.
+2. **GREEN:** After the revised batch materializer produces the staged bundle,
+   assert that all 21 artifact operations and all three surface-only
+   discrepancies are represented, then repeat the command-reachability sweep
+   and static gates. Record the actual output; no expected pass is declared in
+   advance.
+3. **REFACTOR:** Keep changes generated/staged to PersistIQ plus this phase's
+   evidence. Run formatting/validation checks and inspect the diff for no
+   unrelated connector paths.
+
+## Required GSD command evidence
+
+Resolved successfully with `scripts/gsd sources`:
+
+```text
+discuss-phase → plan-phase --tdd → execute-phase → verify-work → code-review
+```
+
+`go run ./cmd/agentcontractgen check` passed before planning. The actual phase
+was executed inline because the phase is unscheduled and the runtime worker
+contract is unavailable; this manual fallback is recorded here, in RUN-STATE,
+and in the final report.
+
+## Required skills loaded
+
+- `golang-how-to`
+- `golang-cli`
+- `golang-testing`
+- `golang-error-handling`
+- `golang-security`
+- `golang-safety`
+- `golang-design-patterns`
+- `golang-structs-interfaces`
+- `gsd-discuss-phase`, `gsd-plan-phase`, `gsd-execute-phase`,
+  `gsd-verify-work`, `gsd-code-review`
+
+## CLI parity checklist
+
+- [x] `pm persistiq` bare namespace: contextual help and exit 0.
+- [x] Every generated `pm persistiq <command> --help` reaches the command
+  parser without credentials/network.
+- [x] `pm help <topic>` and docs/website generation are not applicable unless
+  the materializer adds a new command surface; record the result explicitly.
+- [x] `surface-sync --check` is clean and generated flag metadata is derived,
+  not hand-authored.

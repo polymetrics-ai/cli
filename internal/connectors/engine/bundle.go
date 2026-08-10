@@ -645,38 +645,77 @@ type APISurface struct {
 type SurfaceArtifact struct {
 	ID          string `json:"id"`
 	URL         string `json:"url"`
+	Kind        string `json:"kind,omitempty"`
+	Version     string `json:"version,omitempty"`
 	RetrievedAt string `json:"retrieved_at"`
 	SHA256      string `json:"sha256,omitempty"`
 }
 
 // SurfaceEndpoint is one api_surface.json endpoint entry.
 type SurfaceEndpoint struct {
-	Method     string             `json:"method,omitempty"`
-	Path       string             `json:"path,omitempty"`
-	Provenance *SurfaceProvenance `json:"provenance,omitempty"`
-	CoveredBy  *SurfaceCoverage   `json:"covered_by,omitempty"`
-	Excluded   *SurfaceExclusion  `json:"excluded,omitempty"`
-	Operation  *SurfaceOperation  `json:"operation,omitempty"`
+	Method      string             `json:"method,omitempty"`
+	Path        string             `json:"path,omitempty"`
+	Discrepancy string             `json:"discrepancy,omitempty"`
+	Provenance  *SurfaceProvenance `json:"provenance,omitempty"`
+	CoveredBy   *SurfaceCoverage   `json:"covered_by,omitempty"`
+	Excluded    *SurfaceExclusion  `json:"excluded,omitempty"`
+	Operation   *SurfaceOperation  `json:"operation,omitempty"`
 }
 
 // SurfaceProvenance cites one operation-specific provider source in a v2
 // ledger. It is evidence metadata only: CoveredBy remains the sole binding to
 // an executable connector surface.
 type SurfaceProvenance struct {
-	Artifact  string `json:"artifact"`
-	SourceURL string `json:"source_url"`
+	Artifact     string                         `json:"artifact"`
+	SourceURL    string                         `json:"source_url"`
+	SourceKind   string                         `json:"source_kind,omitempty"`
+	Version      string                         `json:"version,omitempty"`
+	RetrievedAt  string                         `json:"retrieved_at,omitempty"`
+	SHA256       string                         `json:"sha256,omitempty"`
+	Coordinate   string                         `json:"coordinate,omitempty"`
+	Alternatives []SurfaceProvenanceAlternative `json:"alternatives,omitempty"`
+}
+
+// SurfaceProvenanceAlternative preserves a second authoritative source that
+// states the same normalized operation differently. The primary citation stays
+// on SurfaceProvenance; alternatives keep source disagreement inspectable
+// without duplicating an api_surface row.
+type SurfaceProvenanceAlternative struct {
+	SourceURL   string `json:"source_url"`
+	SourceKind  string `json:"source_kind,omitempty"`
+	Version     string `json:"version,omitempty"`
+	RetrievedAt string `json:"retrieved_at,omitempty"`
+	SHA256      string `json:"sha256,omitempty"`
+	Coordinate  string `json:"coordinate,omitempty"`
 }
 
 // SurfaceCoverage names the executable connector surface that covers an endpoint.
 type SurfaceCoverage struct {
 	Stream string `json:"stream,omitempty"`
-	Write  string `json:"write,omitempty"`
+	// Streams names every ETL stream an endpoint backs when several stream
+	// contracts intentionally share one documented provider request.
+	Streams []string `json:"streams,omitempty"`
+	Write   string   `json:"write,omitempty"`
 	// Writes names every write action an endpoint backs when it backs more than
 	// one. A provider documents one path per operation, but a bundle may model
 	// several distinct write contracts over that one path.
 	Writes      []string `json:"writes,omitempty"`
 	DirectRead  string   `json:"direct_read,omitempty"`
 	DirectReads []string `json:"direct_reads,omitempty"`
+}
+
+// StreamTargets returns every ETL stream a coverage entry names, singular and
+// plural together, so callers do not need to distinguish their spellings.
+func (c *SurfaceCoverage) StreamTargets() []string {
+	if c == nil {
+		return nil
+	}
+	targets := make([]string, 0, len(c.Streams)+1)
+	if c.Stream != "" {
+		targets = append(targets, c.Stream)
+	}
+	targets = append(targets, c.Streams...)
+	return targets
 }
 
 // WriteTargets returns every write action a coverage entry names, singular and

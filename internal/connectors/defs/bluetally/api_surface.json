@@ -1,117 +1,1840 @@
 {
-  "api": "BlueTally REST API v1 (https://app.bluetallyapp.com/api/v1)",
+  "api": "BlueTally REST API v1 (https://app.bluetallyapp.com/api/v1); provider artifact version: v1; OpenAPI 3.1.0; info version 1.0",
   "docs": "https://developer.bluetally.com/reference/getting-started-with-your-api",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: every documented BlueTally resource (assets, employees, licenses, maintenances, accessories, components, consumables, categories, departments, depreciations, locations, manufacturers, products, statuses, suppliers, audits, activity, tenants) is now a read stream. Every BlueTally create/update/delete/check-in/check-out mutation sends its payload entirely as QUERY-STRING parameters (verified against the connector's published OpenAPI spec at developer.bluetally.com/branches/1.0/apis/bluetally-api.json: every POST/PUT operation's parameters are declared 'in':'query', none declare a requestBody) -- the engine's write dialect (engine/bundle.go WriteAction.BodyType: json|form|none) has no query-string body construction mechanism, so no BlueTally mutation can be expressed as a writes.json action without silently sending a wrong-shaped request. This is ENGINE_GAP (docs/migration/conventions.md §6 taxonomy): a Tier-1 workaround (body_type: json or form) would post an empty/incorrect body while the real params sit unset in the query string, silently diverging from the documented contract. capabilities.write stays false; writes.json is not shipped. GET /{resource}/{id} single-record detail endpoints are excluded as duplicate_of their sibling list stream (a sync connector reads the full list; the per-id lookup is redundant surface for this use case, not a distinct capability).",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 91 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official openapi artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: Pass B full-surface expansion: every documented BlueTally resource (assets, employees, licenses, maintenances, accessories, components, consumables, categories, departments, depreciations, locations, manufacturers, products, statuses, suppliers, audits, activity, tenants) is now a read stream. Every BlueTally create/update/delete/check-in/check-out mutation sends its payload entirely as QUERY-STRING parameters (verified against the connector's published OpenAPI spec at developer.bluetally.com/branches/1.0/apis/bluetally-api.json: every POST/PUT operation's parameters are declared 'in':'query', none declare a requestBody) -- the engine's write dialect (engine/bundle.go WriteAction.BodyType: json|form|none) has no query-string body construction mechanism, so no BlueTally mutation can be expressed as a writes.json action without silently sending a wrong-shaped request. This is ENGINE_GAP (docs/migration/conventions.md §6 taxonomy): a Tier-1 workaround (body_type: json or form) would post an empty/incorrect body while the real params sit unset in the query string, silently diverging from the documented contract. capabilities.write stays false; writes.json is not shipped. GET /{resource}/{id} single-record detail endpoints are excluded as duplicate_of their sibling list stream (a sync connector reads the full list; the per-id lookup is redundant surface for this use case, not a distinct capability).",
+  "artifacts": [
+    {
+      "id": "bluetally-artifact-2026-08-09",
+      "url": "https://developer.bluetally.com/llms.txt",
+      "kind": "openapi",
+      "version": "v1; OpenAPI 3.1.0; info version 1.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/assets", "covered_by": { "stream": "assets" } },
-    { "method": "GET", "path": "/assets/{id}", "excluded": { "category": "duplicate_of", "reason": "single-asset lookup by id; fully covered by the assets list stream" } },
-    { "method": "POST", "path": "/assets", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-asset sends every field as a query-string parameter (OpenAPI parameters[].in == query, no requestBody); the engine's write dialect only supports json/form/none request bodies, so this mutation cannot be expressed without silently diverging from BlueTally's real wire contract" } },
-    { "method": "PUT", "path": "/assets/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-asset sends every field as a query-string parameter, same gap as create-asset" } },
-    { "method": "DELETE", "path": "/assets/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: delete-asset accepts an optional tenant_id query parameter only, but is grouped with the rest of this resource's write surface, which is blocked by the same query-parameter body gap; a path-only delete with no query support beyond tenant_id is possible in principle but is deferred alongside its sibling create/update actions to keep the resource's write semantics consistent (all-or-nothing per resource)" } },
-
-    { "method": "GET", "path": "/employees", "covered_by": { "stream": "employees" } },
-    { "method": "GET", "path": "/employees/{id}", "excluded": { "category": "duplicate_of", "reason": "single-employee lookup by id; fully covered by the employees list stream" } },
-    { "method": "POST", "path": "/employees", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-employee sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/employees/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-employee sends every field as a query-string parameter, same gap as create-employee" } },
-    { "method": "DELETE", "path": "/employees/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/licenses", "covered_by": { "stream": "licenses" } },
-    { "method": "GET", "path": "/licenses/{id}", "excluded": { "category": "duplicate_of", "reason": "single-license lookup by id; fully covered by the licenses list stream" } },
-    { "method": "POST", "path": "/licenses", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-license sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/licenses/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-license sends every field as a query-string parameter, same gap as create-license" } },
-    { "method": "DELETE", "path": "/licenses/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/maintenances", "covered_by": { "stream": "maintenances" } },
-    { "method": "GET", "path": "/maintenances/{id}", "excluded": { "category": "duplicate_of", "reason": "single-maintenance lookup by id; fully covered by the maintenances list stream" } },
-    { "method": "POST", "path": "/maintenances", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-maintenance sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/maintenances/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-maintenance sends every field as a query-string parameter, same gap as create-maintenance" } },
-    { "method": "DELETE", "path": "/maintenances/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/accessories", "covered_by": { "stream": "accessories" } },
-    { "method": "GET", "path": "/accessories/{id}", "excluded": { "category": "duplicate_of", "reason": "single-accessory lookup by id; fully covered by the accessories list stream" } },
-    { "method": "POST", "path": "/accessories", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-accessory sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/accessories/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-accessory sends every field as a query-string parameter, same gap as create-accessory" } },
-    { "method": "DELETE", "path": "/accessories/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/components", "covered_by": { "stream": "components" } },
-    { "method": "GET", "path": "/components/{id}", "excluded": { "category": "duplicate_of", "reason": "single-component lookup by id; fully covered by the components list stream" } },
-    { "method": "POST", "path": "/components", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-component sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/components/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-component sends every field as a query-string parameter, same gap as create-component" } },
-    { "method": "DELETE", "path": "/components/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/consumables", "covered_by": { "stream": "consumables" } },
-    { "method": "GET", "path": "/consumables/{id}", "excluded": { "category": "duplicate_of", "reason": "single-consumable lookup by id; fully covered by the consumables list stream" } },
-    { "method": "POST", "path": "/consumables", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-consumable sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/consumables/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-consumable sends every field as a query-string parameter, same gap as create-consumable" } },
-    { "method": "DELETE", "path": "/consumables/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/categories", "covered_by": { "stream": "categories" } },
-    { "method": "GET", "path": "/categories/{id}", "excluded": { "category": "duplicate_of", "reason": "single-category lookup by id; fully covered by the categories list stream" } },
-    { "method": "POST", "path": "/categories", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-category sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/categories/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-category sends every field as a query-string parameter, same gap as create-category" } },
-    { "method": "DELETE", "path": "/categories/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/departments", "covered_by": { "stream": "departments" } },
-    { "method": "GET", "path": "/departments/{id}", "excluded": { "category": "duplicate_of", "reason": "single-department lookup by id; fully covered by the departments list stream" } },
-    { "method": "POST", "path": "/departments", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-department sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/departments/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-department sends every field as a query-string parameter, same gap as create-department" } },
-    { "method": "DELETE", "path": "/departments/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/depreciations", "covered_by": { "stream": "depreciations" } },
-    { "method": "GET", "path": "/depreciations/{id}", "excluded": { "category": "duplicate_of", "reason": "single-depreciation lookup by id; fully covered by the depreciations list stream" } },
-    { "method": "POST", "path": "/depreciations", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-depreciation sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/depreciations/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-depreciation sends every field as a query-string parameter, same gap as create-depreciation" } },
-    { "method": "DELETE", "path": "/depreciations/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/locations", "covered_by": { "stream": "locations" } },
-    { "method": "GET", "path": "/locations/{id}", "excluded": { "category": "duplicate_of", "reason": "single-location lookup by id; fully covered by the locations list stream" } },
-    { "method": "POST", "path": "/locations", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-location sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/locations/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-location sends every field as a query-string parameter, same gap as create-location" } },
-    { "method": "DELETE", "path": "/locations/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/manufacturers", "covered_by": { "stream": "manufacturers" } },
-    { "method": "GET", "path": "/manufacturers/{id}", "excluded": { "category": "duplicate_of", "reason": "single-manufacturer lookup by id; fully covered by the manufacturers list stream" } },
-    { "method": "POST", "path": "/manufacturers", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-manufacturer sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/manufacturers/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-manufacturer sends every field as a query-string parameter, same gap as create-manufacturer" } },
-    { "method": "DELETE", "path": "/manufacturers/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/products", "covered_by": { "stream": "products" } },
-    { "method": "GET", "path": "/products/{id}", "excluded": { "category": "duplicate_of", "reason": "single-product lookup by id; fully covered by the products list stream" } },
-    { "method": "POST", "path": "/products", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-product sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/products/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-product sends every field as a query-string parameter, same gap as create-product" } },
-    { "method": "DELETE", "path": "/products/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/statuses", "covered_by": { "stream": "statuses" } },
-    { "method": "GET", "path": "/statuses/{id}", "excluded": { "category": "duplicate_of", "reason": "single-status lookup by id; fully covered by the statuses list stream" } },
-    { "method": "POST", "path": "/statuses", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-status sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/statuses/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-status sends every field as a query-string parameter, same gap as create-status" } },
-    { "method": "DELETE", "path": "/statuses/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/suppliers", "covered_by": { "stream": "suppliers" } },
-    { "method": "GET", "path": "/suppliers/{id}", "excluded": { "category": "duplicate_of", "reason": "single-supplier lookup by id; fully covered by the suppliers list stream" } },
-    { "method": "POST", "path": "/suppliers", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-supplier sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/suppliers/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-supplier sends every field as a query-string parameter, same gap as create-supplier" } },
-    { "method": "DELETE", "path": "/suppliers/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/audits", "covered_by": { "stream": "audits" } },
-    { "method": "GET", "path": "/audits/{id}", "excluded": { "category": "duplicate_of", "reason": "single-audit lookup by id; fully covered by the audits list stream" } },
-    { "method": "POST", "path": "/audits", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: create-audit sends every field as a query-string parameter; see assets POST for the full explanation" } },
-    { "method": "PUT", "path": "/audits/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: update-audit sends every field as a query-string parameter, same gap as create-audit" } },
-    { "method": "DELETE", "path": "/audits/{id}", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale" } },
-
-    { "method": "GET", "path": "/activity", "covered_by": { "stream": "activity" } },
-
-    { "method": "GET", "path": "/tenants", "covered_by": { "stream": "tenants" } },
-
-    { "method": "POST", "path": "/checkin/accessory", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-in-accessory sends every field as a query-string parameter, same gap as the resource create/update actions; check-in/check-out are stateful inventory-movement actions layered atop the CRUD resources, not additional data resources" } },
-    { "method": "POST", "path": "/checkin/asset", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-in-asset sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
-    { "method": "POST", "path": "/checkin/component", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-in-component sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
-    { "method": "POST", "path": "/checkin/license", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-in-license sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
-    { "method": "POST", "path": "/checkout/accessory", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-out-accessory sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
-    { "method": "POST", "path": "/checkout/asset", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-out-asset sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
-    { "method": "POST", "path": "/checkout/component", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-out-component sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
-    { "method": "POST", "path": "/checkout/consumable", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-out-consumable sends every field as a query-string parameter; see checkin/accessory for the full explanation" } },
-    { "method": "POST", "path": "/checkout/license", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: check-out-license sends every field as a query-string parameter; see checkin/accessory for the full explanation" } }
+    {
+      "method": "GET",
+      "path": "/accessories",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /accessories]"
+      },
+      "covered_by": {
+        "stream": "accessories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accessories",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /accessories]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-accessory sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accessories/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /accessories/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-accessory lookup by id; fully covered by the accessories list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/accessories/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /accessories/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-accessory sends every field as a query-string parameter, same gap as create-accessory",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/accessories/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /accessories/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /activity]"
+      },
+      "covered_by": {
+        "stream": "activity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/assets",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /assets]"
+      },
+      "covered_by": {
+        "stream": "assets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/assets",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /assets]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-asset sends every field as a query-string parameter (OpenAPI parameters[].in == query, no requestBody); the engine's write dialect only supports json/form/none request bodies, so this mutation cannot be expressed without silently diverging from BlueTally's real wire contract",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/assets/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /assets/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-asset lookup by id; fully covered by the assets list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/assets/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /assets/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-asset sends every field as a query-string parameter, same gap as create-asset",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/assets/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /assets/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: delete-asset accepts an optional tenant_id query parameter only, but is grouped with the rest of this resource's write surface, which is blocked by the same query-parameter body gap; a path-only delete with no query support beyond tenant_id is possible in principle but is deferred alongside its sibling create/update actions to keep the resource's write semantics consistent (all-or-nothing per resource)",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audits",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /audits]"
+      },
+      "covered_by": {
+        "stream": "audits"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/audits",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /audits]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-audit sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audits/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /audits/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-audit lookup by id; fully covered by the audits list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/audits/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /audits/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-audit sends every field as a query-string parameter, same gap as create-audit",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/audits/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /audits/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/categories",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /categories]"
+      },
+      "covered_by": {
+        "stream": "categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/categories",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /categories]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-category sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/categories/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /categories/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-category lookup by id; fully covered by the categories list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/categories/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /categories/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-category sends every field as a query-string parameter, same gap as create-category",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/categories/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /categories/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checkin/accessory",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /checkin/accessory]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: check-in-accessory sends every field as a query-string parameter, same gap as the resource create/update actions; check-in/check-out are stateful inventory-movement actions layered atop the CRUD resources, not additional data resources",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checkin/asset",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /checkin/asset]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: check-in-asset sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checkin/component",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /checkin/component]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: check-in-component sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checkin/license",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /checkin/license]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: check-in-license sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checkout/accessory",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /checkout/accessory]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: check-out-accessory sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checkout/asset",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /checkout/asset]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: check-out-asset sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checkout/component",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /checkout/component]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: check-out-component sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checkout/consumable",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /checkout/consumable]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: check-out-consumable sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checkout/license",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /checkout/license]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: check-out-license sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/components",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /components]"
+      },
+      "covered_by": {
+        "stream": "components"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/components",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /components]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-component sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/components/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /components/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-component lookup by id; fully covered by the components list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/components/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /components/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-component sends every field as a query-string parameter, same gap as create-component",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/components/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /components/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/consumables",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /consumables]"
+      },
+      "covered_by": {
+        "stream": "consumables"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/consumables",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /consumables]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-consumable sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/consumables/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /consumables/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-consumable lookup by id; fully covered by the consumables list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/consumables/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /consumables/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-consumable sends every field as a query-string parameter, same gap as create-consumable",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/consumables/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /consumables/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/departments",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /departments]"
+      },
+      "covered_by": {
+        "stream": "departments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/departments",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /departments]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-department sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/departments/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /departments/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-department lookup by id; fully covered by the departments list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/departments/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /departments/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-department sends every field as a query-string parameter, same gap as create-department",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/departments/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /departments/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/depreciations",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /depreciations]"
+      },
+      "covered_by": {
+        "stream": "depreciations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/depreciations",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /depreciations]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-depreciation sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/depreciations/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /depreciations/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-depreciation lookup by id; fully covered by the depreciations list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/depreciations/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /depreciations/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-depreciation sends every field as a query-string parameter, same gap as create-depreciation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/depreciations/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /depreciations/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/employees",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /employees]"
+      },
+      "covered_by": {
+        "stream": "employees"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/employees",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /employees]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-employee sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/employees/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /employees/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-employee lookup by id; fully covered by the employees list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/employees/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /employees/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-employee sends every field as a query-string parameter, same gap as create-employee",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/employees/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /employees/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licenses",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /licenses]"
+      },
+      "covered_by": {
+        "stream": "licenses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/licenses",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /licenses]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-license sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licenses/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /licenses/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-license lookup by id; fully covered by the licenses list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/licenses/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /licenses/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-license sends every field as a query-string parameter, same gap as create-license",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/licenses/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /licenses/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/locations",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /locations]"
+      },
+      "covered_by": {
+        "stream": "locations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/locations",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /locations]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-location sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/locations/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /locations/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-location lookup by id; fully covered by the locations list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/locations/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /locations/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-location sends every field as a query-string parameter, same gap as create-location",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/locations/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /locations/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/maintenances",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /maintenances]"
+      },
+      "covered_by": {
+        "stream": "maintenances"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/maintenances",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /maintenances]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-maintenance sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/maintenances/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /maintenances/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-maintenance lookup by id; fully covered by the maintenances list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/maintenances/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /maintenances/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-maintenance sends every field as a query-string parameter, same gap as create-maintenance",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/maintenances/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /maintenances/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/manufacturers",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /manufacturers]"
+      },
+      "covered_by": {
+        "stream": "manufacturers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/manufacturers",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /manufacturers]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-manufacturer sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/manufacturers/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /manufacturers/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-manufacturer lookup by id; fully covered by the manufacturers list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/manufacturers/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /manufacturers/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-manufacturer sends every field as a query-string parameter, same gap as create-manufacturer",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/manufacturers/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /manufacturers/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /products]"
+      },
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /products]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-product sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /products/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-product lookup by id; fully covered by the products list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /products/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-product sends every field as a query-string parameter, same gap as create-product",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/products/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /products/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/statuses",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /statuses]"
+      },
+      "covered_by": {
+        "stream": "statuses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/statuses",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /statuses]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-status sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/statuses/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /statuses/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-status lookup by id; fully covered by the statuses list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/statuses/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /statuses/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-status sends every field as a query-string parameter, same gap as create-status",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/statuses/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /statuses/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppliers",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /suppliers]"
+      },
+      "covered_by": {
+        "stream": "suppliers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/suppliers",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[POST /suppliers]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: create-supplier sends every field as a query-string parameter; see assets POST for the full explanation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppliers/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /suppliers/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-supplier lookup by id; fully covered by the suppliers list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/suppliers/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[PUT /suppliers/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: update-supplier sends every field as a query-string parameter, same gap as create-supplier",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/suppliers/{id}",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[DELETE /suppliers/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tenants",
+      "provenance": {
+        "artifact": "bluetally-artifact-2026-08-09",
+        "source_url": "https://developer.bluetally.com/llms.txt",
+        "source_kind": "openapi",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76",
+        "coordinate": "existing-complete-surface[GET /tenants]"
+      },
+      "covered_by": {
+        "stream": "tenants"
+      }
+    }
   ]
 }

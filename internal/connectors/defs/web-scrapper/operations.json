@@ -1,0 +1,406 @@
+{
+  "operations": [
+    {
+      "id": "web-scrapper.get.scraping-job-id",
+      "kind": "rest_read",
+      "summary": "GET /scraping-job/{id}",
+      "description": "single-scraping-job detail lookup returns the same object shape already reachable via the jobs/scraping_jobs_list list streams' individual records",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scraping-job/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.get.scraping-job-id-csv",
+      "kind": "rest_read",
+      "summary": "GET /scraping-job/{id}/csv",
+      "description": "returns a raw CSV export file (arbitrary caller-defined selector-driven columns), not JSON",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scraping-job/{id}/csv",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.get.scraping-job-id-data-quality",
+      "kind": "rest_read",
+      "summary": "GET /scraping-job/{id}/data-quality",
+      "description": "undocumented on the public API reference (only exposed via the community PHP SDK's getScrapingJobDataQuality helper with no published response schema); no authoritative field-level source to build a schema from",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scraping-job/{id}/data-quality",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.get.scraping-job-id-json",
+      "kind": "rest_read",
+      "summary": "GET /scraping-job/{id}/json",
+      "description": "returns a newline-delimited-JSON bulk data export file (one scraped record per line, arbitrary caller-defined selector schema), not a single structured object this dialect's records.path/schema projection can describe",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scraping-job/{id}/json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.get.scraping-job-id-xlsx",
+      "kind": "rest_read",
+      "summary": "GET /scraping-job/{id}/xlsx",
+      "description": "returns a raw XLSX binary export file, not JSON",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scraping-job/{id}/xlsx",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.get.scraping-job-scrapingjobid",
+      "kind": "rest_read",
+      "summary": "GET /scraping-job/{scrapingJobId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scraping-job/{scrapingJobId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.delete.scraping-job-scrapingjobid",
+      "kind": "rest_write",
+      "summary": "DELETE /scraping-job/{scrapingJobId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/scraping-job/{scrapingJobId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.post.scraping-job-scrapingjobid-continue",
+      "kind": "rest_write",
+      "summary": "POST /scraping-job/{scrapingJobId}/continue",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/scraping-job/{scrapingJobId}/continue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.get.scraping-job-scrapingjobid-data-quality",
+      "kind": "rest_read",
+      "summary": "GET /scraping-job/{scrapingJobId}/data-quality",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scraping-job/{scrapingJobId}/data-quality",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.get.scraping-job-scrapingjobid-problematic-urls",
+      "kind": "rest_read",
+      "summary": "GET /scraping-job/{scrapingJobId}/problematic-urls",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scraping-job/{scrapingJobId}/problematic-urls",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.post.scraping-job-scrapingjobid-stop",
+      "kind": "rest_write",
+      "summary": "POST /scraping-job/{scrapingJobId}/stop",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/scraping-job/{scrapingJobId}/stop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.get.scraping-job-scrapingjobid-extension",
+      "kind": "rest_read",
+      "summary": "GET /scraping-job/{scrapingJobId}/{extension}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scraping-job/{scrapingJobId}/{extension}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.get.sitemap-id",
+      "kind": "rest_read",
+      "summary": "GET /sitemap/{id}",
+      "description": "single-sitemap detail lookup returns the same {id, name, sitemap} shape already reachable via the sitemaps/sitemaps_list list streams' individual records; no incremental value as a separate stream without a fan_out id-list config surface duplicating sitemaps_list's own output",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sitemap/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.post.sitemap-id-disable-scheduler",
+      "kind": "rest_write",
+      "summary": "POST /sitemap/{id}/disable-scheduler",
+      "description": "undocumented on the public API reference (community PHP SDK only, no published request/response schema)",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sitemap/{id}/disable-scheduler",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.post.sitemap-id-enable-scheduler",
+      "kind": "rest_write",
+      "summary": "POST /sitemap/{id}/enable-scheduler",
+      "description": "undocumented on the public API reference (community PHP SDK only, no published request/response schema)",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sitemap/{id}/enable-scheduler",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.get.sitemap-id-scheduler",
+      "kind": "rest_read",
+      "summary": "GET /sitemap/{id}/scheduler",
+      "description": "undocumented on the public API reference (only exposed via the community PHP SDK's scheduler helpers with no published response schema); no authoritative field-level source to build a schema from",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sitemap/{id}/scheduler",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.get.sitemap-sitemapid",
+      "kind": "rest_read",
+      "summary": "GET /sitemap/{sitemapId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sitemap/{sitemapId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.put.sitemap-sitemapid",
+      "kind": "rest_write",
+      "summary": "PUT /sitemap/{sitemapId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/sitemap/{sitemapId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.delete.sitemap-sitemapid",
+      "kind": "rest_write",
+      "summary": "DELETE /sitemap/{sitemapId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sitemap/{sitemapId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.post.sitemap-sitemapid-add-tag",
+      "kind": "rest_write",
+      "summary": "POST /sitemap/{sitemapId}/add-tag",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sitemap/{sitemapId}/add-tag",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.post.sitemap-sitemapid-disable-scheduler",
+      "kind": "rest_write",
+      "summary": "POST /sitemap/{sitemapId}/disable-scheduler",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sitemap/{sitemapId}/disable-scheduler",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.post.sitemap-sitemapid-enable-scheduler",
+      "kind": "rest_write",
+      "summary": "POST /sitemap/{sitemapId}/enable-scheduler",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sitemap/{sitemapId}/enable-scheduler",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.delete.sitemap-sitemapid-remove-tag",
+      "kind": "rest_write",
+      "summary": "DELETE /sitemap/{sitemapId}/remove-tag",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sitemap/{sitemapId}/remove-tag",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.put.sitemap-sitemapid-rename",
+      "kind": "rest_write",
+      "summary": "PUT /sitemap/{sitemapId}/rename",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/sitemap/{sitemapId}/rename",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.get.sitemap-sitemapid-scheduler",
+      "kind": "rest_read",
+      "summary": "GET /sitemap/{sitemapId}/scheduler",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sitemap/{sitemapId}/scheduler",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "web-scrapper.get.sitemap-sitemapid-tags",
+      "kind": "rest_read",
+      "summary": "GET /sitemap/{sitemapId}/tags",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://webscraper.io/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sitemap/{sitemapId}/tags",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/rerun-2026-08-08/manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "persistiq",
+      "artifact": {
+        "url": "https://persistiq.com/api-docs/v1/swagger.json",
+        "version": "PersistIQ API V1; OpenAPI 3.0.1",
+        "retrieved_at": "2026-08-08",
+        "sha256": "0bf3e1ecbfbf6215360b5bb8f9d4fda816df4e1872470a00b529fb3e8b80946f"
+      },
+      "artifact_operations": 21,
+      "declared_operations": 24,
+      "operation_split": {
+        "executable": 21,
+        "provider_blocked": 0,
+        "excluded": 3
+      },
+      "cli_commands": 24,
+      "implemented_commands": 21,
+      "named_dependency_commands": 3,
+      "flagged_discrepancies": 3,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 3
+    }
+  ],
+  "dropped": []
+}

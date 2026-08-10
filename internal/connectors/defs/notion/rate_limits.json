@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developers.notion.com/reference/request-limits (retrieved 2026-08-06): Notion's documented average and burst allowance are per connection, but the bundle has no non-secret connection identifier for that scope."
+}

@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://docs.recurly.com/recurly-subscriptions/v2021-02-25/reference/getting-started-v2021-02-25 (retrieved 2026-08-06): Recurly's documented limits vary by sandbox versus production and by HTTP method; the bundle has no non-secret site or environment selector."
+}

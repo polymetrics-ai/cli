@@ -1,0 +1,1591 @@
+{
+  "tagline": "Run Thinkific Courses's declared streams and reverse-ETL actions.",
+  "usage": "pm thinkific-courses \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api v2 webhooks",
+        "api get oauth operation",
+        "bundle courses list",
+        "bundle enrollments list",
+        "bundle list",
+        "chapter contents list",
+        "chapter list",
+        "chapters list",
+        "collection list",
+        "collection products list",
+        "collections list",
+        "content list",
+        "coupon list",
+        "coupons list",
+        "course chapters list",
+        "course list",
+        "course review list",
+        "course reviews list",
+        "courses list",
+        "custom profile field definitions list",
+        "enrollment list",
+        "enrollments list",
+        "group analysts list",
+        "group list",
+        "groups list",
+        "instructor list",
+        "instructors list",
+        "lessons list",
+        "order list",
+        "orders list",
+        "product list",
+        "product publish request list",
+        "product publish requests list",
+        "products list",
+        "promotion by coupon list",
+        "promotion list",
+        "promotions list",
+        "related products list",
+        "site script list",
+        "site scripts list",
+        "user authentication list",
+        "user list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add groups to analyst apply",
+        "add product to collection apply",
+        "api post coupons",
+        "api post coupons bulk-create",
+        "api post course-reviews",
+        "approve product publish request apply",
+        "assign group analysts apply",
+        "create bundle enrollment apply",
+        "create collection apply",
+        "create enrollment apply",
+        "create external order apply",
+        "create group apply",
+        "create group users apply",
+        "create instructor apply",
+        "create promotion apply",
+        "create site script apply",
+        "create user apply",
+        "delete collection apply",
+        "delete coupon apply",
+        "delete group apply",
+        "delete instructor apply",
+        "delete product from collection apply",
+        "delete promotion apply",
+        "delete site script apply",
+        "delete user apply",
+        "deny product publish request apply",
+        "purchase external order transaction apply",
+        "refund external order transaction apply",
+        "remove group analyst apply",
+        "remove group from analyst apply",
+        "update bundle enrollments apply",
+        "update collection apply",
+        "update coupon apply",
+        "update enrollment apply",
+        "update instructor apply",
+        "update promotion apply",
+        "update site script apply",
+        "update user apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add groups to analyst apply",
+      "summary": "Plan and execute the add groups to analyst reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_groups_to_analyst",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses add groups to analyst apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/group_analysts/{user_id}/groups"
+        }
+      ],
+      "risk": "adds groups to an analyst",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "add product to collection apply",
+      "summary": "Plan and execute the add product to collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_product_to_collection",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses add product to collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/collection_memberships/{id}"
+        }
+      ],
+      "risk": "adds products to a category/collection",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "api get api v2 webhooks",
+      "summary": "Documented GET /api/v2/webhooks* (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses api get api v2 webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/webhooks*"
+        }
+      ],
+      "operation": "thinkific-courses.get.api-v2-webhooks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get oauth operation",
+      "summary": "Documented GET /oauth/* (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses api get oauth operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/oauth/*"
+        }
+      ],
+      "operation": "thinkific-courses.get.oauth",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post coupons",
+      "summary": "Documented POST /coupons (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses api post coupons --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/coupons"
+        }
+      ],
+      "operation": "thinkific-courses.post.coupons",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post coupons bulk-create",
+      "summary": "Documented POST /coupons/bulk_create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses api post coupons bulk-create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/coupons/bulk_create"
+        }
+      ],
+      "operation": "thinkific-courses.post.coupons-bulk-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post course-reviews",
+      "summary": "Documented POST /course_reviews (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses api post course-reviews --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/course_reviews"
+        }
+      ],
+      "operation": "thinkific-courses.post.course-reviews",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "approve product publish request apply",
+      "summary": "Plan and execute the approve product publish request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "approve_product_publish_request",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses approve product publish request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/product_publish_requests/{id}/approve"
+        }
+      ],
+      "risk": "approves a product publish request",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "assign group analysts apply",
+      "summary": "Plan and execute the assign group analysts reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "assign_group_analysts",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses assign group analysts apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups/{group_id}/analysts"
+        }
+      ],
+      "risk": "assigns analysts to a group",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "bundle courses list",
+      "summary": "Run the bundle courses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bundle_courses",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses bundle courses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bundles/{id}/courses"
+        }
+      ]
+    },
+    {
+      "path": "bundle enrollments list",
+      "summary": "Run the bundle enrollments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bundle_enrollments",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses bundle enrollments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bundles/{id}/enrollments"
+        }
+      ]
+    },
+    {
+      "path": "bundle list",
+      "summary": "Run the bundle ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bundle",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses bundle list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bundles/{id}"
+        }
+      ]
+    },
+    {
+      "path": "chapter contents list",
+      "summary": "Run the chapter contents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "chapter_contents",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses chapter contents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/chapters/{id}/contents"
+        }
+      ]
+    },
+    {
+      "path": "chapter list",
+      "summary": "Run the chapter ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "chapter",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses chapter list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/chapters/{id}"
+        }
+      ]
+    },
+    {
+      "path": "chapters list",
+      "summary": "Run the chapters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "chapters",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses chapters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/chapters"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "collection list",
+      "summary": "Run the collection ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collection",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses collection list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collections/{id}"
+        }
+      ]
+    },
+    {
+      "path": "collection products list",
+      "summary": "Run the collection products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collection_products",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses collection products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collections/{id}/products"
+        }
+      ]
+    },
+    {
+      "path": "collections list",
+      "summary": "Run the collections ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collections",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses collections list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collections"
+        }
+      ]
+    },
+    {
+      "path": "content list",
+      "summary": "Run the content ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "content",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses content list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contents/{id}"
+        }
+      ]
+    },
+    {
+      "path": "coupon list",
+      "summary": "Run the coupon ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "coupon",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses coupon list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coupons/{id}"
+        }
+      ]
+    },
+    {
+      "path": "coupons list",
+      "summary": "Run the coupons ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "coupons",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses coupons list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coupons"
+        }
+      ]
+    },
+    {
+      "path": "course chapters list",
+      "summary": "Run the course chapters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "course_chapters",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses course chapters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/courses/{id}/chapters"
+        }
+      ]
+    },
+    {
+      "path": "course list",
+      "summary": "Run the course ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "course",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses course list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/courses/{id}"
+        }
+      ]
+    },
+    {
+      "path": "course review list",
+      "summary": "Run the course review ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "course_review",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses course review list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/course_reviews/{id}"
+        }
+      ]
+    },
+    {
+      "path": "course reviews list",
+      "summary": "Run the course reviews ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "course_reviews",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses course reviews list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/course_reviews"
+        }
+      ]
+    },
+    {
+      "path": "courses list",
+      "summary": "Run the courses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "courses",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses courses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/courses"
+        }
+      ]
+    },
+    {
+      "path": "create bundle enrollment apply",
+      "summary": "Plan and execute the create bundle enrollment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_bundle_enrollment",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses create bundle enrollment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bundles/{id}/enrollments"
+        }
+      ],
+      "risk": "creates enrollments in a bundle of courses",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create collection apply",
+      "summary": "Plan and execute the create collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_collection",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses create collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/collections"
+        }
+      ],
+      "risk": "creates a category/collection",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create enrollment apply",
+      "summary": "Plan and execute the create enrollment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_enrollment",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses create enrollment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/enrollments"
+        }
+      ],
+      "risk": "creates a course enrollment",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create external order apply",
+      "summary": "Plan and execute the create external order reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_external_order",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses create external order apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/external_orders"
+        }
+      ],
+      "risk": "creates an external order record",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create group apply",
+      "summary": "Plan and execute the create group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_group",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses create group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups"
+        }
+      ],
+      "risk": "creates a group",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create group users apply",
+      "summary": "Plan and execute the create group users reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_group_users",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses create group users apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/group_users"
+        }
+      ],
+      "risk": "adds users to existing groups",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create instructor apply",
+      "summary": "Plan and execute the create instructor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_instructor",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses create instructor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/instructors"
+        }
+      ],
+      "risk": "creates an instructor",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create promotion apply",
+      "summary": "Plan and execute the create promotion reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_promotion",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses create promotion apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/promotions"
+        }
+      ],
+      "risk": "creates a promotion",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create site script apply",
+      "summary": "Plan and execute the create site script reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_site_script",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses create site script apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/site_scripts"
+        }
+      ],
+      "risk": "creates a site script",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create user apply",
+      "summary": "Plan and execute the create user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses create user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ],
+      "risk": "creates a user",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "custom profile field definitions list",
+      "summary": "Run the custom profile field definitions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_profile_field_definitions",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses custom profile field definitions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_profile_field_definitions"
+        }
+      ]
+    },
+    {
+      "path": "delete collection apply",
+      "summary": "Plan and execute the delete collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_collection",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses delete collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/collections/{id}"
+        }
+      ],
+      "risk": "deletes a category/collection",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete coupon apply",
+      "summary": "Plan and execute the delete coupon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_coupon",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses delete coupon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/coupons/{id}"
+        }
+      ],
+      "risk": "deletes a coupon",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete group apply",
+      "summary": "Plan and execute the delete group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_group",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses delete group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/groups/{id}"
+        }
+      ],
+      "risk": "deletes a group",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete instructor apply",
+      "summary": "Plan and execute the delete instructor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_instructor",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses delete instructor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/instructors/{id}"
+        }
+      ],
+      "risk": "deletes an instructor",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete product from collection apply",
+      "summary": "Plan and execute the delete product from collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_product_from_collection",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses delete product from collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/collection_memberships/{id}"
+        }
+      ],
+      "risk": "removes products from a category/collection",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete promotion apply",
+      "summary": "Plan and execute the delete promotion reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_promotion",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses delete promotion apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/promotions/{id}"
+        }
+      ],
+      "risk": "deletes a promotion",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete site script apply",
+      "summary": "Plan and execute the delete site script reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_site_script",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses delete site script apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/site_scripts/{id}"
+        }
+      ],
+      "risk": "deletes a site script",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete user apply",
+      "summary": "Plan and execute the delete user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_user",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses delete user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{id}"
+        }
+      ],
+      "risk": "deletes a user",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "deny product publish request apply",
+      "summary": "Plan and execute the deny product publish request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "deny_product_publish_request",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses deny product publish request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/product_publish_requests/{id}/deny"
+        }
+      ],
+      "risk": "denies a product publish request",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "enrollment list",
+      "summary": "Run the enrollment ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "enrollment",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses enrollment list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/enrollments/{id}"
+        }
+      ]
+    },
+    {
+      "path": "enrollments list",
+      "summary": "Run the enrollments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "enrollments",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses enrollments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/enrollments"
+        }
+      ]
+    },
+    {
+      "path": "group analysts list",
+      "summary": "Run the group analysts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "group_analysts",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses group analysts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_id}/analysts"
+        }
+      ]
+    },
+    {
+      "path": "group list",
+      "summary": "Run the group ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "group",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses group list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{id}"
+        }
+      ]
+    },
+    {
+      "path": "groups list",
+      "summary": "Run the groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups"
+        }
+      ]
+    },
+    {
+      "path": "instructor list",
+      "summary": "Run the instructor ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "instructor",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses instructor list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/instructors/{id}"
+        }
+      ]
+    },
+    {
+      "path": "instructors list",
+      "summary": "Run the instructors ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "instructors",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses instructors list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/instructors"
+        }
+      ]
+    },
+    {
+      "path": "lessons list",
+      "summary": "Run the lessons ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lessons",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses lessons list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lessons"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "order list",
+      "summary": "Run the order ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "order",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses order list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders/{id}"
+        }
+      ]
+    },
+    {
+      "path": "orders list",
+      "summary": "Run the orders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "orders",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses orders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders"
+        }
+      ]
+    },
+    {
+      "path": "product list",
+      "summary": "Run the product ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses product list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}"
+        }
+      ]
+    },
+    {
+      "path": "product publish request list",
+      "summary": "Run the product publish request ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product_publish_request",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses product publish request list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/product_publish_requests/{id}"
+        }
+      ]
+    },
+    {
+      "path": "product publish requests list",
+      "summary": "Run the product publish requests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product_publish_requests",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses product publish requests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/product_publish_requests"
+        }
+      ]
+    },
+    {
+      "path": "products list",
+      "summary": "Run the products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products"
+        }
+      ]
+    },
+    {
+      "path": "promotion by coupon list",
+      "summary": "Run the promotion by coupon ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "promotion_by_coupon",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses promotion by coupon list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/promotions/by_coupon"
+        }
+      ]
+    },
+    {
+      "path": "promotion list",
+      "summary": "Run the promotion ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "promotion",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses promotion list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/promotions/{id}"
+        }
+      ]
+    },
+    {
+      "path": "promotions list",
+      "summary": "Run the promotions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "promotions",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses promotions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/promotions"
+        }
+      ]
+    },
+    {
+      "path": "purchase external order transaction apply",
+      "summary": "Plan and execute the purchase external order transaction reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "purchase_external_order_transaction",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses purchase external order transaction apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/external_orders/{id}/transactions/purchase"
+        }
+      ],
+      "risk": "records a purchase transaction for an external order",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "refund external order transaction apply",
+      "summary": "Plan and execute the refund external order transaction reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "refund_external_order_transaction",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses refund external order transaction apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/external_orders/{id}/transactions/refund"
+        }
+      ],
+      "risk": "records a refund transaction for an external order",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "related products list",
+      "summary": "Run the related products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "related_products",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses related products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}/related"
+        }
+      ]
+    },
+    {
+      "path": "remove group analyst apply",
+      "summary": "Plan and execute the remove group analyst reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "remove_group_analyst",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses remove group analyst apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/groups/{group_id}/analysts/{user_id}"
+        }
+      ],
+      "risk": "removes an analyst from a group",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "remove group from analyst apply",
+      "summary": "Plan and execute the remove group from analyst reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "remove_group_from_analyst",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses remove group from analyst apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/group_analysts/{user_id}/groups/{group_id}"
+        }
+      ],
+      "risk": "removes a group from an analyst",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "site script list",
+      "summary": "Run the site script ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "site_script",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses site script list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/site_scripts/{id}"
+        }
+      ]
+    },
+    {
+      "path": "site scripts list",
+      "summary": "Run the site scripts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "site_scripts",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses site scripts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/site_scripts"
+        }
+      ]
+    },
+    {
+      "path": "update bundle enrollments apply",
+      "summary": "Plan and execute the update bundle enrollments reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_bundle_enrollments",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses update bundle enrollments apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/bundles/{id}/enrollments"
+        }
+      ],
+      "risk": "updates enrollments in a bundle",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update collection apply",
+      "summary": "Plan and execute the update collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_collection",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses update collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/collections/{id}"
+        }
+      ],
+      "risk": "updates a category/collection",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update coupon apply",
+      "summary": "Plan and execute the update coupon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_coupon",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses update coupon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/coupons/{id}"
+        }
+      ],
+      "risk": "updates a coupon",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update enrollment apply",
+      "summary": "Plan and execute the update enrollment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_enrollment",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses update enrollment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/enrollments/{id}"
+        }
+      ],
+      "risk": "updates a course enrollment",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update instructor apply",
+      "summary": "Plan and execute the update instructor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_instructor",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses update instructor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/instructors/{id}"
+        }
+      ],
+      "risk": "updates an instructor",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update promotion apply",
+      "summary": "Plan and execute the update promotion reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_promotion",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses update promotion apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/promotions/{id}"
+        }
+      ],
+      "risk": "updates a promotion",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update site script apply",
+      "summary": "Plan and execute the update site script reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_site_script",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses update site script apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/site_scripts/{id}"
+        }
+      ],
+      "risk": "updates a site script",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update user apply",
+      "summary": "Plan and execute the update user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_user",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses update user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{id}"
+        }
+      ],
+      "risk": "updates a user",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "user authentication list",
+      "summary": "Run the user authentication ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_authentication",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses user authentication list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}/authentications/{provider}"
+        }
+      ]
+    },
+    {
+      "path": "user list",
+      "summary": "Run the user ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}"
+        }
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific-courses users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ]
+    }
+  ]
+}

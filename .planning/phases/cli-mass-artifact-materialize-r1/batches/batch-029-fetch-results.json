@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-machine-retry-manifest.json",
+  "fetched": [
+    {
+      "connector": "7shifts",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/7shifts.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "activecampaign",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/activecampaign.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "box",
+      "source_url": "https://github.com/box/box-openapi/tree/main/openapi",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/box.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "box-data-extract",
+      "source_url": "https://github.com/box/box-openapi/tree/main/openapi",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/box-data-extract.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "brex",
+      "source_url": "https://developer.brex.com/openapi/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/brex.txt",
+      "status": "failed",
+      "reason": "official primary artifact retrieval failed; retained for isolated alternative-source retry"
+    },
+    {
+      "connector": "castor-edc",
+      "source_url": "https://data.castoredc.com/api/swagger?format=json",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/castor-edc.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "clockify",
+      "source_url": "https://docs.clockify.me/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/clockify.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "confluence",
+      "source_url": "https://dac-static.atlassian.com/cloud/confluence/openapi-v2.v3.json?_v=1.8516.73",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/confluence.txt",
+      "status": "failed",
+      "reason": "official primary artifact retrieval failed; retained for isolated alternative-source retry"
+    },
+    {
+      "connector": "dixa",
+      "source_url": "https://docs.dixa.io/page-data/shared/oas-openapi/dixa-api/@v1/v1.yaml.json",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/dixa.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "eventzilla",
+      "source_url": "https://developer.eventzilla.net/docs/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/eventzilla.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "fastly",
+      "source_url": "https://www.fastly.com/documentation/downloads/fastly.collection.json",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/fastly.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "finnhub",
+      "source_url": "https://finnhub.io/static/swagger.json",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/finnhub.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "finnworlds",
+      "source_url": "https://finnworlds.com/documentation/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/finnworlds.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "freshbooks",
+      "source_url": "https://documenter.getpostman.com/view/3322108/S1ERwwza",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/freshbooks.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "genesys",
+      "source_url": "https://api.mypurecloud.com/api/v2/docs/swagger",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/genesys.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "glassfrog",
+      "source_url": "https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/glassfrog.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "gologin",
+      "source_url": "https://api.gologin.com/docs/swagger-ui-init.js",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/gologin.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "guru",
+      "source_url": "https://developer.getguru.com/getguru/api-next/v2/branches/1.0/reference/postv1searchkeyworddocumentsearch?reduce=false",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/guru.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "insightful",
+      "source_url": "https://developers.insightful.io/api/collections/10755095/Szzq4Eoa?environment=10754747-cee77158-1d26-446e-a4ab-fe597277f032&segregateAuth=true&versionTag=latest",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/insightful.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "intercom",
+      "source_url": "https://developers.intercom.com/_bundle/docs/references/@2.16/rest-api/api.intercom.io.yaml",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/intercom.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "invoiceninja",
+      "source_url": "https://api-docs.invoicing.co/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/invoiceninja.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "jobnimbus",
+      "source_url": "https://documenter.getpostman.com/view/3919598/S11PpG4x",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/jobnimbus.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "judge-me-reviews",
+      "source_url": "https://judge.me/api/docs.yaml",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/judge-me-reviews.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "k6-cloud",
+      "source_url": "https://api.k6.io/cloud/v6/openapi",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/k6-cloud.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "kisi",
+      "source_url": "https://api.kisi.io/docs",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/kisi.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "lob",
+      "source_url": "https://docs.lob.com/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/lob.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "lokalise",
+      "source_url": "https://developers.lokalise.com/reference/lokalise-rest-api",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/lokalise.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "mailtrap",
+      "source_url": "https://github.com/mailtrap/mailtrap-openapi/blob/main/specs/account-management.openapi.yml",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/mailtrap.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "mendeley",
+      "source_url": "https://api.mendeley.com/apidocs/apis?convertToOpenApi=true",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/mendeley.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "mixmax",
+      "source_url": "https://developer.mixmax.com/mixmax/api-next/v2/branches/1.0/reference/reportsdatatable?reduce=false",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/mixmax.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "paypal-transaction",
+      "source_url": "https://github.com/paypal/paypal-rest-api-specifications/tree/main/openapi",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/paypal-transaction.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "productboard",
+      "source_url": "https://developer.productboard.com/.well-known/api-catalog",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/productboard.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "recurly",
+      "source_url": "https://github.com/recurly/recurly-client-go/blob/main/openapi/api.yaml",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/recurly.txt",
+      "status": "failed",
+      "reason": "official primary artifact retrieval failed; retained for isolated alternative-source retry"
+    },
+    {
+      "connector": "reply-io",
+      "source_url": "https://docs.reply.io/api-reference/bundled.yaml",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/reply-io.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "rocketlane",
+      "source_url": "https://developer.rocketlane.com/llms.txt",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/rocketlane.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "rollbar",
+      "source_url": "https://docs.rollbar.com/llms.txt",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/rollbar.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "secoda",
+      "source_url": "https://docs.secoda.co/api/reference.md",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/secoda.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "sendgrid",
+      "source_url": "https://github.com/twilio/sendgrid-oai/tree/main/spec/json",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/sendgrid.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "sendpulse",
+      "source_url": "https://api.sendpulse.com/.well-known/openapi/index.yaml",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/sendpulse.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "teamtailor",
+      "source_url": "https://docs.teamtailor.com/api/collections/14157246/TVzSiGxA?environment=14157246-0a1d21ed-80bf-49dc-afe7-a54fc680be99&segregateAuth=true&versionTag=latest",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/teamtailor.txt",
+      "status": "retrieved",
+      "reason": null
+    }
+  ]
+}

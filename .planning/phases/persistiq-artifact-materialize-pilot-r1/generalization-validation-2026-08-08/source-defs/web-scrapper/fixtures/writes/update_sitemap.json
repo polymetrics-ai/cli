@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": 123,
+    "_id": "fixture-sitemap",
+    "startUrl": ["https://example.test/"],
+    "selectors": [
+      { "parentSelectors": ["_root"], "type": "SelectorText", "multiple": false, "id": "title", "selector": "h1", "regex": "", "delay": "" }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/sitemap/123",
+    "body": {
+      "_id": "fixture-sitemap",
+      "startUrl": ["https://example.test/"],
+      "selectors": [
+        { "parentSelectors": ["_root"], "type": "SelectorText", "multiple": false, "id": "title", "selector": "h1", "regex": "", "delay": "" }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": { "success": true, "data": "ok" }
+  }
+}

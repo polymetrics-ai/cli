@@ -1,0 +1,432 @@
+definitions:
+  PeopleTag:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+        example: "east coast"
+        description: "The name of the tag"
+        maxLength: 64
+    title: "PeopleTag"
+  Department:
+    type: "object"
+    required:
+    - "department_id"
+    properties:
+      department_id:
+        type: "integer"
+        example: 123
+        description: "The ID of this department"
+      parent_id:
+        type: "integer"
+        example: 123
+        description: "The ID of this department's parent department (identifies this as a sub-department if not `null`)"
+        readOnly: true
+      name:
+        type: "string"
+        example: "Engineers"
+        description: "The name of the department"
+        maxLength: 200
+        readOnly: true
+    title: "Department"
+  Contract:
+    type: object
+    properties:
+      effective_date:
+        example: "2023-01-01"
+        type: string
+        format: date
+        description: "The date the contract starts; defaults to the person's start_date"
+      role_id:
+        type: integer
+        example: 7891
+        description: The ID of the role the contract is for (`null` if the person has no role)
+      role_name:
+        type: string
+        example: "Software Engineer"
+        description: The name of the role the contract is for (`null` if the person has no role)
+      cost_rate:
+        type: string
+        example: "100.50"
+        description: The effective cost rate for the contract (`null` if there are no cost rates)
+      cost_rate_from:
+        type: string
+        example: "role"
+        description: The entity that the cost rate is derived from either role, person, or `null` (if there are no cost rates).
+    required:
+      - effective_date
+  Account:
+    title: "Account"
+    type: "object"
+    required:
+    - "email"
+    - "name"
+    properties:
+      account_id:
+        type: "integer"
+        example: 1
+        description: "The ID of this account"
+        readOnly: true
+      name:
+        type: "string"
+        example: "Donna Nobel"
+        description: "The name of the account"
+        maxLength: 200
+      email:
+        type: "string"
+        example: "donna@example.com"
+        description: "Email address for this account"
+        maxLength: 200
+      timezone:
+        type: string
+        description: "Timezone as a TZ identifier, set when using the time logging timer function"
+        example: America/New_York
+      avatar:
+        type: string
+        format: uri
+        description: "URL of an image file representing the account as an avatar"
+        example: https://floatcdn.com/icons/avatar1-80.png
+      account_type:
+        type: "integer"
+        example: 7
+        description: "High level permissions of the account; `1` = Account Owner, `2` = Admin, `4` = Member, `5` = Billing, `7` = Manager"
+      access:
+        type: "integer"
+        example: 3
+        description: "Used in conjunction with `account_type` to determine granular permissions, see response description"
+      department_filter_id:
+        type: "integer"
+        example: 443
+        description: "The department ID if this account is filtered by a department"
+      view_rights:
+        type: "integer"
+        example: 1
+        description: "(**Deprecated** - see `access`) Do they have rights to view the team? `1` = Yes, `0` = No"
+      edit_rights:
+        type: "integer"
+        example: 1
+        description: "(**Deprecated** - see `access`) If a Member, do they have rights to edit their schedule? `1` = Yes, `0` = No"
+      active:
+        type: "integer"
+        example: 1
+        description: "Is this account active? `1` = Yes, `0` = No"
+      created:
+        type: "string"
+        example: "2023-05-16 03:08:23.000000"
+        description: "Date time this record was created"
+        readOnly: true
+      modified:
+        type: "string"
+        example: "2024-05-16 03:08:23.000000"
+        description: "Date time this record was last modified"
+        readOnly: true
+
+
+
+
+  Person:
+    title: "Person"
+    type: "object"
+    required:
+    - "name"
+    properties:
+      people_id:
+        type: "integer"
+        example: 1
+        description: "The unique identifier for this person. Ignored when creating a person"
+        readOnly: true
+      name:
+        type: "string"
+        example: "Sarah-Jane Smith"
+        description: "The person's full name"
+        maxLength: 150
+      email:
+        type: "string"
+        example: "sarahjane@example.com"
+        description: "Email address for this person"
+        maxLength: 200
+      job_title:
+        type: "string"
+        example: "Designer"
+        description: "The name of the person's role as defined by their `role_id`"
+        maxLength: 200
+      role_id:
+        type: "integer"
+        example: 0
+        description: "ID of a role associated with this person, `role.name` is used for `job_title`, during updates `role_id` is higher order"
+      department:
+        $ref: "#/definitions/Department"
+        description: "The current department the person belongs to"
+      notes:
+        type: "string"
+        example: "Sarah-Jane can't work on weekends."
+        description: "Any notes related to this person"
+        maxLength: 65535
+      avatar_file:
+        type: "string"
+        example: ""
+        description: "Filename of thumbnail image for this person"
+        maxLength: 40
+        readOnly: true
+      auto_email:
+        type: "integer"
+        example: 0
+        description: "Should this person's schedule be emailed at start of week? 1\
+          \ = Yes, 0 = No"
+      employee_type:
+        type: "integer"
+        example: 0
+        description: "Full-time or part-type. `1` = Full-time, `0`  = Part-time"
+      work_days_hours:
+        type: "array"
+        items:
+          type: "integer"
+        format: "float"
+        example:
+        - 0
+        - 8
+        - 8
+        - 8
+        - 8
+        - 4
+        - 0
+        description: "Hours that a part-time person is available for scheduling each day\
+          \ in order from Sunday to Saturday"
+
+      active:
+        type: "integer"
+        example: 1
+        description: "Is this person active or archived? `1` = Active, `0` = Archived. Archived people do not show on the schedule or contribute to billing seats and will have their access removed"
+      people_type_id:
+        type: "integer"
+        example: 1
+        description: "Is this person an `1` = Employee (default), `2` = Contractor, `3` = Placeholder, `4` = Role placeholder? Type `4` is not returned by default when listing people."
+      tags:
+        type: "array"
+        items:
+          $ref: "#/definitions/PeopleTag"
+      start_date:
+        type: "string"
+        example: "2019-05-20"
+        description: "Date the person started"
+      end_date:
+        type: "string"
+        example: "2019-11-11"
+        description: "Date the person finished"
+      default_hourly_rate:
+        type: "string"
+        example: "100.50"
+        description: "Default hourly rate applied when the person is added to a fee-based project, the request also accepts a decimal `number`"
+      region_id:
+        type: "integer"
+        example: 1234
+        description: "ID of the public holiday region to which the person belongs"
+      created:
+        type: "string"
+        example: "2019-05-07 10:26:49"
+        description: "Date this record was created"
+        readOnly: true
+      modified:
+        type: "string"
+        example: "2019-05-07 11:26:49"
+        description: "Date this record was last modified"
+        readOnly: true
+      contracts:
+        type: array
+        description: "`expand` field. List of applicable contracts determined for the person based on effective dates"
+        items:
+          $ref: "#/definitions/Contract"
+        readOnly: true          
+      account:
+        $ref: "#/definitions/Account"
+        description: "`expand` field. Details of an account linked to this person including permissions on this team, or `null` if none"
+        readOnly: true
+      managers:
+        description: "`expand` field. List of accounts by `account_id` that manage this person, multiple managers are possible using departments. `null` if none"
+        type: array
+        items:
+          type: "integer"
+        example:
+        - 123456
+        - 4567892
+        readOnly: true
+          
+
+
+parameters:
+  email:
+    name: "email"
+    in: "query"
+    description: "An email address to filter the response (exact match, non-case sensitive)"
+    required: false
+    type: "string"
+  people_type_id:
+    name: "people_type_id"
+    in: "query"
+    description: "The people type to filter the response on `1` = Employee, `2` = Contractor, `3` = Placeholder, `4` = Role placeholder. Type `4` is not returned by default.
+
+                  **Note:** This parameter accepts comma-separated values (e.g., `people_type_id=1,2` or `people_type_id=4`)."
+    required: false
+    type: "string"
+  employee_type:
+    name: "employee_type"
+    in: "query"
+    description: "The employee type to filter the response on `1` = Full time, `0` = Part time"
+    required: false
+    type: "integer"
+  expand:
+    name: "expand"
+    in: "query"
+    description: "Comma-delimited values expands the response with additional fields: `account`,  `managers`, and `contracts`"
+    required: false
+    type: "string"
+
+people:
+  get:
+    tags:
+    - "People"
+    summary: "List people"
+    description: "Search for all people in your organization.
+
+                  People are a distinct entity from Accounts. People exist on the schedule and will only have a linked account if they are invited to sign in. Each active person contributes to a billing seat.
+
+                  Archived people do not show on the schedule, they also do not contribute towards billing seats."
+    operationId: "getPeople"
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/active"
+    - $ref: "../swagger-api-v3.yaml#/parameters/department_id"
+    - $ref: "#/parameters/email"
+    - $ref: "#/parameters/people_type_id"
+    - $ref: "#/parameters/employee_type"
+    - $ref: "../swagger-api-v3.yaml#/parameters/tag_name"
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/sort"
+    - $ref: "../swagger-api-v3.yaml#/parameters/modified_since"
+    - $ref: "../swagger-api-v3.yaml#/parameters/fields"
+    - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "The list of people"
+        schema:
+          type: "array"
+          title: "Array of people"
+          items:
+            $ref: "#/definitions/Person"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+  post:
+    tags:
+    - "People"
+    summary: "Add a new person"
+    description: "Creating a person does not create an account (can only be done through the UI). Each active person contributes to a billing seat.
+                  The `role_id` is a higher order than `job_title`, `job_title` will attempt to match on an existing `role.name` and create a new role if none exist.  
+                   
+                   Cost rates may be set on a person using the `cost_rate` field and can include an `effective_date` field in the format; e.g. `2025-06-10`.  
+
+                   - If `effective_date` is omitted when the first `cost_rate` is added, the date will default to the person's `start_date`, or fallback to `1970-01-01`.  
+
+                   - When a further `cost_rate` is added and the `effective_date` omitted, the date will default to today.  
+                   
+
+                   These will be reflected in the person's `contracts` when expanded in the response.  
+                   "
+    operationId: "addPerson"
+    parameters:
+
+    - in: "body"
+      name: "body"
+      description: "The person to create, read-only fields are ignored"
+      required: false
+      schema:
+        $ref: "#/definitions/Person"
+    - $ref: "#/parameters/expand"
+    responses:
+      201:
+        description: "The person was successfully created, the response returns the full information about that person."
+        schema:
+          $ref: "#/definitions/Person"
+      422:
+        description: "Data validation failure."
+    
+
+people-id:
+  get:
+    tags:
+    - "People"
+    summary: "Retrieve a single person"
+    operationId: "getPerson"
+    parameters:
+    - name: "people_id"
+      in: "path"
+      description: "The person's id"
+      required: true
+      type: "integer"
+    - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "Details of a single person"
+        schema:
+          $ref: "#/definitions/Person"
+      404:
+        description: "The person does not exist."
+  delete:
+    tags:
+    - "People"
+    summary: "Delete a person"
+    description: "Deleting a person will delete all their allocations (`task_id`) and logged time, this is an irreversible action"
+    operationId: "deletePerson"
+    parameters:
+    - name: "people_id"
+      in: "path"
+      description: "people id to delete"
+      required: true
+      type: "integer"
+    responses:
+      204:
+        description: "Delete successful, all associated allocations and logged time for this `people_id` have also been deleted"
+      404:
+        description: "The person does not exist."
+  patch:
+    tags:
+    - "People"
+    summary: "Update a person's details, read-only fields are ignored"
+    description: "If a person is changed to archived (`active = 0`) then their access to the team is revoked by deleting the account and this can only be re-established through the UI.
+
+                  The `role_id` is a higher order than `job_title`, `job_title` will attempt to match on an existing `role.name` and create a new role if none exist.  
+                  
+
+                  Cost rates may be updated on a person using the `cost_rate` field and Role changes may be updated using the `role_id` field along with
+                  the `effective_date` field with the format example `2025-06-10` (defaults to today if omitted).  
+
+                  These will be reflected in the person's `contracts` available to be expanded on the response.
+                  "
+    operationId: "updatePerson"
+    parameters:
+    - name: "people_id"
+      in: "path"
+      description: "The person's id"
+      required: true
+      type: "integer"
+    - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "On a successful update of a person, the response returns the\
+        full information about that person."
+        schema:
+          $ref: "#/definitions/Person"
+      422:
+        description: "Data validation failure.    \n"

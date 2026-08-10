@@ -1,0 +1,2826 @@
+{
+  "operations": [
+    {
+      "id": "akeneo.post.api-oauth-v1-token",
+      "kind": "rest_write",
+      "summary": "POST /api/oauth/v1/token",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/oauth/v1/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-2",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/",
+      "description": "index endpoint listing the API's own available routes; not business data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families",
+      "description": "Enterprise Edition Asset Manager feature, not available on every Akeneo edition; every sub-resource below is scoped under an asset-family code this connector's spec.json has no config surface to enumerate over",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families-asset-family-code-assets",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families/{asset_family_code}/assets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families/{asset_family_code}/assets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-asset-families-asset-family-code-assets",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/asset-families/{asset_family_code}/assets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/asset-families/{asset_family_code}/assets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families-asset-family-code-assets-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families/{asset_family_code}/assets/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families/{asset_family_code}/assets/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-asset-families-asset-family-code-assets-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/asset-families/{asset_family_code}/assets/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/asset-families/{asset_family_code}/assets/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.delete.api-rest-v1-asset-families-asset-family-code-assets-code",
+      "kind": "rest_write",
+      "summary": "DELETE /api/rest/v1/asset-families/{asset_family_code}/assets/{code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/rest/v1/asset-families/{asset_family_code}/assets/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families-asset-family-code-attributes",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families/{asset_family_code}/attributes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families/{asset_family_code}/attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families-asset-family-code-attributes-attribute-code-options",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families/{asset_family_code}/attributes/{attribute_code}/options",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families/{asset_family_code}/attributes/{attribute_code}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families-asset-family-code-attributes-attribute-code-options-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families/{asset_family_code}/attributes/{attribute_code}/options/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families/{asset_family_code}/attributes/{attribute_code}/options/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-asset-families-asset-family-code-attributes-attribute-code-options-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/asset-families/{asset_family_code}/attributes/{attribute_code}/options/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/asset-families/{asset_family_code}/attributes/{attribute_code}/options/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.delete.api-rest-v1-asset-families-asset-family-code-attributes-attribute-code-options-code",
+      "kind": "rest_write",
+      "summary": "DELETE /api/rest/v1/asset-families/{asset_family_code}/attributes/{attribute_code}/options/{code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/rest/v1/asset-families/{asset_family_code}/attributes/{attribute_code}/options/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families-asset-family-code-attributes-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families/{asset_family_code}/attributes/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families/{asset_family_code}/attributes/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-asset-families-asset-family-code-attributes-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/asset-families/{asset_family_code}/attributes/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/asset-families/{asset_family_code}/attributes/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families/{code}",
+      "description": "Enterprise Edition Asset Manager feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-asset-families-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/asset-families/{code}",
+      "description": "Enterprise Edition Asset Manager feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/asset-families/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families-code-assets",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families/{code}/assets",
+      "description": "Enterprise Edition Asset Manager feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families/{code}/assets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-asset-families-code-assets",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/asset-families/{code}/assets",
+      "description": "Enterprise Edition Asset Manager feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/asset-families/{code}/assets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families-code-assets-asset-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families/{code}/assets/{asset_code}",
+      "description": "Enterprise Edition Asset Manager feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families/{code}/assets/{asset_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-asset-families-code-assets-asset-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/asset-families/{code}/assets/{asset_code}",
+      "description": "Enterprise Edition Asset Manager feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/asset-families/{code}/assets/{asset_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.delete.api-rest-v1-asset-families-code-assets-asset-code",
+      "kind": "rest_write",
+      "summary": "DELETE /api/rest/v1/asset-families/{code}/assets/{asset_code}",
+      "description": "Enterprise Edition Asset Manager feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/rest/v1/asset-families/{code}/assets/{asset_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families-code-attributes",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families/{code}/attributes",
+      "description": "Enterprise Edition Asset Manager feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families/{code}/attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families-code-attributes-attribute-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families/{code}/attributes/{attribute_code}",
+      "description": "Enterprise Edition Asset Manager feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families/{code}/attributes/{attribute_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-asset-families-code-attributes-attribute-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/asset-families/{code}/attributes/{attribute_code}",
+      "description": "Enterprise Edition Asset Manager feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/asset-families/{code}/attributes/{attribute_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families-code-attributes-attribute-code-options",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families/{code}/attributes/{attribute_code}/options",
+      "description": "Enterprise Edition Asset Manager feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families/{code}/attributes/{attribute_code}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-families-code-attributes-attribute-code-options-option-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-families/{code}/attributes/{attribute_code}/options/{option_code}",
+      "description": "Enterprise Edition Asset Manager feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-families/{code}/attributes/{attribute_code}/options/{option_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-asset-families-code-attributes-attribute-code-options-option-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/asset-families/{code}/attributes/{attribute_code}/options/{option_code}",
+      "description": "Enterprise Edition Asset Manager feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/asset-families/{code}/attributes/{attribute_code}/options/{option_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.delete.api-rest-v1-asset-families-code-attributes-attribute-code-options-option-code",
+      "kind": "rest_write",
+      "summary": "DELETE /api/rest/v1/asset-families/{code}/attributes/{attribute_code}/options/{option_code}",
+      "description": "Enterprise Edition Asset Manager feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/rest/v1/asset-families/{code}/attributes/{attribute_code}/options/{option_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-asset-media-files",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/asset-media-files",
+      "description": "multipart/form-data file upload",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/asset-media-files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-asset-media-files-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/asset-media-files/{code}",
+      "description": "returns raw file bytes, not JSON record data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/asset-media-files/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-association-types",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/association-types",
+      "description": "identifier-only create; create_or_update_association_type's PATCH already creates or updates in one idempotent upsert call",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/association-types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-association-types",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/association-types",
+      "description": "bulk multi-type PATCH; create_or_update_association_type's single-record PATCH already covers the same outcome, one request per record",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/association-types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-association-types-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/association-types/{code}",
+      "description": "single-association-type detail; the association_types stream already covers the list data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/association-types/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-attribute-groups",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/attribute-groups",
+      "description": "identifier-only create; create_or_update_attribute_group's PATCH already creates or updates in one idempotent upsert call",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/attribute-groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-attribute-groups",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/attribute-groups",
+      "description": "bulk multi-group PATCH; create_or_update_attribute_group's single-record PATCH already covers the same outcome, one request per record",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/attribute-groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-attribute-groups-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/attribute-groups/{code}",
+      "description": "single-attribute-group detail; the attribute_groups stream already covers the list data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/attribute-groups/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-attributes",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/attributes",
+      "description": "identifier-only create; create_or_update_attribute's PATCH already creates or updates in one idempotent upsert call",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-attributes",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/attributes",
+      "description": "bulk multi-attribute PATCH; create_or_update_attribute's single-attribute PATCH already covers the same outcome, one request per record",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-attributes-attribute-code-options",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/attributes/{attribute_code}/options",
+      "description": "attribute-option sub-resource requires a parent attribute_code this connector's spec.json has no config surface to enumerate over (there is no list-all-attribute-codes-then-fan-out config wired for this pilot)",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/attributes/{attribute_code}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-attributes-attribute-code-options",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/attributes/{attribute_code}/options",
+      "description": "same parent-scoping limitation as the list above",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/attributes/{attribute_code}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-attributes-attribute-code-options",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/attributes/{attribute_code}/options",
+      "description": "same parent-scoping limitation as the list above",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/attributes/{attribute_code}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-attributes-attribute-code-options-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/attributes/{attribute_code}/options/{code}",
+      "description": "single attribute-option detail, same parent-scoping limitation",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/attributes/{attribute_code}/options/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-attributes-attribute-code-options-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/attributes/{attribute_code}/options/{code}",
+      "description": "same parent-scoping limitation as the list above",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/attributes/{attribute_code}/options/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-attributes-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/attributes/{code}",
+      "description": "single-attribute detail; the attributes stream already covers the list data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/attributes/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-catalogs",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/catalogs",
+      "description": "Catalogs (marketplace channel export) is a distinct Enterprise Edition provisioning feature requiring its own workspace/marketplace-channel scope this connector's spec.json has no config surface for",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/catalogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-catalogs",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/catalogs",
+      "description": "Catalogs provisioning feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/catalogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-catalogs-id",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/catalogs/{id}",
+      "description": "Catalogs provisioning feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/catalogs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-catalogs-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/catalogs/{id}",
+      "description": "Catalogs provisioning feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/catalogs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.delete.api-rest-v1-catalogs-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/rest/v1/catalogs/{id}",
+      "description": "Catalogs provisioning feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/rest/v1/catalogs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-catalogs-id-duplicate",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/catalogs/{id}/duplicate",
+      "description": "Catalogs provisioning feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/catalogs/{id}/duplicate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-catalogs-id-mapped-models",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/catalogs/{id}/mapped-models",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/catalogs/{id}/mapped-models",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-catalogs-id-mapped-models-model-code-variants",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/catalogs/{id}/mapped-models/{model_code}/variants",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/catalogs/{id}/mapped-models/{model_code}/variants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-catalogs-id-mapped-product-models",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/catalogs/{id}/mapped-product-models",
+      "description": "Catalogs provisioning feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/catalogs/{id}/mapped-product-models",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-catalogs-id-mapped-product-models-code-variants",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/catalogs/{id}/mapped-product-models/{code}/variants",
+      "description": "Catalogs provisioning feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/catalogs/{id}/mapped-product-models/{code}/variants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-catalogs-id-mapped-products",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/catalogs/{id}/mapped-products",
+      "description": "Catalogs provisioning feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/catalogs/{id}/mapped-products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-catalogs-id-mapping-schemas-product",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/catalogs/{id}/mapping-schemas/product",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/catalogs/{id}/mapping-schemas/product",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.put.api-rest-v1-catalogs-id-mapping-schemas-product",
+      "kind": "rest_write",
+      "summary": "PUT /api/rest/v1/catalogs/{id}/mapping-schemas/product",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/rest/v1/catalogs/{id}/mapping-schemas/product",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.delete.api-rest-v1-catalogs-id-mapping-schemas-product",
+      "kind": "rest_write",
+      "summary": "DELETE /api/rest/v1/catalogs/{id}/mapping-schemas/product",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/rest/v1/catalogs/{id}/mapping-schemas/product",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-catalogs-id-mapping-product",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/catalogs/{id}/mapping/product",
+      "description": "Catalogs provisioning feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/catalogs/{id}/mapping/product",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.put.api-rest-v1-catalogs-id-mapping-product",
+      "kind": "rest_write",
+      "summary": "PUT /api/rest/v1/catalogs/{id}/mapping/product",
+      "description": "Catalogs provisioning feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/rest/v1/catalogs/{id}/mapping/product",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.delete.api-rest-v1-catalogs-id-mapping-product",
+      "kind": "rest_write",
+      "summary": "DELETE /api/rest/v1/catalogs/{id}/mapping/product",
+      "description": "Catalogs provisioning feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/rest/v1/catalogs/{id}/mapping/product",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-catalogs-id-product-uuids",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/catalogs/{id}/product-uuids",
+      "description": "Catalogs provisioning feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/catalogs/{id}/product-uuids",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-catalogs-id-products",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/catalogs/{id}/products",
+      "description": "Catalogs-scoped view of the same Product resource the products stream already lists in full",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/catalogs/{id}/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-catalogs-id-products-uuid",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/catalogs/{id}/products/{uuid}",
+      "description": "Catalogs-scoped single-product detail; covered by the products stream",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/catalogs/{id}/products/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-categories",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/categories",
+      "description": "identifier-only create; create_or_update_category's PATCH already creates or updates in one idempotent upsert call",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-categories",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/categories",
+      "description": "bulk multi-category PATCH; create_or_update_category's single-category PATCH already covers the same outcome, one request per record",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-categories-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/categories/{code}",
+      "description": "single-category detail; the categories stream already covers the list data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/categories/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-categories-code-media-files",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/categories/{code}/media-files",
+      "description": "multipart/form-data file upload; this dialect's write actions express only JSON/form bodies",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/categories/{code}/media-files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-categories-code-media-files-file-path",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/categories/{code}/media-files/{file_path}",
+      "description": "returns raw file bytes, not JSON record data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/categories/{code}/media-files/{file_path}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-category-media-files",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/category-media-files",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/category-media-files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-category-media-files-file-path-download",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/category-media-files/{file_path}/download",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/category-media-files/{file_path}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-channels",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/channels",
+      "description": "identifier-only create; create_or_update_channel's PATCH already creates or updates in one idempotent upsert call",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/channels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-channels",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/channels",
+      "description": "bulk multi-channel PATCH; create_or_update_channel's single-channel PATCH already covers the same outcome, one request per record",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/channels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-channels-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/channels/{code}",
+      "description": "single-channel detail; the channels stream already covers the list data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/channels/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-currencies-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/currencies/{code}",
+      "description": "single-currency detail; the currencies stream already covers the list data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/currencies/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-data-model-designer-modelization-suggestion",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/data-model-designer/modelization-suggestion",
+      "description": "Data Architect Agent AI-suggestion feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/data-model-designer/modelization-suggestion",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-data-model-designer-modelization-suggestion-approve",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/data-model-designer/modelization-suggestion/approve",
+      "description": "Data Architect Agent AI-suggestion feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/data-model-designer/modelization-suggestion/approve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-data-model-designer-modelization-suggestion-attribute",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/data-model-designer/modelization-suggestion/attribute",
+      "description": "Data Architect Agent AI-suggestion feature, an async/conversational assistant capability, not a syncable record stream or reverse-ETL write",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/data-model-designer/modelization-suggestion/attribute",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-data-model-designer-modelization-suggestion-decline",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/data-model-designer/modelization-suggestion/decline",
+      "description": "Data Architect Agent AI-suggestion feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/data-model-designer/modelization-suggestion/decline",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-data-model-designer-modelization-suggestion-uuid",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/data-model-designer/modelization-suggestion/{uuid}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/data-model-designer/modelization-suggestion/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-data-model-designer-modelization-suggestion-uuid-approve",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/data-model-designer/modelization-suggestion/{uuid}/approve",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/data-model-designer/modelization-suggestion/{uuid}/approve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-data-model-designer-modelization-suggestion-uuid-decline",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/data-model-designer/modelization-suggestion/{uuid}/decline",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/data-model-designer/modelization-suggestion/{uuid}/decline",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-data-model-designer-modelization-suggestions",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/data-model-designer/modelization-suggestions",
+      "description": "Data Architect Agent AI-suggestion feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/data-model-designer/modelization-suggestions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-export-jobs-code",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/export-jobs/{code}",
+      "description": "launches an async export job in Akeneo's own job queue; the resulting export is a downloadable artifact, not a synchronous JSON record this dialect's write action can model without polling",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/export-jobs/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-families",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/families",
+      "description": "identifier-only create; create_or_update_family's PATCH already creates or updates in one idempotent upsert call",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/families",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-families",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/families",
+      "description": "bulk multi-family PATCH; create_or_update_family's single-family PATCH already covers the same outcome, one request per record",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/families",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-families-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/families/{code}",
+      "description": "single-family detail; the families stream already covers the list data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/families/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.delete.api-rest-v1-families-code",
+      "kind": "rest_write",
+      "summary": "DELETE /api/rest/v1/families/{code}",
+      "description": "permanently deletes a family definition, affecting every product/product-model assigned to it; no obviously-safe reverse-ETL write surface for this pass",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/rest/v1/families/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-families-family-code-variants",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/families/{family_code}/variants",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/families/{family_code}/variants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-families-family-code-variants",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/families/{family_code}/variants",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/families/{family_code}/variants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-families-family-code-variants",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/families/{family_code}/variants",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/families/{family_code}/variants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-families-family-code-variants-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/families/{family_code}/variants/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/families/{family_code}/variants/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-families-family-code-variants-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/families/{family_code}/variants/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/families/{family_code}/variants/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-family-variants",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/family-variants",
+      "description": "identifier-only create; create_or_update_family_variant's PATCH already creates or updates in one idempotent upsert call",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/family-variants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-family-variants",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/family-variants",
+      "description": "bulk multi-family-variant PATCH; create_or_update_family_variant's single-record PATCH already covers the same outcome, one request per record",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/family-variants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-family-variants-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/family-variants/{code}",
+      "description": "single-family-variant detail; the family_variants stream already covers the list data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/family-variants/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-import-jobs-code",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/import-jobs/{code}",
+      "description": "launches an async import job; same async-job limitation as export-jobs above",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/import-jobs/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-jobs-export-code",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/jobs/export/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/jobs/export/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-jobs-import-code",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/jobs/import/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/jobs/import/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-locales-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/locales/{code}",
+      "description": "single-locale detail; the locales stream already covers the list data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/locales/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-measure-families",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/measure-families",
+      "description": "measurement families have no per-code PATCH endpoint, only this bulk multi-family form (newline-delimited JSON body); the engine's one-request-per-record write semantics has no per-record analog to model here",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/measure-families",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-measurement-families",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/measurement-families",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/measurement-families",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-measurement-families",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/measurement-families",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/measurement-families",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-media-files",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/media-files",
+      "description": "lists media-file metadata records referencing binary assets already attached to products/categories via the values/media-files write path; a thin metadata-only stream with no independent business meaning apart from the product/category it is attached to",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/media-files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-media-files",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/media-files",
+      "description": "multipart/form-data file upload; this dialect's write actions express only JSON/form bodies, not binary multipart uploads",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/media-files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-media-files-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/media-files/{code}",
+      "description": "single media-file metadata detail; excluded for the same reason as the list above",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/media-files/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-media-files-code-download",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/media-files/{code}/download",
+      "description": "returns raw file bytes, not JSON record data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/media-files/{code}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-permissions-channels",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/permissions/channels",
+      "description": "returns the authenticated API user's own channel access-control list for introspection, not syncable business data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/permissions/channels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-permissions-locales",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/permissions/locales",
+      "description": "returns the authenticated API user's own locale access-control list for introspection, not syncable business data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/permissions/locales",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-permissions-uuid-channels",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/permissions/{uuid}/channels",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/permissions/{uuid}/channels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-permissions-uuid-locales",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/permissions/{uuid}/locales",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/permissions/{uuid}/locales",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-product-models",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/product-models",
+      "description": "identifier-only create; create_or_update_product_model's PATCH already creates or updates in one idempotent upsert call",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/product-models",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-product-models",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/product-models",
+      "description": "bulk multi-model PATCH; create_or_update_product_model's single-model PATCH already covers the same outcome, one request per record",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/product-models",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-product-models-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/product-models/{code}",
+      "description": "single-product-model detail; the product_models stream already covers the list data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/product-models/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.delete.api-rest-v1-product-models-code",
+      "kind": "rest_write",
+      "summary": "DELETE /api/rest/v1/product-models/{code}",
+      "description": "permanently deletes a product model and orphans its variant products; no obviously-safe reverse-ETL write surface for this pass",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/rest/v1/product-models/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-product-models-code-draft",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/product-models/{code}/draft",
+      "description": "Enterprise Edition draft/proposal detail",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/product-models/{code}/draft",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-product-models-code-proposal",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/product-models/{code}/proposal",
+      "description": "Enterprise Edition workflow/proposal feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/product-models/{code}/proposal",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-products",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/products",
+      "description": "identifier-only create; create_or_update_product's PATCH /products/{code} already creates (201) or updates (204) in one idempotent upsert call, matching Akeneo's own documented preferred pattern",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-products",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/products",
+      "description": "bulk multi-product PATCH (newline-delimited JSON body, one product per line); create_or_update_product's single-product PATCH already covers create/update, one request per record, matching the engine's one-request-per-record write semantics (conventions.md §3)",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-products-uuid",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/products-uuid",
+      "description": "UUID-keyed variant of the same Product resource the products stream already lists via its identifier-keyed form; not separately migrated",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/products-uuid",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-products-uuid",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/products-uuid",
+      "description": "UUID-keyed create; create_or_update_product's identifier-keyed PATCH already covers create/update",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/products-uuid",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-products-uuid",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/products-uuid",
+      "description": "UUID-keyed bulk PATCH; not separately migrated from the identifier-keyed bulk exclusion above",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/products-uuid",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-products-uuid-search",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/products-uuid/search",
+      "description": "server-side search over the same Product resource the products stream already lists in full",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/products-uuid/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-products-uuid-uuid",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/products-uuid/{uuid}",
+      "description": "UUID-keyed single-product detail; covered by the identifier-keyed products stream",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/products-uuid/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-products-uuid-uuid",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/products-uuid/{uuid}",
+      "description": "UUID-keyed single-product upsert; covered by create_or_update_product's identifier-keyed PATCH",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/products-uuid/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.delete.api-rest-v1-products-uuid-uuid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/rest/v1/products-uuid/{uuid}",
+      "description": "permanently deletes a product; same reasoning as the identifier-keyed delete above",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/rest/v1/products-uuid/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-products-uuid-uuid-draft",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/products-uuid/{uuid}/draft",
+      "description": "Enterprise Edition draft/proposal detail",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/products-uuid/{uuid}/draft",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-products-uuid-uuid-proposal",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/products-uuid/{uuid}/proposal",
+      "description": "Enterprise Edition workflow/proposal feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/products-uuid/{uuid}/proposal",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-products-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/products/{code}",
+      "description": "single-product detail; the products stream already covers the list data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/products/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.delete.api-rest-v1-products-code",
+      "kind": "rest_write",
+      "summary": "DELETE /api/rest/v1/products/{code}",
+      "description": "permanently deletes a product and all its variant/history data with no undo; no obviously-safe reverse-ETL write surface for this pass",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/rest/v1/products/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-products-code-draft",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/products/{code}/draft",
+      "description": "Enterprise Edition draft/proposal detail, not available on every Akeneo edition",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/products/{code}/draft",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-products-code-proposal",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/products/{code}/proposal",
+      "description": "submits a draft for workflow approval; requires the Enterprise Edition workflow/proposal feature and reviewer-role context this connector's spec has no config surface for",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/products/{code}/proposal",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities",
+      "description": "Enterprise Edition Reference Entities feature, not available on every Akeneo edition; every sub-resource below is scoped under a reference-entity code this connector's spec.json has no config surface to enumerate over",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-reference-entities-media-files",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/reference-entities-media-files",
+      "description": "multipart/form-data file upload",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/reference-entities-media-files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-media-files-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities-media-files/{code}",
+      "description": "returns raw file bytes, not JSON record data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities-media-files/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-records",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities-records",
+      "description": "Enterprise Edition Reference Entities feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities-records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-records-2",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/records",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/{code}",
+      "description": "Enterprise Edition Reference Entities feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-reference-entities-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/reference-entities/{code}",
+      "description": "Enterprise Edition Reference Entities feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/reference-entities/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-code-attributes",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/{code}/attributes",
+      "description": "Enterprise Edition Reference Entities feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/{code}/attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-code-attributes-attribute-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/{code}/attributes/{attribute_code}",
+      "description": "Enterprise Edition Reference Entities feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/{code}/attributes/{attribute_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-reference-entities-code-attributes-attribute-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/reference-entities/{code}/attributes/{attribute_code}",
+      "description": "Enterprise Edition Reference Entities feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/reference-entities/{code}/attributes/{attribute_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-code-attributes-attribute-code-options",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/{code}/attributes/{attribute_code}/options",
+      "description": "Enterprise Edition Reference Entities feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/{code}/attributes/{attribute_code}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-code-attributes-attribute-code-options-option-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/{code}/attributes/{attribute_code}/options/{option_code}",
+      "description": "Enterprise Edition Reference Entities feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/{code}/attributes/{attribute_code}/options/{option_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-reference-entities-code-attributes-attribute-code-options-option-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/reference-entities/{code}/attributes/{attribute_code}/options/{option_code}",
+      "description": "Enterprise Edition Reference Entities feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/reference-entities/{code}/attributes/{attribute_code}/options/{option_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-code-records",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/{code}/records",
+      "description": "Enterprise Edition Reference Entities feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/{code}/records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-reference-entities-code-records",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/reference-entities/{code}/records",
+      "description": "Enterprise Edition Reference Entities feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/reference-entities/{code}/records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-code-records-record-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/{code}/records/{record_code}",
+      "description": "Enterprise Edition Reference Entities feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/{code}/records/{record_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-reference-entities-code-records-record-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/reference-entities/{code}/records/{record_code}",
+      "description": "Enterprise Edition Reference Entities feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/reference-entities/{code}/records/{record_code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-reference-entity-code-attributes",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/{reference_entity_code}/attributes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/{reference_entity_code}/attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-reference-entity-code-attributes-attribute-code-options",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/{reference_entity_code}/attributes/{attribute_code}/options",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/{reference_entity_code}/attributes/{attribute_code}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-reference-entity-code-attributes-attribute-code-options-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/{reference_entity_code}/attributes/{attribute_code}/options/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/{reference_entity_code}/attributes/{attribute_code}/options/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-reference-entities-reference-entity-code-attributes-attribute-code-options-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/reference-entities/{reference_entity_code}/attributes/{attribute_code}/options/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/reference-entities/{reference_entity_code}/attributes/{attribute_code}/options/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-reference-entity-code-attributes-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/{reference_entity_code}/attributes/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/{reference_entity_code}/attributes/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-reference-entities-reference-entity-code-attributes-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/reference-entities/{reference_entity_code}/attributes/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/reference-entities/{reference_entity_code}/attributes/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-reference-entity-code-records",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/{reference_entity_code}/records",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/{reference_entity_code}/records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-reference-entities-reference-entity-code-records",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/reference-entities/{reference_entity_code}/records",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/reference-entities/{reference_entity_code}/records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-reference-entities-reference-entity-code-records-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/reference-entities/{reference_entity_code}/records/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/reference-entities/{reference_entity_code}/records/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-reference-entities-reference-entity-code-records-code",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/reference-entities/{reference_entity_code}/records/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/reference-entities/{reference_entity_code}/records/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-rule-definitions",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/rule-definitions",
+      "description": "Enterprise Edition rule-engine feature (business rule automation), not available on every Akeneo edition",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/rule-definitions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-rule-definitions-code",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/rule-definitions/{code}",
+      "description": "Enterprise Edition rule-engine feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/rule-definitions/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.put.api-rest-v1-rule-definitions-code",
+      "kind": "rest_write",
+      "summary": "PUT /api/rest/v1/rule-definitions/{code}",
+      "description": "Enterprise Edition rule-engine feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/rest/v1/rule-definitions/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-system",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/system",
+      "description": "returns Akeneo PIM edition/version metadata for introspection, not syncable business data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/system",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-system-information",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/system-information",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/system-information",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-token",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/token",
+      "description": "OAuth2 password-grant token-exchange endpoint used internally by the akeneo AuthHook, not a syncable data stream or a directly caller-invoked write action",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-ui-extensions",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/ui-extensions",
+      "description": "UI extension management is an account/instance-admin customization feature, not reverse-ETL business data",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/ui-extensions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-ui-extensions",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/ui-extensions",
+      "description": "UI extension management is an account/instance-admin customization feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/ui-extensions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-ui-extensions-uuid",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/ui-extensions/{uuid}",
+      "description": "file-upload variant of UI extension update (multipart), not a JSON record mutation",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/ui-extensions/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-ui-extensions-uuid",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/ui-extensions/{uuid}",
+      "description": "UI extension management is an account/instance-admin customization feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/ui-extensions/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.delete.api-rest-v1-ui-extensions-uuid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/rest/v1/ui-extensions/{uuid}",
+      "description": "UI extension management is an account/instance-admin customization feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/rest/v1/ui-extensions/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-workflow-executions",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/workflow-executions",
+      "description": "Enterprise Edition workflow-automation feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/workflow-executions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-workflow-tasks",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/workflow-tasks",
+      "description": "Enterprise Edition workflow-automation feature",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/workflow-tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-workflow-tasks-uuid",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/workflow-tasks/{uuid}",
+      "description": "Enterprise Edition workflow-automation feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/workflow-tasks/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-workflows",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/workflows",
+      "description": "Enterprise Edition workflow-automation feature, not available on every Akeneo edition",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/workflows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.post.api-rest-v1-workflows-executions",
+      "kind": "rest_write",
+      "summary": "POST /api/rest/v1/workflows/executions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/rest/v1/workflows/executions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-workflows-steps-uuid-assignees",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/workflows/steps/{uuid}/assignees",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/workflows/steps/{uuid}/assignees",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-workflows-tasks",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/workflows/tasks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/workflows/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.patch.api-rest-v1-workflows-tasks-uuid",
+      "kind": "rest_write",
+      "summary": "PATCH /api/rest/v1/workflows/tasks/{uuid}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/rest/v1/workflows/tasks/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-workflows-uuid",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/workflows/{uuid}",
+      "description": "Enterprise Edition workflow-automation feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/workflows/{uuid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "akeneo.get.api-rest-v1-workflows-uuid-step-assignees",
+      "kind": "rest_read",
+      "summary": "GET /api/rest/v1/workflows/{uuid}/step-assignees",
+      "description": "Enterprise Edition workflow-automation feature, parent-scoped",
+      "source_url": "https://storage.googleapis.com/akecld-prd-pim-saas-shared-openapi-spec/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest/v1/workflows/{uuid}/step-assignees",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

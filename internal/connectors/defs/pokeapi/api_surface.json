@@ -1,40 +1,2167 @@
 {
-  "api": "PokeAPI v2 (https://pokeapi.co/api/v2)",
+  "api": "PokeAPI v2 (https://pokeapi.co/api/v2); provider artifact version: PokéAPI v2.10.0; OpenAPI 3.1.0",
   "docs": "https://pokeapi.co/docs/v2",
-  "reviewed_at": "2026-07-04",
-  "scope": "Complete PokeAPI v2 documented REST surface: every concrete resource list endpoint implied by the documented generic list pagination rule, every documented resource detail endpoint, and the pokemon encounters subresource. PokeAPI is consumption-only, so there are no mutation endpoints or write actions.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (100 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "pokeapi-artifact-2026-08-09",
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "kind": "openapi",
+      "version": "3.1.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/pokemon",
-      "covered_by": {
-        "stream": "pokemon"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/type",
-      "covered_by": {
-        "stream": "types"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/ability",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /ability]"
+      },
       "covered_by": {
         "stream": "abilities"
       }
     },
     {
       "method": "GET",
-      "path": "/move",
+      "path": "/ability/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /ability/{id or name}]"
+      },
       "covered_by": {
-        "stream": "moves"
+        "stream": "abilities_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ability/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/ability/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ability/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/ability/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/berry-firmness/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/berry-firmness/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/berry-firmness/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/berry-firmness/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/berry-flavor/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/berry-flavor/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/berry-flavor/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/berry-flavor/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/berry/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/berry/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/berry/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/berry/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/characteristic/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/characteristic/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/characteristic/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/characteristic/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contest-effect/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/contest-effect/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contest-effect/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/contest-effect/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contest-type/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/contest-type/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/contest-type/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/contest-type/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/currency/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/currency/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/currency/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/currency/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/egg-group/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/egg-group/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/egg-group/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/egg-group/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/encounter-condition-value/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/encounter-condition-value/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/encounter-condition-value/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/encounter-condition-value/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/encounter-condition/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/encounter-condition/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/encounter-condition/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/encounter-condition/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/encounter-method/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/encounter-method/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/encounter-method/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/encounter-method/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/evolution-chain/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/evolution-chain/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/evolution-chain/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/evolution-chain/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/evolution-trigger/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/evolution-trigger/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/evolution-trigger/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/evolution-trigger/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/gender/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/gender/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/gender/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/gender/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/generation/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/generation/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/generation/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/generation/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/growth-rate/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/growth-rate/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/growth-rate/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/growth-rate/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/item-attribute/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/item-attribute/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/item-attribute/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/item-attribute/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/item-category/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/item-category/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/item-category/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/item-category/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/item-fling-effect/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/item-fling-effect/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/item-fling-effect/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/item-fling-effect/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/item-pocket/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/item-pocket/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/item-pocket/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/item-pocket/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/item/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/item/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/item/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/item/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/language/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/language/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/language/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/language/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/location-area/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/location-area/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/location-area/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/location-area/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/location/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/location/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/location/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/location/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/machine/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/machine/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/machine/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/machine/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/meta/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/meta/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move-ailment/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move-ailment/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move-ailment/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move-ailment/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move-battle-style/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move-battle-style/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move-battle-style/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move-battle-style/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move-category/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move-category/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move-category/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move-category/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move-damage-class/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move-damage-class/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move-damage-class/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move-damage-class/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move-learn-method/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move-learn-method/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move-learn-method/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move-learn-method/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move-target/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move-target/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move-target/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move-target/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/move/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/move/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/nature/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/nature/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/nature/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/nature/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pal-park-area/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pal-park-area/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pal-park-area/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pal-park-area/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokeathlon-stat/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokeathlon-stat/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokeathlon-stat/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokeathlon-stat/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokedex/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokedex/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokedex/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokedex/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokemon-color/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokemon-color/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokemon-color/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokemon-color/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokemon-form/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokemon-form/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokemon-form/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokemon-form/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokemon-habitat/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokemon-habitat/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokemon-habitat/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokemon-habitat/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokemon-shape/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokemon-shape/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokemon-shape/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokemon-shape/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokemon-species/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokemon-species/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokemon-species/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokemon-species/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokemon/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokemon/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokemon/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokemon/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/pokemon/{pokemon_id}/encounters",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/pokemon/{pokemon_id}/encounters\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/region/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/region/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/region/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/region/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/stat/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/stat/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/stat/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/stat/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/super-contest-effect/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/super-contest-effect/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/super-contest-effect/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/super-contest-effect/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/type/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/type/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/type/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/type/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/version-group/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/version-group/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/version-group/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/version-group/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/version/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/version/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/version/{id}/",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "paths[\"/api/v2/version/{id}/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/berry",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /berry]"
+      },
       "covered_by": {
         "stream": "berries"
       }
@@ -42,48 +2169,237 @@
     {
       "method": "GET",
       "path": "/berry-firmness",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /berry-firmness]"
+      },
       "covered_by": {
         "stream": "berry_firmnesses"
       }
     },
     {
       "method": "GET",
+      "path": "/berry-firmness/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /berry-firmness/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "berry_firmnesses_detail"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/berry-flavor",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /berry-flavor]"
+      },
       "covered_by": {
         "stream": "berry_flavors"
       }
     },
     {
       "method": "GET",
-      "path": "/contest-type",
+      "path": "/berry-flavor/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /berry-flavor/{id or name}]"
+      },
       "covered_by": {
-        "stream": "contest_types"
+        "stream": "berry_flavors_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/berry/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /berry/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "berries_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/characteristic",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /characteristic]"
+      },
+      "covered_by": {
+        "stream": "characteristics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/characteristic/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /characteristic/{id}]"
+      },
+      "covered_by": {
+        "stream": "characteristics_detail"
       }
     },
     {
       "method": "GET",
       "path": "/contest-effect",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /contest-effect]"
+      },
       "covered_by": {
         "stream": "contest_effects"
       }
     },
     {
       "method": "GET",
-      "path": "/super-contest-effect",
+      "path": "/contest-effect/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /contest-effect/{id}]"
+      },
       "covered_by": {
-        "stream": "super_contest_effects"
+        "stream": "contest_effects_detail"
       }
     },
     {
       "method": "GET",
-      "path": "/encounter-method",
+      "path": "/contest-type",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /contest-type]"
+      },
       "covered_by": {
-        "stream": "encounter_methods"
+        "stream": "contest_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contest-type/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /contest-type/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "contest_types_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/egg-group",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /egg-group]"
+      },
+      "covered_by": {
+        "stream": "egg_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/egg-group/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /egg-group/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "egg_groups_detail"
       }
     },
     {
       "method": "GET",
       "path": "/encounter-condition",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /encounter-condition]"
+      },
       "covered_by": {
         "stream": "encounter_conditions"
       }
@@ -91,55 +2407,271 @@
     {
       "method": "GET",
       "path": "/encounter-condition-value",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /encounter-condition-value]"
+      },
       "covered_by": {
         "stream": "encounter_condition_values"
       }
     },
     {
       "method": "GET",
+      "path": "/encounter-condition-value/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /encounter-condition-value/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "encounter_condition_values_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-condition/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /encounter-condition/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "encounter_conditions_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-method",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /encounter-method]"
+      },
+      "covered_by": {
+        "stream": "encounter_methods"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/encounter-method/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /encounter-method/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "encounter_methods_detail"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/evolution-chain",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /evolution-chain]"
+      },
       "covered_by": {
         "stream": "evolution_chains"
       }
     },
     {
       "method": "GET",
+      "path": "/evolution-chain/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /evolution-chain/{id}]"
+      },
+      "covered_by": {
+        "stream": "evolution_chains_detail"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/evolution-trigger",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /evolution-trigger]"
+      },
       "covered_by": {
         "stream": "evolution_triggers"
       }
     },
     {
       "method": "GET",
+      "path": "/evolution-trigger/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /evolution-trigger/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "evolution_triggers_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gender",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /gender]"
+      },
+      "covered_by": {
+        "stream": "genders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gender/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /gender/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "genders_detail"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/generation",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /generation]"
+      },
       "covered_by": {
         "stream": "generations"
       }
     },
     {
       "method": "GET",
-      "path": "/pokedex",
+      "path": "/generation/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /generation/{id or name}]"
+      },
       "covered_by": {
-        "stream": "pokedexes"
+        "stream": "generations_detail"
       }
     },
     {
       "method": "GET",
-      "path": "/version",
+      "path": "/growth-rate",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /growth-rate]"
+      },
       "covered_by": {
-        "stream": "versions"
+        "stream": "growth_rates"
       }
     },
     {
       "method": "GET",
-      "path": "/version-group",
+      "path": "/growth-rate/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /growth-rate/{id or name}]"
+      },
       "covered_by": {
-        "stream": "version_groups"
+        "stream": "growth_rates_detail"
       }
     },
     {
       "method": "GET",
       "path": "/item",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /item]"
+      },
       "covered_by": {
         "stream": "items"
       }
@@ -147,34 +2679,203 @@
     {
       "method": "GET",
       "path": "/item-attribute",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /item-attribute]"
+      },
       "covered_by": {
         "stream": "item_attributes"
       }
     },
     {
       "method": "GET",
+      "path": "/item-attribute/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /item-attribute/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "item_attributes_detail"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/item-category",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /item-category]"
+      },
       "covered_by": {
         "stream": "item_categories"
       }
     },
     {
       "method": "GET",
+      "path": "/item-category/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /item-category/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "item_categories_detail"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/item-fling-effect",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /item-fling-effect]"
+      },
       "covered_by": {
         "stream": "item_fling_effects"
       }
     },
     {
       "method": "GET",
+      "path": "/item-fling-effect/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /item-fling-effect/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "item_fling_effects_detail"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/item-pocket",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /item-pocket]"
+      },
       "covered_by": {
         "stream": "item_pockets"
       }
     },
     {
       "method": "GET",
+      "path": "/item-pocket/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /item-pocket/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "item_pockets_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/item/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /item/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "items_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/language",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /language]"
+      },
+      "covered_by": {
+        "stream": "languages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/language/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /language/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "languages_detail"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/location",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /location]"
+      },
       "covered_by": {
         "stream": "locations"
       }
@@ -182,505 +2883,885 @@
     {
       "method": "GET",
       "path": "/location-area",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /location-area]"
+      },
       "covered_by": {
         "stream": "location_areas"
       }
     },
     {
       "method": "GET",
-      "path": "/pal-park-area",
-      "covered_by": {
-        "stream": "pal_park_areas"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/region",
-      "covered_by": {
-        "stream": "regions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/machine",
-      "covered_by": {
-        "stream": "machines"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/move-ailment",
-      "covered_by": {
-        "stream": "move_ailments"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/move-battle-style",
-      "covered_by": {
-        "stream": "move_battle_styles"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/move-category",
-      "covered_by": {
-        "stream": "move_categories"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/move-damage-class",
-      "covered_by": {
-        "stream": "move_damage_classes"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/move-learn-method",
-      "covered_by": {
-        "stream": "move_learn_methods"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/move-target",
-      "covered_by": {
-        "stream": "move_targets"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/characteristic",
-      "covered_by": {
-        "stream": "characteristics"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/egg-group",
-      "covered_by": {
-        "stream": "egg_groups"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/gender",
-      "covered_by": {
-        "stream": "genders"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/growth-rate",
-      "covered_by": {
-        "stream": "growth_rates"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/nature",
-      "covered_by": {
-        "stream": "natures"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/pokeathlon-stat",
-      "covered_by": {
-        "stream": "pokeathlon_stats"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/pokemon-color",
-      "covered_by": {
-        "stream": "pokemon_colors"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/pokemon-form",
-      "covered_by": {
-        "stream": "pokemon_forms"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/pokemon-habitat",
-      "covered_by": {
-        "stream": "pokemon_habitats"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/pokemon-shape",
-      "covered_by": {
-        "stream": "pokemon_shapes"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/pokemon-species",
-      "covered_by": {
-        "stream": "pokemon_species"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/stat",
-      "covered_by": {
-        "stream": "stats"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/language",
-      "covered_by": {
-        "stream": "languages"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/pokemon/{id or name}",
-      "covered_by": {
-        "stream": "pokemon_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/type/{id or name}",
-      "covered_by": {
-        "stream": "types_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/ability/{id or name}",
-      "covered_by": {
-        "stream": "abilities_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/move/{id or name}",
-      "covered_by": {
-        "stream": "moves_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/berry/{id or name}",
-      "covered_by": {
-        "stream": "berries_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/berry-firmness/{id or name}",
-      "covered_by": {
-        "stream": "berry_firmnesses_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/berry-flavor/{id or name}",
-      "covered_by": {
-        "stream": "berry_flavors_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/contest-type/{id or name}",
-      "covered_by": {
-        "stream": "contest_types_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/contest-effect/{id}",
-      "covered_by": {
-        "stream": "contest_effects_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/super-contest-effect/{id}",
-      "covered_by": {
-        "stream": "super_contest_effects_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/encounter-method/{id or name}",
-      "covered_by": {
-        "stream": "encounter_methods_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/encounter-condition/{id or name}",
-      "covered_by": {
-        "stream": "encounter_conditions_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/encounter-condition-value/{id or name}",
-      "covered_by": {
-        "stream": "encounter_condition_values_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/evolution-chain/{id}",
-      "covered_by": {
-        "stream": "evolution_chains_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/evolution-trigger/{id or name}",
-      "covered_by": {
-        "stream": "evolution_triggers_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/generation/{id or name}",
-      "covered_by": {
-        "stream": "generations_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/pokedex/{id or name}",
-      "covered_by": {
-        "stream": "pokedexes_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/version/{id or name}",
-      "covered_by": {
-        "stream": "versions_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/version-group/{id or name}",
-      "covered_by": {
-        "stream": "version_groups_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/item/{id or name}",
-      "covered_by": {
-        "stream": "items_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/item-attribute/{id or name}",
-      "covered_by": {
-        "stream": "item_attributes_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/item-category/{id or name}",
-      "covered_by": {
-        "stream": "item_categories_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/item-fling-effect/{id or name}",
-      "covered_by": {
-        "stream": "item_fling_effects_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/item-pocket/{id or name}",
-      "covered_by": {
-        "stream": "item_pockets_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/location/{id or name}",
-      "covered_by": {
-        "stream": "locations_detail"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/location-area/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /location-area/{id or name}]"
+      },
       "covered_by": {
         "stream": "location_areas_detail"
       }
     },
     {
       "method": "GET",
-      "path": "/pal-park-area/{id or name}",
+      "path": "/location/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /location/{id or name}]"
+      },
       "covered_by": {
-        "stream": "pal_park_areas_detail"
+        "stream": "locations_detail"
       }
     },
     {
       "method": "GET",
-      "path": "/region/{id or name}",
+      "path": "/machine",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /machine]"
+      },
       "covered_by": {
-        "stream": "regions_detail"
+        "stream": "machines"
       }
     },
     {
       "method": "GET",
       "path": "/machine/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /machine/{id}]"
+      },
       "covered_by": {
         "stream": "machines_detail"
       }
     },
     {
       "method": "GET",
+      "path": "/move",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move]"
+      },
+      "covered_by": {
+        "stream": "moves"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/move-ailment",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move-ailment]"
+      },
+      "covered_by": {
+        "stream": "move_ailments"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/move-ailment/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move-ailment/{id or name}]"
+      },
       "covered_by": {
         "stream": "move_ailments_detail"
       }
     },
     {
       "method": "GET",
+      "path": "/move-battle-style",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move-battle-style]"
+      },
+      "covered_by": {
+        "stream": "move_battle_styles"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/move-battle-style/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move-battle-style/{id or name}]"
+      },
       "covered_by": {
         "stream": "move_battle_styles_detail"
       }
     },
     {
       "method": "GET",
+      "path": "/move-category",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move-category]"
+      },
+      "covered_by": {
+        "stream": "move_categories"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/move-category/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move-category/{id or name}]"
+      },
       "covered_by": {
         "stream": "move_categories_detail"
       }
     },
     {
       "method": "GET",
+      "path": "/move-damage-class",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move-damage-class]"
+      },
+      "covered_by": {
+        "stream": "move_damage_classes"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/move-damage-class/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move-damage-class/{id or name}]"
+      },
       "covered_by": {
         "stream": "move_damage_classes_detail"
       }
     },
     {
       "method": "GET",
+      "path": "/move-learn-method",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move-learn-method]"
+      },
+      "covered_by": {
+        "stream": "move_learn_methods"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/move-learn-method/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move-learn-method/{id or name}]"
+      },
       "covered_by": {
         "stream": "move_learn_methods_detail"
       }
     },
     {
       "method": "GET",
+      "path": "/move-target",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move-target]"
+      },
+      "covered_by": {
+        "stream": "move_targets"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/move-target/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move-target/{id or name}]"
+      },
       "covered_by": {
         "stream": "move_targets_detail"
       }
     },
     {
       "method": "GET",
-      "path": "/characteristic/{id}",
+      "path": "/move/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /move/{id or name}]"
+      },
       "covered_by": {
-        "stream": "characteristics_detail"
+        "stream": "moves_detail"
       }
     },
     {
       "method": "GET",
-      "path": "/egg-group/{id or name}",
+      "path": "/nature",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /nature]"
+      },
       "covered_by": {
-        "stream": "egg_groups_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/gender/{id or name}",
-      "covered_by": {
-        "stream": "genders_detail"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/growth-rate/{id or name}",
-      "covered_by": {
-        "stream": "growth_rates_detail"
+        "stream": "natures"
       }
     },
     {
       "method": "GET",
       "path": "/nature/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /nature/{id or name}]"
+      },
       "covered_by": {
         "stream": "natures_detail"
       }
     },
     {
       "method": "GET",
+      "path": "/pal-park-area",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pal-park-area]"
+      },
+      "covered_by": {
+        "stream": "pal_park_areas"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pal-park-area/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pal-park-area/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "pal_park_areas_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokeathlon-stat",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokeathlon-stat]"
+      },
+      "covered_by": {
+        "stream": "pokeathlon_stats"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/pokeathlon-stat/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokeathlon-stat/{id or name}]"
+      },
       "covered_by": {
         "stream": "pokeathlon_stats_detail"
       }
     },
     {
       "method": "GET",
+      "path": "/pokedex",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokedex]"
+      },
+      "covered_by": {
+        "stream": "pokedexes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokedex/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokedex/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "pokedexes_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokemon]"
+      },
+      "covered_by": {
+        "stream": "pokemon"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon-color",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokemon-color]"
+      },
+      "covered_by": {
+        "stream": "pokemon_colors"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/pokemon-color/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokemon-color/{id or name}]"
+      },
       "covered_by": {
         "stream": "pokemon_colors_detail"
       }
     },
     {
       "method": "GET",
+      "path": "/pokemon-form",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokemon-form]"
+      },
+      "covered_by": {
+        "stream": "pokemon_forms"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/pokemon-form/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokemon-form/{id or name}]"
+      },
       "covered_by": {
         "stream": "pokemon_forms_detail"
       }
     },
     {
       "method": "GET",
+      "path": "/pokemon-habitat",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokemon-habitat]"
+      },
+      "covered_by": {
+        "stream": "pokemon_habitats"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/pokemon-habitat/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokemon-habitat/{id or name}]"
+      },
       "covered_by": {
         "stream": "pokemon_habitats_detail"
       }
     },
     {
       "method": "GET",
+      "path": "/pokemon-shape",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokemon-shape]"
+      },
+      "covered_by": {
+        "stream": "pokemon_shapes"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/pokemon-shape/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokemon-shape/{id or name}]"
+      },
       "covered_by": {
         "stream": "pokemon_shapes_detail"
       }
     },
     {
       "method": "GET",
+      "path": "/pokemon-species",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokemon-species]"
+      },
+      "covered_by": {
+        "stream": "pokemon_species"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/pokemon-species/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokemon-species/{id or name}]"
+      },
       "covered_by": {
         "stream": "pokemon_species_detail"
       }
     },
     {
       "method": "GET",
+      "path": "/pokemon/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokemon/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "pokemon_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pokemon/{id or name}/encounters",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /pokemon/{id or name}/encounters]"
+      },
+      "covered_by": {
+        "stream": "pokemon_location_areas"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/region",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /region]"
+      },
+      "covered_by": {
+        "stream": "regions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/region/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /region/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "regions_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stat",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /stat]"
+      },
+      "covered_by": {
+        "stream": "stats"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/stat/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /stat/{id or name}]"
+      },
       "covered_by": {
         "stream": "stats_detail"
       }
     },
     {
       "method": "GET",
-      "path": "/language/{id or name}",
+      "path": "/super-contest-effect",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /super-contest-effect]"
+      },
       "covered_by": {
-        "stream": "languages_detail"
+        "stream": "super_contest_effects"
       }
     },
     {
       "method": "GET",
-      "path": "/pokemon/{id or name}/encounters",
+      "path": "/super-contest-effect/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /super-contest-effect/{id}]"
+      },
       "covered_by": {
-        "stream": "pokemon_location_areas"
+        "stream": "super_contest_effects_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/type",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /type]"
+      },
+      "covered_by": {
+        "stream": "types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/type/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /type/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "types_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/version",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /version]"
+      },
+      "covered_by": {
+        "stream": "versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/version-group",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /version-group]"
+      },
+      "covered_by": {
+        "stream": "version_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/version-group/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /version-group/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "version_groups_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/version/{id or name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pokeapi-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "source_kind": "openapi",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83",
+        "coordinate": "existing-surface[GET /version/{id or name}]"
+      },
+      "covered_by": {
+        "stream": "versions_detail"
       }
     }
   ]

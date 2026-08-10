@@ -1,0 +1,59 @@
+{
+  "tagline": "Run Senseforce's declared streams and reverse-ETL actions.",
+  "usage": "pm senseforce \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "records list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api post api v1 scripts script-id results"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api post api v1 scripts script-id results",
+      "summary": "Documented POST /api/v1/scripts/{script_id}/results (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://manual.senseforce.io/manual/sf-platform/public-api/endpoints.md",
+      "examples": [
+        "pm senseforce api post api v1 scripts script-id results --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/scripts/{script_id}/results"
+        }
+      ],
+      "operation": "senseforce.post.api-v1-scripts-script-id-results",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "records list",
+      "summary": "Run the records ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "records",
+      "source_url": "https://manual.senseforce.io/manual/sf-platform/public-api/endpoints.md",
+      "examples": [
+        "pm senseforce records list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/datasets/{dataset_id}/records"
+        }
+      ]
+    }
+  ]
+}

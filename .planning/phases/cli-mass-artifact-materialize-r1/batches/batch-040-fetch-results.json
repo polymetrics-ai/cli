@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "source_index": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-040-100ms-source-index.json",
+  "results": [
+    {
+      "connector": "100ms",
+      "status": "retrieved",
+      "route": "provider sitemap plus 86 directly indexed provider-owned raw MDX API-reference pages",
+      "url": "https://www.100ms.live/docs/sitemap.xml",
+      "sitemap_api_reference_pages": 86,
+      "successful_mdx_pages": 86,
+      "operations": 73,
+      "read_operations": 33,
+      "write_operations": 40,
+      "cache": "batch-040-100ms-direct-reference-artifacts (reproducible, not staged)"
+    }
+  ]
+}

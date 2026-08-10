@@ -1,0 +1,2197 @@
+{
+  "tagline": "Run Beamer's declared streams and reverse-ETL actions.",
+  "usage": "pm beamer \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get nps",
+        "api get nps check",
+        "api get nps count",
+        "api get nps link",
+        "api get posts",
+        "api get posts count",
+        "api get posts postid",
+        "api get posts postid comments",
+        "api get posts postid comments commentid",
+        "api get posts postid comments count",
+        "api get posts postid reactions",
+        "api get posts postid reactions count",
+        "api get posts postid reactions reactionid",
+        "api get requests",
+        "api get requests count",
+        "api get requests featurerequestid",
+        "api get requests featurerequestid comments",
+        "api get requests featurerequestid comments commentid",
+        "api get requests featurerequestid comments count",
+        "api get requests featurerequestid votes",
+        "api get requests featurerequestid votes count",
+        "api get requests featurerequestid votes voteid",
+        "api get unread",
+        "api get unread count",
+        "api get url",
+        "api get users",
+        "api get v0 feature-requests count",
+        "api get v0 feature-requests featurerequestid",
+        "api get v0 feature-requests featurerequestid comments",
+        "api get v0 feature-requests featurerequestid comments commentid",
+        "api get v0 feature-requests featurerequestid comments count",
+        "api get v0 feature-requests featurerequestid votes count",
+        "api get v0 feature-requests featurerequestid votes voteid",
+        "api get v0 nps check",
+        "api get v0 nps count",
+        "api get v0 nps link",
+        "api get v0 posts count",
+        "api get v0 posts postid",
+        "api get v0 posts postid comments commentid",
+        "api get v0 posts postid comments count",
+        "api get v0 posts postid reactions count",
+        "api get v0 posts postid reactions reactionid",
+        "api get v0 unread",
+        "api get v0 unread count",
+        "comments list",
+        "feature request votes list",
+        "feature requests list",
+        "nps list",
+        "post reactions list",
+        "posts list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete posts postid",
+        "api delete posts postid comments commentid",
+        "api delete posts postid reactions reactionid",
+        "api delete privacy",
+        "api delete requests featurerequestid",
+        "api delete requests featurerequestid comments commentid",
+        "api delete requests featurerequestid votes voteid",
+        "api delete team",
+        "api delete users",
+        "api delete v0 privacy",
+        "api delete v0 team",
+        "api delete v0 users",
+        "api post nps email",
+        "api post ping",
+        "api post posts",
+        "api post posts postid comments",
+        "api post posts postid reactions",
+        "api post requests",
+        "api post requests featurerequestid comments",
+        "api post requests featurerequestid votes",
+        "api post team",
+        "api post users",
+        "api post v0 nps email",
+        "api post v0 team",
+        "api post v0 users",
+        "api put posts postid",
+        "api put requests featurerequestid",
+        "api put team",
+        "api put users",
+        "api put v0 team",
+        "api put v0 users",
+        "create feature request apply",
+        "create feature request comment apply",
+        "create feature request vote apply",
+        "create post apply",
+        "create post comment apply",
+        "create post reaction apply",
+        "delete feature request apply",
+        "delete feature request comment apply",
+        "delete feature request vote apply",
+        "delete post apply",
+        "delete post comment apply",
+        "delete post reaction apply",
+        "update feature request apply",
+        "update post apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete posts postid",
+      "summary": "Documented DELETE /posts/{postId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api delete posts postid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/posts/{postId}"
+        }
+      ],
+      "operation": "beamer.delete.posts-postid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete posts postid comments commentid",
+      "summary": "Documented DELETE /posts/{postId}/comments/{commentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api delete posts postid comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/posts/{postId}/comments/{commentId}"
+        }
+      ],
+      "operation": "beamer.delete.posts-postid-comments-commentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete posts postid reactions reactionid",
+      "summary": "Documented DELETE /posts/{postId}/reactions/{reactionId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api delete posts postid reactions reactionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/posts/{postId}/reactions/{reactionId}"
+        }
+      ],
+      "operation": "beamer.delete.posts-postid-reactions-reactionid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete privacy",
+      "summary": "Documented DELETE /privacy (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api delete privacy --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/privacy"
+        }
+      ],
+      "operation": "beamer.delete.privacy",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete requests featurerequestid",
+      "summary": "Documented DELETE /requests/{featureRequestId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api delete requests featurerequestid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/requests/{featureRequestId}"
+        }
+      ],
+      "operation": "beamer.delete.requests-featurerequestid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete requests featurerequestid comments commentid",
+      "summary": "Documented DELETE /requests/{featureRequestId}/comments/{commentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api delete requests featurerequestid comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/requests/{featureRequestId}/comments/{commentId}"
+        }
+      ],
+      "operation": "beamer.delete.requests-featurerequestid-comments-commentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete requests featurerequestid votes voteid",
+      "summary": "Documented DELETE /requests/{featureRequestId}/votes/{voteId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api delete requests featurerequestid votes voteid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/requests/{featureRequestId}/votes/{voteId}"
+        }
+      ],
+      "operation": "beamer.delete.requests-featurerequestid-votes-voteid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete team",
+      "summary": "Documented DELETE /team (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api delete team --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/team"
+        }
+      ],
+      "operation": "beamer.delete.team",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete users",
+      "summary": "Documented DELETE /users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api delete users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users"
+        }
+      ],
+      "operation": "beamer.delete.users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v0 privacy",
+      "summary": "Documented DELETE /v0/privacy (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api delete v0 privacy --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v0/privacy"
+        }
+      ],
+      "operation": "beamer.delete.v0-privacy",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v0 team",
+      "summary": "Documented DELETE /v0/team (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api delete v0 team --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v0/team"
+        }
+      ],
+      "operation": "beamer.delete.v0-team",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v0 users",
+      "summary": "Documented DELETE /v0/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api delete v0 users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v0/users"
+        }
+      ],
+      "operation": "beamer.delete.v0-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get nps",
+      "summary": "Documented GET /nps (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get nps --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nps"
+        }
+      ],
+      "operation": "beamer.get.nps",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get nps check",
+      "summary": "Documented GET /nps/check (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get nps check --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nps/check"
+        }
+      ],
+      "operation": "beamer.get.nps-check",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get nps count",
+      "summary": "Documented GET /nps/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get nps count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nps/count"
+        }
+      ],
+      "operation": "beamer.get.nps-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get nps link",
+      "summary": "Documented GET /nps/link (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get nps link --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nps/link"
+        }
+      ],
+      "operation": "beamer.get.nps-link",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get posts",
+      "summary": "Documented GET /posts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get posts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/posts"
+        }
+      ],
+      "operation": "beamer.get.posts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get posts count",
+      "summary": "Documented GET /posts/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get posts count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/posts/count"
+        }
+      ],
+      "operation": "beamer.get.posts-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get posts postid",
+      "summary": "Documented GET /posts/{postId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get posts postid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/posts/{postId}"
+        }
+      ],
+      "operation": "beamer.get.posts-postid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get posts postid comments",
+      "summary": "Documented GET /posts/{postId}/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get posts postid comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/posts/{postId}/comments"
+        }
+      ],
+      "operation": "beamer.get.posts-postid-comments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get posts postid comments commentid",
+      "summary": "Documented GET /posts/{postId}/comments/{commentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get posts postid comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/posts/{postId}/comments/{commentId}"
+        }
+      ],
+      "operation": "beamer.get.posts-postid-comments-commentid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get posts postid comments count",
+      "summary": "Documented GET /posts/{postId}/comments/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get posts postid comments count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/posts/{postId}/comments/count"
+        }
+      ],
+      "operation": "beamer.get.posts-postid-comments-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get posts postid reactions",
+      "summary": "Documented GET /posts/{postId}/reactions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get posts postid reactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/posts/{postId}/reactions"
+        }
+      ],
+      "operation": "beamer.get.posts-postid-reactions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get posts postid reactions count",
+      "summary": "Documented GET /posts/{postId}/reactions/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get posts postid reactions count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/posts/{postId}/reactions/count"
+        }
+      ],
+      "operation": "beamer.get.posts-postid-reactions-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get posts postid reactions reactionid",
+      "summary": "Documented GET /posts/{postId}/reactions/{reactionId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get posts postid reactions reactionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/posts/{postId}/reactions/{reactionId}"
+        }
+      ],
+      "operation": "beamer.get.posts-postid-reactions-reactionid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get requests",
+      "summary": "Documented GET /requests (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get requests --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/requests"
+        }
+      ],
+      "operation": "beamer.get.requests",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get requests count",
+      "summary": "Documented GET /requests/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get requests count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/requests/count"
+        }
+      ],
+      "operation": "beamer.get.requests-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get requests featurerequestid",
+      "summary": "Documented GET /requests/{featureRequestId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get requests featurerequestid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/requests/{featureRequestId}"
+        }
+      ],
+      "operation": "beamer.get.requests-featurerequestid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get requests featurerequestid comments",
+      "summary": "Documented GET /requests/{featureRequestId}/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get requests featurerequestid comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/requests/{featureRequestId}/comments"
+        }
+      ],
+      "operation": "beamer.get.requests-featurerequestid-comments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get requests featurerequestid comments commentid",
+      "summary": "Documented GET /requests/{featureRequestId}/comments/{commentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get requests featurerequestid comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/requests/{featureRequestId}/comments/{commentId}"
+        }
+      ],
+      "operation": "beamer.get.requests-featurerequestid-comments-commentid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get requests featurerequestid comments count",
+      "summary": "Documented GET /requests/{featureRequestId}/comments/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get requests featurerequestid comments count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/requests/{featureRequestId}/comments/count"
+        }
+      ],
+      "operation": "beamer.get.requests-featurerequestid-comments-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get requests featurerequestid votes",
+      "summary": "Documented GET /requests/{featureRequestId}/votes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get requests featurerequestid votes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/requests/{featureRequestId}/votes"
+        }
+      ],
+      "operation": "beamer.get.requests-featurerequestid-votes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get requests featurerequestid votes count",
+      "summary": "Documented GET /requests/{featureRequestId}/votes/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get requests featurerequestid votes count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/requests/{featureRequestId}/votes/count"
+        }
+      ],
+      "operation": "beamer.get.requests-featurerequestid-votes-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get requests featurerequestid votes voteid",
+      "summary": "Documented GET /requests/{featureRequestId}/votes/{voteId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get requests featurerequestid votes voteid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/requests/{featureRequestId}/votes/{voteId}"
+        }
+      ],
+      "operation": "beamer.get.requests-featurerequestid-votes-voteid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get unread",
+      "summary": "Documented GET /unread (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get unread --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/unread"
+        }
+      ],
+      "operation": "beamer.get.unread",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get unread count",
+      "summary": "Documented GET /unread/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get unread count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/unread/count"
+        }
+      ],
+      "operation": "beamer.get.unread-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get url",
+      "summary": "Documented GET /url (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get url --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/url"
+        }
+      ],
+      "operation": "beamer.get.url",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users",
+      "summary": "Documented GET /users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ],
+      "operation": "beamer.get.users",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 feature-requests count",
+      "summary": "Documented GET /v0/feature-requests/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 feature-requests count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/feature-requests/count"
+        }
+      ],
+      "operation": "beamer.get.v0-feature-requests-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 feature-requests featurerequestid",
+      "summary": "Documented GET /v0/feature-requests/{featureRequestId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 feature-requests featurerequestid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/feature-requests/{featureRequestId}"
+        }
+      ],
+      "operation": "beamer.get.v0-feature-requests-featurerequestid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 feature-requests featurerequestid comments",
+      "summary": "Documented GET /v0/feature-requests/{featureRequestId}/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 feature-requests featurerequestid comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/feature-requests/{featureRequestId}/comments"
+        }
+      ],
+      "operation": "beamer.get.v0-feature-requests-featurerequestid-comments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 feature-requests featurerequestid comments commentid",
+      "summary": "Documented GET /v0/feature-requests/{featureRequestId}/comments/{commentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 feature-requests featurerequestid comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/feature-requests/{featureRequestId}/comments/{commentId}"
+        }
+      ],
+      "operation": "beamer.get.v0-feature-requests-featurerequestid-comments-commentid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 feature-requests featurerequestid comments count",
+      "summary": "Documented GET /v0/feature-requests/{featureRequestId}/comments/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 feature-requests featurerequestid comments count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/feature-requests/{featureRequestId}/comments/count"
+        }
+      ],
+      "operation": "beamer.get.v0-feature-requests-featurerequestid-comments-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 feature-requests featurerequestid votes count",
+      "summary": "Documented GET /v0/feature-requests/{featureRequestId}/votes/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 feature-requests featurerequestid votes count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/feature-requests/{featureRequestId}/votes/count"
+        }
+      ],
+      "operation": "beamer.get.v0-feature-requests-featurerequestid-votes-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 feature-requests featurerequestid votes voteid",
+      "summary": "Documented GET /v0/feature-requests/{featureRequestId}/votes/{voteId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 feature-requests featurerequestid votes voteid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/feature-requests/{featureRequestId}/votes/{voteId}"
+        }
+      ],
+      "operation": "beamer.get.v0-feature-requests-featurerequestid-votes-voteid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 nps check",
+      "summary": "Documented GET /v0/nps/check (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 nps check --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/nps/check"
+        }
+      ],
+      "operation": "beamer.get.v0-nps-check",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 nps count",
+      "summary": "Documented GET /v0/nps/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 nps count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/nps/count"
+        }
+      ],
+      "operation": "beamer.get.v0-nps-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 nps link",
+      "summary": "Documented GET /v0/nps/link (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 nps link --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/nps/link"
+        }
+      ],
+      "operation": "beamer.get.v0-nps-link",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 posts count",
+      "summary": "Documented GET /v0/posts/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 posts count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/posts/count"
+        }
+      ],
+      "operation": "beamer.get.v0-posts-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 posts postid",
+      "summary": "Documented GET /v0/posts/{postId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 posts postid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/posts/{postId}"
+        }
+      ],
+      "operation": "beamer.get.v0-posts-postid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 posts postid comments commentid",
+      "summary": "Documented GET /v0/posts/{postId}/comments/{commentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 posts postid comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/posts/{postId}/comments/{commentId}"
+        }
+      ],
+      "operation": "beamer.get.v0-posts-postid-comments-commentid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 posts postid comments count",
+      "summary": "Documented GET /v0/posts/{postId}/comments/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 posts postid comments count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/posts/{postId}/comments/count"
+        }
+      ],
+      "operation": "beamer.get.v0-posts-postid-comments-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 posts postid reactions count",
+      "summary": "Documented GET /v0/posts/{postId}/reactions/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 posts postid reactions count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/posts/{postId}/reactions/count"
+        }
+      ],
+      "operation": "beamer.get.v0-posts-postid-reactions-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 posts postid reactions reactionid",
+      "summary": "Documented GET /v0/posts/{postId}/reactions/{reactionId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 posts postid reactions reactionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/posts/{postId}/reactions/{reactionId}"
+        }
+      ],
+      "operation": "beamer.get.v0-posts-postid-reactions-reactionid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 unread",
+      "summary": "Documented GET /v0/unread (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 unread --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/unread"
+        }
+      ],
+      "operation": "beamer.get.v0-unread",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v0 unread count",
+      "summary": "Documented GET /v0/unread/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api get v0 unread count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/unread/count"
+        }
+      ],
+      "operation": "beamer.get.v0-unread-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post nps email",
+      "summary": "Documented POST /nps/email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api post nps email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/nps/email"
+        }
+      ],
+      "operation": "beamer.post.nps-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post ping",
+      "summary": "Documented POST /ping (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api post ping --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/ping"
+        }
+      ],
+      "operation": "beamer.post.ping",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post posts",
+      "summary": "Documented POST /posts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api post posts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/posts"
+        }
+      ],
+      "operation": "beamer.post.posts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post posts postid comments",
+      "summary": "Documented POST /posts/{postId}/comments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api post posts postid comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/posts/{postId}/comments"
+        }
+      ],
+      "operation": "beamer.post.posts-postid-comments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post posts postid reactions",
+      "summary": "Documented POST /posts/{postId}/reactions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api post posts postid reactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/posts/{postId}/reactions"
+        }
+      ],
+      "operation": "beamer.post.posts-postid-reactions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post requests",
+      "summary": "Documented POST /requests (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api post requests --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/requests"
+        }
+      ],
+      "operation": "beamer.post.requests",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post requests featurerequestid comments",
+      "summary": "Documented POST /requests/{featureRequestId}/comments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api post requests featurerequestid comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/requests/{featureRequestId}/comments"
+        }
+      ],
+      "operation": "beamer.post.requests-featurerequestid-comments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post requests featurerequestid votes",
+      "summary": "Documented POST /requests/{featureRequestId}/votes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api post requests featurerequestid votes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/requests/{featureRequestId}/votes"
+        }
+      ],
+      "operation": "beamer.post.requests-featurerequestid-votes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post team",
+      "summary": "Documented POST /team (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api post team --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/team"
+        }
+      ],
+      "operation": "beamer.post.team",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users",
+      "summary": "Documented POST /users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api post users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ],
+      "operation": "beamer.post.users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v0 nps email",
+      "summary": "Documented POST /v0/nps/email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api post v0 nps email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v0/nps/email"
+        }
+      ],
+      "operation": "beamer.post.v0-nps-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v0 team",
+      "summary": "Documented POST /v0/team (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api post v0 team --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v0/team"
+        }
+      ],
+      "operation": "beamer.post.v0-team",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v0 users",
+      "summary": "Documented POST /v0/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api post v0 users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v0/users"
+        }
+      ],
+      "operation": "beamer.post.v0-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put posts postid",
+      "summary": "Documented PUT /posts/{postId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api put posts postid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/posts/{postId}"
+        }
+      ],
+      "operation": "beamer.put.posts-postid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put requests featurerequestid",
+      "summary": "Documented PUT /requests/{featureRequestId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api put requests featurerequestid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/requests/{featureRequestId}"
+        }
+      ],
+      "operation": "beamer.put.requests-featurerequestid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put team",
+      "summary": "Documented PUT /team (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api put team --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/team"
+        }
+      ],
+      "operation": "beamer.put.team",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put users",
+      "summary": "Documented PUT /users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api put users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users"
+        }
+      ],
+      "operation": "beamer.put.users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v0 team",
+      "summary": "Documented PUT /v0/team (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api put v0 team --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v0/team"
+        }
+      ],
+      "operation": "beamer.put.v0-team",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v0 users",
+      "summary": "Documented PUT /v0/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer api put v0 users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v0/users"
+        }
+      ],
+      "operation": "beamer.put.v0-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "comments list",
+      "summary": "Run the comments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "comments",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer comments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/posts/{postId}/comments"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "create feature request apply",
+      "summary": "Plan and execute the create feature request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_feature_request",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "content",
+          "type": "string_array",
+          "summary": "Required content record field.",
+          "maps_to": "record.content",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string_array",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer create feature request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v0/feature-requests"
+        }
+      ],
+      "risk": "external mutation; creates a new feature request, optionally visible immediately to end users; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create feature request comment apply",
+      "summary": "Plan and execute the create feature request comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_feature_request_comment",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "feature_request_id",
+          "type": "string",
+          "summary": "Required feature request id record field.",
+          "maps_to": "record.feature_request_id",
+          "required": true
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Required text record field.",
+          "maps_to": "record.text",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer create feature request comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v0/feature-requests/{featureRequestId}/comments"
+        }
+      ],
+      "risk": "external mutation; adds a comment to a feature request on behalf of a user; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create feature request vote apply",
+      "summary": "Plan and execute the create feature request vote reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_feature_request_vote",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "feature_request_id",
+          "type": "string",
+          "summary": "Required feature request id record field.",
+          "maps_to": "record.feature_request_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer create feature request vote apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v0/feature-requests/{featureRequestId}/votes"
+        }
+      ],
+      "risk": "external mutation; records a vote for a feature request on behalf of a user; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create post apply",
+      "summary": "Plan and execute the create post reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_post",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "content",
+          "type": "string_array",
+          "summary": "Required content record field.",
+          "maps_to": "record.content",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string_array",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer create post apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v0/posts"
+        }
+      ],
+      "risk": "external mutation; creates a new Beamer announcement post, optionally published immediately (visible to end users); approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create post comment apply",
+      "summary": "Plan and execute the create post comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_post_comment",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "post_id",
+          "type": "string",
+          "summary": "Required post id record field.",
+          "maps_to": "record.post_id",
+          "required": true
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Required text record field.",
+          "maps_to": "record.text",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer create post comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v0/posts/{postId}/comments"
+        }
+      ],
+      "risk": "external mutation; adds a comment to a live announcement post on behalf of a user; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create post reaction apply",
+      "summary": "Plan and execute the create post reaction reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_post_reaction",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "post_id",
+          "type": "string",
+          "summary": "Required post id record field.",
+          "maps_to": "record.post_id",
+          "required": true
+        },
+        {
+          "name": "reaction",
+          "type": "string",
+          "summary": "Required reaction record field.",
+          "maps_to": "record.reaction",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer create post reaction apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v0/posts/{postId}/reactions"
+        }
+      ],
+      "risk": "external mutation; records a reaction to a post on behalf of a user; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete feature request apply",
+      "summary": "Plan and execute the delete feature request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_feature_request",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer delete feature request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v0/feature-requests/{featureRequestId}"
+        }
+      ],
+      "risk": "permanently removes a feature request; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete feature request comment apply",
+      "summary": "Plan and execute the delete feature request comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_feature_request_comment",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "feature_request_id",
+          "type": "string",
+          "summary": "Required feature request id record field.",
+          "maps_to": "record.feature_request_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer delete feature request comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v0/feature-requests/{featureRequestId}/comments/{commentId}"
+        }
+      ],
+      "risk": "permanently removes a comment from a feature request; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete feature request vote apply",
+      "summary": "Plan and execute the delete feature request vote reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_feature_request_vote",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "feature_request_id",
+          "type": "string",
+          "summary": "Required feature request id record field.",
+          "maps_to": "record.feature_request_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer delete feature request vote apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v0/feature-requests/{featureRequestId}/votes/{voteId}"
+        }
+      ],
+      "risk": "permanently removes a vote from a feature request; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete post apply",
+      "summary": "Plan and execute the delete post reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_post",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer delete post apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v0/posts/{postId}"
+        }
+      ],
+      "risk": "permanently removes an announcement post; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete post comment apply",
+      "summary": "Plan and execute the delete post comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_post_comment",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "post_id",
+          "type": "string",
+          "summary": "Required post id record field.",
+          "maps_to": "record.post_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer delete post comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v0/posts/{postId}/comments/{commentId}"
+        }
+      ],
+      "risk": "permanently removes a comment from a post; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete post reaction apply",
+      "summary": "Plan and execute the delete post reaction reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_post_reaction",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "post_id",
+          "type": "string",
+          "summary": "Required post id record field.",
+          "maps_to": "record.post_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer delete post reaction apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v0/posts/{postId}/reactions/{reactionId}"
+        }
+      ],
+      "risk": "permanently removes a reaction from a post; irreversible; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "feature request votes list",
+      "summary": "Run the feature request votes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "feature_request_votes",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer feature request votes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/feature-requests/{featureRequestId}/votes"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "feature requests list",
+      "summary": "Run the feature requests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "feature_requests",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer feature requests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/feature-requests"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "nps list",
+      "summary": "Run the nps ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "nps",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer nps list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/nps"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "post reactions list",
+      "summary": "Run the post reactions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "post_reactions",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer post reactions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/posts/{postId}/reactions"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "posts list",
+      "summary": "Run the posts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "posts",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer posts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/posts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "update feature request apply",
+      "summary": "Plan and execute the update feature request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_feature_request",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer update feature request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v0/feature-requests/{featureRequestId}"
+        }
+      ],
+      "risk": "external mutation; updates a feature request visible to end users (status changes are commonly user-facing); approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update post apply",
+      "summary": "Plan and execute the update post reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_post",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm beamer update post apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v0/posts/{postId}"
+        }
+      ],
+      "risk": "external mutation; updates a live announcement post visible to end users; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://getbeamer-api.pages.dev/",
+      "examples": [
+        "pm beamer users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/users"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

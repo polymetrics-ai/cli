@@ -1,0 +1,377 @@
+{
+  "schema_version": 1,
+  "batch": "batch-024",
+  "manifest": "batches/batch-024-primary-plus-alternative-manifest.json",
+  "base_manifest": "batches/batch-024-primary-plus-alternative-base.json",
+  "fetch_results": "batches/batch-024-fetch-results.json",
+  "execution": "interrupted",
+  "reason": "controlled stop: cached reference traversal exceeded the two-minute fast static budget; cache and any complete staged bundle were retained for narrower official-source retries",
+  "outcomes": [
+    {
+      "connector": "mailjet-sms",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "buzzsprout",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "cimis",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "marketstack",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "artifact_fetch",
+      "reason": "official cache retrieval failed during the bounded static pass; alternate official source routes remain queued"
+    },
+    {
+      "connector": "campayn",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "ebay-finance",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "artifact_fetch",
+      "reason": "official cache retrieval failed during the bounded static pass; alternate official source routes remain queued"
+    },
+    {
+      "connector": "hugging-face-datasets",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "countercyclical",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "ticketmaster",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "webflow",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "freshsales",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "sonar-cloud",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "harvest",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "lemlist",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "static_bundle_validated",
+      "reason": "complete staged official-source bundle survived the controlled stop, validated, and passed credential-free CLI inspection; runtime foundation remains pending",
+      "artifact": {
+        "url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+        "kind": "html_reference",
+        "version": "v2 (current rendered reference)",
+        "retrieved_at": "2026-08-06"
+      }
+    },
+    {
+      "connector": "buildkite",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "capsule-crm",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "serpstat",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "hubspot",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "planhat",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "mux",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "mailjet-mail",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "sparkpost",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "miro",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "salesloft",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "free-agent-connector",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "nylas",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "freshdesk",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "sentry",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "bing-ads",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "katana",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "grafana",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "discord",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "shopwired",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "pinterest",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "pretix",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "signnow",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "prestashop",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "firehydrant",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "freshservice",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    },
+    {
+      "connector": "high-level",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-024-interrupted-outcomes.json",
+      "stage": "reference_traversal_budget",
+      "reason": "controlled stop: cached official-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route"
+    }
+  ]
+}

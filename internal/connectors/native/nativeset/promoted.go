@@ -57,6 +57,12 @@ func (c definitionConnector) Definition() connectors.Definition {
 	return c.base.Definition()
 }
 
+// CommandSurface preserves the bundle-owned CLI contract when a promoted
+// native connector replaces its hook-backed engine counterpart in the registry.
+func (c definitionConnector) CommandSurface() *connectors.CommandSurface {
+	return c.base.CommandSurface()
+}
+
 // HasConfigurationConstraints forwards the wrapped bundle's actual
 // configuration-constraint declaration. It prevents promoted native
 // connectors from advertising a generic validator when their bundle has no

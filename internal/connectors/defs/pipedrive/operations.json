@@ -1,0 +1,2786 @@
+{
+  "operations": [
+    {
+      "id": "pipedrive.get.activityfields",
+      "kind": "rest_read",
+      "summary": "GET /activityFields",
+      "description": "activity fields are a largely fixed built-in field set with limited custom-field usage compared to deal/person/organization/product fields; deprioritized in this pass's field-metadata coverage",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activityFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.billing-subscriptions-addons",
+      "kind": "rest_read",
+      "summary": "GET /billing/subscriptions/addons",
+      "description": "the company's own Pipedrive subscription/billing add-on list, account-billing metadata rather than CRM business data",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/billing/subscriptions/addons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.calllogs",
+      "kind": "rest_read",
+      "summary": "GET /callLogs",
+      "description": "call-log records tied to Pipedrive's telephony/VoIP integration feature, a niche add-on most accounts do not use; deprioritized for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/callLogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.calllogs",
+      "kind": "rest_write",
+      "summary": "POST /callLogs",
+      "description": "creates a call-log entry; same telephony-integration-feature deprioritization as the list endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/callLogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.calllogs-id",
+      "kind": "rest_read",
+      "summary": "GET /callLogs/{id}",
+      "description": "single-call-log detail; same out-of-scope reasoning as the parent list endpoint, which itself was deprioritized",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/callLogs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.calllogs-id",
+      "kind": "rest_write",
+      "summary": "DELETE /callLogs/{id}",
+      "description": "deletes a call-log entry; same telephony-integration-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/callLogs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.calllogs-id-recordings",
+      "kind": "rest_write",
+      "summary": "POST /callLogs/{id}/recordings",
+      "description": "attaches a binary audio recording file to a call log; binary-attachment management, out of scope",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/callLogs/{id}/recordings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.channels",
+      "kind": "rest_write",
+      "summary": "POST /channels",
+      "description": "registers a messaging-app integration channel (Pipedrive's Messaging Apps Extension feature), a developer-platform integration primitive rather than CRM business data",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/channels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.channels-messages-receive",
+      "kind": "rest_write",
+      "summary": "POST /channels/messages/receive",
+      "description": "webhook-style inbound-message receiver for a registered messaging channel; a push-delivery endpoint, not a syncable record read",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/channels/messages/receive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.channels-channel-id-conversations-conversation-id",
+      "kind": "rest_write",
+      "summary": "DELETE /channels/{channel-id}/conversations/{conversation-id}",
+      "description": "deletes a messaging-channel conversation thread; same integration-primitive reasoning as channel registration",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/channels/{channel-id}/conversations/{conversation-id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.channels-id",
+      "kind": "rest_write",
+      "summary": "DELETE /channels/{id}",
+      "description": "deregisters a messaging-app integration channel; same integration-primitive reasoning as channel creation",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/channels/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.dealfields",
+      "kind": "rest_write",
+      "summary": "POST /dealFields",
+      "description": "creates a new custom deal field definition; schema/metadata-authoring mutation, out of scope for this pass (the field-definition streams are read-only reference data in this bundle)",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/dealFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.dealfields",
+      "kind": "rest_write",
+      "summary": "DELETE /dealFields",
+      "description": "bulk delete of multiple deal-field definitions by an id-list request body; deleting a field definition removes its data from every deal, no bulk-destructive action added",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/dealFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.dealfields-id",
+      "kind": "rest_read",
+      "summary": "GET /dealFields/{id}",
+      "description": "single-deal-field detail; identical record shape to the deal_fields list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dealFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.dealfields-id",
+      "kind": "rest_write",
+      "summary": "PUT /dealFields/{id}",
+      "description": "updates a custom deal field's definition (name/options); schema-authoring mutation, out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/dealFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.dealfields-id",
+      "kind": "rest_write",
+      "summary": "DELETE /dealFields/{id}",
+      "description": "irreversibly deletes a custom field definition and its data from every deal; out of scope for this pass, no safer covered alternative",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/dealFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.deals-archived",
+      "kind": "rest_read",
+      "summary": "GET /deals/archived",
+      "description": "archived-deals-only filtered view of the same Deal resource the deals stream already reads; a narrower variant, not an independent object, and shares the deals stream's v1-read-only status (see scope note)",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deals/archived",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.deals-summary",
+      "kind": "rest_read",
+      "summary": "GET /deals/summary",
+      "description": "aggregated deal-value/count rollup, a computed reporting summary rather than an independently syncable business object",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deals/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.deals-summary-archived",
+      "kind": "rest_read",
+      "summary": "GET /deals/summary/archived",
+      "description": "aggregated rollup over archived deals; same computed-reporting reasoning as deals/summary",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deals/summary/archived",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.deals-timeline",
+      "kind": "rest_read",
+      "summary": "GET /deals/timeline",
+      "description": "aggregated deal-count-by-time-period rollup for chart rendering, a computed reporting view rather than an independently syncable business object",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deals/timeline",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.deals-timeline-archived",
+      "kind": "rest_read",
+      "summary": "GET /deals/timeline/archived",
+      "description": "same computed-reporting reasoning as deals/timeline, scoped to archived deals",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deals/timeline/archived",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.deals-id-changelog",
+      "kind": "rest_read",
+      "summary": "GET /deals/{id}/changelog",
+      "description": "per-deal field-value change history, a fine-grained audit sub-resource of an already-covered deal rather than an independent business object",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deals/{id}/changelog",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.deals-id-duplicate",
+      "kind": "rest_write",
+      "summary": "POST /deals/{id}/duplicate",
+      "description": "clones an existing deal server-side; a convenience action, not a data-shape create_deal write this pass models (the deals resource's create/update/delete live on v2, out of scope per the scope note)",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/deals/{id}/duplicate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.deals-id-files",
+      "kind": "rest_read",
+      "summary": "GET /deals/{id}/files",
+      "description": "per-deal attached-file sub-list; the top-level /files resource (see Files exclusions below) covers the same file metadata more generally, and file binary payloads are out of scope",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deals/{id}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.deals-id-flow",
+      "kind": "rest_read",
+      "summary": "GET /deals/{id}/flow",
+      "description": "chronological activity-log feed for one deal (a UI timeline rendering), not a stable syncable business record",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deals/{id}/flow",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.deals-id-followers",
+      "kind": "rest_read",
+      "summary": "GET /deals/{id}/followers",
+      "description": "per-deal follower sub-list, a fine-grained edit-surface view rather than an independent business object",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deals/{id}/followers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.deals-id-followers",
+      "kind": "rest_write",
+      "summary": "POST /deals/{id}/followers",
+      "description": "adds a follower to one deal; fine-grained edit of an already-covered parent record",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/deals/{id}/followers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.deals-id-followers-follower-id",
+      "kind": "rest_write",
+      "summary": "DELETE /deals/{id}/followers/{follower_id}",
+      "description": "removes a follower from one deal; same fine-grained-edit reasoning as the add-follower endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/deals/{id}/followers/{follower_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.deals-id-mailmessages",
+      "kind": "rest_read",
+      "summary": "GET /deals/{id}/mailMessages",
+      "description": "per-deal linked-email sub-list; email content/threading is a separate Mailbox feature area out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deals/{id}/mailMessages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.deals-id-merge",
+      "kind": "rest_write",
+      "summary": "PUT /deals/{id}/merge",
+      "description": "merges two deals into one, an irreversible structural operation rather than an ordinary field-level update; out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/deals/{id}/merge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.deals-id-participants",
+      "kind": "rest_read",
+      "summary": "GET /deals/{id}/participants",
+      "description": "per-deal participant (linked-person) sub-list; a fine-grained association view rather than an independent business object",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deals/{id}/participants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.deals-id-participants",
+      "kind": "rest_write",
+      "summary": "POST /deals/{id}/participants",
+      "description": "adds a participant to one deal; fine-grained edit of an already-covered parent record",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/deals/{id}/participants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.deals-id-participants-deal-participant-id",
+      "kind": "rest_write",
+      "summary": "DELETE /deals/{id}/participants/{deal_participant_id}",
+      "description": "removes a participant from one deal; same fine-grained-edit reasoning as the add-participant endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/deals/{id}/participants/{deal_participant_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.deals-id-participantschangelog",
+      "kind": "rest_read",
+      "summary": "GET /deals/{id}/participantsChangelog",
+      "description": "per-deal participant-change audit history; same audit-sub-resource reasoning as deals/{id}/changelog",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deals/{id}/participantsChangelog",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.deals-id-permittedusers",
+      "kind": "rest_read",
+      "summary": "GET /deals/{id}/permittedUsers",
+      "description": "returns the list of user ids permitted to access one deal (an access-control check), not a syncable business record",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deals/{id}/permittedUsers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.files",
+      "kind": "rest_read",
+      "summary": "GET /files",
+      "description": "file metadata list whose only useful payload (the file content) is fetched via a separate binary-download endpoint; binary-attachment management is out of scope for a record-sync connector",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.files",
+      "kind": "rest_write",
+      "summary": "POST /files",
+      "description": "uploads a new file attachment (multipart file upload); binary-attachment management, out of scope",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.files-remote",
+      "kind": "rest_write",
+      "summary": "POST /files/remote",
+      "description": "creates a file reference to an external cloud-storage document; binary-attachment management, out of scope",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/files/remote",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.files-remotelink",
+      "kind": "rest_write",
+      "summary": "POST /files/remoteLink",
+      "description": "links an existing remote file to an item; binary-attachment management, out of scope",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/files/remoteLink",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.files-id",
+      "kind": "rest_read",
+      "summary": "GET /files/{id}",
+      "description": "single-file metadata detail; binary-attachment management, out of scope",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/files/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.files-id",
+      "kind": "rest_write",
+      "summary": "PUT /files/{id}",
+      "description": "updates a file's name/description; binary-attachment management, out of scope",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/files/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.files-id",
+      "kind": "rest_write",
+      "summary": "DELETE /files/{id}",
+      "description": "deletes a file attachment; binary-attachment management, out of scope",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/files/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.files-id-download",
+      "kind": "rest_read",
+      "summary": "GET /files/{id}/download",
+      "description": "downloads the raw binary file content; explicitly a binary payload, out of scope",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/files/{id}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.filters",
+      "kind": "rest_write",
+      "summary": "DELETE /filters",
+      "description": "bulk delete of multiple saved filters by an id-list request body; delete_filter already covers the safer per-filter equivalent",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/filters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.filters-helpers",
+      "kind": "rest_read",
+      "summary": "GET /filters/helpers",
+      "description": "returns the field/condition-operator vocabulary usable when building a filter's conditions object; a schema-discovery helper, not a syncable business record",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/filters/helpers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.filters-id",
+      "kind": "rest_read",
+      "summary": "GET /filters/{id}",
+      "description": "single-filter detail; identical record shape to the filters list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/filters/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.goals",
+      "kind": "rest_write",
+      "summary": "POST /goals",
+      "description": "creates a sales goal; same goal-tracking-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/goals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.goals-find",
+      "kind": "rest_read",
+      "summary": "GET /goals/find",
+      "description": "goal-tracking feature search endpoint (no plain list endpoint exists); a niche performance-tracking add-on, deprioritized for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/goals/find",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.goals-id",
+      "kind": "rest_write",
+      "summary": "PUT /goals/{id}",
+      "description": "updates a sales goal; same goal-tracking-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/goals/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.goals-id",
+      "kind": "rest_write",
+      "summary": "DELETE /goals/{id}",
+      "description": "deletes a sales goal; same goal-tracking-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/goals/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.goals-id-results",
+      "kind": "rest_read",
+      "summary": "GET /goals/{id}/results",
+      "description": "computed progress-against-target rollup for one goal, a reporting aggregate rather than an independently syncable business object",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/goals/{id}/results",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.leads-archived",
+      "kind": "rest_read",
+      "summary": "GET /leads/archived",
+      "description": "archived-leads-only view of the same Lead resource already covered by the leads stream; a narrower filtered variant, not an independent business object",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/leads/archived",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.leads-search",
+      "kind": "rest_read",
+      "summary": "GET /leads/search",
+      "description": "full-text search over leads by term; the leads stream already provides complete list coverage, this is a query convenience endpoint layered on the same data",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/leads/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.leads-id",
+      "kind": "rest_read",
+      "summary": "GET /leads/{id}",
+      "description": "single-lead detail; identical record shape to the leads list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/leads/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.leads-id-permittedusers",
+      "kind": "rest_read",
+      "summary": "GET /leads/{id}/permittedUsers",
+      "description": "returns the list of user ids permitted to access one lead (an access-control check), not a syncable business record",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/leads/{id}/permittedUsers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.legacyteams",
+      "kind": "rest_write",
+      "summary": "POST /legacyTeams",
+      "description": "creates a new legacy team; Pipedrive documents this resource as 'legacy' in favor of the newer role/permission-set model, deprioritized for write coverage in this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/legacyTeams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.legacyteams-user-id",
+      "kind": "rest_read",
+      "summary": "GET /legacyTeams/user/{id}",
+      "description": "reverse lookup of which teams one user belongs to; a query convenience over data the legacy_teams stream's users[] field already exposes",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/legacyTeams/user/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.legacyteams-id",
+      "kind": "rest_read",
+      "summary": "GET /legacyTeams/{id}",
+      "description": "single-team detail; identical record shape to the legacy_teams list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/legacyTeams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.legacyteams-id",
+      "kind": "rest_write",
+      "summary": "PUT /legacyTeams/{id}",
+      "description": "updates a legacy team's name/manager; same legacy-resource deprioritization as its create counterpart",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/legacyTeams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.legacyteams-id-users",
+      "kind": "rest_read",
+      "summary": "GET /legacyTeams/{id}/users",
+      "description": "per-team user-membership sub-list; the legacy_teams stream's own users[] field already carries this same membership data",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/legacyTeams/{id}/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.legacyteams-id-users",
+      "kind": "rest_write",
+      "summary": "POST /legacyTeams/{id}/users",
+      "description": "adds users to a legacy team's membership; fine-grained membership edit of an already-covered parent record",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/legacyTeams/{id}/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.legacyteams-id-users",
+      "kind": "rest_write",
+      "summary": "DELETE /legacyTeams/{id}/users",
+      "description": "removes users from a legacy team's membership; same fine-grained-edit reasoning as the add-users endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/legacyTeams/{id}/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.mailbox-mailmessages-id",
+      "kind": "rest_read",
+      "summary": "GET /mailbox/mailMessages/{id}",
+      "description": "single linked-email-message detail; Pipedrive's Mailbox email-sync feature is a separate integration surface with its own OAuth-email-provider prerequisites, out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mailbox/mailMessages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.mailbox-mailthreads",
+      "kind": "rest_read",
+      "summary": "GET /mailbox/mailThreads",
+      "description": "linked-email-thread list; same Mailbox-feature-area deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mailbox/mailThreads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.mailbox-mailthreads-id",
+      "kind": "rest_read",
+      "summary": "GET /mailbox/mailThreads/{id}",
+      "description": "single-mail-thread detail; same out-of-scope reasoning as the parent list endpoint, which itself was deprioritized",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mailbox/mailThreads/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.mailbox-mailthreads-id",
+      "kind": "rest_write",
+      "summary": "PUT /mailbox/mailThreads/{id}",
+      "description": "updates a mail thread's read/archived state; same Mailbox-feature-area deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/mailbox/mailThreads/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.mailbox-mailthreads-id",
+      "kind": "rest_write",
+      "summary": "DELETE /mailbox/mailThreads/{id}",
+      "description": "deletes a linked email thread; same Mailbox-feature-area deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/mailbox/mailThreads/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.mailbox-mailthreads-id-mailmessages",
+      "kind": "rest_read",
+      "summary": "GET /mailbox/mailThreads/{id}/mailMessages",
+      "description": "per-thread message list; same Mailbox-feature-area deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mailbox/mailThreads/{id}/mailMessages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.meetings-userproviderlinks",
+      "kind": "rest_write",
+      "summary": "POST /meetings/userProviderLinks",
+      "description": "links a user's video-call-provider account for the Meetings scheduling feature; an integration-configuration mutation, not CRM business data",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/meetings/userProviderLinks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.meetings-userproviderlinks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /meetings/userProviderLinks/{id}",
+      "description": "unlinks a user's video-call-provider account; same integration-configuration reasoning as linking",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/meetings/userProviderLinks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.notefields",
+      "kind": "rest_read",
+      "summary": "GET /noteFields",
+      "description": "note fields are a fixed, non-customizable field set (content/pinning flags only, no user-defined custom fields); the metadata this endpoint returns has no independent sync value beyond what notes.json's schema already documents",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/noteFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.notes-id",
+      "kind": "rest_read",
+      "summary": "GET /notes/{id}",
+      "description": "single-note detail; identical record shape to the notes list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.notes-id-comments",
+      "kind": "rest_read",
+      "summary": "GET /notes/{id}/comments",
+      "description": "per-note comment thread sub-resource, a fine-grained edit surface on an already-covered note rather than an independent business object; Pass B breadth-vs-cost triage",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notes/{id}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.notes-id-comments",
+      "kind": "rest_write",
+      "summary": "POST /notes/{id}/comments",
+      "description": "adds a comment to one note's comment thread; narrower than the note-level create/update/delete actions already covered",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/notes/{id}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.notes-id-comments-commentid",
+      "kind": "rest_read",
+      "summary": "GET /notes/{id}/comments/{commentId}",
+      "description": "single-comment detail on a note's comment thread; same out-of-scope reasoning as the parent comments list",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notes/{id}/comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.notes-id-comments-commentid",
+      "kind": "rest_write",
+      "summary": "PUT /notes/{id}/comments/{commentId}",
+      "description": "updates one comment on a note's comment thread; same out-of-scope reasoning as the parent comments list",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/notes/{id}/comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.notes-id-comments-commentid",
+      "kind": "rest_write",
+      "summary": "DELETE /notes/{id}/comments/{commentId}",
+      "description": "deletes one comment on a note's comment thread; same out-of-scope reasoning as the parent comments list",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/notes/{id}/comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.oauth-authorize",
+      "kind": "rest_read",
+      "summary": "GET /oauth/authorize",
+      "description": "OAuth2 authorization-code redirect endpoint; an auth-flow artifact, not a data endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/oauth/authorize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.oauth-token",
+      "kind": "rest_write",
+      "summary": "POST /oauth/token",
+      "description": "OAuth2 token-exchange endpoint; an auth-flow artifact, not a data endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/oauth/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.oauth-token-2",
+      "kind": "rest_write",
+      "summary": "POST /oauth/token/",
+      "description": "OAuth2 token-refresh endpoint; an auth-flow artifact, not a data endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/oauth/token/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.organizationfields",
+      "kind": "rest_write",
+      "summary": "POST /organizationFields",
+      "description": "creates a new custom organization field definition; same schema-authoring-mutation reasoning as dealFields' POST",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizationFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.organizationfields",
+      "kind": "rest_write",
+      "summary": "DELETE /organizationFields",
+      "description": "bulk delete of multiple organization-field definitions by an id-list request body; same reasoning as dealFields' bulk delete",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizationFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.organizationfields-id",
+      "kind": "rest_read",
+      "summary": "GET /organizationFields/{id}",
+      "description": "single-organization-field detail; identical record shape to the organization_fields list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizationFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.organizationfields-id",
+      "kind": "rest_write",
+      "summary": "PUT /organizationFields/{id}",
+      "description": "updates a custom organization field's definition; schema-authoring mutation, out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizationFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.organizationfields-id",
+      "kind": "rest_write",
+      "summary": "DELETE /organizationFields/{id}",
+      "description": "irreversibly deletes a custom field definition and its data from every organization; out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizationFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.organizationrelationships",
+      "kind": "rest_read",
+      "summary": "GET /organizationRelationships",
+      "description": "requires a REQUIRED org_id query parameter (listable only per-organization, not as a standalone top-level collection); expressing this would require a fan_out driven by the organizations stream's ids, deprioritized for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizationRelationships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.organizationrelationships",
+      "kind": "rest_write",
+      "summary": "POST /organizationRelationships",
+      "description": "creates a relationship between two organizations; deprioritized alongside the list endpoint's fan_out requirement",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizationRelationships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.organizationrelationships-id",
+      "kind": "rest_read",
+      "summary": "GET /organizationRelationships/{id}",
+      "description": "single-relationship detail; same out-of-scope reasoning as the parent list endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizationRelationships/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.organizationrelationships-id",
+      "kind": "rest_write",
+      "summary": "PUT /organizationRelationships/{id}",
+      "description": "updates an organization relationship; deprioritized alongside the list endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizationRelationships/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.organizationrelationships-id",
+      "kind": "rest_write",
+      "summary": "DELETE /organizationRelationships/{id}",
+      "description": "deletes an organization relationship; deprioritized alongside the list endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizationRelationships/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.organizations-id-changelog",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/changelog",
+      "description": "per-organization field-value change history; same audit-sub-resource reasoning as deals/{id}/changelog",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/changelog",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.organizations-id-files",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/files",
+      "description": "per-organization attached-file sub-list; same file-metadata reasoning as deals/{id}/files",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.organizations-id-flow",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/flow",
+      "description": "chronological activity-log feed for one organization; same UI-timeline reasoning as deals/{id}/flow",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/flow",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.organizations-id-followers",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/followers",
+      "description": "per-organization follower sub-list; same fine-grained-edit-surface reasoning as deals/{id}/followers",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/followers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.organizations-id-followers",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{id}/followers",
+      "description": "adds a follower to one organization; fine-grained edit of an already-covered parent record",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{id}/followers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.organizations-id-followers-follower-id",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{id}/followers/{follower_id}",
+      "description": "removes a follower from one organization; same fine-grained-edit reasoning as the add-follower endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{id}/followers/{follower_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.organizations-id-mailmessages",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/mailMessages",
+      "description": "per-organization linked-email sub-list; same Mailbox-feature-area reasoning as deals/{id}/mailMessages",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/mailMessages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.organizations-id-merge",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{id}/merge",
+      "description": "merges two organizations into one, an irreversible structural operation; same reasoning as deals/{id}/merge",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{id}/merge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.organizations-id-permittedusers",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{id}/permittedUsers",
+      "description": "access-control check for one organization; same reasoning as deals/{id}/permittedUsers",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{id}/permittedUsers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.permissionsets",
+      "kind": "rest_read",
+      "summary": "GET /permissionSets",
+      "description": "Pipedrive's newer fixed (non-editable) permission-set catalog, a read-only complement to the roles resource already covered; deprioritized for this pass's breadth-vs-cost triage",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/permissionSets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.permissionsets-id",
+      "kind": "rest_read",
+      "summary": "GET /permissionSets/{id}",
+      "description": "single-permission-set detail; same out-of-scope reasoning as the parent list endpoint, which itself was deprioritized",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/permissionSets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.permissionsets-id-assignments",
+      "kind": "rest_read",
+      "summary": "GET /permissionSets/{id}/assignments",
+      "description": "per-permission-set user-assignment sub-list; same out-of-scope reasoning as permissionSets itself",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/permissionSets/{id}/assignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.personfields",
+      "kind": "rest_write",
+      "summary": "POST /personFields",
+      "description": "creates a new custom person field definition; same schema-authoring-mutation reasoning as dealFields' POST",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/personFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.personfields",
+      "kind": "rest_write",
+      "summary": "DELETE /personFields",
+      "description": "bulk delete of multiple person-field definitions by an id-list request body; same reasoning as dealFields' bulk delete",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/personFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.personfields-id",
+      "kind": "rest_read",
+      "summary": "GET /personFields/{id}",
+      "description": "single-person-field detail; identical record shape to the person_fields list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/personFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.personfields-id",
+      "kind": "rest_write",
+      "summary": "PUT /personFields/{id}",
+      "description": "updates a custom person field's definition; schema-authoring mutation, out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/personFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.personfields-id",
+      "kind": "rest_write",
+      "summary": "DELETE /personFields/{id}",
+      "description": "irreversibly deletes a custom field definition and its data from every person; out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/personFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.persons-id-changelog",
+      "kind": "rest_read",
+      "summary": "GET /persons/{id}/changelog",
+      "description": "per-person field-value change history; same audit-sub-resource reasoning as deals/{id}/changelog",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/persons/{id}/changelog",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.persons-id-files",
+      "kind": "rest_read",
+      "summary": "GET /persons/{id}/files",
+      "description": "per-person attached-file sub-list; same file-metadata reasoning as deals/{id}/files",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/persons/{id}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.persons-id-flow",
+      "kind": "rest_read",
+      "summary": "GET /persons/{id}/flow",
+      "description": "chronological activity-log feed for one person; same UI-timeline reasoning as deals/{id}/flow",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/persons/{id}/flow",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.persons-id-followers",
+      "kind": "rest_read",
+      "summary": "GET /persons/{id}/followers",
+      "description": "per-person follower sub-list; same fine-grained-edit-surface reasoning as deals/{id}/followers",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/persons/{id}/followers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.persons-id-followers",
+      "kind": "rest_write",
+      "summary": "POST /persons/{id}/followers",
+      "description": "adds a follower to one person; fine-grained edit of an already-covered parent record",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/persons/{id}/followers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.persons-id-followers-follower-id",
+      "kind": "rest_write",
+      "summary": "DELETE /persons/{id}/followers/{follower_id}",
+      "description": "removes a follower from one person; same fine-grained-edit reasoning as the add-follower endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/persons/{id}/followers/{follower_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.persons-id-mailmessages",
+      "kind": "rest_read",
+      "summary": "GET /persons/{id}/mailMessages",
+      "description": "per-person linked-email sub-list; same Mailbox-feature-area reasoning as deals/{id}/mailMessages",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/persons/{id}/mailMessages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.persons-id-merge",
+      "kind": "rest_write",
+      "summary": "PUT /persons/{id}/merge",
+      "description": "merges two persons into one, an irreversible structural operation; same reasoning as deals/{id}/merge",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/persons/{id}/merge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.persons-id-permittedusers",
+      "kind": "rest_read",
+      "summary": "GET /persons/{id}/permittedUsers",
+      "description": "access-control check for one person; same reasoning as deals/{id}/permittedUsers",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/persons/{id}/permittedUsers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.persons-id-picture",
+      "kind": "rest_write",
+      "summary": "POST /persons/{id}/picture",
+      "description": "uploads a person's profile picture image (multipart file upload); binary-image management, out of scope for a record-sync connector",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/persons/{id}/picture",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.persons-id-picture",
+      "kind": "rest_write",
+      "summary": "DELETE /persons/{id}/picture",
+      "description": "removes a person's profile picture image; binary-image management, out of scope for a record-sync connector",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/persons/{id}/picture",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.persons-id-products",
+      "kind": "rest_read",
+      "summary": "GET /persons/{id}/products",
+      "description": "per-person linked-products sub-list; a fine-grained association view rather than an independent business object",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/persons/{id}/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.pipelines-id-conversion-statistics",
+      "kind": "rest_read",
+      "summary": "GET /pipelines/{id}/conversion_statistics",
+      "description": "computed deal-conversion-rate rollup for one pipeline, a reporting aggregate rather than an independently syncable business object",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipelines/{id}/conversion_statistics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.pipelines-id-deals",
+      "kind": "rest_read",
+      "summary": "GET /pipelines/{id}/deals",
+      "description": "per-pipeline linked-deals sub-list; the pipeline resource itself is v2-only (see scope note), out of scope alongside it",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipelines/{id}/deals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.pipelines-id-movement-statistics",
+      "kind": "rest_read",
+      "summary": "GET /pipelines/{id}/movement_statistics",
+      "description": "computed deal-stage-movement rollup for one pipeline; same reporting-aggregate reasoning as conversion_statistics",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipelines/{id}/movement_statistics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.productfields",
+      "kind": "rest_write",
+      "summary": "POST /productFields",
+      "description": "creates a new custom product field definition; same schema-authoring-mutation reasoning as dealFields' POST",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/productFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.productfields",
+      "kind": "rest_write",
+      "summary": "DELETE /productFields",
+      "description": "bulk delete of multiple product-field definitions by an id-list request body; same reasoning as dealFields' bulk delete",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/productFields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.productfields-id",
+      "kind": "rest_read",
+      "summary": "GET /productFields/{id}",
+      "description": "single-product-field detail; identical record shape to the product_fields list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/productFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.productfields-id",
+      "kind": "rest_write",
+      "summary": "PUT /productFields/{id}",
+      "description": "updates a custom product field's definition; schema-authoring mutation, out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/productFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.productfields-id",
+      "kind": "rest_write",
+      "summary": "DELETE /productFields/{id}",
+      "description": "irreversibly deletes a custom field definition and its data from every product; out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/productFields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.products-id-deals",
+      "kind": "rest_read",
+      "summary": "GET /products/{id}/deals",
+      "description": "per-product linked-deals sub-list; a fine-grained association view rather than an independent business object, the deals stream already covers deal records themselves",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{id}/deals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.products-id-files",
+      "kind": "rest_read",
+      "summary": "GET /products/{id}/files",
+      "description": "per-product attached-file sub-list; same file-metadata reasoning as deals/{id}/files",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{id}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.products-id-followers",
+      "kind": "rest_read",
+      "summary": "GET /products/{id}/followers",
+      "description": "per-product follower sub-list; same fine-grained-edit-surface reasoning as deals/{id}/followers",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{id}/followers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.products-id-followers",
+      "kind": "rest_write",
+      "summary": "POST /products/{id}/followers",
+      "description": "adds a follower to one product; fine-grained edit of an already-covered parent record",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/products/{id}/followers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.products-id-followers-follower-id",
+      "kind": "rest_write",
+      "summary": "DELETE /products/{id}/followers/{follower_id}",
+      "description": "removes a follower from one product; same fine-grained-edit reasoning as the add-follower endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/products/{id}/followers/{follower_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.products-id-permittedusers",
+      "kind": "rest_read",
+      "summary": "GET /products/{id}/permittedUsers",
+      "description": "access-control check for one product; same reasoning as deals/{id}/permittedUsers",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{id}/permittedUsers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.projecttemplates",
+      "kind": "rest_read",
+      "summary": "GET /projectTemplates",
+      "description": "reusable project-template catalog for the Projects add-on; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projectTemplates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.projecttemplates-id",
+      "kind": "rest_read",
+      "summary": "GET /projectTemplates/{id}",
+      "description": "single-template detail; same out-of-scope reasoning as the parent list endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projectTemplates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.projects",
+      "kind": "rest_read",
+      "summary": "GET /projects",
+      "description": "Pipedrive's Projects add-on feature (paid, not universally enabled); deprioritized for this pass alongside tasks",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.projects",
+      "kind": "rest_write",
+      "summary": "POST /projects",
+      "description": "creates a project; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.projects-boards",
+      "kind": "rest_read",
+      "summary": "GET /projects/boards",
+      "description": "Projects-add-on board/column configuration; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/boards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.projects-boards-id",
+      "kind": "rest_read",
+      "summary": "GET /projects/boards/{id}",
+      "description": "single-board detail; same out-of-scope reasoning as the parent list endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/boards/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.projects-phases",
+      "kind": "rest_read",
+      "summary": "GET /projects/phases",
+      "description": "Projects-add-on phase/workflow-stage configuration; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/phases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.projects-phases-id",
+      "kind": "rest_read",
+      "summary": "GET /projects/phases/{id}",
+      "description": "single-phase detail; same out-of-scope reasoning as the parent list endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/phases/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.projects-id",
+      "kind": "rest_read",
+      "summary": "GET /projects/{id}",
+      "description": "single-project detail; same out-of-scope reasoning as the parent list endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.projects-id",
+      "kind": "rest_write",
+      "summary": "PUT /projects/{id}",
+      "description": "updates a project; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/projects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.projects-id",
+      "kind": "rest_write",
+      "summary": "DELETE /projects/{id}",
+      "description": "deletes a project; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.projects-id-activities",
+      "kind": "rest_read",
+      "summary": "GET /projects/{id}/activities",
+      "description": "per-project linked-activities sub-list; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{id}/activities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.projects-id-archive",
+      "kind": "rest_write",
+      "summary": "POST /projects/{id}/archive",
+      "description": "archives a project; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{id}/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.projects-id-groups",
+      "kind": "rest_read",
+      "summary": "GET /projects/{id}/groups",
+      "description": "per-project task-group sub-resource; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{id}/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.projects-id-plan",
+      "kind": "rest_read",
+      "summary": "GET /projects/{id}/plan",
+      "description": "per-project Gantt-style plan view; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{id}/plan",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.projects-id-plan-activities-activityid",
+      "kind": "rest_write",
+      "summary": "PUT /projects/{id}/plan/activities/{activityId}",
+      "description": "updates one activity's position within a project plan; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/projects/{id}/plan/activities/{activityId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.projects-id-plan-tasks-taskid",
+      "kind": "rest_write",
+      "summary": "PUT /projects/{id}/plan/tasks/{taskId}",
+      "description": "updates one task's position within a project plan; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/projects/{id}/plan/tasks/{taskId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.projects-id-tasks",
+      "kind": "rest_read",
+      "summary": "GET /projects/{id}/tasks",
+      "description": "per-project linked-tasks sub-list; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{id}/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.recents",
+      "kind": "rest_read",
+      "summary": "GET /recents",
+      "description": "a UI-facing 'recently viewed/changed across all object types' activity feed, not a stable single-resource-typed business record",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.roles",
+      "kind": "rest_write",
+      "summary": "POST /roles",
+      "description": "creates a new permission role; account-permission-structure authoring, out of scope for this pass (the roles stream is read-only reference data in this bundle)",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.roles-id",
+      "kind": "rest_read",
+      "summary": "GET /roles/{id}",
+      "description": "single-role detail; identical record shape to the roles list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.roles-id",
+      "kind": "rest_write",
+      "summary": "PUT /roles/{id}",
+      "description": "updates a permission role's name/parent; account-permission-structure authoring, out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.roles-id",
+      "kind": "rest_write",
+      "summary": "DELETE /roles/{id}",
+      "description": "irreversibly deletes a permission role affecting every assigned user's access; out of scope for this pass, no safer covered alternative",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.roles-id-assignments",
+      "kind": "rest_read",
+      "summary": "GET /roles/{id}/assignments",
+      "description": "per-role user-assignment sub-list; a narrower fine-grained view of account permission structure than the roles stream itself",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/roles/{id}/assignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.roles-id-assignments",
+      "kind": "rest_write",
+      "summary": "POST /roles/{id}/assignments",
+      "description": "assigns a user to a role; account-permission-structure mutation, out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/roles/{id}/assignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.roles-id-assignments",
+      "kind": "rest_write",
+      "summary": "DELETE /roles/{id}/assignments",
+      "description": "removes a user's role assignment, altering their account permissions; out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/roles/{id}/assignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.roles-id-pipelines",
+      "kind": "rest_read",
+      "summary": "GET /roles/{id}/pipelines",
+      "description": "per-role pipeline-visibility sub-resource; a narrower fine-grained view of account permission structure than the roles stream itself",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/roles/{id}/pipelines",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.roles-id-pipelines",
+      "kind": "rest_write",
+      "summary": "PUT /roles/{id}/pipelines",
+      "description": "sets which pipelines a role can see; account-permission-structure mutation, out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/roles/{id}/pipelines",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.roles-id-settings",
+      "kind": "rest_read",
+      "summary": "GET /roles/{id}/settings",
+      "description": "per-role visibility/access settings sub-resource; a narrower fine-grained view of account permission structure than the roles stream itself",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/roles/{id}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.roles-id-settings",
+      "kind": "rest_write",
+      "summary": "POST /roles/{id}/settings",
+      "description": "sets a per-role visibility/access setting; account-permission-structure mutation, out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/roles/{id}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.stages-id-deals",
+      "kind": "rest_read",
+      "summary": "GET /stages/{id}/deals",
+      "description": "per-stage linked-deals sub-list; the stage resource itself is v2-only (see scope note), out of scope alongside it",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stages/{id}/deals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.tasks",
+      "kind": "rest_read",
+      "summary": "GET /tasks",
+      "description": "part of Pipedrive's Projects add-on feature (paid, not universally enabled), uses a distinct cursor-based pagination shape from the rest of this bundle; deprioritized for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.tasks",
+      "kind": "rest_write",
+      "summary": "POST /tasks",
+      "description": "creates a project task; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.tasks-id",
+      "kind": "rest_read",
+      "summary": "GET /tasks/{id}",
+      "description": "single-task detail; same out-of-scope reasoning as the parent list endpoint",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.tasks-id",
+      "kind": "rest_write",
+      "summary": "PUT /tasks/{id}",
+      "description": "updates a project task; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tasks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.delete.tasks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /tasks/{id}",
+      "description": "deletes a project task; same Projects-add-on-feature deprioritization",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tasks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.userconnections",
+      "kind": "rest_read",
+      "summary": "GET /userConnections",
+      "description": "lists the calling user's connected third-party service accounts (email, calendar, etc.); an integration-configuration artifact, not CRM business data",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/userConnections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.usersettings",
+      "kind": "rest_read",
+      "summary": "GET /userSettings",
+      "description": "returns the calling user's own account-level UI/feature-flag settings, a single caller-scoped configuration object rather than a syncable multi-record business resource",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/userSettings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.post.users",
+      "kind": "rest_write",
+      "summary": "POST /users",
+      "description": "invites/creates a new Pipedrive account user; account-provisioning mutation, out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.users-find",
+      "kind": "rest_read",
+      "summary": "GET /users/find",
+      "description": "name-search convenience lookup over the same Users resource already covered by the users stream",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/find",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.users-me",
+      "kind": "rest_read",
+      "summary": "GET /users/me",
+      "description": "returns the calling user's own record; identical shape to one item of the users list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.users-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}",
+      "description": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.put.users-id",
+      "kind": "rest_write",
+      "summary": "PUT /users/{id}",
+      "description": "updates a user's account settings (active state, admin flag); account-administration mutation, out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.users-id-followers",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}/followers",
+      "description": "per-user follower sub-list, a fine-grained edit-surface view rather than an independent business object",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}/followers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.users-id-permissions",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}/permissions",
+      "description": "per-user effective-permissions computed view; account-permission-structure data, out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}/permissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.users-id-roleassignments",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}/roleAssignments",
+      "description": "per-user role-assignment sub-list; same account-permission-structure reasoning as roles/{id}/assignments",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}/roleAssignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pipedrive.get.users-id-rolesettings",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}/roleSettings",
+      "description": "per-user effective role-settings computed view; account-permission-structure data, out of scope for this pass",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}/roleSettings",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

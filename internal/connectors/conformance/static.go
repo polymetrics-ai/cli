@@ -335,7 +335,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
+		hasCovered := ep.CoveredBy != nil && (len(ep.CoveredBy.StreamTargets()) > 0 || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -354,11 +354,11 @@ func checkSurfaceComplete(b engine.Bundle) error {
 		case ledgerMode && hasOperation && hasExcluded:
 			return fmt.Errorf("endpoint %d (%s %s) has both operation and excluded", i, ep.Method, ep.Path)
 		case hasCovered:
-			if ep.CoveredBy.Stream != "" {
-				if !streams[ep.CoveredBy.Stream] {
-					return fmt.Errorf("endpoint %d (%s %s) covered_by.stream %q is not a declared stream", i, ep.Method, ep.Path, ep.CoveredBy.Stream)
+			for _, stream := range ep.CoveredBy.StreamTargets() {
+				if !streams[stream] {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.stream %q is not a declared stream", i, ep.Method, ep.Path, stream)
 				}
-				coveredStreams[ep.CoveredBy.Stream] = true
+				coveredStreams[stream] = true
 			}
 			for _, write := range ep.CoveredBy.WriteTargets() {
 				if !writes[write] {

@@ -1,0 +1,407 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-011-manifest.json",
+  "candidates": 40,
+  "included": [
+    {
+      "connector": "gong",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d9a751a49708b6122b2f5e3873e1b7269810c5d12d2b42b21335ba140969b4d6"
+      },
+      "artifact_operations": 69,
+      "declared_operations": 69,
+      "operation_split": {
+        "executable": 69,
+        "provider_blocked": 0,
+        "excluded": 0
+      },
+      "cli_commands": 69,
+      "implemented_commands": 62,
+      "named_dependency_commands": 7,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 17
+    },
+    {
+      "connector": "mailersend",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "version": "1.0.0-oas3.1 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621"
+      },
+      "artifact_operations": 97,
+      "declared_operations": 107,
+      "operation_split": {
+        "executable": 16,
+        "provider_blocked": 53,
+        "excluded": 38
+      },
+      "cli_commands": 107,
+      "implemented_commands": 16,
+      "named_dependency_commands": 91,
+      "flagged_discrepancies": 10,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 91
+    },
+    {
+      "connector": "mailgun",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://documentation.mailgun.com/_bundle/docs/mailgun/api-reference/send/mailgun.json?download",
+        "version": "3.0.0 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8a10ca506e3c4810ef2f5e49948695cca8caadc7bf7af4ddaf1c8a41cd06694a"
+      },
+      "artifact_operations": 265,
+      "declared_operations": 274,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 151,
+        "excluded": 119
+      },
+      "cli_commands": 274,
+      "implemented_commands": 4,
+      "named_dependency_commands": 270,
+      "flagged_discrepancies": 9,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 270
+    },
+    {
+      "connector": "pendo",
+      "artifact": {
+        "kind": "postman",
+        "url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8bd465aa22f43aed3d1ae50c73a7c2e679f5bb5f81cdddab81a17c96124fc4b8"
+      },
+      "artifact_operations": 65,
+      "declared_operations": 138,
+      "operation_split": {
+        "executable": 49,
+        "provider_blocked": 37,
+        "excluded": 52
+      },
+      "cli_commands": 138,
+      "implemented_commands": 35,
+      "named_dependency_commands": 103,
+      "flagged_discrepancies": 73,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 89
+    },
+    {
+      "connector": "productive",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developer.productive.io/reference/download_spec?format=json",
+        "version": "Productive API v2 current reference; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6bb0150a5c5f607f95098b7a719a9bcc3d5f58e1133945cfd233294a9308e64a"
+      },
+      "artifact_operations": 648,
+      "declared_operations": 649,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 308,
+        "excluded": 337
+      },
+      "cli_commands": 649,
+      "implemented_commands": 4,
+      "named_dependency_commands": 645,
+      "flagged_discrepancies": 1,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 645
+    },
+    {
+      "connector": "smartsheets",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+        "version": "OpenAPI 3.0.3; Smartsheet OpenAPI Reference 2.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c5bf46c2948431ab2f858e48d4aed22ee42e76e8bc15b1ed5d650a77b8fd8c83"
+      },
+      "artifact_operations": 187,
+      "declared_operations": 188,
+      "operation_split": {
+        "executable": 141,
+        "provider_blocked": 5,
+        "excluded": 42
+      },
+      "cli_commands": 188,
+      "implemented_commands": 76,
+      "named_dependency_commands": 112,
+      "flagged_discrepancies": 1,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 47
+    },
+    {
+      "connector": "teamwork",
+      "artifact": {
+        "kind": "swagger",
+        "url": "https://apidocs.teamwork.com/api/oas/download?slug=teamwork\u0026api_version=v3",
+        "version": "Teamwork API V3 v3.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d0ea68d32dd94f2aac045e12ee749f283ce5ef3d056cbd7ec07e8f9d24ebbe93"
+      },
+      "artifact_operations": 409,
+      "declared_operations": 636,
+      "operation_split": {
+        "executable": 17,
+        "provider_blocked": 280,
+        "excluded": 339
+      },
+      "cli_commands": 636,
+      "implemented_commands": 9,
+      "named_dependency_commands": 627,
+      "flagged_discrepancies": 227,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 619
+    },
+    {
+      "connector": "square",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "101fca4d5346611a487542085c91bc66eb953e10224e442b275becbba5c10d6b"
+      },
+      "artifact_operations": 334,
+      "declared_operations": 336,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 141,
+        "excluded": 191
+      },
+      "cli_commands": 336,
+      "implemented_commands": 4,
+      "named_dependency_commands": 332,
+      "flagged_discrepancies": 2,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 332
+    },
+    {
+      "connector": "trello",
+      "artifact": {
+        "kind": "swagger",
+        "url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b50fca38c5ea62025f9778482f89f11ae3da0dd983d31ba49401c4422e450b19"
+      },
+      "artifact_operations": 261,
+      "declared_operations": 264,
+      "operation_split": {
+        "executable": 3,
+        "provider_blocked": 161,
+        "excluded": 100
+      },
+      "cli_commands": 264,
+      "implemented_commands": 3,
+      "named_dependency_commands": 261,
+      "flagged_discrepancies": 3,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 261
+    },
+    {
+      "connector": "bitbucket",
+      "artifact": {
+        "kind": "swagger",
+        "url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8c7911c0a9109be263a3528b0307f1f3418bf0fabac26bdd50d7f3841af94f89"
+      },
+      "artifact_operations": 331,
+      "declared_operations": 331,
+      "operation_split": {
+        "executable": 197,
+        "provider_blocked": 134,
+        "excluded": 0
+      },
+      "cli_commands": 331,
+      "implemented_commands": 180,
+      "named_dependency_commands": 151,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 268
+    },
+    {
+      "connector": "employment-hero",
+      "artifact": {
+        "kind": "postman",
+        "url": "https://developer.employmenthero.com/postman-collection.json",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42"
+      },
+      "artifact_operations": 128,
+      "declared_operations": 137,
+      "operation_split": {
+        "executable": 90,
+        "provider_blocked": 13,
+        "excluded": 34
+      },
+      "cli_commands": 137,
+      "implemented_commands": 85,
+      "named_dependency_commands": 52,
+      "flagged_discrepancies": 9,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 47
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "google-analytics-data-api",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developers.google.com/analytics/devguides/reporting/data/v1/rest\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "youtube-analytics",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developers.google.com/youtube/analytics/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "google-ads",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developers.google.com/google-ads/api/rest/reference/rest\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "google-search-console",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developers.google.com/webmaster-tools/v1/api_reference_index\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "bing-ads",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://learn.microsoft.com/en-us/advertising/customer-management-service/customer-management-service-operations?view=bingads-13\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "care-quality-commission",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://api-portal.service.cqc.org.uk/developer/apis/syndication?export=true\u0026format=openapi%2Bjson\u0026api-version=2022-04-01-preview\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact has no HTTP or webhook operations; Postman: Postman collection has no request items), and official reference fallback \"https://api-portal.service.cqc.org.uk/api-details\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "castor-edc",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: found unknown escape character), and official reference fallback \"https://data.castoredc.com/api\" failed: artifact operation inventory is unknown: official reference \"https://data.castoredc.com/swagger-ui/swagger-ui.css\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document"
+    },
+    {
+      "connector": "confluence",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no confluence.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "flowlu",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: found unknown escape character), and official reference fallback \"https://www.flowlu.com/api/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "google-classroom",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developers.google.com/workspace/classroom/reference/rest\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "google-directory",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developers.google.com/admin-sdk/directory/reference/rest\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "google-forms",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developers.google.com/workspace/forms/api/reference/rest\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "google-pagespeed-insights",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developers.google.com/speed/docs/insights/rest/v5/pagespeedapi/runpagespeed\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "guru",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.getguru.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "hibob",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://apidocs.hibob.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "insightful",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 106 operation(s), below the ledger's 112"
+    },
+    {
+      "connector": "mendeley",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 16 operation(s), below the ledger's 67; official reference fallback \"https://api.mendeley.com/apidocs/openapi\" failed: artifact operation inventory is unknown: official reference \"https://api.mendeley.com/apidocs/openapi/favicon.png\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document"
+    },
+    {
+      "connector": "mixmax",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.mixmax.com/reference/getting-started-with-the-api\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "ringcentral",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation POST /ai/audio/v1/async/speaker-diarize contains callbacks that cannot be represented as provider request paths), and official reference fallback \"https://developers.ringcentral.com/api-reference\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "teamtailor",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 127 operation(s), below the ledger's 129; official reference fallback \"https://docs.teamtailor.com/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "whisky-hunter",
+      "stage": "coverage",
+      "reason": "existing api surface duplicates GET /api/auctions_data/"
+    },
+    {
+      "connector": "front",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://dev.frontapp.com/reference/introduction\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "hubplanner",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://github.com/hubplanner/API/tree/master/Sections\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "zoom",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "marketo",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "monday",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "reddit",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no reddit.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "gorgias",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "airtable",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    }
+  ]
+}

@@ -1,0 +1,595 @@
+{
+  "operations": [
+    {
+      "id": "tickettailor.get.v1-check-ins",
+      "kind": "rest_read",
+      "summary": "GET /v1/check_ins",
+      "description": "a raw check-in event log rather than a stable entity list (each check-in is a point-in-time action against an issued ticket already fully represented by the issued_tickets stream's own checked_in field); Pass B breadth-vs-cost triage",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/check_ins",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-checkout-forms-checkout-form-id-elements-checkout-form-element-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/checkout_forms/{checkout_form_id}/elements/{checkout_form_element_id}",
+      "description": "single-checkout-form-element detail; identical record shape to the checkout_form_elements fan_out stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/checkout_forms/{checkout_form_id}/elements/{checkout_form_element_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-checkout-forms-checkout-form-id-elements-checkout-form-element-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/checkout_forms/{checkout_form_id}/elements/{checkout_form_element_id}",
+      "description": "updates a single checkout-form question/element's configuration; narrow sub-resource mutation, Pass B breadth-vs-cost triage",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/checkout_forms/{checkout_form_id}/elements/{checkout_form_element_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-discounts-discount-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/discounts/{discount_id}",
+      "description": "single-discount detail; identical record shape to the discounts list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/discounts/{discount_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-event-series-event-series-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/event_series/{event_series_id}",
+      "description": "single-event-series detail; identical record shape to the event_series list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/event_series/{event_series_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-event-series-event-series-id-bundles",
+      "kind": "rest_write",
+      "summary": "POST /v1/event_series/{event_series_id}/bundles",
+      "description": "creates a ticket bundle configuration; narrow event-configuration sub-resource mutation with no corresponding read stream to round-trip against, Pass B breadth-vs-cost triage",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/event_series/{event_series_id}/bundles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-event-series-event-series-id-bundles-bundle-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/event_series/{event_series_id}/bundles/{bundle_id}",
+      "description": "updates a ticket bundle configuration; same narrow sub-resource reasoning as bundle create above",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/event_series/{event_series_id}/bundles/{bundle_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.delete.v1-event-series-event-series-id-bundles-bundle-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/event_series/{event_series_id}/bundles/{bundle_id}",
+      "description": "deletes a ticket bundle configuration; same narrow sub-resource reasoning as bundle create above",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/event_series/{event_series_id}/bundles/{bundle_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-event-series-event-series-id-events",
+      "kind": "rest_read",
+      "summary": "GET /v1/event_series/{event_series_id}/events",
+      "description": "event occurrences of a series are already reachable through the top-level events stream (each occurrence carries its own id/dates); adding a second, series-scoped fan_out view of the identical record shape would be a duplicate of intent, not a distinct resource",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/event_series/{event_series_id}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-event-series-event-series-id-events",
+      "kind": "rest_write",
+      "summary": "POST /v1/event_series/{event_series_id}/events",
+      "description": "creates a new occurrence within an event series; narrower event-scheduling sub-resource mutation, Pass B breadth-vs-cost triage (event_series' own create/update/status writes cover the primary lifecycle)",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/event_series/{event_series_id}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-event-series-event-series-id-events-event-occurrence-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/event_series/{event_series_id}/events/{event_occurrence_id}",
+      "description": "single-occurrence detail; same record shape as the top-level events stream's per-item object",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/event_series/{event_series_id}/events/{event_occurrence_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-event-series-event-series-id-events-event-occurrence-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/event_series/{event_series_id}/events/{event_occurrence_id}",
+      "description": "updates a single event occurrence's schedule; narrower sub-resource mutation, Pass B breadth-vs-cost triage",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/event_series/{event_series_id}/events/{event_occurrence_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.delete.v1-event-series-event-series-id-events-event-occurrence-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/event_series/{event_series_id}/events/{event_occurrence_id}",
+      "description": "deletes a single event occurrence; narrower sub-resource mutation, Pass B breadth-vs-cost triage",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/event_series/{event_series_id}/events/{event_occurrence_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-event-series-event-series-id-overrides",
+      "kind": "rest_write",
+      "summary": "POST /v1/event_series/{event_series_id}/overrides",
+      "description": "creates a schedule override for an event series; narrower sub-resource configuration mutation, Pass B breadth-vs-cost triage",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/event_series/{event_series_id}/overrides",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-event-series-event-series-id-overrides-override-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/event_series/{event_series_id}/overrides/{override_id}",
+      "description": "updates a schedule override; same narrow sub-resource mutation reasoning as the override create above",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/event_series/{event_series_id}/overrides/{override_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-event-series-event-series-id-ticket-groups",
+      "kind": "rest_write",
+      "summary": "POST /v1/event_series/{event_series_id}/ticket_groups",
+      "description": "creates a ticket-type grouping configuration; narrow event-configuration sub-resource mutation with no corresponding read stream, Pass B breadth-vs-cost triage",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/event_series/{event_series_id}/ticket_groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-event-series-event-series-id-ticket-groups-ticket-group-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/event_series/{event_series_id}/ticket_groups/{ticket_group_id}",
+      "description": "updates a ticket-group configuration; same narrow sub-resource reasoning as ticket-group create above",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/event_series/{event_series_id}/ticket_groups/{ticket_group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.delete.v1-event-series-event-series-id-ticket-groups-ticket-group-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/event_series/{event_series_id}/ticket_groups/{ticket_group_id}",
+      "description": "deletes a ticket-group configuration; same narrow sub-resource reasoning as ticket-group create above",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/event_series/{event_series_id}/ticket_groups/{ticket_group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-event-series-event-series-id-ticket-types",
+      "kind": "rest_write",
+      "summary": "POST /v1/event_series/{event_series_id}/ticket_types",
+      "description": "creates a ticket type configuration; narrow event-configuration sub-resource mutation with no corresponding read stream, Pass B breadth-vs-cost triage",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/event_series/{event_series_id}/ticket_types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-event-series-event-series-id-ticket-types-ticket-type-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/event_series/{event_series_id}/ticket_types/{ticket_type_id}",
+      "description": "updates a ticket type configuration; same narrow sub-resource reasoning as ticket-type create above",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/event_series/{event_series_id}/ticket_types/{ticket_type_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.delete.v1-event-series-event-series-id-ticket-types-ticket-type-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/event_series/{event_series_id}/ticket_types/{ticket_type_id}",
+      "description": "deletes a ticket type configuration; same narrow sub-resource reasoning as ticket-type create above",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/event_series/{event_series_id}/ticket_types/{ticket_type_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.delete.v1-event-series-event-series-id-waitlist-signup-waitlist-signup-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/event_series/{event_series_id}/waitlist_signup/{waitlist_signup_id}",
+      "description": "removes a single waitlist signup; narrow sub-resource mutation, Pass B breadth-vs-cost triage",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/event_series/{event_series_id}/waitlist_signup/{waitlist_signup_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-events-event-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/events/{event_id}",
+      "description": "single-event detail; identical record shape to the events list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-holds",
+      "kind": "rest_write",
+      "summary": "POST /v1/holds",
+      "description": "ENGINE_GAP: the documented request body's required ticket_type_id field is a JSON object (additionalProperties, e.g. {tt_1: 1, tt_2: 5}) sent inside an application/x-www-form-urlencoded body -- this dialect's form-body construction (engine/write.go buildForm/stringifyAny) can only stringify a nested object value as a single JSON-string-valued form field, not the bracket-notation (ticket_type_id[tt_1]=1) or repeated-key form encoding a nested object in a form body typically requires; unverifiable which encoding Ticket Tailor's real endpoint expects without a live test, so not implemented rather than guessed",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/holds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-holds-hold-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/holds/{hold_id}",
+      "description": "single-hold detail; identical record shape to the holds list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/holds/{hold_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-holds-hold-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/holds/{hold_id}",
+      "description": "ENGINE_GAP: same nested-object-in-form-body ambiguity as POST /v1/holds above (this endpoint's ticket_type_id field is optional but carries the identical encoding ambiguity whenever it is set)",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/holds/{hold_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-issued-membership-redemptions-event-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/issued_membership_redemptions/{event_id}",
+      "description": "records a membership redemption at check-in time for a specific event; narrow operational sub-workflow distinct from the membership lifecycle writes already covered, Pass B breadth-vs-cost triage",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/issued_membership_redemptions/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-issued-memberships-issued-membership-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/issued_memberships/{issued_membership_id}",
+      "description": "single-issued-membership detail; identical record shape to the issued_memberships list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/issued_memberships/{issued_membership_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-issued-tickets-issued-ticket-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/issued_tickets/{issued_ticket_id}",
+      "description": "single-issued-ticket detail; identical record shape to the issued_tickets list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/issued_tickets/{issued_ticket_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-membership-photo-share",
+      "kind": "rest_read",
+      "summary": "GET /v1/membership_photo_share",
+      "description": "returns a single photo-URL lookup by issued-membership code, not a syncable object stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/membership_photo_share",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-membership-types-membership-type-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/membership_types/{membership_type_id}",
+      "description": "single-membership-type detail; identical record shape to the membership_types list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/membership_types/{membership_type_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-membership-types-membership-type-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/membership_types/{membership_type_id}",
+      "description": "updates a membership type's validity/conditions configuration; narrow sub-resource mutation, Pass B breadth-vs-cost triage (create/delete already cover the primary lifecycle)",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/membership_types/{membership_type_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-orders-order-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/orders/{order_id}",
+      "description": "single-order detail; identical record shape to the orders list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/orders/{order_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-ping",
+      "kind": "rest_read",
+      "summary": "GET /v1/ping",
+      "description": "a liveness/health-check endpoint returning a static {version} payload, not a syncable object stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/ping",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-products-product-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/products/{product_id}",
+      "description": "single-product detail; identical record shape to the products list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/products/{product_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-stores-store-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/stores/{store_id}",
+      "description": "single-store detail; identical record shape to the stores list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/stores/{store_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.post.v1-stores-store-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/stores/{store_id}",
+      "description": "updates store-level currency/product configuration; a single-tenant configuration endpoint (most box offices have exactly one store) with limited reverse-ETL value, Pass B breadth-vs-cost triage",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/stores/{store_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tickettailor.get.v1-vouchers-voucher-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/vouchers/{voucher_id}",
+      "description": "single-voucher detail; identical record shape to the vouchers list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/vouchers/{voucher_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

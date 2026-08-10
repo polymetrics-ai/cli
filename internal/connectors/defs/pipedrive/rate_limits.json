@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developers.pipedrive.com/changelog/post/announcing-search-api-rate-limit (retrieved 2026-08-06): Pipedrive's documented Search API limit is per secret API token or access token, while other endpoint limits follow separate general rules."
+}

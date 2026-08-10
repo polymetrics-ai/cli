@@ -1,0 +1,304 @@
+{
+  "schema_version": 1,
+  "batch": "batch-003",
+  "manifest": "batches/batch-003-manifest.json",
+  "outcomes": [
+    {
+      "connector": "opinion-stage",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "wikipedia-pageviews",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "newsdata",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "newsdata-io",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "aviationstack",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "simplesat",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "fulcrum",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "paystack",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "onepagecrm",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "customer-io",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "svix",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "chift",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "incident-io",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "twelve-data",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "getlago",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "vantage",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "pipedrive",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "devin-ai",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "datadog",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "xero",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-xero-retry-materialize.json"
+    },
+    {
+      "connector": "chargify",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "asana",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "outreach",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "plaid",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "sendinblue",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "brevo",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "fleetio",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "close-com",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "statsig",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "cal-com",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "aha",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "klaviyo",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "gitbook",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "ruddr",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "launchdarkly",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-materialize.json"
+    },
+    {
+      "connector": "twilio",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-003-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 24360: found invalid Unicode character escape code), and official reference fallback \"https://www.twilio.com/docs/usage/api\" failed: artifact operation inventory is unknown: official reference link \"https://www.twilio.com/docs/api/errors/21625\" could not be fetched: fetch artifact: provider returned HTTP 500"
+    },
+    {
+      "connector": "tempo",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-003-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation POST /4/webhooks/subscriptions contains callbacks that cannot be represented as provider request paths), and official reference fallback \"https://apidocs.tempo.io/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "mailchimp",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-003-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: external path-item reference limit 64 exceeded), and official reference fallback \"https://mailchimp.com/developer/marketing/api/\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "intercom",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-003-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 231 operation(s), below the ledger's 324; official reference fallback \"https://developers.intercom.com/docs/references/rest-api/api.intercom.io\" failed: artifact operation inventory is unknown: official reference \"https://developers.intercom.com/app-data.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact openapi field: must be a string; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "reply-io",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-003-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 359 operation(s), below the ledger's 377; official reference fallback \"https://docs.reply.io/api-reference/introduction\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "xero",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-003-xero-retry-materialize.json"
+    }
+  ]
+}

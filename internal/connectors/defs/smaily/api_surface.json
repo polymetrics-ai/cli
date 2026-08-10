@@ -1,30 +1,406 @@
 {
-  "api": "Smaily API (https://smaily.com/help/api/)",
+  "api": "Smaily API (https://smaily.com/help/api/); provider artifact version: current Smaily API provider HTML reference",
   "docs": "https://smaily.com/help/api/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion (re-verified against Smaily's live per-endpoint docs, not just the index page): the 5 legacy-parity read streams are unchanged (campaigns, segments, subscribers, templates, automations — segments retains legacy's exact api/segment.php call per the parity meta-rule even though that path is not a currently-documented endpoint, see the segments entry below), plus organization_users, segment_rules, segment_subscribers, and ab_tests read streams and 6 write actions covering subscriber/segment upsert, campaign-recipient unsubscribe, individual message send, automation-workflow triggering, and A/B test launch — the full documented mutation surface for Smaily's PHP API. Bulk contact-import/opt-in/forget/action-log/campaign-launch/campaign-and-ab-test-statistics endpoints are excluded as out_of_scope (breadth-vs-cost triage: statistics/logs are not syncable object streams, and launch/import/opt-in/forget are lower-priority mutations than the ones covered here) or destructive_admin where documented as an irreversible account-wide erasure.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 22 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: Pass B full-surface expansion (re-verified against Smaily's live per-endpoint docs, not just the index page): the 5 legacy-parity read streams are unchanged (campaigns, segments, subscribers, templates, automations — segments retains legacy's exact api/segment.php call per the parity meta-rule even though that path is not a currently-documented endpoint, see the segments entry below), plus organization_users, segment_rules, segment_subscribers, and ab_tests read streams and 6 write actions covering subscriber/segment upsert, campaign-recipient unsubscribe, individual message send, automation-workflow triggering, and A/B test launch — the full documented mutation surface for Smaily's PHP API. Bulk contact-import/opt-in/forget/action-log/campaign-launch/campaign-and-ab-test-statistics endpoints are excluded as out_of_scope (breadth-vs-cost triage: statistics/logs are not syncable object streams, and launch/import/opt-in/forget are lower-priority mutations than the ones covered here) or destructive_admin where documented as an irreversible account-wide erasure.",
+  "artifacts": [
+    {
+      "id": "smaily-artifact-2026-08-09",
+      "url": "https://smaily.com/help/api/",
+      "kind": "html_reference",
+      "version": "current Smaily API provider HTML reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "api/campaign.php", "covered_by": { "stream": "campaigns" } },
-    { "method": "GET", "path": "api/segment.php", "covered_by": { "stream": "segments" } },
-    { "method": "GET", "path": "api/contact.php", "covered_by": { "stream": "subscribers" } },
-    { "method": "GET", "path": "api/template.php", "covered_by": { "stream": "templates" } },
-    { "method": "GET", "path": "api/autoresponder.php", "covered_by": { "stream": "automations" } },
-    { "method": "GET", "path": "api/organizations/users.php", "covered_by": { "stream": "organization_users" } },
-    { "method": "GET", "path": "api/list.php", "covered_by": { "stream": "segment_rules" } },
-    { "method": "GET", "path": "api/contact.php?list=...", "covered_by": { "stream": "segment_subscribers" } },
-    { "method": "GET", "path": "api/split.php", "covered_by": { "stream": "ab_tests" } },
-    { "method": "POST", "path": "api/contact.php", "covered_by": { "write": "create_or_update_subscriber" } },
-    { "method": "POST", "path": "api/list.php", "covered_by": { "write": "create_or_update_segment" } },
-    { "method": "POST", "path": "api/unsubscribe.php", "covered_by": { "write": "unsubscribe_recipient" } },
-    { "method": "POST", "path": "api/message/send.php", "covered_by": { "write": "send_message" } },
-    { "method": "POST", "path": "api/autoresponder.php", "covered_by": { "write": "trigger_automation_workflow" } },
-    { "method": "POST", "path": "api/split.php", "covered_by": { "write": "launch_ab_test" } },
-    { "method": "POST", "path": "api/campaign.php", "excluded": { "category": "out_of_scope", "reason": "campaign create-and-launch is a full compound send-a-real-campaign action (recipient list selection, content, scheduling) beyond a single-record declarative write; Pass B breadth-vs-cost triage for this pass" } },
-    { "method": "POST", "path": "api/subscribers/opt-in.php", "excluded": { "category": "out_of_scope", "reason": "bulk opt-in confirmation action, narrower value than the already-covered create/update-subscriber write; Pass B breadth-vs-cost triage" } },
-    { "method": "POST", "path": "api/subscribers/forget.php", "excluded": { "category": "destructive_admin", "reason": "irreversibly erases a subscriber's personal data account-wide (GDPR right-to-be-forgotten action), a materially higher-risk operation than this pass's covered mutations" } },
-    { "method": "GET", "path": "api/message/action/log.php", "excluded": { "category": "out_of_scope", "reason": "message engagement-action log (sends/opens/clicks/opt-outs) explicitly time-windowed to the last 30 days by the API itself; an analytics/audit log, not a stable syncable object stream" } },
-    { "method": "GET", "path": "api/subscribers/action/log.php", "excluded": { "category": "out_of_scope", "reason": "subscriber engagement-action log, same shape/rationale as the message action log above" } },
-    { "method": "GET", "path": "api/campaign.php?id=...", "excluded": { "category": "duplicate_of", "reason": "single-campaign statistics detail keyed by id; overlaps the campaigns list stream's own per-item shape for the object-identity fields, and the campaign-statistics-specific fields are an analytics rollup outside this pass's scope" } },
-    { "method": "GET", "path": "api/split.php?id=...", "excluded": { "category": "duplicate_of", "reason": "single-A/B-test overview/detailed statistics keyed by id; overlaps the ab_tests list stream's own per-item shape for the object-identity fields, and the statistics-specific fields are an analytics rollup outside this pass's scope" } }
+    {
+      "method": "GET",
+      "path": "api/autoresponder.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[GET api/autoresponder.php]"
+      },
+      "covered_by": {
+        "stream": "automations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "api/autoresponder.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[POST api/autoresponder.php]"
+      },
+      "covered_by": {
+        "write": "trigger_automation_workflow"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "api/campaign.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[GET api/campaign.php]"
+      },
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "api/campaign.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[POST api/campaign.php]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "campaign create-and-launch is a full compound send-a-real-campaign action (recipient list selection, content, scheduling) beyond a single-record declarative write; Pass B breadth-vs-cost triage for this pass",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "api/campaign.php?id=...",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[GET api/campaign.php?id=...]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-campaign statistics detail keyed by id; overlaps the campaigns list stream's own per-item shape for the object-identity fields, and the campaign-statistics-specific fields are an analytics rollup outside this pass's scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "api/contact.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[GET api/contact.php]"
+      },
+      "covered_by": {
+        "stream": "subscribers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "api/contact.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[POST api/contact.php]"
+      },
+      "covered_by": {
+        "write": "create_or_update_subscriber"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "api/contact.php?list=...",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[GET api/contact.php?list=...]"
+      },
+      "covered_by": {
+        "stream": "segment_subscribers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "api/list.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[GET api/list.php]"
+      },
+      "covered_by": {
+        "stream": "segment_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "api/list.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[POST api/list.php]"
+      },
+      "covered_by": {
+        "write": "create_or_update_segment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "api/message/action/log.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[GET api/message/action/log.php]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "message engagement-action log (sends/opens/clicks/opt-outs) explicitly time-windowed to the last 30 days by the API itself; an analytics/audit log, not a stable syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "api/message/send.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[POST api/message/send.php]"
+      },
+      "covered_by": {
+        "write": "send_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "api/organizations/users.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[GET api/organizations/users.php]"
+      },
+      "covered_by": {
+        "stream": "organization_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "api/segment.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[GET api/segment.php]"
+      },
+      "covered_by": {
+        "stream": "segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "api/split.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[GET api/split.php]"
+      },
+      "covered_by": {
+        "stream": "ab_tests"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "api/split.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[POST api/split.php]"
+      },
+      "covered_by": {
+        "write": "launch_ab_test"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "api/split.php?id=...",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[GET api/split.php?id=...]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-A/B-test overview/detailed statistics keyed by id; overlaps the ab_tests list stream's own per-item shape for the object-identity fields, and the statistics-specific fields are an analytics rollup outside this pass's scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "api/subscribers/action/log.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[GET api/subscribers/action/log.php]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "subscriber engagement-action log, same shape/rationale as the message action log above",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "api/subscribers/forget.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[POST api/subscribers/forget.php]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "irreversibly erases a subscriber's personal data account-wide (GDPR right-to-be-forgotten action), a materially higher-risk operation than this pass's covered mutations",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "api/subscribers/opt-in.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[POST api/subscribers/opt-in.php]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk opt-in confirmation action, narrower value than the already-covered create/update-subscriber write; Pass B breadth-vs-cost triage",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "api/template.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[GET api/template.php]"
+      },
+      "covered_by": {
+        "stream": "templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "api/unsubscribe.php",
+      "provenance": {
+        "artifact": "smaily-artifact-2026-08-09",
+        "source_url": "https://smaily.com/help/api/",
+        "source_kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5",
+        "coordinate": "existing-complete-surface[POST api/unsubscribe.php]"
+      },
+      "covered_by": {
+        "write": "unsubscribe_recipient"
+      }
+    }
   ]
 }

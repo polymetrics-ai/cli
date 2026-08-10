@@ -1,0 +1,2350 @@
+{
+  "tagline": "Run Drip's declared streams and reverse-ETL actions.",
+  "usage": "pm drip \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "accounts list",
+        "api get account-id broadcasts broadcast-id",
+        "api get account-id campaigns campaign-id",
+        "api get account-id campaigns campaign-id subscribers",
+        "api get account-id custom-field-identifiers",
+        "api get account-id event-actions",
+        "api get account-id forms form-id",
+        "api get account-id goals",
+        "api get account-id goals conversion-id",
+        "api get account-id subscribers subscriber-id",
+        "api get account-id subscribers subscriber-id campaign-subscriptions",
+        "api get account-id tags",
+        "api get account-id webhooks webhook-id",
+        "api get account-id workflow-triggers",
+        "api get account-id workflows workflow-id",
+        "api get accounts account-id",
+        "api get users me",
+        "api get v2 account-id broadcasts",
+        "api get v2 account-id broadcasts broadcast-id",
+        "api get v2 account-id campaigns",
+        "api get v2 account-id campaigns campaign-id",
+        "api get v2 account-id campaigns campaign-id subscribers",
+        "api get v2 account-id custom-field-identifiers",
+        "api get v2 account-id event-actions",
+        "api get v2 account-id forms",
+        "api get v2 account-id forms form-id",
+        "api get v2 account-id goals",
+        "api get v2 account-id goals conversion-id",
+        "api get v2 account-id subscribers",
+        "api get v2 account-id subscribers id-or-email-or-visitor-uuid",
+        "api get v2 account-id subscribers subscriber-id campaign-subscriptions",
+        "api get v2 account-id tags",
+        "api get v2 account-id webhooks",
+        "api get v2 account-id webhooks webhook-id",
+        "api get v2 account-id workflows",
+        "api get v2 account-id workflows workflow-id",
+        "api get v2 account-id workflows workflow-id triggers",
+        "api get v2 accounts",
+        "api get v2 accounts account-id",
+        "api get v2 user",
+        "broadcasts list",
+        "campaigns list",
+        "forms list",
+        "subscribers list",
+        "webhooks list",
+        "workflows list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "activate workflow apply",
+        "api delete account-id subscribers email tags tag",
+        "api delete v2 account-id broadcasts broadcast-id",
+        "api delete v2 account-id subscribers id-or-email",
+        "api delete v2 account-id webhooks webhook-id",
+        "api delete v2 account-id workflows workflow-id subscribers id-or-email",
+        "api patch v2 account-id broadcasts broadcast-id",
+        "api post account-id broadcasts broadcast-id send-test",
+        "api post account-id campaigns campaign-id activate",
+        "api post account-id campaigns campaign-id pause",
+        "api post account-id campaigns campaign-id subscribers",
+        "api post account-id events batches",
+        "api post account-id orders",
+        "api post account-id orders batches",
+        "api post account-id shopper-activity cart batch",
+        "api post account-id shopper-activity order batch",
+        "api post account-id shopper-activity product batch",
+        "api post account-id subscribers batches",
+        "api post account-id unsubscribes batches",
+        "api post account-id workflow-triggers",
+        "api post account-id workflow-triggers trigger-id",
+        "api post account-id workflows workflow-id subscribers",
+        "api post account-id workflows workflow-id subscribers subscriber-id remove",
+        "api post v2 account-id broadcasts",
+        "api post v2 account-id broadcasts broadcast-id send-test",
+        "api post v2 account-id campaigns campaign-id activate",
+        "api post v2 account-id campaigns campaign-id pause",
+        "api post v2 account-id campaigns campaign-id subscribers",
+        "api post v2 account-id events",
+        "api post v2 account-id events batches",
+        "api post v2 account-id orders",
+        "api post v2 account-id orders batches",
+        "api post v2 account-id refunds",
+        "api post v2 account-id subscribers",
+        "api post v2 account-id subscribers batches",
+        "api post v2 account-id subscribers id-or-email remove",
+        "api post v2 account-id subscribers id-or-email unsubscribe-all",
+        "api post v2 account-id tags",
+        "api post v2 account-id unsubscribes batches",
+        "api post v2 account-id webhooks",
+        "api post v2 account-id workflows workflow-id activate",
+        "api post v2 account-id workflows workflow-id pause",
+        "api post v2 account-id workflows workflow-id subscribers",
+        "api post v2 account-id workflows workflow-id triggers",
+        "api post v3 account-id shopper-activity cart",
+        "api post v3 account-id shopper-activity cart batch",
+        "api post v3 account-id shopper-activity order",
+        "api post v3 account-id shopper-activity order batch",
+        "api post v3 account-id shopper-activity product",
+        "api post v3 account-id shopper-activity product batch",
+        "api put v2 account-id workflows workflow-id triggers trigger-id",
+        "apply tag apply",
+        "create broadcast apply",
+        "create or update subscriber apply",
+        "create webhook apply",
+        "delete broadcast apply",
+        "delete subscriber apply",
+        "delete webhook apply",
+        "pause workflow apply",
+        "record event apply",
+        "remove tag apply",
+        "unsubscribe subscriber apply",
+        "update broadcast apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "accounts list",
+      "summary": "Run the accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "activate workflow apply",
+      "summary": "Plan and execute the activate workflow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "activate_workflow",
+      "source_url": "https://developer.drip.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm drip activate workflow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/workflows/{workflow_id}/activate"
+        }
+      ],
+      "risk": "activates a paused workflow, resuming automated sends to everyone currently enrolled and allowing new triggers to enroll people; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "api delete account-id subscribers email tags tag",
+      "summary": "Documented DELETE /:account_id/subscribers/:email/tags/:tag (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api delete account-id subscribers email tags tag --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/:account_id/subscribers/:email/tags/:tag"
+        }
+      ],
+      "operation": "drip.delete.account-id-subscribers-email-tags-tag",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 account-id broadcasts broadcast-id",
+      "summary": "Documented DELETE /v2/:account_id/broadcasts/:broadcast_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api delete v2 account-id broadcasts broadcast-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/:account_id/broadcasts/:broadcast_id"
+        }
+      ],
+      "operation": "drip.delete.v2-account-id-broadcasts-broadcast-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 account-id subscribers id-or-email",
+      "summary": "Documented DELETE /v2/:account_id/subscribers/:id_or_email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api delete v2 account-id subscribers id-or-email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/:account_id/subscribers/:id_or_email"
+        }
+      ],
+      "operation": "drip.delete.v2-account-id-subscribers-id-or-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 account-id webhooks webhook-id",
+      "summary": "Documented DELETE /v2/:account_id/webhooks/:webhook_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api delete v2 account-id webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/:account_id/webhooks/:webhook_id"
+        }
+      ],
+      "operation": "drip.delete.v2-account-id-webhooks-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 account-id workflows workflow-id subscribers id-or-email",
+      "summary": "Documented DELETE /v2/:account_id/workflows/:workflow_id/subscribers/:id_or_email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api delete v2 account-id workflows workflow-id subscribers id-or-email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/:account_id/workflows/:workflow_id/subscribers/:id_or_email"
+        }
+      ],
+      "operation": "drip.delete.v2-account-id-workflows-workflow-id-subscribers-id-or-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get account-id broadcasts broadcast-id",
+      "summary": "Documented GET /{account_id}/broadcasts/{broadcast_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id broadcasts broadcast-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/broadcasts/{broadcast_id}"
+        }
+      ],
+      "operation": "drip.get.account-id-broadcasts-broadcast-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get account-id campaigns campaign-id",
+      "summary": "Documented GET /{account_id}/campaigns/{campaign_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id campaigns campaign-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/campaigns/{campaign_id}"
+        }
+      ],
+      "operation": "drip.get.account-id-campaigns-campaign-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get account-id campaigns campaign-id subscribers",
+      "summary": "Documented GET /{account_id}/campaigns/{campaign_id}/subscribers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id campaigns campaign-id subscribers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/campaigns/{campaign_id}/subscribers"
+        }
+      ],
+      "operation": "drip.get.account-id-campaigns-campaign-id-subscribers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get account-id custom-field-identifiers",
+      "summary": "Documented GET /{account_id}/custom_field_identifiers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id custom-field-identifiers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/custom_field_identifiers"
+        }
+      ],
+      "operation": "drip.get.account-id-custom-field-identifiers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get account-id event-actions",
+      "summary": "Documented GET /{account_id}/event_actions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id event-actions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/event_actions"
+        }
+      ],
+      "operation": "drip.get.account-id-event-actions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get account-id forms form-id",
+      "summary": "Documented GET /{account_id}/forms/{form_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id forms form-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/forms/{form_id}"
+        }
+      ],
+      "operation": "drip.get.account-id-forms-form-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get account-id goals",
+      "summary": "Documented GET /{account_id}/goals (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id goals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/goals"
+        }
+      ],
+      "operation": "drip.get.account-id-goals",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get account-id goals conversion-id",
+      "summary": "Documented GET /{account_id}/goals/{conversion_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id goals conversion-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/goals/{conversion_id}"
+        }
+      ],
+      "operation": "drip.get.account-id-goals-conversion-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get account-id subscribers subscriber-id",
+      "summary": "Documented GET /{account_id}/subscribers/{subscriber_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id subscribers subscriber-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/subscribers/{subscriber_id}"
+        }
+      ],
+      "operation": "drip.get.account-id-subscribers-subscriber-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get account-id subscribers subscriber-id campaign-subscriptions",
+      "summary": "Documented GET /{account_id}/subscribers/{subscriber_id}/campaign_subscriptions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id subscribers subscriber-id campaign-subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/subscribers/{subscriber_id}/campaign_subscriptions"
+        }
+      ],
+      "operation": "drip.get.account-id-subscribers-subscriber-id-campaign-subscriptions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get account-id tags",
+      "summary": "Documented GET /{account_id}/tags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/tags"
+        }
+      ],
+      "operation": "drip.get.account-id-tags",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get account-id webhooks webhook-id",
+      "summary": "Documented GET /{account_id}/webhooks/{webhook_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/webhooks/{webhook_id}"
+        }
+      ],
+      "operation": "drip.get.account-id-webhooks-webhook-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get account-id workflow-triggers",
+      "summary": "Documented GET /{account_id}/workflow_triggers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id workflow-triggers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/workflow_triggers"
+        }
+      ],
+      "operation": "drip.get.account-id-workflow-triggers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get account-id workflows workflow-id",
+      "summary": "Documented GET /{account_id}/workflows/{workflow_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get account-id workflows workflow-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/workflows/{workflow_id}"
+        }
+      ],
+      "operation": "drip.get.account-id-workflows-workflow-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get accounts account-id",
+      "summary": "Documented GET /accounts/{account_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get accounts account-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/{account_id}"
+        }
+      ],
+      "operation": "drip.get.accounts-account-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users me",
+      "summary": "Documented GET /users/me (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get users me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/me"
+        }
+      ],
+      "operation": "drip.get.users-me",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id broadcasts",
+      "summary": "Documented GET /v2/:account_id/broadcasts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id broadcasts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/broadcasts"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-broadcasts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id broadcasts broadcast-id",
+      "summary": "Documented GET /v2/:account_id/broadcasts/:broadcast_id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id broadcasts broadcast-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/broadcasts/:broadcast_id"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-broadcasts-broadcast-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id campaigns",
+      "summary": "Documented GET /v2/:account_id/campaigns (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id campaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/campaigns"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-campaigns",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id campaigns campaign-id",
+      "summary": "Documented GET /v2/:account_id/campaigns/:campaign_id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id campaigns campaign-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/campaigns/:campaign_id"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-campaigns-campaign-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id campaigns campaign-id subscribers",
+      "summary": "Documented GET /v2/:account_id/campaigns/:campaign_id/subscribers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id campaigns campaign-id subscribers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/campaigns/:campaign_id/subscribers"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-campaigns-campaign-id-subscribers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id custom-field-identifiers",
+      "summary": "Documented GET /v2/:account_id/custom_field_identifiers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id custom-field-identifiers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/custom_field_identifiers"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-custom-field-identifiers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id event-actions",
+      "summary": "Documented GET /v2/:account_id/event_actions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id event-actions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/event_actions"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-event-actions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id forms",
+      "summary": "Documented GET /v2/:account_id/forms (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id forms --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/forms"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-forms",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id forms form-id",
+      "summary": "Documented GET /v2/:account_id/forms/:form_id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id forms form-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/forms/:form_id"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-forms-form-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id goals",
+      "summary": "Documented GET /v2/:account_id/goals (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id goals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/goals"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-goals",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id goals conversion-id",
+      "summary": "Documented GET /v2/:account_id/goals/:conversion_id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id goals conversion-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/goals/:conversion_id"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-goals-conversion-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id subscribers",
+      "summary": "Documented GET /v2/:account_id/subscribers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id subscribers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/subscribers"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-subscribers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id subscribers id-or-email-or-visitor-uuid",
+      "summary": "Documented GET /v2/:account_id/subscribers/:id_or_email_or_visitor_uuid (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id subscribers id-or-email-or-visitor-uuid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/subscribers/:id_or_email_or_visitor_uuid"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-subscribers-id-or-email-or-visitor-uuid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id subscribers subscriber-id campaign-subscriptions",
+      "summary": "Documented GET /v2/:account_id/subscribers/:subscriber_id/campaign_subscriptions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id subscribers subscriber-id campaign-subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/subscribers/:subscriber_id/campaign_subscriptions"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-subscribers-subscriber-id-campaign-subscriptions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id tags",
+      "summary": "Documented GET /v2/:account_id/tags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/tags"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-tags",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id webhooks",
+      "summary": "Documented GET /v2/:account_id/webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/webhooks"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id webhooks webhook-id",
+      "summary": "Documented GET /v2/:account_id/webhooks/:webhook_id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/webhooks/:webhook_id"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-webhooks-webhook-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id workflows",
+      "summary": "Documented GET /v2/:account_id/workflows (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id workflows --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/workflows"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-workflows",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id workflows workflow-id",
+      "summary": "Documented GET /v2/:account_id/workflows/:workflow_id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id workflows workflow-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/workflows/:workflow_id"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-workflows-workflow-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 account-id workflows workflow-id triggers",
+      "summary": "Documented GET /v2/:account_id/workflows/:workflow_id/triggers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 account-id workflows workflow-id triggers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/:account_id/workflows/:workflow_id/triggers"
+        }
+      ],
+      "operation": "drip.get.v2-account-id-workflows-workflow-id-triggers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 accounts",
+      "summary": "Documented GET /v2/accounts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/accounts"
+        }
+      ],
+      "operation": "drip.get.v2-accounts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 accounts account-id",
+      "summary": "Documented GET /v2/accounts/:account_id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 accounts account-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/accounts/:account_id"
+        }
+      ],
+      "operation": "drip.get.v2-accounts-account-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 user",
+      "summary": "Documented GET /v2/user (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api get v2 user --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/user"
+        }
+      ],
+      "operation": "drip.get.v2-user",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch v2 account-id broadcasts broadcast-id",
+      "summary": "Documented PATCH /v2/:account_id/broadcasts/:broadcast_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api patch v2 account-id broadcasts broadcast-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/:account_id/broadcasts/:broadcast_id"
+        }
+      ],
+      "operation": "drip.patch.v2-account-id-broadcasts-broadcast-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id broadcasts broadcast-id send-test",
+      "summary": "Documented POST /{account_id}/broadcasts/{broadcast_id}/send_test (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id broadcasts broadcast-id send-test --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/broadcasts/{broadcast_id}/send_test"
+        }
+      ],
+      "operation": "drip.post.account-id-broadcasts-broadcast-id-send-test",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id campaigns campaign-id activate",
+      "summary": "Documented POST /{account_id}/campaigns/{campaign_id}/activate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id campaigns campaign-id activate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/campaigns/{campaign_id}/activate"
+        }
+      ],
+      "operation": "drip.post.account-id-campaigns-campaign-id-activate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id campaigns campaign-id pause",
+      "summary": "Documented POST /{account_id}/campaigns/{campaign_id}/pause (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id campaigns campaign-id pause --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/campaigns/{campaign_id}/pause"
+        }
+      ],
+      "operation": "drip.post.account-id-campaigns-campaign-id-pause",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id campaigns campaign-id subscribers",
+      "summary": "Documented POST /{account_id}/campaigns/{campaign_id}/subscribers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id campaigns campaign-id subscribers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/campaigns/{campaign_id}/subscribers"
+        }
+      ],
+      "operation": "drip.post.account-id-campaigns-campaign-id-subscribers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id events batches",
+      "summary": "Documented POST /{account_id}/events/batches (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id events batches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/events/batches"
+        }
+      ],
+      "operation": "drip.post.account-id-events-batches",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id orders",
+      "summary": "Documented POST /{account_id}/orders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/orders"
+        }
+      ],
+      "operation": "drip.post.account-id-orders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id orders batches",
+      "summary": "Documented POST /{account_id}/orders/batches (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id orders batches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/orders/batches"
+        }
+      ],
+      "operation": "drip.post.account-id-orders-batches",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id shopper-activity cart batch",
+      "summary": "Documented POST /{account_id}/shopper_activity/cart/batch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id shopper-activity cart batch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/shopper_activity/cart/batch"
+        }
+      ],
+      "operation": "drip.post.account-id-shopper-activity-cart-batch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id shopper-activity order batch",
+      "summary": "Documented POST /{account_id}/shopper_activity/order/batch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id shopper-activity order batch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/shopper_activity/order/batch"
+        }
+      ],
+      "operation": "drip.post.account-id-shopper-activity-order-batch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id shopper-activity product batch",
+      "summary": "Documented POST /{account_id}/shopper_activity/product/batch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id shopper-activity product batch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/shopper_activity/product/batch"
+        }
+      ],
+      "operation": "drip.post.account-id-shopper-activity-product-batch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id subscribers batches",
+      "summary": "Documented POST /{account_id}/subscribers/batches (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id subscribers batches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/subscribers/batches"
+        }
+      ],
+      "operation": "drip.post.account-id-subscribers-batches",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id unsubscribes batches",
+      "summary": "Documented POST /{account_id}/unsubscribes/batches (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id unsubscribes batches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/unsubscribes/batches"
+        }
+      ],
+      "operation": "drip.post.account-id-unsubscribes-batches",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id workflow-triggers",
+      "summary": "Documented POST /{account_id}/workflow_triggers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id workflow-triggers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/workflow_triggers"
+        }
+      ],
+      "operation": "drip.post.account-id-workflow-triggers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id workflow-triggers trigger-id",
+      "summary": "Documented POST /{account_id}/workflow_triggers/{trigger_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id workflow-triggers trigger-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/workflow_triggers/{trigger_id}"
+        }
+      ],
+      "operation": "drip.post.account-id-workflow-triggers-trigger-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id workflows workflow-id subscribers",
+      "summary": "Documented POST /{account_id}/workflows/{workflow_id}/subscribers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id workflows workflow-id subscribers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/workflows/{workflow_id}/subscribers"
+        }
+      ],
+      "operation": "drip.post.account-id-workflows-workflow-id-subscribers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post account-id workflows workflow-id subscribers subscriber-id remove",
+      "summary": "Documented POST /{account_id}/workflows/{workflow_id}/subscribers/{subscriber_id}/remove (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post account-id workflows workflow-id subscribers subscriber-id remove --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/workflows/{workflow_id}/subscribers/{subscriber_id}/remove"
+        }
+      ],
+      "operation": "drip.post.account-id-workflows-workflow-id-subscribers-subscriber-id-remove",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id broadcasts",
+      "summary": "Documented POST /v2/:account_id/broadcasts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id broadcasts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/broadcasts"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-broadcasts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id broadcasts broadcast-id send-test",
+      "summary": "Documented POST /v2/:account_id/broadcasts/:broadcast_id/send_test (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id broadcasts broadcast-id send-test --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/broadcasts/:broadcast_id/send_test"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-broadcasts-broadcast-id-send-test",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id campaigns campaign-id activate",
+      "summary": "Documented POST /v2/:account_id/campaigns/:campaign_id/activate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id campaigns campaign-id activate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/campaigns/:campaign_id/activate"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-campaigns-campaign-id-activate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id campaigns campaign-id pause",
+      "summary": "Documented POST /v2/:account_id/campaigns/:campaign_id/pause (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id campaigns campaign-id pause --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/campaigns/:campaign_id/pause"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-campaigns-campaign-id-pause",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id campaigns campaign-id subscribers",
+      "summary": "Documented POST /v2/:account_id/campaigns/:campaign_id/subscribers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id campaigns campaign-id subscribers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/campaigns/:campaign_id/subscribers"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-campaigns-campaign-id-subscribers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id events",
+      "summary": "Documented POST /v2/:account_id/events (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/events"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-events",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id events batches",
+      "summary": "Documented POST /v2/:account_id/events/batches (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id events batches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/events/batches"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-events-batches",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id orders",
+      "summary": "Documented POST /v2/:account_id/orders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/orders"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-orders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id orders batches",
+      "summary": "Documented POST /v2/:account_id/orders/batches (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id orders batches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/orders/batches"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-orders-batches",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id refunds",
+      "summary": "Documented POST /v2/:account_id/refunds (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id refunds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/refunds"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-refunds",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id subscribers",
+      "summary": "Documented POST /v2/:account_id/subscribers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id subscribers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/subscribers"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-subscribers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id subscribers batches",
+      "summary": "Documented POST /v2/:account_id/subscribers/batches (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id subscribers batches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/subscribers/batches"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-subscribers-batches",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id subscribers id-or-email remove",
+      "summary": "Documented POST /v2/:account_id/subscribers/:id_or_email/remove (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id subscribers id-or-email remove --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/subscribers/:id_or_email/remove"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-subscribers-id-or-email-remove",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id subscribers id-or-email unsubscribe-all",
+      "summary": "Documented POST /v2/:account_id/subscribers/:id_or_email/unsubscribe_all (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id subscribers id-or-email unsubscribe-all --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/subscribers/:id_or_email/unsubscribe_all"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-subscribers-id-or-email-unsubscribe-all",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id tags",
+      "summary": "Documented POST /v2/:account_id/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/tags"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id unsubscribes batches",
+      "summary": "Documented POST /v2/:account_id/unsubscribes/batches (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id unsubscribes batches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/unsubscribes/batches"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-unsubscribes-batches",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id webhooks",
+      "summary": "Documented POST /v2/:account_id/webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/webhooks"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id workflows workflow-id activate",
+      "summary": "Documented POST /v2/:account_id/workflows/:workflow_id/activate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id workflows workflow-id activate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/workflows/:workflow_id/activate"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-workflows-workflow-id-activate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id workflows workflow-id pause",
+      "summary": "Documented POST /v2/:account_id/workflows/:workflow_id/pause (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id workflows workflow-id pause --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/workflows/:workflow_id/pause"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-workflows-workflow-id-pause",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id workflows workflow-id subscribers",
+      "summary": "Documented POST /v2/:account_id/workflows/:workflow_id/subscribers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id workflows workflow-id subscribers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/workflows/:workflow_id/subscribers"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-workflows-workflow-id-subscribers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 account-id workflows workflow-id triggers",
+      "summary": "Documented POST /v2/:account_id/workflows/:workflow_id/triggers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v2 account-id workflows workflow-id triggers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/:account_id/workflows/:workflow_id/triggers"
+        }
+      ],
+      "operation": "drip.post.v2-account-id-workflows-workflow-id-triggers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 account-id shopper-activity cart",
+      "summary": "Documented POST /v3/:account_id/shopper_activity/cart (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v3 account-id shopper-activity cart --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/:account_id/shopper_activity/cart"
+        }
+      ],
+      "operation": "drip.post.v3-account-id-shopper-activity-cart",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 account-id shopper-activity cart batch",
+      "summary": "Documented POST /v3/:account_id/shopper_activity/cart/batch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v3 account-id shopper-activity cart batch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/:account_id/shopper_activity/cart/batch"
+        }
+      ],
+      "operation": "drip.post.v3-account-id-shopper-activity-cart-batch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 account-id shopper-activity order",
+      "summary": "Documented POST /v3/:account_id/shopper_activity/order (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v3 account-id shopper-activity order --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/:account_id/shopper_activity/order"
+        }
+      ],
+      "operation": "drip.post.v3-account-id-shopper-activity-order",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 account-id shopper-activity order batch",
+      "summary": "Documented POST /v3/:account_id/shopper_activity/order/batch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v3 account-id shopper-activity order batch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/:account_id/shopper_activity/order/batch"
+        }
+      ],
+      "operation": "drip.post.v3-account-id-shopper-activity-order-batch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 account-id shopper-activity product",
+      "summary": "Documented POST /v3/:account_id/shopper_activity/product (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v3 account-id shopper-activity product --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/:account_id/shopper_activity/product"
+        }
+      ],
+      "operation": "drip.post.v3-account-id-shopper-activity-product",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 account-id shopper-activity product batch",
+      "summary": "Documented POST /v3/:account_id/shopper_activity/product/batch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api post v3 account-id shopper-activity product batch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/:account_id/shopper_activity/product/batch"
+        }
+      ],
+      "operation": "drip.post.v3-account-id-shopper-activity-product-batch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 account-id workflows workflow-id triggers trigger-id",
+      "summary": "Documented PUT /v2/:account_id/workflows/:workflow_id/triggers/:trigger_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip api put v2 account-id workflows workflow-id triggers trigger-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/:account_id/workflows/:workflow_id/triggers/:trigger_id"
+        }
+      ],
+      "operation": "drip.put.v2-account-id-workflows-workflow-id-triggers-trigger-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "apply tag apply",
+      "summary": "Plan and execute the apply tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "apply_tag",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip apply tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/subscribers/{subscriber_id}/tags"
+        }
+      ],
+      "risk": "applies one or more tags to a subscriber, potentially triggering any workflow with a matching tag-applied trigger; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "broadcasts list",
+      "summary": "Run the broadcasts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "broadcasts",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip broadcasts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/broadcasts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "campaigns list",
+      "summary": "Run the campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/campaigns"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "create broadcast apply",
+      "summary": "Plan and execute the create broadcast reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_broadcast",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip create broadcast apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/broadcasts"
+        }
+      ],
+      "risk": "creates a new draft single-email campaign (broadcast); low-risk in draft form (not sent), no approval required. Drip's real API requires the body to be an ARRAY under the \"broadcasts\" key even for one broadcast; record_schema's \"broadcasts\" field is itself that array (callers are expected to supply exactly one element; this action is not the true batch endpoint).",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create or update subscriber apply",
+      "summary": "Plan and execute the create or update subscriber reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_or_update_subscriber",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip create or update subscriber apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/subscribers"
+        }
+      ],
+      "risk": "creates a new subscriber or updates an existing one matched by email; low-risk external mutation, no approval required. Drip's real API strictly requires the one-subscriber-per-write body to still be an ARRAY under the \"subscribers\" key ({\"subscribers\": [{...}]}), not a bare object — record_schema's \"subscribers\" field is itself that array, and body_fields copies it verbatim so the wire body matches Drip's real shape exactly; the engine's schema dialect has no minItems/maxItems keyword to mechanically cap it to exactly one element, so callers are expected to supply exactly one (this action is not the true batch endpoint).",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_webhook",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/webhooks"
+        }
+      ],
+      "risk": "registers a new outbound webhook that will POST live subscriber/campaign event data to an external URL of the caller's choosing; verify the target endpoint before enabling. Drip's real API requires the body to be an ARRAY under the \"webhooks\" key even for one webhook; record_schema's \"webhooks\" field is itself that array (callers are expected to supply exactly one element; this action is not the true batch endpoint).",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete broadcast apply",
+      "summary": "Plan and execute the delete broadcast reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_broadcast",
+      "source_url": "https://developer.drip.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm drip delete broadcast apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/{account_id}/broadcasts/{broadcast_id}"
+        }
+      ],
+      "risk": "permanently removes a broadcast; destructive if it was already sent (removes historical record, though delivered emails cannot be recalled), approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete subscriber apply",
+      "summary": "Plan and execute the delete subscriber reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_subscriber",
+      "source_url": "https://developer.drip.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm drip delete subscriber apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/{account_id}/subscribers/{subscriber_id}"
+        }
+      ],
+      "risk": "permanently removes a subscriber and their event/tag history; destructive, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://developer.drip.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm drip delete webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/{account_id}/webhooks/{webhook_id}"
+        }
+      ],
+      "risk": "permanently removes a webhook subscription; stops future event delivery to its post_url; destructive, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "forms list",
+      "summary": "Run the forms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "forms",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip forms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/forms"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pause workflow apply",
+      "summary": "Plan and execute the pause workflow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pause_workflow",
+      "source_url": "https://developer.drip.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm drip pause workflow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/workflows/{workflow_id}/pause"
+        }
+      ],
+      "risk": "pauses an active workflow, stopping automated sends to everyone currently enrolled and disabling new triggers; low-risk (reversible via activate_workflow), no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "record event apply",
+      "summary": "Plan and execute the record event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "record_event",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip record event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/events"
+        }
+      ],
+      "risk": "records a custom behavioral event on a subscriber, which can trigger any workflow with a matching event trigger; low-risk external mutation, no approval required. Drip's real API requires the body to be an ARRAY under the \"events\" key even for one event; record_schema's \"events\" field is itself that array (callers are expected to supply exactly one element; this action is not the true batch endpoint).",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "remove tag apply",
+      "summary": "Plan and execute the remove tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_tag",
+      "source_url": "https://developer.drip.com/",
+      "flags": [
+        {
+          "name": "subscriber_id",
+          "type": "string",
+          "summary": "Required subscriber id record field.",
+          "maps_to": "record.subscriber_id",
+          "required": true
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "summary": "Required tag record field.",
+          "maps_to": "record.tag",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm drip remove tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/{account_id}/subscribers/{subscriber_id}/tags/{tag}"
+        }
+      ],
+      "risk": "removes a tag from a subscriber, potentially triggering any workflow with a matching tag-removed trigger; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "subscribers list",
+      "summary": "Run the subscribers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscribers",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip subscribers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/subscribers"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "unsubscribe subscriber apply",
+      "summary": "Plan and execute the unsubscribe subscriber reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "unsubscribe_subscriber",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip unsubscribe subscriber apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{account_id}/unsubscribes"
+        }
+      ],
+      "risk": "unsubscribes the named email from ALL mailings in the account; stops all future campaign/broadcast/workflow sends to them, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update broadcast apply",
+      "summary": "Plan and execute the update broadcast reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_broadcast",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip update broadcast apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/{account_id}/broadcasts/{broadcast_id}"
+        }
+      ],
+      "risk": "mutates an existing draft broadcast's subject/content; Drip only allows updating broadcasts still in draft status, so this cannot alter an already-sent email; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/webhooks"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "workflows list",
+      "summary": "Run the workflows ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflows",
+      "source_url": "https://developer.drip.com/",
+      "examples": [
+        "pm drip workflows list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{account_id}/workflows"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

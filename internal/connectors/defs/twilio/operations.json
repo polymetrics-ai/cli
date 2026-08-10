@@ -1,0 +1,3053 @@
+{
+  "operations": [
+    {
+      "id": "twilio.get.2010-04-01-accounts-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-addresses-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Addresses.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Addresses.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-addresses-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Addresses.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Addresses.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-addresses-addresssid-dependentphonenumbers-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Addresses/{AddressSid}/DependentPhoneNumbers.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Addresses/{AddressSid}/DependentPhoneNumbers.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-addresses-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Addresses/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Addresses/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-addresses-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Addresses/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Addresses/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-addresses-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Addresses/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Addresses/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-applications-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Applications.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Applications.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-applications-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Applications.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Applications.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-applications-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Applications/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Applications/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-applications-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Applications/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Applications/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-applications-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Applications/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Applications/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-authorizedconnectapps-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/AuthorizedConnectApps.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/AuthorizedConnectApps.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-authorizedconnectapps-connectappsid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/AuthorizedConnectApps/{ConnectAppSid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/AuthorizedConnectApps/{ConnectAppSid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-availablephonenumbers-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-availablephonenumbers-countrycode-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-availablephonenumbers-countrycode-local-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Local.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Local.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-availablephonenumbers-countrycode-machinetomachine-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/MachineToMachine.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/MachineToMachine.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-availablephonenumbers-countrycode-mobile-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Mobile.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Mobile.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-availablephonenumbers-countrycode-national-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/National.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/National.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-availablephonenumbers-countrycode-sharedcost-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/SharedCost.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/SharedCost.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-availablephonenumbers-countrycode-tollfree-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/TollFree.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/TollFree.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-availablephonenumbers-countrycode-voip-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Voip.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Voip.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-balance-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Balance.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Balance.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-calls-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Calls.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-calls-callsid-events-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Events.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Events.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-calls-callsid-notifications-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Notifications.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Notifications.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-calls-callsid-notifications-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Notifications/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Notifications/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-callsid-payments-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Payments.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Payments.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-callsid-payments-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Payments/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Payments/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-calls-callsid-recordings-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-callsid-recordings-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-calls-callsid-recordings-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-callsid-recordings-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-calls-callsid-recordings-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-callsid-siprec-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Siprec.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Siprec.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-callsid-siprec-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Siprec/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Siprec/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-callsid-streams-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Streams.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Streams.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-callsid-streams-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Streams/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Streams/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-callsid-transcriptions-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-callsid-transcriptions-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-callsid-userdefinedmessagesubscriptions-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-calls-callsid-userdefinedmessagesubscriptions-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-callsid-userdefinedmessages-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessages.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessages.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-calls-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Calls/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-calls-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Calls/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-calls-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Calls/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Calls/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-conferences-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Conferences.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Conferences.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-conferences-conferencesid-participants-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-conferences-conferencesid-participants-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-conferences-conferencesid-participants-callsid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-conferences-conferencesid-participants-callsid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-conferences-conferencesid-participants-callsid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-conferences-conferencesid-recordings-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-conferences-conferencesid-recordings-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-conferences-conferencesid-recordings-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-conferences-conferencesid-recordings-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-conferences-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Conferences/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-conferences-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Conferences/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Conferences/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-connectapps-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/ConnectApps.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/ConnectApps.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-connectapps-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-connectapps-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-connectapps-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-incomingphonenumbers-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-incomingphonenumbers-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-incomingphonenumbers-local-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-incomingphonenumbers-local-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-incomingphonenumbers-mobile-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-incomingphonenumbers-mobile-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-incomingphonenumbers-tollfree-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-incomingphonenumbers-tollfree-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-incomingphonenumbers-resourcesid-assignedaddons-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-incomingphonenumbers-resourcesid-assignedaddons-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-incomingphonenumbers-resourcesid-assignedaddons-assignedaddonsid-extensions-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{AssignedAddOnSid}/Extensions.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{AssignedAddOnSid}/Extensions.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-incomingphonenumbers-resourcesid-assignedaddons-assignedaddonsid-extensions-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{AssignedAddOnSid}/Extensions/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{AssignedAddOnSid}/Extensions/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-incomingphonenumbers-resourcesid-assignedaddons-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-incomingphonenumbers-resourcesid-assignedaddons-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-incomingphonenumbers-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-incomingphonenumbers-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-incomingphonenumbers-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-keys-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Keys.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Keys.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-keys-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Keys.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Keys.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-keys-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Keys/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Keys/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-keys-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Keys/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Keys/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-keys-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Keys/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Keys/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-messages-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Messages.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Messages.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-messages-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Messages.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Messages.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-messages-messagesid-feedback-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Feedback.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Feedback.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-messages-messagesid-media-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Media.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Media.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-messages-messagesid-media-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-messages-messagesid-media-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-messages-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Messages/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-messages-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Messages/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-messages-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Messages/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Messages/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-notifications-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Notifications.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Notifications.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-notifications-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Notifications/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Notifications/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-outgoingcallerids-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-outgoingcallerids-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-outgoingcallerids-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-outgoingcallerids-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-outgoingcallerids-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-queues-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Queues.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Queues.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-queues-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Queues.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Queues.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-queues-queuesid-members-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Queues/{QueueSid}/Members.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Queues/{QueueSid}/Members.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-queues-queuesid-members-callsid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-queues-queuesid-members-callsid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-queues-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Queues/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Queues/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-queues-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Queues/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Queues/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-queues-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Queues/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Queues/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-recordings-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Recordings.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Recordings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-recordings-recordingsid-transcriptions-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-recordings-recordingsid-transcriptions-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-recordings-recordingsid-transcriptions-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-recordings-referencesid-addonresults-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-recordings-referencesid-addonresults-addonresultsid-payloads-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-recordings-referencesid-addonresults-addonresultsid-payloads-payloadsid-data-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{PayloadSid}/Data.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{PayloadSid}/Data.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-recordings-referencesid-addonresults-addonresultsid-payloads-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-recordings-referencesid-addonresults-addonresultsid-payloads-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-recordings-referencesid-addonresults-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-recordings-referencesid-addonresults-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-recordings-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Recordings/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-recordings-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Recordings/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Recordings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-credentiallists-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-credentiallists-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-credentiallists-credentiallistsid-credentials-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-credentiallists-credentiallistsid-credentials-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-credentiallists-credentiallistsid-credentials-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-credentiallists-credentiallistsid-credentials-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-sip-credentiallists-credentiallistsid-credentials-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-credentiallists-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-credentiallists-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-sip-credentiallists-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-domains-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/Domains.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-domains-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/Domains.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-domains-domainsid-auth-calls-credentiallistmappings-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-domains-domainsid-auth-calls-credentiallistmappings-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-domains-domainsid-auth-calls-credentiallistmappings-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-sip-domains-domainsid-auth-calls-credentiallistmappings-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-domains-domainsid-auth-calls-ipaccesscontrollistmappings-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-domains-domainsid-auth-calls-ipaccesscontrollistmappings-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-domains-domainsid-auth-calls-ipaccesscontrollistmappings-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-sip-domains-domainsid-auth-calls-ipaccesscontrollistmappings-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-domains-domainsid-auth-registrations-credentiallistmappings-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-domains-domainsid-auth-registrations-credentiallistmappings-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-domains-domainsid-auth-registrations-credentiallistmappings-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-sip-domains-domainsid-auth-registrations-credentiallistmappings-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-domains-domainsid-credentiallistmappings-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-domains-domainsid-credentiallistmappings-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-domains-domainsid-credentiallistmappings-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-sip-domains-domainsid-credentiallistmappings-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-domains-domainsid-ipaccesscontrollistmappings-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-domains-domainsid-ipaccesscontrollistmappings-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-domains-domainsid-ipaccesscontrollistmappings-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-sip-domains-domainsid-ipaccesscontrollistmappings-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-domains-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-domains-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-sip-domains-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-ipaccesscontrollists-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-ipaccesscontrollists-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-ipaccesscontrollists-ipaccesscontrollistsid-ipaddresses-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-ipaccesscontrollists-ipaccesscontrollistsid-ipaddresses-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-ipaccesscontrollists-ipaccesscontrollistsid-ipaddresses-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-ipaccesscontrollists-ipaccesscontrollistsid-ipaddresses-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-sip-ipaccesscontrollists-ipaccesscontrollistsid-ipaddresses-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sip-ipaccesscontrollists-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sip-ipaccesscontrollists-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-sip-ipaccesscontrollists-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sms-shortcodes-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SMS/ShortCodes.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SMS/ShortCodes.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-sms-shortcodes-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-sms-shortcodes-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-signingkeys-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SigningKeys.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SigningKeys.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-signingkeys-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SigningKeys.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SigningKeys.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-signingkeys-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-signingkeys-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-signingkeys-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-tokens-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Tokens.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Tokens.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-transcriptions-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Transcriptions.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Transcriptions.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-transcriptions-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Transcriptions/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Transcriptions/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-transcriptions-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Transcriptions/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Transcriptions/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-usage-records-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Usage/Records.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-usage-records-alltime-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Usage/Records/AllTime.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/AllTime.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-usage-records-daily-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Usage/Records/Daily.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/Daily.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-usage-records-lastmonth-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Usage/Records/LastMonth.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/LastMonth.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-usage-records-monthly-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Usage/Records/Monthly.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/Monthly.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-usage-records-thismonth-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Usage/Records/ThisMonth.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/ThisMonth.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-usage-records-today-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Usage/Records/Today.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/Today.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-usage-records-yearly-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Usage/Records/Yearly.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/Yearly.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-usage-records-yesterday-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Usage/Records/Yesterday.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Records/Yesterday.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-usage-triggers-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Usage/Triggers.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Triggers.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-usage-triggers-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Usage/Triggers.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Triggers.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-accountsid-usage-triggers-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-accountsid-usage-triggers-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.delete.2010-04-01-accounts-accountsid-usage-triggers-sid-json",
+      "kind": "rest_write",
+      "summary": "DELETE /2010-04-01/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2010-04-01/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.get.2010-04-01-accounts-sid-json",
+      "kind": "rest_read",
+      "summary": "GET /2010-04-01/Accounts/{Sid}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2010-04-01/Accounts/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twilio.post.2010-04-01-accounts-sid-json",
+      "kind": "rest_write",
+      "summary": "POST /2010-04-01/Accounts/{Sid}.json",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2010-04-01/Accounts/{Sid}.json",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

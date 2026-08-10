@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-031-amazon-sqs-unversioned-reference-manifest.json",
+  "fetched": [
+    {
+      "connector": "amazon-sqs",
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-031-amazon-sqs-artifacts/amazon-sqs.html",
+      "status": "retrieved",
+      "reason": null
+    }
+  ]
+}

@@ -1,0 +1,3957 @@
+{
+  "tagline": "Run PokeAPI's declared streams and reverse-ETL actions.",
+  "usage": "pm pokeapi \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "abilities detail list",
+        "abilities list",
+        "api get api v2 ability",
+        "api get api v2 ability id",
+        "api get api v2 berry",
+        "api get api v2 berry id",
+        "api get api v2 berry-firmness",
+        "api get api v2 berry-firmness id",
+        "api get api v2 berry-flavor",
+        "api get api v2 berry-flavor id",
+        "api get api v2 characteristic",
+        "api get api v2 characteristic id",
+        "api get api v2 contest-effect",
+        "api get api v2 contest-effect id",
+        "api get api v2 contest-type",
+        "api get api v2 contest-type id",
+        "api get api v2 currency",
+        "api get api v2 currency id",
+        "api get api v2 egg-group",
+        "api get api v2 egg-group id",
+        "api get api v2 encounter-condition",
+        "api get api v2 encounter-condition id",
+        "api get api v2 encounter-condition-value",
+        "api get api v2 encounter-condition-value id",
+        "api get api v2 encounter-method",
+        "api get api v2 encounter-method id",
+        "api get api v2 evolution-chain",
+        "api get api v2 evolution-chain id",
+        "api get api v2 evolution-trigger",
+        "api get api v2 evolution-trigger id",
+        "api get api v2 gender",
+        "api get api v2 gender id",
+        "api get api v2 generation",
+        "api get api v2 generation id",
+        "api get api v2 growth-rate",
+        "api get api v2 growth-rate id",
+        "api get api v2 item",
+        "api get api v2 item id",
+        "api get api v2 item-attribute",
+        "api get api v2 item-attribute id",
+        "api get api v2 item-category",
+        "api get api v2 item-category id",
+        "api get api v2 item-fling-effect",
+        "api get api v2 item-fling-effect id",
+        "api get api v2 item-pocket",
+        "api get api v2 item-pocket id",
+        "api get api v2 language",
+        "api get api v2 language id",
+        "api get api v2 location",
+        "api get api v2 location id",
+        "api get api v2 location-area",
+        "api get api v2 location-area id",
+        "api get api v2 machine",
+        "api get api v2 machine id",
+        "api get api v2 meta",
+        "api get api v2 move",
+        "api get api v2 move id",
+        "api get api v2 move-ailment",
+        "api get api v2 move-ailment id",
+        "api get api v2 move-battle-style",
+        "api get api v2 move-battle-style id",
+        "api get api v2 move-category",
+        "api get api v2 move-category id",
+        "api get api v2 move-damage-class",
+        "api get api v2 move-damage-class id",
+        "api get api v2 move-learn-method",
+        "api get api v2 move-learn-method id",
+        "api get api v2 move-target",
+        "api get api v2 move-target id",
+        "api get api v2 nature",
+        "api get api v2 nature id",
+        "api get api v2 pal-park-area",
+        "api get api v2 pal-park-area id",
+        "api get api v2 pokeathlon-stat",
+        "api get api v2 pokeathlon-stat id",
+        "api get api v2 pokedex",
+        "api get api v2 pokedex id",
+        "api get api v2 pokemon",
+        "api get api v2 pokemon id",
+        "api get api v2 pokemon pokemon-id encounters",
+        "api get api v2 pokemon-color",
+        "api get api v2 pokemon-color id",
+        "api get api v2 pokemon-form",
+        "api get api v2 pokemon-form id",
+        "api get api v2 pokemon-habitat",
+        "api get api v2 pokemon-habitat id",
+        "api get api v2 pokemon-shape",
+        "api get api v2 pokemon-shape id",
+        "api get api v2 pokemon-species",
+        "api get api v2 pokemon-species id",
+        "api get api v2 region",
+        "api get api v2 region id",
+        "api get api v2 stat",
+        "api get api v2 stat id",
+        "api get api v2 super-contest-effect",
+        "api get api v2 super-contest-effect id",
+        "api get api v2 type",
+        "api get api v2 type id",
+        "api get api v2 version",
+        "api get api v2 version id",
+        "api get api v2 version-group",
+        "api get api v2 version-group id",
+        "berries detail list",
+        "berries list",
+        "berry firmnesses detail list",
+        "berry firmnesses list",
+        "berry flavors detail list",
+        "berry flavors list",
+        "characteristics detail list",
+        "characteristics list",
+        "contest effects detail list",
+        "contest effects list",
+        "contest types detail list",
+        "contest types list",
+        "egg groups detail list",
+        "egg groups list",
+        "encounter condition values detail list",
+        "encounter condition values list",
+        "encounter conditions detail list",
+        "encounter conditions list",
+        "encounter methods detail list",
+        "encounter methods list",
+        "evolution chains detail list",
+        "evolution chains list",
+        "evolution triggers detail list",
+        "evolution triggers list",
+        "genders detail list",
+        "genders list",
+        "generations detail list",
+        "generations list",
+        "growth rates detail list",
+        "growth rates list",
+        "item attributes detail list",
+        "item attributes list",
+        "item categories detail list",
+        "item categories list",
+        "item fling effects detail list",
+        "item fling effects list",
+        "item pockets detail list",
+        "item pockets list",
+        "items detail list",
+        "items list",
+        "languages detail list",
+        "languages list",
+        "location areas detail list",
+        "location areas list",
+        "locations detail list",
+        "locations list",
+        "machines detail list",
+        "machines list",
+        "move ailments detail list",
+        "move ailments list",
+        "move battle styles detail list",
+        "move battle styles list",
+        "move categories detail list",
+        "move categories list",
+        "move damage classes detail list",
+        "move damage classes list",
+        "move learn methods detail list",
+        "move learn methods list",
+        "move targets detail list",
+        "move targets list",
+        "moves detail list",
+        "moves list",
+        "natures detail list",
+        "natures list",
+        "pal park areas detail list",
+        "pal park areas list",
+        "pokeathlon stats detail list",
+        "pokeathlon stats list",
+        "pokedexes detail list",
+        "pokedexes list",
+        "pokemon colors detail list",
+        "pokemon colors list",
+        "pokemon detail list",
+        "pokemon forms detail list",
+        "pokemon forms list",
+        "pokemon habitats detail list",
+        "pokemon habitats list",
+        "pokemon list",
+        "pokemon location areas list",
+        "pokemon shapes detail list",
+        "pokemon shapes list",
+        "pokemon species detail list",
+        "pokemon species list",
+        "regions detail list",
+        "regions list",
+        "stats detail list",
+        "stats list",
+        "super contest effects detail list",
+        "super contest effects list",
+        "types detail list",
+        "types list",
+        "version groups detail list",
+        "version groups list",
+        "versions detail list",
+        "versions list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "abilities detail list",
+      "summary": "Run the abilities detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "abilities_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi abilities detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ability/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "abilities list",
+      "summary": "Run the abilities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "abilities",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi abilities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ability"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "api get api v2 ability",
+      "summary": "Documented GET /api/v2/ability/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 ability --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/ability/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-ability",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 ability id",
+      "summary": "Documented GET /api/v2/ability/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 ability id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/ability/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-ability-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 berry",
+      "summary": "Documented GET /api/v2/berry/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 berry --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/berry/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-berry",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 berry id",
+      "summary": "Documented GET /api/v2/berry/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 berry id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/berry/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-berry-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 berry-firmness",
+      "summary": "Documented GET /api/v2/berry-firmness/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 berry-firmness --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/berry-firmness/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-berry-firmness",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 berry-firmness id",
+      "summary": "Documented GET /api/v2/berry-firmness/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 berry-firmness id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/berry-firmness/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-berry-firmness-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 berry-flavor",
+      "summary": "Documented GET /api/v2/berry-flavor/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 berry-flavor --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/berry-flavor/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-berry-flavor",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 berry-flavor id",
+      "summary": "Documented GET /api/v2/berry-flavor/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 berry-flavor id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/berry-flavor/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-berry-flavor-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 characteristic",
+      "summary": "Documented GET /api/v2/characteristic/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 characteristic --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/characteristic/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-characteristic",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 characteristic id",
+      "summary": "Documented GET /api/v2/characteristic/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 characteristic id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/characteristic/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-characteristic-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 contest-effect",
+      "summary": "Documented GET /api/v2/contest-effect/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 contest-effect --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/contest-effect/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-contest-effect",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 contest-effect id",
+      "summary": "Documented GET /api/v2/contest-effect/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 contest-effect id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/contest-effect/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-contest-effect-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 contest-type",
+      "summary": "Documented GET /api/v2/contest-type/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 contest-type --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/contest-type/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-contest-type",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 contest-type id",
+      "summary": "Documented GET /api/v2/contest-type/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 contest-type id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/contest-type/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-contest-type-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 currency",
+      "summary": "Documented GET /api/v2/currency/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 currency --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/currency/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-currency",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 currency id",
+      "summary": "Documented GET /api/v2/currency/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 currency id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/currency/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-currency-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 egg-group",
+      "summary": "Documented GET /api/v2/egg-group/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 egg-group --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/egg-group/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-egg-group",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 egg-group id",
+      "summary": "Documented GET /api/v2/egg-group/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 egg-group id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/egg-group/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-egg-group-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 encounter-condition",
+      "summary": "Documented GET /api/v2/encounter-condition/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 encounter-condition --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/encounter-condition/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-encounter-condition",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 encounter-condition id",
+      "summary": "Documented GET /api/v2/encounter-condition/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 encounter-condition id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/encounter-condition/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-encounter-condition-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 encounter-condition-value",
+      "summary": "Documented GET /api/v2/encounter-condition-value/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 encounter-condition-value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/encounter-condition-value/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-encounter-condition-value",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 encounter-condition-value id",
+      "summary": "Documented GET /api/v2/encounter-condition-value/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 encounter-condition-value id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/encounter-condition-value/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-encounter-condition-value-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 encounter-method",
+      "summary": "Documented GET /api/v2/encounter-method/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 encounter-method --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/encounter-method/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-encounter-method",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 encounter-method id",
+      "summary": "Documented GET /api/v2/encounter-method/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 encounter-method id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/encounter-method/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-encounter-method-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 evolution-chain",
+      "summary": "Documented GET /api/v2/evolution-chain/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 evolution-chain --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/evolution-chain/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-evolution-chain",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 evolution-chain id",
+      "summary": "Documented GET /api/v2/evolution-chain/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 evolution-chain id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/evolution-chain/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-evolution-chain-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 evolution-trigger",
+      "summary": "Documented GET /api/v2/evolution-trigger/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 evolution-trigger --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/evolution-trigger/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-evolution-trigger",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 evolution-trigger id",
+      "summary": "Documented GET /api/v2/evolution-trigger/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 evolution-trigger id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/evolution-trigger/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-evolution-trigger-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 gender",
+      "summary": "Documented GET /api/v2/gender/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 gender --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/gender/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-gender",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 gender id",
+      "summary": "Documented GET /api/v2/gender/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 gender id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/gender/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-gender-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 generation",
+      "summary": "Documented GET /api/v2/generation/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 generation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/generation/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-generation",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 generation id",
+      "summary": "Documented GET /api/v2/generation/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 generation id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/generation/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-generation-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 growth-rate",
+      "summary": "Documented GET /api/v2/growth-rate/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 growth-rate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/growth-rate/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-growth-rate",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 growth-rate id",
+      "summary": "Documented GET /api/v2/growth-rate/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 growth-rate id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/growth-rate/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-growth-rate-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 item",
+      "summary": "Documented GET /api/v2/item/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 item --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/item/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-item",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 item id",
+      "summary": "Documented GET /api/v2/item/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 item id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/item/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-item-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 item-attribute",
+      "summary": "Documented GET /api/v2/item-attribute/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 item-attribute --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/item-attribute/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-item-attribute",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 item-attribute id",
+      "summary": "Documented GET /api/v2/item-attribute/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 item-attribute id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/item-attribute/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-item-attribute-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 item-category",
+      "summary": "Documented GET /api/v2/item-category/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 item-category --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/item-category/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-item-category",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 item-category id",
+      "summary": "Documented GET /api/v2/item-category/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 item-category id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/item-category/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-item-category-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 item-fling-effect",
+      "summary": "Documented GET /api/v2/item-fling-effect/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 item-fling-effect --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/item-fling-effect/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-item-fling-effect",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 item-fling-effect id",
+      "summary": "Documented GET /api/v2/item-fling-effect/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 item-fling-effect id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/item-fling-effect/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-item-fling-effect-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 item-pocket",
+      "summary": "Documented GET /api/v2/item-pocket/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 item-pocket --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/item-pocket/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-item-pocket",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 item-pocket id",
+      "summary": "Documented GET /api/v2/item-pocket/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 item-pocket id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/item-pocket/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-item-pocket-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 language",
+      "summary": "Documented GET /api/v2/language/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/language/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-language",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 language id",
+      "summary": "Documented GET /api/v2/language/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 language id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/language/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-language-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 location",
+      "summary": "Documented GET /api/v2/location/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 location --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/location/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-location",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 location id",
+      "summary": "Documented GET /api/v2/location/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 location id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/location/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-location-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 location-area",
+      "summary": "Documented GET /api/v2/location-area/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 location-area --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/location-area/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-location-area",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 location-area id",
+      "summary": "Documented GET /api/v2/location-area/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 location-area id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/location-area/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-location-area-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 machine",
+      "summary": "Documented GET /api/v2/machine/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 machine --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/machine/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-machine",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 machine id",
+      "summary": "Documented GET /api/v2/machine/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 machine id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/machine/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-machine-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 meta",
+      "summary": "Documented GET /api/v2/meta/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 meta --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/meta/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-meta",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move",
+      "summary": "Documented GET /api/v2/move/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move id",
+      "summary": "Documented GET /api/v2/move/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move-ailment",
+      "summary": "Documented GET /api/v2/move-ailment/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move-ailment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move-ailment/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move-ailment",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move-ailment id",
+      "summary": "Documented GET /api/v2/move-ailment/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move-ailment id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move-ailment/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move-ailment-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move-battle-style",
+      "summary": "Documented GET /api/v2/move-battle-style/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move-battle-style --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move-battle-style/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move-battle-style",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move-battle-style id",
+      "summary": "Documented GET /api/v2/move-battle-style/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move-battle-style id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move-battle-style/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move-battle-style-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move-category",
+      "summary": "Documented GET /api/v2/move-category/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move-category --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move-category/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move-category",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move-category id",
+      "summary": "Documented GET /api/v2/move-category/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move-category id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move-category/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move-category-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move-damage-class",
+      "summary": "Documented GET /api/v2/move-damage-class/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move-damage-class --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move-damage-class/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move-damage-class",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move-damage-class id",
+      "summary": "Documented GET /api/v2/move-damage-class/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move-damage-class id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move-damage-class/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move-damage-class-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move-learn-method",
+      "summary": "Documented GET /api/v2/move-learn-method/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move-learn-method --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move-learn-method/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move-learn-method",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move-learn-method id",
+      "summary": "Documented GET /api/v2/move-learn-method/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move-learn-method id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move-learn-method/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move-learn-method-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move-target",
+      "summary": "Documented GET /api/v2/move-target/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move-target --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move-target/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move-target",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 move-target id",
+      "summary": "Documented GET /api/v2/move-target/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 move-target id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/move-target/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-move-target-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 nature",
+      "summary": "Documented GET /api/v2/nature/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 nature --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/nature/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-nature",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 nature id",
+      "summary": "Documented GET /api/v2/nature/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 nature id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/nature/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-nature-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pal-park-area",
+      "summary": "Documented GET /api/v2/pal-park-area/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pal-park-area --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pal-park-area/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pal-park-area",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pal-park-area id",
+      "summary": "Documented GET /api/v2/pal-park-area/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pal-park-area id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pal-park-area/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pal-park-area-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokeathlon-stat",
+      "summary": "Documented GET /api/v2/pokeathlon-stat/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokeathlon-stat --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokeathlon-stat/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokeathlon-stat",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokeathlon-stat id",
+      "summary": "Documented GET /api/v2/pokeathlon-stat/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokeathlon-stat id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokeathlon-stat/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokeathlon-stat-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokedex",
+      "summary": "Documented GET /api/v2/pokedex/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokedex --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokedex/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokedex",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokedex id",
+      "summary": "Documented GET /api/v2/pokedex/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokedex id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokedex/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokedex-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokemon",
+      "summary": "Documented GET /api/v2/pokemon/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokemon --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokemon/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokemon",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokemon id",
+      "summary": "Documented GET /api/v2/pokemon/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokemon id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokemon/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokemon-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokemon pokemon-id encounters",
+      "summary": "Documented GET /api/v2/pokemon/{pokemon_id}/encounters (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokemon pokemon-id encounters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokemon/{pokemon_id}/encounters"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokemon-pokemon-id-encounters",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokemon-color",
+      "summary": "Documented GET /api/v2/pokemon-color/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokemon-color --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokemon-color/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokemon-color",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokemon-color id",
+      "summary": "Documented GET /api/v2/pokemon-color/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokemon-color id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokemon-color/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokemon-color-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokemon-form",
+      "summary": "Documented GET /api/v2/pokemon-form/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokemon-form --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokemon-form/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokemon-form",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokemon-form id",
+      "summary": "Documented GET /api/v2/pokemon-form/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokemon-form id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokemon-form/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokemon-form-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokemon-habitat",
+      "summary": "Documented GET /api/v2/pokemon-habitat/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokemon-habitat --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokemon-habitat/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokemon-habitat",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokemon-habitat id",
+      "summary": "Documented GET /api/v2/pokemon-habitat/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokemon-habitat id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokemon-habitat/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokemon-habitat-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokemon-shape",
+      "summary": "Documented GET /api/v2/pokemon-shape/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokemon-shape --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokemon-shape/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokemon-shape",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokemon-shape id",
+      "summary": "Documented GET /api/v2/pokemon-shape/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokemon-shape id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokemon-shape/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokemon-shape-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokemon-species",
+      "summary": "Documented GET /api/v2/pokemon-species/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokemon-species --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokemon-species/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokemon-species",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 pokemon-species id",
+      "summary": "Documented GET /api/v2/pokemon-species/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 pokemon-species id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/pokemon-species/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-pokemon-species-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 region",
+      "summary": "Documented GET /api/v2/region/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 region --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/region/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-region",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 region id",
+      "summary": "Documented GET /api/v2/region/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 region id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/region/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-region-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 stat",
+      "summary": "Documented GET /api/v2/stat/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 stat --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/stat/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-stat",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 stat id",
+      "summary": "Documented GET /api/v2/stat/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 stat id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/stat/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-stat-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 super-contest-effect",
+      "summary": "Documented GET /api/v2/super-contest-effect/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 super-contest-effect --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/super-contest-effect/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-super-contest-effect",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 super-contest-effect id",
+      "summary": "Documented GET /api/v2/super-contest-effect/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 super-contest-effect id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/super-contest-effect/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-super-contest-effect-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 type",
+      "summary": "Documented GET /api/v2/type/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 type --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/type/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-type",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 type id",
+      "summary": "Documented GET /api/v2/type/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 type id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/type/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-type-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 version",
+      "summary": "Documented GET /api/v2/version/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 version --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/version/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-version",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 version id",
+      "summary": "Documented GET /api/v2/version/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 version id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/version/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-version-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 version-group",
+      "summary": "Documented GET /api/v2/version-group/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 version-group --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/version-group/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-version-group",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 version-group id",
+      "summary": "Documented GET /api/v2/version-group/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi api get api v2 version-group id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/version-group/{id}/"
+        }
+      ],
+      "operation": "pokeapi.get.api-v2-version-group-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "berries detail list",
+      "summary": "Run the berries detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "berries_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi berries detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/berry/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "berries list",
+      "summary": "Run the berries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "berries",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi berries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/berry"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "berry firmnesses detail list",
+      "summary": "Run the berry firmnesses detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "berry_firmnesses_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi berry firmnesses detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/berry-firmness/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "berry firmnesses list",
+      "summary": "Run the berry firmnesses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "berry_firmnesses",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi berry firmnesses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/berry-firmness"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "berry flavors detail list",
+      "summary": "Run the berry flavors detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "berry_flavors_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi berry flavors detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/berry-flavor/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "berry flavors list",
+      "summary": "Run the berry flavors ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "berry_flavors",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi berry flavors list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/berry-flavor"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "characteristics detail list",
+      "summary": "Run the characteristics detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "characteristics_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi characteristics detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/characteristic/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "characteristics list",
+      "summary": "Run the characteristics ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "characteristics",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi characteristics list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/characteristic"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "contest effects detail list",
+      "summary": "Run the contest effects detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contest_effects_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi contest effects detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contest-effect/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "contest effects list",
+      "summary": "Run the contest effects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contest_effects",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi contest effects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contest-effect"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "contest types detail list",
+      "summary": "Run the contest types detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contest_types_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi contest types detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contest-type/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "contest types list",
+      "summary": "Run the contest types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contest_types",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi contest types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contest-type"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "egg groups detail list",
+      "summary": "Run the egg groups detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "egg_groups_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi egg groups detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/egg-group/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "egg groups list",
+      "summary": "Run the egg groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "egg_groups",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi egg groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/egg-group"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "encounter condition values detail list",
+      "summary": "Run the encounter condition values detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "encounter_condition_values_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi encounter condition values detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/encounter-condition-value/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "encounter condition values list",
+      "summary": "Run the encounter condition values ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "encounter_condition_values",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi encounter condition values list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/encounter-condition-value"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "encounter conditions detail list",
+      "summary": "Run the encounter conditions detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "encounter_conditions_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi encounter conditions detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/encounter-condition/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "encounter conditions list",
+      "summary": "Run the encounter conditions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "encounter_conditions",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi encounter conditions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/encounter-condition"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "encounter methods detail list",
+      "summary": "Run the encounter methods detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "encounter_methods_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi encounter methods detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/encounter-method/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "encounter methods list",
+      "summary": "Run the encounter methods ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "encounter_methods",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi encounter methods list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/encounter-method"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "evolution chains detail list",
+      "summary": "Run the evolution chains detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "evolution_chains_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi evolution chains detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/evolution-chain/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "evolution chains list",
+      "summary": "Run the evolution chains ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "evolution_chains",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi evolution chains list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/evolution-chain"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "evolution triggers detail list",
+      "summary": "Run the evolution triggers detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "evolution_triggers_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi evolution triggers detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/evolution-trigger/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "evolution triggers list",
+      "summary": "Run the evolution triggers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "evolution_triggers",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi evolution triggers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/evolution-trigger"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "genders detail list",
+      "summary": "Run the genders detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "genders_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi genders detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/gender/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "genders list",
+      "summary": "Run the genders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "genders",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi genders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/gender"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "generations detail list",
+      "summary": "Run the generations detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "generations_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi generations detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/generation/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "generations list",
+      "summary": "Run the generations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "generations",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi generations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/generation"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "growth rates detail list",
+      "summary": "Run the growth rates detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "growth_rates_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi growth rates detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/growth-rate/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "growth rates list",
+      "summary": "Run the growth rates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "growth_rates",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi growth rates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/growth-rate"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "item attributes detail list",
+      "summary": "Run the item attributes detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "item_attributes_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi item attributes detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/item-attribute/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "item attributes list",
+      "summary": "Run the item attributes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "item_attributes",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi item attributes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/item-attribute"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "item categories detail list",
+      "summary": "Run the item categories detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "item_categories_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi item categories detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/item-category/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "item categories list",
+      "summary": "Run the item categories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "item_categories",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi item categories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/item-category"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "item fling effects detail list",
+      "summary": "Run the item fling effects detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "item_fling_effects_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi item fling effects detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/item-fling-effect/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "item fling effects list",
+      "summary": "Run the item fling effects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "item_fling_effects",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi item fling effects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/item-fling-effect"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "item pockets detail list",
+      "summary": "Run the item pockets detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "item_pockets_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi item pockets detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/item-pocket/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "item pockets list",
+      "summary": "Run the item pockets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "item_pockets",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi item pockets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/item-pocket"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "items detail list",
+      "summary": "Run the items detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "items_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi items detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/item/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "items list",
+      "summary": "Run the items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "items",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/item"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "languages detail list",
+      "summary": "Run the languages detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "languages_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi languages detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/language/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "languages list",
+      "summary": "Run the languages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "languages",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi languages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/language"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "location areas detail list",
+      "summary": "Run the location areas detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "location_areas_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi location areas detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/location-area/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "location areas list",
+      "summary": "Run the location areas ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "location_areas",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi location areas list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/location-area"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "locations detail list",
+      "summary": "Run the locations detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "locations_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi locations detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/location/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "locations list",
+      "summary": "Run the locations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "locations",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi locations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/location"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "machines detail list",
+      "summary": "Run the machines detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "machines_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi machines detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/machine/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "machines list",
+      "summary": "Run the machines ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "machines",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi machines list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/machine"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "move ailments detail list",
+      "summary": "Run the move ailments detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "move_ailments_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi move ailments detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move-ailment/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "move ailments list",
+      "summary": "Run the move ailments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "move_ailments",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi move ailments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move-ailment"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "move battle styles detail list",
+      "summary": "Run the move battle styles detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "move_battle_styles_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi move battle styles detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move-battle-style/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "move battle styles list",
+      "summary": "Run the move battle styles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "move_battle_styles",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi move battle styles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move-battle-style"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "move categories detail list",
+      "summary": "Run the move categories detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "move_categories_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi move categories detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move-category/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "move categories list",
+      "summary": "Run the move categories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "move_categories",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi move categories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move-category"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "move damage classes detail list",
+      "summary": "Run the move damage classes detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "move_damage_classes_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi move damage classes detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move-damage-class/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "move damage classes list",
+      "summary": "Run the move damage classes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "move_damage_classes",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi move damage classes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move-damage-class"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "move learn methods detail list",
+      "summary": "Run the move learn methods detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "move_learn_methods_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi move learn methods detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move-learn-method/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "move learn methods list",
+      "summary": "Run the move learn methods ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "move_learn_methods",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi move learn methods list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move-learn-method"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "move targets detail list",
+      "summary": "Run the move targets detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "move_targets_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi move targets detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move-target/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "move targets list",
+      "summary": "Run the move targets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "move_targets",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi move targets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move-target"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "moves detail list",
+      "summary": "Run the moves detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "moves_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi moves detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "moves list",
+      "summary": "Run the moves ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "moves",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi moves list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/move"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "natures detail list",
+      "summary": "Run the natures detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "natures_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi natures detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nature/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "natures list",
+      "summary": "Run the natures ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "natures",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi natures list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nature"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pal park areas detail list",
+      "summary": "Run the pal park areas detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pal_park_areas_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pal park areas detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pal-park-area/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pal park areas list",
+      "summary": "Run the pal park areas ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pal_park_areas",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pal park areas list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pal-park-area"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokeathlon stats detail list",
+      "summary": "Run the pokeathlon stats detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokeathlon_stats_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokeathlon stats detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokeathlon-stat/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokeathlon stats list",
+      "summary": "Run the pokeathlon stats ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokeathlon_stats",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokeathlon stats list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokeathlon-stat"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokedexes detail list",
+      "summary": "Run the pokedexes detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokedexes_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokedexes detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokedex/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokedexes list",
+      "summary": "Run the pokedexes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokedexes",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokedexes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokedex"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokemon colors detail list",
+      "summary": "Run the pokemon colors detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokemon_colors_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokemon colors detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokemon-color/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokemon colors list",
+      "summary": "Run the pokemon colors ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokemon_colors",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokemon colors list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokemon-color"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokemon detail list",
+      "summary": "Run the pokemon detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokemon_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokemon detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokemon/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokemon forms detail list",
+      "summary": "Run the pokemon forms detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokemon_forms_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokemon forms detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokemon-form/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokemon forms list",
+      "summary": "Run the pokemon forms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokemon_forms",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokemon forms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokemon-form"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokemon habitats detail list",
+      "summary": "Run the pokemon habitats detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokemon_habitats_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokemon habitats detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokemon-habitat/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokemon habitats list",
+      "summary": "Run the pokemon habitats ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokemon_habitats",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokemon habitats list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokemon-habitat"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokemon list",
+      "summary": "Run the pokemon ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokemon",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokemon list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokemon"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokemon location areas list",
+      "summary": "Run the pokemon location areas ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokemon_location_areas",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokemon location areas list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokemon/{id or name}/encounters"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokemon shapes detail list",
+      "summary": "Run the pokemon shapes detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokemon_shapes_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokemon shapes detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokemon-shape/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokemon shapes list",
+      "summary": "Run the pokemon shapes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokemon_shapes",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokemon shapes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokemon-shape"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokemon species detail list",
+      "summary": "Run the pokemon species detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokemon_species_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokemon species detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokemon-species/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pokemon species list",
+      "summary": "Run the pokemon species ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pokemon_species",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi pokemon species list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pokemon-species"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "regions detail list",
+      "summary": "Run the regions detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "regions_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi regions detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/region/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "regions list",
+      "summary": "Run the regions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "regions",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi regions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/region"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "stats detail list",
+      "summary": "Run the stats detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stats_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi stats detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stat/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "stats list",
+      "summary": "Run the stats ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stats",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi stats list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stat"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "super contest effects detail list",
+      "summary": "Run the super contest effects detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "super_contest_effects_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi super contest effects detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/super-contest-effect/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "super contest effects list",
+      "summary": "Run the super contest effects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "super_contest_effects",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi super contest effects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/super-contest-effect"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "types detail list",
+      "summary": "Run the types detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "types_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi types detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/type/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "types list",
+      "summary": "Run the types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "types",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/type"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "version groups detail list",
+      "summary": "Run the version groups detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "version_groups_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi version groups detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/version-group/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "version groups list",
+      "summary": "Run the version groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "version_groups",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi version groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/version-group"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "versions detail list",
+      "summary": "Run the versions detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "versions_detail",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi versions detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/version/{id or name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "versions list",
+      "summary": "Run the versions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "versions",
+      "source_url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+      "examples": [
+        "pm pokeapi versions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/version"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

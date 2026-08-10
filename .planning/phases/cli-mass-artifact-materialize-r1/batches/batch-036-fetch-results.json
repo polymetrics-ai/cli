@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-036-brex-reference-manifest.json",
+  "fetched": [
+    {
+      "connector": "brex",
+      "source_url": "https://developer.brex.com/openapi/",
+      "cache_file": null,
+      "status": "failed",
+      "reason": "HTTP 404 from the legacy provider OpenAPI directory route"
+    },
+    {
+      "connector": "brex",
+      "source_url": "https://developer.brex.com/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-036-brex-artifacts/brex.html",
+      "status": "retrieved",
+      "reason": "provider overview links the ten official product OpenAPI references"
+    }
+  ]
+}

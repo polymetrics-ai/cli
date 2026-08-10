@@ -1,0 +1,176 @@
+# Verification — 426 connector artifact sweep
+
+Fast gates only: ledger uniqueness/count reconciliation; JSON parsing; `connectorgen validate`; engine bundle discovery/load; `surface-sync --check` where applicable; and binary command reachability only for commands whose executor foundation exists. No provider credential, response, certification, or per-connector review gate is in this phase.
+
+Current green slice (2026-08-09): target manifest asserts 426 unique names; recovered seven and first official-source batch of five parse/load; `surface-sync --check`, `TestEveryImplementedCommandPassesRuntimePreflight`, and credential-free `pm connectors inspect <name> --json` checks pass for all twelve reachable bundles.
+
+Batch 002 and subsequent 40-connector batches use resumable cached official-artifact input. Successful generated bundles parse/load in their isolated roots; Leadfeeder, ClickUp, and Xero each received one concrete isolated retry after a focused red/green repair. A primary source failure is `retry_pending`, never a terminal blocker: `RETRY-QUEUE.json` records every alternate official-source route to exhaust before any genuine-blocked classification.
+
+Batch 015 alternative-source retry regenerated Luma and YouTube Analytics after the implemented-write registration repair. Its isolated v2 root validates both bundles, their checked-in bundles validate and load through `pm connectors inspect --json`, and the ledger assertion proves 149 materialized plus 277 explicit official-source retries equals the 426-target manifest. The other 38 primary/reference drops remain in the retry queue with a recorded attempted alternative-source route; none is classified genuinely blocked.
+
+The next 40-wide manifest cached 37 provider artifacts and recorded three fetch failures without aborting the pass. Twilio then validated through its isolated JSON-normalization retry. Batch 017 materialized Whisky Hunter (after the standard Swagger base-path repair), Circa, and Squarespace; their checked-in bundles validate and load. Its 37 drops are still retry-pending with their exact stage and an additional official-source retry route. The focused `cmd/connectorgen` package is green, and the reconciled ledger is now 153 materialized, 273 retries, zero genuinely blocked, and 139 `foundation_pending` artifacts.
+
+Batch 018 stopped its broad HTML-reference traversal at the fast static budget rather than treating its cached sources as terminal failures. All 40 candidates have a recorded `reference_traversal_budget` or fetch retry outcome. Narrow root-only retries then materialized Plausible, and PyPI after the focused angle-placeholder regression; both checked-in bundles validate and load. The 7shifts provider-linked Postman collection enumerated 128 requests below its immutable 147-operation ledger count, so its official reference and SDK routes remain explicitly queued.
+
+Batch 021 processed 40 cached provider artifacts. Tempo, PagerDuty, RingCentral, and Flowlu materialized from official machine-readable sources; each checked-in bundle validates and passes credential-free inspection. Its remaining 36 drops are `retry_pending`, each carrying a `batch-021 official-source retry` route and exact extraction stage. The ledger assertion proves 159 materialized plus 267 explicit retries equals all 426 unique targets, with zero genuinely blocked and 145 `foundation_pending`; `go test -count=1 ./cmd/connectorgen` passes.
+
+Batch 022 first proved that an empty cache is a local preflight condition, not a provider-source result; its 37 fetched and three failed cache retrievals are preserved separately. The cached source report then materialized Formbricks and Sharetribe, both static-validated and credential-free inspected. The gate output and source report are both retained because the gate intentionally reports bundle-path disposition while the source report records the exact 38 extraction/fetch stages. Every one of those 38 remains `retry_pending` with a `batch-022 official-source retry` route. The ledger assertion is 161 materialized plus 265 explicit retries equals all 426 targets, zero genuinely blocked, and 147 `foundation_pending`.
+
+Batch 023 cached all 40 official roots, finished within the bounded static pass, and materialized Eventbrite. Eventbrite's checked-in bundle validates and passes credential-free inspection. Its 39 remaining roots retain exact source-stage outcomes and a `batch-023 official-source retry` route; the separately retained gate report does not replace those extraction facts. The ledger assertion is 162 materialized plus 264 explicit retries equals all 426 targets, zero genuinely blocked, and 148 `foundation_pending`.
+
+Batch 024 combined 31 untouched primary records with nine provider-reference alternatives from the earlier bounded HTML pass. Its cache retained 38 responses, but the static traversal reached the two-minute ceiling before a batch report could be written. Lemlist's completed staged bundle was recovered, static-validated, and credential-free inspected; the other 39 have explicit interrupted outcomes—37 `reference_traversal_budget` and two `artifact_fetch`—and a `batch-024 bounded official-source retry` route. The ledger assertion is 163 materialized plus 263 explicit retries equals all 426 targets, zero genuinely blocked, and 149 `foundation_pending`.
+
+A focused static-asset regression then proved that CSS, scripts, source maps, fonts, and images must not be selected as provider API documents merely because their filename contains an API marker. The focused fail-closed cases and `go test -count=1 ./cmd/connectorgen` pass. Cached EmailOctopus and Strava retries no longer fail on the stylesheet: EmailOctopus now yields 25 documented operations below its authoritative 34, while Strava has no complete documented inventory. Both remain explicitly queued through `batch-025 static-asset retry`; counts are unchanged.
+
+The next focused regression proved that generic off-host support/navigation links containing `/api/reference` must be skipped rather than fetched, while off-host OpenAPI/Swagger/Postman links still fail closed. Its focused cases and the complete `cmd/connectorgen` package pass. Coassemble's isolated cached retry now yields three documented operations below its 52-operation ledger, so it too remains queued rather than overstated.
+
+The full cached B023 replay then encountered the same two-minute bounded HTML-traversal ceiling already recorded for B024 before writing a report or completing another staged bundle. `batch-027-offhost-navigation-retry-interrupted-outcomes.json` records all 40 names: Eventbrite remains previously materialized and all other 39 have the precise `reference_traversal_budget` retry route. The counts remain 163 materialized plus 263 explicit retries equals 426, zero genuinely blocked, and 149 `foundation_pending`. Per the delivery brief's repeated-obstacle rule, further broad HTML traversal is escalated rather than silently increasing the budget.
+
+Under the unblock order, B028 used the explicit exact-existing-surface evidence route: 31 cited official artifacts were cached, their preserved endpoint inventories exactly matched the immutable survey count, and their staged v2 bundles validate with zero findings. A focused shared-binding repair merged SearXNG's two stream bindings for `GET /search` into one endpoint-local coverage entry without inventing a command. The three fetch failures (Brex, Pexels, and Recurly) remain queued for isolated official-source retries.
+
+After a failed ad-hoc JSON transformation left the accounting ledgers empty, the task-scoped reconciler rebuilt them from `TARGET-LEDGER.json`, retained batch reports/outcomes, `reconciled-complete-outcomes.json`, and current bundle provenance. Its check reports 426 unique targets, an exact disjoint queue/resolved partition, no missing target-source or materialized-bundle provenance, and `194 materialized + 232 retry_pending + 0 genuinely_blocked = 426`. `TestStageValidatedJSONBytesLeavesDestinationUntouchedForInvalidCandidate` covers the atomic-write guard.
+
+Batch 030 recovered Recurly from the provider's official `v3-v2021-02-25` SDK OpenAPI branch after its original GitHub blob route failed. The one-bundle staged root validates, its checked-in bundle validates and loads, and the exact-evidence report records all 197 surveyed operations. Batch 031 then exercised the narrow unversioned official-reference route for Amazon SQS: the AWS-owned action index was fetched and hashed, its preserved source surface has exactly 23 endpoints, and the staged plus checked-in bundle validate and load through `pm connectors inspect amazon-sqs --json`. The generated v2 artifact and endpoint provenance explicitly record `provider-publishes-no-version-marker`; ordinary artifacts still fail the required-version guard. The reconciler check is green at `196 materialized + 230 retry_pending + 0 genuinely_blocked = 426`, with 21 reachable and 182 `foundation_pending` artifacts.
+
+Batches 032–035 applied that same exact-count, unversioned official-reference rule to Fillout (8), recovered Freshchat (34), Gorgias (114), and recovered Zoom (1,913). Every staged and checked-in bundle validates; each report cites a fetched, hashed provider-owned reference and records the explicit no-version marker. Batch 036 recovered Brex (108) after its legacy `/openapi/` directory returned HTTP 404: the current provider-owned developer overview links all ten official product OpenAPI references and serves as the exact-surface provenance root. Its staged and checked-in bundle validate. The reconciler check is green at `201 materialized + 225 retry_pending + 0 genuinely_blocked = 426`, with 21 reachable and 187 `foundation_pending` artifacts.
+
+B037 preserved 100ms as `retry_pending`: its official Postman setup page and provider-owned SDK repository establish bounded alternative routes, but neither exposed a complete 73-operation inventory. B038 materialized Pexels (9) from a clearly labeled official document-renderer capture after direct HTTP and browser access were challenge-gated; its staged and checked-in JSON validates without claiming a provider-response test.
+
+B039 resolved 7shifts without relaxing the normal provenance guard or increasing the generic reference traversal budget. The provider-published `llms.txt` API index has 158 reference entries; a deterministic direct selection excluded two overview pages, two webhook guide pages, six explicitly deprecated external-mapping duplicates, and one explicitly deprecated forecast-overrides duplicate. All 147 selected official reference pages fetched successfully, each embedded exactly one OpenAPI 3.0.2 operation at provider API version `2026-06-01`, and the combined source inventory has exactly 66 read plus 81 write operations. The isolated and checked-in bundles validate, and credential-free `pm connectors inspect 7shifts --json` succeeds. Seven legacy deprecated rows are preserved as explicit `present-in-surface-absent-from-artifact` discrepancies rather than inferred provider operations. The compact source index records every URL and SHA-256 while the 9.3 MiB reproducible raw cache remains unstaged. The reconciler check is green at `203 materialized + 223 retry_pending + 0 genuinely_blocked = 426`, with 22 reachable and 189 `foundation_pending` artifacts.
+
+B040 resolves 100ms from the provider-published sitemap, not the bounded generic reference materializer. Its 86 explicitly indexed v2 API-reference pages were fetched directly from the provider-owned `100ms-docs` repository; 78 visible request-component rows de-duplicate to 72 method/path operations, and one explicit `POST /v2/analytics/events/webhooks/replay` provider curl example completes the immutable 73-operation survey (33 read, 40 write). The compact source index records all page URLs, raw-source URLs, SHA-256 values, and operation coordinates; it also records the one source spelling correction from `{repsonse_id}` to the page's own `response_id` parameter label. The isolated and checked-in bundles validate, and credential-free `pm connectors inspect 100ms --json` succeeds. Eight legacy paths absent from the current provider inventory remain explicit discrepancies. The reconciler check is green at `204 materialized + 222 retry_pending + 0 genuinely_blocked = 426`, with 23 reachable and 190 `foundation_pending` artifacts.
+
+B041 resolves ActiveCampaign through the provider-published `llms.txt` index without recursive crawling. All 147 directly listed reference pages were retrieved and hashed; filtering only fragments whose own declared OpenAPI server URL names the connector's `/api/3` REST scope yields 87 unique operations (40 reads, 47 writes), exactly matching the immutable survey. The focused parser regression retains that literal root path from a templated OpenAPI 3 server URL, correcting false root-relative discrepancies while leaving the normal version/provenance guard intact. The staged and checked-in bundle validates, credential-free `pm connectors inspect activecampaign --json` succeeds, and 50 legacy paths absent from the current official inventory remain explicit discrepancies. The reconciler check is green at `205 materialized + 221 retry_pending + 0 genuinely_blocked = 426`, with 24 reachable and 191 `foundation_pending` artifacts.
+
+Rate-limit completion is now part of the same static sweep rather than deferred to certification. `go run ./scripts/materialize_cli_rate_limits` generated a compact 426-entry official-source ledger and wrote all declarations in eleven deterministic reports of at most 40 files. Only Harvest, CallRail, and Aha have provider-published enforceable policy data at this checkpoint, so the ledger reports `3 declared + 422 unknown + 1 not_applicable = 426` and exactly 426 `rate_limits.json` files. Unknown declarations retain each target's official operation source and precise missing-policy facts; Faker is the sole no-provider-HTTP/API `not_applicable` declaration. A later provider-cited declared record (including a cross-lane rebase) is monotonic: the producer promotes the source ledger and preserves the schema-loadable declaration instead of replacing it with generated unknown data, while the reconciler counts the on-disk state. `TestEverySweepTargetLoadsRateLimitDeclaration` and `TestProductionDefinitionsEmbedEveryRateLimitDeclaration` load every target from production `defs.FS`, while the reconciler confirms the same file/state conservation alongside the unchanged `205 materialized + 221 retry_pending + 0 genuinely_blocked = 426` operation-surface partition. The focused ActiveCampaign OpenAPI-server-base-path regression and rate-limit producer/reconciler tests pass without provider credentials or runtime pacing work.
+
+Pre-final static completion (2026-08-09): B046–B055 added 26 cited complete surfaces, including Pipeliner's 1,510-operation OpenAPI inventory, and B056 retained explicit `official_source_exhausted` evidence for every final source gap. The deterministic reconciler passes at `231 materialized + 195 genuinely_blocked + 0 retry_pending = 426`, with `24 reachable`, `217 foundation_pending`, `remaining: 0`, and all 426 rate-limit files conserved as `3 declared + 422 unknown + 1 not_applicable`. `connectorgen validate internal/connectors/defs`, `surface-sync --check`, `go build ./cmd/pm`, `pm help connectors`, `pm connectors inspect faker --json`, the reconciler regression, the full `cmd/connectorgen` package suite, `TestEveryImplementedCommandPassesRuntimePreflight`, the shipped runtime endpoint-ledger load test, and scoped `go vet` all pass. `surface-sync` regenerated the embedded 15,154-entry runtime endpoint projection and its immediate check is clean.
+
+The wider `internal/connectors/engine` package still has three unrelated HEAD-consistent assertion divergences: GitHub's expected CLI command/usage spelling and Xero's pre-existing absent direct-read coverage rows. Neither the GitHub/Xero bundle files nor those tests changed in this sweep; the targeted shipped-ledger load test is green. Per the captain order, no hand repair or review cycle is started before the one final no-mistakes run; that pipeline owns any subsequent validation findings.
+
+## Promoted native CLI-surface recovery (2026-08-10)
+
+The seven materialized hook-backed connectors `apify-dataset`, `basecamp`, `copper`, `google-classroom`, `google-pagespeed-insights`, `metabase`, and `rootly` now return exit 0 for their bare command namespaces in a real `go run ./cmd/pm <connector>` invocation. The native registry overlay retains the bundle's `CommandSurface`, so the dynamic CLI can discover its already-declared 25 implemented ETL commands while preserving native `Check`/`Read` execution. `go test -timeout 20m -count=1 -v ./internal/cli -run '^TestPromotedNativeConnectorCommandSurfacesRemainReachable$'`, `go test -timeout 20m -count=1 ./internal/connectors/native/nativeset`, `go test -timeout 20m -count=1 ./internal/connectors/commandrunner`, `go test -timeout 20m -count=1 ./internal/connectors/bundleregistry -run '^$'`, and `go vet ./internal/cli ./internal/connectors/native/nativeset` pass. The broad `bundleregistry` test invocation still has the existing GitHub manual-spelling assertion divergence recorded above; the registry-related compile-only gate passes and this repair does not alter the GitHub path. CLI/manual/website parity is not independently changed: this restores registration of JSON already materialized by the sweep, and the regression exercises bare namespace plus real command-depth help for every affected connector without credentials or provider I/O.
+
+## Pipeline and remote checkpoint reconciliation (2026-08-10)
+
+The preserved pipeline checkpoint `318f3638` and remote checkpoint `620d509a` independently report the same final partition: `231 materialized + 195 genuinely_blocked + 0 retry_pending = 426`, with `24 reachable`, `217 foundation_pending`, and `3 declared + 422 unknown + 1 not_applicable` rate-limit declarations. The reconciliation keeps the remote branch's later command-reachability repair and the pipeline's subsequent review/lint fixes. `origin/preserve/cli-mass-artifact-materialize-pipeline-20260810` retains the original pipeline head (`858b72e0`) for direct audit; regenerated aggregate artifacts are the authority for the combined bundle set.
+
+## PR #3957 CI remediation verification (2026-08-10)
+
+The script-main loading failure is closed: `go test -timeout 20m -count=1 ./scripts/...` passes
+for both isolated commands, and the actual
+`go run golang.org/x/vuln/cmd/govulncheck@latest ./...` completes with `No vulnerabilities found`.
+The CodeQL defense-in-depth regression passes through
+`TestIsLikelyBatchReferenceLinkAllowsOnlyHTTPSchemesOrRelativeReferences`, including `data:` and
+`vbscript:` rejection plus preserved relative/HTTPS references; the malformed-link and static/feed
+reference regressions remain green. `go test -timeout 20m -count=1 ./cmd/connectorgen` was green
+before the final scanner-only refinement and the focused reference suite remains green afterward.
+
+The connector-boundary repair is verified both narrowly and in the production gate:
+`TestScanIgnoresStaticAssetLiteralsWithoutIgnoringConnectorIdentity` and the pre-existing
+`TestScanAppliesLedgerToConnectorDocsOutput` pass together, and `make connector-boundary` reports
+zero findings across 192 shared production files and 552 loaded connectors. This preserves the two
+intentional GitHub docs-example exception matches while rejecting neither `.rss` nor `/rss.xml` as
+connector identity. `go run ./cmd/connectorgen surface-sync --check` remains clean.
+
+The website regression is green under the installed lockfile dependencies:
+`npm exec vitest run tests/api/search.test.ts` passes all four tests with a connector-qualified
+setup-field query. No generated website catalog artifact changed.
+
+`make verify` was rerun after committing the tidy-required direct `golang.org/x/net` classification.
+It passed formatting, module tidiness, and vet, then failed in unrelated existing full-suite paths:
+`internal/cli` has Gong help/preview assertion divergences and a Bahmni matrix timeout; conformance
+for Aha, CallRail, and Harvest lacks a coordination identity for their declared rate-limit policies;
+the Xero runtime-ledger test expects absent report entries; Google Search Console's redaction test;
+and Amazon SQS's required-flag test. The remediation's script packages pass in that same full run.
+Those failures are recorded rather than changed by this slice.
+
+## Certify-timing budget calibration (2026-08-10)
+
+The approved 8m cap is locally green through the exact Make target:
+`make certify-timing` passes with 292.016s total test elapsed time and 308.762s total wall time.
+Its two targets remain intact: the certification harness reports 29.935s elapsed / 38.394s wall
+and the focused CLI route reports 262.081s elapsed / 270.368s wall. The in-process contracts
+report 25 real harness calls within the 25 ceiling and 92 real CLI invocations at the 92 ceiling.
+The changed bound is justified by the recorded 6.57x endpoint-ledger growth versus 1.85x actual
+test-time growth, not by a change to coverage or invocation topology. Hosted Verify remains the
+final matrix confirmation after the committed push.
+
+## Existing command-surface preservation and redaction propagation (2026-08-10)
+
+**Red:** the focused materializer regression initially failed with an empty command
+`redact_fields` array, while the existing Amazon SQS and Google Search Console package tests failed
+on `--receipt-handle` and `site_url` respectively. This is not a certify-timing failure: the
+committed 8-minute timing gate passed in hosted CI in 5m53s.
+
+**Green:** `TestMaterializeCLISurfacePreservesExistingWriteContractAndPropagatesRedactions`,
+`TestCLIReverseExamplesContainRequiredFlags`, and `TestWriteCommandsCarryActionRedactions` pass.
+The materializer now retains every existing reverse-ETL command contract while refreshing its API
+references, then performs a sorted, de-duplicated union of command and write-action redactions.
+Amazon SQS's 16 reverse-ETL commands and Google Search Console's four commands were regenerated
+from their pre-sweep contracts; their established dashed flags, runnable examples, and action
+redactions are present again. `go test -timeout 20m -count=1 ./cmd/connectorgen`, the two focused
+connector package tests, `go vet ./cmd/connectorgen`, both real connector help paths, targeted
+bundle validation, and `go run ./cmd/connectorgen surface-sync --check` pass; the full sync scans
+all 552 connectors with zero changed fields.
+
+The read-only whole-corpus audit covered all 552 definition directories: 234 currently contain a
+CLI surface, of which 36 have a pre-sweep `f96a47e80` CLI baseline and 198 are newly materialized.
+After the two named repairs, six other connectors still have 270 changed flag spellings across 196
+existing reverse-ETL commands: Bitbucket (2), Chatwoot (26), Freshchat (8), Gorgias (17), Jira
+(210), and Lever Hiring (7). Current action-to-command redaction auditing finds 146 command gaps
+across six other connectors / 414 missing field pairs. Six gaps are materialization-introduced
+(Freshchat five and Stripe one); 88 were already present in main (Mailchimp 55, Recurly 28, Zendesk
+Support five); and 52 Xero commands have no comparable pre-sweep command for attribution. Those
+unrelated surfaces remain untouched pending captain sequencing. The next hosted PR matrix remains
+pending.
+
+## Full audited-corpus command-surface regeneration (2026-08-10)
+
+The repaired materializer regenerated the thirteen initially affected source bundles with zero
+drops, and a separate Gong source recovery regenerated its preserved global flags. A subsequent
+baseline audit found eleven more existing connector-wide flag contracts removed by the same
+surface replacement. The generator now copies `GlobalFlags`; a second generator run materialized
+all eleven affected bundles with zero drops from their preserved `f96a47e80` CLI contracts and
+current endpoint inventories. No `cli_surface.json` was patched by hand.
+
+The final read-only 552-bundle audits report exactly:
+
+- `flag_spelling_regressions flags=0 actions=0 connectors=0`
+- `declared_redaction_gaps fields=0 commands=0 connectors=0`
+- `global_flag_contract_differences connectors=0`
+
+`connectorgen surface-sync --check` scans all 552 connectors with zero corrections, and the
+website data generator has been rerun from the final bundle set. Remaining local and hosted gates
+are recorded as they complete; no credentialed provider check is part of this static repair.
+
+## Final local command-contract verification (2026-08-10)
+
+The repaired generator suite passes (`go test -timeout 20m -count=1 ./cmd/connectorgen`), as do
+the engine, bundle-registry, commandrunner, lint, vet, docs, smoke, release-workflow,
+agent-contract, GSD-evidence, and clean 552-connector boundary gates. The full
+`go test -timeout 20m -count=1 ./internal/cli` package completes in `557.489s`, preserving the
+20-minute limit rather than loosening it. Website typecheck, lint, unit tests (80), script tests
+(25), and production build are green after regenerating its data.
+
+The final `make certify-timing` run completes in `104.664s` test elapsed / `122.651s` wall time,
+within the approved 8-minute cap, and retains its full fixed topology: 25/25 harness calls and
+92/92 real CLI invocations. Hosted PR checks remain the final independent confirmation after the
+commit and push.
+
+## Harvest rate-limited conformance replay repair (2026-08-10)
+
+Hosted Verify failed in `TestConformance/harvest`, not in the generator or timing suite. The
+materialized `rate_limits.json` correctly declares Harvest's documented `general-account` account
+scope, but the non-live fixture `RuntimeConfig` omitted `CoordinationIdentity`; the resolver
+therefore refused every replayed request before it reached the local server. The fix keeps the
+policy and resolver active and constructs a deterministic, public fixture-only opaque identity.
+It does not use a credential, vault, provider, or live request.
+
+- **Red:** `TestHarvestRateLimitedFixturesReceiveSyntheticCoordinationIdentity` failed with
+  `rate-limit policy "general-account" scope identity: coordination identity is unavailable`.
+- **Green:** the focused regression, `TestConformance/harvest`, the complete
+  `./internal/connectors/conformance` package, and `./internal/connectors/engine` all pass under
+  `-timeout 20m -count=1`; `go vet ./internal/connectors/conformance` also passes. The next hosted
+  Verify run is the independent whole-repository confirmation.

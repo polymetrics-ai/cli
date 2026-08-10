@@ -9,9 +9,11 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
-func TestGitLabCommandSurfaceAdvertisesOnlyCitedReadCommands(t *testing.T) {
+func TestGitLabCommandSurfacePreservesCitedReadCommandsAndDeclaresRemainingOperations(t *testing.T) {
 	registry := bundleregistry.New()
 	connector, ok := registry.Get("gitlab")
 	if !ok {
@@ -27,6 +29,10 @@ func TestGitLabCommandSurfaceAdvertisesOnlyCitedReadCommands(t *testing.T) {
 	if !ok || provider.CommandSurface() == nil {
 		t.Fatal("GitLab connector has no command surface")
 	}
+	bundle, err := engine.Load(defs.FS, "gitlab")
+	if err != nil {
+		t.Fatalf("load GitLab bundle: %v", err)
+	}
 	want := map[string]struct {
 		stream string
 		method string
@@ -40,13 +46,24 @@ func TestGitLabCommandSurfaceAdvertisesOnlyCitedReadCommands(t *testing.T) {
 	}
 
 	surface := provider.CommandSurface()
-	if len(surface.Commands) != len(want) {
-		t.Fatalf("GitLab command count = %d, want %d", len(surface.Commands), len(want))
+	if got, wantCount := len(surface.Commands), len(bundle.Streams)+len(bundle.Operations); got != wantCount {
+		t.Fatalf("GitLab command count = %d, want one row for each of %d stream/operation declarations", got, wantCount)
 	}
+	found := make(map[string]bool, len(want))
+	operationRows := 0
 	for _, command := range surface.Commands {
 		expectation, ok := want[command.Path]
 		if !ok {
-			t.Fatalf("unexpected GitLab command %q", command.Path)
+			operationRows++
+			if command.Availability != "not_implemented" || command.Operation == "" || len(command.APISurface) != 1 {
+				t.Fatalf("GitLab operation command %q = %+v, want one endpoint-backed not_implemented row", command.Path, command)
+			}
+			switch command.Intent {
+			case "direct_read", "direct_write", "binary_download":
+				continue
+			default:
+				t.Fatalf("GitLab operation command %q intent = %q, want a declared operation intent", command.Path, command.Intent)
+			}
 		}
 		if command.Intent != "etl" || command.Availability != "implemented" || command.Stream != expectation.stream || command.SourceCLIPath != expectation.method+" "+expectation.path || command.SourceURL != expectation.url {
 			t.Fatalf("command %q = %+v, want implemented %s stream with provider citation %s", command.Path, command, expectation.stream, expectation.url)
@@ -54,6 +71,13 @@ func TestGitLabCommandSurfaceAdvertisesOnlyCitedReadCommands(t *testing.T) {
 		if len(command.APISurface) != 1 || command.APISurface[0].Method != expectation.method || command.APISurface[0].Path != expectation.path {
 			t.Fatalf("command %q API surface = %+v, want %s %s", command.Path, command.APISurface, expectation.method, expectation.path)
 		}
+		found[command.Path] = true
+	}
+	if len(found) != len(want) {
+		t.Fatalf("implemented GitLab stream commands = %d, want all %d cited streams", len(found), len(want))
+	}
+	if got, wantCount := operationRows, len(bundle.Operations); got != wantCount {
+		t.Fatalf("GitLab operation rows = %d, want %d honest non-implemented endpoint rows", got, wantCount)
 	}
 }
 

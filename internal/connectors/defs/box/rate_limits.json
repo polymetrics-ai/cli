@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developer.box.com/guides/api-calls/permissions-and-errors/rate-limits (retrieved 2026-08-06): Box policies vary by user, enterprise, endpoint, and licensed allocation; the bundle's configured subject cannot safely model those scopes."
+}

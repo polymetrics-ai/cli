@@ -1,0 +1,279 @@
+{
+  "tagline": "Run NewsData.io's declared streams and reverse-ETL actions.",
+  "usage": "pm newsdata-io \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get 1 archive",
+        "api get 1 count",
+        "api get 1 crypto",
+        "api get 1 crypto count",
+        "api get 1 latest",
+        "api get 1 market",
+        "api get 1 market count",
+        "api get 1 news",
+        "api get 1 sources",
+        "archive list",
+        "crypto list",
+        "latest list",
+        "sources list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get 1 archive",
+      "summary": "Documented GET /1/archive (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://newsdata.io/openapi.json",
+      "examples": [
+        "pm newsdata-io api get 1 archive --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1/archive"
+        }
+      ],
+      "operation": "newsdata-io.get.1-archive",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1 count",
+      "summary": "Documented GET /1/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://newsdata.io/openapi.json",
+      "examples": [
+        "pm newsdata-io api get 1 count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1/count"
+        }
+      ],
+      "operation": "newsdata-io.get.1-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1 crypto",
+      "summary": "Documented GET /1/crypto (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://newsdata.io/openapi.json",
+      "examples": [
+        "pm newsdata-io api get 1 crypto --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1/crypto"
+        }
+      ],
+      "operation": "newsdata-io.get.1-crypto",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1 crypto count",
+      "summary": "Documented GET /1/crypto/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://newsdata.io/openapi.json",
+      "examples": [
+        "pm newsdata-io api get 1 crypto count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1/crypto/count"
+        }
+      ],
+      "operation": "newsdata-io.get.1-crypto-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1 latest",
+      "summary": "Documented GET /1/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://newsdata.io/openapi.json",
+      "examples": [
+        "pm newsdata-io api get 1 latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1/latest"
+        }
+      ],
+      "operation": "newsdata-io.get.1-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1 market",
+      "summary": "Documented GET /1/market (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://newsdata.io/openapi.json",
+      "examples": [
+        "pm newsdata-io api get 1 market --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1/market"
+        }
+      ],
+      "operation": "newsdata-io.get.1-market",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1 market count",
+      "summary": "Documented GET /1/market/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://newsdata.io/openapi.json",
+      "examples": [
+        "pm newsdata-io api get 1 market count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1/market/count"
+        }
+      ],
+      "operation": "newsdata-io.get.1-market-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1 news",
+      "summary": "Documented GET /1/news (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://newsdata.io/openapi.json",
+      "examples": [
+        "pm newsdata-io api get 1 news --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1/news"
+        }
+      ],
+      "operation": "newsdata-io.get.1-news",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1 sources",
+      "summary": "Documented GET /1/sources (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://newsdata.io/openapi.json",
+      "examples": [
+        "pm newsdata-io api get 1 sources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1/sources"
+        }
+      ],
+      "operation": "newsdata-io.get.1-sources",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "archive list",
+      "summary": "Run the archive ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "archive",
+      "source_url": "https://newsdata.io/openapi.json",
+      "examples": [
+        "pm newsdata-io archive list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/1/archive"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "crypto list",
+      "summary": "Run the crypto ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "crypto",
+      "source_url": "https://newsdata.io/openapi.json",
+      "examples": [
+        "pm newsdata-io crypto list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/1/crypto"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "latest list",
+      "summary": "Run the latest ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "latest",
+      "source_url": "https://newsdata.io/openapi.json",
+      "examples": [
+        "pm newsdata-io latest list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/1/latest"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "sources list",
+      "summary": "Run the sources ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sources",
+      "source_url": "https://newsdata.io/openapi.json",
+      "examples": [
+        "pm newsdata-io sources list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/1/sources"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

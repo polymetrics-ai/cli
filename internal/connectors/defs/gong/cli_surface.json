@@ -1,158 +1,86 @@
 {
-  "tagline": "Inspect, read, and safely plan typed Gong operations.",
-  "usage": "pm gong <command> [flags]",
-  "source_cli": {
-    "name": "Gong API",
-    "docs": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-    "reference": "Public OpenAPI 3.0.1",
-    "source": "provider_api"
-  },
+  "tagline": "Run Gong's declared streams and reverse-ETL actions.",
+  "usage": "pm gong \u003ccommand\u003e [flags]",
   "groups": [
     {
-      "id": "calls",
-      "title": "Calls",
+      "id": "read",
+      "title": "Read streams",
       "commands": [
-        "calls"
+        "call-outcomes list",
+        "calls extensive",
+        "calls get",
+        "calls list",
+        "calls transcript",
+        "calls users-access get",
+        "coaching list",
+        "crm entities get",
+        "crm entity-schema get",
+        "crm integrations list",
+        "crm request-status get",
+        "entities ask",
+        "entities get-brief",
+        "flows bulk-assignment get",
+        "flows folders list",
+        "flows list",
+        "flows prospects",
+        "flows steps",
+        "library folder-content list",
+        "library folders list",
+        "logs list",
+        "meetings integration-status",
+        "permissions profile get",
+        "permissions profile-users list",
+        "permissions profiles list",
+        "privacy find-email",
+        "privacy find-phone",
+        "scorecards list",
+        "settings briefs list",
+        "settings trackers list",
+        "stats activity-aggregate",
+        "stats activity-aggregate-by-period",
+        "stats activity-day-by-day",
+        "stats activity-scorecards",
+        "stats interaction",
+        "targets list",
+        "tasks list",
+        "users extensive",
+        "users get",
+        "users list",
+        "users settings-history",
+        "workspaces list"
       ]
     },
     {
-      "id": "users",
-      "title": "Users",
+      "id": "write",
+      "title": "Reverse ETL writes",
       "commands": [
-        "users"
-      ]
-    },
-    {
-      "id": "scorecards",
-      "title": "Scorecards",
-      "commands": [
-        "scorecards"
-      ]
-    },
-    {
-      "id": "workspaces",
-      "title": "Workspaces",
-      "commands": [
-        "workspaces"
-      ]
-    },
-    {
-      "id": "settings",
-      "title": "Settings",
-      "commands": [
-        "settings"
-      ]
-    },
-    {
-      "id": "permissions",
-      "title": "Permissions",
-      "commands": [
-        "permissions"
-      ]
-    },
-    {
-      "id": "crm",
-      "title": "CRM",
-      "commands": [
-        "crm"
-      ]
-    },
-    {
-      "id": "meetings",
-      "title": "Meetings",
-      "commands": [
-        "meetings"
-      ]
-    },
-    {
-      "id": "engagement",
-      "title": "Engagement",
-      "commands": [
-        "engagement"
-      ]
-    },
-    {
-      "id": "stats",
-      "title": "Stats",
-      "commands": [
-        "stats"
-      ]
-    },
-    {
-      "id": "flows",
-      "title": "Engage Flows",
-      "commands": [
-        "flows"
-      ]
-    },
-    {
-      "id": "library",
-      "title": "Library",
-      "commands": [
-        "library"
-      ]
-    },
-    {
-      "id": "entities",
-      "title": "Entities",
-      "commands": [
-        "entities"
-      ]
-    },
-    {
-      "id": "privacy",
-      "title": "Data Privacy",
-      "commands": [
-        "privacy"
-      ]
-    },
-    {
-      "id": "tasks",
-      "title": "Tasks",
-      "commands": [
-        "tasks"
-      ]
-    },
-    {
-      "id": "digital-interaction",
-      "title": "Digital Interactions",
-      "commands": [
-        "digital-interaction"
-      ]
-    },
-    {
-      "id": "logs",
-      "title": "Logs",
-      "commands": [
-        "logs"
-      ]
-    },
-    {
-      "id": "coaching",
-      "title": "Coaching",
-      "commands": [
-        "coaching"
-      ]
-    },
-    {
-      "id": "call-outcomes",
-      "title": "Outcomes",
-      "commands": [
-        "call-outcomes"
-      ]
-    },
-    {
-      "id": "integration-settings",
-      "title": "Integration Settings",
-      "commands": [
-        "integration-settings"
-      ]
-    },
-    {
-      "id": "targets",
-      "title": "Targets",
-      "commands": [
-        "targets"
+        "calls create",
+        "calls upload-media",
+        "calls users-access add",
+        "calls users-access delete",
+        "crm integrations delete",
+        "crm integrations register",
+        "crm upload-entities",
+        "crm upload-entity-schema",
+        "digital-interaction create",
+        "engagement content-shared",
+        "engagement content-viewed",
+        "engagement custom-action",
+        "flows prospects assign",
+        "flows prospects assign-cool-off-override",
+        "flows prospects bulk-assign",
+        "flows prospects unassign-by-crm",
+        "flows prospects unassign-by-instance",
+        "integration-settings update",
+        "meetings create",
+        "meetings delete",
+        "meetings update",
+        "permissions profile create",
+        "permissions profile update",
+        "privacy erase-email",
+        "privacy erase-phone",
+        "targets upload-assignments",
+        "tasks update"
       ]
     }
   ],
@@ -210,752 +138,20 @@
   ],
   "commands": [
     {
-      "path": "users list",
-      "summary": "List Gong users as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "users",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/users"
-        }
-      ],
-      "examples": [
-        "pm gong users list --json --limit 25"
-      ]
-    },
-    {
-      "path": "calls list",
-      "summary": "List Gong calls as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "calls",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/calls"
-        }
-      ],
-      "flags": [
-        {
-          "name": "from",
-          "type": "string",
-          "summary": "Inclusive ISO-8601 lower bound mapped to Gong fromDateTime.",
-          "maps_to": "query.fromDateTime",
-          "format": "date-time",
-          "allow_empty": false
-        },
-        {
-          "name": "to",
-          "type": "string",
-          "summary": "Exclusive ISO-8601 upper bound mapped to Gong toDateTime.",
-          "maps_to": "query.toDateTime",
-          "format": "date-time",
-          "allow_empty": false
-        }
-      ],
-      "constraints": [
-        {
-          "kind": "order",
-          "left": "query.fromDateTime",
-          "left_fallback": "config.start_date",
-          "op": "lt",
-          "right": "query.toDateTime",
-          "value_type": "date-time",
-          "message": "invalid Gong calls list date range: --from must be before --to (Gong treats --to as an exclusive upper bound)"
-        }
-      ],
-      "notes": "Use --from/--to for provider-side Gong call time bounds. --to is an exclusive upper bound. Global --limit caps PM output records only; Gong request page size remains the connector page_size config for compatibility.",
-      "examples": [
-        "pm gong calls list --json --limit 25",
-        "pm gong calls list --json --from 2026-07-01T00:00:00Z --to 2026-07-02T00:00:00Z --limit 25"
-      ]
-    },
-    {
-      "path": "scorecards list",
-      "summary": "List Gong scorecards as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "scorecards",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/settings/scorecards"
-        }
-      ],
-      "examples": [
-        "pm gong scorecards list --json --limit 25"
-      ]
-    },
-    {
-      "path": "crm integrations list",
-      "summary": "List Generic CRM integrations as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "crm_integrations",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/crm/integrations"
-        }
-      ],
-      "examples": [
-        "pm gong crm integrations list --json --limit 25"
-      ]
-    },
-    {
-      "path": "workspaces list",
-      "summary": "List Gong workspaces as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "workspaces",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/workspaces"
-        }
-      ],
-      "examples": [
-        "pm gong workspaces list --json --limit 25"
-      ]
-    },
-    {
-      "path": "settings trackers list",
-      "summary": "List Gong tracker settings as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "trackers",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/settings/trackers"
-        }
-      ],
-      "examples": [
-        "pm gong settings trackers list --json --limit 25"
-      ]
-    },
-    {
-      "path": "settings briefs list",
-      "summary": "List Gong AI brief settings as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "briefs",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/settings/briefs"
-        }
-      ],
-      "examples": [
-        "pm gong settings briefs list --json --limit 25"
-      ]
-    },
-    {
-      "path": "library folders list",
-      "summary": "List Gong library folders as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "library_folders",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/library/folders"
-        }
-      ],
-      "examples": [
-        "pm gong library folders list --json --limit 25"
-      ]
-    },
-    {
-      "path": "flows list",
-      "summary": "List Gong Engage flows as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "flows",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/flows"
-        }
-      ],
-      "examples": [
-        "pm gong flows list --json --limit 25"
-      ]
-    },
-    {
-      "path": "flows folders list",
-      "summary": "List Gong Engage flow folders as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "flow_folders",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/flows/folders"
-        }
-      ],
-      "examples": [
-        "pm gong flows folders list --json --limit 25"
-      ]
-    },
-    {
       "path": "call-outcomes list",
       "summary": "List Gong call outcomes as ETL records.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "call_outcomes",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "examples": [
+        "pm gong call-outcomes list --json --limit 25"
+      ],
       "api_surface": [
         {
           "method": "GET",
           "path": "/v2/call-outcomes"
         }
-      ],
-      "examples": [
-        "pm gong call-outcomes list --json --limit 25"
-      ]
-    },
-    {
-      "path": "permissions profiles list",
-      "summary": "List Gong permission profiles as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "permission_profiles",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/all-permission-profiles"
-        }
-      ],
-      "examples": [
-        "pm gong permissions profiles list --json --limit 25"
-      ]
-    },
-    {
-      "path": "calls get",
-      "summary": "Retrieve data for a specific call (/v2/calls/{id})",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Gong's unique numeric identifier for the call (up to 20 digits).",
-          "maps_to": "path.id"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/calls/{id}"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong calls get --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "permissions profile get",
-      "summary": "Permission profile for a given profile Id (/v2/permission-profile)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "profileId",
-          "type": "string",
-          "summary": "Permission profile identifier.",
-          "maps_to": "query.profileId"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/permission-profile"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong permissions profile get --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "crm entity-schema get",
-      "summary": "List Schema Fields (/v2/crm/entity-schema)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "integrationId",
-          "type": "integer",
-          "summary": "Integration ID generated when creating the integration",
-          "maps_to": "query.integrationId"
-        },
-        {
-          "name": "objectType",
-          "type": "string",
-          "summary": "Type of object to retrieve the schema fields for (case-sensitive). <br>Omitting this parameter returns the schema for all object types.",
-          "maps_to": "query.objectType"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/crm/entity-schema"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong crm entity-schema get --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "crm entities get",
-      "summary": "Get CRM objects (/v2/crm/entities)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "integrationId",
-          "type": "integer",
-          "summary": "Integration ID generated when creating the integration",
-          "maps_to": "query.integrationId"
-        },
-        {
-          "name": "objectType",
-          "type": "string",
-          "summary": "Requested objects type",
-          "maps_to": "query.objectType"
-        },
-        {
-          "name": "objectsCrmIds",
-          "type": "string",
-          "summary": "<b>Request Body:</b> The requested objects crm ids (should be sent in the request body)",
-          "maps_to": "query.objectsCrmIds"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/crm/entities"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong crm entities get --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "users get",
-      "summary": "Retrieve user (/v2/users/{id})",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Gong's unique numeric identifier for the user (up to 20 digits).",
-          "maps_to": "path.id"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/users/{id}"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong users get --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "users settings-history",
-      "summary": "Retrieve user settings history (/v2/users/{id}/settings-history)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Gong's unique numeric identifier for the user (up to 20 digits).",
-          "maps_to": "path.id"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/users/{id}/settings-history"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong users settings-history --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "permissions profile-users list",
-      "summary": "List all users attached to a given permission profile (/v2/permission-profile/users)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "profileId",
-          "type": "string",
-          "summary": "Permission profile identifier.",
-          "maps_to": "query.profileId"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/permission-profile/users"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong permissions profile-users list --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "logs list",
-      "summary": "Retrieve logs data by type and time range (/v2/logs)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "logType",
-          "type": "string",
-          "summary": "Type of logs requested.",
-          "maps_to": "query.logType"
-        },
-        {
-          "name": "fromDateTime",
-          "type": "string",
-          "summary": "The time from which to retrieve log records, in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
-          "maps_to": "query.fromDateTime"
-        },
-        {
-          "name": "toDateTime",
-          "type": "string",
-          "summary": "The time until which to retrieve log records, in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC); if not specified, the lo",
-          "maps_to": "query.toDateTime"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/logs"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong logs list --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "library folder-content list",
-      "summary": "List of calls in a specific folder (/v2/library/folder-content)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "folderId",
-          "type": "string",
-          "summary": "Gong's unique numeric identifier for the folder (up to 20 digits).",
-          "maps_to": "query.folderId"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/library/folder-content"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong library folder-content list --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "flows bulk-assignment get",
-      "summary": "Get the results of a bulk assignment of prospects to a flow (/v2/flows/prospects/bulk-assignments/{id})",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "",
-          "maps_to": "path.id"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/flows/prospects/bulk-assignments/{id}"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong flows bulk-assignment get --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "entities get-brief",
-      "summary": "Generate a brief for a CRM entity (/v2/entities/get-brief)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "workspaceId",
-          "type": "integer",
-          "summary": "Workspace identifier. The workspace the brief is defined in.",
-          "maps_to": "query.workspaceId"
-        },
-        {
-          "name": "briefName",
-          "type": "string",
-          "summary": "The name of the brief to generate. Briefs are configured in the Agent Studio > AI Briefer.",
-          "maps_to": "query.briefName"
-        },
-        {
-          "name": "crmEntityType",
-          "type": "string",
-          "summary": "The object type of the entity in the CRM.",
-          "maps_to": "query.crmEntityType"
-        },
-        {
-          "name": "crmEntityId",
-          "type": "string",
-          "summary": "The CRM Id of the entity the question is asked about.",
-          "maps_to": "query.crmEntityId"
-        },
-        {
-          "name": "timePeriod",
-          "type": "string",
-          "summary": "Specifies the time period during which associated calls and emails must have occurred to be used to generate the answer. The calls and emails must be associated with the specified ",
-          "maps_to": "query.timePeriod"
-        },
-        {
-          "name": "fromDateTime",
-          "type": "string",
-          "summary": "Required when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) on or after which calls (based on call start time) and emails must have occurred to be included when gene",
-          "maps_to": "query.fromDateTime"
-        },
-        {
-          "name": "toDateTime",
-          "type": "string",
-          "summary": "Relevant only when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) before which calls (based on call start time) and emails must have occurred to be included when gene",
-          "maps_to": "query.toDateTime"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/entities/get-brief"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong entities get-brief --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "entities ask",
-      "summary": "Ask about an entity (/v2/entities/ask-entity)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "workspaceId",
-          "type": "integer",
-          "summary": "Workspace identifier. The calls and emails used to answer the question must be associated with this workspace.",
-          "maps_to": "query.workspaceId"
-        },
-        {
-          "name": "crmEntityType",
-          "type": "string",
-          "summary": "The object type of the entity in the CRM.",
-          "maps_to": "query.crmEntityType"
-        },
-        {
-          "name": "crmEntityId",
-          "type": "string",
-          "summary": "The CRM Id of the entity the question is asked about.",
-          "maps_to": "query.crmEntityId"
-        },
-        {
-          "name": "timePeriod",
-          "type": "string",
-          "summary": "Specifies the time period during which associated calls and emails must have occurred to be used to generate the answer. The calls and emails must be associated with the specified ",
-          "maps_to": "query.timePeriod"
-        },
-        {
-          "name": "fromDateTime",
-          "type": "string",
-          "summary": "Required when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) on or after which calls (based on call start time) and emails must have occurred to be included when gene",
-          "maps_to": "query.fromDateTime"
-        },
-        {
-          "name": "toDateTime",
-          "type": "string",
-          "summary": "Relevant only when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) before which calls (based on call start time) and emails must have occurred to be included when gene",
-          "maps_to": "query.toDateTime"
-        },
-        {
-          "name": "question",
-          "type": "string",
-          "summary": "The question to answer.",
-          "maps_to": "query.question"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/entities/ask-entity"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong entities ask --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "privacy find-phone",
-      "summary": "Retrieve all references to a phone number. (/v2/data-privacy/data-for-phone-number)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "phoneNumber",
-          "type": "string",
-          "summary": "The phone number.\n\nThis number must start with a + (plus) sign followed by the country code, area code, and local phone number. All other non-digits are ignored.\n\nThe following are",
-          "maps_to": "query.phoneNumber"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/data-privacy/data-for-phone-number"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong privacy find-phone --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "privacy find-email",
-      "summary": "Retrieve all references to an email address. (/v2/data-privacy/data-for-email-address)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "emailAddress",
-          "type": "string",
-          "summary": "The email address.",
-          "maps_to": "query.emailAddress"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/data-privacy/data-for-email-address"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong privacy find-email --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "crm request-status get",
-      "summary": "Get Request Status (/v2/crm/request-status)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "integrationId",
-          "type": "integer",
-          "summary": "Integration ID generated when creating the integration",
-          "maps_to": "query.integrationId"
-        },
-        {
-          "name": "clientRequestId",
-          "type": "string",
-          "summary": "The client request ID used in the asynchronous endpoint you want to get a status for",
-          "maps_to": "query.clientRequestId"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/crm/request-status"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong crm request-status get --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "coaching list",
-      "summary": "List all coaching metrics (/v2/coaching)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "workspace-id",
-          "type": "integer",
-          "summary": "",
-          "maps_to": "query.workspace-id"
-        },
-        {
-          "name": "manager-id",
-          "type": "integer",
-          "summary": "",
-          "maps_to": "query.manager-id"
-        },
-        {
-          "name": "from",
-          "type": "string",
-          "summary": "Association time filter - only the associations made after that time will be listed. The time is in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z'",
-          "maps_to": "query.from"
-        },
-        {
-          "name": "to",
-          "type": "string",
-          "summary": "Association time filter - only the associations made after that time will be listed. The time is in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z'",
-          "maps_to": "query.to"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/coaching"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong coaching list --json --max-bytes 1048576"
       ]
     },
     {
@@ -964,6 +160,7 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "add_call",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "flags": [
         {
           "name": "actualStart",
@@ -996,558 +193,14 @@
           "maps_to": "record.primaryUser"
         }
       ],
-      "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "permissions profile create",
-      "summary": "administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "create_permission_profile",
-      "flags": [
+      "api_surface": [
         {
-          "name": "workspaceId",
-          "type": "string",
-          "summary": "workspaceId value",
-          "maps_to": "record.workspaceId"
-        }
-      ],
-      "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "permissions profile update",
-      "summary": "administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "update_permission_profile",
-      "flags": [
-        {
-          "name": "profileId",
-          "type": "string",
-          "summary": "profileId value",
-          "maps_to": "record.profileId"
-        }
-      ],
-      "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "meetings update",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "update_meeting",
-      "flags": [
-        {
-          "name": "endTime",
-          "type": "string",
-          "summary": "The meeting end time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
-          "maps_to": "record.endTime"
-        },
-        {
-          "name": "invitees",
-          "type": "string",
-          "summary": "A list of email addresses of invitees to the event (not including the organizer).",
-          "maps_to": "record.invitees"
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "summary": "meetingId value",
-          "maps_to": "record.meetingId"
-        },
-        {
-          "name": "organizerEmail",
-          "type": "string",
-          "summary": "The email address of the user who created the meeting.",
-          "maps_to": "record.organizerEmail"
-        },
-        {
-          "name": "startTime",
-          "type": "string",
-          "summary": "The meeting start time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
-          "maps_to": "record.startTime"
-        }
-      ],
-      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "meetings delete",
-      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "delete_meeting",
-      "flags": [
-        {
-          "name": "meetingId",
-          "type": "string",
-          "summary": "meetingId value",
-          "maps_to": "record.meetingId"
-        }
-      ],
-      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "engagement content-viewed",
-      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "content_viewed",
-      "flags": [
-        {
-          "name": "contentId",
-          "type": "string",
-          "summary": "The id of the content that was viewed in the reporting system.",
-          "maps_to": "record.contentId"
-        },
-        {
-          "name": "contentTitle",
-          "type": "string",
-          "summary": "Human readable title of the content.",
-          "maps_to": "record.contentTitle"
-        },
-        {
-          "name": "contentUrl",
-          "type": "string",
-          "summary": "The url of the content that was viewed in the reporting system. This is the url that is was accessed by the viewer.",
-          "maps_to": "record.contentUrl"
-        },
-        {
-          "name": "eventTimestamp",
-          "type": "string",
-          "summary": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);",
-          "maps_to": "record.eventTimestamp"
-        },
-        {
-          "name": "reportingSystem",
-          "type": "string",
-          "summary": "The unique identifier of the reporting system. It is the same value in all events originating from the same system.",
-          "maps_to": "record.reportingSystem"
+          "method": "POST",
+          "path": "/v2/calls"
         }
       ],
       "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "engagement content-shared",
-      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "content_shared",
-      "flags": [
-        {
-          "name": "contentId",
-          "type": "string",
-          "summary": "The id of the content that was shared in the reporting system.",
-          "maps_to": "record.contentId"
-        },
-        {
-          "name": "contentTitle",
-          "type": "string",
-          "summary": "Human readable title of the content.",
-          "maps_to": "record.contentTitle"
-        },
-        {
-          "name": "contentUrl",
-          "type": "string",
-          "summary": "The url of the content that was shared in the reporting system. This is the url that is was accessed by the viewer.",
-          "maps_to": "record.contentUrl"
-        },
-        {
-          "name": "eventTimestamp",
-          "type": "string",
-          "summary": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);",
-          "maps_to": "record.eventTimestamp"
-        },
-        {
-          "name": "reportingSystem",
-          "type": "string",
-          "summary": "The unique identifier of the reporting system. It is the same value in all events originating from the same system.",
-          "maps_to": "record.reportingSystem"
-        }
-      ],
-      "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "engagement custom-action",
-      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "custom_action",
-      "flags": [
-        {
-          "name": "eventTimestamp",
-          "type": "string",
-          "summary": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);",
-          "maps_to": "record.eventTimestamp"
-        },
-        {
-          "name": "reportingSystem",
-          "type": "string",
-          "summary": "The unique identifier of the reporting system. It is the same value in all events originating from the same system.",
-          "maps_to": "record.reportingSystem"
-        }
-      ],
-      "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "crm integrations register",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "register_crm_integration",
-      "flags": [
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "The name of the integration",
-          "maps_to": "record.name"
-        },
-        {
-          "name": "ownerEmail",
-          "type": "string",
-          "summary": "Email address of the person responsible for the integration",
-          "maps_to": "record.ownerEmail"
-        }
-      ],
-      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "crm integrations delete",
-      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "delete_crm_integration",
-      "flags": [
-        {
-          "name": "clientRequestId",
-          "type": "string",
-          "summary": "clientRequestId value",
-          "maps_to": "record.clientRequestId"
-        },
-        {
-          "name": "integrationId",
-          "type": "string",
-          "summary": "integrationId value",
-          "maps_to": "record.integrationId"
-        }
-      ],
-      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "calls users-access add",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "add_calls_users_access",
-      "flags": [],
-      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "calls users-access delete",
-      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "delete_calls_users_access",
-      "flags": [],
-      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "meetings create",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "create_meeting",
-      "flags": [
-        {
-          "name": "endTime",
-          "type": "string",
-          "summary": "The meeting end time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
-          "maps_to": "record.endTime"
-        },
-        {
-          "name": "invitees",
-          "type": "string",
-          "summary": "A list of email addresses of invitees to the event (not including the organizer).",
-          "maps_to": "record.invitees"
-        },
-        {
-          "name": "organizerEmail",
-          "type": "string",
-          "summary": "The email address of the user creating the meeting, the Gong consent page link will be used according to the settings of this user.",
-          "maps_to": "record.organizerEmail"
-        },
-        {
-          "name": "startTime",
-          "type": "string",
-          "summary": "The meeting start time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
-          "maps_to": "record.startTime"
-        }
-      ],
-      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "integration-settings update",
-      "summary": "administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "integration_settings",
-      "flags": [
-        {
-          "name": "integrationTypeSettings",
-          "type": "string",
-          "summary": "Set a list of dynamic origins for a company",
-          "maps_to": "record.integrationTypeSettings"
-        }
-      ],
-      "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "flows prospects unassign-by-instance",
-      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "unassign_flows_by_instance_id",
-      "flags": [
-        {
-          "name": "flowInstanceIds",
-          "type": "string_array",
-          "summary": "The unique identifiers of the flows that prospects should be removed from.",
-          "maps_to": "record.flowInstanceIds"
-        }
-      ],
-      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "flows prospects unassign-by-crm",
-      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "unassign_flows_by_crm_id",
-      "flags": [
-        {
-          "name": "crmProspectId",
-          "type": "string",
-          "summary": "The CRM ID of the prospect to unassign.",
-          "maps_to": "record.crmProspectId"
-        }
-      ],
-      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "flows prospects bulk-assign",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "submit_flow_prospects_bulk_assignment",
-      "flags": [
-        {
-          "name": "flowId",
-          "type": "string",
-          "summary": "The Flow ID to assign the prospects to.",
-          "maps_to": "record.flowId"
-        },
-        {
-          "name": "flowInstanceOwnerEmail",
-          "type": "string",
-          "summary": "The email of the Gong user who will own the flow instance.",
-          "maps_to": "record.flowInstanceOwnerEmail"
-        },
-        {
-          "name": "prospects",
-          "type": "string",
-          "summary": "The prospects that should be assigned to the flow.",
-          "maps_to": "record.prospects"
-        }
-      ],
-      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "flows prospects assign",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "assign_prospects",
-      "flags": [
-        {
-          "name": "crmProspectsIds",
-          "type": "string_array",
-          "summary": "The CRM IDs of the contact or lead that should be assigned to a flow.",
-          "maps_to": "record.crmProspectsIds"
-        },
-        {
-          "name": "flowId",
-          "type": "string",
-          "summary": "The Engage Flow ID to assign the contacts to.",
-          "maps_to": "record.flowId"
-        },
-        {
-          "name": "flowInstanceOwnerEmail",
-          "type": "string",
-          "summary": "The email of the Gong user who owns the flow to-dos.",
-          "maps_to": "record.flowInstanceOwnerEmail"
-        }
-      ],
-      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "flows prospects assign-cool-off-override",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "assign_prospects_cool_off_override",
-      "flags": [
-        {
-          "name": "crmProspectsIds",
-          "type": "string_array",
-          "summary": "The CRM IDs of the contact or lead that should be assigned to a flow.",
-          "maps_to": "record.crmProspectsIds"
-        },
-        {
-          "name": "flowId",
-          "type": "string",
-          "summary": "The Engage Flow ID to assign the contacts to.",
-          "maps_to": "record.flowId"
-        },
-        {
-          "name": "flowInstanceOwnerEmail",
-          "type": "string",
-          "summary": "The email of the Gong user who owns the flow to-dos.",
-          "maps_to": "record.flowInstanceOwnerEmail"
-        }
-      ],
-      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "digital-interaction create",
-      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "add_digital_interaction",
-      "flags": [
-        {
-          "name": "content",
-          "type": "string",
-          "summary": "The content the person looked at",
-          "maps_to": "record.content"
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "summary": "The provider's unique identifier for the event used for deduplication",
-          "maps_to": "record.eventId"
-        },
-        {
-          "name": "eventType",
-          "type": "string",
-          "summary": "The type of the event, explaining the content and action performed. Values may be partner-aligned, for example, \"link clicked\", \"page viewed\"",
-          "maps_to": "record.eventType"
-        },
-        {
-          "name": "timestamp",
-          "type": "string",
-          "summary": "The date and time of the event in ISO 8601 format",
-          "maps_to": "record.timestamp"
-        }
-      ],
-      "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "privacy erase-phone",
-      "summary": "destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "purge_phone_number",
-      "flags": [
-        {
-          "name": "phoneNumber",
-          "type": "string",
-          "summary": "phoneNumber value",
-          "maps_to": "record.phoneNumber"
-        }
-      ],
-      "risk": "critical: destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "privacy erase-email",
-      "summary": "destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "purge_email_address",
-      "flags": [
-        {
-          "name": "emailAddress",
-          "type": "string",
-          "summary": "emailAddress value",
-          "maps_to": "record.emailAddress"
-        }
-      ],
-      "risk": "critical: destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
-    },
-    {
-      "path": "tasks update",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "update_task",
-      "flags": [
-        {
-          "name": "taskId",
-          "type": "string",
-          "summary": "taskId value",
-          "maps_to": "record.taskId"
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "summary": "The id of the Gong user who owns the task",
-          "maps_to": "record.userId"
-        }
-      ],
-      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
       "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
     },
     {
@@ -1555,17 +208,6 @@
       "summary": "Retrieve detailed call data by various filters (/v2/calls/extensive)",
       "intent": "direct_read",
       "availability": "implemented",
-      "operation": "gong.calls_extensive",
-      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
-      "approval": "none: read-only POST query with schema-gated body",
-      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
-      "output_policy": "json_redacted",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/calls/extensive"
-        }
-      ],
       "flags": [
         {
           "name": "call-id",
@@ -1602,12 +244,12 @@
           "name": "context",
           "type": "enum",
           "summary": "Context expansion level.",
-          "maps_to": "body.contentSelector.context",
           "values": [
             "None",
             "Basic",
             "Extended"
-          ]
+          ],
+          "maps_to": "body.contentSelector.context"
         },
         {
           "name": "context-timing",
@@ -1714,24 +356,211 @@
       ],
       "examples": [
         "pm gong calls extensive --call-id call-id --credential gong-credential --json"
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/calls/extensive"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "gong.calls_extensive",
+      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed."
+    },
+    {
+      "path": "calls get",
+      "summary": "Retrieve data for a specific call (/v2/calls/{id})",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Gong's unique numeric identifier for the call (up to 20 digits).",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm gong calls get --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/calls/{id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "calls list",
+      "summary": "List Gong calls as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calls",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "from",
+          "type": "string",
+          "summary": "Inclusive ISO-8601 lower bound mapped to Gong fromDateTime.",
+          "maps_to": "query.fromDateTime",
+          "format": "date-time",
+          "allow_empty": false
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "summary": "Exclusive ISO-8601 upper bound mapped to Gong toDateTime.",
+          "maps_to": "query.toDateTime",
+          "format": "date-time",
+          "allow_empty": false
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "order",
+          "left": "query.fromDateTime",
+          "right": "query.toDateTime",
+          "op": "lt",
+          "value_type": "date-time",
+          "left_fallback": "config.start_date",
+          "message": "invalid Gong calls list date range: --from must be before --to (Gong treats --to as an exclusive upper bound)"
+        }
+      ],
+      "examples": [
+        "pm gong calls list --json --limit 25",
+        "pm gong calls list --json --from 2026-07-01T00:00:00Z --to 2026-07-02T00:00:00Z --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/calls"
+        }
+      ],
+      "notes": "Use --from/--to for provider-side Gong call time bounds. --to is an exclusive upper bound. Global --limit caps PM output records only; Gong request page size remains the connector page_size config for compatibility."
+    },
+    {
+      "path": "calls transcript",
+      "summary": "Retrieve transcripts of calls (/v2/calls/transcript)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "call-id",
+          "type": "string_array",
+          "summary": "Gong call ID; repeat or comma-separate.",
+          "maps_to": "body.filter.callIds",
+          "required": true
+        },
+        {
+          "name": "from",
+          "type": "string",
+          "summary": "Inclusive ISO-8601 call start lower bound.",
+          "maps_to": "body.filter.fromDateTime"
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "summary": "Exclusive ISO-8601 call start upper bound.",
+          "maps_to": "body.filter.toDateTime"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Gong workspace ID.",
+          "maps_to": "body.filter.workspaceId"
+        }
+      ],
+      "examples": [
+        "pm gong calls transcript --call-id call-id --credential gong-credential --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/calls/transcript"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "gong.calls_transcript",
+      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed."
+    },
+    {
+      "path": "calls upload-media",
+      "summary": "Add call media (/v2/calls/{id}/media)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upload_call_media",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Gong call ID whose media should be uploaded.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "media-file-path",
+          "type": "string",
+          "summary": "Project-relative media file path to upload.",
+          "maps_to": "record.media_file_path",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/calls/{id}/media"
+        }
+      ],
+      "risk": "high: uploads call media from a bounded project-local file path; file path/content are redacted in plans",
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute; destructive confirmation required",
+      "notes": "Uses typed multipart write support; no generic upload command is exposed."
+    },
+    {
+      "path": "calls users-access add",
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "add_calls_users_access",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/calls/users-access"
+        }
+      ],
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "calls users-access delete",
+      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_calls_users_access",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/calls/users-access"
+        }
+      ],
+      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
     },
     {
       "path": "calls users-access get",
       "summary": "Retrieve users that have specific individual access to calls (/v2/calls/users-access)",
       "intent": "direct_read",
       "availability": "implemented",
-      "operation": "gong.calls_users_access_get",
-      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
-      "approval": "none: read-only POST query with schema-gated body",
-      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
-      "output_policy": "json_redacted",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/calls/users-access"
-        }
-      ],
       "flags": [
         {
           "name": "call-id",
@@ -1743,25 +572,1415 @@
       ],
       "examples": [
         "pm gong calls users-access get --call-id call-id --credential gong-credential --json"
-      ]
-    },
-    {
-      "path": "users extensive",
-      "summary": "List users by filter (/v2/users/extensive)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "gong.users_extensive",
-      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
-      "approval": "none: read-only POST query with schema-gated body",
-      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
-      "output_policy": "json_redacted",
+      ],
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2/users/extensive"
+          "path": "/v2/calls/users-access"
         }
       ],
+      "output_policy": "json_redacted",
+      "operation": "gong.calls_users_access_get",
+      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed."
+    },
+    {
+      "path": "coaching list",
+      "summary": "List all coaching metrics (/v2/coaching)",
+      "intent": "direct_read",
+      "availability": "implemented",
       "flags": [
+        {
+          "name": "workspace-id",
+          "type": "integer",
+          "maps_to": "query.workspace-id"
+        },
+        {
+          "name": "manager-id",
+          "type": "integer",
+          "maps_to": "query.manager-id"
+        },
+        {
+          "name": "from",
+          "type": "string",
+          "summary": "Association time filter - only the associations made after that time will be listed. The time is in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z'",
+          "maps_to": "query.from"
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "summary": "Association time filter - only the associations made after that time will be listed. The time is in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z'",
+          "maps_to": "query.to"
+        }
+      ],
+      "examples": [
+        "pm gong coaching list --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/coaching"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "crm entities get",
+      "summary": "Get CRM objects (/v2/crm/entities)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "integrationId",
+          "type": "integer",
+          "summary": "Integration ID generated when creating the integration",
+          "maps_to": "query.integrationId"
+        },
+        {
+          "name": "objectType",
+          "type": "string",
+          "summary": "Requested objects type",
+          "maps_to": "query.objectType"
+        },
+        {
+          "name": "objectsCrmIds",
+          "type": "string",
+          "summary": "\u003cb\u003eRequest Body:\u003c/b\u003e The requested objects crm ids (should be sent in the request body)",
+          "maps_to": "query.objectsCrmIds"
+        }
+      ],
+      "examples": [
+        "pm gong crm entities get --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crm/entities"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "crm entity-schema get",
+      "summary": "List Schema Fields (/v2/crm/entity-schema)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "integrationId",
+          "type": "integer",
+          "summary": "Integration ID generated when creating the integration",
+          "maps_to": "query.integrationId"
+        },
+        {
+          "name": "objectType",
+          "type": "string",
+          "summary": "Type of object to retrieve the schema fields for (case-sensitive). \u003cbr\u003eOmitting this parameter returns the schema for all object types.",
+          "maps_to": "query.objectType"
+        }
+      ],
+      "examples": [
+        "pm gong crm entity-schema get --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crm/entity-schema"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "crm integrations delete",
+      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_crm_integration",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "clientRequestId",
+          "type": "string",
+          "summary": "clientRequestId value",
+          "maps_to": "record.clientRequestId",
+          "required": true
+        },
+        {
+          "name": "integrationId",
+          "type": "string",
+          "summary": "integrationId value",
+          "maps_to": "record.integrationId",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/crm/integrations"
+        }
+      ],
+      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "crm integrations list",
+      "summary": "List Generic CRM integrations as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "crm_integrations",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "examples": [
+        "pm gong crm integrations list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crm/integrations"
+        }
+      ]
+    },
+    {
+      "path": "crm integrations register",
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "register_crm_integration",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the integration",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "ownerEmail",
+          "type": "string",
+          "summary": "Email address of the person responsible for the integration",
+          "maps_to": "record.ownerEmail",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/crm/integrations"
+        }
+      ],
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "crm request-status get",
+      "summary": "Get Request Status (/v2/crm/request-status)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "integrationId",
+          "type": "integer",
+          "summary": "Integration ID generated when creating the integration",
+          "maps_to": "query.integrationId"
+        },
+        {
+          "name": "clientRequestId",
+          "type": "string",
+          "summary": "The client request ID used in the asynchronous endpoint you want to get a status for",
+          "maps_to": "query.clientRequestId"
+        }
+      ],
+      "examples": [
+        "pm gong crm request-status get --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/crm/request-status"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "crm upload-entities",
+      "summary": "Upload CRM objects (/v2/crm/entities)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upload_crm_entities",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "data-file-path",
+          "type": "string",
+          "summary": "Project-relative CRM data file path to upload.",
+          "maps_to": "record.data_file_path",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/crm/entities"
+        }
+      ],
+      "risk": "high: uploads CRM data from a bounded project-local file path; file path/content are redacted in plans",
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute; destructive confirmation required",
+      "notes": "Uses typed multipart write support; no generic upload command is exposed."
+    },
+    {
+      "path": "crm upload-entity-schema",
+      "summary": "Upload Object Schema (/v2/crm/entity-schema)",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "upload_crm_entity_schema",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/crm/entity-schema"
+        }
+      ],
+      "risk": "high: uploads CRM entity schema as a top-level JSON array; no raw CLI body is exposed",
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute; destructive confirmation required",
+      "notes": "Write action supports schema-gated top-level array bodies for table/reverse-ETL mappings; provider-style raw JSON CLI flags remain intentionally unavailable."
+    },
+    {
+      "path": "digital-interaction create",
+      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "add_digital_interaction",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "The content the person looked at",
+          "maps_to": "record.content"
+        },
+        {
+          "name": "eventId",
+          "type": "string",
+          "summary": "The provider's unique identifier for the event used for deduplication",
+          "maps_to": "record.eventId"
+        },
+        {
+          "name": "eventType",
+          "type": "string",
+          "summary": "The type of the event, explaining the content and action performed. Values may be partner-aligned, for example, \"link clicked\", \"page viewed\"",
+          "maps_to": "record.eventType"
+        },
+        {
+          "name": "timestamp",
+          "type": "string",
+          "summary": "The date and time of the event in ISO 8601 format",
+          "maps_to": "record.timestamp"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/digital-interaction"
+        }
+      ],
+      "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "engagement content-shared",
+      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "content_shared",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "contentId",
+          "type": "string",
+          "summary": "The id of the content that was shared in the reporting system.",
+          "maps_to": "record.contentId",
+          "required": true
+        },
+        {
+          "name": "contentTitle",
+          "type": "string",
+          "summary": "Human readable title of the content.",
+          "maps_to": "record.contentTitle",
+          "required": true
+        },
+        {
+          "name": "contentUrl",
+          "type": "string",
+          "summary": "The url of the content that was shared in the reporting system. This is the url that is was accessed by the viewer.",
+          "maps_to": "record.contentUrl",
+          "required": true
+        },
+        {
+          "name": "eventTimestamp",
+          "type": "string",
+          "summary": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);",
+          "maps_to": "record.eventTimestamp",
+          "required": true
+        },
+        {
+          "name": "reportingSystem",
+          "type": "string",
+          "summary": "The unique identifier of the reporting system. It is the same value in all events originating from the same system.",
+          "maps_to": "record.reportingSystem",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customer-engagement/content/shared"
+        }
+      ],
+      "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "engagement content-viewed",
+      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "content_viewed",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "contentId",
+          "type": "string",
+          "summary": "The id of the content that was viewed in the reporting system.",
+          "maps_to": "record.contentId",
+          "required": true
+        },
+        {
+          "name": "contentTitle",
+          "type": "string",
+          "summary": "Human readable title of the content.",
+          "maps_to": "record.contentTitle",
+          "required": true
+        },
+        {
+          "name": "contentUrl",
+          "type": "string",
+          "summary": "The url of the content that was viewed in the reporting system. This is the url that is was accessed by the viewer.",
+          "maps_to": "record.contentUrl",
+          "required": true
+        },
+        {
+          "name": "eventTimestamp",
+          "type": "string",
+          "summary": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);",
+          "maps_to": "record.eventTimestamp",
+          "required": true
+        },
+        {
+          "name": "reportingSystem",
+          "type": "string",
+          "summary": "The unique identifier of the reporting system. It is the same value in all events originating from the same system.",
+          "maps_to": "record.reportingSystem",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customer-engagement/content/viewed"
+        }
+      ],
+      "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "engagement custom-action",
+      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "custom_action",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "eventTimestamp",
+          "type": "string",
+          "summary": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);",
+          "maps_to": "record.eventTimestamp",
+          "required": true
+        },
+        {
+          "name": "reportingSystem",
+          "type": "string",
+          "summary": "The unique identifier of the reporting system. It is the same value in all events originating from the same system.",
+          "maps_to": "record.reportingSystem",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customer-engagement/action"
+        }
+      ],
+      "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "entities ask",
+      "summary": "Ask about an entity (/v2/entities/ask-entity)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "workspaceId",
+          "type": "integer",
+          "summary": "Workspace identifier. The calls and emails used to answer the question must be associated with this workspace.",
+          "maps_to": "query.workspaceId"
+        },
+        {
+          "name": "crmEntityType",
+          "type": "string",
+          "summary": "The object type of the entity in the CRM.",
+          "maps_to": "query.crmEntityType"
+        },
+        {
+          "name": "crmEntityId",
+          "type": "string",
+          "summary": "The CRM Id of the entity the question is asked about.",
+          "maps_to": "query.crmEntityId"
+        },
+        {
+          "name": "timePeriod",
+          "type": "string",
+          "summary": "Specifies the time period during which associated calls and emails must have occurred to be used to generate the answer. The calls and emails must be associated with the specified ",
+          "maps_to": "query.timePeriod"
+        },
+        {
+          "name": "fromDateTime",
+          "type": "string",
+          "summary": "Required when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) on or after which calls (based on call start time) and emails must have occurred to be included when gene",
+          "maps_to": "query.fromDateTime"
+        },
+        {
+          "name": "toDateTime",
+          "type": "string",
+          "summary": "Relevant only when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) before which calls (based on call start time) and emails must have occurred to be included when gene",
+          "maps_to": "query.toDateTime"
+        },
+        {
+          "name": "question",
+          "type": "string",
+          "summary": "The question to answer.",
+          "maps_to": "query.question"
+        }
+      ],
+      "examples": [
+        "pm gong entities ask --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/entities/ask-entity"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "entities get-brief",
+      "summary": "Generate a brief for a CRM entity (/v2/entities/get-brief)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "workspaceId",
+          "type": "integer",
+          "summary": "Workspace identifier. The workspace the brief is defined in.",
+          "maps_to": "query.workspaceId"
+        },
+        {
+          "name": "briefName",
+          "type": "string",
+          "summary": "The name of the brief to generate. Briefs are configured in the Agent Studio \u003e AI Briefer.",
+          "maps_to": "query.briefName"
+        },
+        {
+          "name": "crmEntityType",
+          "type": "string",
+          "summary": "The object type of the entity in the CRM.",
+          "maps_to": "query.crmEntityType"
+        },
+        {
+          "name": "crmEntityId",
+          "type": "string",
+          "summary": "The CRM Id of the entity the question is asked about.",
+          "maps_to": "query.crmEntityId"
+        },
+        {
+          "name": "timePeriod",
+          "type": "string",
+          "summary": "Specifies the time period during which associated calls and emails must have occurred to be used to generate the answer. The calls and emails must be associated with the specified ",
+          "maps_to": "query.timePeriod"
+        },
+        {
+          "name": "fromDateTime",
+          "type": "string",
+          "summary": "Required when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) on or after which calls (based on call start time) and emails must have occurred to be included when gene",
+          "maps_to": "query.fromDateTime"
+        },
+        {
+          "name": "toDateTime",
+          "type": "string",
+          "summary": "Relevant only when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) before which calls (based on call start time) and emails must have occurred to be included when gene",
+          "maps_to": "query.toDateTime"
+        }
+      ],
+      "examples": [
+        "pm gong entities get-brief --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/entities/get-brief"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "flows bulk-assignment get",
+      "summary": "Get the results of a bulk assignment of prospects to a flow (/v2/flows/prospects/bulk-assignments/{id})",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm gong flows bulk-assignment get --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/flows/prospects/bulk-assignments/{id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "flows folders list",
+      "summary": "List Gong Engage flow folders as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "flow_folders",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "examples": [
+        "pm gong flows folders list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/flows/folders"
+        }
+      ]
+    },
+    {
+      "path": "flows list",
+      "summary": "List Gong Engage flows as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "flows",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "examples": [
+        "pm gong flows list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/flows"
+        }
+      ]
+    },
+    {
+      "path": "flows prospects",
+      "summary": "List prospects assigned flows (/v2/flows/prospects)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "crm-prospect-id",
+          "type": "string_array",
+          "summary": "CRM prospect ID to query. Repeat or comma-separate.",
+          "maps_to": "body.crmProspectsIds"
+        },
+        {
+          "name": "flow-instance-id",
+          "type": "string_array",
+          "summary": "Assigned flow instance ID to query. Repeat or comma-separate.",
+          "maps_to": "body.flowInstanceIds"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/prospects"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "gong.flows_prospects",
+      "risk": "bounded POST read-query; sends only typed CRM prospect or flow instance ID arrays and redacts sensitive response fields",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body flag is exposed."
+    },
+    {
+      "path": "flows prospects assign",
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "assign_prospects",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "crmProspectsIds",
+          "type": "string_array",
+          "summary": "The CRM IDs of the contact or lead that should be assigned to a flow.",
+          "maps_to": "record.crmProspectsIds",
+          "required": true
+        },
+        {
+          "name": "flowId",
+          "type": "string",
+          "summary": "The Engage Flow ID to assign the contacts to.",
+          "maps_to": "record.flowId",
+          "required": true
+        },
+        {
+          "name": "flowInstanceOwnerEmail",
+          "type": "string",
+          "summary": "The email of the Gong user who owns the flow to-dos.",
+          "maps_to": "record.flowInstanceOwnerEmail",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/prospects/assign"
+        }
+      ],
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "flows prospects assign-cool-off-override",
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "assign_prospects_cool_off_override",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "crmProspectsIds",
+          "type": "string_array",
+          "summary": "The CRM IDs of the contact or lead that should be assigned to a flow.",
+          "maps_to": "record.crmProspectsIds",
+          "required": true
+        },
+        {
+          "name": "flowId",
+          "type": "string",
+          "summary": "The Engage Flow ID to assign the contacts to.",
+          "maps_to": "record.flowId",
+          "required": true
+        },
+        {
+          "name": "flowInstanceOwnerEmail",
+          "type": "string",
+          "summary": "The email of the Gong user who owns the flow to-dos.",
+          "maps_to": "record.flowInstanceOwnerEmail",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/prospects/assign/cool-off-override"
+        }
+      ],
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "flows prospects bulk-assign",
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "submit_flow_prospects_bulk_assignment",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "flowId",
+          "type": "string",
+          "summary": "The Flow ID to assign the prospects to.",
+          "maps_to": "record.flowId"
+        },
+        {
+          "name": "flowInstanceOwnerEmail",
+          "type": "string",
+          "summary": "The email of the Gong user who will own the flow instance.",
+          "maps_to": "record.flowInstanceOwnerEmail"
+        },
+        {
+          "name": "prospects",
+          "type": "string",
+          "summary": "The prospects that should be assigned to the flow.",
+          "maps_to": "record.prospects"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/prospects/bulk-assignments"
+        }
+      ],
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "flows prospects unassign-by-crm",
+      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "unassign_flows_by_crm_id",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "crmProspectId",
+          "type": "string",
+          "summary": "The CRM ID of the prospect to unassign.",
+          "maps_to": "record.crmProspectId",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/prospects/unassign-flows-by-crm-id"
+        }
+      ],
+      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "flows prospects unassign-by-instance",
+      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "unassign_flows_by_instance_id",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "flowInstanceIds",
+          "type": "string_array",
+          "summary": "The unique identifiers of the flows that prospects should be removed from.",
+          "maps_to": "record.flowInstanceIds",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/prospects/unassign-flows-by-instance-id"
+        }
+      ],
+      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "flows steps",
+      "summary": "Get flow details and steps for one or more Engage flows (/v2/flows/steps)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "flow-id",
+          "type": "string_array",
+          "summary": "Engage flow ID to retrieve steps for. Repeat or comma-separate; max 20 per Gong API.",
+          "maps_to": "body.flowIds",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/steps"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "gong.flows_steps",
+      "risk": "bounded POST read-query; sends only typed flow ID array body fields and redacts sensitive response fields",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body flag is exposed."
+    },
+    {
+      "path": "integration-settings update",
+      "summary": "administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "integration_settings",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "integrationTypeSettings",
+          "type": "string",
+          "summary": "Set a list of dynamic origins for a company",
+          "maps_to": "record.integrationTypeSettings"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/integration-settings"
+        }
+      ],
+      "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "library folder-content list",
+      "summary": "List of calls in a specific folder (/v2/library/folder-content)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "folderId",
+          "type": "string",
+          "summary": "Gong's unique numeric identifier for the folder (up to 20 digits).",
+          "maps_to": "query.folderId"
+        }
+      ],
+      "examples": [
+        "pm gong library folder-content list --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/library/folder-content"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "library folders list",
+      "summary": "List Gong library folders as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "library_folders",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "examples": [
+        "pm gong library folders list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/library/folders"
+        }
+      ]
+    },
+    {
+      "path": "logs list",
+      "summary": "Retrieve logs data by type and time range (/v2/logs)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "logType",
+          "type": "string",
+          "summary": "Type of logs requested.",
+          "maps_to": "query.logType"
+        },
+        {
+          "name": "fromDateTime",
+          "type": "string",
+          "summary": "The time from which to retrieve log records, in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
+          "maps_to": "query.fromDateTime"
+        },
+        {
+          "name": "toDateTime",
+          "type": "string",
+          "summary": "The time until which to retrieve log records, in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC); if not specified, the lo",
+          "maps_to": "query.toDateTime"
+        }
+      ],
+      "examples": [
+        "pm gong logs list --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/logs"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "meetings create",
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_meeting",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "endTime",
+          "type": "string",
+          "summary": "The meeting end time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
+          "maps_to": "record.endTime"
+        },
+        {
+          "name": "invitees",
+          "type": "string",
+          "summary": "A list of email addresses of invitees to the event (not including the organizer).",
+          "maps_to": "record.invitees"
+        },
+        {
+          "name": "organizerEmail",
+          "type": "string",
+          "summary": "The email address of the user creating the meeting, the Gong consent page link will be used according to the settings of this user.",
+          "maps_to": "record.organizerEmail"
+        },
+        {
+          "name": "startTime",
+          "type": "string",
+          "summary": "The meeting start time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
+          "maps_to": "record.startTime"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/meetings"
+        }
+      ],
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "meetings delete",
+      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_meeting",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "meetingId",
+          "type": "string",
+          "summary": "meetingId value",
+          "maps_to": "record.meetingId",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/meetings/{meetingId}"
+        }
+      ],
+      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "meetings integration-status",
+      "summary": "Validate Gong meeting Integration (/v2/meetings/integration/status)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string_array",
+          "summary": "Email address to validate. Repeat or comma-separate; max 100 per Gong API.",
+          "maps_to": "body.emails",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/meetings/integration/status"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "gong.meetings_integration_status",
+      "risk": "bounded POST read-query; sends only typed email array body fields and redacts sensitive response fields",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body flag is exposed."
+    },
+    {
+      "path": "meetings update",
+      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_meeting",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "endTime",
+          "type": "string",
+          "summary": "The meeting end time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
+          "maps_to": "record.endTime"
+        },
+        {
+          "name": "invitees",
+          "type": "string",
+          "summary": "A list of email addresses of invitees to the event (not including the organizer).",
+          "maps_to": "record.invitees"
+        },
+        {
+          "name": "meetingId",
+          "type": "string",
+          "summary": "meetingId value",
+          "maps_to": "record.meetingId"
+        },
+        {
+          "name": "organizerEmail",
+          "type": "string",
+          "summary": "The email address of the user who created the meeting.",
+          "maps_to": "record.organizerEmail"
+        },
+        {
+          "name": "startTime",
+          "type": "string",
+          "summary": "The meeting start time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
+          "maps_to": "record.startTime"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/meetings/{meetingId}"
+        }
+      ],
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "permissions profile create",
+      "summary": "administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_permission_profile",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "workspaceId",
+          "type": "string",
+          "summary": "workspaceId value",
+          "maps_to": "record.workspaceId",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/permission-profile"
+        }
+      ],
+      "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "permissions profile get",
+      "summary": "Permission profile for a given profile Id (/v2/permission-profile)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "profileId",
+          "type": "string",
+          "summary": "Permission profile identifier.",
+          "maps_to": "query.profileId"
+        }
+      ],
+      "examples": [
+        "pm gong permissions profile get --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/permission-profile"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "permissions profile update",
+      "summary": "administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_permission_profile",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "profileId",
+          "type": "string",
+          "summary": "profileId value",
+          "maps_to": "record.profileId",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/permission-profile"
+        }
+      ],
+      "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "permissions profile-users list",
+      "summary": "List all users attached to a given permission profile (/v2/permission-profile/users)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "profileId",
+          "type": "string",
+          "summary": "Permission profile identifier.",
+          "maps_to": "query.profileId"
+        }
+      ],
+      "examples": [
+        "pm gong permissions profile-users list --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/permission-profile/users"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "permissions profiles list",
+      "summary": "List Gong permission profiles as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "permission_profiles",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "examples": [
+        "pm gong permissions profiles list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/all-permission-profiles"
+        }
+      ]
+    },
+    {
+      "path": "privacy erase-email",
+      "summary": "destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "purge_email_address",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "emailAddress",
+          "type": "string",
+          "summary": "emailAddress value",
+          "maps_to": "record.emailAddress",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/data-privacy/erase-data-for-email-address"
+        }
+      ],
+      "risk": "critical: destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "privacy erase-phone",
+      "summary": "destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "purge_phone_number",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "phoneNumber",
+          "type": "string",
+          "summary": "phoneNumber value",
+          "maps_to": "record.phoneNumber",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/data-privacy/erase-data-for-phone-number"
+        }
+      ],
+      "risk": "critical: destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "privacy find-email",
+      "summary": "Retrieve all references to an email address. (/v2/data-privacy/data-for-email-address)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "emailAddress",
+          "type": "string",
+          "summary": "The email address.",
+          "maps_to": "query.emailAddress"
+        }
+      ],
+      "examples": [
+        "pm gong privacy find-email --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/data-privacy/data-for-email-address"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "privacy find-phone",
+      "summary": "Retrieve all references to a phone number. (/v2/data-privacy/data-for-phone-number)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "phoneNumber",
+          "type": "string",
+          "summary": "The phone number.\n\nThis number must start with a + (plus) sign followed by the country code, area code, and local phone number. All other non-digits are ignored.\n\nThe following are",
+          "maps_to": "query.phoneNumber"
+        }
+      ],
+      "examples": [
+        "pm gong privacy find-phone --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/data-privacy/data-for-phone-number"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "scorecards list",
+      "summary": "List Gong scorecards as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scorecards",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "examples": [
+        "pm gong scorecards list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/settings/scorecards"
+        }
+      ]
+    },
+    {
+      "path": "settings briefs list",
+      "summary": "List Gong AI brief settings as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "briefs",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "examples": [
+        "pm gong settings briefs list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/settings/briefs"
+        }
+      ]
+    },
+    {
+      "path": "settings trackers list",
+      "summary": "List Gong tracker settings as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trackers",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "examples": [
+        "pm gong settings trackers list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/settings/trackers"
+        }
+      ]
+    },
+    {
+      "path": "stats activity-aggregate",
+      "summary": "Retrieve aggregated activity for defined users by date (/v2/stats/activity/aggregate)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Inclusive date, YYYY-MM-DD.",
+          "maps_to": "body.filter.fromDate",
+          "required": true
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "Exclusive date, YYYY-MM-DD.",
+          "maps_to": "body.filter.toDate",
+          "required": true
+        },
         {
           "name": "user-id",
           "type": "string_array",
@@ -1771,42 +1990,353 @@
         {
           "name": "created-from",
           "type": "string",
-          "summary": "Inclusive ISO-8601 creation lower bound.",
+          "summary": "Optional ISO-8601 creation lower bound.",
           "maps_to": "body.filter.createdFromDateTime"
         },
         {
           "name": "created-to",
           "type": "string",
-          "summary": "Exclusive ISO-8601 creation upper bound.",
+          "summary": "Optional ISO-8601 creation upper bound.",
           "maps_to": "body.filter.createdToDateTime"
-        },
-        {
-          "name": "include-avatars",
-          "type": "boolean",
-          "summary": "Include Gong avatar users.",
-          "maps_to": "body.filter.includeAvatars"
         }
       ],
       "examples": [
-        "pm gong users extensive --user-id user-id --credential gong-credential --json"
-      ]
+        "pm gong stats activity-aggregate --from-date 2026-01-01 --to-date 2026-01-31 --credential gong-credential --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/stats/activity/aggregate"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "gong.stats_activity_aggregate",
+      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed."
+    },
+    {
+      "path": "stats activity-aggregate-by-period",
+      "summary": "Retrieve aggregated activity for defined users by a date range with grouping in time periods (/v2/stats/activity/aggregate-by-period)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Inclusive date, YYYY-MM-DD.",
+          "maps_to": "body.filter.fromDate",
+          "required": true
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "Exclusive date, YYYY-MM-DD.",
+          "maps_to": "body.filter.toDate",
+          "required": true
+        },
+        {
+          "name": "user-id",
+          "type": "string_array",
+          "summary": "Gong user ID; repeat or comma-separate.",
+          "maps_to": "body.filter.userIds"
+        },
+        {
+          "name": "created-from",
+          "type": "string",
+          "summary": "Optional ISO-8601 creation lower bound.",
+          "maps_to": "body.filter.createdFromDateTime"
+        },
+        {
+          "name": "created-to",
+          "type": "string",
+          "summary": "Optional ISO-8601 creation upper bound.",
+          "maps_to": "body.filter.createdToDateTime"
+        },
+        {
+          "name": "aggregation-period",
+          "type": "enum",
+          "summary": "Aggregation period.",
+          "values": [
+            "DAY",
+            "WEEK",
+            "MONTH",
+            "QUARTER",
+            "YEAR"
+          ],
+          "maps_to": "body.aggregationPeriod",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gong stats activity-aggregate-by-period --from-date 2026-01-01 --to-date 2026-01-31 --aggregation-period DAY --credential gong-credential --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/stats/activity/aggregate-by-period"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "gong.stats_activity_aggregate_by_period",
+      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed."
+    },
+    {
+      "path": "stats activity-day-by-day",
+      "summary": "Retrieve daily activity for applicable users for a date range (/v2/stats/activity/day-by-day)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Inclusive date, YYYY-MM-DD.",
+          "maps_to": "body.filter.fromDate",
+          "required": true
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "Exclusive date, YYYY-MM-DD.",
+          "maps_to": "body.filter.toDate",
+          "required": true
+        },
+        {
+          "name": "user-id",
+          "type": "string_array",
+          "summary": "Gong user ID; repeat or comma-separate.",
+          "maps_to": "body.filter.userIds"
+        },
+        {
+          "name": "created-from",
+          "type": "string",
+          "summary": "Optional ISO-8601 creation lower bound.",
+          "maps_to": "body.filter.createdFromDateTime"
+        },
+        {
+          "name": "created-to",
+          "type": "string",
+          "summary": "Optional ISO-8601 creation upper bound.",
+          "maps_to": "body.filter.createdToDateTime"
+        }
+      ],
+      "examples": [
+        "pm gong stats activity-day-by-day --from-date 2026-01-01 --to-date 2026-01-31 --credential gong-credential --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/stats/activity/day-by-day"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "gong.stats_activity_day_by_day",
+      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed."
+    },
+    {
+      "path": "stats activity-scorecards",
+      "summary": "Retrieve answered scorecards for applicable reviewed users or scorecards for a date range (/v2/stats/activity/scorecards)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "call-from-date",
+          "type": "string",
+          "summary": "Inclusive call date, YYYY-MM-DD.",
+          "maps_to": "body.filter.callFromDate"
+        },
+        {
+          "name": "call-to-date",
+          "type": "string",
+          "summary": "Exclusive call date, YYYY-MM-DD.",
+          "maps_to": "body.filter.callToDate"
+        },
+        {
+          "name": "review-from-date",
+          "type": "string",
+          "summary": "Inclusive review date, YYYY-MM-DD.",
+          "maps_to": "body.filter.reviewFromDate"
+        },
+        {
+          "name": "review-to-date",
+          "type": "string",
+          "summary": "Exclusive review date, YYYY-MM-DD.",
+          "maps_to": "body.filter.reviewToDate"
+        },
+        {
+          "name": "review-method",
+          "type": "enum",
+          "summary": "Review method.",
+          "values": [
+            "AUTOMATIC",
+            "MANUAL",
+            "BOTH"
+          ],
+          "maps_to": "body.filter.reviewMethod"
+        },
+        {
+          "name": "reviewed-user-id",
+          "type": "string_array",
+          "summary": "Reviewed Gong user ID; repeat or comma-separate.",
+          "maps_to": "body.filter.reviewedUserIds"
+        },
+        {
+          "name": "scorecard-id",
+          "type": "string_array",
+          "summary": "Scorecard ID; repeat or comma-separate.",
+          "maps_to": "body.filter.scorecardIds",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gong stats activity-scorecards --scorecard-id scorecard-id --credential gong-credential --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/stats/activity/scorecards"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "gong.stats_activity_scorecards",
+      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed."
+    },
+    {
+      "path": "stats interaction",
+      "summary": "Retrieve interaction stats for applicable users by date (/v2/stats/interaction)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Inclusive date, YYYY-MM-DD.",
+          "maps_to": "body.filter.fromDate",
+          "required": true
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "Exclusive date, YYYY-MM-DD.",
+          "maps_to": "body.filter.toDate",
+          "required": true
+        },
+        {
+          "name": "user-id",
+          "type": "string_array",
+          "summary": "Gong user ID; repeat or comma-separate.",
+          "maps_to": "body.filter.userIds"
+        },
+        {
+          "name": "created-from",
+          "type": "string",
+          "summary": "Optional ISO-8601 creation lower bound.",
+          "maps_to": "body.filter.createdFromDateTime"
+        },
+        {
+          "name": "created-to",
+          "type": "string",
+          "summary": "Optional ISO-8601 creation upper bound.",
+          "maps_to": "body.filter.createdToDateTime"
+        }
+      ],
+      "examples": [
+        "pm gong stats interaction --from-date 2026-01-01 --to-date 2026-01-31 --credential gong-credential --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/stats/interaction"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "gong.stats_interaction",
+      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed."
+    },
+    {
+      "path": "targets list",
+      "summary": "List target definitions (/v2/targets)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "workspaceId",
+          "type": "string",
+          "summary": "The ID of the workspace to retrieve target definitions for. You can retrieve workspace IDs using the Workspaces API.",
+          "maps_to": "query.workspaceId"
+        }
+      ],
+      "examples": [
+        "pm gong targets list --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/targets"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
+    },
+    {
+      "path": "targets upload-assignments",
+      "summary": "Upload target assignments (/v2/targets/{targetId}/assignments)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upload_target_assignments",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "targetId",
+          "type": "string",
+          "summary": "Unique identifier for the target (up to 20 digits). Retrieve this value using the List targets API.",
+          "maps_to": "record.targetId",
+          "required": true
+        },
+        {
+          "name": "workspaceId",
+          "type": "string",
+          "summary": "The ID of the workspace the target belongs to. You can retrieve workspace IDs using the Workspaces API.",
+          "maps_to": "record.workspaceId",
+          "required": true
+        },
+        {
+          "name": "validate-only",
+          "type": "string",
+          "summary": "(Default: false) When true, the CSV file is fully validated but no data is uploaded.",
+          "maps_to": "record.validateOnly"
+        },
+        {
+          "name": "assignments-file-path",
+          "type": "string",
+          "summary": "Project-relative target assignments CSV file path to upload.",
+          "maps_to": "record.assignments_file_path",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/targets/{targetId}/assignments"
+        }
+      ],
+      "risk": "high: uploads target assignments from a bounded project-local file path; file path/content are redacted in plans",
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute; destructive confirmation required",
+      "notes": "Uses typed multipart write support; no generic upload command is exposed."
     },
     {
       "path": "tasks list",
       "summary": "List user's tasks (/v2/tasks)",
       "intent": "direct_read",
       "availability": "implemented",
-      "operation": "gong.tasks_list",
-      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
-      "approval": "none: read-only POST query with schema-gated body",
-      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
-      "output_policy": "json_redacted",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/tasks"
-        }
-      ],
       "flags": [
         {
           "name": "user-id",
@@ -1845,567 +2375,181 @@
       ],
       "examples": [
         "pm gong tasks list --user-id user-id --status OPEN --task-action CALL --task-type FLOW --credential gong-credential --json"
-      ]
-    },
-    {
-      "path": "stats interaction",
-      "summary": "Retrieve interaction stats for applicable users by date (/v2/stats/interaction)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "gong.stats_interaction",
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/tasks"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "gong.tasks_list",
       "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
       "approval": "none: read-only POST query with schema-gated body",
-      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
-      "output_policy": "json_redacted",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/stats/interaction"
-        }
-      ],
-      "flags": [
-        {
-          "name": "from-date",
-          "type": "string",
-          "summary": "Inclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.fromDate",
-          "required": true
-        },
-        {
-          "name": "to-date",
-          "type": "string",
-          "summary": "Exclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.toDate",
-          "required": true
-        },
-        {
-          "name": "user-id",
-          "type": "string_array",
-          "summary": "Gong user ID; repeat or comma-separate.",
-          "maps_to": "body.filter.userIds"
-        },
-        {
-          "name": "created-from",
-          "type": "string",
-          "summary": "Optional ISO-8601 creation lower bound.",
-          "maps_to": "body.filter.createdFromDateTime"
-        },
-        {
-          "name": "created-to",
-          "type": "string",
-          "summary": "Optional ISO-8601 creation upper bound.",
-          "maps_to": "body.filter.createdToDateTime"
-        }
-      ],
-      "examples": [
-        "pm gong stats interaction --from-date 2026-01-01 --to-date 2026-01-31 --credential gong-credential --json"
-      ]
+      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed."
     },
     {
-      "path": "stats activity-scorecards",
-      "summary": "Retrieve answered scorecards for applicable reviewed users or scorecards for a date range (/v2/stats/activity/scorecards)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "gong.stats_activity_scorecards",
-      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
-      "approval": "none: read-only POST query with schema-gated body",
-      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
-      "output_policy": "json_redacted",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/stats/activity/scorecards"
-        }
-      ],
-      "flags": [
-        {
-          "name": "call-from-date",
-          "type": "string",
-          "summary": "Inclusive call date, YYYY-MM-DD.",
-          "maps_to": "body.filter.callFromDate"
-        },
-        {
-          "name": "call-to-date",
-          "type": "string",
-          "summary": "Exclusive call date, YYYY-MM-DD.",
-          "maps_to": "body.filter.callToDate"
-        },
-        {
-          "name": "review-from-date",
-          "type": "string",
-          "summary": "Inclusive review date, YYYY-MM-DD.",
-          "maps_to": "body.filter.reviewFromDate"
-        },
-        {
-          "name": "review-to-date",
-          "type": "string",
-          "summary": "Exclusive review date, YYYY-MM-DD.",
-          "maps_to": "body.filter.reviewToDate"
-        },
-        {
-          "name": "review-method",
-          "type": "enum",
-          "summary": "Review method.",
-          "maps_to": "body.filter.reviewMethod",
-          "values": [
-            "AUTOMATIC",
-            "MANUAL",
-            "BOTH"
-          ]
-        },
-        {
-          "name": "reviewed-user-id",
-          "type": "string_array",
-          "summary": "Reviewed Gong user ID; repeat or comma-separate.",
-          "maps_to": "body.filter.reviewedUserIds"
-        },
-        {
-          "name": "scorecard-id",
-          "type": "string_array",
-          "summary": "Scorecard ID; repeat or comma-separate.",
-          "maps_to": "body.filter.scorecardIds",
-          "required": true
-        }
-      ],
-      "examples": [
-        "pm gong stats activity-scorecards --scorecard-id scorecard-id --credential gong-credential --json"
-      ]
-    },
-    {
-      "path": "stats activity-day-by-day",
-      "summary": "Retrieve daily activity for applicable users for a date range (/v2/stats/activity/day-by-day)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "gong.stats_activity_day_by_day",
-      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
-      "approval": "none: read-only POST query with schema-gated body",
-      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
-      "output_policy": "json_redacted",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/stats/activity/day-by-day"
-        }
-      ],
-      "flags": [
-        {
-          "name": "from-date",
-          "type": "string",
-          "summary": "Inclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.fromDate",
-          "required": true
-        },
-        {
-          "name": "to-date",
-          "type": "string",
-          "summary": "Exclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.toDate",
-          "required": true
-        },
-        {
-          "name": "user-id",
-          "type": "string_array",
-          "summary": "Gong user ID; repeat or comma-separate.",
-          "maps_to": "body.filter.userIds"
-        },
-        {
-          "name": "created-from",
-          "type": "string",
-          "summary": "Optional ISO-8601 creation lower bound.",
-          "maps_to": "body.filter.createdFromDateTime"
-        },
-        {
-          "name": "created-to",
-          "type": "string",
-          "summary": "Optional ISO-8601 creation upper bound.",
-          "maps_to": "body.filter.createdToDateTime"
-        }
-      ],
-      "examples": [
-        "pm gong stats activity-day-by-day --from-date 2026-01-01 --to-date 2026-01-31 --credential gong-credential --json"
-      ]
-    },
-    {
-      "path": "stats activity-aggregate",
-      "summary": "Retrieve aggregated activity for defined users by date (/v2/stats/activity/aggregate)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "gong.stats_activity_aggregate",
-      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
-      "approval": "none: read-only POST query with schema-gated body",
-      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
-      "output_policy": "json_redacted",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/stats/activity/aggregate"
-        }
-      ],
-      "flags": [
-        {
-          "name": "from-date",
-          "type": "string",
-          "summary": "Inclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.fromDate",
-          "required": true
-        },
-        {
-          "name": "to-date",
-          "type": "string",
-          "summary": "Exclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.toDate",
-          "required": true
-        },
-        {
-          "name": "user-id",
-          "type": "string_array",
-          "summary": "Gong user ID; repeat or comma-separate.",
-          "maps_to": "body.filter.userIds"
-        },
-        {
-          "name": "created-from",
-          "type": "string",
-          "summary": "Optional ISO-8601 creation lower bound.",
-          "maps_to": "body.filter.createdFromDateTime"
-        },
-        {
-          "name": "created-to",
-          "type": "string",
-          "summary": "Optional ISO-8601 creation upper bound.",
-          "maps_to": "body.filter.createdToDateTime"
-        }
-      ],
-      "examples": [
-        "pm gong stats activity-aggregate --from-date 2026-01-01 --to-date 2026-01-31 --credential gong-credential --json"
-      ]
-    },
-    {
-      "path": "stats activity-aggregate-by-period",
-      "summary": "Retrieve aggregated activity for defined users by a date range with grouping in time periods (/v2/stats/activity/aggregate-by-period)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "gong.stats_activity_aggregate_by_period",
-      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
-      "approval": "none: read-only POST query with schema-gated body",
-      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
-      "output_policy": "json_redacted",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/stats/activity/aggregate-by-period"
-        }
-      ],
-      "flags": [
-        {
-          "name": "from-date",
-          "type": "string",
-          "summary": "Inclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.fromDate",
-          "required": true
-        },
-        {
-          "name": "to-date",
-          "type": "string",
-          "summary": "Exclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.toDate",
-          "required": true
-        },
-        {
-          "name": "user-id",
-          "type": "string_array",
-          "summary": "Gong user ID; repeat or comma-separate.",
-          "maps_to": "body.filter.userIds"
-        },
-        {
-          "name": "created-from",
-          "type": "string",
-          "summary": "Optional ISO-8601 creation lower bound.",
-          "maps_to": "body.filter.createdFromDateTime"
-        },
-        {
-          "name": "created-to",
-          "type": "string",
-          "summary": "Optional ISO-8601 creation upper bound.",
-          "maps_to": "body.filter.createdToDateTime"
-        },
-        {
-          "name": "aggregation-period",
-          "type": "enum",
-          "summary": "Aggregation period.",
-          "maps_to": "body.aggregationPeriod",
-          "values": [
-            "DAY",
-            "WEEK",
-            "MONTH",
-            "QUARTER",
-            "YEAR"
-          ],
-          "required": true
-        }
-      ],
-      "examples": [
-        "pm gong stats activity-aggregate-by-period --from-date 2026-01-01 --to-date 2026-01-31 --aggregation-period DAY --credential gong-credential --json"
-      ]
-    },
-    {
-      "path": "meetings integration-status",
-      "summary": "Validate Gong meeting Integration (/v2/meetings/integration/status)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "gong.meetings_integration_status",
-      "risk": "bounded POST read-query; sends only typed email array body fields and redacts sensitive response fields",
-      "approval": "none: read-only POST query with schema-gated body",
-      "notes": "Executes through the typed operation direct-read engine; no raw body flag is exposed.",
-      "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "email",
-          "type": "string_array",
-          "summary": "Email address to validate. Repeat or comma-separate; max 100 per Gong API.",
-          "maps_to": "body.emails",
-          "required": true
-        }
-      ],
-      "examples": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/meetings/integration/status"
-        }
-      ]
-    },
-    {
-      "path": "flows steps",
-      "summary": "Get flow details and steps for one or more Engage flows (/v2/flows/steps)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "gong.flows_steps",
-      "risk": "bounded POST read-query; sends only typed flow ID array body fields and redacts sensitive response fields",
-      "approval": "none: read-only POST query with schema-gated body",
-      "notes": "Executes through the typed operation direct-read engine; no raw body flag is exposed.",
-      "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "flow-id",
-          "type": "string_array",
-          "summary": "Engage flow ID to retrieve steps for. Repeat or comma-separate; max 20 per Gong API.",
-          "maps_to": "body.flowIds",
-          "required": true
-        }
-      ],
-      "examples": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/flows/steps"
-        }
-      ]
-    },
-    {
-      "path": "flows prospects",
-      "summary": "List prospects assigned flows (/v2/flows/prospects)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "gong.flows_prospects",
-      "risk": "bounded POST read-query; sends only typed CRM prospect or flow instance ID arrays and redacts sensitive response fields",
-      "approval": "none: read-only POST query with schema-gated body",
-      "notes": "Executes through the typed operation direct-read engine; no raw body flag is exposed.",
-      "output_policy": "json_redacted",
-      "flags": [
-        {
-          "name": "crm-prospect-id",
-          "type": "string_array",
-          "summary": "CRM prospect ID to query. Repeat or comma-separate.",
-          "maps_to": "body.crmProspectsIds"
-        },
-        {
-          "name": "flow-instance-id",
-          "type": "string_array",
-          "summary": "Assigned flow instance ID to query. Repeat or comma-separate.",
-          "maps_to": "body.flowInstanceIds"
-        }
-      ],
-      "examples": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/flows/prospects"
-        }
-      ]
-    },
-    {
-      "path": "calls transcript",
-      "summary": "Retrieve transcripts of calls (/v2/calls/transcript)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "gong.calls_transcript",
-      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
-      "approval": "none: read-only POST query with schema-gated body",
-      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed.",
-      "output_policy": "json_redacted",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/calls/transcript"
-        }
-      ],
-      "flags": [
-        {
-          "name": "call-id",
-          "type": "string_array",
-          "summary": "Gong call ID; repeat or comma-separate.",
-          "maps_to": "body.filter.callIds",
-          "required": true
-        },
-        {
-          "name": "from",
-          "type": "string",
-          "summary": "Inclusive ISO-8601 call start lower bound.",
-          "maps_to": "body.filter.fromDateTime"
-        },
-        {
-          "name": "to",
-          "type": "string",
-          "summary": "Exclusive ISO-8601 call start upper bound.",
-          "maps_to": "body.filter.toDateTime"
-        },
-        {
-          "name": "workspace-id",
-          "type": "string",
-          "summary": "Gong workspace ID.",
-          "maps_to": "body.filter.workspaceId"
-        }
-      ],
-      "examples": [
-        "pm gong calls transcript --call-id call-id --credential gong-credential --json"
-      ]
-    },
-    {
-      "path": "calls upload-media",
-      "summary": "Add call media (/v2/calls/{id}/media)",
+      "path": "tasks update",
+      "summary": "mutates Gong API state; requires reverse ETL approval",
       "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_task",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "flags": [
+        {
+          "name": "taskId",
+          "type": "string",
+          "summary": "taskId value",
+          "maps_to": "record.taskId",
+          "required": true
+        },
+        {
+          "name": "userId",
+          "type": "string",
+          "summary": "The id of the Gong user who owns the task",
+          "maps_to": "record.userId",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/tasks/{taskId}"
+        }
+      ],
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
+      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+    },
+    {
+      "path": "users extensive",
+      "summary": "List users by filter (/v2/users/extensive)",
+      "intent": "direct_read",
       "availability": "implemented",
-      "risk": "high: uploads call media from a bounded project-local file path; file path/content are redacted in plans",
-      "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
-      "notes": "Uses typed multipart write support; no generic upload command is exposed.",
-      "write": "upload_call_media",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string_array",
+          "summary": "Gong user ID; repeat or comma-separate.",
+          "maps_to": "body.filter.userIds"
+        },
+        {
+          "name": "created-from",
+          "type": "string",
+          "summary": "Inclusive ISO-8601 creation lower bound.",
+          "maps_to": "body.filter.createdFromDateTime"
+        },
+        {
+          "name": "created-to",
+          "type": "string",
+          "summary": "Exclusive ISO-8601 creation upper bound.",
+          "maps_to": "body.filter.createdToDateTime"
+        },
+        {
+          "name": "include-avatars",
+          "type": "boolean",
+          "summary": "Include Gong avatar users.",
+          "maps_to": "body.filter.includeAvatars"
+        }
+      ],
+      "examples": [
+        "pm gong users extensive --user-id user-id --credential gong-credential --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/users/extensive"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "gong.users_extensive",
+      "risk": "bounded typed POST read-query; response size is capped and secret/download/content-shaped fields are redacted",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body or generic HTTP flag is exposed."
+    },
+    {
+      "path": "users get",
+      "summary": "Retrieve user (/v2/users/{id})",
+      "intent": "direct_read",
+      "availability": "implemented",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "Gong call ID whose media should be uploaded.",
-          "maps_to": "record.id"
-        },
-        {
-          "name": "media-file-path",
-          "type": "string",
-          "summary": "Project-relative media file path to upload.",
-          "maps_to": "record.media_file_path"
+          "summary": "Gong's unique numeric identifier for the user (up to 20 digits).",
+          "maps_to": "path.id"
         }
-      ]
-    },
-    {
-      "path": "crm upload-entities",
-      "summary": "Upload CRM objects (/v2/crm/entities)",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "risk": "high: uploads CRM data from a bounded project-local file path; file path/content are redacted in plans",
-      "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
-      "notes": "Uses typed multipart write support; no generic upload command is exposed.",
-      "write": "upload_crm_entities",
-      "flags": [
-        {
-          "name": "data-file-path",
-          "type": "string",
-          "summary": "Project-relative CRM data file path to upload.",
-          "maps_to": "record.data_file_path"
-        }
-      ]
-    },
-    {
-      "path": "crm upload-entity-schema",
-      "summary": "Upload Object Schema (/v2/crm/entity-schema)",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "risk": "high: uploads CRM entity schema as a top-level JSON array; no raw CLI body is exposed",
-      "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
-      "notes": "Write action supports schema-gated top-level array bodies for table/reverse-ETL mappings; provider-style raw JSON CLI flags remain intentionally unavailable.",
-      "write": "upload_crm_entity_schema"
-    },
-    {
-      "path": "targets list",
-      "summary": "List target definitions (/v2/targets)",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "workspaceId",
-          "type": "string",
-          "summary": "The ID of the workspace to retrieve target definitions for. You can retrieve workspace IDs using the Workspaces API.",
-          "maps_to": "query.workspaceId"
-        }
+      ],
+      "examples": [
+        "pm gong users get --json --max-bytes 1048576"
       ],
       "api_surface": [
         {
           "method": "GET",
-          "path": "/v2/targets"
+          "path": "/v2/users/{id}"
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong targets list --json --max-bytes 1048576"
-      ]
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
     },
     {
-      "path": "targets upload-assignments",
-      "summary": "Upload target assignments (/v2/targets/{targetId}/assignments)",
-      "intent": "reverse_etl",
+      "path": "users list",
+      "summary": "List Gong users as ETL records.",
+      "intent": "etl",
       "availability": "implemented",
-      "risk": "high: uploads target assignments from a bounded project-local file path; file path/content are redacted in plans",
-      "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
-      "notes": "Uses typed multipart write support; no generic upload command is exposed.",
-      "write": "upload_target_assignments",
-      "flags": [
+      "stream": "users",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "examples": [
+        "pm gong users list --json --limit 25"
+      ],
+      "api_surface": [
         {
-          "name": "targetId",
-          "type": "string",
-          "summary": "Unique identifier for the target (up to 20 digits). Retrieve this value using the List targets API.",
-          "maps_to": "record.targetId"
-        },
-        {
-          "name": "workspaceId",
-          "type": "string",
-          "summary": "The ID of the workspace the target belongs to. You can retrieve workspace IDs using the Workspaces API.",
-          "maps_to": "record.workspaceId"
-        },
-        {
-          "name": "validate-only",
-          "type": "string",
-          "summary": "(Default: false) When true, the CSV file is fully validated but no data is uploaded.",
-          "maps_to": "record.validateOnly"
-        },
-        {
-          "name": "assignments-file-path",
-          "type": "string",
-          "summary": "Project-relative target assignments CSV file path to upload.",
-          "maps_to": "record.assignments_file_path"
+          "method": "GET",
+          "path": "/v2/users"
         }
       ]
-    }
-  ],
-  "help_topics": [
-    {
-      "name": "gong-auth",
-      "summary": "Use Gong access key and access key secret via credentials; never pass secrets in command text."
     },
     {
-      "name": "gong-writes",
-      "summary": "Gong mutations are typed reverse-ETL actions with plan, preview, approval, execute gates."
+      "path": "users settings-history",
+      "summary": "Retrieve user settings history (/v2/users/{id}/settings-history)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Gong's unique numeric identifier for the user (up to 20 digits).",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm gong users settings-history --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{id}/settings-history"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted"
     },
     {
-      "name": "gong-direct-read",
-      "summary": "Gong direct reads are bounded JSON GET or typed POST operations with redaction for secret/download/content-shaped fields; call transcripts support a 16 MiB cap."
+      "path": "workspaces list",
+      "summary": "List Gong workspaces as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workspaces",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "examples": [
+        "pm gong workspaces list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workspaces"
+        }
+      ]
     }
   ]
 }

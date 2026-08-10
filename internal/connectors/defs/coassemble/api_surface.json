@@ -1,46 +1,1925 @@
 {
-  "api": "Coassemble Headless API",
+  "api": "Coassemble Headless API; provider artifact version: current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
   "docs": "https://developers.coassemble.com/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: every endpoint documented across the Coassemble headless API reference (Courses, Tracking, Identities, Collections, Translations). The base URL is https://api.coassemble.com; documented paths are prefixed /v1/headless/... in the public reference and /api/v1/headless/... in this connector's own base_url + stream path split (identical resulting URL; matches legacy's own path convention).",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (53 documented operations across 10 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "coassemble-artifact-2026-08-09",
+      "url": "https://developers.coassemble.com/",
+      "kind": "html_reference",
+      "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+      "retrieved_at": "2026-08-09",
+      "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919"
+    },
+    {
+      "id": "coassemble-artifact-ref-1d4e2ccd90df7f21-df11262a928e5dd2",
+      "url": "https://developers.coassemble.com/api/collections",
+      "kind": "html_reference",
+      "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+      "retrieved_at": "2026-08-09",
+      "sha256": "1d4e2ccd90df7f210f092c2736cce2238694c91cb79315e8f6e11f300df7f893"
+    },
+    {
+      "id": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+      "url": "https://developers.coassemble.com/api/courses",
+      "kind": "html_reference",
+      "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+      "retrieved_at": "2026-08-09",
+      "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b"
+    },
+    {
+      "id": "coassemble-artifact-ref-5d60d943e29366f9-d78959838b6e8926",
+      "url": "https://developers.coassemble.com/api/generate",
+      "kind": "html_reference",
+      "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+      "retrieved_at": "2026-08-09",
+      "sha256": "5d60d943e29366f97f8228d7318c9e43bddb3c60dd548863241a45d4d3f512e0"
+    },
+    {
+      "id": "coassemble-artifact-ref-5cd02624bb33536b-76449cf988b34af5",
+      "url": "https://developers.coassemble.com/api/identities",
+      "kind": "html_reference",
+      "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+      "retrieved_at": "2026-08-09",
+      "sha256": "5cd02624bb33536b37a8e82b4617556a58a6d1f59e021317265dab97c92111b3"
+    },
+    {
+      "id": "coassemble-artifact-ref-6753968034d722a5-f342e03830a8d360",
+      "url": "https://developers.coassemble.com/api/themes",
+      "kind": "html_reference",
+      "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+      "retrieved_at": "2026-08-09",
+      "sha256": "6753968034d722a58a7b077f0eca4f8e4dad2ea5b6e476116fca6d4386113738"
+    },
+    {
+      "id": "coassemble-artifact-ref-a00d0505c1d42969-c32f57a342881ce4",
+      "url": "https://developers.coassemble.com/api/tracking",
+      "kind": "html_reference",
+      "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+      "retrieved_at": "2026-08-09",
+      "sha256": "a00d0505c1d42969bbcea6227ac36eddac347399622b0e46d15dcbbc8928f008"
+    },
+    {
+      "id": "coassemble-artifact-ref-4b4ac3696339e02f-5d67e947ee6d8cd3",
+      "url": "https://developers.coassemble.com/api/translations",
+      "kind": "html_reference",
+      "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+      "retrieved_at": "2026-08-09",
+      "sha256": "4b4ac3696339e02f7c83eefd63d34d42805d7c5712404ffc0d675715110bf93d"
+    },
+    {
+      "id": "coassemble-artifact-ref-42e8c990111d3550-ae6cc60a743e401e",
+      "url": "https://developers.coassemble.com/api/usage",
+      "kind": "html_reference",
+      "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+      "retrieved_at": "2026-08-09",
+      "sha256": "42e8c990111d3550960299d80f407dede33a300109d364b3434dcbd7503d0696"
+    },
+    {
+      "id": "coassemble-artifact-ref-0ef6f09c1450b990-afb4e59d3dfb1560",
+      "url": "https://developers.coassemble.com/api/webhooks",
+      "kind": "html_reference",
+      "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0ef6f09c1450b9901358e19fb51547ea4bf0d8130a942ff7ad304253376d4630"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/api/v1/headless/courses", "covered_by": { "stream": "courses" } },
-    { "method": "GET", "path": "/api/v1/headless/courses/{id}", "excluded": { "category": "duplicate_of", "reason": "single-course detail is a strict subset of the courses stream's own per-record shape already returned by GET /api/v1/headless/courses" } },
-    { "method": "GET", "path": "/api/v1/headless/course/content/{id}", "excluded": { "category": "out_of_scope", "reason": "returns a course's raw content-asset manifest (languages/variants/assets with signed CDN URLs) for embedding a learner-facing player, not a catalog/record-sync resource; no stable per-record shape suitable for a list stream" } },
-    { "method": "POST", "path": "/api/v1/headless/course/generate", "excluded": { "category": "deprecated", "reason": "the API reference marks this endpoint deprecated" } },
-    { "method": "POST", "path": "/api/v1/headless/course/{id}/publish", "covered_by": { "write": "publish_course" } },
-    { "method": "POST", "path": "/api/v1/headless/course/{id}/duplicate", "covered_by": { "write": "duplicate_course" } },
-    { "method": "DELETE", "path": "/api/v1/headless/course/{id}", "covered_by": { "write": "delete_course" } },
-    { "method": "POST", "path": "/api/v1/headless/course/{id}/restore", "covered_by": { "write": "restore_course" } },
-    { "method": "POST", "path": "/api/v1/headless/course/{id}/revert", "excluded": { "category": "out_of_scope", "reason": "reverts a course to a prior content revision; a content-authoring/versioning action with no bounded, declarable request body documented (revision target is implicit/unspecified), not a plain record mutation" } },
-    { "method": "GET", "path": "/api/v1/headless/course/scorm/{id}", "excluded": { "category": "binary_payload", "reason": "returns a downloadable SCORM package zip file, not a JSON record" } },
-    { "method": "GET", "path": "/api/v1/headless/course/{action}", "excluded": { "category": "deprecated", "reason": "the API reference marks this endpoint deprecated" } },
-    { "method": "POST", "path": "/api/v1/headless/course/url", "excluded": { "category": "deprecated", "reason": "the API reference marks this endpoint deprecated" } },
-    { "method": "GET", "path": "/api/v1/headless/screen/types", "covered_by": { "stream": "screen_types" } },
-    { "method": "GET", "path": "/api/v1/headless/trackings", "covered_by": { "stream": "trackings" } },
-    { "method": "GET", "path": "/api/v1/headless/tracking/{id}", "excluded": { "category": "duplicate_of", "reason": "single-tracking detail is a strict subset of the trackings stream's own per-record shape already returned by GET /api/v1/headless/trackings" } },
-    { "method": "DELETE", "path": "/api/v1/headless/tracking", "covered_by": { "write": "delete_tracking" } },
-    { "method": "GET", "path": "/api/v1/headless/collection/trackings", "covered_by": { "stream": "collection_trackings" } },
-    { "method": "GET", "path": "/api/v1/headless/collection/tracking/{id}", "excluded": { "category": "duplicate_of", "reason": "single-collection-tracking detail is a strict subset of the collection_trackings stream's own per-record shape already returned by GET /api/v1/headless/collection/trackings" } },
-    { "method": "GET", "path": "/api/v1/headless/screen/trackings", "excluded": { "category": "out_of_scope", "reason": "requires a screen id (a per-embed screen resource distinct from the screen_types lookup enum this connector already exposes); Coassemble's own API reference never defines a list/id endpoint for this screen-id resource, so there is no way to enumerate valid ids to read this stream against without an unverifiable guess at the id's source" } },
-    { "method": "GET", "path": "/api/v1/headless/user/trackings", "covered_by": { "stream": "user_trackings" } },
-    { "method": "GET", "path": "/api/v1/headless/clients", "covered_by": { "stream": "clients" } },
-    { "method": "GET", "path": "/api/v1/headless/client/{identifier}", "excluded": { "category": "duplicate_of", "reason": "single-client detail is a strict subset of the clients stream's own per-record shape already returned by GET /api/v1/headless/clients" } },
-    { "method": "PUT", "path": "/api/v1/headless/client/{identifier}", "covered_by": { "write": "update_client" } },
-    { "method": "DELETE", "path": "/api/v1/headless/client/{identifier}", "covered_by": { "write": "delete_client" } },
-    { "method": "GET", "path": "/api/v1/headless/users", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/api/v1/headless/user/{identifier}", "excluded": { "category": "duplicate_of", "reason": "single-user detail is a strict subset of the users stream's own per-record shape already returned by GET /api/v1/headless/users" } },
-    { "method": "PUT", "path": "/api/v1/headless/user/{identifier}", "covered_by": { "write": "update_user" } },
-    { "method": "DELETE", "path": "/api/v1/headless/user/{identifier}", "covered_by": { "write": "delete_user" } },
-    { "method": "GET", "path": "/api/v1/headless/collections", "covered_by": { "stream": "collections" } },
-    { "method": "GET", "path": "/api/v1/headless/collections/{id}", "excluded": { "category": "duplicate_of", "reason": "single-collection detail is a strict subset of the collections stream's own per-record shape already returned by GET /api/v1/headless/collections" } },
-    { "method": "POST", "path": "/api/v1/headless/collection", "covered_by": { "write": "create_collection" } },
-    { "method": "DELETE", "path": "/api/v1/headless/collection/{id}", "covered_by": { "write": "delete_collection" } },
-    { "method": "POST", "path": "/api/v1/headless/collection/{id}/restore", "covered_by": { "write": "restore_collection" } },
-    { "method": "GET", "path": "/api/v1/headless/translations/{id}", "covered_by": { "stream": "translations" } },
-    { "method": "POST", "path": "/api/v1/headless/translation/translate/{id}", "covered_by": { "write": "translate_course" } },
-    { "method": "POST", "path": "/api/v1/headless/translation/default/{id}/{language}", "covered_by": { "write": "set_default_translation" } },
-    { "method": "POST", "path": "/api/v1/headless/translation/sync/{id}/{language}", "covered_by": { "write": "sync_translation" } },
-    { "method": "DELETE", "path": "/api/v1/headless/translation/{id}/{language}", "covered_by": { "write": "delete_translation" } }
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/client/{identifier}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/client/{identifier}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-client detail is a strict subset of the clients stream's own per-record shape already returned by GET /api/v1/headless/clients",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/headless/client/{identifier}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[PUT /api/v1/headless/client/{identifier}]"
+      },
+      "covered_by": {
+        "write": "update_client"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/headless/client/{identifier}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[DELETE /api/v1/headless/client/{identifier}]"
+      },
+      "covered_by": {
+        "write": "delete_client"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/clients",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/clients]"
+      },
+      "covered_by": {
+        "stream": "clients"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/headless/collection",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[POST /api/v1/headless/collection]"
+      },
+      "covered_by": {
+        "write": "create_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/collection/tracking/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/collection/tracking/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-collection-tracking detail is a strict subset of the collection_trackings stream's own per-record shape already returned by GET /api/v1/headless/collection/trackings",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/collection/trackings",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/collection/trackings]"
+      },
+      "covered_by": {
+        "stream": "collection_trackings"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/headless/collection/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[DELETE /api/v1/headless/collection/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/headless/collection/{id}/restore",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[POST /api/v1/headless/collection/{id}/restore]"
+      },
+      "covered_by": {
+        "write": "restore_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/collections",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/collections]"
+      },
+      "covered_by": {
+        "stream": "collections"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/collections/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/collections/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-collection detail is a strict subset of the collections stream's own per-record shape already returned by GET /api/v1/headless/collections",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/course/content/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/course/content/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns a course's raw content-asset manifest (languages/variants/assets with signed CDN URLs) for embedding a learner-facing player, not a catalog/record-sync resource; no stable per-record shape suitable for a list stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/headless/course/generate",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[POST /api/v1/headless/course/generate]"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "the API reference marks this endpoint deprecated",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/course/scorm/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/course/scorm/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns a downloadable SCORM package zip file, not a JSON record",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/headless/course/url",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[POST /api/v1/headless/course/url]"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "the API reference marks this endpoint deprecated",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/course/{action}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/course/{action}]"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "the API reference marks this endpoint deprecated",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/headless/course/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[DELETE /api/v1/headless/course/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_course"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/headless/course/{id}/duplicate",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[POST /api/v1/headless/course/{id}/duplicate]"
+      },
+      "covered_by": {
+        "write": "duplicate_course"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/headless/course/{id}/publish",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[POST /api/v1/headless/course/{id}/publish]"
+      },
+      "covered_by": {
+        "write": "publish_course"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/headless/course/{id}/restore",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[POST /api/v1/headless/course/{id}/restore]"
+      },
+      "covered_by": {
+        "write": "restore_course"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/headless/course/{id}/revert",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[POST /api/v1/headless/course/{id}/revert]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "reverts a course to a prior content revision; a content-authoring/versioning action with no bounded, declarable request body documented (revision target is implicit/unspecified), not a plain record mutation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/courses",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/courses]"
+      },
+      "covered_by": {
+        "stream": "courses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/courses/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/courses/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-course detail is a strict subset of the courses stream's own per-record shape already returned by GET /api/v1/headless/courses",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/screen/trackings",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/screen/trackings]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "requires a screen id (a per-embed screen resource distinct from the screen_types lookup enum this connector already exposes); Coassemble's own API reference never defines a list/id endpoint for this screen-id resource, so there is no way to enumerate valid ids to read this stream against without an unverifiable guess at the id's source",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/screen/types",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/screen/types]"
+      },
+      "covered_by": {
+        "stream": "screen_types"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/headless/tracking",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[DELETE /api/v1/headless/tracking]"
+      },
+      "covered_by": {
+        "write": "delete_tracking"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/tracking/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/tracking/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-tracking detail is a strict subset of the trackings stream's own per-record shape already returned by GET /api/v1/headless/trackings",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/trackings",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/trackings]"
+      },
+      "covered_by": {
+        "stream": "trackings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/headless/translation/default/{id}/{language}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[POST /api/v1/headless/translation/default/{id}/{language}]"
+      },
+      "covered_by": {
+        "write": "set_default_translation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/headless/translation/sync/{id}/{language}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[POST /api/v1/headless/translation/sync/{id}/{language}]"
+      },
+      "covered_by": {
+        "write": "sync_translation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/headless/translation/translate/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[POST /api/v1/headless/translation/translate/{id}]"
+      },
+      "covered_by": {
+        "write": "translate_course"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/headless/translation/{id}/{language}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[DELETE /api/v1/headless/translation/{id}/{language}]"
+      },
+      "covered_by": {
+        "write": "delete_translation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/translations/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/translations/{id}]"
+      },
+      "covered_by": {
+        "stream": "translations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/user/trackings",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/user/trackings]"
+      },
+      "covered_by": {
+        "stream": "user_trackings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/user/{identifier}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/user/{identifier}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-user detail is a strict subset of the users stream's own per-record shape already returned by GET /api/v1/headless/users",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/headless/user/{identifier}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[PUT /api/v1/headless/user/{identifier}]"
+      },
+      "covered_by": {
+        "write": "update_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/headless/user/{identifier}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[DELETE /api/v1/headless/user/{identifier}]"
+      },
+      "covered_by": {
+        "write": "delete_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/headless/users",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coassemble-artifact-2026-08-09",
+        "source_url": "https://developers.coassemble.com/",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "421ad1668d8cc35f57f50d816b1c28f3bad586b3d52e52dec5614db024243919",
+        "coordinate": "existing-surface[GET /api/v1/headless/users]"
+      },
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/client/{identifier}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-5cd02624bb33536b-76449cf988b34af5",
+        "source_url": "https://developers.coassemble.com/api/identities",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5cd02624bb33536b37a8e82b4617556a58a6d1f59e021317265dab97c92111b3",
+        "coordinate": "https://developers.coassemble.com/api/identities#GET /v1/headless/client/{identifier}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/headless/client/{identifier}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-5cd02624bb33536b-76449cf988b34af5",
+        "source_url": "https://developers.coassemble.com/api/identities",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5cd02624bb33536b37a8e82b4617556a58a6d1f59e021317265dab97c92111b3",
+        "coordinate": "https://developers.coassemble.com/api/identities#PUT /v1/headless/client/{identifier}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/headless/client/{identifier}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-5cd02624bb33536b-76449cf988b34af5",
+        "source_url": "https://developers.coassemble.com/api/identities",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5cd02624bb33536b37a8e82b4617556a58a6d1f59e021317265dab97c92111b3",
+        "coordinate": "https://developers.coassemble.com/api/identities#DELETE /v1/headless/client/{identifier}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/clients",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-5cd02624bb33536b-76449cf988b34af5",
+        "source_url": "https://developers.coassemble.com/api/identities",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5cd02624bb33536b37a8e82b4617556a58a6d1f59e021317265dab97c92111b3",
+        "coordinate": "https://developers.coassemble.com/api/identities#GET /v1/headless/clients"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/collection",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-1d4e2ccd90df7f21-df11262a928e5dd2",
+        "source_url": "https://developers.coassemble.com/api/collections",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1d4e2ccd90df7f210f092c2736cce2238694c91cb79315e8f6e11f300df7f893",
+        "coordinate": "https://developers.coassemble.com/api/collections#POST /v1/headless/collection"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/collection/tracking/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-a00d0505c1d42969-c32f57a342881ce4",
+        "source_url": "https://developers.coassemble.com/api/tracking",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a00d0505c1d42969bbcea6227ac36eddac347399622b0e46d15dcbbc8928f008",
+        "coordinate": "https://developers.coassemble.com/api/tracking#GET /v1/headless/collection/tracking/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/collection/trackings",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-a00d0505c1d42969-c32f57a342881ce4",
+        "source_url": "https://developers.coassemble.com/api/tracking",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a00d0505c1d42969bbcea6227ac36eddac347399622b0e46d15dcbbc8928f008",
+        "coordinate": "https://developers.coassemble.com/api/tracking#GET /v1/headless/collection/trackings"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/headless/collection/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-1d4e2ccd90df7f21-df11262a928e5dd2",
+        "source_url": "https://developers.coassemble.com/api/collections",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1d4e2ccd90df7f210f092c2736cce2238694c91cb79315e8f6e11f300df7f893",
+        "coordinate": "https://developers.coassemble.com/api/collections#DELETE /v1/headless/collection/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/collection/{id}/restore",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-1d4e2ccd90df7f21-df11262a928e5dd2",
+        "source_url": "https://developers.coassemble.com/api/collections",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1d4e2ccd90df7f210f092c2736cce2238694c91cb79315e8f6e11f300df7f893",
+        "coordinate": "https://developers.coassemble.com/api/collections#POST /v1/headless/collection/{id}/restore"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/collections",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-1d4e2ccd90df7f21-df11262a928e5dd2",
+        "source_url": "https://developers.coassemble.com/api/collections",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1d4e2ccd90df7f210f092c2736cce2238694c91cb79315e8f6e11f300df7f893",
+        "coordinate": "https://developers.coassemble.com/api/collections#GET /v1/headless/collections"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/collections/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-1d4e2ccd90df7f21-df11262a928e5dd2",
+        "source_url": "https://developers.coassemble.com/api/collections",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1d4e2ccd90df7f210f092c2736cce2238694c91cb79315e8f6e11f300df7f893",
+        "coordinate": "https://developers.coassemble.com/api/collections#GET /v1/headless/collections/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/course/content/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#GET /v1/headless/course/content/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/course/generate",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#POST /v1/headless/course/generate"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/course/scorm/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#GET /v1/headless/course/scorm/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/course/url",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#POST /v1/headless/course/url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/course/{action}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#GET /v1/headless/course/{action}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/headless/course/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#DELETE /v1/headless/course/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/course/{id}/duplicate",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#POST /v1/headless/course/{id}/duplicate"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/course/{id}/publish",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#POST /v1/headless/course/{id}/publish"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/course/{id}/restore",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#POST /v1/headless/course/{id}/restore"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/course/{id}/revert",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#POST /v1/headless/course/{id}/revert"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/courses",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#GET /v1/headless/courses"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/courses/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#GET /v1/headless/courses/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/embed/course",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#POST /v1/headless/embed/course"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/generate/course",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-d54a5c9d67ede70e-37c6c6464a4e06ea",
+        "source_url": "https://developers.coassemble.com/api/courses",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d54a5c9d67ede70e0554369749ed378a882e3e9e30c2e5c076d8153563cbdf2b",
+        "coordinate": "https://developers.coassemble.com/api/courses#POST /v1/headless/generate/course",
+        "alternatives": [
+          {
+            "source_url": "https://developers.coassemble.com/api/generate",
+            "source_kind": "html_reference",
+            "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+            "retrieved_at": "2026-08-09",
+            "sha256": "5d60d943e29366f97f8228d7318c9e43bddb3c60dd548863241a45d4d3f512e0",
+            "coordinate": "https://developers.coassemble.com/api/generate#POST /v1/headless/generate/course"
+          }
+        ]
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/generate/course/{id}/quiz",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-5d60d943e29366f9-d78959838b6e8926",
+        "source_url": "https://developers.coassemble.com/api/generate",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5d60d943e29366f97f8228d7318c9e43bddb3c60dd548863241a45d4d3f512e0",
+        "coordinate": "https://developers.coassemble.com/api/generate#POST /v1/headless/generate/course/{id}/quiz"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/generate/course/{id}/screen",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-5d60d943e29366f9-d78959838b6e8926",
+        "source_url": "https://developers.coassemble.com/api/generate",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5d60d943e29366f97f8228d7318c9e43bddb3c60dd548863241a45d4d3f512e0",
+        "coordinate": "https://developers.coassemble.com/api/generate#POST /v1/headless/generate/course/{id}/screen"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/screen/trackings",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-a00d0505c1d42969-c32f57a342881ce4",
+        "source_url": "https://developers.coassemble.com/api/tracking",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a00d0505c1d42969bbcea6227ac36eddac347399622b0e46d15dcbbc8928f008",
+        "coordinate": "https://developers.coassemble.com/api/tracking#GET /v1/headless/screen/trackings"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/themes",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-6753968034d722a5-f342e03830a8d360",
+        "source_url": "https://developers.coassemble.com/api/themes",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6753968034d722a58a7b077f0eca4f8e4dad2ea5b6e476116fca6d4386113738",
+        "coordinate": "https://developers.coassemble.com/api/themes#GET /v1/headless/themes"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/themes",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-6753968034d722a5-f342e03830a8d360",
+        "source_url": "https://developers.coassemble.com/api/themes",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6753968034d722a58a7b077f0eca4f8e4dad2ea5b6e476116fca6d4386113738",
+        "coordinate": "https://developers.coassemble.com/api/themes#POST /v1/headless/themes"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/themes/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-6753968034d722a5-f342e03830a8d360",
+        "source_url": "https://developers.coassemble.com/api/themes",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6753968034d722a58a7b077f0eca4f8e4dad2ea5b6e476116fca6d4386113738",
+        "coordinate": "https://developers.coassemble.com/api/themes#GET /v1/headless/themes/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/headless/themes/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-6753968034d722a5-f342e03830a8d360",
+        "source_url": "https://developers.coassemble.com/api/themes",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6753968034d722a58a7b077f0eca4f8e4dad2ea5b6e476116fca6d4386113738",
+        "coordinate": "https://developers.coassemble.com/api/themes#PUT /v1/headless/themes/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/headless/themes/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-6753968034d722a5-f342e03830a8d360",
+        "source_url": "https://developers.coassemble.com/api/themes",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6753968034d722a58a7b077f0eca4f8e4dad2ea5b6e476116fca6d4386113738",
+        "coordinate": "https://developers.coassemble.com/api/themes#DELETE /v1/headless/themes/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/headless/tracking",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-a00d0505c1d42969-c32f57a342881ce4",
+        "source_url": "https://developers.coassemble.com/api/tracking",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a00d0505c1d42969bbcea6227ac36eddac347399622b0e46d15dcbbc8928f008",
+        "coordinate": "https://developers.coassemble.com/api/tracking#DELETE /v1/headless/tracking"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/tracking/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-a00d0505c1d42969-c32f57a342881ce4",
+        "source_url": "https://developers.coassemble.com/api/tracking",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a00d0505c1d42969bbcea6227ac36eddac347399622b0e46d15dcbbc8928f008",
+        "coordinate": "https://developers.coassemble.com/api/tracking#GET /v1/headless/tracking/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/trackings",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-a00d0505c1d42969-c32f57a342881ce4",
+        "source_url": "https://developers.coassemble.com/api/tracking",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a00d0505c1d42969bbcea6227ac36eddac347399622b0e46d15dcbbc8928f008",
+        "coordinate": "https://developers.coassemble.com/api/tracking#GET /v1/headless/trackings"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/translation/default/{id}/{language}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-4b4ac3696339e02f-5d67e947ee6d8cd3",
+        "source_url": "https://developers.coassemble.com/api/translations",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4b4ac3696339e02f7c83eefd63d34d42805d7c5712404ffc0d675715110bf93d",
+        "coordinate": "https://developers.coassemble.com/api/translations#POST /v1/headless/translation/default/{id}/{language}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/translation/sync/{id}/{language}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-4b4ac3696339e02f-5d67e947ee6d8cd3",
+        "source_url": "https://developers.coassemble.com/api/translations",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4b4ac3696339e02f7c83eefd63d34d42805d7c5712404ffc0d675715110bf93d",
+        "coordinate": "https://developers.coassemble.com/api/translations#POST /v1/headless/translation/sync/{id}/{language}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/translation/translate/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-4b4ac3696339e02f-5d67e947ee6d8cd3",
+        "source_url": "https://developers.coassemble.com/api/translations",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4b4ac3696339e02f7c83eefd63d34d42805d7c5712404ffc0d675715110bf93d",
+        "coordinate": "https://developers.coassemble.com/api/translations#POST /v1/headless/translation/translate/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/headless/translation/{id}/{language}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-4b4ac3696339e02f-5d67e947ee6d8cd3",
+        "source_url": "https://developers.coassemble.com/api/translations",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4b4ac3696339e02f7c83eefd63d34d42805d7c5712404ffc0d675715110bf93d",
+        "coordinate": "https://developers.coassemble.com/api/translations#DELETE /v1/headless/translation/{id}/{language}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/translations/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-4b4ac3696339e02f-5d67e947ee6d8cd3",
+        "source_url": "https://developers.coassemble.com/api/translations",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4b4ac3696339e02f7c83eefd63d34d42805d7c5712404ffc0d675715110bf93d",
+        "coordinate": "https://developers.coassemble.com/api/translations#GET /v1/headless/translations/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/usage/allowances",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-42e8c990111d3550-ae6cc60a743e401e",
+        "source_url": "https://developers.coassemble.com/api/usage",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "42e8c990111d3550960299d80f407dede33a300109d364b3434dcbd7503d0696",
+        "coordinate": "https://developers.coassemble.com/api/usage#GET /v1/headless/usage/allowances"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/usage/client/{identifier}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-42e8c990111d3550-ae6cc60a743e401e",
+        "source_url": "https://developers.coassemble.com/api/usage",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "42e8c990111d3550960299d80f407dede33a300109d364b3434dcbd7503d0696",
+        "coordinate": "https://developers.coassemble.com/api/usage#GET /v1/headless/usage/client/{identifier}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/headless/usage/client/{identifier}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-42e8c990111d3550-ae6cc60a743e401e",
+        "source_url": "https://developers.coassemble.com/api/usage",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "42e8c990111d3550960299d80f407dede33a300109d364b3434dcbd7503d0696",
+        "coordinate": "https://developers.coassemble.com/api/usage#PUT /v1/headless/usage/client/{identifier}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/usage/clients",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-42e8c990111d3550-ae6cc60a743e401e",
+        "source_url": "https://developers.coassemble.com/api/usage",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "42e8c990111d3550960299d80f407dede33a300109d364b3434dcbd7503d0696",
+        "coordinate": "https://developers.coassemble.com/api/usage#GET /v1/headless/usage/clients"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/user/trackings",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-a00d0505c1d42969-c32f57a342881ce4",
+        "source_url": "https://developers.coassemble.com/api/tracking",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a00d0505c1d42969bbcea6227ac36eddac347399622b0e46d15dcbbc8928f008",
+        "coordinate": "https://developers.coassemble.com/api/tracking#GET /v1/headless/user/trackings"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/user/{identifier}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-5cd02624bb33536b-76449cf988b34af5",
+        "source_url": "https://developers.coassemble.com/api/identities",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5cd02624bb33536b37a8e82b4617556a58a6d1f59e021317265dab97c92111b3",
+        "coordinate": "https://developers.coassemble.com/api/identities#GET /v1/headless/user/{identifier}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/headless/user/{identifier}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-5cd02624bb33536b-76449cf988b34af5",
+        "source_url": "https://developers.coassemble.com/api/identities",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5cd02624bb33536b37a8e82b4617556a58a6d1f59e021317265dab97c92111b3",
+        "coordinate": "https://developers.coassemble.com/api/identities#PUT /v1/headless/user/{identifier}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/headless/user/{identifier}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-5cd02624bb33536b-76449cf988b34af5",
+        "source_url": "https://developers.coassemble.com/api/identities",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5cd02624bb33536b37a8e82b4617556a58a6d1f59e021317265dab97c92111b3",
+        "coordinate": "https://developers.coassemble.com/api/identities#DELETE /v1/headless/user/{identifier}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/users",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-5cd02624bb33536b-76449cf988b34af5",
+        "source_url": "https://developers.coassemble.com/api/identities",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5cd02624bb33536b37a8e82b4617556a58a6d1f59e021317265dab97c92111b3",
+        "coordinate": "https://developers.coassemble.com/api/identities#GET /v1/headless/users"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/headless/webhooks",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-0ef6f09c1450b990-afb4e59d3dfb1560",
+        "source_url": "https://developers.coassemble.com/api/webhooks",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ef6f09c1450b9901358e19fb51547ea4bf0d8130a942ff7ad304253376d4630",
+        "coordinate": "https://developers.coassemble.com/api/webhooks#GET /v1/headless/webhooks"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/headless/webhooks",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-0ef6f09c1450b990-afb4e59d3dfb1560",
+        "source_url": "https://developers.coassemble.com/api/webhooks",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ef6f09c1450b9901358e19fb51547ea4bf0d8130a942ff7ad304253376d4630",
+        "coordinate": "https://developers.coassemble.com/api/webhooks#POST /v1/headless/webhooks"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/headless/webhooks/{id}",
+      "provenance": {
+        "artifact": "coassemble-artifact-ref-0ef6f09c1450b990-afb4e59d3dfb1560",
+        "source_url": "https://developers.coassemble.com/api/webhooks",
+        "source_kind": "html_reference",
+        "version": "current Coassemble Developer Documentation; Nuxt build 85db2af5-d031-43f1-9c8c-019b4ad402be",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ef6f09c1450b9901358e19fb51547ea4bf0d8130a942ff7ad304253376d4630",
+        "coordinate": "https://developers.coassemble.com/api/webhooks#DELETE /v1/headless/webhooks/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    }
   ]
 }

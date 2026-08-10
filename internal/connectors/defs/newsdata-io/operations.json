@@ -1,0 +1,139 @@
+{
+  "operations": [
+    {
+      "id": "newsdata-io.get.1-archive",
+      "kind": "rest_read",
+      "summary": "GET /1/archive",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://newsdata.io/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "newsdata-io.get.1-count",
+      "kind": "rest_read",
+      "summary": "GET /1/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://newsdata.io/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "newsdata-io.get.1-crypto",
+      "kind": "rest_read",
+      "summary": "GET /1/crypto",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://newsdata.io/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/crypto",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "newsdata-io.get.1-crypto-count",
+      "kind": "rest_read",
+      "summary": "GET /1/crypto/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://newsdata.io/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/crypto/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "newsdata-io.get.1-latest",
+      "kind": "rest_read",
+      "summary": "GET /1/latest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://newsdata.io/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "newsdata-io.get.1-market",
+      "kind": "rest_read",
+      "summary": "GET /1/market",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://newsdata.io/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/market",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "newsdata-io.get.1-market-count",
+      "kind": "rest_read",
+      "summary": "GET /1/market/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://newsdata.io/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/market/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "newsdata-io.get.1-news",
+      "kind": "rest_read",
+      "summary": "GET /1/news",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://newsdata.io/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/news",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "newsdata-io.get.1-sources",
+      "kind": "rest_read",
+      "summary": "GET /1/sources",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://newsdata.io/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1/sources",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

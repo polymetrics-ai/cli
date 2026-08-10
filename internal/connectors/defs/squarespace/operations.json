@@ -1,0 +1,677 @@
+{
+  "operations": [
+    {
+      "id": "squarespace.get.1-0-authorization-member",
+      "kind": "rest_read",
+      "summary": "GET /1.0/authorization/member",
+      "description": "returns metadata about the Squarespace member who owns the OAuth token in use, not syncable site data",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1.0/authorization/member",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.1-0-authorization-website",
+      "kind": "rest_read",
+      "summary": "GET /1.0/authorization/website",
+      "description": "returns metadata about the website that owns the API key/OAuth token in use, not syncable site data",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1.0/authorization/website",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.1-0-commerce-inventory-adjustments",
+      "kind": "rest_write",
+      "summary": "POST /1.0/commerce/inventory/adjustments",
+      "description": "CreateInventoryAdjustmentRequest's body is 4 alternative named arrays (incrementOperations/decrementOperations/setFiniteOperations/setUnlimitedOperations) of {variantId,quantity} objects, not a flat record; the engine's default JSON write body cannot construct this nested array-of-operations shape without a Tier-2 WriteHook",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1.0/commerce/inventory/adjustments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.1-0-commerce-inventory-variantidcsvs",
+      "kind": "rest_read",
+      "summary": "GET /1.0/commerce/inventory/{variantIdCsvs}",
+      "description": "batch inventory-item detail by variant id; identical record shape to the inventory list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1.0/commerce/inventory/{variantIdCsvs}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.1-0-commerce-orders",
+      "kind": "rest_write",
+      "summary": "POST /1.0/commerce/orders",
+      "description": "Order.create's real body is a full order graph (lineItems, addresses, fulfillmentStatus, discountLines) with no flat-field shape suitable for reverse ETL; creating orders programmatically is also a rare/unsafe integration pattern for a data-sync connector",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1.0/commerce/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.1-0-commerce-orders-id",
+      "kind": "rest_read",
+      "summary": "GET /1.0/commerce/orders/{id}",
+      "description": "single-order detail; identical record shape to the orders list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1.0/commerce/orders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.1-0-commerce-orders-id-fulfillments",
+      "kind": "rest_write",
+      "summary": "POST /1.0/commerce/orders/{id}/fulfillments",
+      "description": "OrderFulfillmentRequest's body is a shipments[] array of nested CreateOrderShipmentRequest objects (carrierName/service/shipDate/trackingNumber each), not a flat record; the engine's default JSON write body copies top-level record fields verbatim and cannot construct a nested array-of-objects payload without a Tier-2 WriteHook",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1.0/commerce/orders/{id}/fulfillments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.1-0-commerce-transactions-documentids",
+      "kind": "rest_read",
+      "summary": "GET /1.0/commerce/transactions/{documentIds}",
+      "description": "single/batch transaction detail by id; identical record shape to the transactions list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1.0/commerce/transactions/{documentIds}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.1-0-profiles-profileidcsvs",
+      "kind": "rest_read",
+      "summary": "GET /1.0/profiles/{profileIdCsvs}",
+      "description": "batch profile detail by id; identical record shape to the profiles list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1.0/profiles/{profileIdCsvs}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.1-0-webhook-subscriptions-subscriptionid",
+      "kind": "rest_read",
+      "summary": "GET /1.0/webhook_subscriptions/{subscriptionId}",
+      "description": "single webhook-subscription detail; identical record shape to the webhook_subscriptions list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.1-0-webhook-subscriptions-subscriptionid",
+      "kind": "rest_write",
+      "summary": "POST /1.0/webhook_subscriptions/{subscriptionId}",
+      "description": "ExternalUpdateWebhookSubscriptionRequest wraps every changed field as {present:true,value:...} (Squarespace's own partial-update convention), not a flat record; the engine's default JSON write body copies top-level record fields verbatim and cannot construct this per-field wrapper without a Tier-2 WriteHook",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.1-0-webhook-subscriptions-subscriptionid-actions-rotatesecret",
+      "kind": "rest_write",
+      "summary": "POST /1.0/webhook_subscriptions/{subscriptionId}/actions/rotateSecret",
+      "description": "immediately invalidates the subscription's existing signing secret for every downstream consumer verifying webhook signatures; an operator-initiated security action, not a syncable data mutation",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}/actions/rotateSecret",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.1-0-webhook-subscriptions-subscriptionid-actions-sendtestnotification",
+      "kind": "rest_write",
+      "summary": "POST /1.0/webhook_subscriptions/{subscriptionId}/actions/sendTestNotification",
+      "description": "fires a synthetic test event at the configured endpoint for manual verification; no data is created, read, or mutated",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}/actions/sendTestNotification",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.v1-analytics-transaction-summaries",
+      "kind": "rest_write",
+      "summary": "POST /v1/analytics/transaction-summaries",
+      "description": "returns aggregated order/donation totals per contact for a caller-supplied contact-id batch, not a syncable object list",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/analytics/transaction-summaries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.v1-commerce-discounts",
+      "kind": "rest_read",
+      "summary": "GET /v1/commerce/discounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/commerce/discounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.v1-commerce-discounts",
+      "kind": "rest_write",
+      "summary": "POST /v1/commerce/discounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/commerce/discounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.v1-commerce-discounts-discountid",
+      "kind": "rest_read",
+      "summary": "GET /v1/commerce/discounts/{discountId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/commerce/discounts/{discountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.put.v1-commerce-discounts-discountid",
+      "kind": "rest_write",
+      "summary": "PUT /v1/commerce/discounts/{discountId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/commerce/discounts/{discountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.delete.v1-commerce-discounts-discountid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/commerce/discounts/{discountId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/commerce/discounts/{discountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.v1-contacts",
+      "kind": "rest_write",
+      "summary": "POST /v1/contacts",
+      "description": "the Contacts API v1 surface lives at a different version prefix (/v1/...) than every Commerce API write action's base_url (which bakes in the Commerce API's /1.0 segment); reaching it requires the same stream.path absolute-URL override the contacts READ stream uses, but write actions have no equivalent conformance skip-marker mechanism (write_request_shape's replay capture server always points at b.HTTP.URL, which an absolute-URL action.path bypasses entirely) — so an untestable write action was not added rather than shipping one that cannot be proven correct in this repo's conformance harness",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.v1-contacts-query",
+      "kind": "rest_write",
+      "summary": "POST /v1/contacts/query",
+      "description": "filtered/sorted contact search returning the identical Contact record shape already covered by the contacts list stream; a POST-with-body search endpoint has no GET-list declarative equivalent in this dialect",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/contacts/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.v1-contacts-contactid",
+      "kind": "rest_read",
+      "summary": "GET /v1/contacts/{contactId}",
+      "description": "single-contact detail; identical record shape to the contacts list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/contacts/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.patch.v1-contacts-contactid",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/contacts/{contactId}",
+      "description": "requires an application/merge-patch+json content type the engine's write dialect (json/form/none body_type) does not model",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/contacts/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.delete.v1-contacts-contactid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/contacts/{contactId}",
+      "description": "same Contacts API v1 version-prefix/conformance-testability gap as POST /v1/contacts above; not added as an untestable write action",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/contacts/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.v1-contacts-contactid-address-book",
+      "kind": "rest_read",
+      "summary": "GET /v1/contacts/{contactId}/address-book",
+      "description": "sub-resource of an individual contact (address book entries); no parent-id fan-out stream is declared for contacts in this pass, so there is no id source to drive this per-contact sub-read",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/contacts/{contactId}/address-book",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.v1-contacts-contactid-address-book",
+      "kind": "rest_write",
+      "summary": "POST /v1/contacts/{contactId}/address-book",
+      "description": "creates an address-book entry under a specific contact; narrow sub-resource write with no corresponding read stream in this pass",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/contacts/{contactId}/address-book",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.v1-contacts-contactid-address-book-addressbookentryid",
+      "kind": "rest_read",
+      "summary": "GET /v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+      "description": "single address-book-entry detail; no parent address-book stream is covered in this pass",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.put.v1-contacts-contactid-address-book-addressbookentryid",
+      "kind": "rest_write",
+      "summary": "PUT /v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+      "description": "replaces a specific address-book entry; narrow sub-resource write with no corresponding read stream in this pass",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.delete.v1-contacts-contactid-address-book-addressbookentryid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+      "description": "deletes a specific address-book entry; narrow sub-resource write with no corresponding read stream in this pass",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.v1-fulfillments-fulfillment-options",
+      "kind": "rest_read",
+      "summary": "GET /v1/fulfillments/fulfillment-options",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/fulfillments/fulfillment-options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.v2-commerce-products",
+      "kind": "rest_write",
+      "summary": "POST /v2/commerce/products",
+      "description": "CreateProductRequest's body includes nested variants[]/variantAttributes[] arrays required for most real product types; not expressible as the engine's default flat JSON write body without a Tier-2 WriteHook",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/commerce/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.v2-commerce-products-productidcsvs",
+      "kind": "rest_read",
+      "summary": "GET /v2/commerce/products/{productIdCsvs}",
+      "description": "batch product detail by id; identical record shape to the products list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/commerce/products/{productIdCsvs}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.v2-commerce-products-productid",
+      "kind": "rest_write",
+      "summary": "POST /v2/commerce/products/{productId}",
+      "description": "UpdateProductRequest wraps every changed field as {present:true,value:...} (Squarespace's own partial-update convention), not a flat record; the engine's default JSON write body copies top-level record fields verbatim and cannot construct this per-field wrapper without a Tier-2 WriteHook",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.delete.v2-commerce-products-productid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/commerce/products/{productId}",
+      "description": "permanently deletes a product and all its variants/images from the merchant's live storefront; higher-risk storefront-content deletion, out of scope for this pass's reverse-ETL write set",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/commerce/products/{productId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.v2-commerce-products-productid-images",
+      "kind": "rest_write",
+      "summary": "POST /v2/commerce/products/{productId}/images",
+      "description": "multipart image upload; the engine's write dialect has no multipart/binary body construction",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/images",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.v2-commerce-products-productid-images-imageid",
+      "kind": "rest_write",
+      "summary": "POST /v2/commerce/products/{productId}/images/{imageId}",
+      "description": "updates image metadata (altText) only; narrow sub-resource write with no corresponding read stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.delete.v2-commerce-products-productid-images-imageid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/commerce/products/{productId}/images/{imageId}",
+      "description": "deletes a single product image; narrow sub-resource write with no corresponding read stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.v2-commerce-products-productid-images-imageid-order",
+      "kind": "rest_write",
+      "summary": "POST /v2/commerce/products/{productId}/images/{imageId}/order",
+      "description": "reorders product images; narrow sub-resource write with no corresponding read stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}/order",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.get.v2-commerce-products-productid-images-imageid-status",
+      "kind": "rest_read",
+      "summary": "GET /v2/commerce/products/{productId}/images/{imageId}/status",
+      "description": "returns async image-processing status only, not syncable product data",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.v2-commerce-products-productid-variants",
+      "kind": "rest_write",
+      "summary": "POST /v2/commerce/products/{productId}/variants",
+      "description": "CreateProductVariantRequest's body includes nested attributes/pricing/shippingMeasurements objects; narrow sub-resource write with no corresponding read stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/variants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.v2-commerce-products-productid-variants-variantid",
+      "kind": "rest_write",
+      "summary": "POST /v2/commerce/products/{productId}/variants/{variantId}",
+      "description": "UpdateProductVariantRequest uses the same present/value wrapper convention as update_product; narrow sub-resource write with no corresponding read stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/variants/{variantId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.delete.v2-commerce-products-productid-variants-variantid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/commerce/products/{productId}/variants/{variantId}",
+      "description": "deletes a single product variant; narrow sub-resource write with no corresponding read stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/commerce/products/{productId}/variants/{variantId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "squarespace.post.v2-commerce-products-productid-variants-variantid-image",
+      "kind": "rest_write",
+      "summary": "POST /v2/commerce/products/{productId}/variants/{variantId}/image",
+      "description": "associates an existing image with a variant; narrow sub-resource write with no corresponding read stream",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/variants/{variantId}/image",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

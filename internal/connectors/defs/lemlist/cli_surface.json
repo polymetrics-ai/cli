@@ -1,0 +1,3343 @@
+{
+  "tagline": "Run Lemlist's declared streams and reverse-ETL actions.",
+  "usage": "pm lemlist \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "activities list",
+        "api get campaigns campaignid",
+        "api get campaigns campaignid export exportid status",
+        "api get campaigns campaignid export leads",
+        "api get campaigns campaignid export leads contacts export unsubs export v2 unsubscribes exports variables v2 unsubscribes exports contacts",
+        "api get campaigns campaignid export start",
+        "api get campaigns campaignid export start campaigns campaignid export exportid status",
+        "api get campaigns campaignid leads",
+        "api get campaigns campaignid leads operation campaigns campaignid schedules operation campaigns campaignid sequences campaigns campaignid statutes v2 campaigns campaignid stats companies companyid notes lemwarm usermailboxid settings v2 unsubscribes contacts contactid",
+        "api get campaigns campaignid operation schedules scheduleid operation users userid operation leads leads email operation contacts idoremail operation inbox labels labelid operation v2 unsubscribes variables value operation unsubscribes email operation enrich enrichid",
+        "api get campaigns campaignid schedules",
+        "api get campaigns campaignid sequences",
+        "api get campaigns campaignid statutes",
+        "api get campaigns reports",
+        "api get campaigns reports crm filters inbox inbox contactid operation inbox contactid drafts inbox contactid drafts draftid",
+        "api get companies companyid notes",
+        "api get contacts export",
+        "api get contacts idoremail",
+        "api get crm filters",
+        "api get database personas",
+        "api get deliverability alerts",
+        "api get deliverability alerts alertid",
+        "api get enrich enrichid",
+        "api get fields",
+        "api get inbox",
+        "api get inbox contactid",
+        "api get inbox contactid drafts",
+        "api get inbox contactid drafts draftid",
+        "api get inbox labels labelid",
+        "api get leads",
+        "api get leads email",
+        "api get lemwarm usermailboxid settings",
+        "api get schedules scheduleid",
+        "api get sequences sequenceid steps stepid ab-test",
+        "api get unsubs export",
+        "api get unsubscribes email",
+        "api get users userid",
+        "api get v2 campaigns campaignid stats",
+        "api get v2 unsubscribes contacts contactid",
+        "api get v2 unsubscribes exports contacts",
+        "api get v2 unsubscribes exports variables",
+        "api get v2 unsubscribes variables value",
+        "api get watchlist",
+        "api get watchlist filter-values",
+        "api get watchlist filters",
+        "api get watchlist history",
+        "api get watchlist library",
+        "campaigns list",
+        "companies list",
+        "contact lists list",
+        "contacts list",
+        "database filters list",
+        "fields company list",
+        "fields contact list",
+        "inbox labels list",
+        "schedules list",
+        "tasks list",
+        "team credits list",
+        "team crm users list",
+        "team list",
+        "team senders list",
+        "unsubscribed variables list",
+        "unsubscribes list",
+        "user channels list",
+        "watchlist signals list",
+        "webhooks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete activities activityid recording-transcript",
+        "api delete campaigns campaignid leads email",
+        "api delete campaigns campaignid leads leadid",
+        "api delete campaigns campaignid leads operation campaigns campaignid leads leadid operation campaigns campaignid leads email operation leads leadid variables",
+        "api delete companies companyid",
+        "api delete contacts idoremail",
+        "api delete database personas personaid",
+        "api delete deliverability alerts alertid",
+        "api delete hooks hookid",
+        "api delete inbox contactid drafts draftid",
+        "api delete inbox conversations labels contactid",
+        "api delete inbox conversations labels contactid operation inbox contactid drafts draftid",
+        "api delete leads leadid variables",
+        "api delete schedules scheduleid",
+        "api delete schedules scheduleid operation sequences sequenceid steps stepid operation activities activityid recording-transcript v2 unsubscribes variables value operation v2 unsubscribes contacts contactid operation unsubscribes email operation hooks hookid operation user email-accounts emailaccountid",
+        "api delete sequences sequenceid steps stepid",
+        "api delete sequences sequenceid steps stepid ab-test",
+        "api delete unsubscribes email",
+        "api delete user email-accounts emailaccountid",
+        "api delete v2 unsubscribes contacts contactid",
+        "api delete v2 unsubscribes variables value",
+        "api delete watchlist",
+        "api patch campaigns campaignid",
+        "api patch campaigns campaignid leads leadid",
+        "api patch campaigns campaignid leads leadid operation leads leadid variables",
+        "api patch campaigns campaignid operation schedules scheduleid operation sequences sequenceid steps stepid",
+        "api patch deliverability alerts alertid",
+        "api patch inbox contactid drafts draftid",
+        "api patch leads leadid variables",
+        "api patch lemwarm usermailboxid settings",
+        "api patch schedules scheduleid",
+        "api patch sequences sequenceid steps stepid",
+        "api patch sequences sequenceid steps stepid ab-test",
+        "api patch tasks",
+        "api patch tasks inbox contactid drafts draftid",
+        "api patch watchlist",
+        "api post campaigns",
+        "api post campaigns campaignid duplicate",
+        "api post campaigns campaignid leads",
+        "api post campaigns campaignid leads import",
+        "api post campaigns campaignid leads leadidoremail interested",
+        "api post campaigns campaignid leads leadidoremail notinterested",
+        "api post campaigns campaignid leads operation campaigns campaignid leads import leads start leadid operation leads pause leadid operation leads review leadid operation leads interested leadidoremail operation leads notinterested leadidoremail operation campaigns campaignid leads leadidoremail interested campaigns campaignid leads leadidoremail notinterested leads leadid variables leads leadid enrich",
+        "api post campaigns campaignid pause",
+        "api post campaigns campaignid schedules scheduleid",
+        "api post campaigns campaignid start",
+        "api post campaigns campaigns campaignid duplicate campaigns campaignid pause campaigns campaignid start campaigns campaignid schedules scheduleid operation sequences sequenceid steps",
+        "api post companies",
+        "api post companies companyid notes",
+        "api post contacts",
+        "api post contacts contacts lists contacts lists listid entities companies companies companyid notes",
+        "api post contacts lists",
+        "api post contacts lists listid entities",
+        "api post database companies",
+        "api post database people",
+        "api post database people database companies",
+        "api post database personas",
+        "api post deliverability alerts",
+        "api post enrich",
+        "api post hooks",
+        "api post inbox contactid drafts",
+        "api post inbox conversations labels contactid",
+        "api post inbox email",
+        "api post inbox labels",
+        "api post inbox linkedin",
+        "api post inbox whatsapp",
+        "api post leads audio",
+        "api post leads interested leadidoremail",
+        "api post leads leadid enrich",
+        "api post leads leadid variables",
+        "api post leads notinterested leadidoremail",
+        "api post leads pause leadid",
+        "api post leads review leadid",
+        "api post leads start leadid",
+        "api post lemwarm usermailboxid pause",
+        "api post lemwarm usermailboxid start",
+        "api post schedules",
+        "api post schedules lemwarm usermailboxid start lemwarm usermailboxid pause hooks enrich v2 enrichments bulk v2 unsubscribes variables v2 unsubscribes variables value operation v2 unsubscribes contacts contactid operation unsubscribes email operation user email-accounts user email-accounts emailaccountid test",
+        "api post sequences sequenceid steps",
+        "api post sequences sequenceid steps stepid ab-test",
+        "api post sequences sequenceid steps stepid ab-test winner",
+        "api post tasks",
+        "api post tasks ignore",
+        "api post tasks tasks ignore inbox email inbox linkedin inbox whatsapp inbox labels inbox conversations labels contactid operation inbox contactid drafts",
+        "api post unsubscribes email",
+        "api post user email-accounts",
+        "api post user email-accounts emailaccountid test",
+        "api post v2 campaigns stats batch",
+        "api post v2 enrichments bulk",
+        "api post v2 unsubscribes contacts contactid",
+        "api post v2 unsubscribes variables",
+        "api post v2 unsubscribes variables value",
+        "api post watchlist",
+        "api post watchlist watchlistid external-signals",
+        "api put campaigns campaignid export exportid email email"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "activities list",
+      "summary": "Run the activities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activities",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist activities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities"
+        }
+      ]
+    },
+    {
+      "path": "api delete activities activityid recording-transcript",
+      "summary": "Documented DELETE /activities/{activityId}/recording-transcript (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete activities activityid recording-transcript --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/activities/{activityId}/recording-transcript"
+        }
+      ],
+      "operation": "lemlist.delete.activities-activityid-recording-transcript",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete campaigns campaignid leads email",
+      "summary": "Documented DELETE /campaigns/{campaignId}/leads/{email} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete campaigns campaignid leads email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/campaigns/{campaignId}/leads/{email}"
+        }
+      ],
+      "operation": "lemlist.delete.campaigns-campaignid-leads-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete campaigns campaignid leads leadid",
+      "summary": "Documented DELETE /campaigns/{campaignId}/leads/{leadId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete campaigns campaignid leads leadid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/campaigns/{campaignId}/leads/{leadId}"
+        }
+      ],
+      "operation": "lemlist.delete.campaigns-campaignid-leads-leadid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete campaigns campaignid leads operation campaigns campaignid leads leadid operation campaigns campaignid leads email operation leads leadid variables",
+      "summary": "Documented DELETE /campaigns/{campaignId}/leads/, /campaigns/{campaignId}/leads/{leadId}, /campaigns/{campaignId}/leads/{email}, /leads/{leadId}/variables (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete campaigns campaignid leads operation campaigns campaignid leads leadid operation campaigns campaignid leads email operation leads leadid variables --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/campaigns/{campaignId}/leads/, /campaigns/{campaignId}/leads/{leadId}, /campaigns/{campaignId}/leads/{email}, /leads/{leadId}/variables"
+        }
+      ],
+      "operation": "lemlist.delete.campaigns-campaignid-leads-campaigns-campaignid-leads-leadid-campaigns-campaignid-leads-email-leads-leadid-variables",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete companies companyid",
+      "summary": "Documented DELETE /companies/{companyId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete companies companyid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/companies/{companyId}"
+        }
+      ],
+      "operation": "lemlist.delete.companies-companyid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete contacts idoremail",
+      "summary": "Documented DELETE /contacts/{idOrEmail} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete contacts idoremail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{idOrEmail}"
+        }
+      ],
+      "operation": "lemlist.delete.contacts-idoremail",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete database personas personaid",
+      "summary": "Documented DELETE /database/personas/{personaId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete database personas personaid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/database/personas/{personaId}"
+        }
+      ],
+      "operation": "lemlist.delete.database-personas-personaid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete deliverability alerts alertid",
+      "summary": "Documented DELETE /deliverability/alerts/{alertId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete deliverability alerts alertid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/deliverability/alerts/{alertId}"
+        }
+      ],
+      "operation": "lemlist.delete.deliverability-alerts-alertid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete hooks hookid",
+      "summary": "Documented DELETE /hooks/{hookId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete hooks hookid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/hooks/{hookId}"
+        }
+      ],
+      "operation": "lemlist.delete.hooks-hookid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete inbox contactid drafts draftid",
+      "summary": "Documented DELETE /inbox/{contactId}/drafts/{draftId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete inbox contactid drafts draftid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/inbox/{contactId}/drafts/{draftId}"
+        }
+      ],
+      "operation": "lemlist.delete.inbox-contactid-drafts-draftid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete inbox conversations labels contactid",
+      "summary": "Documented DELETE /inbox/conversations/labels/{contactId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete inbox conversations labels contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/inbox/conversations/labels/{contactId}"
+        }
+      ],
+      "operation": "lemlist.delete.inbox-conversations-labels-contactid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete inbox conversations labels contactid operation inbox contactid drafts draftid",
+      "summary": "Documented DELETE /inbox/conversations/labels/{contactId}, /inbox/{contactId}/drafts/{draftId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete inbox conversations labels contactid operation inbox contactid drafts draftid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/inbox/conversations/labels/{contactId}, /inbox/{contactId}/drafts/{draftId}"
+        }
+      ],
+      "operation": "lemlist.delete.inbox-conversations-labels-contactid-inbox-contactid-drafts-draftid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete leads leadid variables",
+      "summary": "Documented DELETE /leads/{leadId}/variables (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete leads leadid variables --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/leads/{leadId}/variables"
+        }
+      ],
+      "operation": "lemlist.delete.leads-leadid-variables",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete schedules scheduleid",
+      "summary": "Documented DELETE /schedules/{scheduleId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete schedules scheduleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/schedules/{scheduleId}"
+        }
+      ],
+      "operation": "lemlist.delete.schedules-scheduleid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete schedules scheduleid operation sequences sequenceid steps stepid operation activities activityid recording-transcript v2 unsubscribes variables value operation v2 unsubscribes contacts contactid operation unsubscribes email operation hooks hookid operation user email-accounts emailaccountid",
+      "summary": "Documented DELETE /schedules/{scheduleId}, /sequences/{sequenceId}/steps/{stepId}, /activities/{activityId}/recording-transcript, /v2/unsubscribes/variables/{value}, /v2/unsubscribes/contacts/{contactId}, /unsubscribes/{email}, /hooks/{hookId}, /user/email-accounts/{emailAccountId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete schedules scheduleid operation sequences sequenceid steps stepid operation activities activityid recording-transcript v2 unsubscribes variables value operation v2 unsubscribes contacts contactid operation unsubscribes email operation hooks hookid operation user email-accounts emailaccountid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/schedules/{scheduleId}, /sequences/{sequenceId}/steps/{stepId}, /activities/{activityId}/recording-transcript, /v2/unsubscribes/variables/{value}, /v2/unsubscribes/contacts/{contactId}, /unsubscribes/{email}, /hooks/{hookId}, /user/email-accounts/{emailAccountId}"
+        }
+      ],
+      "operation": "lemlist.delete.schedules-scheduleid-sequences-sequenceid-steps-stepid-activities-activityid-recording-transcript-v2-unsubscribes-variables-value-v2-unsubscribes-contacts-contactid-unsubscribes-email-hooks-hookid-user-email-accounts-emailaccountid",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api delete sequences sequenceid steps stepid",
+      "summary": "Documented DELETE /sequences/{sequenceId}/steps/{stepId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete sequences sequenceid steps stepid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sequences/{sequenceId}/steps/{stepId}"
+        }
+      ],
+      "operation": "lemlist.delete.sequences-sequenceid-steps-stepid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete sequences sequenceid steps stepid ab-test",
+      "summary": "Documented DELETE /sequences/{sequenceId}/steps/{stepId}/ab-test (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete sequences sequenceid steps stepid ab-test --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sequences/{sequenceId}/steps/{stepId}/ab-test"
+        }
+      ],
+      "operation": "lemlist.delete.sequences-sequenceid-steps-stepid-ab-test",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete unsubscribes email",
+      "summary": "Documented DELETE /unsubscribes/{email} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete unsubscribes email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/unsubscribes/{email}"
+        }
+      ],
+      "operation": "lemlist.delete.unsubscribes-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete user email-accounts emailaccountid",
+      "summary": "Documented DELETE /user/email-accounts/{emailAccountId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete user email-accounts emailaccountid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/user/email-accounts/{emailAccountId}"
+        }
+      ],
+      "operation": "lemlist.delete.user-email-accounts-emailaccountid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 unsubscribes contacts contactid",
+      "summary": "Documented DELETE /v2/unsubscribes/contacts/{contactId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete v2 unsubscribes contacts contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/unsubscribes/contacts/{contactId}"
+        }
+      ],
+      "operation": "lemlist.delete.v2-unsubscribes-contacts-contactid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 unsubscribes variables value",
+      "summary": "Documented DELETE /v2/unsubscribes/variables/{value} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete v2 unsubscribes variables value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/unsubscribes/variables/{value}"
+        }
+      ],
+      "operation": "lemlist.delete.v2-unsubscribes-variables-value",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete watchlist",
+      "summary": "Documented DELETE /watchlist (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api delete watchlist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/watchlist"
+        }
+      ],
+      "operation": "lemlist.delete.watchlist",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get campaigns campaignid",
+      "summary": "Documented GET /campaigns/{campaignId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns campaignid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-campaignid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid export exportid status",
+      "summary": "Documented GET /campaigns/{campaignId}/export/{exportId}/status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns campaignid export exportid status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/export/{exportId}/status"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-campaignid-export-exportid-status",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid export leads",
+      "summary": "Documented GET /campaigns/{campaignId}/export/leads (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns campaignid export leads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/export/leads"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-campaignid-export-leads",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid export leads contacts export unsubs export v2 unsubscribes exports variables v2 unsubscribes exports contacts",
+      "summary": "Documented GET /campaigns/{campaignId}/export/leads, /contacts/export, /unsubs/export, /v2/unsubscribes/exports/variables, /v2/unsubscribes/exports/contacts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns campaignid export leads contacts export unsubs export v2 unsubscribes exports variables v2 unsubscribes exports contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/export/leads, /contacts/export, /unsubs/export, /v2/unsubscribes/exports/variables, /v2/unsubscribes/exports/contacts"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-campaignid-export-leads-contacts-export-unsubs-export-v2-unsubscribes-exports-variables-v2-unsubscribes-exports-contacts",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid export start",
+      "summary": "Documented GET /campaigns/{campaignId}/export/start (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns campaignid export start --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/export/start"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-campaignid-export-start",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid export start campaigns campaignid export exportid status",
+      "summary": "Documented GET /campaigns/{campaignId}/export/start, /campaigns/{campaignId}/export/{exportId}/status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns campaignid export start campaigns campaignid export exportid status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/export/start, /campaigns/{campaignId}/export/{exportId}/status"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-campaignid-export-start-campaigns-campaignid-export-exportid-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid leads",
+      "summary": "Documented GET /campaigns/{campaignId}/leads/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns campaignid leads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/leads/"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-campaignid-leads",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid leads operation campaigns campaignid schedules operation campaigns campaignid sequences campaigns campaignid statutes v2 campaigns campaignid stats companies companyid notes lemwarm usermailboxid settings v2 unsubscribes contacts contactid",
+      "summary": "Documented GET /campaigns/{campaignId}/leads/, /campaigns/{campaignId}/schedules/, /campaigns/{campaignId}/sequences, /campaigns/{campaignId}/statutes, /v2/campaigns/{campaignId}/stats, /companies/{companyId}/notes, /lemwarm/{userMailboxId}/settings, /v2/unsubscribes/contacts/{contactId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns campaignid leads operation campaigns campaignid schedules operation campaigns campaignid sequences campaigns campaignid statutes v2 campaigns campaignid stats companies companyid notes lemwarm usermailboxid settings v2 unsubscribes contacts contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/leads/, /campaigns/{campaignId}/schedules/, /campaigns/{campaignId}/sequences, /campaigns/{campaignId}/statutes, /v2/campaigns/{campaignId}/stats, /companies/{companyId}/notes, /lemwarm/{userMailboxId}/settings, /v2/unsubscribes/contacts/{contactId}"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-campaignid-leads-campaigns-campaignid-schedules-campaigns-campaignid-sequences-campaigns-campaignid-statutes-v2-campaigns-campaignid-stats-companies-companyid-notes-lemwarm-usermailboxid-settings-v2-unsubscribes-contacts-contactid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid operation schedules scheduleid operation users userid operation leads leads email operation contacts idoremail operation inbox labels labelid operation v2 unsubscribes variables value operation unsubscribes email operation enrich enrichid",
+      "summary": "Documented GET /campaigns/{campaignId}, /schedules/{scheduleId}, /users/{userId}, /leads, /leads/{email}, /contacts/{idOrEmail}, /inbox/labels/{labelId}, /v2/unsubscribes/variables/{value}, /unsubscribes/{email}, /enrich/{enrichId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns campaignid operation schedules scheduleid operation users userid operation leads leads email operation contacts idoremail operation inbox labels labelid operation v2 unsubscribes variables value operation unsubscribes email operation enrich enrichid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}, /schedules/{scheduleId}, /users/{userId}, /leads, /leads/{email}, /contacts/{idOrEmail}, /inbox/labels/{labelId}, /v2/unsubscribes/variables/{value}, /unsubscribes/{email}, /enrich/{enrichId}"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-campaignid-schedules-scheduleid-users-userid-leads-leads-email-contacts-idoremail-inbox-labels-labelid-v2-unsubscribes-variables-value-unsubscribes-email-enrich-enrichid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid schedules",
+      "summary": "Documented GET /campaigns/{campaignId}/schedules/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns campaignid schedules --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/schedules/"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-campaignid-schedules",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid sequences",
+      "summary": "Documented GET /campaigns/{campaignId}/sequences (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns campaignid sequences --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/sequences"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-campaignid-sequences",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns campaignid statutes",
+      "summary": "Documented GET /campaigns/{campaignId}/statutes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns campaignid statutes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{campaignId}/statutes"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-campaignid-statutes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns reports",
+      "summary": "Documented GET /campaigns/reports (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns reports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/reports"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-reports",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get campaigns reports crm filters inbox inbox contactid operation inbox contactid drafts inbox contactid drafts draftid",
+      "summary": "Documented GET /campaigns/reports, /crm/filters, /inbox, /inbox/{contactId}, /inbox/{contactId}/drafts, /inbox/{contactId}/drafts/{draftId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get campaigns reports crm filters inbox inbox contactid operation inbox contactid drafts inbox contactid drafts draftid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/reports, /crm/filters, /inbox, /inbox/{contactId}, /inbox/{contactId}/drafts, /inbox/{contactId}/drafts/{draftId}"
+        }
+      ],
+      "operation": "lemlist.get.campaigns-reports-crm-filters-inbox-inbox-contactid-inbox-contactid-drafts-inbox-contactid-drafts-draftid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get companies companyid notes",
+      "summary": "Documented GET /companies/{companyId}/notes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get companies companyid notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{companyId}/notes"
+        }
+      ],
+      "operation": "lemlist.get.companies-companyid-notes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contacts export",
+      "summary": "Documented GET /contacts/export (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get contacts export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/export"
+        }
+      ],
+      "operation": "lemlist.get.contacts-export",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contacts idoremail",
+      "summary": "Documented GET /contacts/{idOrEmail} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get contacts idoremail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{idOrEmail}"
+        }
+      ],
+      "operation": "lemlist.get.contacts-idoremail",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get crm filters",
+      "summary": "Documented GET /crm/filters (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get crm filters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/crm/filters"
+        }
+      ],
+      "operation": "lemlist.get.crm-filters",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get database personas",
+      "summary": "Documented GET /database/personas (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get database personas --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/database/personas"
+        }
+      ],
+      "operation": "lemlist.get.database-personas",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deliverability alerts",
+      "summary": "Documented GET /deliverability/alerts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get deliverability alerts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deliverability/alerts"
+        }
+      ],
+      "operation": "lemlist.get.deliverability-alerts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deliverability alerts alertid",
+      "summary": "Documented GET /deliverability/alerts/{alertId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get deliverability alerts alertid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deliverability/alerts/{alertId}"
+        }
+      ],
+      "operation": "lemlist.get.deliverability-alerts-alertid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get enrich enrichid",
+      "summary": "Documented GET /enrich/{enrichId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get enrich enrichid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/enrich/{enrichId}"
+        }
+      ],
+      "operation": "lemlist.get.enrich-enrichid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get fields",
+      "summary": "Documented GET /fields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fields"
+        }
+      ],
+      "operation": "lemlist.get.fields",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get inbox",
+      "summary": "Documented GET /inbox (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get inbox --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/inbox"
+        }
+      ],
+      "operation": "lemlist.get.inbox",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get inbox contactid",
+      "summary": "Documented GET /inbox/{contactId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get inbox contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/inbox/{contactId}"
+        }
+      ],
+      "operation": "lemlist.get.inbox-contactid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get inbox contactid drafts",
+      "summary": "Documented GET /inbox/{contactId}/drafts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get inbox contactid drafts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/inbox/{contactId}/drafts"
+        }
+      ],
+      "operation": "lemlist.get.inbox-contactid-drafts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get inbox contactid drafts draftid",
+      "summary": "Documented GET /inbox/{contactId}/drafts/{draftId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get inbox contactid drafts draftid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/inbox/{contactId}/drafts/{draftId}"
+        }
+      ],
+      "operation": "lemlist.get.inbox-contactid-drafts-draftid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get inbox labels labelid",
+      "summary": "Documented GET /inbox/labels/{labelId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get inbox labels labelid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/inbox/labels/{labelId}"
+        }
+      ],
+      "operation": "lemlist.get.inbox-labels-labelid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get leads",
+      "summary": "Documented GET /leads (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get leads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads"
+        }
+      ],
+      "operation": "lemlist.get.leads",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get leads email",
+      "summary": "Documented GET /leads/{email} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get leads email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/{email}"
+        }
+      ],
+      "operation": "lemlist.get.leads-email",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get lemwarm usermailboxid settings",
+      "summary": "Documented GET /lemwarm/{userMailboxId}/settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get lemwarm usermailboxid settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lemwarm/{userMailboxId}/settings"
+        }
+      ],
+      "operation": "lemlist.get.lemwarm-usermailboxid-settings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get schedules scheduleid",
+      "summary": "Documented GET /schedules/{scheduleId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get schedules scheduleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/schedules/{scheduleId}"
+        }
+      ],
+      "operation": "lemlist.get.schedules-scheduleid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sequences sequenceid steps stepid ab-test",
+      "summary": "Documented GET /sequences/{sequenceId}/steps/{stepId}/ab-test (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get sequences sequenceid steps stepid ab-test --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sequences/{sequenceId}/steps/{stepId}/ab-test"
+        }
+      ],
+      "operation": "lemlist.get.sequences-sequenceid-steps-stepid-ab-test",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get unsubs export",
+      "summary": "Documented GET /unsubs/export (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get unsubs export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/unsubs/export"
+        }
+      ],
+      "operation": "lemlist.get.unsubs-export",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get unsubscribes email",
+      "summary": "Documented GET /unsubscribes/{email} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get unsubscribes email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/unsubscribes/{email}"
+        }
+      ],
+      "operation": "lemlist.get.unsubscribes-email",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users userid",
+      "summary": "Documented GET /users/{userId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get users userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}"
+        }
+      ],
+      "operation": "lemlist.get.users-userid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 campaigns campaignid stats",
+      "summary": "Documented GET /v2/campaigns/{campaignId}/stats (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get v2 campaigns campaignid stats --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/campaigns/{campaignId}/stats"
+        }
+      ],
+      "operation": "lemlist.get.v2-campaigns-campaignid-stats",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 unsubscribes contacts contactid",
+      "summary": "Documented GET /v2/unsubscribes/contacts/{contactId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get v2 unsubscribes contacts contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/unsubscribes/contacts/{contactId}"
+        }
+      ],
+      "operation": "lemlist.get.v2-unsubscribes-contacts-contactid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 unsubscribes exports contacts",
+      "summary": "Documented GET /v2/unsubscribes/exports/contacts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get v2 unsubscribes exports contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/unsubscribes/exports/contacts"
+        }
+      ],
+      "operation": "lemlist.get.v2-unsubscribes-exports-contacts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 unsubscribes exports variables",
+      "summary": "Documented GET /v2/unsubscribes/exports/variables (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get v2 unsubscribes exports variables --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/unsubscribes/exports/variables"
+        }
+      ],
+      "operation": "lemlist.get.v2-unsubscribes-exports-variables",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 unsubscribes variables value",
+      "summary": "Documented GET /v2/unsubscribes/variables/{value} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get v2 unsubscribes variables value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/unsubscribes/variables/{value}"
+        }
+      ],
+      "operation": "lemlist.get.v2-unsubscribes-variables-value",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get watchlist",
+      "summary": "Documented GET /watchlist (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get watchlist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/watchlist"
+        }
+      ],
+      "operation": "lemlist.get.watchlist",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get watchlist filter-values",
+      "summary": "Documented GET /watchlist/filter-values (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get watchlist filter-values --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/watchlist/filter-values"
+        }
+      ],
+      "operation": "lemlist.get.watchlist-filter-values",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get watchlist filters",
+      "summary": "Documented GET /watchlist/filters (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get watchlist filters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/watchlist/filters"
+        }
+      ],
+      "operation": "lemlist.get.watchlist-filters",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get watchlist history",
+      "summary": "Documented GET /watchlist/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get watchlist history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/watchlist/history"
+        }
+      ],
+      "operation": "lemlist.get.watchlist-history",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get watchlist library",
+      "summary": "Documented GET /watchlist/library (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api get watchlist library --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/watchlist/library"
+        }
+      ],
+      "operation": "lemlist.get.watchlist-library",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch campaigns campaignid",
+      "summary": "Documented PATCH /campaigns/{campaignId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch campaigns campaignid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/campaigns/{campaignId}"
+        }
+      ],
+      "operation": "lemlist.patch.campaigns-campaignid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch campaigns campaignid leads leadid",
+      "summary": "Documented PATCH /campaigns/{campaignId}/leads/{leadId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch campaigns campaignid leads leadid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/campaigns/{campaignId}/leads/{leadId}"
+        }
+      ],
+      "operation": "lemlist.patch.campaigns-campaignid-leads-leadid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch campaigns campaignid leads leadid operation leads leadid variables",
+      "summary": "Documented PATCH /campaigns/{campaignId}/leads/{leadId}, /leads/{leadId}/variables (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch campaigns campaignid leads leadid operation leads leadid variables --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/campaigns/{campaignId}/leads/{leadId}, /leads/{leadId}/variables"
+        }
+      ],
+      "operation": "lemlist.patch.campaigns-campaignid-leads-leadid-leads-leadid-variables",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch campaigns campaignid operation schedules scheduleid operation sequences sequenceid steps stepid",
+      "summary": "Documented PATCH /campaigns/{campaignId}, /schedules/{scheduleId}, /sequences/{sequenceId}/steps/{stepId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch campaigns campaignid operation schedules scheduleid operation sequences sequenceid steps stepid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/campaigns/{campaignId}, /schedules/{scheduleId}, /sequences/{sequenceId}/steps/{stepId}"
+        }
+      ],
+      "operation": "lemlist.patch.campaigns-campaignid-schedules-scheduleid-sequences-sequenceid-steps-stepid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch deliverability alerts alertid",
+      "summary": "Documented PATCH /deliverability/alerts/{alertId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch deliverability alerts alertid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/deliverability/alerts/{alertId}"
+        }
+      ],
+      "operation": "lemlist.patch.deliverability-alerts-alertid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch inbox contactid drafts draftid",
+      "summary": "Documented PATCH /inbox/{contactId}/drafts/{draftId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch inbox contactid drafts draftid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/inbox/{contactId}/drafts/{draftId}"
+        }
+      ],
+      "operation": "lemlist.patch.inbox-contactid-drafts-draftid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch leads leadid variables",
+      "summary": "Documented PATCH /leads/{leadId}/variables (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch leads leadid variables --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/leads/{leadId}/variables"
+        }
+      ],
+      "operation": "lemlist.patch.leads-leadid-variables",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch lemwarm usermailboxid settings",
+      "summary": "Documented PATCH /lemwarm/{userMailboxId}/settings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch lemwarm usermailboxid settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/lemwarm/{userMailboxId}/settings"
+        }
+      ],
+      "operation": "lemlist.patch.lemwarm-usermailboxid-settings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch schedules scheduleid",
+      "summary": "Documented PATCH /schedules/{scheduleId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch schedules scheduleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/schedules/{scheduleId}"
+        }
+      ],
+      "operation": "lemlist.patch.schedules-scheduleid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch sequences sequenceid steps stepid",
+      "summary": "Documented PATCH /sequences/{sequenceId}/steps/{stepId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch sequences sequenceid steps stepid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/sequences/{sequenceId}/steps/{stepId}"
+        }
+      ],
+      "operation": "lemlist.patch.sequences-sequenceid-steps-stepid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch sequences sequenceid steps stepid ab-test",
+      "summary": "Documented PATCH /sequences/{sequenceId}/steps/{stepId}/ab-test (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch sequences sequenceid steps stepid ab-test --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/sequences/{sequenceId}/steps/{stepId}/ab-test"
+        }
+      ],
+      "operation": "lemlist.patch.sequences-sequenceid-steps-stepid-ab-test",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch tasks",
+      "summary": "Documented PATCH /tasks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/tasks"
+        }
+      ],
+      "operation": "lemlist.patch.tasks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch tasks inbox contactid drafts draftid",
+      "summary": "Documented PATCH /tasks, /inbox/{contactId}/drafts/{draftId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch tasks inbox contactid drafts draftid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/tasks, /inbox/{contactId}/drafts/{draftId}"
+        }
+      ],
+      "operation": "lemlist.patch.tasks-inbox-contactid-drafts-draftid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch watchlist",
+      "summary": "Documented PATCH /watchlist (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api patch watchlist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/watchlist"
+        }
+      ],
+      "operation": "lemlist.patch.watchlist",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post campaigns",
+      "summary": "Documented POST /campaigns (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post campaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns"
+        }
+      ],
+      "operation": "lemlist.post.campaigns",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post campaigns campaignid duplicate",
+      "summary": "Documented POST /campaigns/{campaignId}/duplicate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post campaigns campaignid duplicate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns/{campaignId}/duplicate"
+        }
+      ],
+      "operation": "lemlist.post.campaigns-campaignid-duplicate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post campaigns campaignid leads",
+      "summary": "Documented POST /campaigns/{campaignId}/leads/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post campaigns campaignid leads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns/{campaignId}/leads/"
+        }
+      ],
+      "operation": "lemlist.post.campaigns-campaignid-leads",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post campaigns campaignid leads import",
+      "summary": "Documented POST /campaigns/{campaignId}/leads/import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post campaigns campaignid leads import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns/{campaignId}/leads/import"
+        }
+      ],
+      "operation": "lemlist.post.campaigns-campaignid-leads-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post campaigns campaignid leads leadidoremail interested",
+      "summary": "Documented POST /campaigns/{campaignId}/leads/{leadIdOrEmail}/interested (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post campaigns campaignid leads leadidoremail interested --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns/{campaignId}/leads/{leadIdOrEmail}/interested"
+        }
+      ],
+      "operation": "lemlist.post.campaigns-campaignid-leads-leadidoremail-interested",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post campaigns campaignid leads leadidoremail notinterested",
+      "summary": "Documented POST /campaigns/{campaignId}/leads/{leadIdOrEmail}/notinterested (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post campaigns campaignid leads leadidoremail notinterested --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns/{campaignId}/leads/{leadIdOrEmail}/notinterested"
+        }
+      ],
+      "operation": "lemlist.post.campaigns-campaignid-leads-leadidoremail-notinterested",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post campaigns campaignid leads operation campaigns campaignid leads import leads start leadid operation leads pause leadid operation leads review leadid operation leads interested leadidoremail operation leads notinterested leadidoremail operation campaigns campaignid leads leadidoremail interested campaigns campaignid leads leadidoremail notinterested leads leadid variables leads leadid enrich",
+      "summary": "Documented POST /campaigns/{campaignId}/leads/, /campaigns/{campaignId}/leads/import, /leads/start/{leadId}, /leads/pause/{leadId}, /leads/review/{leadId}, /leads/interested/{leadIdOrEmail}, /leads/notinterested/{leadIdOrEmail}, /campaigns/{campaignId}/leads/{leadIdOrEmail}/interested, /campaigns/{campaignId}/leads/{leadIdOrEmail}/notinterested, /leads/{leadId}/variables, /leads/{leadId}/enrich (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post campaigns campaignid leads operation campaigns campaignid leads import leads start leadid operation leads pause leadid operation leads review leadid operation leads interested leadidoremail operation leads notinterested leadidoremail operation campaigns campaignid leads leadidoremail interested campaigns campaignid leads leadidoremail notinterested leads leadid variables leads leadid enrich --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns/{campaignId}/leads/, /campaigns/{campaignId}/leads/import, /leads/start/{leadId}, /leads/pause/{leadId}, /leads/review/{leadId}, /leads/interested/{leadIdOrEmail}, /leads/notinterested/{leadIdOrEmail}, /campaigns/{campaignId}/leads/{leadIdOrEmail}/interested, /campaigns/{campaignId}/leads/{leadIdOrEmail}/notinterested, /leads/{leadId}/variables, /leads/{leadId}/enrich"
+        }
+      ],
+      "operation": "lemlist.post.campaigns-campaignid-leads-campaigns-campaignid-leads-import-leads-start-leadid-leads-pause-leadid-leads-review-leadid-leads-interested-leadidoremail-leads-notinterested-leadidoremail-campaigns-campaignid-leads-leadidoremail-interested-campaigns-campaignid-leads-leadidoremail-notinterested-leads-leadid-variables-leads-leadid-enrich",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post campaigns campaignid pause",
+      "summary": "Documented POST /campaigns/{campaignId}/pause (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post campaigns campaignid pause --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns/{campaignId}/pause"
+        }
+      ],
+      "operation": "lemlist.post.campaigns-campaignid-pause",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post campaigns campaignid schedules scheduleid",
+      "summary": "Documented POST /campaigns/{campaignId}/schedules/{scheduleId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post campaigns campaignid schedules scheduleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns/{campaignId}/schedules/{scheduleId}"
+        }
+      ],
+      "operation": "lemlist.post.campaigns-campaignid-schedules-scheduleid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post campaigns campaignid start",
+      "summary": "Documented POST /campaigns/{campaignId}/start (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post campaigns campaignid start --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns/{campaignId}/start"
+        }
+      ],
+      "operation": "lemlist.post.campaigns-campaignid-start",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post campaigns campaigns campaignid duplicate campaigns campaignid pause campaigns campaignid start campaigns campaignid schedules scheduleid operation sequences sequenceid steps",
+      "summary": "Documented POST /campaigns, /campaigns/{campaignId}/duplicate, /campaigns/{campaignId}/pause, /campaigns/{campaignId}/start, /campaigns/{campaignId}/schedules/{scheduleId}, /sequences/{sequenceId}/steps (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post campaigns campaigns campaignid duplicate campaigns campaignid pause campaigns campaignid start campaigns campaignid schedules scheduleid operation sequences sequenceid steps --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns, /campaigns/{campaignId}/duplicate, /campaigns/{campaignId}/pause, /campaigns/{campaignId}/start, /campaigns/{campaignId}/schedules/{scheduleId}, /sequences/{sequenceId}/steps"
+        }
+      ],
+      "operation": "lemlist.post.campaigns-campaigns-campaignid-duplicate-campaigns-campaignid-pause-campaigns-campaignid-start-campaigns-campaignid-schedules-scheduleid-sequences-sequenceid-steps",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post companies",
+      "summary": "Documented POST /companies (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post companies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies"
+        }
+      ],
+      "operation": "lemlist.post.companies",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post companies companyid notes",
+      "summary": "Documented POST /companies/{companyId}/notes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post companies companyid notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies/{companyId}/notes"
+        }
+      ],
+      "operation": "lemlist.post.companies-companyid-notes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post contacts",
+      "summary": "Documented POST /contacts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts"
+        }
+      ],
+      "operation": "lemlist.post.contacts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post contacts contacts lists contacts lists listid entities companies companies companyid notes",
+      "summary": "Documented POST /contacts, /contacts/lists, /contacts/lists/{listId}/entities, /companies, /companies/{companyId}/notes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post contacts contacts lists contacts lists listid entities companies companies companyid notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts, /contacts/lists, /contacts/lists/{listId}/entities, /companies, /companies/{companyId}/notes"
+        }
+      ],
+      "operation": "lemlist.post.contacts-contacts-lists-contacts-lists-listid-entities-companies-companies-companyid-notes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post contacts lists",
+      "summary": "Documented POST /contacts/lists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post contacts lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/lists"
+        }
+      ],
+      "operation": "lemlist.post.contacts-lists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post contacts lists listid entities",
+      "summary": "Documented POST /contacts/lists/{listId}/entities (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post contacts lists listid entities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/lists/{listId}/entities"
+        }
+      ],
+      "operation": "lemlist.post.contacts-lists-listid-entities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post database companies",
+      "summary": "Documented POST /database/companies (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post database companies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/database/companies"
+        }
+      ],
+      "operation": "lemlist.post.database-companies",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post database people",
+      "summary": "Documented POST /database/people (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post database people --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/database/people"
+        }
+      ],
+      "operation": "lemlist.post.database-people",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post database people database companies",
+      "summary": "Documented POST /database/people, /database/companies (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post database people database companies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/database/people, /database/companies"
+        }
+      ],
+      "operation": "lemlist.post.database-people-database-companies",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post database personas",
+      "summary": "Documented POST /database/personas (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post database personas --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/database/personas"
+        }
+      ],
+      "operation": "lemlist.post.database-personas",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post deliverability alerts",
+      "summary": "Documented POST /deliverability/alerts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post deliverability alerts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/deliverability/alerts"
+        }
+      ],
+      "operation": "lemlist.post.deliverability-alerts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post enrich",
+      "summary": "Documented POST /enrich (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post enrich --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/enrich"
+        }
+      ],
+      "operation": "lemlist.post.enrich",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post hooks",
+      "summary": "Documented POST /hooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post hooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/hooks"
+        }
+      ],
+      "operation": "lemlist.post.hooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post inbox contactid drafts",
+      "summary": "Documented POST /inbox/{contactId}/drafts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post inbox contactid drafts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbox/{contactId}/drafts"
+        }
+      ],
+      "operation": "lemlist.post.inbox-contactid-drafts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post inbox conversations labels contactid",
+      "summary": "Documented POST /inbox/conversations/labels/{contactId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post inbox conversations labels contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbox/conversations/labels/{contactId}"
+        }
+      ],
+      "operation": "lemlist.post.inbox-conversations-labels-contactid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post inbox email",
+      "summary": "Documented POST /inbox/email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post inbox email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbox/email"
+        }
+      ],
+      "operation": "lemlist.post.inbox-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post inbox labels",
+      "summary": "Documented POST /inbox/labels (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post inbox labels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbox/labels"
+        }
+      ],
+      "operation": "lemlist.post.inbox-labels",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post inbox linkedin",
+      "summary": "Documented POST /inbox/linkedin (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post inbox linkedin --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbox/linkedin"
+        }
+      ],
+      "operation": "lemlist.post.inbox-linkedin",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post inbox whatsapp",
+      "summary": "Documented POST /inbox/whatsapp (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post inbox whatsapp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbox/whatsapp"
+        }
+      ],
+      "operation": "lemlist.post.inbox-whatsapp",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads audio",
+      "summary": "Documented POST /leads/audio (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post leads audio --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/audio"
+        }
+      ],
+      "operation": "lemlist.post.leads-audio",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads interested leadidoremail",
+      "summary": "Documented POST /leads/interested/{leadIdOrEmail} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post leads interested leadidoremail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/interested/{leadIdOrEmail}"
+        }
+      ],
+      "operation": "lemlist.post.leads-interested-leadidoremail",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads leadid enrich",
+      "summary": "Documented POST /leads/{leadId}/enrich (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post leads leadid enrich --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/{leadId}/enrich"
+        }
+      ],
+      "operation": "lemlist.post.leads-leadid-enrich",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads leadid variables",
+      "summary": "Documented POST /leads/{leadId}/variables (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post leads leadid variables --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/{leadId}/variables"
+        }
+      ],
+      "operation": "lemlist.post.leads-leadid-variables",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads notinterested leadidoremail",
+      "summary": "Documented POST /leads/notinterested/{leadIdOrEmail} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post leads notinterested leadidoremail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/notinterested/{leadIdOrEmail}"
+        }
+      ],
+      "operation": "lemlist.post.leads-notinterested-leadidoremail",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads pause leadid",
+      "summary": "Documented POST /leads/pause/{leadId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post leads pause leadid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/pause/{leadId}"
+        }
+      ],
+      "operation": "lemlist.post.leads-pause-leadid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads review leadid",
+      "summary": "Documented POST /leads/review/{leadId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post leads review leadid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/review/{leadId}"
+        }
+      ],
+      "operation": "lemlist.post.leads-review-leadid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads start leadid",
+      "summary": "Documented POST /leads/start/{leadId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post leads start leadid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/start/{leadId}"
+        }
+      ],
+      "operation": "lemlist.post.leads-start-leadid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post lemwarm usermailboxid pause",
+      "summary": "Documented POST /lemwarm/{userMailboxId}/pause (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post lemwarm usermailboxid pause --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lemwarm/{userMailboxId}/pause"
+        }
+      ],
+      "operation": "lemlist.post.lemwarm-usermailboxid-pause",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post lemwarm usermailboxid start",
+      "summary": "Documented POST /lemwarm/{userMailboxId}/start (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post lemwarm usermailboxid start --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lemwarm/{userMailboxId}/start"
+        }
+      ],
+      "operation": "lemlist.post.lemwarm-usermailboxid-start",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post schedules",
+      "summary": "Documented POST /schedules (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post schedules --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/schedules"
+        }
+      ],
+      "operation": "lemlist.post.schedules",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post schedules lemwarm usermailboxid start lemwarm usermailboxid pause hooks enrich v2 enrichments bulk v2 unsubscribes variables v2 unsubscribes variables value operation v2 unsubscribes contacts contactid operation unsubscribes email operation user email-accounts user email-accounts emailaccountid test",
+      "summary": "Documented POST /schedules, /lemwarm/{userMailboxId}/start, /lemwarm/{userMailboxId}/pause, /hooks, /enrich, /v2/enrichments/bulk, /v2/unsubscribes/variables, /v2/unsubscribes/variables/{value}, /v2/unsubscribes/contacts/{contactId}, /unsubscribes/{email}, /user/email-accounts, /user/email-accounts/{emailAccountId}/test (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post schedules lemwarm usermailboxid start lemwarm usermailboxid pause hooks enrich v2 enrichments bulk v2 unsubscribes variables v2 unsubscribes variables value operation v2 unsubscribes contacts contactid operation unsubscribes email operation user email-accounts user email-accounts emailaccountid test --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/schedules, /lemwarm/{userMailboxId}/start, /lemwarm/{userMailboxId}/pause, /hooks, /enrich, /v2/enrichments/bulk, /v2/unsubscribes/variables, /v2/unsubscribes/variables/{value}, /v2/unsubscribes/contacts/{contactId}, /unsubscribes/{email}, /user/email-accounts, /user/email-accounts/{emailAccountId}/test"
+        }
+      ],
+      "operation": "lemlist.post.schedules-lemwarm-usermailboxid-start-lemwarm-usermailboxid-pause-hooks-enrich-v2-enrichments-bulk-v2-unsubscribes-variables-v2-unsubscribes-variables-value-v2-unsubscribes-contacts-contactid-unsubscribes-email-user-email-accounts-user-email-accounts-emailaccountid-test",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api post sequences sequenceid steps",
+      "summary": "Documented POST /sequences/{sequenceId}/steps (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post sequences sequenceid steps --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sequences/{sequenceId}/steps"
+        }
+      ],
+      "operation": "lemlist.post.sequences-sequenceid-steps",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sequences sequenceid steps stepid ab-test",
+      "summary": "Documented POST /sequences/{sequenceId}/steps/{stepId}/ab-test (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post sequences sequenceid steps stepid ab-test --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sequences/{sequenceId}/steps/{stepId}/ab-test"
+        }
+      ],
+      "operation": "lemlist.post.sequences-sequenceid-steps-stepid-ab-test",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post sequences sequenceid steps stepid ab-test winner",
+      "summary": "Documented POST /sequences/{sequenceId}/steps/{stepId}/ab-test/winner (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post sequences sequenceid steps stepid ab-test winner --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sequences/{sequenceId}/steps/{stepId}/ab-test/winner"
+        }
+      ],
+      "operation": "lemlist.post.sequences-sequenceid-steps-stepid-ab-test-winner",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tasks",
+      "summary": "Documented POST /tasks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks"
+        }
+      ],
+      "operation": "lemlist.post.tasks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tasks ignore",
+      "summary": "Documented POST /tasks/ignore (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post tasks ignore --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks/ignore"
+        }
+      ],
+      "operation": "lemlist.post.tasks-ignore",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tasks tasks ignore inbox email inbox linkedin inbox whatsapp inbox labels inbox conversations labels contactid operation inbox contactid drafts",
+      "summary": "Documented POST /tasks, /tasks/ignore, /inbox/email, /inbox/linkedin, /inbox/whatsapp, /inbox/labels, /inbox/conversations/labels/{contactId}, /inbox/{contactId}/drafts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post tasks tasks ignore inbox email inbox linkedin inbox whatsapp inbox labels inbox conversations labels contactid operation inbox contactid drafts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks, /tasks/ignore, /inbox/email, /inbox/linkedin, /inbox/whatsapp, /inbox/labels, /inbox/conversations/labels/{contactId}, /inbox/{contactId}/drafts"
+        }
+      ],
+      "operation": "lemlist.post.tasks-tasks-ignore-inbox-email-inbox-linkedin-inbox-whatsapp-inbox-labels-inbox-conversations-labels-contactid-inbox-contactid-drafts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post unsubscribes email",
+      "summary": "Documented POST /unsubscribes/{email} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post unsubscribes email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/unsubscribes/{email}"
+        }
+      ],
+      "operation": "lemlist.post.unsubscribes-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post user email-accounts",
+      "summary": "Documented POST /user/email-accounts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post user email-accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user/email-accounts"
+        }
+      ],
+      "operation": "lemlist.post.user-email-accounts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post user email-accounts emailaccountid test",
+      "summary": "Documented POST /user/email-accounts/{emailAccountId}/test (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post user email-accounts emailaccountid test --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user/email-accounts/{emailAccountId}/test"
+        }
+      ],
+      "operation": "lemlist.post.user-email-accounts-emailaccountid-test",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 campaigns stats batch",
+      "summary": "Documented POST /v2/campaigns/stats/batch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post v2 campaigns stats batch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/campaigns/stats/batch"
+        }
+      ],
+      "operation": "lemlist.post.v2-campaigns-stats-batch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 enrichments bulk",
+      "summary": "Documented POST /v2/enrichments/bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post v2 enrichments bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/enrichments/bulk"
+        }
+      ],
+      "operation": "lemlist.post.v2-enrichments-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 unsubscribes contacts contactid",
+      "summary": "Documented POST /v2/unsubscribes/contacts/{contactId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post v2 unsubscribes contacts contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/unsubscribes/contacts/{contactId}"
+        }
+      ],
+      "operation": "lemlist.post.v2-unsubscribes-contacts-contactid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 unsubscribes variables",
+      "summary": "Documented POST /v2/unsubscribes/variables (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post v2 unsubscribes variables --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/unsubscribes/variables"
+        }
+      ],
+      "operation": "lemlist.post.v2-unsubscribes-variables",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 unsubscribes variables value",
+      "summary": "Documented POST /v2/unsubscribes/variables/{value} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post v2 unsubscribes variables value --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/unsubscribes/variables/{value}"
+        }
+      ],
+      "operation": "lemlist.post.v2-unsubscribes-variables-value",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post watchlist",
+      "summary": "Documented POST /watchlist (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post watchlist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/watchlist"
+        }
+      ],
+      "operation": "lemlist.post.watchlist",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post watchlist watchlistid external-signals",
+      "summary": "Documented POST /watchlist/{watchListId}/external-signals (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api post watchlist watchlistid external-signals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/watchlist/{watchListId}/external-signals"
+        }
+      ],
+      "operation": "lemlist.post.watchlist-watchlistid-external-signals",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put campaigns campaignid export exportid email email",
+      "summary": "Documented PUT /campaigns/{campaignId}/export/{exportId}/email/{email} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist api put campaigns campaignid export exportid email email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/campaigns/{campaignId}/export/{exportId}/email/{email}"
+        }
+      ],
+      "operation": "lemlist.put.campaigns-campaignid-export-exportid-email-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "campaigns list",
+      "summary": "Run the campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns"
+        }
+      ]
+    },
+    {
+      "path": "companies list",
+      "summary": "Run the companies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist companies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies"
+        }
+      ]
+    },
+    {
+      "path": "contact lists list",
+      "summary": "Run the contact lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_lists",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist contact lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/lists"
+        }
+      ]
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ]
+    },
+    {
+      "path": "database filters list",
+      "summary": "Run the database filters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "database_filters",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist database filters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/database/filters"
+        }
+      ]
+    },
+    {
+      "path": "fields company list",
+      "summary": "Run the fields company ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fields_company",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist fields company list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fields (company definitions)"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "fields contact list",
+      "summary": "Run the fields contact ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fields_contact",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist fields contact list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fields (contact definitions)"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "inbox labels list",
+      "summary": "Run the inbox labels ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "inbox_labels",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist inbox labels list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/inbox/labels"
+        }
+      ]
+    },
+    {
+      "path": "schedules list",
+      "summary": "Run the schedules ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "schedules",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist schedules list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/schedules"
+        }
+      ]
+    },
+    {
+      "path": "tasks list",
+      "summary": "Run the tasks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist tasks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks"
+        }
+      ]
+    },
+    {
+      "path": "team credits list",
+      "summary": "Run the team credits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "team_credits",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist team credits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/team/credits"
+        }
+      ]
+    },
+    {
+      "path": "team crm users list",
+      "summary": "Run the team crm users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "team_crm_users",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist team crm users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/team/crmUsers"
+        }
+      ]
+    },
+    {
+      "path": "team list",
+      "summary": "Run the team ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "team",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist team list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/team"
+        }
+      ]
+    },
+    {
+      "path": "team senders list",
+      "summary": "Run the team senders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "team_senders",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist team senders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/team/senders"
+        }
+      ]
+    },
+    {
+      "path": "unsubscribed variables list",
+      "summary": "Run the unsubscribed variables ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "unsubscribed_variables",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist unsubscribed variables list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/unsubscribes/variables"
+        }
+      ]
+    },
+    {
+      "path": "unsubscribes list",
+      "summary": "Run the unsubscribes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "unsubscribes",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist unsubscribes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/unsubscribes"
+        }
+      ]
+    },
+    {
+      "path": "user channels list",
+      "summary": "Run the user channels ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_channels",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist user channels list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/channels"
+        }
+      ]
+    },
+    {
+      "path": "watchlist signals list",
+      "summary": "Run the watchlist signals ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "watchlist_signals",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist watchlist signals list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/watchlist/signals"
+        }
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "examples": [
+        "pm lemlist webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/hooks"
+        }
+      ]
+    }
+  ]
+}

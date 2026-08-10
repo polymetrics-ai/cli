@@ -35,9 +35,10 @@ test:
 # certification harness and its CLI route tests. Verify invokes this target in
 # a separate step so the diagnostic is visible even when the aggregate suite
 # later fails or reaches its job limit. The active topology budgets 25 real
-# harness calls and 92 real CLI invocations; its hosted-measurement-derived
-# cap remains 3m30s.
-CERTIFY_TIMING_MAX_DURATION := 3m30s
+# harness calls and 92 real CLI invocations. The endpoint-ledger corpus grew
+# 6.57x (2,060 to 13,534) while the matched test work grew only 1.85x, so the
+# hosted-measurement-derived cap is 8m rather than the old 3m30s limit.
+CERTIFY_TIMING_MAX_DURATION := 8m
 
 certify-timing:
 	go run ./cmd/certifytiming --max-duration $(CERTIFY_TIMING_MAX_DURATION)

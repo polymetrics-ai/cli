@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "official_direct_reference_index",
+    "requested_size": 1,
+    "min_operations": 0,
+    "max_operations": 10000,
+    "criteria": "7shifts provider-published llms index was enumerated once, with its finite 147-operation survey reconstructed from the explicitly linked official OpenAPI fragments; no recursive reference crawl was used."
+  },
+  "connectors": [
+    {
+      "connector": "7shifts",
+      "operations_total": 147,
+      "operations_read": 66,
+      "operations_write": 81,
+      "artifact": {
+        "url": "https://developers.7shifts.com/llms.txt",
+        "kind": "openapi",
+        "version": "2026-06-01",
+        "retrieved_at": "2026-08-09"
+      },
+      "provider_reference_url": "https://developers.7shifts.com/reference",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "Provider-published https://developers.7shifts.com/llms.txt direct API Reference index and its linked /reference/*.md OpenAPI 3.0.2 fragments.",
+      "counting_note": "The official index has 158 reference entries. Authentication, Postman Collection, two non-callable webhook guide pages, six explicitly deprecated external-mapping duplicates, and one explicitly deprecated forecast-overrides duplicate are excluded, leaving exactly 147 provider operations. Every selected page embeds exactly one OpenAPI 3.0.2 operation at version 2026-06-01; the deterministic source index records each URL and hash.",
+      "processed_at": "2026-08-09T00:00:00Z",
+      "selection_reason": "direct official-reference extraction after the generic recursive materializer hit its bounded traversal limit; the finite immutable survey is preserved exactly without relaxing ordinary artifact provenance checks"
+    }
+  ]
+}

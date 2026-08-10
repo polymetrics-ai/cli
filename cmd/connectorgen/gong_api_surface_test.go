@@ -27,8 +27,8 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 		t.Fatalf("unmarshal gong api_surface.json: %v", err)
 	}
 
-	if surface.OperationLedgerVersion != 1 {
-		t.Fatalf("operation_ledger_version = %d, want 1", surface.OperationLedgerVersion)
+	if surface.OperationLedgerVersion != 2 {
+		t.Fatalf("operation_ledger_version = %d, want 2", surface.OperationLedgerVersion)
 	}
 
 	totalByMethod := map[string]int{}

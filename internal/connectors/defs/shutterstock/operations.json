@@ -1,0 +1,548 @@
+{
+  "operations": [
+    {
+      "id": "shutterstock.delete.v2-audio-collections-id-items",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/audio/collections/{id}/items",
+      "description": "item-removal endpoint requires DELETE query parameters such as item_id; writes.json has path and body fields but no query-param support for writes",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/audio/collections/{id}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-audio-genres",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio/genres",
+      "description": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio/genres",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-audio-instruments",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio/instruments",
+      "description": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio/instruments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-audio-licenses",
+      "kind": "rest_write",
+      "summary": "POST /v2/audio/licenses",
+      "description": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/audio/licenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-audio-licenses-id-downloads",
+      "kind": "rest_write",
+      "summary": "POST /v2/audio/licenses/{id}/downloads",
+      "description": "download/redownload endpoint returns or initiates licensed binary asset delivery, not a structured data write",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/audio/licenses/{id}/downloads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-audio-moods",
+      "kind": "rest_read",
+      "summary": "GET /v2/audio/moods",
+      "description": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/audio/moods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-bulk-search-images",
+      "kind": "rest_write",
+      "summary": "POST /v2/bulk_search/images",
+      "description": "search/suggestion helper expressed as POST but not a persistent remote mutation",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/bulk_search/images",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.delete.v2-catalog-collections-collection-id-items",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/catalog/collections/{collection_id}/items",
+      "description": "item-removal endpoint requires DELETE query parameters such as item_id; writes.json has path and body fields but no query-param support for writes",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/catalog/collections/{collection_id}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-cv-images",
+      "kind": "rest_write",
+      "summary": "POST /v2/cv/images",
+      "description": "computer-vision image upload endpoint requires file/binary upload semantics outside the JSON/form write dialect",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/cv/images",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-cv-keywords",
+      "kind": "rest_read",
+      "summary": "GET /v2/cv/keywords",
+      "description": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cv/keywords",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-editorial-categories",
+      "kind": "rest_read",
+      "summary": "GET /v2/editorial/categories",
+      "description": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/editorial/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-editorial-images-categories",
+      "kind": "rest_read",
+      "summary": "GET /v2/editorial/images/categories",
+      "description": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/editorial/images/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-editorial-images-licenses",
+      "kind": "rest_write",
+      "summary": "POST /v2/editorial/images/licenses",
+      "description": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/editorial/images/licenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-editorial-licenses",
+      "kind": "rest_write",
+      "summary": "POST /v2/editorial/licenses",
+      "description": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/editorial/licenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-editorial-videos-categories",
+      "kind": "rest_read",
+      "summary": "GET /v2/editorial/videos/categories",
+      "description": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/editorial/videos/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-editorial-videos-licenses",
+      "kind": "rest_write",
+      "summary": "POST /v2/editorial/videos/licenses",
+      "description": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/editorial/videos/licenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-images-categories",
+      "kind": "rest_read",
+      "summary": "GET /v2/images/categories",
+      "description": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/images/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.delete.v2-images-collections-id-items",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/images/collections/{id}/items",
+      "description": "item-removal endpoint requires DELETE query parameters such as item_id; writes.json has path and body fields but no query-param support for writes",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/images/collections/{id}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-images-licenses",
+      "kind": "rest_write",
+      "summary": "POST /v2/images/licenses",
+      "description": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/images/licenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-images-licenses-id-downloads",
+      "kind": "rest_write",
+      "summary": "POST /v2/images/licenses/{id}/downloads",
+      "description": "download/redownload endpoint returns or initiates licensed binary asset delivery, not a structured data write",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/images/licenses/{id}/downloads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-images-search-suggestions",
+      "kind": "rest_read",
+      "summary": "GET /v2/images/search/suggestions",
+      "description": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/images/search/suggestions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-images-search-suggestions",
+      "kind": "rest_write",
+      "summary": "POST /v2/images/search/suggestions",
+      "description": "search/suggestion helper expressed as POST but not a persistent remote mutation",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/images/search/suggestions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-oauth-access-token",
+      "kind": "rest_write",
+      "summary": "POST /v2/oauth/access_token",
+      "description": "OAuth token exchange endpoint; credentials are managed outside connector write actions",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/oauth/access_token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-oauth-authorize",
+      "kind": "rest_read",
+      "summary": "GET /v2/oauth/authorize",
+      "description": "test or OAuth browser/token endpoint, not connector data",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/oauth/authorize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-sfx-licenses",
+      "kind": "rest_write",
+      "summary": "POST /v2/sfx/licenses",
+      "description": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/sfx/licenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-sfx-licenses-id-downloads",
+      "kind": "rest_write",
+      "summary": "POST /v2/sfx/licenses/{id}/downloads",
+      "description": "download/redownload endpoint returns or initiates licensed binary asset delivery, not a structured data write",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/sfx/licenses/{id}/downloads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-test",
+      "kind": "rest_read",
+      "summary": "GET /v2/test",
+      "description": "test or OAuth browser/token endpoint, not connector data",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/test",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-test-validate",
+      "kind": "rest_read",
+      "summary": "GET /v2/test/validate",
+      "description": "test or OAuth browser/token endpoint, not connector data",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/test/validate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-user",
+      "kind": "rest_read",
+      "summary": "GET /v2/user",
+      "description": "authenticated-user or access-token introspection endpoint, not a syncable business object stream",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/user",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-user-access-token",
+      "kind": "rest_read",
+      "summary": "GET /v2/user/access_token",
+      "description": "authenticated-user or access-token introspection endpoint, not a syncable business object stream",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/user/access_token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-videos-categories",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/categories",
+      "description": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.delete.v2-videos-collections-id-items",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/videos/collections/{id}/items",
+      "description": "item-removal endpoint requires DELETE query parameters such as item_id; writes.json has path and body fields but no query-param support for writes",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/videos/collections/{id}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-videos-licenses",
+      "kind": "rest_write",
+      "summary": "POST /v2/videos/licenses",
+      "description": "licensing endpoint creates rights-bearing paid/entitlement transactions; intentionally excluded from ordinary collection metadata writes",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/videos/licenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.post.v2-videos-licenses-id-downloads",
+      "kind": "rest_write",
+      "summary": "POST /v2/videos/licenses/{id}/downloads",
+      "description": "download/redownload endpoint returns or initiates licensed binary asset delivery, not a structured data write",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/videos/licenses/{id}/downloads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "shutterstock.get.v2-videos-search-suggestions",
+      "kind": "rest_read",
+      "summary": "GET /v2/videos/search/suggestions",
+      "description": "reference, autocomplete, or keyword-suggestion endpoint; useful for UI/search assistance but not a syncable account data stream",
+      "source_url": "https://api-explorer.shutterstock.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videos/search/suggestions",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

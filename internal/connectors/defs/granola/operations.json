@@ -1,0 +1,113 @@
+{
+  "operations": [
+    {
+      "id": "granola.get.v1-folders",
+      "kind": "rest_read",
+      "summary": "GET /v1/folders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.granola.ai/introduction",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "granola.get.v1-notes-note-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/notes/{note_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.granola.ai/introduction",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/notes/{note_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "granola.get.v1-webhook-endpoints",
+      "kind": "rest_read",
+      "summary": "GET /v1/webhook-endpoints",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.granola.ai/introduction",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/webhook-endpoints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "granola.post.v1-webhook-endpoints",
+      "kind": "rest_write",
+      "summary": "POST /v1/webhook-endpoints",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.granola.ai/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/webhook-endpoints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "granola.delete.v1-webhook-endpoints",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/webhook-endpoints",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.granola.ai/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/webhook-endpoints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "granola.patch.v1-webhook-endpoints-webhook-endpoint-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/webhook-endpoints/{webhook_endpoint_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.granola.ai/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/webhook-endpoints/{webhook_endpoint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "granola.delete.v1-webhook-endpoints-webhook-endpoint-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/webhook-endpoints/{webhook_endpoint_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.granola.ai/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/webhook-endpoints/{webhook_endpoint_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

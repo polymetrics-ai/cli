@@ -1,99 +1,734 @@
 {
-  "api": "Strava API v3 (https://www.strava.com/api/v3)",
+  "api": "Strava API v3 (https://www.strava.com/api/v3); provider artifact version: v3 REST API",
   "docs": "https://developers.strava.com/docs/reference/",
-  "reviewed_at": "2026-07-03",
-  "scope": "Fresh migration at legacy capability parity: the 4 legacy read streams only (activities, athlete, athlete_stats, clubs); legacy strava is read-only (no safe reverse-ETL writes; Write always returns ErrUnsupportedOperation) and the full Strava API surface (segments, routes, gear, uploads, streams/laps, webhooks) is out of scope outside this connector's current declared surface",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (34 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "strava-artifact-2026-08-09",
+      "url": "https://developers.strava.com/docs/reference/",
+      "kind": "html_reference",
+      "version": "v3 REST API",
+      "retrieved_at": "2026-08-09",
+      "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44"
+    }
+  ],
   "endpoints": [
+    {
+      "method": "POST",
+      "path": "/activities",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#POST /activities"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activities/{id}",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /activities/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/activities/{id}",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#PUT /activities/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activities/{id}/comments",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /activities/{id}/comments"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activities/{id}/kudos",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /activities/{id}/kudos"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activities/{id}/laps",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /activities/{id}/laps"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activities/{id}/streams",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /activities/{id}/streams"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activities/{id}/zones",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /activities/{id}/zones"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/athlete",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /athlete"
+      },
+      "covered_by": {
+        "stream": "athlete"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/athlete",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#PUT /athlete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
     {
       "method": "GET",
       "path": "/athlete/activities",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /athlete/activities"
+      },
       "covered_by": {
         "stream": "activities"
       }
     },
     {
       "method": "GET",
-      "path": "/athlete",
-      "covered_by": {
-        "stream": "athlete"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/athletes/{id}/stats",
-      "covered_by": {
-        "stream": "athlete_stats"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/athlete/clubs",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /athlete/clubs"
+      },
       "covered_by": {
         "stream": "clubs"
       }
     },
     {
       "method": "GET",
-      "path": "/activities/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/athlete/zones",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /athlete/zones"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/activities/{id}/streams",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/athletes/{id}/routes",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /athletes/{id}/routes"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/activities/{id}/laps",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/athletes/{id}/stats",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /athletes/{id}/stats"
+      },
+      "covered_by": {
+        "stream": "athlete_stats"
       }
     },
     {
       "method": "GET",
-      "path": "/segments/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/clubs/{id}",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /clubs/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/routes/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/clubs/{id}/activities",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /clubs/{id}/activities"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/clubs/{id}/admins",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /clubs/{id}/admins"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/clubs/{id}/members",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /clubs/{id}/members"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/gear/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/uploads",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "no safe reverse-ETL write surface identified"
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /gear/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
       "path": "/push_subscriptions",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "existing-surface[POST /push_subscriptions]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/routes/{id}",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /routes/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/routes/{id}/export_gpx",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /routes/{id}/export_gpx"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/routes/{id}/export_tcx",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /routes/{id}/export_tcx"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/routes/{id}/streams",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /routes/{id}/streams"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segment_efforts",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /segment_efforts"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segment_efforts/{id}",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /segment_efforts/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segment_efforts/{id}/streams",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /segment_efforts/{id}/streams"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments/explore",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /segments/explore"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments/starred",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /segments/starred"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments/{id}",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /segments/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/segments/{id}/starred",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#PUT /segments/{id}/starred"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments/{id}/streams",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /segments/{id}/streams"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/uploads",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#POST /uploads"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "no safe reverse-ETL write surface identified",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/uploads/{uploadId}",
+      "provenance": {
+        "artifact": "strava-artifact-2026-08-09",
+        "source_url": "https://developers.strava.com/docs/reference/",
+        "source_kind": "html_reference",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44",
+        "coordinate": "https://developers.strava.com/docs/reference/#GET /uploads/{uploadId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

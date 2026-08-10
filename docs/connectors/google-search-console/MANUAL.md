@@ -104,41 +104,26 @@ SECURITY
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 COMMAND SURFACE
-  Inspect, read, and safely plan typed Google Search Console operations.
+  Run Google Search Console's declared streams and reverse-ETL actions.
   Usage: pm google-search-console <command> [flags]
-  Source CLI: Google Search Console API (Official REST discovery documents for Search Console v3 and searchconsole v1)
-  Global flags:
-    --credential (string): Credential name to use for the Google Search Console request.
-    --connection (string): Alias for --credential.
-    --config (string_array): Connector config override as key=value.
-    --json (boolean): Emit machine-readable JSON output.
-    --limit (integer): Maximum PM ETL records to emit; does not control Search Console rowLimit.
-    --max-bytes (integer): Maximum direct-read response bytes; typed operations are capped at 16 MiB and each Google Search Console operation declares a lower limit.
-    --plan (string): Execute an approved reverse-ETL plan by id.
-    --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
-    --approve (string): Approval token required to execute a reverse-ETL plan.
-    --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
-  Sites
-    sites list - List verified Search Console site properties as ETL records. [intent=etl availability=implemented stream=sites]
-    sites get - Read one verified Search Console site property as an ETL record. [intent=etl availability=implemented stream=site_details]
-    sites add - Plan adding a Search Console site property through reverse ETL. [intent=reverse_etl availability=implemented write=add_site]; approval: Use reverse ETL plan -> preview -> approval -> execute. No raw HTTP body is accepted; the record must match writes.json.; risk: medium: adds a site property to the authenticated Search Console account; requires reverse ETL plan and approval; flags: --site-url
-    sites delete - Plan deleting a Search Console site property through destructive reverse ETL. [intent=reverse_etl availability=implemented write=delete_site]; approval: Use reverse ETL plan -> preview -> approval -> typed destructive confirmation -> execute. Missing provider records are idempotent for HTTP 404.; risk: high: removes a site property from the authenticated Search Console account; requires reverse ETL plan, approval, and destructive confirmation; flags: --site-url
-  Sitemaps
-    sitemaps list - List sitemap entries for configured Search Console site properties. [intent=etl availability=implemented stream=sitemaps]
-    sitemaps get - Read one sitemap entry for a Search Console site property. [intent=etl availability=implemented stream=sitemap_details]
-    sitemaps submit - Plan submitting a sitemap URL for a Search Console site property. [intent=reverse_etl availability=implemented write=submit_sitemap]; approval: Use reverse ETL plan -> preview -> approval -> execute. No raw HTTP body is accepted; the record must match writes.json.; risk: medium: submits a sitemap URL for a Search Console site property; requires reverse ETL plan and approval; flags: --site-url, --feedpath
-    sitemaps delete - Plan deleting a sitemap URL from a Search Console site property through destructive reverse ETL. [intent=reverse_etl availability=implemented write=delete_sitemap]; approval: Use reverse ETL plan -> preview -> approval -> typed destructive confirmation -> execute. Missing provider records are idempotent for HTTP 404.; risk: high: deletes a sitemap from a Search Console site property; requires reverse ETL plan, approval, and destructive confirmation; flags: --site-url, --feedpath
-  Search Analytics
-    search-analytics by-date - Read Search Analytics rows grouped by date. [intent=etl availability=implemented stream=search_analytics_by_date]
-    search-analytics by-country - Read Search Analytics rows grouped by date and country. [intent=etl availability=implemented stream=search_analytics_by_country]
-    search-analytics by-device - Read Search Analytics rows grouped by date and device. [intent=etl availability=implemented stream=search_analytics_by_device]
-    search-analytics by-page - Read Search Analytics rows grouped by date and page. [intent=etl availability=implemented stream=search_analytics_by_page]
-    search-analytics by-query - Read Search Analytics rows grouped by date and query. [intent=etl availability=implemented stream=search_analytics_by_query]
-  Typed Direct Reads
-    direct url-inspection inspect - Run the official URL Inspection operation as a typed bounded direct read. [intent=direct_read availability=implemented operation=google-search-console.urlinspection_index_inspect]; risk: low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL-shaped fields; flags: --inspection-url (required), --site-url (required), --language-code, --page, --page-cursor
+  Read streams
+  Reverse ETL writes
+  Other Commands
+    add site apply - Plan and execute the add site reverse-ETL action [intent=reverse_etl availability=implemented write=add_site]; approval: requires plan, preview, approval, and execute; risk: adds a site property to the authenticated Search Console account; flags: --site_url (required)
+    delete site apply - Plan and execute the delete site reverse-ETL action [intent=reverse_etl availability=implemented write=delete_site]; approval: requires plan, preview, approval, and execute; risk: removes a site property from the authenticated Search Console account; flags: --site_url (required)
+    delete sitemap apply - Plan and execute the delete sitemap reverse-ETL action [intent=reverse_etl availability=implemented write=delete_sitemap]; approval: requires plan, preview, approval, and execute; risk: deletes a sitemap from a Search Console site property; flags: --feedpath (required), --site_url (required)
     direct mobile-friendly-test run - Run the official Mobile Friendly Test operation as a typed bounded direct read. [intent=direct_read availability=implemented operation=google-search-console.mobile_friendly_test_run]; risk: low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL/screenshot-shaped fields; flags: --url (required), --request-screenshot, --page, --page-cursor
-  Help topics:
-    parity - Google's current Discovery document lists 11 unique Search Console operations. Five reach ETL streams, four reach typed reverse-ETL writes, and URL Inspection plus Mobile-Friendly Test reach typed bounded direct reads. There are no generic raw HTTP, body, query, binary, CDC, excluded, or planned operations.
+    direct url-inspection inspect - Run the official URL Inspection operation as a typed bounded direct read. [intent=direct_read availability=implemented operation=google-search-console.urlinspection_index_inspect]; risk: low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL-shaped fields; flags: --inspection-url (required), --site-url (required), --language-code, --page, --page-cursor
+    search analytics by country list - Run the search analytics by country ETL stream [intent=etl availability=implemented stream=search_analytics_by_country]
+    search analytics by date list - Run the search analytics by date ETL stream [intent=etl availability=implemented stream=search_analytics_by_date]
+    search analytics by device list - Run the search analytics by device ETL stream [intent=etl availability=implemented stream=search_analytics_by_device]
+    search analytics by page list - Run the search analytics by page ETL stream [intent=etl availability=implemented stream=search_analytics_by_page]
+    search analytics by query list - Run the search analytics by query ETL stream [intent=etl availability=implemented stream=search_analytics_by_query]
+    site details list - Run the site details ETL stream [intent=etl availability=implemented stream=site_details]
+    sitemap details list - Run the sitemap details ETL stream [intent=etl availability=implemented stream=sitemap_details]
+    sitemaps list - Run the sitemaps ETL stream [intent=etl availability=implemented stream=sitemaps]
+    sites list - Run the sites ETL stream [intent=etl availability=implemented stream=sites]
+    submit sitemap apply - Plan and execute the submit sitemap reverse-ETL action [intent=reverse_etl availability=implemented write=submit_sitemap]; approval: requires plan, preview, approval, and execute; risk: submits a sitemap URL for a Search Console site property; flags: --feedpath (required), --site_url (required)
 
 EXAMPLES
   # Inspect as a manual

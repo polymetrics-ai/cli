@@ -1,0 +1,51 @@
+{
+  "operations": [
+    {
+      "id": "persistiq.post.v1-leads",
+      "kind": "rest_write",
+      "summary": "POST /v1/leads",
+      "description": "ENGINE_GAP: create-a-lead's live OpenAPI requestBody schema requires a top-level 'lead' wrapper object ({\"lead\": {...fields...}, \"creator_id\", \"dup\"}), confirmed directly from https://persistiq.com/api-docs/v1/swagger.json; the engine's declarative WriteAction dialect always sends the record's own fields directly (or a body_fields allow-list of top-level keys), with no envelope/wrapper mechanism, so this mutation is not currently dialect-expressible without silently diverging from the real request shape",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/leads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "persistiq.get.v1-leads-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/leads/{id}",
+      "description": "single-lead detail; identical record shape to the leads list stream's per-item object, already covered by that stream",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/leads/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "persistiq.put.v1-webhook-plugin",
+      "kind": "rest_write",
+      "summary": "PUT /v1/webhook_plugin",
+      "description": "repoints the account's outbound webhook-notification URLs (post_new_prospect_url, post_updated_prospect_url, raw_events_url, post_email_reply_url, post_email_opened_url) of the caller's choosing; deferred pending its own dedicated security review, consistent with this dialect's general caution around webhook-URL mutations elsewhere in this migration (persona, bitly, perk)",
+      "source_url": "https://persistiq.com/api-docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/webhook_plugin",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

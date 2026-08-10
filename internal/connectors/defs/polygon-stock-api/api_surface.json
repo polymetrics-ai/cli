@@ -1,84 +1,1055 @@
 {
-  "api": "Polygon.io Stocks REST API (https://api.polygon.io)",
+  "api": "Polygon.io Stocks REST API (https://api.polygon.io); provider artifact version: Massive Stocks REST API current rendered reference (successor to Polygon.io)",
   "docs": "https://polygon.io/docs/stocks/getting-started",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Polygon.io stocks surface (aggregates, snapshots, ticker details, financials, market status, exchanges) is out of scope outside this connector's current declared surface",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (48 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "polygon-stock-api-artifact-2026-08-09",
+      "url": "https://massive.com/docs/rest/stocks/overview",
+      "kind": "html_reference",
+      "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/v3/reference/tickers",
-      "covered_by": {
-        "stream": "tickers"
+      "path": "/stocks/filings/10-K/vX/sections",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/filings/10-K/vX/sections"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/filings/8-K/vX/disclosures",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/filings/8-K/vX/disclosures"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/filings/8-K/vX/text",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/filings/8-K/vX/text"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/filings/vX/13-F",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/filings/vX/13-F"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/filings/vX/form-3",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/filings/vX/form-3"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/filings/vX/form-4",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/filings/vX/form-4"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/filings/vX/index",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/filings/vX/index"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/filings/vX/risk-factors",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/filings/vX/risk-factors"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/financials/v1/balance-sheets",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/financials/v1/balance-sheets"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/financials/v1/cash-flow-statements",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/financials/v1/cash-flow-statements"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/financials/v1/income-statements",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/financials/v1/income-statements"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/financials/v1/ratios",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/financials/v1/ratios"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/taxonomies/vX/disclosures",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/taxonomies/vX/disclosures"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/taxonomies/vX/risk-factors",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/taxonomies/vX/risk-factors"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/v1/dividends",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/v1/dividends"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/v1/short-interest",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/v1/short-interest"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/v1/short-volume",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/v1/short-volume"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/v1/splits",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/v1/splits"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stocks/vX/float",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /stocks/vX/float"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/indicators/ema/{stockTicker}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v1/indicators/ema/{stockTicker}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/indicators/macd/{stockTicker}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v1/indicators/macd/{stockTicker}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/indicators/rsi/{stockTicker}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v1/indicators/rsi/{stockTicker}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/indicators/sma/{stockTicker}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v1/indicators/sma/{stockTicker}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/marketstatus/now",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v1/marketstatus/now"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "point-in-time market status, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/marketstatus/upcoming",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v1/marketstatus/upcoming"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/open-close/{stocksTicker}/{date}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v1/open-close/{stocksTicker}/{date}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/related-companies/{ticker}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v1/related-companies/{ticker}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/aggs/grouped/locale/us/market/stocks/{date}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v2/aggs/grouped/locale/us/market/stocks/{date}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/aggs/ticker/{stocksTicker}/prev",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v2/aggs/ticker/{stocksTicker}/prev"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/aggs/ticker/{stocksTicker}/range/{multiplier}/{timespan}/{from}/{to}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v2/aggs/ticker/{stocksTicker}/range/{multiplier}/{timespan}/{from}/{to}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/aggs/ticker/{ticker}/range/{multiplier}/{timespan}/{from}/{to}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "existing-surface[GET /v2/aggs/ticker/{ticker}/range/{multiplier}/{timespan}/{from}/{to}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/last/nbbo/{stocksTicker}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v2/last/nbbo/{stocksTicker}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/last/trade/{stocksTicker}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v2/last/trade/{stocksTicker}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reference/news",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v2/reference/news"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/snapshot/locale/us/markets/stocks/tickers",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v2/snapshot/locale/us/markets/stocks/tickers"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/snapshot/locale/us/markets/stocks/tickers/{stocksTicker}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v2/snapshot/locale/us/markets/stocks/tickers/{stocksTicker}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/snapshot/locale/us/markets/stocks/{direction}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v2/snapshot/locale/us/markets/stocks/{direction}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/quotes/{stockTicker}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v3/quotes/{stockTicker}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reference/conditions",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v3/reference/conditions"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v3/reference/dividends",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v3/reference/dividends"
+      },
       "covered_by": {
         "stream": "dividends"
       }
     },
     {
       "method": "GET",
+      "path": "/v3/reference/exchanges",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v3/reference/exchanges"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v3/reference/splits",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v3/reference/splits"
+      },
       "covered_by": {
         "stream": "splits"
       }
     },
     {
       "method": "GET",
-      "path": "/v3/reference/tickers/{ticker}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/v3/reference/tickers",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v3/reference/tickers"
+      },
+      "covered_by": {
+        "stream": "tickers"
       }
     },
     {
       "method": "GET",
       "path": "/v3/reference/tickers/types",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v3/reference/tickers/types"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/reference/tickers/{ticker}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v3/reference/tickers/{ticker}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/snapshot",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v3/snapshot"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/trades/{stockTicker}",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /v3/trades/{stockTicker}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/vX/reference/financials",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "existing-surface[GET /vX/reference/financials]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/v2/aggs/ticker/{ticker}/range/{multiplier}/{timespan}/{from}/{to}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/vX/reference/ipos",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /vX/reference/ipos"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/v2/snapshot/locale/us/markets/stocks/tickers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/reference/exchanges",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/marketstatus/now",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "point-in-time market status, not a syncable object stream"
+      "path": "/vX/reference/tickers/{id}/events",
+      "provenance": {
+        "artifact": "polygon-stock-api-artifact-2026-08-09",
+        "source_url": "https://massive.com/docs/rest/stocks/overview",
+        "source_kind": "html_reference",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8",
+        "coordinate": "https://massive.com/docs/rest/stocks/overview#GET /vX/reference/tickers/{id}/events"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

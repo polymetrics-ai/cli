@@ -1,0 +1,1059 @@
+{
+  "tagline": "Run Coin API's declared streams and reverse-ETL actions.",
+  "usage": "pm coin-api \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v1 assets asset-id",
+        "api get v1 assets icons size",
+        "api get v1 chains",
+        "api get v1 chains chain-id",
+        "api get v1 exchangerate asset-id-base asset-id-quote",
+        "api get v1 exchangerate asset-id-base asset-id-quote history",
+        "api get v1 exchangerate history periods",
+        "api get v1 exchanges exchange-id",
+        "api get v1 exchanges icons size",
+        "api get v1 metrics asset current",
+        "api get v1 metrics asset history",
+        "api get v1 metrics asset listing",
+        "api get v1 metrics exchange current",
+        "api get v1 metrics exchange history",
+        "api get v1 metrics exchange listing",
+        "api get v1 metrics symbol current",
+        "api get v1 metrics symbol history",
+        "api get v1 metrics symbol listing",
+        "api get v1 ohlcv exchanges exchange-id history",
+        "api get v1 ohlcv periods",
+        "api get v1 ohlcv symbol-id latest",
+        "api get v1 options exchange-id current",
+        "api get v1 orderbooks symbol-id depth current",
+        "api get v1 orderbooks symbol-id history",
+        "api get v1 orderbooks3 current",
+        "api get v1 orderbooks3 symbol-id current",
+        "api get v1 quotes current",
+        "api get v1 quotes latest",
+        "api get v1 quotes symbol-id history",
+        "api get v1 quotes symbol-id latest",
+        "api get v1 symbols exchange-id active",
+        "api get v1 symbols exchange-id history",
+        "api get v1 symbols map exchange-id",
+        "api get v1 trades latest",
+        "api get v1 trades symbol-id latest",
+        "api get v2 metrics asset history",
+        "api get v2 metrics asset listing",
+        "api get v2 metrics chain history",
+        "api get v2 metrics chain listing",
+        "api get v2 metrics exchange history",
+        "api get v2 metrics exchange listing",
+        "api get v2 metrics listing",
+        "assets list",
+        "exchange rates list",
+        "exchanges list",
+        "metrics listing list",
+        "ohlcv historical data list",
+        "orderbook current list",
+        "quotes current list",
+        "symbols list",
+        "trades historical data list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get v1 assets asset-id",
+      "summary": "Documented GET /v1/assets/{asset_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 assets asset-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/assets/{asset_id}"
+        }
+      ],
+      "operation": "coin-api.get.v1-assets-asset-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 assets icons size",
+      "summary": "Documented GET /v1/assets/icons/{size} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 assets icons size --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/assets/icons/{size}"
+        }
+      ],
+      "operation": "coin-api.get.v1-assets-icons-size",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 chains",
+      "summary": "Documented GET /v1/chains (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 chains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/chains"
+        }
+      ],
+      "operation": "coin-api.get.v1-chains",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 chains chain-id",
+      "summary": "Documented GET /v1/chains/{chain_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 chains chain-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/chains/{chain_id}"
+        }
+      ],
+      "operation": "coin-api.get.v1-chains-chain-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exchangerate asset-id-base asset-id-quote",
+      "summary": "Documented GET /v1/exchangerate/{asset_id_base}/{asset_id_quote} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 exchangerate asset-id-base asset-id-quote --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchangerate/{asset_id_base}/{asset_id_quote}"
+        }
+      ],
+      "operation": "coin-api.get.v1-exchangerate-asset-id-base-asset-id-quote",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exchangerate asset-id-base asset-id-quote history",
+      "summary": "Documented GET /v1/exchangerate/{asset_id_base}/{asset_id_quote}/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 exchangerate asset-id-base asset-id-quote history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchangerate/{asset_id_base}/{asset_id_quote}/history"
+        }
+      ],
+      "operation": "coin-api.get.v1-exchangerate-asset-id-base-asset-id-quote-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exchangerate history periods",
+      "summary": "Documented GET /v1/exchangerate/history/periods (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 exchangerate history periods --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchangerate/history/periods"
+        }
+      ],
+      "operation": "coin-api.get.v1-exchangerate-history-periods",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exchanges exchange-id",
+      "summary": "Documented GET /v1/exchanges/{exchange_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 exchanges exchange-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchanges/{exchange_id}"
+        }
+      ],
+      "operation": "coin-api.get.v1-exchanges-exchange-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 exchanges icons size",
+      "summary": "Documented GET /v1/exchanges/icons/{size} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 exchanges icons size --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchanges/icons/{size}"
+        }
+      ],
+      "operation": "coin-api.get.v1-exchanges-icons-size",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 metrics asset current",
+      "summary": "Documented GET /v1/metrics/asset/current (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 metrics asset current --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/metrics/asset/current"
+        }
+      ],
+      "operation": "coin-api.get.v1-metrics-asset-current",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 metrics asset history",
+      "summary": "Documented GET /v1/metrics/asset/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 metrics asset history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/metrics/asset/history"
+        }
+      ],
+      "operation": "coin-api.get.v1-metrics-asset-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 metrics asset listing",
+      "summary": "Documented GET /v1/metrics/asset/listing (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 metrics asset listing --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/metrics/asset/listing"
+        }
+      ],
+      "operation": "coin-api.get.v1-metrics-asset-listing",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 metrics exchange current",
+      "summary": "Documented GET /v1/metrics/exchange/current (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 metrics exchange current --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/metrics/exchange/current"
+        }
+      ],
+      "operation": "coin-api.get.v1-metrics-exchange-current",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 metrics exchange history",
+      "summary": "Documented GET /v1/metrics/exchange/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 metrics exchange history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/metrics/exchange/history"
+        }
+      ],
+      "operation": "coin-api.get.v1-metrics-exchange-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 metrics exchange listing",
+      "summary": "Documented GET /v1/metrics/exchange/listing (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 metrics exchange listing --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/metrics/exchange/listing"
+        }
+      ],
+      "operation": "coin-api.get.v1-metrics-exchange-listing",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 metrics symbol current",
+      "summary": "Documented GET /v1/metrics/symbol/current (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 metrics symbol current --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/metrics/symbol/current"
+        }
+      ],
+      "operation": "coin-api.get.v1-metrics-symbol-current",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 metrics symbol history",
+      "summary": "Documented GET /v1/metrics/symbol/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 metrics symbol history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/metrics/symbol/history"
+        }
+      ],
+      "operation": "coin-api.get.v1-metrics-symbol-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 metrics symbol listing",
+      "summary": "Documented GET /v1/metrics/symbol/listing (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 metrics symbol listing --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/metrics/symbol/listing"
+        }
+      ],
+      "operation": "coin-api.get.v1-metrics-symbol-listing",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 ohlcv exchanges exchange-id history",
+      "summary": "Documented GET /v1/ohlcv/exchanges/{exchange_id}/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 ohlcv exchanges exchange-id history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/ohlcv/exchanges/{exchange_id}/history"
+        }
+      ],
+      "operation": "coin-api.get.v1-ohlcv-exchanges-exchange-id-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 ohlcv periods",
+      "summary": "Documented GET /v1/ohlcv/periods (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 ohlcv periods --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/ohlcv/periods"
+        }
+      ],
+      "operation": "coin-api.get.v1-ohlcv-periods",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 ohlcv symbol-id latest",
+      "summary": "Documented GET /v1/ohlcv/{symbol_id}/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 ohlcv symbol-id latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/ohlcv/{symbol_id}/latest"
+        }
+      ],
+      "operation": "coin-api.get.v1-ohlcv-symbol-id-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 options exchange-id current",
+      "summary": "Documented GET /v1/options/{exchange_id}/current (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 options exchange-id current --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/options/{exchange_id}/current"
+        }
+      ],
+      "operation": "coin-api.get.v1-options-exchange-id-current",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 orderbooks symbol-id depth current",
+      "summary": "Documented GET /v1/orderbooks/{symbol_id}/depth/current (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 orderbooks symbol-id depth current --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/orderbooks/{symbol_id}/depth/current"
+        }
+      ],
+      "operation": "coin-api.get.v1-orderbooks-symbol-id-depth-current",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 orderbooks symbol-id history",
+      "summary": "Documented GET /v1/orderbooks/{symbol_id}/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 orderbooks symbol-id history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/orderbooks/{symbol_id}/history"
+        }
+      ],
+      "operation": "coin-api.get.v1-orderbooks-symbol-id-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 orderbooks3 current",
+      "summary": "Documented GET /v1/orderbooks3/current (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 orderbooks3 current --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/orderbooks3/current"
+        }
+      ],
+      "operation": "coin-api.get.v1-orderbooks3-current",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 orderbooks3 symbol-id current",
+      "summary": "Documented GET /v1/orderbooks3/{symbol_id}/current (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 orderbooks3 symbol-id current --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/orderbooks3/{symbol_id}/current"
+        }
+      ],
+      "operation": "coin-api.get.v1-orderbooks3-symbol-id-current",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 quotes current",
+      "summary": "Documented GET /v1/quotes/current (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 quotes current --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/quotes/current"
+        }
+      ],
+      "operation": "coin-api.get.v1-quotes-current",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 quotes latest",
+      "summary": "Documented GET /v1/quotes/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 quotes latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/quotes/latest"
+        }
+      ],
+      "operation": "coin-api.get.v1-quotes-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 quotes symbol-id history",
+      "summary": "Documented GET /v1/quotes/{symbol_id}/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 quotes symbol-id history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/quotes/{symbol_id}/history"
+        }
+      ],
+      "operation": "coin-api.get.v1-quotes-symbol-id-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 quotes symbol-id latest",
+      "summary": "Documented GET /v1/quotes/{symbol_id}/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 quotes symbol-id latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/quotes/{symbol_id}/latest"
+        }
+      ],
+      "operation": "coin-api.get.v1-quotes-symbol-id-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 symbols exchange-id active",
+      "summary": "Documented GET /v1/symbols/{exchange_id}/active (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 symbols exchange-id active --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/symbols/{exchange_id}/active"
+        }
+      ],
+      "operation": "coin-api.get.v1-symbols-exchange-id-active",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 symbols exchange-id history",
+      "summary": "Documented GET /v1/symbols/{exchange_id}/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 symbols exchange-id history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/symbols/{exchange_id}/history"
+        }
+      ],
+      "operation": "coin-api.get.v1-symbols-exchange-id-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 symbols map exchange-id",
+      "summary": "Documented GET /v1/symbols/map/{exchange_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 symbols map exchange-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/symbols/map/{exchange_id}"
+        }
+      ],
+      "operation": "coin-api.get.v1-symbols-map-exchange-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 trades latest",
+      "summary": "Documented GET /v1/trades/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 trades latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/trades/latest"
+        }
+      ],
+      "operation": "coin-api.get.v1-trades-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 trades symbol-id latest",
+      "summary": "Documented GET /v1/trades/{symbol_id}/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v1 trades symbol-id latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/trades/{symbol_id}/latest"
+        }
+      ],
+      "operation": "coin-api.get.v1-trades-symbol-id-latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 metrics asset history",
+      "summary": "Documented GET /v2/metrics/asset/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v2 metrics asset history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/metrics/asset/history"
+        }
+      ],
+      "operation": "coin-api.get.v2-metrics-asset-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 metrics asset listing",
+      "summary": "Documented GET /v2/metrics/asset/listing (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v2 metrics asset listing --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/metrics/asset/listing"
+        }
+      ],
+      "operation": "coin-api.get.v2-metrics-asset-listing",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 metrics chain history",
+      "summary": "Documented GET /v2/metrics/chain/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v2 metrics chain history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/metrics/chain/history"
+        }
+      ],
+      "operation": "coin-api.get.v2-metrics-chain-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 metrics chain listing",
+      "summary": "Documented GET /v2/metrics/chain/listing (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v2 metrics chain listing --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/metrics/chain/listing"
+        }
+      ],
+      "operation": "coin-api.get.v2-metrics-chain-listing",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 metrics exchange history",
+      "summary": "Documented GET /v2/metrics/exchange/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v2 metrics exchange history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/metrics/exchange/history"
+        }
+      ],
+      "operation": "coin-api.get.v2-metrics-exchange-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 metrics exchange listing",
+      "summary": "Documented GET /v2/metrics/exchange/listing (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v2 metrics exchange listing --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/metrics/exchange/listing"
+        }
+      ],
+      "operation": "coin-api.get.v2-metrics-exchange-listing",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 metrics listing",
+      "summary": "Documented GET /v2/metrics/listing (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api api get v2 metrics listing --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/metrics/listing"
+        }
+      ],
+      "operation": "coin-api.get.v2-metrics-listing",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "assets list",
+      "summary": "Run the assets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "assets",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api assets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/assets"
+        }
+      ]
+    },
+    {
+      "path": "exchange rates list",
+      "summary": "Run the exchange rates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "exchange_rates",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api exchange rates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchangerate/{asset_id_base}"
+        }
+      ]
+    },
+    {
+      "path": "exchanges list",
+      "summary": "Run the exchanges ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "exchanges",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api exchanges list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/exchanges"
+        }
+      ]
+    },
+    {
+      "path": "metrics listing list",
+      "summary": "Run the metrics listing ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "metrics_listing",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api metrics listing list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/metrics/listing"
+        }
+      ]
+    },
+    {
+      "path": "ohlcv historical data list",
+      "summary": "Run the ohlcv historical data ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ohlcv_historical_data",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api ohlcv historical data list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/ohlcv/{symbol_id}/history"
+        }
+      ]
+    },
+    {
+      "path": "orderbook current list",
+      "summary": "Run the orderbook current ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "orderbook_current",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api orderbook current list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/orderbooks/{symbol_id}/current"
+        }
+      ]
+    },
+    {
+      "path": "quotes current list",
+      "summary": "Run the quotes current ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "quotes_current",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api quotes current list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/quotes/{symbol_id}/current"
+        }
+      ]
+    },
+    {
+      "path": "symbols list",
+      "summary": "Run the symbols ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "symbols",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api symbols list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/symbols"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "trades historical data list",
+      "summary": "Run the trades historical data ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trades_historical_data",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "examples": [
+        "pm coin-api trades historical data list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/trades/{symbol_id}/history"
+        }
+      ]
+    }
+  ]
+}

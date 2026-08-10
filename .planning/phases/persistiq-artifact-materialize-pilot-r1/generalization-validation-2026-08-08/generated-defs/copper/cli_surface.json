@@ -1,0 +1,1732 @@
+{
+  "tagline": "Run Copper's declared streams and reverse-ETL actions.",
+  "usage": "pm copper \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get account",
+        "api get activities example-activity-id",
+        "api get activity-types",
+        "api get companies example-company-id",
+        "api get contact-types",
+        "api get custom-activity-types",
+        "api get custom-activity-types custom-activity-type-id",
+        "api get custom-field-definitions",
+        "api get custom-field-definitions custom-field-definition-id",
+        "api get customer-sources",
+        "api get entity-id files",
+        "api get entity-id files file-id",
+        "api get entity-id files s3-signed-url",
+        "api get entity-id related",
+        "api get entity-id related related-entity-name",
+        "api get lead-statuses",
+        "api get leads example-lead-id",
+        "api get loss-reasons",
+        "api get opportunities example-opportunity-id",
+        "api get people example-person-id",
+        "api get pipeline-stages",
+        "api get pipeline-stages pipeline pipeline-id",
+        "api get pipelines",
+        "api get projects example-project-id",
+        "api get related-links",
+        "api get tasks example-task-id",
+        "api get users example-user-id",
+        "api get webhooks",
+        "api get webhooks example-webhook-id",
+        "companies list",
+        "leads list",
+        "opportunities list",
+        "people list",
+        "tasks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete activities delete-activity-id",
+        "api delete companies delete-company-id",
+        "api delete custom-field-definitions custom-field-definition-id",
+        "api delete entity-id related",
+        "api delete leads example-lead-id",
+        "api delete opportunities delete-opportunity-id",
+        "api delete people example-person-id",
+        "api delete projects delete-project-id",
+        "api delete related-links connection-id",
+        "api delete tasks delete-task-id",
+        "api delete webhooks example-webhook-id",
+        "api post",
+        "api post activities",
+        "api post activities search",
+        "api post companies",
+        "api post companies example-company-id activities",
+        "api post companies search",
+        "api post custom-activity-types",
+        "api post custom-field-definitions",
+        "api post entity-id files",
+        "api post entity-id related",
+        "api post leads",
+        "api post leads example-lead-id activities",
+        "api post leads example-leadconvert-id convert",
+        "api post leads search",
+        "api post opportunities",
+        "api post opportunities search",
+        "api post people",
+        "api post people example-person-id activities",
+        "api post people fetch-by-email",
+        "api post people search",
+        "api post projects",
+        "api post projects search",
+        "api post related-links",
+        "api post search",
+        "api post tasks",
+        "api post tasks search",
+        "api post users search",
+        "api post webhooks",
+        "api put companies example-company-id",
+        "api put custom-activity-types custom-activity-type-id",
+        "api put custom-field-definitions custom-field-definition-id",
+        "api put leads example-lead-id",
+        "api put leads upsert",
+        "api put opportunities example-opportunity-id",
+        "api put people example-person-id",
+        "api put projects example-project-id",
+        "api put tasks example-task-id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete activities delete-activity-id",
+      "summary": "Documented DELETE /activities/{delete_activity_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api delete activities delete-activity-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/activities/{delete_activity_id}"
+        }
+      ],
+      "operation": "copper.delete.activities-delete-activity-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete companies delete-company-id",
+      "summary": "Documented DELETE /companies/{delete_company_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api delete companies delete-company-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/companies/{delete_company_id}"
+        }
+      ],
+      "operation": "copper.delete.companies-delete-company-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete custom-field-definitions custom-field-definition-id",
+      "summary": "Documented DELETE /custom_field_definitions/{custom_field_definition_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api delete custom-field-definitions custom-field-definition-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/custom_field_definitions/{custom_field_definition_id}"
+        }
+      ],
+      "operation": "copper.delete.custom-field-definitions-custom-field-definition-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete entity-id related",
+      "summary": "Documented DELETE /{entity_id}/related (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api delete entity-id related --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/{entity_id}/related"
+        }
+      ],
+      "operation": "copper.delete.entity-id-related",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete leads example-lead-id",
+      "summary": "Documented DELETE /leads/{example_lead_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api delete leads example-lead-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/leads/{example_lead_id}"
+        }
+      ],
+      "operation": "copper.delete.leads-example-lead-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete opportunities delete-opportunity-id",
+      "summary": "Documented DELETE /opportunities/{delete_opportunity_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api delete opportunities delete-opportunity-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/opportunities/{delete_opportunity_id}"
+        }
+      ],
+      "operation": "copper.delete.opportunities-delete-opportunity-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete people example-person-id",
+      "summary": "Documented DELETE /people/{example_person_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api delete people example-person-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/people/{example_person_id}"
+        }
+      ],
+      "operation": "copper.delete.people-example-person-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete projects delete-project-id",
+      "summary": "Documented DELETE /projects/{delete_project_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api delete projects delete-project-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{delete_project_id}"
+        }
+      ],
+      "operation": "copper.delete.projects-delete-project-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete related-links connection-id",
+      "summary": "Documented DELETE /related_links/{connection_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api delete related-links connection-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/related_links/{connection_id}"
+        }
+      ],
+      "operation": "copper.delete.related-links-connection-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete tasks delete-task-id",
+      "summary": "Documented DELETE /tasks/{delete_task_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api delete tasks delete-task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tasks/{delete_task_id}"
+        }
+      ],
+      "operation": "copper.delete.tasks-delete-task-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete webhooks example-webhook-id",
+      "summary": "Documented DELETE /webhooks/{example_webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api delete webhooks example-webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{example_webhook_id}"
+        }
+      ],
+      "operation": "copper.delete.webhooks-example-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get account",
+      "summary": "Documented GET /account (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get account --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/account"
+        }
+      ],
+      "operation": "copper.get.account",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get activities example-activity-id",
+      "summary": "Documented GET /activities/{example_activity_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get activities example-activity-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities/{example_activity_id}"
+        }
+      ],
+      "operation": "copper.get.activities-example-activity-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get activity-types",
+      "summary": "Documented GET /activity_types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get activity-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activity_types"
+        }
+      ],
+      "operation": "copper.get.activity-types",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get companies example-company-id",
+      "summary": "Documented GET /companies/{example_company_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get companies example-company-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{example_company_id}"
+        }
+      ],
+      "operation": "copper.get.companies-example-company-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contact-types",
+      "summary": "Documented GET /contact_types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get contact-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contact_types"
+        }
+      ],
+      "operation": "copper.get.contact-types",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get custom-activity-types",
+      "summary": "Documented GET /custom_activity_types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get custom-activity-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_activity_types"
+        }
+      ],
+      "operation": "copper.get.custom-activity-types",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get custom-activity-types custom-activity-type-id",
+      "summary": "Documented GET /custom_activity_types/{custom_activity_type_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get custom-activity-types custom-activity-type-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_activity_types/{custom_activity_type_id}"
+        }
+      ],
+      "operation": "copper.get.custom-activity-types-custom-activity-type-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get custom-field-definitions",
+      "summary": "Documented GET /custom_field_definitions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get custom-field-definitions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_field_definitions"
+        }
+      ],
+      "operation": "copper.get.custom-field-definitions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get custom-field-definitions custom-field-definition-id",
+      "summary": "Documented GET /custom_field_definitions/{custom_field_definition_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get custom-field-definitions custom-field-definition-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_field_definitions/{custom_field_definition_id}"
+        }
+      ],
+      "operation": "copper.get.custom-field-definitions-custom-field-definition-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer-sources",
+      "summary": "Documented GET /customer_sources (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get customer-sources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer_sources"
+        }
+      ],
+      "operation": "copper.get.customer-sources",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get entity-id files",
+      "summary": "Documented GET /{entity_id}/files (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get entity-id files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{entity_id}/files"
+        }
+      ],
+      "operation": "copper.get.entity-id-files",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get entity-id files file-id",
+      "summary": "Documented GET /{entity_id}/files/{file_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get entity-id files file-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{entity_id}/files/{file_id}"
+        }
+      ],
+      "operation": "copper.get.entity-id-files-file-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get entity-id files s3-signed-url",
+      "summary": "Documented GET /{entity_id}/files/s3_signed_url (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get entity-id files s3-signed-url --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{entity_id}/files/s3_signed_url"
+        }
+      ],
+      "operation": "copper.get.entity-id-files-s3-signed-url",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get entity-id related",
+      "summary": "Documented GET /{entity_id}/related/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get entity-id related --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{entity_id}/related/"
+        }
+      ],
+      "operation": "copper.get.entity-id-related",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get entity-id related related-entity-name",
+      "summary": "Documented GET /{entity_id}/related/{related_entity_name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get entity-id related related-entity-name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{entity_id}/related/{related_entity_name}"
+        }
+      ],
+      "operation": "copper.get.entity-id-related-related-entity-name",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get lead-statuses",
+      "summary": "Documented GET /lead_statuses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get lead-statuses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lead_statuses"
+        }
+      ],
+      "operation": "copper.get.lead-statuses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get leads example-lead-id",
+      "summary": "Documented GET /leads/{example_lead_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get leads example-lead-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/{example_lead_id}"
+        }
+      ],
+      "operation": "copper.get.leads-example-lead-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get loss-reasons",
+      "summary": "Documented GET /loss_reasons (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get loss-reasons --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/loss_reasons"
+        }
+      ],
+      "operation": "copper.get.loss-reasons",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get opportunities example-opportunity-id",
+      "summary": "Documented GET /opportunities/{example_opportunity_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get opportunities example-opportunity-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunities/{example_opportunity_id}"
+        }
+      ],
+      "operation": "copper.get.opportunities-example-opportunity-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get people example-person-id",
+      "summary": "Documented GET /people/{example_person_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get people example-person-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/people/{example_person_id}"
+        }
+      ],
+      "operation": "copper.get.people-example-person-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipeline-stages",
+      "summary": "Documented GET /pipeline_stages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get pipeline-stages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipeline_stages"
+        }
+      ],
+      "operation": "copper.get.pipeline-stages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipeline-stages pipeline pipeline-id",
+      "summary": "Documented GET /pipeline_stages/pipeline/{pipeline_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get pipeline-stages pipeline pipeline-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipeline_stages/pipeline/{pipeline_id}"
+        }
+      ],
+      "operation": "copper.get.pipeline-stages-pipeline-pipeline-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipelines",
+      "summary": "Documented GET /pipelines (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get pipelines --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipelines"
+        }
+      ],
+      "operation": "copper.get.pipelines",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects example-project-id",
+      "summary": "Documented GET /projects/{example_project_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get projects example-project-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{example_project_id}"
+        }
+      ],
+      "operation": "copper.get.projects-example-project-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get related-links",
+      "summary": "Documented GET /related_links (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get related-links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/related_links"
+        }
+      ],
+      "operation": "copper.get.related-links",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tasks example-task-id",
+      "summary": "Documented GET /tasks/{example_task_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get tasks example-task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks/{example_task_id}"
+        }
+      ],
+      "operation": "copper.get.tasks-example-task-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users example-user-id",
+      "summary": "Documented GET /users/{example_user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get users example-user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{example_user_id}"
+        }
+      ],
+      "operation": "copper.get.users-example-user-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks",
+      "summary": "Documented GET /webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "copper.get.webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks example-webhook-id",
+      "summary": "Documented GET /webhooks{example_webhook_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api get webhooks example-webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks{example_webhook_id}"
+        }
+      ],
+      "operation": "copper.get.webhooks-example-webhook-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post",
+      "summary": "Documented POST / (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/"
+        }
+      ],
+      "operation": "copper.post.operation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post activities",
+      "summary": "Documented POST /activities (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post activities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/activities"
+        }
+      ],
+      "operation": "copper.post.activities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post activities search",
+      "summary": "Documented POST /activities/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post activities search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/activities/search"
+        }
+      ],
+      "operation": "copper.post.activities-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post companies",
+      "summary": "Documented POST /companies (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post companies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies"
+        }
+      ],
+      "operation": "copper.post.companies",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post companies example-company-id activities",
+      "summary": "Documented POST /companies/{example_company_id}/activities (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post companies example-company-id activities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies/{example_company_id}/activities"
+        }
+      ],
+      "operation": "copper.post.companies-example-company-id-activities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post companies search",
+      "summary": "Documented POST /companies/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post companies search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies/search"
+        }
+      ],
+      "operation": "copper.post.companies-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post custom-activity-types",
+      "summary": "Documented POST /custom_activity_types (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post custom-activity-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/custom_activity_types"
+        }
+      ],
+      "operation": "copper.post.custom-activity-types",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post custom-field-definitions",
+      "summary": "Documented POST /custom_field_definitions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post custom-field-definitions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/custom_field_definitions"
+        }
+      ],
+      "operation": "copper.post.custom-field-definitions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post entity-id files",
+      "summary": "Documented POST /{entity_id}/files (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post entity-id files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{entity_id}/files"
+        }
+      ],
+      "operation": "copper.post.entity-id-files",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post entity-id related",
+      "summary": "Documented POST /{entity_id}/related (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post entity-id related --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{entity_id}/related"
+        }
+      ],
+      "operation": "copper.post.entity-id-related",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads",
+      "summary": "Documented POST /leads (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post leads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads"
+        }
+      ],
+      "operation": "copper.post.leads",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads example-lead-id activities",
+      "summary": "Documented POST /leads/{example_lead_id}/activities (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post leads example-lead-id activities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/{example_lead_id}/activities"
+        }
+      ],
+      "operation": "copper.post.leads-example-lead-id-activities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads example-leadconvert-id convert",
+      "summary": "Documented POST /leads/{example_leadconvert_id}/convert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post leads example-leadconvert-id convert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/{example_leadconvert_id}/convert"
+        }
+      ],
+      "operation": "copper.post.leads-example-leadconvert-id-convert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post leads search",
+      "summary": "Documented POST /leads/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post leads search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads/search"
+        }
+      ],
+      "operation": "copper.post.leads-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post opportunities",
+      "summary": "Documented POST /opportunities (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post opportunities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities"
+        }
+      ],
+      "operation": "copper.post.opportunities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post opportunities search",
+      "summary": "Documented POST /opportunities/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post opportunities search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/opportunities/search"
+        }
+      ],
+      "operation": "copper.post.opportunities-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post people",
+      "summary": "Documented POST /people (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post people --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/people"
+        }
+      ],
+      "operation": "copper.post.people",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post people example-person-id activities",
+      "summary": "Documented POST /people/{example_person_id}/activities (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post people example-person-id activities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/people/{example_person_id}/activities"
+        }
+      ],
+      "operation": "copper.post.people-example-person-id-activities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post people fetch-by-email",
+      "summary": "Documented POST /people/fetch_by_email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post people fetch-by-email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/people/fetch_by_email"
+        }
+      ],
+      "operation": "copper.post.people-fetch-by-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post people search",
+      "summary": "Documented POST /people/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post people search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/people/search"
+        }
+      ],
+      "operation": "copper.post.people-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects",
+      "summary": "Documented POST /projects (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post projects --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects"
+        }
+      ],
+      "operation": "copper.post.projects",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects search",
+      "summary": "Documented POST /projects/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post projects search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/search"
+        }
+      ],
+      "operation": "copper.post.projects-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post related-links",
+      "summary": "Documented POST /related_links (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post related-links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/related_links"
+        }
+      ],
+      "operation": "copper.post.related-links",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post search",
+      "summary": "Documented POST /search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/search"
+        }
+      ],
+      "operation": "copper.post.search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tasks",
+      "summary": "Documented POST /tasks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks"
+        }
+      ],
+      "operation": "copper.post.tasks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tasks search",
+      "summary": "Documented POST /tasks/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post tasks search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks/search"
+        }
+      ],
+      "operation": "copper.post.tasks-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users search",
+      "summary": "Documented POST /users/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post users search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/search"
+        }
+      ],
+      "operation": "copper.post.users-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhooks",
+      "summary": "Documented POST /webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api post webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks"
+        }
+      ],
+      "operation": "copper.post.webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put companies example-company-id",
+      "summary": "Documented PUT /companies/{example_company_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api put companies example-company-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/companies/{example_company_id}"
+        }
+      ],
+      "operation": "copper.put.companies-example-company-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put custom-activity-types custom-activity-type-id",
+      "summary": "Documented PUT /custom_activity_types/{custom_activity_type_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api put custom-activity-types custom-activity-type-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/custom_activity_types/{custom_activity_type_id}"
+        }
+      ],
+      "operation": "copper.put.custom-activity-types-custom-activity-type-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put custom-field-definitions custom-field-definition-id",
+      "summary": "Documented PUT /custom_field_definitions/{custom_field_definition_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api put custom-field-definitions custom-field-definition-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/custom_field_definitions/{custom_field_definition_id}"
+        }
+      ],
+      "operation": "copper.put.custom-field-definitions-custom-field-definition-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put leads example-lead-id",
+      "summary": "Documented PUT /leads/{example_lead_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api put leads example-lead-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/leads/{example_lead_id}"
+        }
+      ],
+      "operation": "copper.put.leads-example-lead-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put leads upsert",
+      "summary": "Documented PUT /leads/upsert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api put leads upsert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/leads/upsert"
+        }
+      ],
+      "operation": "copper.put.leads-upsert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put opportunities example-opportunity-id",
+      "summary": "Documented PUT /opportunities/{example_opportunity_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api put opportunities example-opportunity-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/opportunities/{example_opportunity_id}"
+        }
+      ],
+      "operation": "copper.put.opportunities-example-opportunity-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put people example-person-id",
+      "summary": "Documented PUT /people/{example_person_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api put people example-person-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/people/{example_person_id}"
+        }
+      ],
+      "operation": "copper.put.people-example-person-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put projects example-project-id",
+      "summary": "Documented PUT /projects/{example_project_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api put projects example-project-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/projects/{example_project_id}"
+        }
+      ],
+      "operation": "copper.put.projects-example-project-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put tasks example-task-id",
+      "summary": "Documented PUT /tasks/{example_task_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper api put tasks example-task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tasks/{example_task_id}"
+        }
+      ],
+      "operation": "copper.put.tasks-example-task-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "companies list",
+      "summary": "Run the companies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper companies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "HOOK",
+          "path": "internal/connectors/copper companies read path"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "leads list",
+      "summary": "Run the leads ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "leads",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper leads list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "HOOK",
+          "path": "internal/connectors/copper leads read path"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "opportunities list",
+      "summary": "Run the opportunities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunities",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper opportunities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "HOOK",
+          "path": "internal/connectors/copper opportunities read path"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "people list",
+      "summary": "Run the people ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "people",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper people list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "HOOK",
+          "path": "internal/connectors/copper people read path"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "tasks list",
+      "summary": "Run the tasks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "source_url": "https://developer.copper.com/download/copper_postman_collection.json",
+      "examples": [
+        "pm copper tasks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "HOOK",
+          "path": "internal/connectors/copper tasks read path"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

@@ -1,0 +1,2631 @@
+{
+  "operations": [
+    {
+      "id": "devin-ai.get.v1",
+      "kind": "rest_read",
+      "summary": "GET /v1/*",
+      "description": "legacy v1 API family remains documented only for migration; this bundle targets current v3 service-user API",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/*",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v2",
+      "kind": "rest_read",
+      "summary": "GET /v2/*",
+      "description": "legacy v2 API family remains documented only for migration; this bundle targets current v3 service-user API",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/*",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-audit-logs",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/audit-logs",
+      "description": "enterprise audit logs require enterprise observability scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/audit-logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-code-scans-findings",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/code-scans/findings",
+      "description": "code scan findings require enterprise security scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/code-scans/findings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-code-scans-metrics",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/code-scans/metrics",
+      "description": "code scan metrics require enterprise security scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/code-scans/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-code-scans-profiles",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/code-scans/profiles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/code-scans/profiles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-code-scans-profiles-profile-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/code-scans/profiles/{profile_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/code-scans/profiles/{profile_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-code-scans-scans",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/code-scans/scans",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/code-scans/scans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-consumption-acu-limits-devin",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/consumption/acu-limits/devin",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/consumption/acu-limits/devin",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.put.v3-enterprise-consumption-acu-limits-devin-organizations-org-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/enterprise/consumption/acu-limits/devin/organizations/{org_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/enterprise/consumption/acu-limits/devin/organizations/{org_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-consumption-acu-limits-devin-organizations-org-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/consumption/acu-limits/devin/organizations/{org_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/consumption/acu-limits/devin/organizations/{org_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-consumption-cycles",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/consumption/cycles",
+      "description": "enterprise billing-cycle consumption requires enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/consumption/cycles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-consumption-daily",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/consumption/daily",
+      "description": "enterprise consumption requires enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/consumption/daily",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-consumption-daily-organizations-org-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/consumption/daily/organizations/{org_id}",
+      "description": "enterprise organization consumption duplicates org_daily_consumption but requires enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/consumption/daily/organizations/{org_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-consumption-daily-service-users-service-user-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/consumption/daily/service-users/{service_user_id}",
+      "description": "enterprise service-user consumption requires enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/consumption/daily/service-users/{service_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-consumption-daily-sessions-session-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/consumption/daily/sessions/{session_id}",
+      "description": "enterprise session consumption duplicates session_daily_consumption but requires enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/consumption/daily/sessions/{session_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-consumption-daily-users-user-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/consumption/daily/users/{user_id}",
+      "description": "enterprise user consumption duplicates user_daily_consumption but requires enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/consumption/daily/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-git-providers-connections",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/git-providers/connections",
+      "description": "git connection inventory is enterprise integration administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/git-providers/connections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-git-providers-connections-connection-id-repositories",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/git-providers/connections/{connection_id}/repositories",
+      "description": "git connection repository listing is enterprise integration administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/git-providers/connections/{connection_id}/repositories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-hypervisors",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/hypervisors",
+      "description": "hypervisor status is enterprise infrastructure administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/hypervisors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-idp-groups",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/idp-groups",
+      "description": "IDP group registration is enterprise identity administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/idp-groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-idp-groups",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/idp-groups",
+      "description": "registering IDP groups mutates enterprise identity configuration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/idp-groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-idp-groups-idp-group-name",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/idp-groups/{idp_group_name}",
+      "description": "deleting a registered IDP group removes enterprise identity mapping",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/idp-groups/{idp_group_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-ip-access-list",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/ip-access-list",
+      "description": "IP allowlist reads are enterprise security administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/ip-access-list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-ip-access-list",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/ip-access-list",
+      "description": "adding IPs mutates enterprise security access controls",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/ip-access-list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.put.v3-enterprise-ip-access-list",
+      "kind": "rest_write",
+      "summary": "PUT /v3/enterprise/ip-access-list",
+      "description": "replacing IP allowlist mutates enterprise security access controls",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/enterprise/ip-access-list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-ip-access-list",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/ip-access-list",
+      "description": "clearing IP allowlist is destructive enterprise security administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/ip-access-list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-knowledge-folders",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/knowledge/folders",
+      "description": "enterprise knowledge folders require enterprise-level RBAC outside this org-scoped connector",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/knowledge/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-knowledge-notes",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/knowledge/notes",
+      "description": "enterprise knowledge inventory requires enterprise-level RBAC outside this org-scoped connector",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/knowledge/notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-knowledge-notes",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/knowledge/notes",
+      "description": "enterprise note creation mutates account-wide knowledge",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/knowledge/notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-knowledge-notes-note-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/knowledge/notes/{note_id}",
+      "description": "enterprise knowledge detail requires enterprise-level RBAC outside this org-scoped connector",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/knowledge/notes/{note_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.put.v3-enterprise-knowledge-notes-note-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/enterprise/knowledge/notes/{note_id}",
+      "description": "enterprise note update mutates account-wide knowledge",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/enterprise/knowledge/notes/{note_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-knowledge-notes-note-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/knowledge/notes/{note_id}",
+      "description": "enterprise note deletion is account-wide destructive administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/knowledge/notes/{note_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-members-idp-groups",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/members/idp-groups",
+      "description": "IDP group membership is enterprise identity administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/members/idp-groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-members-idp-groups-idp-group-name",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/members/idp-groups/{idp_group_name}",
+      "description": "IDP group detail is enterprise identity administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/members/idp-groups/{idp_group_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-members-idp-groups-idp-group-name",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/members/idp-groups/{idp_group_name}",
+      "description": "assigning IDP groups mutates enterprise identity configuration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/members/idp-groups/{idp_group_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.patch.v3-enterprise-members-idp-groups-idp-group-name",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/enterprise/members/idp-groups/{idp_group_name}",
+      "description": "updating IDP groups mutates enterprise identity configuration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/enterprise/members/idp-groups/{idp_group_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-members-idp-groups-idp-group-name",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/members/idp-groups/{idp_group_name}",
+      "description": "deleting an IDP group assignment removes enterprise identity mapping",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/members/idp-groups/{idp_group_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-members-idp-users",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/members/idp-users",
+      "description": "enterprise IDP-derived users require enterprise-level RBAC outside this org-scoped connector",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/members/idp-users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-members-service-users",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/members/service-users",
+      "description": "service-user inventory is enterprise identity administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/members/service-users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-members-service-users-service-user-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/members/service-users/{service_user_id}",
+      "description": "service-user detail is enterprise identity administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/members/service-users/{service_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-members-service-users-service-user-id",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/members/service-users/{service_user_id}",
+      "description": "assigning service users mutates enterprise identity roles",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/members/service-users/{service_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.patch.v3-enterprise-members-service-users-service-user-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/enterprise/members/service-users/{service_user_id}",
+      "description": "updating service users mutates enterprise identity roles",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/enterprise/members/service-users/{service_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-members-service-users-service-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/members/service-users/{service_user_id}",
+      "description": "deleting a service user is destructive enterprise identity administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/members/service-users/{service_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-members-users",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/members/users",
+      "description": "enterprise-wide user inventory requires enterprise-level RBAC outside this org-scoped connector",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/members/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-members-users",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/members/users",
+      "description": "inviting enterprise users mutates enterprise membership",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/members/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-members-users-user-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/members/users/{user_id}",
+      "description": "enterprise user detail requires enterprise-level RBAC outside this org-scoped connector",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/members/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.patch.v3-enterprise-members-users-user-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/enterprise/members/users/{user_id}",
+      "description": "updating enterprise users mutates enterprise membership and roles",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/enterprise/members/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-members-users-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/members/users/{user_id}",
+      "description": "deleting an enterprise user is destructive account administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/members/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-metrics-active-users",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/metrics/active-users",
+      "description": "enterprise active-user metrics require enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/metrics/active-users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-metrics-dau",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/metrics/dau",
+      "description": "enterprise daily active-user metrics require enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/metrics/dau",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-metrics-mau",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/metrics/mau",
+      "description": "enterprise monthly active-user metrics require enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/metrics/mau",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-metrics-prs",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/metrics/prs",
+      "description": "enterprise PR metrics require enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/metrics/prs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-metrics-searches",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/metrics/searches",
+      "description": "enterprise search metrics require enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/metrics/searches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-metrics-sessions",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/metrics/sessions",
+      "description": "enterprise session metrics require enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/metrics/sessions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-metrics-sessions-by-category",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/metrics/sessions-by-category",
+      "description": "enterprise category metrics require enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/metrics/sessions-by-category",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-metrics-usage",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/metrics/usage",
+      "description": "enterprise aggregate metrics require enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/metrics/usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-metrics-wau",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/metrics/wau",
+      "description": "enterprise weekly active-user metrics require enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/metrics/wau",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-org-group-limits",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/org-group-limits",
+      "description": "organization group limits are enterprise account configuration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/org-group-limits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.put.v3-enterprise-org-group-limits",
+      "kind": "rest_write",
+      "summary": "PUT /v3/enterprise/org-group-limits",
+      "description": "updating organization group limits mutates enterprise account configuration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/enterprise/org-group-limits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-organizations",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/organizations",
+      "description": "organization inventory is enterprise account administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/organizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-organizations",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/organizations",
+      "description": "creating organizations is enterprise account administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/organizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-organizations-org-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/organizations/{org_id}",
+      "description": "organization detail is enterprise account administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/organizations/{org_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.patch.v3-enterprise-organizations-org-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/enterprise/organizations/{org_id}",
+      "description": "updating organizations is enterprise account administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/enterprise/organizations/{org_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-organizations-org-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/organizations/{org_id}",
+      "description": "deleting an organization is destructive enterprise administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/organizations/{org_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-organizations-org-id-audit-logs",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/organizations/{org_id}/audit-logs",
+      "description": "organization audit logs are served from enterprise scope and require enterprise observability RBAC",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/organizations/{org_id}/audit-logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-organizations-org-id-code-scans",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/organizations/{org_id}/code-scans",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/organizations/{org_id}/code-scans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-organizations-org-id-code-scans-ingestion",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/organizations/{org_id}/code-scans/ingestion",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/organizations/{org_id}/code-scans/ingestion",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-organizations-org-id-code-scans-scan-id-findings-finding-id-remediate",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/organizations/{org_id}/code-scans/{scan_id}/findings/{finding_id}/remediate",
+      "description": "code scan remediation launches sessions from enterprise security workflows",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/organizations/{org_id}/code-scans/{scan_id}/findings/{finding_id}/remediate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-organizations-org-id-git-providers-permissions",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/organizations/{org_id}/git-providers/permissions",
+      "description": "git permission inventory is enterprise integration administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/organizations/{org_id}/git-providers/permissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-organizations-org-id-git-providers-permissions",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/organizations/{org_id}/git-providers/permissions",
+      "description": "creating git permissions mutates enterprise integration policy",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/organizations/{org_id}/git-providers/permissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.put.v3-enterprise-organizations-org-id-git-providers-permissions",
+      "kind": "rest_write",
+      "summary": "PUT /v3/enterprise/organizations/{org_id}/git-providers/permissions",
+      "description": "replacing git permissions mutates enterprise integration policy",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/enterprise/organizations/{org_id}/git-providers/permissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-organizations-org-id-git-providers-permissions",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/organizations/{org_id}/git-providers/permissions",
+      "description": "clearing git permissions removes organization integration policy",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/organizations/{org_id}/git-providers/permissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.patch.v3-enterprise-organizations-org-id-git-providers-permissions-git-permission-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/enterprise/organizations/{org_id}/git-providers/permissions/{git_permission_id}",
+      "description": "updating git permissions mutates enterprise integration policy",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/enterprise/organizations/{org_id}/git-providers/permissions/{git_permission_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-organizations-org-id-git-providers-permissions-git-permission-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/organizations/{org_id}/git-providers/permissions/{git_permission_id}",
+      "description": "deleting a git permission removes organization integration policy",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/organizations/{org_id}/git-providers/permissions/{git_permission_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-organizations-org-id-members-idp-groups",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/organizations/{org_id}/members/idp-groups",
+      "description": "organization IDP groups are managed through enterprise identity scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/organizations/{org_id}/members/idp-groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-organizations-org-id-members-idp-groups-idp-group-name",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/organizations/{org_id}/members/idp-groups/{idp_group_name}",
+      "description": "organization IDP group detail is managed through enterprise identity scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/organizations/{org_id}/members/idp-groups/{idp_group_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-organizations-org-id-members-idp-groups-idp-group-name",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/organizations/{org_id}/members/idp-groups/{idp_group_name}",
+      "description": "assigning organization IDP groups mutates enterprise identity configuration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/organizations/{org_id}/members/idp-groups/{idp_group_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.patch.v3-enterprise-organizations-org-id-members-idp-groups-idp-group-name",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/enterprise/organizations/{org_id}/members/idp-groups/{idp_group_name}",
+      "description": "updating organization IDP groups mutates enterprise identity configuration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/enterprise/organizations/{org_id}/members/idp-groups/{idp_group_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-organizations-org-id-members-idp-groups-idp-group-name",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/organizations/{org_id}/members/idp-groups/{idp_group_name}",
+      "description": "deleting an organization IDP group assignment removes identity mapping",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/organizations/{org_id}/members/idp-groups/{idp_group_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-organizations-org-id-members-idp-users",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/organizations/{org_id}/members/idp-users",
+      "description": "enterprise-scoped organization IDP users duplicate the org-scoped beta stream but require enterprise RBAC",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/organizations/{org_id}/members/idp-users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-organizations-org-id-members-service-users",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/organizations/{org_id}/members/service-users",
+      "description": "organization service-user inventory is served through enterprise identity scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/organizations/{org_id}/members/service-users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-organizations-org-id-members-service-users-service-user-id",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/organizations/{org_id}/members/service-users/{service_user_id}",
+      "description": "assigning organization service users mutates enterprise identity roles",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/organizations/{org_id}/members/service-users/{service_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.patch.v3-enterprise-organizations-org-id-members-service-users-service-user-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/enterprise/organizations/{org_id}/members/service-users/{service_user_id}",
+      "description": "updating organization service users mutates enterprise identity roles",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/enterprise/organizations/{org_id}/members/service-users/{service_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-organizations-org-id-members-service-users-service-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/organizations/{org_id}/members/service-users/{service_user_id}",
+      "description": "deleting an organization service user assignment is destructive identity administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/organizations/{org_id}/members/service-users/{service_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-organizations-org-id-members-users",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/organizations/{org_id}/members/users",
+      "description": "enterprise-scoped organization user endpoint duplicates the org-scoped beta membership stream but requires enterprise RBAC",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/organizations/{org_id}/members/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-organizations-org-id-members-users-user-id",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/organizations/{org_id}/members/users/{user_id}",
+      "description": "assigning organization users via enterprise scope mutates membership roles",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/organizations/{org_id}/members/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.patch.v3-enterprise-organizations-org-id-members-users-user-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/enterprise/organizations/{org_id}/members/users/{user_id}",
+      "description": "updating organization users via enterprise scope mutates membership roles",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/enterprise/organizations/{org_id}/members/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-organizations-org-id-members-users-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/organizations/{org_id}/members/users/{user_id}",
+      "description": "removing an organization user via enterprise scope is destructive membership administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/organizations/{org_id}/members/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-organizations-org-id-metrics-usage",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/organizations/{org_id}/metrics/usage",
+      "description": "enterprise organization usage metrics duplicate org_usage_metrics but require enterprise analytics scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/organizations/{org_id}/metrics/usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-organizations-org-id-tags",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/organizations/{org_id}/tags",
+      "description": "allowed session tags are enterprise settings requiring enterprise RBAC",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/organizations/{org_id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-organizations-org-id-tags",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/organizations/{org_id}/tags",
+      "description": "appending allowed organization tags mutates enterprise settings",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/organizations/{org_id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.put.v3-enterprise-organizations-org-id-tags",
+      "kind": "rest_write",
+      "summary": "PUT /v3/enterprise/organizations/{org_id}/tags",
+      "description": "replacing allowed organization tags mutates enterprise settings",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/enterprise/organizations/{org_id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-organizations-org-id-tags",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/organizations/{org_id}/tags",
+      "description": "clearing allowed organization tags removes enterprise settings",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/organizations/{org_id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-organizations-org-id-tags-default",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/organizations/{org_id}/tags/default",
+      "description": "default organization tag is an enterprise setting requiring enterprise RBAC",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/organizations/{org_id}/tags/default",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.put.v3-enterprise-organizations-org-id-tags-default",
+      "kind": "rest_write",
+      "summary": "PUT /v3/enterprise/organizations/{org_id}/tags/default",
+      "description": "setting default organization tag mutates enterprise settings",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/enterprise/organizations/{org_id}/tags/default",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-organizations-org-id-tags-default",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/organizations/{org_id}/tags/default",
+      "description": "clearing default organization tag mutates enterprise settings",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/organizations/{org_id}/tags/default",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-organizations-org-id-tags-tag",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/organizations/{org_id}/tags/{tag}",
+      "description": "removing an allowed organization tag mutates enterprise settings",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/organizations/{org_id}/tags/{tag}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-playbooks",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/playbooks",
+      "description": "enterprise playbook inventory requires enterprise-level RBAC outside this org-scoped connector",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/playbooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-playbooks",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/playbooks",
+      "description": "enterprise playbook creation mutates account-wide configuration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/playbooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-playbooks-playbook-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/playbooks/{playbook_id}",
+      "description": "enterprise playbook detail requires enterprise-level RBAC outside this org-scoped connector",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/playbooks/{playbook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.put.v3-enterprise-playbooks-playbook-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/enterprise/playbooks/{playbook_id}",
+      "description": "enterprise playbook update mutates account-wide configuration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/enterprise/playbooks/{playbook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3-enterprise-playbooks-playbook-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/enterprise/playbooks/{playbook_id}",
+      "description": "enterprise playbook deletion is account-wide destructive administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/enterprise/playbooks/{playbook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-pr-reviews",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/pr-reviews",
+      "description": "enterprise PR review lookup requires enterprise review scope and caller-supplied pr_url",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/pr-reviews",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-pr-reviews",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/pr-reviews",
+      "description": "enterprise PR review trigger mutates account-wide review state",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/pr-reviews",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-queue",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/queue",
+      "description": "enterprise queue status is account-wide infrastructure data",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/queue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-roles",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/roles",
+      "description": "enterprise role inventory requires enterprise RBAC scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-roles-role-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/roles/{role_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/roles/{role_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-sessions",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/sessions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/sessions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-sessions-insights",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/sessions/insights",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/sessions/insights",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-sessions-devin-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/sessions/{devin_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/sessions/{devin_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-sessions-devin-id-attachments",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/sessions/{devin_id}/attachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/sessions/{devin_id}/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-sessions-devin-id-insights",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/sessions/{devin_id}/insights",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/sessions/{devin_id}/insights",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-sessions-devin-id-insights-generate",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/sessions/{devin_id}/insights/generate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/sessions/{devin_id}/insights/generate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-sessions-devin-id-messages",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/sessions/{devin_id}/messages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/sessions/{devin_id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-sessions-devin-id-messages",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/sessions/{devin_id}/messages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/sessions/{devin_id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-enterprise-sessions-devin-id-tags",
+      "kind": "rest_read",
+      "summary": "GET /v3/enterprise/sessions/{devin_id}/tags",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/enterprise/sessions/{devin_id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-enterprise-sessions-devin-id-tags",
+      "kind": "rest_write",
+      "summary": "POST /v3/enterprise/sessions/{devin_id}/tags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/enterprise/sessions/{devin_id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.put.v3-enterprise-sessions-devin-id-tags",
+      "kind": "rest_write",
+      "summary": "PUT /v3/enterprise/sessions/{devin_id}/tags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/enterprise/sessions/{devin_id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-organizations-org-id-attachments",
+      "kind": "rest_write",
+      "summary": "POST /v3/organizations/{org_id}/attachments",
+      "description": "attachment upload is multipart/binary file transfer, outside the JSON write dialect",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/organizations/{org_id}/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-organizations-org-id-attachments-uuid-name",
+      "kind": "rest_read",
+      "summary": "GET /v3/organizations/{org_id}/attachments/{uuid}/{name}",
+      "description": "attachment download redirects to a presigned file URL rather than returning JSON records",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/organizations/{org_id}/attachments/{uuid}/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-organizations-org-id-code-scans",
+      "kind": "rest_write",
+      "summary": "POST /v3/organizations/{org_id}/code-scans",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/organizations/{org_id}/code-scans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-organizations-org-id-code-scans-findings",
+      "kind": "rest_read",
+      "summary": "GET /v3/organizations/{org_id}/code-scans/findings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/organizations/{org_id}/code-scans/findings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-organizations-org-id-code-scans-ingestion",
+      "kind": "rest_write",
+      "summary": "POST /v3/organizations/{org_id}/code-scans/ingestion",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/organizations/{org_id}/code-scans/ingestion",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-organizations-org-id-code-scans-metrics",
+      "kind": "rest_read",
+      "summary": "GET /v3/organizations/{org_id}/code-scans/metrics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/organizations/{org_id}/code-scans/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-organizations-org-id-code-scans-profiles",
+      "kind": "rest_read",
+      "summary": "GET /v3/organizations/{org_id}/code-scans/profiles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/organizations/{org_id}/code-scans/profiles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-organizations-org-id-code-scans-profiles-profile-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/organizations/{org_id}/code-scans/profiles/{profile_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/organizations/{org_id}/code-scans/profiles/{profile_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-organizations-org-id-code-scans-scans",
+      "kind": "rest_read",
+      "summary": "GET /v3/organizations/{org_id}/code-scans/scans",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/organizations/{org_id}/code-scans/scans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-organizations-org-id-code-scans-scan-id-findings-finding-id-remediate",
+      "kind": "rest_write",
+      "summary": "POST /v3/organizations/{org_id}/code-scans/{scan_id}/findings/{finding_id}/remediate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/organizations/{org_id}/code-scans/{scan_id}/findings/{finding_id}/remediate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-organizations-org-id-consumption-daily-service-users-service-user-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/organizations/{org_id}/consumption/daily/service-users/{service_user_id}",
+      "description": "service-user consumption requires enterprise service-user identity enumeration, which is enterprise-admin scoped",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/organizations/{org_id}/consumption/daily/service-users/{service_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-organizations-org-id-knowledge-notes-note-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/organizations/{org_id}/knowledge/notes/{note_id}",
+      "description": "org note detail response is represented by records from the knowledge_notes list stream",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/organizations/{org_id}/knowledge/notes/{note_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-organizations-org-id-playbooks-playbook-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/organizations/{org_id}/playbooks/{playbook_id}",
+      "description": "org playbook detail response is represented by records from the playbooks list stream",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/organizations/{org_id}/playbooks/{playbook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-organizations-org-id-pr-reviews",
+      "kind": "rest_read",
+      "summary": "GET /v3/organizations/{org_id}/pr-reviews",
+      "description": "point lookup requires a caller-supplied pr_url and is not an enumerable ETL stream",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/organizations/{org_id}/pr-reviews",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-organizations-org-id-schedules-schedule-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/organizations/{org_id}/schedules/{schedule_id}",
+      "description": "schedule detail response is represented by records from the schedules list stream",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/organizations/{org_id}/schedules/{schedule_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-organizations-org-id-secrets",
+      "kind": "rest_write",
+      "summary": "POST /v3/organizations/{org_id}/secrets",
+      "description": "secret creation requires accepting secret values as write-record data, which this connector does not request or store",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/organizations/{org_id}/secrets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3-organizations-org-id-sessions-devin-id-insights",
+      "kind": "rest_read",
+      "summary": "GET /v3/organizations/{org_id}/sessions/{devin_id}/insights",
+      "description": "per-session detail shape is covered by the sessions_insights list stream, which enumerates insights for all sessions",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/organizations/{org_id}/sessions/{devin_id}/insights",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3-organizations-org-id-sessions-devin-id-unarchive",
+      "kind": "rest_write",
+      "summary": "POST /v3/organizations/{org_id}/sessions/{devin_id}/unarchive",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/organizations/{org_id}/sessions/{devin_id}/unarchive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-enterprise-guardrail-violations",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/enterprise/guardrail-violations",
+      "description": "enterprise guardrail violations require enterprise observability scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/enterprise/guardrail-violations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-enterprise-organizations-org-id-guardrail-violations",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/enterprise/organizations/{org_id}/guardrail-violations",
+      "description": "organization guardrail violations are served from enterprise scope and require enterprise observability RBAC",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/enterprise/organizations/{org_id}/guardrail-violations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-enterprise-service-users-service-user-id-api-keys",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/enterprise/service-users/{service_user_id}/api-keys",
+      "description": "service-user API key inventory is enterprise credential administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/enterprise/service-users/{service_user_id}/api-keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3beta1-enterprise-service-users-service-user-id-api-keys",
+      "kind": "rest_write",
+      "summary": "POST /v3beta1/enterprise/service-users/{service_user_id}/api-keys",
+      "description": "creating service-user API keys returns credential material and is enterprise credential administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3beta1/enterprise/service-users/{service_user_id}/api-keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3beta1-enterprise-service-users-service-user-id-api-keys-api-key-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3beta1/enterprise/service-users/{service_user_id}/api-keys/{api_key_id}",
+      "description": "revoking service-user API keys is destructive credential administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3beta1/enterprise/service-users/{service_user_id}/api-keys/{api_key_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3beta1-enterprise-service-users-service-user-id-api-keys-api-key-id-rotate",
+      "kind": "rest_write",
+      "summary": "POST /v3beta1/enterprise/service-users/{service_user_id}/api-keys/{api_key_id}/rotate",
+      "description": "rotating service-user API keys returns credential material and is enterprise credential administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3beta1/enterprise/service-users/{service_user_id}/api-keys/{api_key_id}/rotate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-enterprise-snapshot-setup-blueprints",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/enterprise/snapshot-setup/blueprints",
+      "description": "enterprise snapshot setup is account-wide environment administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/enterprise/snapshot-setup/blueprints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3beta1-enterprise-snapshot-setup-blueprints",
+      "kind": "rest_write",
+      "summary": "POST /v3beta1/enterprise/snapshot-setup/blueprints",
+      "description": "creating enterprise snapshot blueprints mutates account-wide environment setup",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3beta1/enterprise/snapshot-setup/blueprints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-enterprise-snapshot-setup-blueprints-blueprint-id",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}",
+      "description": "enterprise snapshot blueprint detail is account-wide environment administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.put.v3beta1-enterprise-snapshot-setup-blueprints-blueprint-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}",
+      "description": "replacing enterprise blueprint YAML mutates account-wide environment setup",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3beta1-enterprise-snapshot-setup-blueprints-blueprint-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}",
+      "description": "soft-deleting enterprise blueprints is destructive account-wide environment administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-enterprise-snapshot-setup-blueprints-blueprint-id-contents",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}/contents",
+      "description": "enterprise blueprint contents endpoint returns a presigned YAML file URL",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}/contents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-enterprise-snapshot-setup-blueprints-blueprint-id-files",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}/files",
+      "description": "enterprise snapshot blueprint files are account-wide environment administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3beta1-enterprise-snapshot-setup-blueprints-blueprint-id-files",
+      "kind": "rest_write",
+      "summary": "POST /v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}/files",
+      "description": "enterprise blueprint file upload is binary/multipart file transfer",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3beta1-enterprise-snapshot-setup-blueprints-blueprint-id-files-file-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}/files/{file_id}",
+      "description": "deleting enterprise blueprint files is destructive account-wide environment administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3beta1/enterprise/snapshot-setup/blueprints/{blueprint_id}/files/{file_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-organizations-org-id-members-users-user-id",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/organizations/{org_id}/members/users/{user_id}",
+      "description": "organization user detail is represented by the organization_users stream",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/organizations/{org_id}/members/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-organizations-org-id-repositories-repository-path-indexing",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/organizations/{org_id}/repositories/{repository_path}/indexing",
+      "description": "repository indexing status is included by default in the repositories list stream; the point endpoint requires URL-encoding full repository paths for fan-out",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/organizations/{org_id}/repositories/{repository_path}/indexing",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-organizations-org-id-snapshot-setup-blueprints",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/organizations/{org_id}/snapshot-setup/blueprints",
+      "description": "snapshot blueprint inventory is environment administration outside ETL scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/blueprints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3beta1-organizations-org-id-snapshot-setup-blueprints",
+      "kind": "rest_write",
+      "summary": "POST /v3beta1/organizations/{org_id}/snapshot-setup/blueprints",
+      "description": "creating snapshot blueprints mutates environment setup",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/blueprints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-organizations-org-id-snapshot-setup-blueprints-blueprint-id",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}",
+      "description": "snapshot blueprint detail is environment administration outside ETL scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.patch.v3beta1-organizations-org-id-snapshot-setup-blueprints-blueprint-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}",
+      "description": "updating snapshot blueprints mutates environment setup",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3beta1-organizations-org-id-snapshot-setup-blueprints-blueprint-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}",
+      "description": "soft-deleting snapshot blueprints is destructive environment administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-organizations-org-id-snapshot-setup-blueprints-blueprint-id-contents",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}/contents",
+      "description": "blueprint contents endpoint returns a presigned YAML file URL, not JSON records",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}/contents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-organizations-org-id-snapshot-setup-blueprints-blueprint-id-files",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}/files",
+      "description": "snapshot blueprint files are environment administration outside ETL scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3beta1-organizations-org-id-snapshot-setup-blueprints-blueprint-id-files",
+      "kind": "rest_write",
+      "summary": "POST /v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}/files",
+      "description": "blueprint file upload is binary/multipart file transfer",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3beta1-organizations-org-id-snapshot-setup-blueprints-blueprint-id-files-file-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}/files/{file_id}",
+      "description": "deleting blueprint files is destructive environment administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/blueprints/{blueprint_id}/files/{file_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-organizations-org-id-snapshot-setup-builds",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/organizations/{org_id}/snapshot-setup/builds",
+      "description": "snapshot build inventory is environment administration outside ETL scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/builds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3beta1-organizations-org-id-snapshot-setup-builds",
+      "kind": "rest_write",
+      "summary": "POST /v3beta1/organizations/{org_id}/snapshot-setup/builds",
+      "description": "triggering snapshot builds mutates environment setup",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/builds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-organizations-org-id-snapshot-setup-builds-build-id",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/organizations/{org_id}/snapshot-setup/builds/{build_id}",
+      "description": "snapshot build detail is environment administration outside ETL scope",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/builds/{build_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3beta1-organizations-org-id-snapshot-setup-builds-build-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /v3beta1/organizations/{org_id}/snapshot-setup/builds/{build_id}/cancel",
+      "description": "canceling snapshot builds is environment administration",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/builds/{build_id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.get.v3beta1-organizations-org-id-snapshot-setup-builds-build-id-logs",
+      "kind": "rest_read",
+      "summary": "GET /v3beta1/organizations/{org_id}/snapshot-setup/builds/{build_id}/logs",
+      "description": "build logs endpoint returns a presigned log file URL, not JSON records",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/builds/{build_id}/logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.post.v3beta1-organizations-org-id-snapshot-setup-builds-build-id-pin",
+      "kind": "rest_write",
+      "summary": "POST /v3beta1/organizations/{org_id}/snapshot-setup/builds/{build_id}/pin",
+      "description": "pinning snapshot builds mutates environment setup",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/builds/{build_id}/pin",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "devin-ai.delete.v3beta1-organizations-org-id-snapshot-setup-builds-build-id-pin",
+      "kind": "rest_write",
+      "summary": "DELETE /v3beta1/organizations/{org_id}/snapshot-setup/builds/{build_id}/pin",
+      "description": "unpinning snapshot builds mutates environment setup",
+      "source_url": "https://docs.devin.ai/v3-openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3beta1/organizations/{org_id}/snapshot-setup/builds/{build_id}/pin",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

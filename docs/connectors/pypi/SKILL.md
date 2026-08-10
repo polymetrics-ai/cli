@@ -47,6 +47,17 @@ Reads PyPI project metadata through the PyPI JSON API. Read-only and credential-
 - approval: none; read-only public package registry API
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run PyPI's declared streams and reverse-ETL actions.
+- Usage: pm pypi <command> [flags]
+- Read streams
+- Other Commands
+  - api get pypi project version json - Documented GET /pypi/{project}/{version}/json (not implemented) [intent=direct_read availability=not_implemented operation=pypi.get.pypi-project-version-json]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get simple project - Documented GET /simple/{project}/ (not implemented) [intent=direct_read availability=not_implemented operation=pypi.get.simple-project]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get stats - Documented GET /stats (not implemented) [intent=direct_read availability=not_implemented operation=pypi.get.stats]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - project list - Run the project ETL stream [intent=etl availability=implemented stream=project]
+
 ## Commands
 
 ### Inspect as a manual

@@ -1,0 +1,49 @@
+{
+  "operations": [
+    {
+      "id": "marketstack.get.v1-currencies",
+      "kind": "rest_read",
+      "summary": "GET /v1/currencies",
+      "description": "/v1/currencies is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/currencies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "marketstack.get.v1-intraday",
+      "kind": "rest_read",
+      "summary": "GET /v1/intraday",
+      "description": "/v1/intraday is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/intraday",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "marketstack.get.v1-timezones",
+      "kind": "rest_read",
+      "summary": "GET /v1/timezones",
+      "description": "/v1/timezones is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/timezones",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

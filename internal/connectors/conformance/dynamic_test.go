@@ -183,6 +183,20 @@ func TestCheckFixture_AndReadFixtureNonempty(t *testing.T) {
 	}
 }
 
+func TestHarvestRateLimitedFixturesReceiveSyntheticCoordinationIdentity(t *testing.T) {
+	bundle, err := engine.Load(realDefsFS(), "harvest")
+	if err != nil {
+		t.Fatalf("load harvest bundle: %v", err)
+	}
+
+	if result := checkCheckFixture(bundle); !result.Passed {
+		t.Fatalf("Harvest check fixture = %+v, want Passed", result)
+	}
+	if result := checkReadFixtureNonempty(bundle, "clients", true); !result.Passed {
+		t.Fatalf("Harvest clients fixture = %+v, want Passed", result)
+	}
+}
+
 func TestReusableStreamReplayServerResetsBetweenStreams(t *testing.T) {
 	b := loadTestBundle(t, "testdata/good", "acme")
 	replay := newReusableStreamReplayServer()

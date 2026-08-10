@@ -1,0 +1,11 @@
+{
+  "record": {
+    "id": 500001,
+    "name": "Fixture Submitter Renamed",
+    "email": "fixture-submitter@example.com"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/submitters/500001"
+  }
+}

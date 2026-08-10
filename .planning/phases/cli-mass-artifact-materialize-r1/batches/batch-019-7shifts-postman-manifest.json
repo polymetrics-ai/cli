@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 1,
+    "min_operations": 0,
+    "max_operations": 250,
+    "criteria": "provider-linked official Postman collection alternative for a queued connector"
+  },
+  "connectors": [
+    {
+      "connector": "7shifts",
+      "operations_total": 147,
+      "operations_read": 66,
+      "operations_write": 81,
+      "artifact": {
+        "url": "https://storage.googleapis.com/cdn.7shifts.com/postman_collections/7shifts_postman_collection_v2023-04-01_v2.zip",
+        "kind": "postman",
+        "version": "7shifts Public API Postman collection v2023-04-01",
+        "retrieved_at": "2026-08-09"
+      },
+      "provider_reference_url": "https://developers.7shifts.com/reference/postman-collection.md",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "provider-published https://developers.7shifts.com/llms.txt and linked /reference/*.md OpenAPI fragments",
+      "counting_note": "Provider-published llms API Reference index yielded 147 current endpoint pages after excluding Authentication, Postman Collection, two non-callable webhook guide pages, and six explicitly deprecated duplicate pages. Each remaining page embedded one OpenAPI 3.0.2 operation; GET/HEAD counted as reads and POST/PUT/PATCH/DELETE as writes. All 147 fragments fetched and parsed successfully.",
+      "processed_at": "2026-08-05T16:16:49Z",
+      "selection_reason": "alternative official-source retry: provider-linked versioned 7shifts Postman collection"
+    }
+  ]
+}
