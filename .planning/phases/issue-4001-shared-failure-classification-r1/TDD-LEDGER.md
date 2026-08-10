@@ -1,0 +1,37 @@
+# TDD ledger — Issue 4001: shared connector failure classification
+
+| ID | Guarantee | Red assertion | Green proof |
+| --- | --- | --- | --- |
+| R1 | Closed domains | There is no contract rejecting an empty or unknown domain. | `Classification.New` and JSON decode accept only configuration/system/transient. |
+| R2 | Retry safety | Configuration errors can be retried by default. | `Retryable` is true only for transient; configuration and system are false. |
+| R3 | Stable dispatch vocabulary | Dispatch kinds are strings that callers can misspell. | The five required kinds validate; unknown kinds and non-system dispatch classifications fail. |
+| R4 | Safe diagnostic separation | User JSON can contain a Go cause, or callers must parse error text. | JSON contains domain/code/message/path/kind/references only; `Cause`/`Unwrap` retain the private cause. |
+| R5 | Exact path | A field path is absent or an arbitrary unsafe string. | JSON Pointer validation accepts escaped pointers and rejects malformed ones. |
+| R6 | Database configuration consumer | The generic validation boundary cannot preserve a typed non-retryable configuration failure. | Focused `internal/connectors` test observes the exact classification and its cause unchanged. |
+| R7 | Engine configuration consumer | Schema constraints produce only text errors. | Focused engine test observes configuration domain, code, exact field path, and private cause. |
+| R8 | Engine dispatch consumer | Commandrunner has no common carrier for #3991's result. | `BlockedCommandError` carries and unwraps every valid dispatch classification. |
+| R9 | Certification consumer | Certification must invent a local untestable-reason enum or serialize a cause. | `CapabilityResult.untestable_reason` uses the common JSON object and omits cause text. |
+
+## Red command
+
+```sh
+go test ./internal/failures ./internal/connectors ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/connectors/certify -run 'Test(Classification|ValidateConfigurationPreserves|SchemaValidateConfigurationReturns|BlockedCommandErrorCarries|CapabilityResultSerializes)' -count=1
+```
+
+The exact initial output is retained at `traces/red-run.txt`. The package does not exist at red
+time, so compilation failure is the expected red signal. The same command must pass after green.
+
+## Green evidence
+
+Passed after implementation:
+
+```sh
+go test -timeout 20m ./internal/failures ./internal/connectors ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/connectors/certify
+go vet ./internal/failures ./internal/connectors ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/connectors/certify
+go build ./cmd/pm
+```
+
+`internal/failures/classification_test.go` proves R1-R5. The generic configuration boundary test
+proves R6 without changing the in-flight PostgreSQL driver. Engine validation proves R7, the
+commandrunner carrier proves R8, and certification report JSON proves R9. The second green run
+also pins unknown domain/dispatch JSON rejection and RFC 6901 escaping for declaration keys.

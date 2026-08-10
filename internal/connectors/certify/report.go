@@ -14,18 +14,21 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+
+	"polymetrics.ai/internal/failures"
 )
 
 // CapabilityResult is a single pass/fail/skip entry under Report.Capabilities,
 // per the certification design §A "Report artifact" shape. Not every field
 // applies to every capability; unused fields are omitted from JSON.
 type CapabilityResult struct {
-	Result        string `json:"result"`
-	Streams       int    `json:"streams,omitempty"`
-	Stream        string `json:"stream,omitempty"`
-	Records       int    `json:"records,omitempty"`
-	StagesChecked int    `json:"stages_checked,omitempty"`
-	Reason        string `json:"reason,omitempty"`
+	Result           string                   `json:"result"`
+	Streams          int                      `json:"streams,omitempty"`
+	Stream           string                   `json:"stream,omitempty"`
+	Records          int                      `json:"records,omitempty"`
+	StagesChecked    int                      `json:"stages_checked,omitempty"`
+	Reason           string                   `json:"reason,omitempty"`
+	UntestableReason *failures.Classification `json:"untestable_reason,omitempty"`
 }
 
 // SyncModeResult is one row of Capabilities.SyncModes.
