@@ -1,0 +1,15 @@
+Captain mediation amendment — Green run after shared artifact and per-leg admission implementation
+
+Command:
+    go test -timeout 20m ./internal/warehouse ./internal/connectors/database ./internal/synccontract ./internal/connectors/engine ./internal/connectors/native/postgres -count=1
+
+Result:
+    ok      polymetrics.ai/internal/warehouse                         2.235s
+    ok      polymetrics.ai/internal/connectors/database               2.133s
+    ok      polymetrics.ai/internal/synccontract                      1.743s
+    ok      polymetrics.ai/internal/connectors/engine                 7.387s
+    ok      polymetrics.ai/internal/connectors/native/postgres        1.965s
+
+The run includes the artifact structural checks, source-owned inbound and
+warehouse-to-target outbound leg checks, mode-declaration refusal, distinct
+per-leg native admissions, and PostgreSQL's unchanged capability test.
