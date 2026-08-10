@@ -74,7 +74,7 @@ func TestDockerhubSCIMWritesNormalizeProxyBaseAndUseSCIMBearer(t *testing.T) {
 	}
 
 	var dataHits int32
-	dataServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	dataServer := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		atomic.AddInt32(&dataHits, 1)
 		if r.Method != http.MethodPost || r.URL.Path != "/proxy/v2/scim/2.0/Users" {
 			t.Errorf("SCIM request = %s %s, want POST /proxy/v2/scim/2.0/Users", r.Method, r.URL.Path)
@@ -90,6 +90,9 @@ func TestDockerhubSCIMWritesNormalizeProxyBaseAndUseSCIMBearer(t *testing.T) {
 		_, _ = w.Write([]byte(`{"id":"fixture-user"}`))
 	}))
 	t.Cleanup(dataServer.Close)
+	defaultTransport := http.DefaultTransport
+	http.DefaultTransport = dataServer.Client().Transport
+	t.Cleanup(func() { http.DefaultTransport = defaultTransport })
 
 	var authHits int32
 	authServer := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

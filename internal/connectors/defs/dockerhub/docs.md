@@ -113,10 +113,13 @@ Pagination by stream: next_url: `repositories`, `tags`; none: `repository_detail
 - `repository_detail`: GET `/namespaces/{{ config.namespace }}/repositories/{{ config.repository }}` - single-object response; records at response root.
 - `tag_detail`: GET `/namespaces/{{ config.namespace }}/repositories/{{ config.repository }}/tags/{{ config.tag }}` - single-object response; records at response root.
 
-Direct-read commands (repositories/tokens/groups/invites/orgs/audit-logs/scim listed below) are
-each a single bounded HTTP request, not a full paginated crawl — Docker Hub's own list endpoints
-return a provider-default first page only per command invocation (a repo-wide, currently open
-limitation tracked separately, not specific to this connector).
+Direct-read commands (repositories/tokens/groups/invites/orgs/audit-logs/scim listed below) return
+one bounded page, not a full paginated crawl. The three SCIM list commands request their declared
+SCIM `start_index` page of 100 records; other Docker Hub list commands receive the provider's
+first/default page. Inspect the returned page context and pass a returned `next_cursor` through
+`--page-cursor` to navigate when one is available. See
+[`docs/direct-read-pages-and-parameters.md`](../../../../docs/direct-read-pages-and-parameters.md)
+for the page contract.
 
 The 3 `*-check` commands (`repository check`, `repository tags check`, `repository tag check`) are
 status-only: Docker Hub's `HEAD` existence-check endpoints never return a response body, so these

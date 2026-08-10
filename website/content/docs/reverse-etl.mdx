@@ -10,7 +10,7 @@ Reverse ETL in pm follows a strict four-step gate: **plan, preview, approve, run
 ```bash
 pm reverse plan <name> [flags]                       # generate a typed plan
 pm reverse preview <plan-id> [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]...   # inspect; destructive plans issue their token here
-pm reverse run <plan-id> --approve <token> [--confirm destructive] [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]... [--json]
+pm reverse run <plan-id> --approve <token> [--confirm destructive] [--show-token] [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]... [--json]
 ```
 
 <Callout type="warn">
@@ -112,6 +112,13 @@ pm reverse run plan_abc123 --approve tk_xyz789 --json
 ```
 
 A failed dispatch is recorded and is not automatically retried.
+
+#### Docker Hub access-token response
+
+`--show-token` is available only for an approved, single-record Docker Hub
+personal or organization access-token create plan. It prints the one-time
+provider response immediately in terminal or JSON output; that output cannot be
+redacted and is never retained in the plan, run history, or project state.
 
 JSON output:
 

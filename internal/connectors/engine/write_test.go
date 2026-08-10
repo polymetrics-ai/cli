@@ -172,14 +172,14 @@ func TestWriteRedactsResponseSensitiveProviderFailure(t *testing.T) {
 	}))
 	t.Cleanup(srv.Close)
 	b := newWriteTestBundle(srv, WriteAction{
-		Name:              "create_access_token",
+		Name:              "create_credential",
 		Kind:              "create",
 		Method:            http.MethodPost,
 		Path:              "/access-tokens",
 		ResponseSensitive: true,
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "create_access_token", CaptureSensitiveResponse: true}, []connectors.Record{{"label": "fixture"}}, nil)
+	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "create_credential", CaptureSensitiveResponse: true}, []connectors.Record{{"label": "fixture"}}, nil)
 	if err == nil {
 		t.Fatal("Write() error = nil, want provider failure")
 	}

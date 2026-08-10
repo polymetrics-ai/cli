@@ -394,8 +394,12 @@ func TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken(t *
 	if len(plan.Sample) != 1 || plan.Sample[0]["password"] != "redacted" {
 		t.Fatal("plan sample did not redact the password")
 	}
-	if len(plan.RedactFields) != 1 || plan.RedactFields[0] != "password" {
-		t.Fatal("plan did not retain the password redaction field")
+	// Command-surface redact_fields protect operator-visible samples and CLI
+	// output. They intentionally do not become a sensitive_policy withholding
+	// contract, because this approved auth exchange retains its credential input
+	// locally after warning the caller.
+	if len(plan.RedactFields) != 0 || len(plan.WithheldFields) != 0 {
+		t.Fatalf("plan redaction/withholding = %#v/%#v, want command-local sample redaction only", plan.RedactFields, plan.WithheldFields)
 	}
 
 	reopened, err := app.Open(root)

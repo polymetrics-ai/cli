@@ -165297,7 +165297,7 @@
   {
     "name": "warehouse",
     "display_name": "Local Warehouse",
-    "description": "Local JSONL warehouse destination used by the dependency-free MVP.",
+    "description": "Local Parquet warehouse destination queried by the embedded DuckDB engine.",
     "integration_type": "database",
     "release_stage": "",
     "capabilities": {
