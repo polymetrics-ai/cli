@@ -361,7 +361,11 @@ func Load(ctx context.Context, fsys fs.FS) (Definition, error) {
 	if err != nil {
 		return Definition{}, invalidDefinition("semantic validation failed", err)
 	}
-	return definition.clone(), nil
+	projection := definition.clone()
+	if err := ctx.Err(); err != nil {
+		return Definition{}, err
+	}
+	return projection, nil
 }
 
 type definitionSchemaDocument struct {
