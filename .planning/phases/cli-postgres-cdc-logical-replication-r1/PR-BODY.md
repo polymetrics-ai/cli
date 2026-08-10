@@ -2,9 +2,12 @@
 
 ## Intent
 
-Implement real PostgreSQL logical-replication CDC on top of the durable database
-sync contract and the polling-watermark executor shape now merged to `main`.
-This PR references the fail-closed CDC discovery work in #2986.
+Preserve the approved native PostgreSQL logical-replication CDC design and
+dependency evidence while change capture remains deliberately planned and
+non-executable. `ReadCDC` fails closed before opening a source connection;
+this PR does not claim current end-to-end CDC, source-LSN progress, or slot
+lifecycle execution. This PR references the fail-closed CDC discovery work in
+#2986.
 
 ## Linked work
 
@@ -15,8 +18,9 @@ database sync contract).
 
 ## Conditional dependency evidence — `github.com/jackc/pglogrepl`
 
-Recorded 2026-08-06 before adding the module; the approval is limited to this
-native PostgreSQL CDC implementation.
+Recorded 2026-08-06 before adding the module; the approval is limited to the
+planned native PostgreSQL CDC path and is not an assertion that it is currently
+executable.
 
 - **Maintenance:** Go module proxy resolves `@latest` to
   `v0.0.0-20260401131349-e37c41485510`, published 2026-04-01. It is an
@@ -44,29 +48,28 @@ Sources: https://pkg.go.dev/github.com/jackc/pglogrepl ;
 https://pkg.go.dev/vuln/GO-2026-4771 ;
 https://www.postgresql.org/docs/current/logicaldecoding-explanation.html
 
-## What changed
+## Current containment and retained implementation material
 
-- Adds a native `pglogrepl` executor that derives a deterministic slot from the
-  PostgreSQL system identity, database, and canonical schema-qualified stream.
-- Reuses the durable sync checkpoint envelope for LSN recovery, validates source
-  identity and generation before resume, and acknowledges PostgreSQL only after
-  a durable downstream checkpoint commit.
-- Decodes `pgoutput` relation/insert/update/delete messages, preserves
-  transaction ordering, and makes slot cleanup an explicit, safe lifecycle
-  operation that refuses unknown, active, or incompatible slots.
-- Declares PostgreSQL CDC as implemented only through the exact native executor
-  and updates the connector contract and documentation.
+- Keeps `pglogrepl` limited to the native PostgreSQL CDC path, while the
+  connector and bundle declare change capture planned rather than implemented.
+- Retains the prior source-bound slot, checkpoint, and `pgoutput` implementation
+  material for the future streamed-staging design, but `ReadCDC` rejects before
+  a source connection, checkpoint advance, or replication-slot operation.
+- Keeps connector documentation and capability projections aligned with the
+  planned, non-executable state.
 
 ## Verification
 
-- `go test -count=1 ./internal/connectors/native/postgres ./internal/connectors/engine ./internal/cli`
-- Live protocol conformance: `TestLogicalReplicationResumesAndCleansSlot` with
+- Current containment: focused PostgreSQL capability tests confirm that
+  `ReadCDC` returns the fail-closed unsupported result and the connector does
+  not advertise CDC. No live source is contacted.
+- Historical, pre-containment protocol evidence:
+  `TestHistoricalLogicalReplicationResumesAndCleansSlot` previously ran against
   an isolated **PostgreSQL 12.22** server configured with `wal_level=logical`,
   `max_replication_slots=4`, and `max_wal_senders=4` on a non-default port. It
-  proves insert/update/delete decoding, durable-LSN resume to the next
-  transaction, and replication-slot absence after teardown. The test fails on
-  an unreachable configured source and explicitly skips only when the
-  integration environment is intentionally absent.
+  recorded insert/update/delete decoding, durable-LSN resume, and slot cleanup.
+  The preserved test is now skipped while change capture is planned, so this is
+  not current conformance or evidence of source progress.
 
 This body intentionally contains no connection string, password, or other
 credential value.

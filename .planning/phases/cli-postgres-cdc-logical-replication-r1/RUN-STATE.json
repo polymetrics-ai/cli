@@ -3,6 +3,6 @@
   "base": "origin/main",
   "base_head": "cb1d3c45f",
   "lifecycle": "inline-manual-gsd-fallback",
-  "status": "green",
-  "tdd": "PCDC-1 through PCDC-6 green; PostgreSQL 12.22 live conformance recorded"
+  "status": "planned",
+  "tdd": "PCDC-1 through PCDC-6 are historical; change capture is planned and non-executable; PostgreSQL 12.22 conformance is historical"
 }

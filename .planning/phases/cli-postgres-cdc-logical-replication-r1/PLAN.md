@@ -1,8 +1,14 @@
-# PLAN — PostgreSQL logical-replication CDC
+# PLAN — PostgreSQL logical-replication CDC (historical implementation plan)
+
+> Current containment: change capture is planned and non-executable until
+> bounded streamed transaction staging exists. `ReadCDC` fails closed before a
+> source connection; the plan below is retained design history, not a claim of
+> current source LSN progress or replication-slot lifecycle execution.
 
 ## Scope and integration base
 
-Implement the native PostgreSQL logical-replication `ChangefeedExecutor` on
+This document records the original plan to implement the native PostgreSQL
+logical-replication `ChangefeedExecutor` on
 `fm/cli-postgres-cdc-logical-replication-r1`. The branch is rebased onto
 `origin/main` after PR #3880 established the non-webhook executor shape and
 PR #3882 established the durable database sync contract. This lane changes
@@ -11,9 +17,9 @@ checkpoint extension needed to consume #3882, tests, dependency files, and
 this evidence.
 
 `pm` currently has no standalone CDC invocation command. This lane therefore
-does not invent a generic SQL/replication CLI surface. It makes the registered
-`postgres` connector genuinely executable through `ReadCDC`; the existing
-fail-closed catalogue/inspect projection is the public capability proof.
+does not invent a generic SQL/replication CLI surface. The original plan made
+the registered `postgres` connector executable through `ReadCDC`; the current
+containment instead keeps the catalogue/inspect projection fail-closed.
 
 ## GSD and skills
 
@@ -33,7 +39,7 @@ Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
 read: no command, help, manual, or website page is added, while the existing
 connector docs and capability tests are updated.
 
-## Design decisions
+## Historical design decisions
 
 1. `pglogrepl` is pinned only after the recorded conditional-approval evidence
    in `PR-BODY.md`. It is used solely by `native/postgres` for PostgreSQL
@@ -66,7 +72,7 @@ connector docs and capability tests are updated.
    executor descriptor, so the existing `HasImplementedChangefeed` gate is
    unchanged and becomes true only for this working implementation.
 
-## TDD sequence
+## Historical TDD sequence
 
 1. **Red — admission and durable state:** replace the stub expectations with
    a `ChangefeedExecutor`/catalogue truth test; add source-identity mismatch,
