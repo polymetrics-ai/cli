@@ -230,28 +230,6 @@ func runGitHubExhaustiveProviderDouble(t *testing.T) (githubProviderDoubleReport
 	return report, nil
 }
 
-func githubSourceLockedGraphQLRootCount(t *testing.T) int {
-	t.Helper()
-	raw, err := os.ReadFile("../defs/github/sources/github-operation-source-lock.json")
-	if err != nil {
-		t.Fatalf("read GitHub source lock: %v", err)
-	}
-	var lock struct {
-		Counts struct {
-			Query    int `json:"graphql_query"`
-			Mutation int `json:"graphql_mutation"`
-		} `json:"counts"`
-	}
-	if err := json.Unmarshal(raw, &lock); err != nil {
-		t.Fatalf("decode GitHub source lock: %v", err)
-	}
-	count := lock.Counts.Query + lock.Counts.Mutation
-	if count <= 0 {
-		t.Fatalf("GitHub source lock GraphQL root count = %d, want positive", count)
-	}
-	return count
-}
-
 func githubStreamHasCommand(b engine.Bundle, name string) bool {
 	if b.CLISurface == nil {
 		return false
