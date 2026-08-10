@@ -48,6 +48,7 @@
     "no_mistakes": {
       "run": "01KZPSZDQ0VSQZ0Q8RV8K4MJ77",
       "head": "e133822f9c1e510cbf40110781a93a8103c6cd48",
+      "scope": "workflow_recovery_only",
       "outcome": "passed",
       "completed_stages": [
         "intent",
@@ -57,7 +58,7 @@
         "document",
         "lint"
       ],
-      "skipped_for_manual_stacked_delivery": [
+      "deferred_to_follow_on_full_pipeline": [
         "push",
         "pr",
         "ci"

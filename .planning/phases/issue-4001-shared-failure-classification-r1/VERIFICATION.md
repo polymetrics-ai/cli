@@ -88,5 +88,6 @@ replacement's maximum of five. After no-mistakes run `01KZPSZDQ0VSQZ0Q8RV8K4MJ77
 custody, the typed-nil cause review finding required the one permitted new production/test
 correction. The final accounting is **4/5 inherited + 1 new = 5/5, 0 remaining**. The run
 completed its local intent, rebase, review, test, documentation, and lint gates with zero findings;
-its push, PR, and CI stages were intentionally left for the manual stacked delivery because this
-child must target `docs/4015-connector-release-certification`, not `main`.
+its push, PR, and CI stages were not run in that local workflow-recovery pass. They belong to the
+follow-on full no-mistakes pipeline, whose child PR must target
+`docs/4015-connector-release-certification`, never `main`.

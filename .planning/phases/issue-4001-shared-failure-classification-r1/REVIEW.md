@@ -53,4 +53,4 @@ defect. In particular, raw JSON UTF-8 and unpaired-surrogate handling precedes t
 for JSON Pointers, `Unwrap` returns a true nil for an absent optional classification, private causes
 remain absent from report JSON and from loaded values, and the configuration boundary preserves the
 typed non-retryable error without provider or database behavior changes. No #4001 sub-issue was
-needed because no new defect was found.
+needed because no additional defect remained after the typed-nil correction.
