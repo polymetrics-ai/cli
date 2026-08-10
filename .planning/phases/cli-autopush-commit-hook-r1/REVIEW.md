@@ -43,10 +43,13 @@ shellcheck passed.
   A shared Git-path helper now covers those paths in prepare, parent, and child
   checks, preventing future operation-list drift.
 - R8 was legitimate: a process killed after acquiring the old directory lock
-  could block that branch permanently. The lease is now an atomic hard link to
-  prewritten owner metadata; a dead owner is reclaimed only after the rate window.
+  could block that branch permanently. The hand-rolled lease is removed; the
+  shared timestamp is now recorded with Git's atomic ref update.
+- R9 was legitimate: stale hard-link recovery could unlink a newer live lease
+  after an earlier stale observation. A compare-and-swap update of the shared
+  timestamp ref makes the rate decision linearizable without stale takeover.
 
 The focused executable harness covers each follow-up, including clean squash,
-cherry-pick, and revert paths, dead-lease recovery, delayed children during and
-after a manual merge, and mixed safe/default push URLs, alongside the original
-non-force rejection and detached-push behavior.
+cherry-pick, and revert paths, concurrent expired-rate compare-and-swap, delayed
+children during and after a manual merge, and mixed safe/default push URLs,
+alongside the original non-force rejection and detached-push behavior.

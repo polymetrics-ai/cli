@@ -84,9 +84,20 @@ run_hooked() {
     "$@"
 }
 
-state_file() {
-  state_common_dir="$(git -C "$1" rev-parse --path-format=absolute --git-common-dir)"
-  GIT_DIR="$state_common_dir" git rev-parse --git-path "pm-autopush/$2.last-push"
+rate_ref() {
+  printf 'refs/pm-autopush/%s\n' "$1"
+}
+
+rate_oid() {
+  git -C "$1" rev-parse --verify -q "$(rate_ref "$2")"
+}
+
+set_rate_timestamp() {
+  rate_repo=$1
+  rate_branch=$2
+  rate_timestamp=$3
+  rate_object="$(printf '%s\n' "$rate_timestamp" | git -C "$rate_repo" hash-object -w --stdin)" || fail "could not create rate object"
+  git -C "$rate_repo" update-ref "$(rate_ref "$rate_branch")" "$rate_object" || fail "could not set rate reference"
 }
 
 status_file() {
@@ -186,10 +197,12 @@ assert_manual_operation_refusal() {
   operation_repo=$1
   operation_remote=$2
   operation_branch=$3
-  operation_state="$(state_file "$operation_repo" "$operation_branch")"
+  operation_rate_ref="$(rate_ref "$operation_branch")"
   operation_snapshot="$(operation_file "$operation_repo")"
 
-  [ ! -f "$operation_state" ] || fail "manual operation recorded an auto-push attempt"
+  if git -C "$operation_repo" rev-parse --verify -q "$operation_rate_ref" >/dev/null; then
+    fail "manual operation recorded an auto-push attempt"
+  fi
   [ ! -f "$operation_snapshot" ] || fail "manual operation snapshot was not consumed"
   if git --git-dir="$operation_remote" rev-parse --verify -q "refs/heads/$operation_branch" >/dev/null; then
     fail "manual operation reached the remote"
@@ -333,9 +346,6 @@ test_rate_limit_and_detached_push() {
   : > "$CURRENT_HOOK_LOG"
 
   git -C "$TEST_REPO" worktree add -q --detach "$linked_dir" feature
-  state_from_primary="$(state_file "$TEST_REPO" feature)"
-  state_from_linked="$(state_file "$linked_dir" feature)"
-  [ "$state_from_primary" = "$state_from_linked" ] || fail "timestamp path is not shared by linked worktrees"
 
   install_receive_delay "$TEST_REMOTE"
   record_change "$TEST_REPO" first
@@ -360,7 +370,10 @@ test_rate_limit_and_detached_push() {
   [ "$remote_sha" = "$first_sha" ] || fail "inside-window commit reached the remote"
 
   expired=$(( $(date +%s) - 601 ))
-  printf '%s\n' "$expired" > "$state_from_primary"
+  set_rate_timestamp "$TEST_REPO" feature "$expired"
+  rate_from_primary="$(rate_oid "$TEST_REPO" feature)"
+  rate_from_linked="$(rate_oid "$linked_dir" feature)"
+  [ "$rate_from_primary" = "$rate_from_linked" ] || fail "rate reference is not shared by linked worktrees"
   record_change "$TEST_REPO" third
   if ! run_hooked git -C "$TEST_REPO" commit -qm "test: expired rate window"; then
     fail "post-window commit should succeed"
@@ -370,8 +383,8 @@ test_rate_limit_and_detached_push() {
   git -C "$TEST_REPO" merge-base --is-ancestor "$second_sha" "$third_sha" || fail "catch-up push omitted the rate-limited commit"
 }
 
-test_concurrent_linked_worktree_lease() {
-  case_dir="$TMP_DIR/concurrent-lease"
+test_concurrent_linked_worktree_rate_ref() {
+  case_dir="$TMP_DIR/concurrent-rate-ref"
   linked_dir="$case_dir/linked"
   wrapper_dir="$case_dir/wrappers"
   mkdir -p "$case_dir" "$wrapper_dir"
@@ -379,9 +392,11 @@ test_concurrent_linked_worktree_lease() {
   git -C "$TEST_REPO" checkout -qb feature
   git -C "$TEST_REPO" worktree add -q --force "$linked_dir" feature
 
-  state_from_primary="$(state_file "$TEST_REPO" feature)"
-  state_from_linked="$(state_file "$linked_dir" feature)"
-  [ "$state_from_primary" = "$state_from_linked" ] || fail "concurrent linked worktrees do not share state"
+  expired=$(( $(date +%s) - 601 ))
+  set_rate_timestamp "$TEST_REPO" feature "$expired"
+  rate_from_primary="$(rate_oid "$TEST_REPO" feature)"
+  rate_from_linked="$(rate_oid "$linked_dir" feature)"
+  [ "$rate_from_primary" = "$rate_from_linked" ] || fail "concurrent linked worktrees do not share rate reference"
 
   real_nohup="$(command -v nohup)"
   schedule_log="$case_dir/schedules.log"
@@ -639,35 +654,6 @@ test_clean_revert_no_edit_refusal() {
   assert_manual_operation_refusal "$TEST_REPO" "$TEST_REMOTE" feature
 }
 
-test_stale_lease_recovery() {
-  case_dir="$TMP_DIR/stale-lease"
-  mkdir -p "$case_dir"
-  new_repo "$case_dir"
-  git -C "$TEST_REPO" checkout -qb feature
-  install_hook "$TEST_REPO"
-  CURRENT_HOOK_LOG="$case_dir/hook.log"
-  CURRENT_OPERATION_LOG=""
-  : > "$CURRENT_HOOK_LOG"
-
-  stale_state="$(state_file "$TEST_REPO" feature)"
-  stale_lease="$stale_state.lock"
-  stale_created=$(( $(date +%s) - 601 ))
-  stale_pid="$(sh -c 'printf "%s\\n" "$$"')"
-  stale_owner="$stale_state.lease.$stale_pid.$stale_created"
-  mkdir -p "$(dirname "$stale_state")"
-  printf '%s %s\n' "$stale_pid" "$stale_created" > "$stale_owner"
-  ln "$stale_owner" "$stale_lease"
-
-  record_change "$TEST_REPO" stale-lease
-  if ! run_hooked git -C "$TEST_REPO" commit -qm "test: stale lease recovery"; then
-    fail "stale-lease commit should succeed"
-  fi
-  assert_hook_invoked "$CURRENT_HOOK_LOG"
-  expected_sha="$(git -C "$TEST_REPO" rev-parse HEAD)"
-  wait_for_ref "$TEST_REMOTE" refs/heads/feature "$expected_sha"
-  [ ! -e "$stale_lease" ] || fail "stale lease was not reclaimed"
-}
-
 test_delayed_child_refuses_operation_tip() {
   case_dir="$TMP_DIR/delayed-child"
   wrapper_dir="$case_dir/wrappers"
@@ -798,7 +784,7 @@ test_pushurl_default_refusal
 test_detached_head_refusal
 test_opt_out
 test_rate_limit_and_detached_push
-test_concurrent_linked_worktree_lease
+test_concurrent_linked_worktree_rate_ref
 test_real_multicommit_rebase_refusal
 test_manual_merge_completion_refusal
 test_manual_cherry_pick_completion_refusal
@@ -806,7 +792,6 @@ test_manual_revert_completion_refusal
 test_squash_merge_completion_refusal
 test_clean_cherry_pick_no_commit_refusal
 test_clean_revert_no_edit_refusal
-test_stale_lease_recovery
 test_delayed_child_refuses_operation_tip
 test_delayed_child_refuses_active_operation
 test_rejected_push_is_swallowed_without_force

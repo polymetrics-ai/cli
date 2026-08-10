@@ -6,9 +6,9 @@
   push when no Git operation is in progress, HEAD is attached and non-default,
   every effective push endpoint's live default has been checked, and the
   per-branch 600-second window has expired.
-- Kept rate and status state below the shared common Git directory, resolved by
-  `git rev-parse --git-path`, with an owner-backed atomic lease so linked
-  worktrees do not fork or race rate-limit state and a dead owner can recover.
+- Kept status state below the shared common Git directory and recorded the rate
+  timestamp behind a per-branch Git ref, so `git update-ref` makes linked
+  worktree rate decisions atomic without a stale lease.
 - Added a worktree-local `prepare-commit-msg` companion that snapshots a
   Git-resolved operation before commit cleanup, using a shared operation helper
   so `post-commit` also refuses squash and clean no-commit completions.
@@ -28,7 +28,7 @@
 - `git diff --check`
 
 The harness covers live, stale, and pushurl-specific remote defaults, detached
-HEAD, opt-out, rate window and catch-up, concurrent linked-worktree leasing and
-dead-lease recovery, a receive-delayed asynchronous push, delayed children during
+HEAD, opt-out, rate window and catch-up, concurrent linked-worktree rate-ref
+compare-and-swap, a receive-delayed asynchronous push, delayed children during
 and after a manual merge, a real two-commit rebase, manual and clean squash,
 cherry-pick/revert completion, and a real non-fast-forward rejected push.

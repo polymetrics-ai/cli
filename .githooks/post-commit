@@ -52,9 +52,9 @@ esac
 # `core.hooksPath` can itself be a worktree path. Using `--git-path` with the
 # common Git directory keeps this git-ignored state shared by linked worktrees.
 common_git_dir="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" || exit 0
-state_file="$(GIT_DIR="$common_git_dir" git rev-parse --git-path "pm-autopush/$branch.last-push" 2>/dev/null)" || exit 0
+rate_ref="refs/pm-autopush/$branch"
 status_file="$(GIT_DIR="$common_git_dir" git rev-parse --git-path "pm-autopush/$branch.log" 2>/dev/null)" || exit 0
-state_dir="$(dirname "$state_file")" || exit 0
+state_dir="$(dirname "$status_file")" || exit 0
 umask 077
 mkdir -p "$state_dir" 2>/dev/null || exit 0
 
@@ -63,55 +63,11 @@ case "$now" in
   ""|*[!0-9]*) exit 0 ;;
 esac
 
-lease_file="$state_file.lock"
-lease_owner_file="$state_file.lease.$$.${now}"
-if ! (set -C; : > "$lease_owner_file") 2>/dev/null; then
-  exit 0
+last_rate_oid="$(GIT_DIR="$common_git_dir" git rev-parse --verify -q "$rate_ref" 2>/dev/null || :)"
+last_push=""
+if [ -n "$last_rate_oid" ]; then
+  last_push="$(GIT_DIR="$common_git_dir" git cat-file blob "$last_rate_oid" 2>/dev/null || :)"
 fi
-if ! printf '%s %s\n' "$$" "$now" > "$lease_owner_file" 2>/dev/null; then
-  rm -f "$lease_owner_file" 2>/dev/null || :
-  exit 0
-fi
-if ! ln "$lease_owner_file" "$lease_file" 2>/dev/null; then
-  lease_pid=""
-  lease_created=""
-  lease_extra=""
-  IFS=' ' read -r lease_pid lease_created lease_extra < "$lease_file" 2>/dev/null || :
-  lease_valid=1
-  case "$lease_pid" in
-    ""|0|*[!0-9]*) lease_valid=0 ;;
-  esac
-  case "$lease_created" in
-    ""|*[!0-9]*) lease_valid=0 ;;
-  esac
-  [ -n "$lease_extra" ] && lease_valid=0
-  if [ "$lease_valid" -eq 1 ] &&
-    [ "$lease_created" -le "$now" ] &&
-    [ $((now - lease_created)) -ge 600 ] &&
-    ! kill -0 "$lease_pid" 2>/dev/null; then
-    rm -f "$lease_file" 2>/dev/null || :
-  fi
-  if ! ln "$lease_owner_file" "$lease_file" 2>/dev/null; then
-    rm -f "$lease_owner_file" 2>/dev/null || :
-    exit 0
-  fi
-fi
-if rm -f "$lease_owner_file" 2>/dev/null; then
-  lease_owner_file=""
-fi
-state_temp=""
-trap '
-  if [ -n "$state_temp" ]; then
-    rm -f "$state_temp" 2>/dev/null || :
-  fi
-  rm -f "$lease_file" 2>/dev/null || :
-  if [ -n "$lease_owner_file" ]; then
-    rm -f "$lease_owner_file" 2>/dev/null || :
-  fi
-' 0
-trap 'exit 0' 1 2 15
-
-last_push="$(sed -n '1p' "$state_file" 2>/dev/null || :)"
 case "$last_push" in
   ""|*[!0-9]*) ;;
   *)
@@ -121,16 +77,12 @@ case "$last_push" in
     ;;
 esac
 
-# Record the attempt before forking so a burst of commits cannot enqueue one
-# push per commit. A rejected attempt is still rate-limited deliberately.
-state_temp="$state_file.$$.tmp"
-printf '%s\n' "$now" > "$state_temp" 2>/dev/null || exit 0
-mv -f "$state_temp" "$state_file" 2>/dev/null || exit 0
-state_temp=""
-if ! rm -f "$lease_file" 2>/dev/null; then
+rate_object="$(printf '%s\n' "$now" | GIT_DIR="$common_git_dir" git hash-object -w --stdin 2>/dev/null)" || exit 0
+if [ -n "$last_rate_oid" ]; then
+  GIT_DIR="$common_git_dir" git update-ref "$rate_ref" "$rate_object" "$last_rate_oid" >/dev/null 2>&1 || exit 0
+elif ! printf 'create %s %s\n' "$rate_ref" "$rate_object" | GIT_DIR="$common_git_dir" git update-ref --stdin >/dev/null 2>&1; then
   exit 0
 fi
-trap - 0 1 2 15
 
 # Never wait for, force, or otherwise make the commit depend on this push.
 # The child records one short local line on any rejected/failed push and the

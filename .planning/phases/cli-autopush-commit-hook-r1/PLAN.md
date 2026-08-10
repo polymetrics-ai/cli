@@ -50,11 +50,11 @@ commits, default/detached heads, or any non-fast-forward update.
    and clears stale records on ordinary commits. `post-commit` consumes a matching
    record before using the same helper in both parent and detached child paths.
 3. Select the branch remote, then `remote.pushDefault`, then an existing `origin`.
-   Resolve Git's common directory, then resolve rate-limit state below
-   `pm-autopush/` with `GIT_DIR=<common-dir> git rev-parse --git-path`. An atomic
-   hard-link lease carries an owner PID and creation time before acquisition, so a
-   dead owner can be reclaimed after the 600-second window without reopening the
-   linked-worktree race; a younger or future timestamp skips the attempt.
+   Resolve Git's common directory, then resolve the local log below
+   `pm-autopush/` with `GIT_DIR=<common-dir> git rev-parse --git-path`. The
+   timestamp itself is a blob behind a shared `refs/pm-autopush/<branch>` ref;
+   `git update-ref` compare-and-swap atomically records an eligible attempt across
+   linked worktrees, while a younger or future timestamp skips the attempt.
 4. Persist the attempt timestamp before scheduling the child with the current HEAD
    OID. The child re-resolves Git operation state, then only sends that OID after
    confirming the branch still names it, using `git push -- <remote>
@@ -64,8 +64,8 @@ commits, default/detached heads, or any non-fast-forward update.
    adds one short line to the per-branch local log; the parent hook exits zero in
    every path.
 5. The harness uses temporary bare remotes and hook wrappers to prove stale and
-   pushurl-specific default refusal, concurrent linked-worktree leasing and stale
-   lease recovery, delayed children during and after a manual merge, clean squash,
+   pushurl-specific default refusal, concurrent linked-worktree compare-and-swap
+   from an expired rate timestamp, delayed children during and after a manual merge, clean squash,
    cherry-pick, and revert completions, a real two-commit rebase, expiry behavior,
    commit non-blocking behavior, and a genuine non-fast-forward rejection without
    force.
