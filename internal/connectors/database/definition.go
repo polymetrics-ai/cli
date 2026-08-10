@@ -8,6 +8,7 @@ import (
 	"errors"
 	"io"
 	"io/fs"
+	"math/big"
 	"strconv"
 	"strings"
 	"time"
@@ -160,7 +161,7 @@ func (m TypeMapping) validate() error {
 	if err := m.Native.validate(); err != nil {
 		return err
 	}
-	if err := m.Logical.validate(0); err != nil || m.Logical.Kind() == LogicalOpaqueNative {
+	if err := m.Logical.validate(0); err != nil || m.Logical.containsOpaqueNative() {
 		return errors.New("database type mapping logical type is invalid")
 	}
 	return nil
@@ -262,11 +263,10 @@ func (d Definition) Validate() error {
 }
 
 // ErrInvalidDefinition is returned for syntactic or semantic database.json
-// failure. Its text intentionally never includes a JSON value from the file.
+// failure.
 var ErrInvalidDefinition = errors.New("database definition is invalid")
 
-// DefinitionError keeps loader diagnostics in a small fixed vocabulary so a
-// malformed manifest cannot exfiltrate a secret-looking value through errors.
+// DefinitionError keeps loader diagnostics bounded to schema-derived details.
 type DefinitionError struct {
 	reason string
 	cause  error
@@ -373,16 +373,22 @@ type definitionSchemaDocument struct {
 	Reference            string                     `json:"$ref"`
 	Properties           map[string]json.RawMessage `json:"properties"`
 	Items                json.RawMessage            `json:"items"`
+	Minimum              json.RawMessage            `json:"minimum"`
+	Maximum              json.RawMessage            `json:"maximum"`
+	Enum                 []json.RawMessage          `json:"enum"`
 	Required             []string                   `json:"required"`
 	AdditionalProperties *bool                      `json:"additionalProperties"`
 	Definitions          map[string]json.RawMessage `json:"definitions"`
 }
 
 type definitionSchemaNode struct {
-	valueType  string
-	properties map[string]*definitionSchemaNode
-	required   []string
-	items      *definitionSchemaNode
+	valueType   string
+	properties  map[string]*definitionSchemaNode
+	required    []string
+	items       *definitionSchemaNode
+	minimum     *big.Int
+	maximum     *big.Int
+	integerEnum []*big.Int
 }
 
 type definitionJSONPathPosition struct {
@@ -479,11 +485,61 @@ func populateDefinitionSchemaNode(node *definitionSchemaNode, raw json.RawMessag
 			return err
 		}
 		node.items = items
-	case "string", "integer", "boolean":
+	case "integer":
+		minimum, err := definitionSchemaIntegerConstraint(document.Minimum)
+		if err != nil {
+			return err
+		}
+		maximum, err := definitionSchemaIntegerConstraint(document.Maximum)
+		if err != nil {
+			return err
+		}
+		if minimum != nil && maximum != nil && minimum.Cmp(maximum) > 0 {
+			return errors.New("database definition schema integer bounds are invalid")
+		}
+		integerEnum, err := definitionSchemaIntegerEnum(document.Enum)
+		if err != nil {
+			return err
+		}
+		node.minimum = minimum
+		node.maximum = maximum
+		node.integerEnum = integerEnum
+	case "string", "boolean":
 	default:
 		return errors.New("database definition schema contains an unsupported type")
 	}
 	return nil
+}
+
+func definitionSchemaIntegerConstraint(raw json.RawMessage) (*big.Int, error) {
+	if len(raw) == 0 {
+		return nil, nil
+	}
+	value, ok := definitionJSONInteger(strings.TrimSpace(string(raw)))
+	if !ok {
+		return nil, errors.New("database definition schema integer constraint is invalid")
+	}
+	return value, nil
+}
+
+func definitionSchemaIntegerEnum(values []json.RawMessage) ([]*big.Int, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+	enum := make([]*big.Int, len(values))
+	for index, raw := range values {
+		value, err := definitionSchemaIntegerConstraint(raw)
+		if err != nil || value == nil {
+			return nil, errors.New("database definition schema integer enum is invalid")
+		}
+		enum[index] = value
+	}
+	return enum, nil
+}
+
+func definitionJSONInteger(value string) (*big.Int, bool) {
+	parsed, ok := new(big.Int).SetString(value, 10)
+	return parsed, ok
 }
 
 func validateDefinitionJSON(raw []byte, schema *definitionSchemaNode) ([]definitionJSONPathPosition, error) {
@@ -520,7 +576,16 @@ func validateDefinitionJSONValue(decoder *json.Decoder, schema *definitionSchema
 		return validateDefinitionJSONObject(decoder, token, schema, path, positions)
 	case "array":
 		return validateDefinitionJSONArray(decoder, token, schema, path, positions)
-	case "integer", "string", "boolean":
+	case "integer":
+		if number, ok := token.(json.Number); ok {
+			if err := validateDefinitionJSONIntegerConstraints(number, schema, path); err != nil {
+				return err
+			}
+		}
+		if err := consumeDefinitionJSONToken(decoder, token); err != nil {
+			return &definitionPathError{path: path, reason: "JSON is malformed", cause: err}
+		}
+	case "string", "boolean":
 		if err := consumeDefinitionJSONToken(decoder, token); err != nil {
 			return &definitionPathError{path: path, reason: "JSON is malformed", cause: err}
 		}
@@ -529,6 +594,36 @@ func validateDefinitionJSONValue(decoder *json.Decoder, schema *definitionSchema
 	}
 	*positions = append(*positions, definitionJSONPathPosition{path: path, offset: offset})
 	return nil
+}
+
+func validateDefinitionJSONIntegerConstraints(number json.Number, schema *definitionSchemaNode, path string) error {
+	value, ok := definitionJSONInteger(string(number))
+	if !ok {
+		return nil
+	}
+	if schema.minimum != nil && value.Cmp(schema.minimum) < 0 {
+		return &definitionPathError{path: path, reason: "value " + string(number) + " violates minimum " + schema.minimum.String()}
+	}
+	if schema.maximum != nil && value.Cmp(schema.maximum) > 0 {
+		return &definitionPathError{path: path, reason: "value " + string(number) + " violates maximum " + schema.maximum.String()}
+	}
+	if len(schema.integerEnum) > 0 {
+		for _, allowed := range schema.integerEnum {
+			if value.Cmp(allowed) == 0 {
+				return nil
+			}
+		}
+		return &definitionPathError{path: path, reason: "value " + string(number) + " violates enum " + definitionSchemaIntegerEnumDescription(schema.integerEnum)}
+	}
+	return nil
+}
+
+func definitionSchemaIntegerEnumDescription(values []*big.Int) string {
+	parts := make([]string, len(values))
+	for index, value := range values {
+		parts[index] = value.String()
+	}
+	return "[" + strings.Join(parts, ", ") + "]"
 }
 
 func validateDefinitionJSONObject(decoder *json.Decoder, token json.Token, schema *definitionSchemaNode, path string, positions *[]definitionJSONPathPosition) error {

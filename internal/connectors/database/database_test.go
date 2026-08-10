@@ -49,6 +49,16 @@ func TestDatabaseDefinitionStrictLoadAndDefensiveProjection(t *testing.T) {
 			wantError: true,
 		},
 		{
+			name: "nested opaque logical mapping is rejected",
+			document: strings.Replace(
+				validDefinitionJSON,
+				`"logical": {"kind": "signed_integer", "bits": 32}`,
+				`"logical": {"kind": "array", "element": {"kind": "opaque_native", "opaque_engine": "test-engine", "opaque_name": "unmapped"}}`,
+				1,
+			),
+			wantError: true,
+		},
+		{
 			name:      "unbounded page policy is rejected",
 			document:  strings.Replace(validDefinitionJSON, `"default": 100`, `"default": 0`, 1),
 			wantError: true,
@@ -193,6 +203,61 @@ func TestDatabaseDefinitionRejectsAmbiguousMembers(t *testing.T) {
 	}
 }
 
+func TestDatabaseDefinitionEnforcesSchemaNumericConstraints(t *testing.T) {
+	tests := []struct {
+		name       string
+		document   string
+		path       string
+		value      string
+		constraint string
+	}{
+		{
+			name:       "logical minimum",
+			document:   strings.Replace(validDefinitionJSON, `"bits": 32`, `"bits": 0`, 1),
+			path:       `$.type_mappings[0].logical.bits`,
+			value:      "0",
+			constraint: "minimum 8",
+		},
+		{
+			name:       "identifier maximum",
+			document:   strings.Replace(validDefinitionJSON, `"max_bytes": 63`, `"max_bytes": 257`, 1),
+			path:       `$.identifiers.max_bytes`,
+			value:      "257",
+			constraint: "maximum 256",
+		},
+		{
+			name:       "schema version enum",
+			document:   strings.Replace(validDefinitionJSON, `"schema_version": 1`, `"schema_version": 2`, 1),
+			path:       `$.schema_version`,
+			value:      "2",
+			constraint: "enum [1]",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := database.Load(context.Background(), fstest.MapFS{
+				"database.json": &fstest.MapFile{Data: []byte(tt.document)},
+			})
+			if err == nil {
+				t.Fatal("Load() error = nil, want schema constraint rejection")
+			}
+			if !errors.Is(err, database.ErrInvalidDefinition) {
+				t.Fatalf("Load() error = %v, want ErrInvalidDefinition", err)
+			}
+			var definitionError *database.DefinitionError
+			if !errors.As(err, &definitionError) {
+				t.Fatalf("Load() error = %v, want retained DefinitionError", err)
+			}
+			for _, expected := range []string{tt.path, "value " + tt.value, tt.constraint} {
+				if !strings.Contains(err.Error(), expected) {
+					t.Fatalf("Load() error = %v, want %q", err, expected)
+				}
+			}
+		})
+	}
+}
+
 func TestResourcePolicyBoundsEveryDatabaseResource(t *testing.T) {
 	policy := loadTestDefinition(t, validDefinitionJSON).Resources()
 
@@ -279,8 +344,26 @@ func TestLogicalTypeCompatibilityIsLosslessOrRejected(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := database.CompileTypePlan(opaque, opaque); err == nil {
-		t.Fatal("CompileTypePlan(opaque, opaque) = nil, want unsupported type refusal")
+	arrayOfOpaque, err := database.NewArray(opaque)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tt := range []struct {
+		name      string
+		typeValue database.LogicalType
+	}{
+		{name: "direct opaque native", typeValue: opaque},
+		{name: "nested opaque native", typeValue: arrayOfOpaque},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			classification, err := database.ClassifyTypeCompatibility(tt.typeValue, tt.typeValue)
+			if err != nil || classification != database.CompatibilityUnsupported {
+				t.Fatalf("ClassifyTypeCompatibility() = (%q, %v), want unsupported", classification, err)
+			}
+			if _, err := database.CompileTypePlan(tt.typeValue, tt.typeValue); err == nil {
+				t.Fatal("CompileTypePlan() error = nil, want unsupported type refusal")
+			}
+		})
 	}
 
 	decimal93, err := database.NewDecimal(9, 3)
