@@ -94,7 +94,8 @@ split (design §B.7), each file well under ~400 lines:
   complete — see postgres below).
 
 Still ship a bundle (`internal/connectors/defs/<name>/{metadata.json,changefeed.json?,spec.json,
-api_surface.json,docs.md}`) so identity/spec/docs stay uniform with every other connector;
+api_surface.json,docs.md}`) so identity/spec/docs stay uniform with every other connector. A
+native database bundle may additionally ship `database.json` as described below;
 `metadata.json` sets
 `capabilities.dynamic_schema: true` and the bundle ships **no `streams.json`** (the loader
 (`bundle.go`'s `loadStreams`) only tolerates a missing `streams.json` when `dynamic_schema` is
@@ -110,8 +111,31 @@ short-circuits all network access for credential-free testing (test/conformance-
 only, never set in production); `cdc.go` retains a `pglogrepl`-backed logical-replication
 foundation, but `ReadCDC` fails closed before source contact while its changefeed is planned. Its
 admission conditions are owned by the [PostgreSQL bundle docs](../../internal/connectors/defs/postgres/docs.md),
-so the capability stays false rather than faking a runnable CDC surface. The package has **no `init()`/`RegisterFactory`/
+so the capability stays false rather than faking a runnable CDC surface. Its `database.json` is the
+reference strict policy-only declaration described below; it does not register a driver or promote
+a capability. The package has **no `init()`/`RegisterFactory`/
 `RegisterNativeLive` call** in wave0 (registration flip is wave6); a grep-guard test enforces this.
+
+#### Database-native policy declaration (`database.json`)
+
+Use this optional bundle file only for a native database connector; it remains absent for the
+broad existing fleet and non-database natives. When present, normal `engine.Load` and
+`connectorgen` loading run it through `database.Load`. The versioned, closed schema at
+`internal/connectors/database/schema/database.schema.json` is the authoritative field contract;
+do not copy it into another validator or document variant.
+
+The declaration is limited to a driver identity/protocol/API version, structured catalog and
+identifier policies, finite resource limits, explicit native-to-logical type mappings, and the
+existing closed `synccontract.Mode` vocabulary. It is policy, not connection configuration: never
+put a credential, DSN, raw SQL/query, DDL, session/transaction/receipt/checkpoint state, CDC or
+polling declaration, generic operation, or capability claim in it. `metadata.json` remains the
+only public capability owner. A syntactically valid declaration neither registers a driver nor
+admits execution; its exact driver identity and matching native evidence are required separately.
+
+The database layer has no direct connector-pair or zero-copy command. Its source-to-warehouse and
+warehouse-to-target admissions are separate legs; see the
+[warehouse-mediation architecture](../architecture/connector-architecture-v2-design.md#b71-database-warehouse-mediation)
+for the shared boundary.
 
 ### Tier 2 — hooks (bundle + Go escape hatch, target ~8%)
 
