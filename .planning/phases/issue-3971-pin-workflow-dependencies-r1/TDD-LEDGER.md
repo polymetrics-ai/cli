@@ -34,16 +34,16 @@ The image manifest-list digests were resolved on the same date with `docker buil
 
 ## Red
 
-- [ ] Red: `./scripts/tests/pinned-build-dependencies.sh` must fail against the baseline because all external `uses:` lines carry mutable version refs and the Node/PostgreSQL images carry mutable tags.
-- [ ] Red: the failure must name at least one actionable mutable reference rather than merely accepting YAML syntax.
+- [x] Red: `./scripts/tests/pinned-build-dependencies.sh` failed against the baseline on 2026-08-10 because external `uses:` lines carried mutable version refs and the Node/PostgreSQL images carried mutable tags.
+- [x] Red: the failure named actionable references, beginning with `actions/checkout@v7` in `.github/workflows/claude-review.yml:68`, and also named the Dockerfile and PostgreSQL service image tags.
 
 ## Green
 
-- [ ] Green: after pinning, `./scripts/tests/pinned-build-dependencies.sh` passes and confirms a full SHA plus version comment on every external action and a digest on every literal build image.
-- [ ] Green: `make release-workflow-check` passes with the new gate wired into the existing release workflow verification target.
+- [x] Green: after pinning, `make pinned-build-dependencies-check` passed on 2026-08-10 and confirmed a full SHA plus version comment on every external action and a digest on every literal build image.
+- [x] Green: `make release-workflow-check` passed on 2026-08-10, running the new pinning gate before the existing Homebrew notification and release-target checks.
 
 ## Refactor / review checks
 
-- [ ] Preserve the existing action/image tags in comments or tag-before-digest form; no action/image version upgrade is permitted in this slice.
-- [ ] Inspect the final diff for only expected workflow, image, gate, and evidence changes.
-- [ ] Run the explicit-file manual code review and record its result in `REVIEW.md`.
+- [x] Preserve the existing action/image tags in comments or tag-before-digest form; no action/image version upgrade is permitted in this slice. A final `git ls-remote` read confirmed every action SHA still resolves from its original ref, and `docker buildx imagetools inspect` confirmed both manifest-list digests.
+- [x] Inspect the final diff for only expected workflow, image, gate, and evidence changes.
+- [x] Run the explicit-file manual code review and record its result in `REVIEW.md`.
