@@ -55,3 +55,33 @@ The seven materialized hook-backed connectors `apify-dataset`, `basecamp`, `copp
 ## Pipeline and remote checkpoint reconciliation (2026-08-10)
 
 The preserved pipeline checkpoint `318f3638` and remote checkpoint `620d509a` independently report the same final partition: `231 materialized + 195 genuinely_blocked + 0 retry_pending = 426`, with `24 reachable`, `217 foundation_pending`, and `3 declared + 422 unknown + 1 not_applicable` rate-limit declarations. The reconciliation keeps the remote branch's later command-reachability repair and the pipeline's subsequent review/lint fixes. `origin/preserve/cli-mass-artifact-materialize-pipeline-20260810` retains the original pipeline head (`858b72e0`) for direct audit; regenerated aggregate artifacts are the authority for the combined bundle set.
+
+## PR #3957 CI remediation verification (2026-08-10)
+
+The script-main loading failure is closed: `go test -timeout 20m -count=1 ./scripts/...` passes
+for both isolated commands, and the actual
+`go run golang.org/x/vuln/cmd/govulncheck@latest ./...` completes with `No vulnerabilities found`.
+The CodeQL defense-in-depth regression passes through
+`TestIsLikelyBatchReferenceLinkAllowsOnlyHTTPSchemesOrRelativeReferences`, including `data:` and
+`vbscript:` rejection plus preserved relative/HTTPS references; the malformed-link and static/feed
+reference regressions remain green. `go test -timeout 20m -count=1 ./cmd/connectorgen` was green
+before the final scanner-only refinement and the focused reference suite remains green afterward.
+
+The connector-boundary repair is verified both narrowly and in the production gate:
+`TestScanIgnoresStaticAssetLiteralsWithoutIgnoringConnectorIdentity` and the pre-existing
+`TestScanAppliesLedgerToConnectorDocsOutput` pass together, and `make connector-boundary` reports
+zero findings across 192 shared production files and 552 loaded connectors. This preserves the two
+intentional GitHub docs-example exception matches while rejecting neither `.rss` nor `/rss.xml` as
+connector identity. `go run ./cmd/connectorgen surface-sync --check` remains clean.
+
+The website regression is green under the installed lockfile dependencies:
+`npm exec vitest run tests/api/search.test.ts` passes all four tests with a connector-qualified
+setup-field query. No generated website catalog artifact changed.
+
+`make verify` was rerun after committing the tidy-required direct `golang.org/x/net` classification.
+It passed formatting, module tidiness, and vet, then failed in unrelated existing full-suite paths:
+`internal/cli` has Gong help/preview assertion divergences and a Bahmni matrix timeout; conformance
+for Aha, CallRail, and Harvest lacks a coordination identity for their declared rate-limit policies;
+the Xero runtime-ledger test expects absent report entries; Google Search Console's redaction test;
+and Amazon SQS's required-flag test. The remediation's script packages pass in that same full run.
+Those failures are recorded rather than changed by this slice.

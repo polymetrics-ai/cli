@@ -353,8 +353,8 @@ func (s *goScanner) scanStringLiteral(lit *ast.BasicLit) {
 	}
 }
 
-// isStaticAssetReferenceLiteral identifies generic filename and extension
-// literals before connector token matching. A token inside .rss or /rss.xml
+// isStaticAssetReferenceLiteral identifies bare asset suffixes and root feed
+// filenames before connector token matching. A token inside .rss or /rss.xml
 // describes an asset type, not a connector identity; treating it as the latter
 // turns shared source-discovery policy into a false boundary violation.
 func isStaticAssetReferenceLiteral(value string) bool {
@@ -365,12 +365,15 @@ func isStaticAssetReferenceLiteral(value string) bool {
 	if cut := strings.IndexAny(value, "?#"); cut >= 0 {
 		value = value[:cut]
 	}
+	if !strings.HasPrefix(value, ".") || strings.Contains(value, "/") {
+		return value == "/rss.xml" || value == "/atom.xml"
+	}
 	for _, suffix := range []string{
 		".css", ".js", ".mjs", ".map", ".png", ".jpg", ".jpeg", ".gif",
 		".svg", ".webp", ".ico", ".woff", ".woff2", ".ttf", ".eot",
-		".rss", "/rss.xml", ".atom", "/atom.xml",
+		".rss", ".atom",
 	} {
-		if strings.HasSuffix(value, suffix) {
+		if value == suffix {
 			return true
 		}
 	}

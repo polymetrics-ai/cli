@@ -205,6 +205,11 @@
   `rss`. **Green:** a fixture uses those two asset entries and produces no `rss` finding, while
   a separate literal `"rss"` in the same shared package still produces the expected
   `connector_literal` finding.
+- **CONNECTOR-BOUNDARY-ASSET-SCOPE — Red:** the first generic asset-path suppression also skipped
+  the documented `icons/github.svg` example, invalidating its intentionally two-match docs
+  exception. **Green:** suppress only bare asset suffixes and root feed filenames; the existing
+  docs-example test retains both GitHub matches while the `.rss`/`/rss.xml` regression remains
+  clean.
 - **WEBSITE-SEARCH-CORPUS — Red:** the generated 552-connector catalog makes the generic
   `management_token` query return 100ms at rank 14, outside the prior `limit=12` assertion.
   **Green:** the targeted metadata/setup query returns the 100ms connector and the test asserts
