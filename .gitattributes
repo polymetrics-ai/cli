@@ -1,0 +1,9 @@
+# Provider artifacts are byte-preserved provenance snapshots.  Their original
+# whitespace is covered by the recorded artifact checksums rather than a source
+# formatter, so do not classify it as patch whitespace.
+.planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/artifacts/float/references/*.artifact whitespace=-trailing-space
+.planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/artifacts/web-scrapper.yaml whitespace=-trailing-space,-blank-at-eof
+
+# The final tab in this tab-separated reachability ledger represents an empty
+# error field and must remain structural data.
+.planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/reachability/watchmode-commands.tsv whitespace=-trailing-space
