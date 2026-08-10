@@ -85,7 +85,7 @@ func preflightReplicationServer(ctx context.Context, conn connConfig) error {
 	if err != nil {
 		return errors.New("postgres CDC server preflight: connect failed")
 	}
-	defer db.Close(context.Background())
+	defer func() { _ = db.Close(context.Background()) }()
 	var walLevel string
 	var slots, senders int
 	var replication bool
