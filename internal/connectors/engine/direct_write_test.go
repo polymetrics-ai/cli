@@ -104,11 +104,13 @@ func TestOperationDirectWriteResponseSensitiveBaseURLRequiresHTTPS(t *testing.T)
 		}}},
 	}
 	for _, tt := range []struct {
-		name    string
-		authURL string
-		wantErr bool
+		name      string
+		authURL   string
+		wantError string
 	}{
-		{name: "rejects cleartext config overlay", authURL: "http://auth.example.invalid/v2", wantErr: true},
+		{name: "rejects cleartext config overlay", authURL: "http://auth.example.invalid/v2", wantError: "requires an HTTPS base URL"},
+		{name: "rejects query config overlay", authURL: "https://auth.example.invalid/v2?tenant=fixture", wantError: "without a query or fragment"},
+		{name: "rejects fragment config overlay", authURL: "https://auth.example.invalid/v2#tenant", wantError: "without a query or fragment"},
 		{name: "accepts HTTPS config overlay", authURL: "https://auth.example.invalid/v2"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
@@ -117,9 +119,9 @@ func TestOperationDirectWriteResponseSensitiveBaseURLRequiresHTTPS(t *testing.T)
 				Config:    connectors.RuntimeConfig{Config: map[string]string{"auth_url": tt.authURL}},
 				Body:      map[string]any{"username": "fixture-user", "password": "fixture-password"},
 			}, nil)
-			if tt.wantErr {
-				if err == nil || !strings.Contains(err.Error(), "requires an HTTPS base URL") {
-					t.Fatalf("PreviewOperationDirectWrite error = %v, want HTTPS rejection", err)
+			if tt.wantError != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantError) {
+					t.Fatalf("PreviewOperationDirectWrite error = %v, want %q", err, tt.wantError)
 				}
 				return
 			}

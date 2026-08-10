@@ -1190,3 +1190,30 @@ ok   polymetrics.ai/internal/connectors/commandrunner
 make lint
 0 issues.
 ```
+
+## Review repair — Docker Hub auth URL and Registry host canonicalization (2026-08-10)
+
+Red: a trusted `auth_url` with a query or fragment was accepted by both the response-sensitive
+direct-write route and the stored-PAT route even though string joining could put the endpoint after
+that component. `rateLimitRequestHost` preserved a Registry DNS root dot, allowing
+`registry-1.docker.io.` to miss the exact documented pull-policy selector. The Docker Hub
+no-PAT documentation also omitted the three approved direct authentication exchanges.
+
+Green: both credential-exchange boundaries now reject auth URLs containing queries or fragments,
+while retaining the independent HTTPS auth host. The Registry selector removes exactly one terminal
+DNS root dot before matching, and its focused regression makes 101 logical requests while admitting
+exactly 100 transport sends. Docker Hub source documentation now names the no-PAT direct-auth
+exception; generated website connector data was regenerated, and generated Docker Hub manual/skill
+output matched the tracked artifacts.
+
+This gate-owned review used golang-how-to, golang-cli, golang-design-patterns,
+golang-structs-interfaces, golang-security, golang-safety, golang-error-handling, golang-lint,
+golang-testing, and golang-documentation, plus CLI help/docs/website parity guidance. The outer
+executor retains GSD lifecycle ownership.
+
+```text
+go test -timeout 20m ./internal/connectors/engine ./internal/connectors/hooks/dockerhub ./internal/connectors/defs/dockerhub -run '^(TestOperationDirectWriteResponseSensitiveBaseURLRequiresHTTPS|TestDockerHubRegistryPullPolicyBlocksTrailingDotBeforeTransport|TestAuthenticator_AuthURLRejectsQueryOrFragment|TestDockerhubPATExchangeUsesDedicatedAuthURL|TestDockerHubRegistryPullRateLimitsAreEmbedded)$' -count=1
+ok   polymetrics.ai/internal/connectors/engine
+ok   polymetrics.ai/internal/connectors/hooks/dockerhub
+ok   polymetrics.ai/internal/connectors/defs/dockerhub
+```

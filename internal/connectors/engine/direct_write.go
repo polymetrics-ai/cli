@@ -770,6 +770,9 @@ func operationDirectWriteBaseURL(b Bundle, op OperationSpec, cfg connectors.Runt
 		if parseErr != nil || !strings.EqualFold(parsed.Scheme, "https") || parsed.Host == "" {
 			return "", fmt.Errorf("response-sensitive operation %q requires an HTTPS base URL", op.ID)
 		}
+		if parsed.RawQuery != "" || parsed.ForceQuery || parsed.Fragment != "" {
+			return "", fmt.Errorf("response-sensitive operation %q requires an HTTPS base URL without a query or fragment", op.ID)
+		}
 	}
 	return baseURL, nil
 }

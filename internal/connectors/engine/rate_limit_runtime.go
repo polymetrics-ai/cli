@@ -232,7 +232,7 @@ func rateLimitRequestHost(baseURL string) string {
 	if err != nil {
 		return ""
 	}
-	return strings.ToLower(parsed.Hostname())
+	return strings.TrimSuffix(strings.ToLower(parsed.Hostname()), ".")
 }
 
 func rateLimitSelectorHostMatches(hosts []string, host string) bool {

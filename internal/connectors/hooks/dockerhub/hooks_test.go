@@ -361,6 +361,26 @@ func TestAuthenticator_TokenURLRejectsPlainHTTP(t *testing.T) {
 	}
 }
 
+func TestAuthenticator_AuthURLRejectsQueryOrFragment(t *testing.T) {
+	for _, tt := range []struct {
+		name    string
+		authURL string
+	}{
+		{name: "query", authURL: "https://auth.example.invalid/v2?tenant=fixture"},
+		{name: "fragment", authURL: "https://auth.example.invalid/v2#tenant"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			cfg := baseCfg()
+			cfg.Config["auth_url"] = tt.authURL
+			h := newClientHooks(nil)
+			_, err := h.Authenticator(context.Background(), cfg, baseSpec("{{ config.auth_url }}/users/login"))
+			if err == nil || !strings.Contains(err.Error(), "must not include a query or fragment") {
+				t.Fatalf("Authenticator() error = %v, want auth URL query or fragment rejection", err)
+			}
+		})
+	}
+}
+
 func TestAuthenticator_TokenURLUnparseableIsError(t *testing.T) {
 	cfg := baseCfg()
 	h := New().(*Hooks)

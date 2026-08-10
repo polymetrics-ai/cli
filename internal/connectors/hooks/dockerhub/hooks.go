@@ -261,6 +261,9 @@ func validateHTTPSURL(raw, field string) error {
 	if parsed.Host == "" {
 		return fmt.Errorf("dockerhub auth: %s must include a host", field)
 	}
+	if parsed.RawQuery != "" || parsed.ForceQuery || parsed.Fragment != "" {
+		return fmt.Errorf("dockerhub auth: %s must not include a query or fragment", field)
+	}
 	return nil
 }
 

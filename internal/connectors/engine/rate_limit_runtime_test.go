@@ -156,7 +156,7 @@ func TestRateLimitSelectorMatchesExactHost(t *testing.T) {
 	}
 }
 
-func TestDockerHubRegistryPullPolicyBlocksBeforeTransport(t *testing.T) {
+func TestDockerHubRegistryPullPolicyBlocksTrailingDotBeforeTransport(t *testing.T) {
 	bundle, err := Load(connectorDefs.FS, "dockerhub")
 	if err != nil {
 		t.Fatalf("Load dockerhub: %v", err)
@@ -165,10 +165,13 @@ func TestDockerHubRegistryPullPolicyBlocksBeforeTransport(t *testing.T) {
 	if err != nil {
 		t.Fatalf("find tags stream: %v", err)
 	}
-	const testLimit = 2
+	const (
+		logicalRequests          = 101
+		permittedProxyDispatches = 100
+	)
 	for i := range bundle.RateLimits.Policies {
 		if bundle.RateLimits.Policies[i].ID == "registry-pull-unauthenticated" {
-			bundle.RateLimits.Policies[i].Budgets[0].Limit = intPtr(testLimit)
+			bundle.RateLimits.Policies[i].Budgets[0].Limit = intPtr(permittedProxyDispatches)
 		}
 	}
 
@@ -179,7 +182,7 @@ func TestDockerHubRegistryPullPolicyBlocksBeforeTransport(t *testing.T) {
 	restore := replaceRateLimitRegistryForTest(coordination.NewRateLimitRegistry(clock))
 	t.Cleanup(restore)
 
-	cfg := dockerHubRateLimitConfig(t, "https://registry-1.docker.io/v2")
+	cfg := dockerHubRateLimitConfig(t, "https://registry-1.docker.io./v2")
 	runtime, err := newRuntime(context.Background(), bundle, cfg, nil)
 	if err != nil {
 		t.Fatalf("newRuntime registry: %v", err)
@@ -202,9 +205,9 @@ func TestDockerHubRegistryPullPolicyBlocksBeforeTransport(t *testing.T) {
 			Request:    req,
 		}, nil
 	})}
-	for attempt := 0; attempt < testLimit; attempt++ {
+	for logicalRequest := 1; logicalRequest < logicalRequests; logicalRequest++ {
 		if _, err := requester.Do(context.Background(), http.MethodGet, stream.Path, nil, nil); err != nil {
-			t.Fatalf("permitted request %d: %v", attempt+1, err)
+			t.Fatalf("permitted logical request %d: %v", logicalRequest, err)
 		}
 	}
 
@@ -227,7 +230,7 @@ func TestDockerHubRegistryPullPolicyBlocksBeforeTransport(t *testing.T) {
 	if err := <-blocked; !errors.Is(err, context.Canceled) {
 		t.Fatalf("blocked request error = %v, want context cancellation from admission", err)
 	}
-	if got, want := sent, testLimit; got != want {
+	if got, want := sent, permittedProxyDispatches; got != want {
 		t.Fatalf("transport sends = %d, want %d: over-budget request reached transport", got, want)
 	}
 

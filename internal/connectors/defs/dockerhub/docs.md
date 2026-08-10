@@ -26,7 +26,8 @@ Connection fields:
 - `auth_url` (optional, string); default `https://hub.docker.com/v2`; format `uri`;
   Docker Hub authentication API base URL. It is intentionally independent of `base_url` so a
   data API proxy cannot receive Docker Hub credential-exchange requests; override it only for a
-  trusted HTTPS test or self-hosted authentication proxy.
+  trusted HTTPS test or self-hosted authentication proxy. It must not include query or fragment
+  components.
 - `docker_username` (required, string); Docker Hub username used to authenticate `docker_pat`.
   Lowercase alphanumerics, underscores, and hyphens only.
 - `namespace` (required, string); Docker Hub user or organization namespace whose repositories and
@@ -68,8 +69,10 @@ Default configuration values: `base_url=https://hub.docker.com/v2`,
 
 Authentication behavior:
 
-- No `docker_pat` configured: no authentication (unchanged from before this connector supported
-  writes) — only the 4 public-read streams and the 3 status-only existence checks are usable.
+- No `docker_pat` configured: no inherited connector authentication. The 4 public-read streams and
+  the 3 status-only existence checks remain usable; the 3 approved direct authentication exchanges
+  (`auth token create`, `auth login create`, and `auth 2fa-login create`) use their supplied
+  credential fields with `auth_mode:none` and do not require `docker_pat`.
 - `docker_pat` configured: every non-SCIM request authenticates via a `dockerhub` AuthHook
   (`internal/connectors/hooks/dockerhub`) that exchanges `docker_username`/`docker_pat` for a
   short-lived session bearer JWT through Docker Hub's API-root-normalized `POST /v2/users/login`
