@@ -1245,3 +1245,30 @@ ok   polymetrics.ai/internal/connectors/engine
 ok   polymetrics.ai/internal/connectors/hooks/dockerhub
 ok   polymetrics.ai/internal/connectors/defs/dockerhub
 ```
+
+## Review repair — direct-auth URL plan preflight (2026-08-10)
+
+Manual-GSD fallback: this is a gate-owned no-mistakes review step. The outer executor owns the
+active lifecycle, so this repair records its Red/Green evidence here and does not invoke pipeline
+control commands.
+
+Red: normal non-preview Docker Hub direct-auth plan creation shaped and persisted its destination
+configuration before the response-sensitive auth URL validation that preview and execution used. A
+URL with userinfo could therefore enter plaintext plan state despite being refused before dispatch.
+
+Green: every declared direct write now requires a no-network configuration preflighter at the shared
+command plan-shaping boundary. The engine applies the existing response-sensitive auth URL boundary
+there after materializing defaults; Docker Hub userinfo is rejected before any plan ID, preview, or
+state write. The focused regression uses only fixture values and proves a non-preview auth-login
+plan neither reaches its HTTPS endpoint nor changes project state.
+
+This gate-owned review uses golang-how-to, golang-cli, golang-design-patterns,
+golang-structs-interfaces, golang-security, golang-safety, golang-error-handling, golang-lint,
+and golang-testing; the outer executor retains GSD lifecycle ownership.
+
+```text
+go test -timeout 20m ./internal/app ./internal/connectors/commandrunner ./internal/connectors/engine -run '^(TestDockerHubAuthLoginRejectsUserinfoBeforeUnpreviewedPlanPersistence|TestBuildOperationDirectWriteCommandPreflightsPlanConfiguration|TestOperationDirectWriteResponseSensitiveBaseURLRequiresHTTPS)$' -count=1
+ok   polymetrics.ai/internal/app
+ok   polymetrics.ai/internal/connectors/commandrunner
+ok   polymetrics.ai/internal/connectors/engine
+```

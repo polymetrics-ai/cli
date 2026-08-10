@@ -545,6 +545,14 @@ type OperationDirectWriteMetadataProvider interface {
 	OperationDirectWriteMetadata(operation string) (OperationDirectWriteMetadata, error)
 }
 
+// OperationDirectWriteConfigPreflighter validates a direct-write plan
+// configuration without resolving credentials or making a network request.
+// It complements the fixed-binding admission check above: response-sensitive
+// operations must also reject an unsafe resolved base URL before persistence.
+type OperationDirectWriteConfigPreflighter interface {
+	PreflightOperationDirectWriteConfig(operation string, config RuntimeConfig) error
+}
+
 // OperationBinaryDownloadRequest is one bounded binary/file download driven by
 // a declared binary_download operation.
 //

@@ -448,6 +448,68 @@ func TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken(t *
 	}
 }
 
+func TestDockerHubAuthLoginRejectsUserinfoBeforeUnpreviewedPlanPersistence(t *testing.T) {
+	ctx := context.Background()
+	authCalls := 0
+	authServer := httptest.NewTLSServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		authCalls++
+	}))
+	t.Cleanup(authServer.Close)
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "dockerhub-auth-plan-preflight",
+		Connector: "dockerhub",
+		Config: map[string]string{
+			"namespace": "fixture",
+			"base_url":  "https://data.example.invalid/v2",
+		},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	statePath := filepath.Join(a.ProjectDir(), "state", "state.json")
+	before, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state before rejected plan: %v", err)
+	}
+	authURL := "https://fixture-user:fixture-value@" + strings.TrimPrefix(authServer.URL, "https://") + "/v2"
+	_, _, err = a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  "dockerhub",
+		Credential: "dockerhub-auth-plan-preflight",
+		Path:       []string{"auth", "login", "create"},
+		Config:     map[string]string{"auth_url": authURL},
+		Flags: map[string][]string{
+			"username": {"fixture-user"},
+			"password": {"fixture-value"},
+		},
+		Preview: false,
+	})
+	if err == nil || !strings.Contains(err.Error(), "without URL userinfo") {
+		t.Fatalf("PlanConnectorCommand error = %v, want userinfo rejection", err)
+	}
+	if authCalls != 0 {
+		t.Fatalf("rejected plan reached authentication endpoint %d times", authCalls)
+	}
+	if plans := a.ListReversePlans(); len(plans) != 0 {
+		t.Fatalf("rejected plan persisted reverse plans = %#v, want none", plans)
+	}
+	after, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state after rejected plan: %v", err)
+	}
+	if string(after) != string(before) {
+		t.Fatal("rejected plan mutated project state")
+	}
+}
+
 func TestDockerHubAuthFailureRedactsProviderBody(t *testing.T) {
 	ctx := context.Background()
 	const providerBodyMarker = "fixture-auth-failure-body"

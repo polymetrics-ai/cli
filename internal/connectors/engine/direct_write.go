@@ -327,6 +327,20 @@ func operationDirectWriteRedactionValues(op OperationSpec, body map[string]any) 
 	return writeActionRedactionValues(WriteAction{RedactFields: fields}, connectors.Record(body))
 }
 
+// PreflightOperationDirectWriteConfig validates the resolved configuration needed by
+// a declared response-sensitive direct write without constructing a runtime.
+func PreflightOperationDirectWriteConfig(b Bundle, operation string, cfg connectors.RuntimeConfig) error {
+	op, _, err := operationDirectWriteSpec(b, operation)
+	if err != nil {
+		return err
+	}
+	if !op.ResponseSensitive {
+		return nil
+	}
+	_, err = operationDirectWriteBaseURL(b, op, materializeConfigDefaults(b, cfg))
+	return err
+}
+
 // operationDirectWritePayloadFileFields keeps multipart file identity
 // discovery declaration-owned. Returning a non-nil empty slice for a multipart
 // operation distinguishes it from the legacy name-based fallback used by

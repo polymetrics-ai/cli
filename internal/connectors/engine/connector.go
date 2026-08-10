@@ -171,6 +171,12 @@ func (c *Connector) OperationDirectWriteMetadata(operation string) (connectors.O
 	return OperationDirectWriteMetadata(c.bundle, operation)
 }
 
+// PreflightOperationDirectWriteConfig validates resolved configuration needed
+// before a response-sensitive direct-write plan can be persisted.
+func (c *Connector) PreflightOperationDirectWriteConfig(operation string, cfg connectors.RuntimeConfig) error {
+	return PreflightOperationDirectWriteConfig(c.bundle, operation, cfg)
+}
+
 // OperationBinaryDownload satisfies connectors.OperationBinaryDownloader by
 // delegating to the package-level executor. The engine-local request type stays
 // the executor's own contract; this adapter is the seam that lets a CLI command
@@ -302,6 +308,12 @@ func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBy
 // operation direct-write binding without resolving credentials or network I/O.
 func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
 	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy)
+}
+
+// PreflightOperationDirectWriteConfig validates a native connector's resolved
+// direct-write configuration without resolving credentials or network I/O.
+func (b Base) PreflightOperationDirectWriteConfig(operation string, cfg connectors.RuntimeConfig) error {
+	return PreflightOperationDirectWriteConfig(b.bundle, operation, cfg)
 }
 
 // OperationDirectReadMaxBytes returns the bounded response limit for a

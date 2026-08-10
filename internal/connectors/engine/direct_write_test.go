@@ -122,17 +122,22 @@ func TestOperationDirectWriteResponseSensitiveBaseURLRequiresHTTPS(t *testing.T)
 		{name: "accepts HTTPS config overlay", authURL: "https://auth.example.invalid/v2"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := PreviewOperationDirectWrite(context.Background(), bundle, connectors.OperationDirectWriteRequest{
-				Operation: "acme.login",
-				Config:    connectors.RuntimeConfig{Config: map[string]string{"auth_url": tt.authURL}},
-				Body:      map[string]any{"username": "fixture-user", "password": "fixture-password"},
-			}, nil)
+			config := connectors.RuntimeConfig{Config: map[string]string{"auth_url": tt.authURL}}
+			err := PreflightOperationDirectWriteConfig(bundle, "acme.login", config)
 			if tt.wantError != "" {
 				if err == nil || !strings.Contains(err.Error(), tt.wantError) {
-					t.Fatalf("PreviewOperationDirectWrite error = %v, want %q", err, tt.wantError)
+					t.Fatalf("PreflightOperationDirectWriteConfig error = %v, want %q", err, tt.wantError)
 				}
 				return
 			}
+			if err != nil {
+				t.Fatalf("PreflightOperationDirectWriteConfig: %v", err)
+			}
+			_, err = PreviewOperationDirectWrite(context.Background(), bundle, connectors.OperationDirectWriteRequest{
+				Operation: "acme.login",
+				Config:    config,
+				Body:      map[string]any{"username": "fixture-user", "password": "fixture-password"},
+			}, nil)
 			if err != nil {
 				t.Fatalf("PreviewOperationDirectWrite: %v", err)
 			}

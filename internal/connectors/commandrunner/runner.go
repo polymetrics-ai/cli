@@ -217,6 +217,9 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 	if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
 		return WriteCommand{}, err
 	}
+	if err := connector.(connectors.OperationDirectWriteConfigPreflighter).PreflightOperationDirectWriteConfig(cmd.Operation, req.Config); err != nil {
+		return WriteCommand{}, err
+	}
 	pathParams, query, body, _, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return WriteCommand{}, err
@@ -714,6 +717,9 @@ func validateOperationDirectWriteCommand(connector connectors.Connector, cmd con
 	metadataProvider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
 	if !ok {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write metadata"}
+	}
+	if _, ok := connector.(connectors.OperationDirectWriteConfigPreflighter); !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write plan preflight"}
 	}
 	if strings.TrimSpace(cmd.Operation) == "" {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write commands require operation"}

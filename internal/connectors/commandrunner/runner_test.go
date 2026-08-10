@@ -22,35 +22,37 @@ import (
 )
 
 type fakeConnector struct {
-	surface                    *connectors.CommandSurface
-	manifest                   connectors.Manifest
-	readReq                    connectors.ReadRequest
-	directReadReq              connectors.DirectReadRequest
-	operationDirectReadReq     connectors.OperationDirectReadRequest
-	operationReadPreflight     operationDirectReadPreflightCall
-	operationReadPreflightErr  error
-	operationJSONVariable      operationStructuredJSONVariablePreflightCall
-	operationJSONVariableErr   error
-	operationDirectWriteReq    connectors.OperationDirectWriteRequest
-	operationWritePreflight    operationDirectWritePreflightCall
-	operationWritePreflightErr error
-	directWriteMetadata        connectors.OperationDirectWriteMetadata
-	binaryDownloadReq          connectors.OperationBinaryDownloadRequest
-	directReadErr              error
-	ignoresPageNavigation      bool
-	operationDirectReadErr     error
-	binaryDownloadErr          error
-	validateReq                connectors.WriteRequest
-	dryRunReq                  connectors.WriteRequest
-	writeReq                   connectors.WriteRequest
-	writeRecords               []connectors.Record
-	validateErr                error
-	dryRunErr                  error
-	readErr                    error
-	writeErr                   error
-	readRecords                []connectors.Record
-	preview                    connectors.WritePreview
-	writeResult                connectors.WriteResult
+	surface                          *connectors.CommandSurface
+	manifest                         connectors.Manifest
+	readReq                          connectors.ReadRequest
+	directReadReq                    connectors.DirectReadRequest
+	operationDirectReadReq           connectors.OperationDirectReadRequest
+	operationReadPreflight           operationDirectReadPreflightCall
+	operationReadPreflightErr        error
+	operationJSONVariable            operationStructuredJSONVariablePreflightCall
+	operationJSONVariableErr         error
+	operationDirectWriteReq          connectors.OperationDirectWriteRequest
+	operationWritePreflight          operationDirectWritePreflightCall
+	operationWritePreflightErr       error
+	operationWriteConfigPreflight    operationDirectWriteConfigPreflightCall
+	operationWriteConfigPreflightErr error
+	directWriteMetadata              connectors.OperationDirectWriteMetadata
+	binaryDownloadReq                connectors.OperationBinaryDownloadRequest
+	directReadErr                    error
+	ignoresPageNavigation            bool
+	operationDirectReadErr           error
+	binaryDownloadErr                error
+	validateReq                      connectors.WriteRequest
+	dryRunReq                        connectors.WriteRequest
+	writeReq                         connectors.WriteRequest
+	writeRecords                     []connectors.Record
+	validateErr                      error
+	dryRunErr                        error
+	readErr                          error
+	writeErr                         error
+	readRecords                      []connectors.Record
+	preview                          connectors.WritePreview
+	writeResult                      connectors.WriteResult
 }
 
 type operationDirectReadPreflightCall struct {
@@ -71,6 +73,11 @@ type operationDirectWritePreflightCall struct {
 	method       string
 	path         string
 	outputPolicy string
+}
+
+type operationDirectWriteConfigPreflightCall struct {
+	operation string
+	config    connectors.RuntimeConfig
 }
 
 type preflightFakeConnector struct {
@@ -169,6 +176,10 @@ func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, o
 		outputPolicy: outputPolicy,
 	}
 	return f.operationWritePreflightErr
+}
+func (f *fakeConnector) PreflightOperationDirectWriteConfig(operation string, config connectors.RuntimeConfig) error {
+	f.operationWriteConfigPreflight = operationDirectWriteConfigPreflightCall{operation: operation, config: config}
+	return f.operationWriteConfigPreflightErr
 }
 func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	f.operationDirectWriteReq = req
@@ -2092,6 +2103,39 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 	})
 	if err == nil || !strings.Contains(err.Error(), "plan, preview, approval, execute") {
 		t.Fatalf("Run(direct_write) error = %v, want plan lifecycle block", err)
+	}
+}
+
+func TestBuildOperationDirectWriteCommandPreflightsPlanConfiguration(t *testing.T) {
+	preflightErr := errors.New("unsafe direct-write configuration")
+	connector := &fakeConnector{
+		operationWriteConfigPreflightErr: preflightErr,
+		directWriteMetadata: connectors.OperationDirectWriteMetadata{
+			Operation:    "acme.vote",
+			OutputPolicy: "json_redacted",
+		},
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "vote",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.vote",
+			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/api/vote"}},
+			OutputPolicy: "json_redacted",
+		}}},
+	}
+	config := connectors.RuntimeConfig{Config: map[string]string{"auth_url": "https://auth.example.invalid/v2"}}
+	_, err := BuildWriteCommand(context.Background(), connector, Request{Path: []string{"vote"}, Config: config})
+	if !errors.Is(err, preflightErr) {
+		t.Fatalf("BuildWriteCommand error = %v, want direct-write configuration preflight error", err)
+	}
+	if got := connector.operationWriteConfigPreflight.operation; got != "acme.vote" {
+		t.Fatalf("preflight operation = %q, want acme.vote", got)
+	}
+	if got := connector.operationWriteConfigPreflight.config.Config["auth_url"]; got != config.Config["auth_url"] {
+		t.Fatalf("preflight auth_url = %q, want resolved command config", got)
+	}
+	if connector.operationDirectWriteReq.Operation != "" {
+		t.Fatalf("direct-write request = %#v, want no preview or dispatch", connector.operationDirectWriteReq)
 	}
 }
 
