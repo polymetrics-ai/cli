@@ -28,9 +28,9 @@ Reads ActiveCampaign contacts, lists, deals, campaigns, tags, automations, custo
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

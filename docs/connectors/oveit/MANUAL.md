@@ -28,9 +28,9 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  email
+  email (required)
   page_size
-  password (secret)
+  password (secret) (required)
 
 ETL STREAMS
   events:

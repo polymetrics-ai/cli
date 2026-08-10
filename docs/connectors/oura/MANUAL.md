@@ -34,7 +34,7 @@ CONFIGURATION
   latest
   start_date
   start_datetime
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   personal_info:

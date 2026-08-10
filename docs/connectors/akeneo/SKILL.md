@@ -28,9 +28,9 @@ Reads Akeneo PIM products, categories, families, attributes, channels, product m
 
 ## Configuration
 
-- api_username
-- base_url
-- client_id
+- api_username (required)
+- base_url (required)
+- client_id (required)
 - page_size
 - password (secret)
 - secret (secret)

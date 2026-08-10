@@ -29,11 +29,11 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   lang
-  lat
-  lon
+  lat (required)
+  lon (required)
   mode
   units
-  appid (secret)
+  appid (secret) (required)
 
 ETL STREAMS
   current:

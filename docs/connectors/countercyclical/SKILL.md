@@ -30,7 +30,7 @@ Reads Countercyclical investments, valuations, research memos, teams, assumption
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

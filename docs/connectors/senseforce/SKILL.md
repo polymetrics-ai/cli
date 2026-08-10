@@ -27,9 +27,9 @@ Reads records from a configured Senseforce dataset through the Senseforce API.
 
 ## Configuration
 
-- backend_url
-- dataset_id
-- access_token (secret)
+- backend_url (required)
+- dataset_id (required)
+- access_token (secret) (required)
 
 ## ETL Streams
 

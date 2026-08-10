@@ -28,10 +28,10 @@ Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, mess
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
 - page_size
-- app_api_key (secret)
+- app_api_key (secret) (required)
 
 ## ETL Streams
 

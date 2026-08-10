@@ -31,7 +31,7 @@ Reads Split.io workspaces, environments, feature flags, segments, groups, traffi
 - base_url
 - mode
 - workspace_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

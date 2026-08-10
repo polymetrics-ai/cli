@@ -48,8 +48,8 @@ CONFIGURATION
   reference_sid
   resource_sid
   sid
-  account_sid (secret)
-  auth_token (secret)
+  account_sid (secret) (required)
+  auth_token (secret) (required)
 
 ETL STREAMS
   messages:

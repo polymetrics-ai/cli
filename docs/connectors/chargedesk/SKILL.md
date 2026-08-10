@@ -31,7 +31,7 @@ Reads ChargeDesk charges, customers, subscriptions, and products through the Cha
 - base_url
 - mode
 - username
-- password (secret)
+- password (secret) (required)
 
 ## ETL Streams
 

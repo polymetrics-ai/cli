@@ -31,7 +31,7 @@ Reads New York Times Most Popular (viewed, emailed, shared) articles via the NYT
 - base_url
 - mode
 - period
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

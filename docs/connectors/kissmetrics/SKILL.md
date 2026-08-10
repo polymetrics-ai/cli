@@ -33,8 +33,8 @@ Reads Kissmetrics products, reports, events, and properties through the Kissmetr
 - mode
 - page_size
 - product_id
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

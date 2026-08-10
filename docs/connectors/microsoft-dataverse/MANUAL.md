@@ -27,12 +27,12 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   login_base_url
   max_pages
   mode
   page_size
-  scope
+  scope (required)
   token_url
   client_id (secret)
   client_secret (secret)

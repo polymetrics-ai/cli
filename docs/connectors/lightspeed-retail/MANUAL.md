@@ -28,8 +28,8 @@ AUTHENTICATION
 
 CONFIGURATION
   mode
-  subdomain
-  api_key (secret)
+  subdomain (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   products:

@@ -28,11 +28,11 @@ Reads and writes Campayn subscriber lists, signup forms, contacts, email campaig
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
 - report_from
 - report_to
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

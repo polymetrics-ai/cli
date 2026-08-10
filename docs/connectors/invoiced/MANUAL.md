@@ -47,7 +47,7 @@ CONFIGURATION
   subscription_id
   task_id
   tax_rate_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   customers:

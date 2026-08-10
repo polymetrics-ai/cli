@@ -28,7 +28,7 @@ Reads Elasticsearch index metadata and documents through the REST API. Read-only
 
 ## Configuration
 
-- endpoint
+- endpoint (required)
 - index
 - max_pages
 - mode

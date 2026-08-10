@@ -29,8 +29,8 @@ Reads configured datasets from the US Census Bureau's API via a caller-supplied 
 ## Configuration
 
 - base_url
-- query_params
-- query_path
+- query_params (required)
+- query_path (required)
 - api_key (secret)
 
 ## ETL Streams

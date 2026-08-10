@@ -34,12 +34,12 @@ CONFIGURATION
   installation_permissions
   installation_repositories
   installation_repository_ids
-  owner
+  owner (required)
   public_access
   rate_limit_account
   rate_limit_ip
   rate_limit_repository
-  repo
+  repo (required)
   since
   private_key (secret)
   private_key_base64 (secret)

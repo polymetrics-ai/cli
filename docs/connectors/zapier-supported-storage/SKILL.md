@@ -30,7 +30,7 @@ Reads and writes Zapier Storage key/value records.
 
 - base_url
 - mode
-- secret (secret)
+- secret (secret) (required)
 
 ## ETL Streams
 

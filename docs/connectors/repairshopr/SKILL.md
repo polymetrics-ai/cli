@@ -28,11 +28,11 @@ Reads RepairShopr customers, tickets, invoices, estimates, and assets through th
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - created_after
 - query
 - updated_after
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

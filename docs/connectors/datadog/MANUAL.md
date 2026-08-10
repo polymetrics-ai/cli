@@ -28,8 +28,8 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  api_key (secret)
-  application_key (secret)
+  api_key (secret) (required)
+  application_key (secret) (required)
 
 ETL STREAMS
   monitors:

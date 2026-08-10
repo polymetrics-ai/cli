@@ -30,7 +30,7 @@ Reads Huntr organization members, candidates, activities, notes, and actions thr
 
 - base_url
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

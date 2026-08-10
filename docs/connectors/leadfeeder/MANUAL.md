@@ -32,7 +32,7 @@ CONFIGURATION
   end_date
   mode
   start_date
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   accounts:

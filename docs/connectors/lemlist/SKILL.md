@@ -30,7 +30,7 @@ Reads lemlist campaigns, activities, team metadata, CRM contacts/companies, sche
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

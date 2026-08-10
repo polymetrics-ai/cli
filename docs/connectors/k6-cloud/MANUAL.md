@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   mode
   page_size
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   organizations:

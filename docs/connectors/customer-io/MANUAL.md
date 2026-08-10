@@ -27,10 +27,10 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   mode
   page_size
-  app_api_key (secret)
+  app_api_key (secret) (required)
 
 ETL STREAMS
   campaigns:

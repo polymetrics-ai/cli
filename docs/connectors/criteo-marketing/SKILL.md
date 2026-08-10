@@ -33,8 +33,8 @@ Reads Criteo Marketing Solutions ad sets, advertisers, campaigns, audiences, ad 
 - end_date
 - start_date
 - token_url
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

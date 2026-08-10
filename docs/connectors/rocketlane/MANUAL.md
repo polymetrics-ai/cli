@@ -33,7 +33,7 @@ CONFIGURATION
   project_id
   status
   updated_after
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   projects:

@@ -30,7 +30,7 @@ Reads Eventzilla events, categories, users, attendees, ticket types, and transac
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -34,7 +34,7 @@ Reads Nylas calendars, contacts, messages, and events for a connected grant thro
 - max_pages
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

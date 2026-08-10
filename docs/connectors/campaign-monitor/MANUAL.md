@@ -35,7 +35,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   client_id
-  username
+  username (required)
   password (secret)
 
 ETL STREAMS

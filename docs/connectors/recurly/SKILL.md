@@ -64,7 +64,7 @@ Reads Recurly accounts, subscriptions, invoices, transactions, catalog, usage, e
 - transaction_id
 - unique_coupon_code_id
 - usage_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

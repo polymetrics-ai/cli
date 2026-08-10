@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  user_auth_key (secret)
+  user_auth_key (secret) (required)
 
 ETL STREAMS
   apps:

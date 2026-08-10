@@ -29,9 +29,9 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  space_id
-  password (secret)
-  username (secret)
+  space_id (required)
+  password (secret) (required)
+  username (secret) (required)
 
 ETL STREAMS
   accounts:

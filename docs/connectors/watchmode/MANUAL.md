@@ -36,7 +36,7 @@ CONFIGURATION
   start_date
   title_ids
   types
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   search:

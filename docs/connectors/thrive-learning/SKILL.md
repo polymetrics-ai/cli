@@ -30,8 +30,8 @@ Reads users, content, completions, assignments, audiences, tags, CPD records, an
 
 - base_url
 - start_date
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

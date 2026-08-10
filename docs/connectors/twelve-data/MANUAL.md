@@ -31,7 +31,7 @@ CONFIGURATION
   interval
   output_size
   symbol
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   time_series:

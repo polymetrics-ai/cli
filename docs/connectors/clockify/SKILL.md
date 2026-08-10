@@ -30,7 +30,7 @@ Reads Clockify workspaces, clients, projects, tags, users, tasks, time entries, 
 
 - base_url
 - workspace_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

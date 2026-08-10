@@ -24,7 +24,7 @@ CAPABILITIES
   Integration type: database
 
 AUTHENTICATION
-  password: Live connections require password authentication; peer/socket and client-certificate modes are unsupported.
+  password: Live connections require password authentication; peer/socket and client-certificate modes, including ambient certificates, are unsupported.
     config: host, database, username
     secrets: password
     supports: read=true write=false

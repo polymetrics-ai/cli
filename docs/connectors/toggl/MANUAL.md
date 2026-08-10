@@ -32,7 +32,7 @@ CONFIGURATION
   organization_id
   start_date
   workspace_id
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   time_entries:

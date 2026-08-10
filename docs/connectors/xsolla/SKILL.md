@@ -31,10 +31,10 @@ Reads Xsolla merchant transaction search/registry, payouts, payout currency brea
 - base_url
 - datetime_from
 - datetime_to
-- merchant_id
+- merchant_id (required)
 - mode
 - project_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

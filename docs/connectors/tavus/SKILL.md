@@ -29,7 +29,7 @@ Reads Tavus faces (replicas), videos, conversations, PALs, guardrails, objective
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -32,7 +32,7 @@ Reads events, venues, attractions, and classifications from the Ticketmaster Dis
 - country_code
 - keyword
 - locale
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

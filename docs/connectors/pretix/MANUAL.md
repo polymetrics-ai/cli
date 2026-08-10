@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   event
   organizer
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   organizers:

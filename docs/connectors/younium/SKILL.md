@@ -31,8 +31,8 @@ Reads and writes Younium accounts, subscriptions, invoices, products, payment te
 - base_url
 - legal_entity
 - mode
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

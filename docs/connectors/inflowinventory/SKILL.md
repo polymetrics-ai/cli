@@ -29,10 +29,10 @@ Reads inFlow Inventory products, customers, vendors, sales orders, and categorie
 ## Configuration
 
 - base_url
-- companyid
+- companyid (required)
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

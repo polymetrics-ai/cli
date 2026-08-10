@@ -31,7 +31,7 @@ Reads Marketstack exchanges, tickers, end-of-day prices, splits, and dividends t
 - base_url
 - start_date
 - symbols
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

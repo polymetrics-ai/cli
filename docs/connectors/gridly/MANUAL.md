@@ -32,7 +32,7 @@ CONFIGURATION
   mode
   page_size
   view_ids
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   views:

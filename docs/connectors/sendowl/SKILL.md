@@ -30,8 +30,8 @@ Reads SendOwl orders, products, subscriptions, discounts, bundles, and licenses,
 
 - base_url
 - mode
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

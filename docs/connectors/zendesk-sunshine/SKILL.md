@@ -28,11 +28,11 @@ Reads and writes Zendesk Sunshine legacy custom object types, objects, relations
 
 ## Configuration
 
-- base_url
-- email
+- base_url (required)
+- email (required)
 - object_type
 - relationship_type
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   start_date
   symbols
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   exchanges:

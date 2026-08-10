@@ -28,10 +28,10 @@ Reads Cin7 Core (DEAR Inventory) products, customers, suppliers, sales, purchase
 
 ## Configuration
 
-- accountid
+- accountid (required)
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

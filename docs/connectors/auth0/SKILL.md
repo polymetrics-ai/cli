@@ -29,7 +29,7 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
 ## Configuration
 
 - audience
-- base_url
+- base_url (required)
 - mode
 - access_token (secret)
 - client_id (secret)

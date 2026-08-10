@@ -31,7 +31,7 @@ Reads LaunchDarkly projects, members, audit log entries, feature flags, and envi
 - base_url
 - mode
 - project_key
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

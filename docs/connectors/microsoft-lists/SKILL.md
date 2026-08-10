@@ -35,7 +35,7 @@ Reads SharePoint/Microsoft Lists, list items, columns, and content types from a 
 - mode
 - page_size
 - scope
-- site_id
+- site_id (required)
 - token_url
 - client_id (secret)
 - client_secret (secret)

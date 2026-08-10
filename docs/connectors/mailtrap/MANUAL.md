@@ -35,7 +35,7 @@ AUTHENTICATION
 CONFIGURATION
   account_id
   base_url
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   accounts:

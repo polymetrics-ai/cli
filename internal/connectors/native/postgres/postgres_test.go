@@ -109,7 +109,7 @@ func TestGeneratedDocsDescribeAuthenticationRequirements(t *testing.T) {
 			"host (required)",
 			"username (required)",
 			"password (secret) (required when mode is not fixture)",
-			"password: Live connections require password authentication; peer/socket and client-certificate modes are unsupported.",
+			"password: Live connections require password authentication; peer/socket and client-certificate modes, including ambient certificates, are unsupported.",
 		} {
 			if !strings.Contains(string(raw), want) {
 				t.Fatalf("%s missing %q:\n%s", name, want, raw)

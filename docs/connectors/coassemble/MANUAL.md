@@ -29,8 +29,8 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  user_id (secret)
-  user_token (secret)
+  user_id (secret) (required)
+  user_token (secret) (required)
 
 ETL STREAMS
   courses:

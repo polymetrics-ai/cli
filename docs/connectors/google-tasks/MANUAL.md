@@ -36,7 +36,7 @@ CONFIGURATION
   base_url
   mode
   records_limit
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   tasklists:

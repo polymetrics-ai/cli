@@ -34,7 +34,7 @@ CONFIGURATION
   sol
   start_date
   thumbs
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   apod:

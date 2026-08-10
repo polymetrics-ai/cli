@@ -34,7 +34,7 @@ Reads Rocketlane projects, tasks, customers, users, and time entries through the
 - project_id
 - status
 - updated_after
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -29,7 +29,7 @@ Reads Insightly CRM contacts, organisations, opportunities, leads, projects, and
 
 - base_url
 - mode
-- token (secret)
+- token (secret) (required)
 
 ## ETL Streams
 

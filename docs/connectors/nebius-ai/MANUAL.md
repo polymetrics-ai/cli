@@ -35,7 +35,7 @@ CONFIGURATION
   limit
   operation_id
   upload_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   models:

@@ -30,7 +30,7 @@ Reads Qualaroo nudges and reporting response records through the Qualaroo API. R
 
 - base_url
 - survey_id
-- api_key (secret)
+- api_key (secret) (required)
 - api_secret (secret)
 
 ## ETL Streams

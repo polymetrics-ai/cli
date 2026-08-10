@@ -31,7 +31,7 @@ Reads pretix organizers, events, items, and orders through the pretix REST API.
 - base_url
 - event
 - organizer
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

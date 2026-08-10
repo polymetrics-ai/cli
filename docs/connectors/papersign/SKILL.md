@@ -29,7 +29,7 @@ Reads PaperSign documents, templates, and recipients through the REST API.
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

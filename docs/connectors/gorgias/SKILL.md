@@ -28,11 +28,11 @@ Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys th
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
 - page_size
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

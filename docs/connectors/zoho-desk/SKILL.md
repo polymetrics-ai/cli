@@ -39,7 +39,7 @@ Reads Zoho Desk tickets, contacts, and accounts through the Zoho Desk REST API.
 - mode
 - org_id
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

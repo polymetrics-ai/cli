@@ -35,7 +35,7 @@ Reads dataset splits and per-split sizes from the Hugging Face dataset-viewer RE
 ## Configuration
 
 - base_url
-- dataset_name
+- dataset_name (required)
 - access_token (secret)
 - api_token (secret)
 - token (secret)

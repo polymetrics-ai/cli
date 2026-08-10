@@ -33,8 +33,8 @@ Reads Phyllo users, accounts, profiles, social content/comments, audience, and i
 - phyllo_account_id
 - phyllo_user_id
 - phyllo_work_platform_id
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

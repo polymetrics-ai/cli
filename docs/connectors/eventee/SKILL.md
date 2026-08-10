@@ -29,7 +29,7 @@ Reads Eventee event agenda, attendee, registration, group, review, and partner d
 ## Configuration
 
 - base_url
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

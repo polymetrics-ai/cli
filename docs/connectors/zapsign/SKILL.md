@@ -29,7 +29,7 @@ Reads and writes ZapSign documents, signers, templates, and webhooks.
 ## Configuration
 
 - base_url
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

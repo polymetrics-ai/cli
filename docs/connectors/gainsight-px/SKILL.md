@@ -32,7 +32,7 @@ Reads Gainsight PX accounts, users, features, and segments through the aptrinsic
 - max_pages
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

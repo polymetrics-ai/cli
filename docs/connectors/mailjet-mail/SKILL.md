@@ -28,11 +28,11 @@ Reads Mailjet contacts, contact lists, messages, campaigns, and statistics throu
 
 ## Configuration
 
-- api_key
+- api_key (required)
 - base_url
 - mode
 - page_size
-- api_key_secret (secret)
+- api_key_secret (secret) (required)
 
 ## ETL Streams
 

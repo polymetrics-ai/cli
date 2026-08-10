@@ -27,8 +27,8 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  coin_id
+  base_url (required)
+  coin_id (required)
   mode
   api_key (secret)
 

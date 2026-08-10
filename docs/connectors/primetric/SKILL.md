@@ -30,8 +30,8 @@ Reads Primetric employees, projects, clients, and roles through OAuth-authentica
 
 - base_url
 - token_url
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

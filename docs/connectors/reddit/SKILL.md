@@ -35,8 +35,8 @@ Reads subreddit posts and comments through the Reddit OAuth API listing endpoint
 ## Configuration
 
 - base_url
-- subreddit
-- access_token (secret)
+- subreddit (required)
+- access_token (secret) (required)
 
 ## ETL Streams
 

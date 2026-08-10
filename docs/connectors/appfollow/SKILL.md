@@ -35,7 +35,7 @@ Reads AppFollow account users, app collections, app lists, reviews, review summa
 - report_from
 - report_store
 - report_to
-- api_secret (secret)
+- api_secret (secret) (required)
 
 ## ETL Streams
 

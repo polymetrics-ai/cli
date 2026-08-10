@@ -38,7 +38,7 @@ Reads and writes Buildkite organizations, pipelines, builds, agents, teams, and 
 - mode
 - organization
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

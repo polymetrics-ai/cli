@@ -52,7 +52,7 @@ CONFIGURATION
   team_id
   teammate_id
   variant_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   contacts:

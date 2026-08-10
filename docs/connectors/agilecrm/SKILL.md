@@ -28,10 +28,10 @@ Reads AgileCRM contacts, deals, tasks, milestone pipelines, campaigns, and suppo
 
 ## Configuration
 
-- domain
-- email
+- domain (required)
+- email (required)
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

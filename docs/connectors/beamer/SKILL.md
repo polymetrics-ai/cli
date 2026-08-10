@@ -31,7 +31,7 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
 - base_url
 - mode
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

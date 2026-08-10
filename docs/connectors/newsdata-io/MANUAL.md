@@ -37,7 +37,7 @@ CONFIGURATION
   page_size
   search_query
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   latest:

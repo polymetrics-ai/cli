@@ -35,7 +35,7 @@ CONFIGURATION
   period
   start_date
   symbol_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   symbols:

@@ -30,7 +30,7 @@ Reads Facebook Marketing ad accounts, campaigns, ads, ad sets, ad creatives, cus
 
 - ad_account_id
 - base_url
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

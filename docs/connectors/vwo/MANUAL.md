@@ -33,7 +33,7 @@ CONFIGURATION
   page_size
   platform
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   campaigns:

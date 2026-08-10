@@ -30,7 +30,7 @@ Reads Paddle customers, subscriptions, transactions, and products through the Pa
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

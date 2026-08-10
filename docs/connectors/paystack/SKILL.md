@@ -33,7 +33,7 @@ Reads Paystack customers, transactions, subscriptions, invoices, and disputes th
 - mode
 - page_size
 - start_date
-- secret_key (secret)
+- secret_key (secret) (required)
 
 ## ETL Streams
 

@@ -29,8 +29,8 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  api_key (secret)
-  company_id (secret)
+  api_key (secret) (required)
+  company_id (secret) (required)
 
 ETL STREAMS
   positions:

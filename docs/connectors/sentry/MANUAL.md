@@ -27,12 +27,12 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   max_pages
   organization
   page_size
   project
-  auth_token (secret)
+  auth_token (secret) (required)
 
 ETL STREAMS
   projects:

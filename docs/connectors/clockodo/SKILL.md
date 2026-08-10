@@ -30,13 +30,13 @@ Reads Clockodo customers, projects, services, users, time entries, absences, tea
 
 - absences_year
 - base_url
-- email_address
+- email_address (required)
 - entries_time_since
 - entries_time_until
-- external_application
+- external_application (required)
 - language
 - nonbusinessdays_year
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

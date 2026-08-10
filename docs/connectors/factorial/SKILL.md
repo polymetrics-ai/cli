@@ -30,7 +30,7 @@ Reads FactorialHR employees, teams, time-off leaves, leave types, and locations 
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

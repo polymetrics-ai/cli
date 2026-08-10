@@ -35,8 +35,8 @@ Reads TestRail projects, suites, cases, milestones, plans, runs, users, and refe
 ## Configuration
 
 - base_url
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

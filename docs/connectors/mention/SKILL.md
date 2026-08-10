@@ -28,11 +28,11 @@ Reads Mention app metadata, accounts, alerts, mentions, alert tags, alert shares
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - alert_id
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

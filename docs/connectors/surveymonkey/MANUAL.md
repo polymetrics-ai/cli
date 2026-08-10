@@ -52,7 +52,7 @@ CONFIGURATION
   user_id
   webhook_id
   workgroup_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   surveys:

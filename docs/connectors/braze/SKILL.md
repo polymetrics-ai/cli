@@ -28,9 +28,9 @@ Reads Braze campaigns, Canvases, segments (list + per-id details/analytics-summa
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

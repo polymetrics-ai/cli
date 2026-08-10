@@ -33,8 +33,8 @@ Reads Gong users, calls, scorecards, settings, flows, and related public API res
 - mode
 - page_size
 - start_date
-- access_key (secret)
-- access_key_secret (secret)
+- access_key (secret) (required)
+- access_key_secret (secret) (required)
 
 ## ETL Streams
 

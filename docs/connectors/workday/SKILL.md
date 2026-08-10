@@ -29,9 +29,9 @@ Reads Workday tenant data (workers, organizations, positions) through conservati
 ## Configuration
 
 - base_url
-- tenant
-- password (secret)
-- username (secret)
+- tenant (required)
+- password (secret) (required)
+- username (secret) (required)
 
 ## ETL Streams
 

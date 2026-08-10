@@ -28,10 +28,10 @@ Reads users, projects, clients, calendar/time events, time entries (hours), tags
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - start_date
-- bearer_token (secret)
+- bearer_token (secret) (required)
 
 ## ETL Streams
 

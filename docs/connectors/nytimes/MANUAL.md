@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   mode
   period
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   most_popular_viewed:

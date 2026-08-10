@@ -29,7 +29,7 @@ Reads and writes Tremendous campaigns, orders, rewards, funding sources, product
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

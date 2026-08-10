@@ -30,7 +30,7 @@ Reads and writes Sharetribe listings, users, transactions, availability, stock, 
 
 - base_url
 - mode
-- oauth_access_token (secret)
+- oauth_access_token (secret) (required)
 
 ## ETL Streams
 

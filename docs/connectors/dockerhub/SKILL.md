@@ -29,7 +29,7 @@ Reads public Docker Hub repositories and image tags for a configured username or
 ## Configuration
 
 - base_url
-- docker_username
+- docker_username (required)
 - page_size
 - repository
 - tag

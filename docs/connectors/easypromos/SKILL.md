@@ -31,7 +31,7 @@ Reads Easypromos promotions, organizing brands, stages, users, participations, a
 - base_url
 - mode
 - promotion_id
-- bearer_token (secret)
+- bearer_token (secret) (required)
 
 ## ETL Streams
 

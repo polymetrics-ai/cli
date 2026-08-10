@@ -38,7 +38,7 @@ CONFIGURATION
   mode
   page_size
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   contacts:

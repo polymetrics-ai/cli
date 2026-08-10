@@ -30,7 +30,7 @@ Reads PersistIQ leads, users, campaigns, mailboxes, activities, accounts, DNC do
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -42,7 +42,7 @@ Reads GNews articles from the keyword search and top-headlines endpoints of the 
 - start_date
 - top_headlines_query
 - top_headlines_topic
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  oauth_access_token (secret)
+  oauth_access_token (secret) (required)
 
 ETL STREAMS
   listings:

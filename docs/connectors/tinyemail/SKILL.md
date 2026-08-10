@@ -29,7 +29,7 @@ Reads subscribers, lists, and campaigns, and writes subscriber create/upsert act
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -30,7 +30,7 @@ CONFIGURATION
   ad_account_id
   base_url
   mode
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   ad_accounts:

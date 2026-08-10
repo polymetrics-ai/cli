@@ -29,7 +29,7 @@ Reads Encharge people, segments, fields, account tags, and schemas through the E
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

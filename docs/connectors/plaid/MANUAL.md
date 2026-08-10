@@ -32,8 +32,8 @@ CONFIGURATION
   max_pages
   mode
   page_size
-  client_id (secret)
-  secret (secret)
+  client_id (secret) (required)
+  secret (secret) (required)
 
 ETL STREAMS
   institutions:

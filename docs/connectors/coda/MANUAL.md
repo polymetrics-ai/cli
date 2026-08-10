@@ -31,7 +31,7 @@ CONFIGURATION
   doc_id
   mode
   page_size
-  auth_token (secret)
+  auth_token (secret) (required)
 
 ETL STREAMS
   docs:

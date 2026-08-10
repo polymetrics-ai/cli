@@ -62,7 +62,7 @@ Reads and writes documented Miro Platform, Enterprise, SCIM, and experimental RE
 - team_id
 - to
 - uri
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

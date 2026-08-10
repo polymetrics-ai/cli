@@ -31,7 +31,7 @@ Reads OpenAQ air quality reference data (countries, parameters, locations, instr
 - base_url
 - countries_id
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

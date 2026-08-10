@@ -28,13 +28,13 @@ Reads AppsFlyer raw-data CSV export reports (installs, in-app events) through th
 
 ## Configuration
 
-- app_id
+- app_id (required)
 - base_url
 - end_date
 - mode
 - start_date
 - timezone
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

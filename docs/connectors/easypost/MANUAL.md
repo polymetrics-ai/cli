@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   mode
   start_date
-  username (secret)
+  username (secret) (required)
 
 ETL STREAMS
   shipments:

@@ -32,7 +32,7 @@ Reads Wrike tasks, folders, and contacts through the Wrike REST API. Read-only.
 - max_pages
 - mode
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

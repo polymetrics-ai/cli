@@ -28,12 +28,12 @@ Reads and writes Chargebee subscription billing data (customers, subscriptions, 
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - max_pages
 - mode
 - page_size
 - start_date
-- site_api_key (secret)
+- site_api_key (secret) (required)
 
 ## ETL Streams
 

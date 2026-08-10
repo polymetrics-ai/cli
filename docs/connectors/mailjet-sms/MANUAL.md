@@ -36,7 +36,7 @@ CONFIGURATION
   sms_ids
   start_date
   status_code
-  token (secret)
+  token (secret) (required)
 
 ETL STREAMS
   sms:

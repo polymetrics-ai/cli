@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   mode
   x_correlation_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   countries:

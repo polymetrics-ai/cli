@@ -31,7 +31,7 @@ Reads global financial data (dividends, stock splits, historical candlesticks, a
 - base_url
 - commodities
 - tickers
-- key (secret)
+- key (secret) (required)
 
 ## ETL Streams
 

@@ -41,7 +41,7 @@ Reads Google Search Console sites, sitemaps, and Search Analytics performance re
 - site_url
 - site_urls
 - start_date
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

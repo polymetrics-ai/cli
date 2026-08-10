@@ -40,7 +40,7 @@ CONFIGURATION
   repo
   vcs_type
   workflow_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   projects:

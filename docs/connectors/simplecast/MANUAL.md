@@ -28,7 +28,7 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   podcasts:

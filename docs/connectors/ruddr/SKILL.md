@@ -30,8 +30,8 @@ Reads Ruddr clients, projects, and time entries through the Ruddr API. Read-only
 
 - base_url
 - mode
-- workspace_id
-- api_key (secret)
+- workspace_id (required)
+- api_key (secret) (required)
 
 ## ETL Streams
 

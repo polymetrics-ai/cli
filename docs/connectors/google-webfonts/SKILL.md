@@ -34,7 +34,7 @@ Reads Google Web Fonts families (default, popular, trending, newest, and alphabe
 - family
 - pretty_print
 - subset
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

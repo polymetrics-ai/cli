@@ -30,7 +30,7 @@ Reads Paperform forms and form submissions through the Paperform REST API.
 
 - base_url
 - form_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -42,7 +42,7 @@ CONFIGURATION
   page_size
   subscriber_search
   template_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   pages:

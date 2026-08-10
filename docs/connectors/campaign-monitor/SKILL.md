@@ -36,7 +36,7 @@ Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscrib
 
 - base_url
 - client_id
-- username
+- username (required)
 - password (secret)
 
 ## ETL Streams

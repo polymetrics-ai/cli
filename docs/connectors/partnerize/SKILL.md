@@ -29,8 +29,8 @@ Reads Partnerize conversions, campaigns, and publishers through the REST API.
 ## Configuration
 
 - base_url
-- application_key (secret)
-- user_api_key (secret)
+- application_key (secret) (required)
+- user_api_key (secret) (required)
 
 ## ETL Streams
 

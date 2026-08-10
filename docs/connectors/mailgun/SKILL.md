@@ -32,7 +32,7 @@ Reads Mailgun sending domains, email events, mailing lists, and analytics tags t
 - domain_name
 - mode
 - page_size
-- private_key (secret)
+- private_key (secret) (required)
 
 ## ETL Streams
 

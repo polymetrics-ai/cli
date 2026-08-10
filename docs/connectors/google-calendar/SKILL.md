@@ -40,9 +40,9 @@ Reads and safely reverse-ETLs Google Calendar calendars, calendar-list entries, 
 - rule_id
 - setting
 - start_date
-- client_id (secret)
-- client_refresh_token_2 (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_refresh_token_2 (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

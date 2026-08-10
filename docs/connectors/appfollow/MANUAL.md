@@ -34,7 +34,7 @@ CONFIGURATION
   report_from
   report_store
   report_to
-  api_secret (secret)
+  api_secret (secret) (required)
 
 ETL STREAMS
   users:

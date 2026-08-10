@@ -87,7 +87,7 @@ Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations
 - url
 - user_id
 - version_id
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

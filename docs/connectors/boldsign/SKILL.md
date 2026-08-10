@@ -30,7 +30,7 @@ Reads BoldSign documents, templates, teams, contacts, brands, users, contact gro
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

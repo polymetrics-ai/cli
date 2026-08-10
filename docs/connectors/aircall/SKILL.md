@@ -30,8 +30,8 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
 
 - base_url
 - start_date
-- api_id (secret)
-- api_token (secret)
+- api_id (secret) (required)
+- api_token (secret) (required)
 
 ## ETL Streams
 

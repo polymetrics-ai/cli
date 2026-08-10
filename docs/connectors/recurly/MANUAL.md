@@ -63,7 +63,7 @@ CONFIGURATION
   transaction_id
   unique_coupon_code_id
   usage_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   list_sites:

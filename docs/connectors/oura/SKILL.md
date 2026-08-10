@@ -35,7 +35,7 @@ Reads Oura API v2 usercollection profile, daily summary, time-series, sleep, tag
 - latest
 - start_date
 - start_datetime
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -34,7 +34,7 @@ CONFIGURATION
   company_match_algorithm
   fullname
   org
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   company_name_matching:

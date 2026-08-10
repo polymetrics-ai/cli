@@ -50,7 +50,7 @@ Reads Reply.io legacy v1 objects and current v3 API resources; writes supported 
 - tagId
 - updated_after
 - variant_id
-- api_key (secret)
+- api_key (secret) (required)
 - bearer_token (secret)
 
 ## ETL Streams

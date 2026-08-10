@@ -27,16 +27,16 @@ AUTHENTICATION
   No secret authentication is required for this connector.
 
 CONFIGURATION
-  access
-  agent
-  article
+  access (required)
+  agent (required)
+  article (required)
   base_url
   country
   day
-  end
+  end (required)
   month
-  project
-  start
+  project (required)
+  start (required)
   year
 
 ETL STREAMS

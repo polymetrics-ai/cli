@@ -29,7 +29,7 @@ Reads Survicate surveys, survey questions, responses, and respondent attributes,
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

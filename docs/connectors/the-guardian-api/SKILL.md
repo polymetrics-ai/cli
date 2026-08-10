@@ -31,7 +31,7 @@ Reads Guardian content search results through the Guardian Open Platform Content
 - base_url
 - content_id
 - query
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

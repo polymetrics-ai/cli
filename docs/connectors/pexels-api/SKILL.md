@@ -36,7 +36,7 @@ Reads Pexels photo/video search and curated/popular results plus featured and pe
 - orientation
 - query
 - size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

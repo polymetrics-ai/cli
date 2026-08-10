@@ -29,8 +29,8 @@ Reads Trustpilot business-unit reviews, invitations, and business-unit profile m
 ## Configuration
 
 - base_url
-- business_unit_id
-- api_key (secret)
+- business_unit_id (required)
+- api_key (secret) (required)
 
 ## ETL Streams
 

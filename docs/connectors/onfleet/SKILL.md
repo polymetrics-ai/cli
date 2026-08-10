@@ -31,7 +31,7 @@ Reads Onfleet tasks, workers, teams, hubs, and administrators through the Onflee
 - base_url
 - max_pages
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

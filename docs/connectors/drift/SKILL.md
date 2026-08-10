@@ -30,7 +30,7 @@ Reads Drift users, accounts, conversations, contacts, and teams, and writes cont
 
 - base_url
 - email
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

@@ -37,7 +37,7 @@ CONFIGURATION
   contact_id
   conversation_id
   customer_id
-  data_center
+  data_center (required)
   domain_name
   export_id
   feedback_id

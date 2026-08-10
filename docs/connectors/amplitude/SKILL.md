@@ -31,8 +31,8 @@ Reads and manages Amplitude behavioral cohorts, chart annotations, annotation ca
 - base_url
 - mode
 - taxonomy_show_deleted
-- api_key (secret)
-- secret_key (secret)
+- api_key (secret) (required)
+- secret_key (secret) (required)
 
 ## ETL Streams
 

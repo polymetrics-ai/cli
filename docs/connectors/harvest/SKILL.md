@@ -28,12 +28,12 @@ Reads Harvest clients, contacts, company settings, projects, tasks, task assignm
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - mode
 - page_size
 - start_date
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

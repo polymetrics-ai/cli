@@ -30,8 +30,8 @@ Reads Nexio Pay card tokens, payout recipients, spendbacks, payment types, termi
 
 - base_url
 - mode
-- api_key (secret)
-- username (secret)
+- api_key (secret) (required)
+- username (secret) (required)
 
 ## ETL Streams
 

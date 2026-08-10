@@ -36,7 +36,7 @@ Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and 
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

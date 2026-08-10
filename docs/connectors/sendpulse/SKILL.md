@@ -30,8 +30,8 @@ Reads SendPulse address books, campaigns, senders, per-book emails, and the acco
 
 - base_url
 - token_url
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

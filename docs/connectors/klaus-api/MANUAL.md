@@ -27,11 +27,11 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  account
+  account (required)
   base_url
   mode
   workspace
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   users:

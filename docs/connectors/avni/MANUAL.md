@@ -30,8 +30,8 @@ CONFIGURATION
   mode
   page_size
   start_date
-  username
-  password (secret)
+  username (required)
+  password (secret) (required)
 
 ETL STREAMS
   subjects:

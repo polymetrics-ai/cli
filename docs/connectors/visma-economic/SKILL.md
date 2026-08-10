@@ -30,8 +30,8 @@ Reads customers, suppliers, products, invoices, orders, quotes, departments, pay
 
 - base_url
 - start_date
-- agreement_grant_token (secret)
-- app_secret_token (secret)
+- agreement_grant_token (secret) (required)
+- app_secret_token (secret) (required)
 
 ## ETL Streams
 

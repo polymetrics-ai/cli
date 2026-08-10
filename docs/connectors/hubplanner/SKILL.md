@@ -28,7 +28,7 @@ Reads Hubplanner scheduling, project, resource, client, billing, time, vacation,
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

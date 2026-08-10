@@ -39,7 +39,7 @@ CONFIGURATION
   sort
   ticker
   type
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   tickers:

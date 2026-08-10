@@ -28,13 +28,13 @@ Reads Taboola campaigns through the Backstage API. Read-only.
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - max_pages
 - mode
 - page_size
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

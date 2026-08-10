@@ -33,7 +33,7 @@ CONFIGURATION
   direction
   messageType
   type
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   extensions:

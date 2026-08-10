@@ -40,7 +40,7 @@ CONFIGURATION
   scope
   start_date
   password (secret)
-  refresh_token (secret)
+  refresh_token (secret) (required)
   username (secret)
 
 ETL STREAMS

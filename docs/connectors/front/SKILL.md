@@ -30,7 +30,7 @@ Reads Front contacts, conversations, inboxes, tags, teammates, and channels thro
 
 - base_url
 - page_limit
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

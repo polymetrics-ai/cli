@@ -35,7 +35,7 @@ Reads Squarespace orders, products, inventory, profiles, transactions, store pag
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

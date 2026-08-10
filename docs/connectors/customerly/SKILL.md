@@ -31,7 +31,7 @@ Reads Customerly users, leads, and accounts, and writes user/lead/tag/message/at
 - base_url
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

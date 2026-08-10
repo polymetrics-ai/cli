@@ -29,8 +29,8 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   start_date
-  username
-  password (secret)
+  username (required)
+  password (secret) (required)
 
 ETL STREAMS
   users:

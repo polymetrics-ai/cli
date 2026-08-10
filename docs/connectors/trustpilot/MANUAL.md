@@ -28,8 +28,8 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  business_unit_id
-  api_key (secret)
+  business_unit_id (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   reviews:

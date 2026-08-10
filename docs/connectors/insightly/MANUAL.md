@@ -28,7 +28,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  token (secret)
+  token (secret) (required)
 
 ETL STREAMS
   contacts:

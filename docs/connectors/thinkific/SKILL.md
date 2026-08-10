@@ -29,8 +29,8 @@ Reads and writes Thinkific courses, users, enrollments, products, orders, and si
 ## Configuration
 
 - base_url
-- subdomain
-- api_key (secret)
+- subdomain (required)
+- api_key (secret) (required)
 
 ## ETL Streams
 

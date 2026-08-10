@@ -40,7 +40,7 @@ Reads Polygon.io stock tickers, dividends, and splits through the Polygon.io ref
 - sort
 - ticker
 - type
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

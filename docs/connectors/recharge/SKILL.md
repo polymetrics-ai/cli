@@ -31,7 +31,7 @@ Reads Recharge customers, subscriptions, and orders through the Recharge REST AP
 - api_version
 - base_url
 - mode
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

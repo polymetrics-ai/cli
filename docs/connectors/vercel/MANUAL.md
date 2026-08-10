@@ -36,7 +36,7 @@ CONFIGURATION
   base_url
   start_date
   team_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   deployments:

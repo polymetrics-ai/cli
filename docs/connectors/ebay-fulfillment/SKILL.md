@@ -41,7 +41,7 @@ Reads eBay seller orders, exploded line items, shipping fulfillments, and paymen
 - scope
 - start_date
 - password (secret)
-- refresh_token (secret)
+- refresh_token (secret) (required)
 - username (secret)
 
 ## ETL Streams

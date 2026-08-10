@@ -39,7 +39,7 @@ CONFIGURATION
   organization_id
   page_size
   report_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   agreements:

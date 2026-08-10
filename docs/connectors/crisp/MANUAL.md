@@ -34,7 +34,7 @@ CONFIGURATION
   session_id
   spam_id
   token_tier
-  website_id
+  website_id (required)
   identifier (secret)
   key (secret)
 

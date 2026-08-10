@@ -27,11 +27,11 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  account_id
+  account_id (required)
   base_url
   mode
   page_size
-  personal_access_token (secret)
+  personal_access_token (secret) (required)
 
 ETL STREAMS
   contacts:

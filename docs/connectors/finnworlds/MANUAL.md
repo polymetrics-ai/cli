@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   commodities
   tickers
-  key (secret)
+  key (secret) (required)
 
 ETL STREAMS
   dividends:

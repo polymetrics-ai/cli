@@ -73,7 +73,7 @@ Reads Amazon Selling Partner API orders, inventory, finance, catalog, listings, 
 - query_id
 - query_type
 - rate_id
-- replication_start_date
+- replication_start_date (required)
 - report_id
 - report_schedule_id
 - report_types
@@ -97,9 +97,9 @@ Reads Amazon Selling Partner API orders, inventory, finance, catalog, listings, 
 - transaction_id
 - transfer_schedule_id
 - vehicle_type
-- lwa_app_id (secret)
-- lwa_client_secret (secret)
-- refresh_token (secret)
+- lwa_app_id (secret) (required)
+- lwa_client_secret (secret) (required)
+- refresh_token (secret) (required)
 
 ## ETL Streams
 

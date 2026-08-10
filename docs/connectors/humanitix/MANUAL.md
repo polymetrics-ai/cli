@@ -31,7 +31,7 @@ CONFIGURATION
   event_id
   page_size
   since
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   events:

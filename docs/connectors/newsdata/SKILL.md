@@ -36,7 +36,7 @@ Reads latest news, cryptocurrency news, and news sources from the NewsData.io RE
 - query
 - query_in_title
 - size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

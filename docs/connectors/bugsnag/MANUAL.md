@@ -31,7 +31,7 @@ CONFIGURATION
   organization_id
   page_size
   project_id
-  auth_token (secret)
+  auth_token (secret) (required)
 
 ETL STREAMS
   organizations:

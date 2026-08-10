@@ -28,8 +28,8 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  access_key (secret)
-  api_key (secret)
+  access_key (secret) (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   customers:

@@ -32,7 +32,7 @@ Reads Fulcrum forms, records, projects, choice lists, and classification sets th
 - max_pages
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

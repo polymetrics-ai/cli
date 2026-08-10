@@ -32,7 +32,7 @@ CONFIGURATION
   created_after
   email
   updated_after
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   customers:

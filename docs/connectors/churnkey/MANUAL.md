@@ -27,9 +27,9 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  app_id
+  app_id (required)
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   sessions:

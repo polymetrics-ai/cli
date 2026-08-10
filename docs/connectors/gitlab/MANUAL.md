@@ -31,7 +31,7 @@ CONFIGURATION
   mode
   page_size
   start_date
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   projects:

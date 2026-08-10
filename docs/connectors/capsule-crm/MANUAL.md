@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  bearer_token (secret)
+  bearer_token (secret) (required)
 
 ETL STREAMS
   parties:

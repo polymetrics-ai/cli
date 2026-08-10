@@ -34,7 +34,7 @@ Reads and writes VWO (Visual Website Optimizer) A/B testing campaigns.
 - page_size
 - platform
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

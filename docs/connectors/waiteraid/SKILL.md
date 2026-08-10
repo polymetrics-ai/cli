@@ -29,9 +29,9 @@ Reads and writes WaiterAid restaurant reservations, meals, guests, and queue ent
 ## Configuration
 
 - base_url
-- restid
+- restid (required)
 - start_date
-- auth_hash (secret)
+- auth_hash (secret) (required)
 
 ## ETL Streams
 

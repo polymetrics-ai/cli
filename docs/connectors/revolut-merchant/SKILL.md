@@ -33,7 +33,7 @@ Reads Revolut Merchant orders, customers, settlements, and payment links through
 - from_created_date
 - state
 - to_created_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

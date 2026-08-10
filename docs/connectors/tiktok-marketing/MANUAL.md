@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   advertiser_id
   base_url
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   advertisers:

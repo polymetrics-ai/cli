@@ -32,7 +32,7 @@ Reads Cloudbeds guests, hotels, rooms, reservations, transactions, rate plans, r
 - property_id
 - rate_plans_end_date
 - rate_plans_start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

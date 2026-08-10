@@ -29,9 +29,9 @@ Reads Twilio TaskRouter workers, tasks, activities, task queues, and workflows f
 ## Configuration
 
 - base_url
-- workspace_sid
-- account_sid (secret)
-- auth_token (secret)
+- workspace_sid (required)
+- account_sid (secret) (required)
+- auth_token (secret) (required)
 
 ## ETL Streams
 

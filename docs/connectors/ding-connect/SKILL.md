@@ -31,7 +31,7 @@ Reads DingConnect reference catalogs (countries, currencies, regions, providers,
 - base_url
 - mode
 - x_correlation_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

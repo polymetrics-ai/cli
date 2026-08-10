@@ -48,7 +48,7 @@ Reads and writes RevenueCat v2 project configuration, customer, product, offerin
 - updated_after
 - virtual_currency_code
 - webhook_integration_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

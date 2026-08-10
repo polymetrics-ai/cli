@@ -32,7 +32,7 @@ Reads JustCall users, call logs, SMS, contacts, and phone numbers through the Ju
 - mode
 - page_size
 - start_date
-- api_key_2 (secret)
+- api_key_2 (secret) (required)
 
 ## ETL Streams
 

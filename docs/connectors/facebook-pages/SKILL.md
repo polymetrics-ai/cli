@@ -29,9 +29,9 @@ Reads Facebook Page metadata and posts from the Graph API. Read-only.
 ## Configuration
 
 - base_url
-- page_id
+- page_id (required)
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

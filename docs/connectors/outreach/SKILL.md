@@ -79,7 +79,7 @@ Reads and mutates Outreach REST API v2 JSON:API resources, including standard re
 - template_id
 - user_id
 - webhook_id
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   survey_id
-  api_key (secret)
+  api_key (secret) (required)
   api_secret (secret)
 
 ETL STREAMS

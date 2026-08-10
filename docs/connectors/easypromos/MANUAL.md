@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   mode
   promotion_id
-  bearer_token (secret)
+  bearer_token (secret) (required)
 
 ETL STREAMS
   promotions:

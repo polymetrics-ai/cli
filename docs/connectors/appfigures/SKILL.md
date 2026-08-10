@@ -33,7 +33,7 @@ Reads Appfigures app-store reviews, products, analytics reports (sales/ratings/r
 - group_by
 - search_store
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

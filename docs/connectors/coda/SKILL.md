@@ -32,7 +32,7 @@ Reads Coda docs and doc-scoped tables, rows, columns, pages, formulas, and contr
 - doc_id
 - mode
 - page_size
-- auth_token (secret)
+- auth_token (secret) (required)
 
 ## ETL Streams
 

@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   mode
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   nps:

@@ -31,7 +31,7 @@ Reads and writes EasyPost shipping resources including shipments, trackers, addr
 - base_url
 - mode
 - start_date
-- username (secret)
+- username (secret) (required)
 
 ## ETL Streams
 

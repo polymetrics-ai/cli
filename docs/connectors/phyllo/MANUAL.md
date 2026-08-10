@@ -32,8 +32,8 @@ CONFIGURATION
   phyllo_account_id
   phyllo_user_id
   phyllo_work_platform_id
-  client_id (secret)
-  client_secret (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   users:

@@ -28,7 +28,7 @@ Reads n8n workflows, executions, tags, users, variables, projects, data tables, 
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - credential_id
 - credential_type_name
 - data_table_column_id
@@ -57,7 +57,7 @@ Reads n8n workflows, executions, tags, users, variables, projects, data tables, 
 - workflow_name
 - workflow_tags
 - workflow_version_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -30,8 +30,8 @@ Reads HighLevel (Go HighLevel / LeadConnector) contacts, opportunities, pipeline
 
 - api_version
 - base_url
-- location_id
-- api_key (secret)
+- location_id (required)
+- api_key (secret) (required)
 
 ## ETL Streams
 

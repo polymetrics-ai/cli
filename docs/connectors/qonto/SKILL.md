@@ -31,7 +31,7 @@ Reads Qonto bank transactions, memberships, and accounts through the Qonto REST 
 - base_url
 - iban
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

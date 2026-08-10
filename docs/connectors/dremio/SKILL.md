@@ -30,7 +30,7 @@ Reads and writes Dremio catalog entries, reflections, sources, users, and roles 
 
 - base_url
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

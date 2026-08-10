@@ -32,7 +32,7 @@ Reads Bugsnag organizations, projects, collaborators, errors, events, and releas
 - organization_id
 - page_size
 - project_id
-- auth_token (secret)
+- auth_token (secret) (required)
 
 ## ETL Streams
 

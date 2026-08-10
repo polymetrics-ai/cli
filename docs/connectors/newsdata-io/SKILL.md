@@ -38,7 +38,7 @@ Reads latest, crypto, and archived news articles plus available news sources fro
 - page_size
 - search_query
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

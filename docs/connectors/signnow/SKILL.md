@@ -30,7 +30,7 @@ Reads signNow documents, templates, and users through the signNow REST API.
 
 - base_url
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

@@ -32,7 +32,7 @@ Reads Lob addresses, postcards, letters, checks, and bank accounts through the L
 - max_pages
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

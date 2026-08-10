@@ -44,7 +44,7 @@ CONFIGURATION
   sentiment_gte
   sentiment_lte
   symbols
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   tickers:

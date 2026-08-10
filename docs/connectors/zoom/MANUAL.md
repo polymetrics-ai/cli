@@ -32,7 +32,7 @@ CONFIGURATION
   mode
   page_size
   user_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   users:

@@ -31,7 +31,7 @@ Reads Klaviyo profiles, events, campaigns, lists, metrics, and segments through 
 - base_url
 - mode
 - revision
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -42,7 +42,7 @@ Reads SimFin company, financial statement, price, share, filing, and database-ch
 - start_date
 - statements
 - tickers
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

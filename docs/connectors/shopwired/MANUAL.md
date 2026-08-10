@@ -64,7 +64,7 @@ CONFIGURATION
   trade
   transaction_id
   access_token (secret)
-  api_key (secret)
+  api_key (secret) (required)
   api_secret (secret)
 
 ETL STREAMS
