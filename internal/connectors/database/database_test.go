@@ -177,6 +177,19 @@ func TestDatabaseDefinitionRejectsAmbiguousMembers(t *testing.T) {
 	if !strings.Contains(err.Error(), `$.identifiers.max_bytes`) {
 		t.Fatalf("Load() error = %v, want exact typed field path", err)
 	}
+
+	_, err = database.Load(context.Background(), fstest.MapFS{
+		"database.json": &fstest.MapFile{Data: []byte(strings.Replace(validDefinitionJSON, `"bits": 32`, `"bits": {}`, 1))},
+	})
+	if err == nil {
+		t.Fatal("Load() error = nil, want compound typed configuration rejection")
+	}
+	if !errors.As(err, &typeError) {
+		t.Fatalf("Load() error = %v, want retained json.UnmarshalTypeError", err)
+	}
+	if !strings.Contains(err.Error(), `$.type_mappings[0].logical.bits`) {
+		t.Fatalf("Load() error = %v, want exact indexed typed field path", err)
+	}
 }
 
 func TestResourcePolicyBoundsEveryDatabaseResource(t *testing.T) {
