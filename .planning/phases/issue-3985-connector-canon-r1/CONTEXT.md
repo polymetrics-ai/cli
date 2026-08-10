@@ -1,8 +1,8 @@
 # Issue 3985 — connector implementation canon and delivery gate: context
 
-**Gathered:** 2026-08-10  
-**Status:** Ready for implementation  
-**Source:** GitHub issue #3985, captain rulings, and the accepted reports listed below.
+- **Gathered:** 2026-08-10
+- **Status:** Ready for implementation
+- **Source:** GitHub issue #3985, captain rulings, and the accepted reports listed below.
 
 <domain>
 ## Phase boundary

@@ -1,9 +1,9 @@
 # PostgreSQL connector parity issue tree — captain correction r2
 
-**Status:** current execution scope as of 2026-08-10.  
-**Supersedes:** r1 only for issue-tree scope and dependency order. r1 remains source-pinned evidence
-of the original audit and is retained intact.  
-**Live parent:** [#3972 — Postgres Parity](https://github.com/polymetrics-ai/cli/issues/3972).
+- **Status:** current execution scope as of 2026-08-10.
+- **Supersedes:** r1 only for issue-tree scope and dependency order. r1 remains source-pinned
+  evidence of the original audit and is retained intact.
+- **Live parent:** [#3972 — Postgres Parity](https://github.com/polymetrics-ai/cli/issues/3972).
 
 ## Why r2 exists
 

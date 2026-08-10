@@ -1,10 +1,10 @@
 # PostgreSQL parity tree audit — captain addendum
 
-**Audited:** 2026-08-10  
-**Live source:** GitHub REST read-back of #3972 and all eleven children after main advanced to
-`4df0b0416`.  
-**Authority:** `data/captain.md`, the three accepted database/CDC reports, and
-`internal/synccontract/mode.go`.
+- **Audited:** 2026-08-10
+- **Live source:** GitHub REST read-back of #3972 and all eleven children after main advanced to
+  `4df0b0416`.
+- **Authority:** `data/captain.md`, the three accepted database/CDC reports, and
+  `internal/synccontract/mode.go`.
 
 ## Finding
 
