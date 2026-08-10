@@ -28,9 +28,10 @@ OpenCode is registered rather than handled as a one-off adapter.
 
 ## Delivery state
 
-All local verification and manual review gates are green; `REVIEW.md` records two fixed findings in
-one of five permitted correction rounds. `no-mistakes` and child-PR publication are the remaining
-delivery steps.
+All local verification and manual review gates are green. The two fixed manual-review findings are
+tracked by child [#4024](https://github.com/polymetrics-ai/cli/issues/4024) in correction round 1
+of 5: the remediation commit is `842f1c271` and the verification record is `d511186bc`.
+`no-mistakes` and child-PR publication are the remaining delivery steps.
 
 #3984 is consumed at `815dc1ab65380e03f6e0c078ba36030baaec21ea`. #3985's concrete canon is
 available at `da7747a796049601a179a97c025bfb05f011f1e8`, although #3985 remains formally open.

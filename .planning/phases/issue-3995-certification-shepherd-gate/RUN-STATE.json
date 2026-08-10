@@ -17,6 +17,21 @@
     "child_pr": "pending"
   },
   "correction_rounds": 1,
+  "correction_tracking": {
+    "round": 1,
+    "maximum_rounds": 5,
+    "issue": 4024,
+    "url": "https://github.com/polymetrics-ai/cli/issues/4024",
+    "finding_ids": ["R-1", "R-2"],
+    "remediation_commit": "842f1c271",
+    "verification_commit": "d511186bc",
+    "status": "code_remediated_child_open_pending_pr_review"
+  },
+  "workflow_recovery": {
+    "cancelled_run": "01KZPTX65SYF6JJJK8QH7BWTBA",
+    "classification": "operator_cancelled_not_a_code_gate_failure_or_correction_round",
+    "next_step": "start_one_fresh_full_no_mistakes_run_without_yes"
+  },
   "dependencies": {
     "3984": {
       "status": "merged",

@@ -29,3 +29,11 @@ Automated review evidence before this report:
 PASS after correction round 1 of 5. There are no open actionable review findings. The remaining
 external dependency is #3989: its eventual proof-schema version must be integrated explicitly;
 the present gate halts unknown proof versions rather than inventing fields.
+
+## Correction tracking
+
+The proof-consumer fixes are tracked as child issue [#4024](https://github.com/polymetrics-ai/cli/issues/4024)
+under #3995, with `Refs #3988`. It owns both R-1 fingerprint-only proof consumption and R-2
+canonical semantic JSON comparison. The production remediation is commit `842f1c271`; the
+verification record is `d511186bc`. The issue is deliberately open pending this child branch's PR
+review and the parent acceptance flow.
