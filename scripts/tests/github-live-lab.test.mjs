@@ -202,6 +202,27 @@ test("lab boundary default-denies protected, working, unresolved, ambiguous, and
   assert.throws(() => validateLabBoundary(ambiguous), /ambiguous/i);
 });
 
+test("rejects unknown, multiline, armored, and malformed boundary scalars without echoing them", () => {
+  const armored = "-----BEGIN PRIVATE KEY-----\nnot-a-key\n-----END PRIVATE KEY-----";
+  for (const candidate of [
+    { ...boundary, unexpected: "field" },
+    { ...boundary, run_id: armored },
+    {
+      ...boundary,
+      allowed_targets: [{ ...boundary.allowed_targets[0], repo_id: "repository id with spaces" }],
+    },
+  ]) {
+    let rejected;
+    try {
+      validateLabBoundary(candidate);
+    } catch (error) {
+      rejected = error;
+    }
+    assert.ok(rejected instanceof Error);
+    assert.equal(rejected.message.includes(armored), false);
+  }
+});
+
 test("a denied target cannot reach the PM fixture executor", async () => {
   let started = false;
   await assert.rejects(

@@ -20,6 +20,7 @@ const REASON_FAMILIES = Object.freeze([
   "no_cleanup_safe_fixture",
   "other",
 ]);
+const APP_INSTALLATION_REPOSITORY_PREFLIGHT = "apps list-repos-accessible-to-installation";
 
 function parseArgs(args) {
   const options = {};
@@ -74,61 +75,135 @@ export function resolveLiveBoundary(candidate) {
   };
 }
 
-function flagValue(flag, command, boundary) {
-  const name = String(flag.name || "");
-  if (Array.isArray(flag.values) && flag.values.length > 0) {
-    return String(flag.values[0]);
-  }
-  if (flag.type === "boolean") return "false";
-  if (flag.type === "integer") {
-    if (name === "issue-number") return "5";
-    return "1";
-  }
-  if (flag.type === "json") {
-    if (name.includes("options")) return '{"provider-live":"provider-live"}';
-    if (name.includes("ids")) return '["provider-live"]';
-    return '{"provider-live":"provider-live"}';
-  }
-  if (flag.type === "string_array") return "provider-live";
-  if (name === "owner" || name === "repo-owner" || name === "username" || name === "user" || name === "target-user") {
-    return boundary.owner;
-  }
-  if (name === "repo" || name === "repository") return boundary.repo;
-  if (name === "repo-name") return boundary.repo;
-  if (name === "org") return boundary.owner;
-  if (name === "q") {
-    if (command?.path === "search users") return boundary.owner;
-    if (command?.path === "search topics") return "polymetrics";
-    if (command?.path === "search commits") return "provider-live";
-    return `repo:${boundary.owner}/${boundary.repo}`;
-  }
-  if (name === "path") return "README.md";
-  if (name === "ref" && command?.path === "git ref view") return "heads/main";
-  if (name === "ref" || name === "branch" || name === "base-ref" || name === "target-commitish") return "main";
-  if (name === "sha" || name === "commit-sha" || name === "tree-sha") return "HEAD";
-  if (name === "basehead") return "main...main";
-  if (name === "text" || name === "context" || name === "body" || name === "title" || name === "comment") return "provider-live";
-  if (name === "issue" || name === "issue-number") return "5";
-  if (name === "head") return "main";
-  if (name === "tag-name") return "provider-live";
-  if (name === "archive-format") return "tarball";
-  return "provider-live";
+function exactReadAPI(command) {
+  const apis = Array.isArray(command?.api_surface) ? command.api_surface : [];
+  if (apis.length !== 1) return null;
+  const api = apis[0];
+  if (!api || api.method !== "GET" || typeof api.path !== "string") return null;
+  return api;
 }
 
-function flagArgs(command, mode, boundary) {
-  const args = [];
+function boundaryRootTargetValues(apiPath, boundary) {
+  const roots = [
+    ["/repos/{owner}/{repo}", { owner: boundary.owner, repo: boundary.repo }],
+    ["/orgs/{org}", { org: boundary.owner }],
+    ["/organizations/{org_id}", { org_id: boundary.organization_id }],
+    ["/repositories/{repository_id}", { repository_id: boundary.repo_id }],
+  ];
+  for (const [prefix, values] of roots) {
+    if (apiPath === prefix || apiPath.startsWith(`${prefix}/`)) return values;
+  }
+  return null;
+}
+
+function pathTemplateNames(apiPath) {
+  return [...apiPath.matchAll(/\{([a-zA-Z0-9_]+)\}/g)].map((match) => match[1]);
+}
+
+function pathTargetForFlag(flag, apiPath) {
+  const mapsTo = String(flag?.maps_to || "");
+  const mapped = /^path\.([a-zA-Z0-9_]+)$/u.exec(mapsTo)?.[1];
+  if (mapped) return mapped;
+  if (mapsTo !== "") return null;
+  const name = String(flag?.name || "").toLowerCase().replaceAll("-", "_");
+  return pathTemplateNames(apiPath).includes(name) ? name : null;
+}
+
+function configResolvedPathNames(apiPath) {
+  return apiPath === "/repos/{owner}/{repo}" || apiPath.startsWith("/repos/{owner}/{repo}/")
+    ? new Set(["owner", "repo"])
+    : new Set();
+}
+
+function hasBoundaryRootTarget(command, boundary) {
+  const api = exactReadAPI(command);
+  if (!api) return false;
+  const targetValues = boundaryRootTargetValues(api.path, boundary);
+  if (!targetValues) return false;
+  const resolved = configResolvedPathNames(api.path);
   for (const flag of command.flags || []) {
-    const mapsTo = String(flag.maps_to || "");
-    const include =
-      mode === "reverse_etl" ||
-      mode === "direct_write" ||
-      mapsTo.startsWith("path.") ||
-      flag.required === true ||
-      (mode === "etl" && flag.name === "state") ||
-      (mode === "direct_read" && ["ref", "q", "path"].includes(flag.name));
-    if (include) args.push(`--${flag.name}`, flagValue(flag, command, boundary));
+    const target = pathTargetForFlag(flag, api.path);
+    if (target) {
+      if (!(target in targetValues)) return false;
+      resolved.add(target);
+    }
+  }
+  return pathTemplateNames(api.path).every((name) => name in targetValues && resolved.has(name));
+}
+
+function boundaryRootArgs(command, boundary) {
+  if (!hasBoundaryRootTarget(command, boundary)) return null;
+  const api = exactReadAPI(command);
+  const targetValues = boundaryRootTargetValues(api.path, boundary);
+  const args = [];
+  const seen = new Set();
+  for (const flag of command.flags || []) {
+    const name = String(flag?.name || "");
+    const target = pathTargetForFlag(flag, api.path);
+    if (target) {
+      if (!(target in targetValues) || !/^[a-z][a-z0-9-]*$/iu.test(name) || seen.has(name)) return null;
+      args.push(`--${name}`, targetValues[target]);
+      seen.add(name);
+      continue;
+    }
+    if (flag?.required === true) return null;
   }
   return args;
+}
+
+function boundaryRootETLArgs(command, boundary) {
+  if (!hasBoundaryRootTarget(command, boundary)) return null;
+  const api = exactReadAPI(command);
+  const targetValues = boundaryRootTargetValues(api.path, boundary);
+  const args = [];
+  const seen = new Set();
+  for (const flag of command.flags || []) {
+    const name = String(flag?.name || "");
+    const target = pathTargetForFlag(flag, api.path);
+    if (target) {
+      if (!(target in targetValues) || !/^[a-z][a-z0-9-]*$/iu.test(name) || seen.has(name)) return null;
+      args.push(`--${name}`, targetValues[target]);
+      seen.add(name);
+      continue;
+    }
+    if (name === "state" && flag.type === "enum" && Array.isArray(flag.values) && typeof flag.values[0] === "string") {
+      args.push(`--${name}`, flag.values[0]);
+      continue;
+    }
+    if (flag?.required === true) return null;
+  }
+  return args;
+}
+
+function isBoundaryRootETL(command, boundary) {
+  return hasBoundaryRootTarget(command, boundary);
+}
+
+function untestableReadCase(command) {
+  return {
+    command: command.path,
+    untestable_reason: reason(
+      command.path,
+      "the command target is not rooted in an immutable Polymetrics-Cert boundary entry or declared typed fixture; targetless live reads are limited to the App installation repository identity preflight",
+    ),
+  };
+}
+
+function isAppInstallationRepositoryPreflight(command) {
+  const api = exactReadAPI(command);
+  return command?.path === APP_INSTALLATION_REPOSITORY_PREFLIGHT &&
+    command?.intent === "direct_read" &&
+    Array.isArray(command?.flags) && command.flags.length === 0 &&
+    api?.path === "/installation/repositories";
+}
+
+function readCase(command, boundary) {
+  if (isAppInstallationRepositoryPreflight(command)) {
+    return { command: command.path, args: [] };
+  }
+  const args = boundaryRootArgs(command, boundary);
+  if (args !== null) return { command: command.path, args };
+  return untestableReadCase(command);
 }
 
 function reason(command, detail) {
@@ -187,15 +262,17 @@ export function summarizeCaseMovement({ baselineCases, currentCases }) {
 }
 
 function directReadCase(command, boundary) {
-  return { command: command.path, args: flagArgs(command, command.intent, boundary) };
+  return readCase(command, boundary);
 }
 
 function etlCase(command, boundary) {
-  return { command: command.path, args: flagArgs(command, command.intent, boundary) };
+  if (!isBoundaryRootETL(command, boundary)) return untestableReadCase(command);
+  const args = boundaryRootETLArgs(command, boundary);
+  return args === null ? untestableReadCase(command) : { command: command.path, args };
 }
 
 function binaryCase(command, boundary) {
-  return { command: command.path, args: flagArgs(command, command.intent, boundary) };
+  return readCase(command, boundary);
 }
 
 function writeCase(command) {

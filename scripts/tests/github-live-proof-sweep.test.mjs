@@ -13,6 +13,8 @@ import {
   enumerateImplementedCommands,
   redactForReport,
   runProcess,
+  validateCredentialScope,
+  validateProofReport,
   validateProofRecords,
 } from "../github-live-proof-sweep.mjs";
 import { buildCases, resolveLiveBoundary } from "../github-live-cases.mjs";
@@ -201,6 +203,223 @@ test("redacts every config value by key before it can enter a proof record", () 
   assert.equal(JSON.stringify(record).includes("https://synthetic.invalid"), false);
 });
 
+test("requires the canonical origin and a fully paginated App installation repository identity", async () => {
+  const temp = await mkdtemp(path.join(os.tmpdir(), "github-live-proof-preflight-"));
+  try {
+    const fakePM = path.join(temp, "fake-pm.mjs");
+    const logPath = path.join(temp, "invocations.jsonl");
+    const boundary = {
+      schema_version: 1,
+      run_id: "github-live-proof-preflight-test",
+      default_deny: true,
+      protected_owners: ["polymetrics-ai"],
+      protected_repositories: [{ owner_slug: "polymetrics-ai", repo_slug: "cli" }],
+      working_repositories: [{ owner_slug: "polymetrics-ai", repo_slug: "cli" }],
+      allowed_targets: [
+        {
+          key: "organization",
+          resource_type: "organization",
+          org_slug: "polymetrics-cert",
+          org_id: "O_certification",
+          run_owned: true,
+        },
+        {
+          key: "repository",
+          resource_type: "repository",
+          owner_slug: "polymetrics-cert",
+          owner_id: "O_certification",
+          repo_slug: "pm-live-lab-test",
+          repo_id: "R_certification",
+          run_owned: true,
+        },
+      ],
+    };
+    const expectedBoundary = resolveLiveBoundary(boundary);
+    const credential = {
+      kind: "Credential",
+      credential: {
+        connector: "github",
+        config: {
+          owner: "polymetrics-cert",
+          repo: "pm-live-lab-test",
+          base_url: "https://api.github.com/",
+          auth_type: "github_app",
+          app_id: "12345",
+          installation_id: "67890",
+        },
+        secret_fields: ["private_key"],
+      },
+    };
+    const outsideOriginCredential = structuredClone(credential);
+    outsideOriginCredential.credential.config.base_url = "https://outside.example";
+    const firstPage = {
+      kind: "ConnectorCommandDirectRead",
+      connector: "github",
+      command: "apps list-repos-accessible-to-installation",
+      status: 200,
+      response: {
+        total_count: 2,
+        repositories: [
+          {
+            id: "R_other",
+            full_name: "polymetrics-cert/another-repository",
+            owner: { login: "polymetrics-cert", id: "O_certification" },
+          },
+        ],
+      },
+      page: {
+        strategy: "page_number",
+        records: 1,
+        size: 1,
+        number: 1,
+        has_more: true,
+        next_number: 2,
+        complete: false,
+        reason: "more_pages",
+      },
+    };
+    const secondPage = {
+      kind: "ConnectorCommandDirectRead",
+      connector: "github",
+      command: "apps list-repos-accessible-to-installation",
+      status: 200,
+      response: {
+        total_count: 2,
+        repositories: [
+          {
+            id: "R_certification",
+            full_name: "polymetrics-cert/pm-live-lab-test",
+            owner: { login: "polymetrics-cert", id: "O_certification" },
+          },
+        ],
+      },
+      page: {
+        strategy: "page_number",
+        records: 1,
+        size: 1,
+        number: 2,
+        has_more: false,
+        complete: true,
+      },
+    };
+    await writeFile(fakePM, [
+      "#!/usr/bin/env node",
+      "import { appendFileSync } from 'node:fs';",
+      `const logPath = ${JSON.stringify(logPath)};`,
+      `const credential = ${JSON.stringify(credential)};`,
+      `const outsideOriginCredential = ${JSON.stringify(outsideOriginCredential)};`,
+      `const firstPage = ${JSON.stringify(firstPage)};`,
+      `const secondPage = ${JSON.stringify(secondPage)};`,
+      "const args = process.argv.slice(2);",
+      "appendFileSync(logPath, JSON.stringify(args) + '\\n');",
+      "if (args[0] === 'credentials' && args[1] === 'inspect') {",
+      "  process.stdout.write(JSON.stringify(args[2] === 'outside-origin' ? outsideOriginCredential : credential) + '\\n');",
+      "  process.exit(0);",
+      "}",
+      "if (args[0] === 'github' && args[1] === 'apps' && args[2] === 'list-repos-accessible-to-installation') {",
+      "  process.stdout.write(JSON.stringify(args.includes('--page') ? secondPage : firstPage) + '\\n');",
+      "  process.exit(0);",
+      "}",
+      "process.exit(1);",
+    ].join("\n"), "utf8");
+    await chmod(fakePM, 0o755);
+    const surface = {
+      commands: [
+        {
+          path: "apps list-repos-accessible-to-installation",
+          availability: "implemented",
+          intent: "direct_read",
+          flags: [],
+          api_surface: [{ method: "GET", path: "/installation/repositories" }],
+        },
+      ],
+    };
+
+    const result = await validateCredentialScope({
+      binary: fakePM,
+      root: temp,
+      credential: "github-live-proof",
+      boundary: expectedBoundary,
+      surface,
+      cwd: temp,
+    });
+    assert.deepEqual(result.record.assertion, {
+      kind: "app-installation-repository-boundary",
+      subject: "apps list-repos-accessible-to-installation",
+      matched: true,
+      pages: 2,
+    });
+
+    const invocations = (await readFile(logPath, "utf8")).trim().split("\n").map((line) => JSON.parse(line));
+    const preflights = invocations.filter((args) => args[0] === "github");
+    assert.equal(preflights.length, 2);
+    assert.equal(preflights[0].includes("--page"), false);
+    assert.equal(preflights[1][preflights[1].indexOf("--page") + 1], "2");
+    assert.equal(preflights[1].includes("--json"), true);
+
+    await assert.rejects(
+      validateCredentialScope({
+        binary: fakePM,
+        root: temp,
+        credential: "outside-origin",
+        boundary: expectedBoundary,
+        surface,
+        cwd: temp,
+      }),
+      /canonical GitHub API origin/i,
+    );
+    const afterRejectedOrigin = (await readFile(logPath, "utf8")).trim().split("\n").map((line) => JSON.parse(line));
+    assert.equal(afterRejectedOrigin.filter((args) => args[0] === "github").length, 2);
+  } finally {
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
+test("rejects unsafe boundary and report scalars without retaining their contents", () => {
+  const secret = "-----BEGIN PRIVATE KEY-----\nnot-a-key\n-----END PRIVATE KEY-----";
+  const report = {
+    schema_version: 1,
+    connector: "github",
+    status: "credentialed_live",
+    generated_at: "2026-08-11T00:00:00.000Z",
+    surface_sha256: "a".repeat(64),
+    binary_sha256: "b".repeat(64),
+    case_file_sha256: "c".repeat(64),
+    test_repository: "<run-owned-boundary-repository>",
+    run_boundary: {
+      run_id: secret,
+      owner: "polymetrics-cert",
+      repo: "pm-live-lab-test",
+      owner_id: "O_certification",
+      repo_id: "R_certification",
+      organization_id: "O_certification",
+    },
+    launch: { strategy: "single_barrier_release", operations_released: 0 },
+    implemented_commands: 1,
+    tally: { proven: 0, untestable: 1, failed: 0 },
+    records: [
+      {
+        command: "repo view",
+        state: "untestable",
+        reason: "the immutable boundary fixture is unavailable for this controlled proof",
+      },
+    ],
+  };
+  let rejected;
+  try {
+    validateProofReport(report, ["repo view"]);
+  } catch (error) {
+    rejected = error;
+  }
+  assert.ok(rejected instanceof Error);
+  assert.equal(rejected.message.includes(secret), false);
+  assert.match(rejected.message, /unsafe|report|boundary/i);
+  assert.throws(
+    () => validateProofReport({ ...report, unexpected: "field" }, ["repo view"]),
+    /unsupported field/i,
+  );
+});
+
 test("rejects untyped target, transport, secret, and lifecycle case inputs before starting pm", async () => {
   const temp = await mkdtemp(path.join(os.tmpdir(), "github-live-proof-case-"));
   try {
@@ -288,6 +507,22 @@ test("rejects untyped target, transport, secret, and lifecycle case inputs befor
         readback: { command: "repo view", args: ["--approve=existing-grant"] },
         expected: /lifecycle or credential flags/i,
       },
+      {
+        command: "repo view",
+        args: [],
+        expected: /unsupported field/i,
+        mutate: (target) => { target.undeclared = "field"; },
+      },
+      {
+        command: "repo view",
+        args: [],
+        expected: /unsafe credential-like material/i,
+        absent: "-----BEGIN PRIVATE KEY-----",
+        mutate: (target) => {
+          delete target.args;
+          target.untestable_reason = "-----BEGIN PRIVATE KEY-----\\nsynthetic\\n-----END PRIVATE KEY-----";
+        },
+      },
     ];
     for (const attempt of attempts) {
       const cases = JSON.parse(JSON.stringify(baseCases));
@@ -295,6 +530,7 @@ test("rejects untyped target, transport, secret, and lifecycle case inputs befor
       delete target.untestable_reason;
       target.args = attempt.args;
       if (attempt.readback) target.readback = attempt.readback;
+      if (attempt.mutate) attempt.mutate(target);
       await writeFile(
         casesPath,
         JSON.stringify(cases),
@@ -344,7 +580,7 @@ test("records every implemented command as terminally untestable for an external
         "--report",
         reportPath,
         "--reason",
-        "approved private GitHub credential and dedicated test repository are unavailable in this isolated worktree",
+        "app_installation_credential_unavailable",
       ],
       { encoding: "utf8" },
     );
@@ -357,6 +593,28 @@ test("records every implemented command as terminally untestable for an external
     assert.deepEqual(report.tally, { proven: 0, untestable: expected.length, failed: 0 });
     assert.equal(report.records.length, expected.length);
     assert.equal(report.records.every((record) => record.state === "untestable"), true);
+    assert.deepEqual(report.blocker, {
+      code: "app_installation_credential_unavailable",
+      message: "The captain-authorized GitHub App installation credential is unavailable to this proof runner.",
+    });
+
+    const rejected = spawnSync(
+      process.execPath,
+      [
+        runner,
+        "--external-blocker",
+        "--pm",
+        process.execPath,
+        "--report",
+        reportPath,
+        "--reason",
+        "unapproved free-form blocker narrative",
+      ],
+      { encoding: "utf8" },
+    );
+    assert.notEqual(rejected.status, 0);
+    assert.match(`${rejected.stdout}\n${rejected.stderr}`, /external blocker code/i);
+    assert.equal(`${rejected.stdout}\n${rejected.stderr}`.includes("unapproved free-form blocker narrative"), false);
   } finally {
     await rm(temp, { recursive: true, force: true });
   }

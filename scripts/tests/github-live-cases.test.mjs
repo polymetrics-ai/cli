@@ -88,6 +88,108 @@ test("derives live-case flags from the supplied immutable boundary instead of hi
   });
 });
 
+test("permits only boundary-root reads and the installation repository preflight", () => {
+  const cases = buildCases({
+    commands: [
+      {
+        path: "apps list-repos-accessible-to-installation",
+        availability: "implemented",
+        intent: "direct_read",
+        flags: [],
+        api_surface: [{ method: "GET", path: "/installation/repositories" }],
+      },
+      {
+        path: "repo actions permissions",
+        availability: "implemented",
+        intent: "direct_read",
+        flags: [],
+        api_surface: [{ method: "GET", path: "/repos/{owner}/{repo}/actions/permissions" }],
+      },
+      {
+        path: "orgs list-members",
+        availability: "implemented",
+        intent: "direct_read",
+        flags: [{ name: "org", required: true, type: "string", maps_to: "path.org" }],
+        api_surface: [{ method: "GET", path: "/orgs/{org}/members" }],
+      },
+      {
+        path: "workflows get",
+        availability: "implemented",
+        intent: "direct_read",
+        flags: [{ name: "workflow-id", required: true, type: "integer", maps_to: "path.workflow_id" }],
+        api_surface: [{ method: "GET", path: "/repos/{owner}/{repo}/actions/workflows/{workflow_id}" }],
+      },
+      {
+        path: "gists get",
+        availability: "implemented",
+        intent: "direct_read",
+        flags: [{ name: "gist-id", required: true, type: "string", maps_to: "path.gist_id" }],
+        api_surface: [{ method: "GET", path: "/gists/{gist_id}" }],
+      },
+      {
+        path: "actions enterprise cache",
+        availability: "implemented",
+        intent: "direct_read",
+        flags: [{ name: "enterprise", required: true, type: "string", maps_to: "path.enterprise" }],
+        api_surface: [{ method: "GET", path: "/enterprises/{enterprise}/actions/cache/retention-limit" }],
+      },
+      {
+        path: "users authenticated",
+        availability: "implemented",
+        intent: "direct_read",
+        flags: [],
+        api_surface: [{ method: "GET", path: "/user/repos" }],
+      },
+      {
+        path: "repo archive tarball",
+        availability: "implemented",
+        intent: "binary_download",
+        flags: [{ name: "ref", type: "string", maps_to: "path.ref" }],
+        api_surface: [{ method: "GET", path: "/repos/{owner}/{repo}/tarball/{ref}" }],
+      },
+      {
+        path: "repo snapshot",
+        availability: "implemented",
+        intent: "etl",
+        flags: [],
+        api_surface: [{ method: "GET", path: "/repos/{owner}/{repo}" }],
+      },
+      {
+        path: "project item-list",
+        availability: "implemented",
+        intent: "etl",
+        flags: [{ name: "project-id", required: true, type: "string", maps_to: "query.project_id" }],
+        api_surface: [{ method: "GRAPHQL", path: "ListProjectItems" }],
+      },
+      {
+        path: "project list",
+        availability: "implemented",
+        intent: "etl",
+        flags: [],
+        api_surface: [{ method: "GRAPHQL", path: "ListProjects" }],
+      },
+      {
+        path: "discussion view",
+        availability: "implemented",
+        intent: "etl",
+        flags: [{ name: "number", required: true, type: "integer", maps_to: "query.number" }],
+        api_surface: [{ method: "GRAPHQL", path: "ViewDiscussion" }],
+      },
+    ],
+  }, resolveLiveBoundary(boundary));
+
+  assert.deepEqual(cases.cases.filter((item) => item.args !== undefined), [
+    { command: "apps list-repos-accessible-to-installation", args: [] },
+    { command: "repo actions permissions", args: [] },
+    { command: "orgs list-members", args: ["--org", "polymetrics-cert"] },
+    { command: "repo snapshot", args: [] },
+  ]);
+  for (const item of cases.cases.filter((item) => item.untestable_reason !== undefined)) {
+    assert.match(item.untestable_reason, /immutable.*boundary|typed fixture|targetless/i);
+  }
+  assert.equal(JSON.stringify(cases).includes("provider-live"), false);
+});
+
 test("reports reason-family movement instead of preserving a frozen pre-skip tally", () => {
   assert.deepEqual(
     summarizeCaseMovement({
