@@ -12,6 +12,7 @@ import (
 	"polymetrics.ai/internal/schedule"
 )
 
+// pmcert:workflow schedule
 func runSchedule(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return usageErrorf("usage: pm schedule <create|list|install|remove>")

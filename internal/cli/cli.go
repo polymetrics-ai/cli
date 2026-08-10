@@ -15,6 +15,7 @@ import (
 	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
+	"polymetrics.ai/internal/connectors/certifications"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
@@ -246,14 +247,22 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 			return err
 		}
 		if c, ok := registry.Get(args[1]); ok {
+			status, err := certifications.StatusFor(args[1])
+			if err != nil {
+				return fmt.Errorf("read connector certification status: %w", err)
+			}
 			if jsonOut {
-				response := envelope{"kind": "Connector", "connector": connectors.MetadataOf(c), "manifest": connectors.ManifestOf(c)}
+				response := envelope{"kind": "Connector", "connector": connectors.MetadataOf(c), "manifest": connectors.ManifestOf(c), "certification": status}
 				if def, ok := connectors.DefinitionOf(c); ok && def.Changefeed != nil {
 					response["changefeed"] = def.Changefeed
 				}
 				return writeJSON(stdout, response)
 			}
 			_, _ = fmt.Fprint(stdout, connectors.RenderConnectorManual(c))
+			_, _ = fmt.Fprintf(stdout, "\nCERTIFICATION\n  %s\n", status.Label)
+			if status.Warning != "" {
+				_, _ = fmt.Fprintf(stdout, "  %s\n", status.Warning)
+			}
 			return nil
 		}
 		return fmt.Errorf("connector %q not found", args[1])
@@ -581,6 +590,7 @@ func catalogStatusMessage(status *connectors.DiscoveryStatus) string {
 	}
 }
 
+// pmcert:workflow etl
 func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool, cfg config.Config) error {
 	if len(args) == 0 {
 		return errUsage
@@ -1709,6 +1719,7 @@ func writeAgentModeQuery(stdout io.Writer, rows []connectors.Record, mode string
 	}
 }
 
+// pmcert:workflow reverse_etl
 func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return errUsage

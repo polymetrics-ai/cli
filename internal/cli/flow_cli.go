@@ -16,6 +16,7 @@ import (
 )
 
 // runFlow dispatches pm flow subcommands: plan | preview | run | status | list.
+// pmcert:workflow flow_authoring
 func runFlow(ctx context.Context, cfg config.Config, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return usageErrorf("flow: subcommand required (plan|preview|run|status|list)")

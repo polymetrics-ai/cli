@@ -234,7 +234,8 @@ func renderCertifyReportText(rep certify.Report) string {
 	if rep.Passed {
 		status = "PASS"
 	}
-	fmt.Fprintf(&b, "Certification: %s [%s]\n", rep.Connector, status)
+	fmt.Fprintf(&b, "Legacy certification run: %s [%s]\n", rep.Connector, status)
+	fmt.Fprintln(&b, "  This run does not set the generated connector certification status.")
 	fmt.Fprintf(&b, "  check:    %s\n", rep.Capabilities.Check.Result)
 	fmt.Fprintf(&b, "  catalog:  %s (streams=%d)\n", rep.Capabilities.Catalog.Result, rep.Capabilities.Catalog.Streams)
 	fmt.Fprintf(&b, "  read:     %s (stream=%s records=%d)\n", rep.Capabilities.Read.Result, rep.Capabilities.Read.Stream, rep.Capabilities.Read.Records)

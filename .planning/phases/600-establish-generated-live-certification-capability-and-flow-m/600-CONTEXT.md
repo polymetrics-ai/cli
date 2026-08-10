@@ -39,9 +39,13 @@ bundle `certification.json` files.
   bundle `certification.json` files and fixture filenames are ignored as live
   evidence; they remain untouched and are reported as legacy/non-evidence
   inputs.
-- **D-05:** Live proof is false unless a strict accepted-evidence record names
-  a real-provider or real-instance run and its bounded evidence pointer. A
-  missing or malformed record cannot make any cell true.
+- **D-05:** Live proof is false unless a strict accepted-evidence record embeds
+  sanitized proof from a completed real-provider or real-instance run. For an
+  operation that means the actual request and response representation; a
+  pointer-only claim is invalid. Redaction uses actual prepared secret values
+  on the way into storage and conservatively redacts any request or response
+  value that cannot be proved safe, including response bodies. A missing,
+  malformed, proofless, or unsafe record cannot make any cell true.
 - **D-06:** A connector is certified if and only if every applicable function
   cell has declared, implemented, fixture-tested, and live-tested all true.
   Every non-applicable cell carries a non-empty, machine-checkable reason code
@@ -50,13 +54,20 @@ bundle `certification.json` files.
 ### Pair-scoped end-to-end flows
 
 - **D-07:** Flow certification is modeled from the start as a source connector
-  plus destination connector plus flow kind. Connector-local flow-role facts
-  are generated to explain whether each endpoint may be an API/database source
-  or destination; they are not manually omitted.
+  plus the mandatory local Parquet warehouse mediator plus destination connector
+  plus flow kind. Connector-local flow-role facts are generated to explain
+  whether each endpoint may be an API/database source or destination; they are
+  not manually omitted. Source and destination may be the same connector.
 - **D-08:** A flow cell is true only with end-to-end evidence that independently
-  reads back the destination data. Individually certified endpoints never imply
-  a certified pair. The current absence of durable API sinks and database write
-  paths must yield an honest red baseline.
+  reads back both the warehouse and destination data after one real `pm`
+  round-trip. Individually certified endpoints or separately passing pipeline
+  legs never imply a certified pair. The current absence of durable API sinks
+  and database write paths must yield an honest red baseline.
+- **D-11:** A successful round trip does not imply resumable, receipt-backed,
+  checkpointed, replay-identifiable, or provider-idempotent delivery. Passed
+  flow evidence must serialize these guarantees separately and name a specific
+  limitation for each false guarantee, so one-shot GitHub reverse writes can be
+  recorded as working without being advertised as replay-safe.
 
 ### Delivery shape
 

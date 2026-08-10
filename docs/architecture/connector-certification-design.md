@@ -2,6 +2,56 @@
 
 Status: approved (2026-07-02). Program PRD: `docs/plans/universal-programming-loop-prd.md`.
 
+> **Current certification authority (r1).** The generated proof-bearing
+> artifacts under `internal/connectors/certifications/` supersede the legacy
+> report/cassette material described below for the question “is this connector
+> certified?”. `go run ./cmd/connectorgen certification-matrix --check` reads
+> and validates committed proof first, then checks its capability, workflow,
+> warehouse-facing sync-mode, and source/destination flow matrices against
+> code. A passing legacy `pm connectors certify` report cannot change the
+> generated status. `pm connectors inspect <name>` renders only the binary
+> status derived from those artifacts: `CERTIFIED`, or `COMMUNITY BUILD,
+> UNCERTIFIED`; reachability is never gated.
+>
+> Accepted evidence embeds a publishable transcript with repository-salted HMAC
+> fingerprints substituted before persistence. It is full-parity credential
+> evidence only, never contains raw or encrypted credentials, and records every
+> false flow-delivery guarantee with a named limitation. See
+> `data/cli-live-certification-matrix-r1/report.md` for the concrete schema and
+> first baseline. The historical harness remains useful test infrastructure but
+> is not a certification source until it writes this accepted record shape.
+
+## Generated certification baseline
+
+`go run ./cmd/connectorgen certification-matrix` produces the authoritative,
+reviewable capability baseline at
+`internal/connectors/certifications/capability-matrix.json`. It must be
+regenerated from a source checkout; `--check` and the
+`connectorgen-certification-matrix` Make target fail on any byte drift.
+
+The generator derives its function-kind inventory from the capability contracts
+and engine operation-kind switch, then records one cell per connector and
+function kind. An applicable cell is complete only when its declaration, real
+implementation path, recorded fixture proof, and a passed live-evidence record
+are all present. It follows the registered concrete method to reject direct
+`ErrUnsupportedOperation` stubs; reachability or a command resolving is never
+evidence of correctness. A connector which exposes a stubbed method without
+declaring that capability remains an applicable `declared=false`,
+`implemented=false` row rather than being hidden as not applicable.
+
+Live evidence is accepted only from
+`internal/connectors/certifications/evidence/*.json`. A passed record embeds
+its sanitized proof rather than a pass claim or a local reference. Existing
+definition-owned `certification.json` contracts and fixture/schema files are
+preserved but explicitly inventoried as legacy non-evidence: neither their
+presence nor their filename can certify a connector. Every non-applicable cell
+has a specific machine-readable code and explanation; generic `n/a` and
+`blocked` labels are invalid.
+
+The generator is developer tooling, but its generated status projection is
+embedded in `pm connectors inspect`, which is the point-of-use user warning.
+Capability completion by itself is not a certification claim.
+
 ## Load-bearing facts (verified in code)
 
 1. **`cli.Run(args, stdout, stderr) int` is a pure in-process entrypoint** (`internal/cli/cli.go:24`).

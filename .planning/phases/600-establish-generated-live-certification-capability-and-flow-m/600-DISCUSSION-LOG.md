@@ -38,6 +38,19 @@ and Employment Hero fixtures are not accepted live certification artifacts.
 **Auto-selected choice:** Source/destination pair cells. The captain's
 extension explicitly requires non-compositional flow evidence.
 
+## Captain clarification: warehouse mediation and delivery guarantees
+
+| Option | Description | Selected |
+|---|---|---|
+| Direct endpoint hop | Treat API-to-API as source directly to destination | |
+| Warehouse-mediated round trip | Require source → local Parquet warehouse → destination, including same-connector pairs | ✓ |
+
+**Captain-selected choice:** Every flow uses the local warehouse mediator and
+is live only after a real `pm` round trip with independent warehouse and
+destination readbacks. A working flow separately reports whether it is
+resumable, receipt-backed, checkpointed, replay-identifiable, and backed by a
+provider idempotency key; false guarantees require named limitations.
+
 ## Delivery shape
 
 | Option | Description | Selected |

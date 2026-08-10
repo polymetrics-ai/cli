@@ -95,6 +95,8 @@ type BinaryDownloadResult struct {
 //     escaping symlinks and closes the TOCTOU race that a lexical path check
 //     (safety.ValidateLocalWritePath) cannot;
 //   - extract_archives is refused outright.
+//
+// pmcert:executes binary_download
 func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRequest, h Hooks) (BinaryDownloadResult, error) {
 	if err := ctx.Err(); err != nil {
 		return BinaryDownloadResult{}, err

@@ -313,8 +313,10 @@ DESCRIPTION
   Connectors expose local metadata for ETL read streams and reverse ETL write
   actions when those executable surfaces are implemented. Planned ledger-only
   connectors remain visible in the catalog without executable streams or write
-  actions. Run pm connectors inspect <name> to see write=true/false, ETL
-  STREAMS, and REVERSE ETL ACTIONS without reading credentials.
+	  actions. Run pm connectors inspect <name> to see write=true/false, ETL
+	  STREAMS, REVERSE ETL ACTIONS, and the generated certification quality
+	  signal without reading credentials. COMMUNITY BUILD, UNCERTIFIED is a
+	  warning only; the connector remains reachable.
 
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy
@@ -389,14 +391,18 @@ ACTIONS
 
   inspect <name>
     Prints a man-style connector manual for a bare connector name. Use --json
-    to print structured metadata for agents. Inspection is metadata-only and
-    does not resolve credentials.
+	  to print structured metadata for agents, including the generated binary
+	  certification status. Inspection is metadata-only and does not resolve
+	  credentials. A connector is either CERTIFIED or COMMUNITY BUILD,
+	  UNCERTIFIED; the latter remains available with a warning.
 
   help <name>
     Alias for the human connector manual.
 
-  certify <connector>
-    Runs connector certification. With --full --json from a source checkout,
+	  certify <connector>
+	    Runs the legacy connector test harness. It does not set the generated
+	    CERTIFIED status; only proof-bearing certification records can do that.
+	    With --full --json from a source checkout,
     the report includes the API-surface inventory and provider-artifact
     provenance evidence separately from endpoint coverage and connector
     capabilities. Version-1 and pre-ledger inventories remain legacy_unverified
