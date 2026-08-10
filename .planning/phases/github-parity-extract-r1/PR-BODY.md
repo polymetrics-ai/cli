@@ -18,8 +18,8 @@ under `.planning/phases/github-parity-extract-r1/`.
   transcripts, and website/catalog artifacts through their owning generators. No generated file
   was hand-merged.
 - Added exhaustive source accounting and deterministic provider-double evidence:
-  1,224 endpoints (1,220 REST + 4 GraphQL), 1,147 covered, 77 blocked, 37 streams, 574 write
-  actions, 377 operations, and 1,179 CLI commands.
+  1,225 endpoints (1,221 REST + 4 GraphQL), 1,225 covered, 0 blocked, 37 streams, 607 write
+  actions, 768 operations, and 1,571 CLI commands.
 - Kept the exhaustive provider-double implementation in test-only scope and verified the
   connector-boundary scanner remains clean; no GitHub-specific shared production policy was added.
 - Added current-head binary dispatch evidence for every command and explicit generic routes for
@@ -46,9 +46,9 @@ approval-gated.
 
 | Evidence | Result |
 | --- | --- |
-| Source-derived operation/command ledgers | 1,224 endpoints; 1,179 commands; all declarations accounted for |
-| Built-binary reachability | 1,179 / 1,179 exact `pm github <path>` names reachable; 1,081 implemented, 37 partial, 5 unsafe/disallowed, 21 unsupported-local, 8 planned, 27 unsupported-api |
-| Deterministic provider double | 37 streams + 574 writes + 377 operations; 985 exercised, 3 concrete untestable, 0 failed |
+| Source-derived operation/command ledgers | 1,225 endpoints; 1,571 commands; all declarations accounted for |
+| Built-binary reachability | 1,571 / 1,571 exact `pm github <path>` names reachable; 1,521 implemented, 0 partial, 0 unsafe/disallowed, 23 unsupported-local, 0 planned, 27 unsupported-api |
+| Deterministic provider double | 37 streams + 607 writes + 768 operations; 1,571 reachable commands, 0 failed |
 | Generic ETL/reverse-ETL routes | 23 / 23 streams and 38 / 38 write actions exercised through the generic engine routes |
 | Limiter proof | 2 same-scope requests, 1 local 60-second wait, 0 provider 429s; independent scope adds 0 waits |
 | Current-head credentialed live proof | 124 / 1,081 proven; 957 terminally `UNTESTABLE` with concrete target, permission, or safety reasons; 0 `FAILED` |

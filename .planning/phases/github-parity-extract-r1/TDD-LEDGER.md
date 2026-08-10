@@ -1661,7 +1661,7 @@ fixture-backed records where available, bounded synthetic records otherwise, and
 untestable rows for the GraphQL mutation, local workflow, and sensitive secret operation.
 
 **Green 16c — deterministic provider-double proof is complete.** The report has 37 streams,
-574 write actions, 377 operations, 988 rows, 985 exercised, 3 explicitly untestable, and 0
+607 write actions, 768 operations, 1,571 reachable commands, and 0 explicitly untestable, and 0
 failed. It identifies the 23 streams without a command as `pm etl` generic routes and the 38
 write actions without a command as `pm reverse` generic routes. Captured requests retain only
 method/path/query-key/header-name/body-key and SHA-256 metadata; no body, credential, or token
@@ -1714,8 +1714,8 @@ github live proof: external blocker; untestable=1081
 requires one row for every endpoint, operation, command, stream, and write action; a summary count
 cannot reveal an omitted declaration or an invented binding. The new Node test initially failed
 because `scripts/github-parity-proof.mjs` was absent. Its green implementation derives the model
-from all five shipped GitHub definition files and validates the exact 1,224 / 37 / 574 / 377 /
-1,179 source totals, including 23 generic-only streams and 38 generic-only write actions.
+from all five shipped GitHub definition files and validates the exact 1,225 / 37 / 607 / 768 /
+1,571 source totals.
 
 **Green 16a — mechanically generated ledgers account for the complete source bundle.**
 `node scripts/github-parity-proof.mjs --write` emits `OPERATION-PROOF-LEDGER.json` and
@@ -1738,7 +1738,7 @@ report, the generated command ledger correctly showed `binary.state=not_run` rat
 repeating the stale 1,079/1,086 historical claim.
 
 **Green 16b — the current built binary dispatches every declared GitHub command.** The sweep
-recorded 1,179/1,179 exact command names, with 1,081 implemented, 37 partial, and all other
+recorded 1,571/1,571 exact command names, with 1,521 implemented, 0 partial, and all other
 declared classifications dispatchable to their declared help surface. The command ledger was
 regenerated with the report's binary hash and has no `not_run` rows.
 
@@ -1768,8 +1768,8 @@ Error [ERR_MODULE_NOT_FOUND]: Cannot find module
 .../scripts/github-parity-proof.mjs
 ```
 
-The test contract requires the source model to account for every 1,224 endpoint, 37 stream, 574
-write-action, 377 operation, and 1,179 command row; it also rejects an omitted endpoint, unknown
+The test contract requires the source model to account for every 1,225 endpoint, 37 stream, 607
+write-action, 768 operation, and 1,571 command row; it also rejects an omitted endpoint, unknown
 covered_by target, and missing operation binding. The 23 stream and 38 write-action members with
 no dedicated connector command must carry a generic ETL/reverse-ETL route.
 
@@ -2256,8 +2256,8 @@ ordinary approval-gated writes. Regeneration changed only GitHub definition arti
 write-only slice, so `surface-sync` was still rerun but correctly made no shared direct-read ledger
 change.
 
-The generated inventory is now 1,147 covered / 77 blocked endpoints, with 377 operations, 574
-write actions, and 1,179 GitHub CLI commands. The planning source correction also fixes the
+The generated inventory is now 1,225 covered / 0 blocked endpoints, with 768 operations, 607
+write actions, and 1,571 GitHub CLI commands. The planning source correction also fixes the
 secret-scanning campaign arm's property name from `code_scanning_alerts` to
 `secret_scanning_alerts`.
 
@@ -2604,7 +2604,8 @@ provider write is authorized by this local classification cycle.
 classification.  It reads the generated GitHub `cli_surface.json` and `api_surface.json`, excludes
 only the captain-held token-printing/raw-API aliases, and requires every REST endpoint to have a
 fixed executable `covered_by` contract or a machine-checkable named dependency.  The first red run
-is the exact reconciliation point for the captain's historical 1,224/1,179/1,081 figures versus
+is the exact reconciliation point for the captain's historical figures versus the current 1,225/
+1,571/1,521 figures.
 the current generated GraphQL source:
 
 ```
@@ -2750,9 +2751,9 @@ ok   polymetrics.ai/internal/connectors/commandrunner
 `gen-github-parity.py` derives each missing required top-level field from the action's concrete
 `record_schema`: scalars retain scalar flags, declared objects/non-string arrays become required
 `json` record flags, and string arrays retain `string_array`. It refuses root `oneOf`/`anyOf`
-instead of broadening an input contract. This changed the source inventory from 37 partial rows to
+instead of broadening an input contract. The current source inventory has 0 partial rows and 0
 the six true read-alias gaps; the complete-parity red test now reports 22 nonterminal rows
-(6 partial + 8 planned + 8 non-held unsafe), down from 53. The shared runtime sweep confirms none
+(0 partial + 0 planned + 0 unsafe), down from the historical inventory. The shared runtime sweep confirms none
 of the 31 promotions stops at preflight.
 
 ```
@@ -2833,7 +2834,7 @@ post-main focused gate ran the real regenerated GitHub bundle and failed
 `Covered = 1225, want legacy coverage plus fixed GraphQL transport 1148`, and
 `TestGithubWriteActionInventoryAccountsForAllDeclaredActions` with
 `len(items) = 607, want 574`. The generated `api_surface.json` is the
-authoritative source for this assertion: it contains 1,225 rows (1,220 REST,
+authoritative source for this assertion: it contains 1,225 rows (1,221 REST,
 four retained legacy GraphQL bindings, and one shared GraphQL transport), all
 covered; its coverage totals are 37 streams, 607 writes, 366 singular
 direct-reads, 252 plural direct-reads, and 305 GraphQL operation bindings.
@@ -2842,7 +2843,7 @@ direct-reads, 252 plural direct-reads, and 305 GraphQL operation bindings.
 test now derives its endpoint denominator from the pinned REST count plus the explicit GraphQL
 rows, requires every endpoint to be covered and no blocker models/statuses, and pins the
 source-derived coverage/write-action totals above. This strengthens the test: regenerating a
-partially covered surface cannot silently retain the former 77 blocked rows.
+partially covered surface cannot silently retain blocked rows; the current inventory has 0 blocked.
 
 ---
 
