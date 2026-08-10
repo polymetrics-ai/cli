@@ -505,8 +505,9 @@ were normalized to the engine interpolation dialect by the generator, not hand-e
 
 ## Current-ref — merged GitHub surface
 
-**Measurement:** 2026-08-10 at ref `9cc25b5c47c01277d77e2b8dcfef08801e8ad0c7`, derived from
-the checked-in GitHub source bundles and generated ledgers.
+**Authoritative measurement:** 2026-08-10 at ref `9cc25b5c47c01277d77e2b8dcfef08801e8ad0c7`,
+derived from the checked-in GitHub source bundles: `cli_surface.json`, `api_surface.json`,
+`streams.json`, `writes.json`, and `operations.json`.
 
 - 1,571 commands: 1,521 implemented, 23 unsupported-local, and 27 unsupported-api; zero
   partial, planned, or `unsafe_or_disallowed` commands.

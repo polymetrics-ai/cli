@@ -11,13 +11,9 @@ The complete GSD/no-mistakes delivery record is included under
 
 ## Current-ref — merged GitHub surface
 
-Measured from the checked-in GitHub source bundles and generated ledgers at
-`9cc25b5c47c01277d77e2b8dcfef08801e8ad0c7` on 2026-08-10:
-
-- 1,571 commands: 1,521 implemented, 23 unsupported-local, and 27 unsupported-api; zero
-  partial, planned, or `unsafe_or_disallowed` commands.
-- 1,225 / 1,225 endpoints covered with zero blocked; 37 streams, 607 write actions, and 768
-  operations.
+The authoritative source-derived count and its provenance are in
+[VERIFICATION.md](VERIFICATION.md). This PR body does not duplicate that generated-surface
+measurement.
 
 The historical execution evidence below remains tied to its original checkpoint and does not
 assert current-ref execution coverage.
