@@ -1252,6 +1252,7 @@ func copyMaterializedClassifier(dst *engine.SurfaceEndpoint, src engine.SurfaceE
 		coverage := *src.CoveredBy
 		coverage.Writes = append([]string(nil), src.CoveredBy.Writes...)
 		coverage.DirectReads = append([]string(nil), src.CoveredBy.DirectReads...)
+		coverage.Writes = append([]string(nil), src.CoveredBy.Writes...)
 		dst.CoveredBy = &coverage
 		return
 	}
@@ -1418,11 +1419,11 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 		if err != nil {
 			return engine.CLISurface{}, fmt.Errorf("write action %q flags: %w", action.Name, err)
 		}
-		// A reverse-ETL action with a required object/array record cannot be
-		// honestly exposed as a scalar CLI-flag command. The action remains
-		// executable through the existing generic plan/preview/approval/execute
-		// workflow; this connector namespace deliberately advertises only the
-		// actions whose required record contract can be derived and validated.
+		// A reverse-ETL action is advertised only when every required field has a
+		// faithful declaration-bound flag contract. Required containers use the
+		// existing `json` flag type: commandrunner proves that it names one
+		// top-level object/array field of this exact closed record schema before
+		// it can form a plan. This is deliberately not a raw request-body route.
 		if !representable {
 			continue
 		}
@@ -1461,10 +1462,11 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 }
 
 // materializedWriteFlags derives the smallest complete flag contract for a
-// reverse-ETL command. It intentionally refuses to flatten object or
-// object-array inputs into made-up scalar flags: those actions are still
-// available via the typed generic reverse-ETL workflow, but are not promoted
-// as a connector command unless every required value has a faithful flag type.
+// reverse-ETL command. Scalar leaves keep their scalar flags. A required
+// object or array is represented by one `json` flag on its top-level record
+// property, which is the narrow structured-input form commandrunner preflights
+// against the action's own closed schema. It never flattens a container into
+// invented scalar flags or admits an arbitrary request body.
 func materializedWriteFlags(action engine.WriteAction) ([]engine.CLIFlag, bool, error) {
 	if len(action.RecordSchema) == 0 {
 		return nil, false, errors.New("record_schema is required")
@@ -1475,7 +1477,11 @@ func materializedWriteFlags(action engine.WriteAction) ([]engine.CLIFlag, bool, 
 	}
 	required := map[string]bool{}
 	for _, path := range schema.requiredMappingPaths("") {
-		required[path] = true
+		materializedPath, err := materializedRequiredFlagPath(schema, path)
+		if err != nil {
+			return nil, false, err
+		}
+		required[materializedPath] = true
 	}
 	for _, path := range action.PathFields {
 		required[path] = true
@@ -1500,12 +1506,31 @@ func materializedWriteFlags(action engine.WriteAction) ([]engine.CLIFlag, bool, 
 	return flags, true, nil
 }
 
+// materializedRequiredFlagPath turns a required descendant of a top-level
+// object/array into that container's one typed JSON flag. The runtime only
+// accepts JSON at this exact top-level record boundary, so keeping the
+// normalization here makes the materializer and preflight agree.
+func materializedRequiredFlagPath(schema *cliRecordSchemaNode, path string) (string, error) {
+	if strings.TrimSpace(path) == "" {
+		return "", errors.New("required record path is empty")
+	}
+	topLevel, _, _ := strings.Cut(path, ".")
+	node, err := schema.recordPath(topLevel)
+	if err != nil {
+		return "", err
+	}
+	if node.isObject() || node.isArray() {
+		return topLevel, nil
+	}
+	if topLevel != path {
+		return "", fmt.Errorf("required nested scalar path %q has no declared container", path)
+	}
+	return path, nil
+}
+
 func materializedWriteFlag(schema *cliRecordSchemaNode, path string) (engine.CLIFlag, bool, error) {
-	// Nested object/array paths would need structured JSON flags. The command
-	// surface has no such escape hatch, so leave that action on its existing
-	// reverse-ETL route rather than misrepresenting the input contract.
 	if strings.Contains(path, ".") {
-		return engine.CLIFlag{}, false, nil
+		return engine.CLIFlag{}, false, fmt.Errorf("materialized flag path %q must be top-level", path)
 	}
 	node, err := schema.recordPath(path)
 	if err != nil {
@@ -1542,10 +1567,12 @@ func materializedCLIFlagType(node *cliRecordSchemaNode) (string, bool) {
 	case "boolean":
 		return "boolean", true
 	case "array":
-		if node.items == nil || len(node.items.effectiveTypes()) != 1 || node.items.effectiveTypes()[0] != "string" {
-			return "", false
+		if node.items != nil && len(node.items.effectiveTypes()) == 1 && node.items.effectiveTypes()[0] == "string" {
+			return "string_array", true
 		}
-		return "string_array", true
+		return "json", true
+	case "object":
+		return "json", true
 	default:
 		return "", false
 	}

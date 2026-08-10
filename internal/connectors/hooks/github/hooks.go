@@ -246,6 +246,37 @@ func (h *Hooks) HandlesWriteAction(action engine.WriteAction) bool {
 	}
 }
 
+// MapWriteRecord pins the one field that distinguishes `repo archive` from
+// `repo unarchive`. Both ride PATCH /repos/{owner}/{repo}, the same endpoint as
+// the generic `repo update`, which is why they exist as separate write actions
+// rather than as flags: a command named "archive" that only archives when the
+// caller also supplies archived=true is a command that lies.
+//
+// They pin the record rather than the request, unlike closeResource, so the
+// declarative path stays intact: preview and execution build one body from one
+// record, which is what makes the digest an operator approves the request that
+// runs. The action's body_fields allow-list keeps the pinned field the only one
+// sent.
+func (h *Hooks) MapWriteRecord(action engine.WriteAction, rec connectors.Record) (connectors.Record, bool, error) {
+	switch action.Name {
+	case "archive_repo":
+		return pinRepoArchived(rec, true), true, nil
+	case "unarchive_repo":
+		return pinRepoArchived(rec, false), true, nil
+	default:
+		return rec, false, nil
+	}
+}
+
+func pinRepoArchived(rec connectors.Record, archived bool) connectors.Record {
+	pinned := make(connectors.Record, len(rec))
+	for key, value := range rec {
+		pinned[key] = value
+	}
+	pinned["archived"] = archived
+	return pinned
+}
+
 // createLabel/updateLabel reproduce githubCreateLabelPayload/
 // githubUpdateLabelPayload: a leading "#" on color is stripped
 // (github.go:1120,1133; ledger G3 — update_label's fields are all optional).

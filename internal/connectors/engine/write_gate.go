@@ -65,9 +65,23 @@ func DestructiveTargetForOperation(connector string, operation OperationSpec) De
 	if operation.Confirmation != nil {
 		confirmation = connectors.ConfirmationKind(strings.TrimSpace(string(operation.Confirmation.Kind)))
 	}
+	// Secret operations are required by the bundle validator to declare
+	// typed_confirmation. Make that declaration effective at the shared
+	// dispatch gate as well: otherwise a generated secret GraphQL mutation
+	// could carry a correct redaction policy yet reach the provider without the
+	// promised preview/approval/confirmation evidence.
+	if confirmation == "" && operation.SensitivePolicy != nil && strings.EqualFold(strings.TrimSpace(operation.SensitivePolicy.ApprovalMode), "typed_confirmation") {
+		confirmation = connectors.ConfirmationKindDestructive
+	}
 	method := ""
 	if operation.REST != nil {
 		method = operation.REST.Method
+	} else if operation.Kind == "graphql_mutation" && operation.GraphQL != nil {
+		// A fixed GraphQL mutation is transported as POST, even though its
+		// safety class comes from the declared mutation metadata rather than
+		// HTTP DELETE. Recording the actual transport makes preview grants bind
+		// the request the executor will issue.
+		method = http.MethodPost
 	}
 	return DestructiveTarget{
 		Connector:     connector,

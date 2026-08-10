@@ -329,7 +329,8 @@ CATALOG
 
 GITHUB AUTHENTICATION
   public
-    Unauthenticated public repository reads. Configure owner and repo.
+    Unauthenticated public repository reads. Configure owner and repo plus
+    public_access=true (or auth_type=public).
     This mode cannot execute reverse ETL writes.
 
   token
@@ -517,7 +518,8 @@ DESCRIPTION
 
   ETL runs read records from a configured source connector stream, add
   Polymetrics metadata fields, and write records to the destination connector.
-  The MVP warehouse destination stores tables as JSONL files.
+  The warehouse destination uses an appendable JSONL write-ahead log and rebuilds
+  each final table as a single Parquet file.
 
   ETL and reverse ETL are separate first-class connector surfaces: ETL reads
   streams, while pm reverse executes connector write actions where the upstream
@@ -731,8 +733,10 @@ SYNOPSIS
 USAGE
   pm reverse list [--json]
   pm reverse plan <name> --source-table <table> [--connection name] --destination connector:credential --map source:dest [--json]
-  pm reverse preview <plan-id> [--json]
-  pm reverse run <plan-id> --approve <token> [--confirm <challenge>] [--json]
+  pm reverse preview <plan-id> [--<withheld-flag> <value>...]
+    [--from-env <env-only-flag>=ENV]... [--json]
+  pm reverse run <plan-id> --approve <token> [--confirm <challenge>]
+    [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]... [--json]
   pm reverse status <run-id> [--json]
 
 DESCRIPTION
@@ -751,8 +755,27 @@ DESCRIPTION
   Agents can create and preview plans, but JSON plan output omits approval
   tokens so an agent cannot silently approve its own external mutation.
   The connector command runner does not mask ETL or reverse-ETL command records
-  from declared redact_fields. Those declarations remain load-compatible metadata.
+  from declared redact_fields; it dispatches the values it was given.
   This runner policy does not change source-table output or other execution paths.
+
+  A connector-command plan does not persist the fields declared sensitive by the
+  write action it runs (writes.json redact_fields) or, for a direct_write
+  operation, by that operation (operations.json sensitive_policy.redact_fields).
+  A redact_fields list on the command itself is not consulted, so a command-level
+  declaration withholds nothing; pm connectors inspect <name> --json shows every
+  declaration, not only the binding one.
+  Withheld keys are removed outright rather than stored as a placeholder, so they
+  never reach the project state file. Preview and run therefore need those values
+  re-supplied on the same command. Ordinary withheld fields use the connector
+  command's own --<flag> <value> form. A field declared env_only must instead
+  use --from-env <flag>=ENV, which reads the value from the named environment
+  variable without placing it in argv. For example: pm reverse preview <plan-id>
+  --from-env input=ENV, and use the same form again on pm reverse run.
+  Where a declared field covers a subtree that several flags fill, those flags
+  re-supply it. Only fields the plan actually removed are asked for, so a
+  declared field you never supplied is never demanded back. A re-supplied value
+  that does not match the one the plan was built from fails the plan-hash check
+  before anything is dispatched. Nothing is re-persisted at preview or run.
   DryRunWrite engine preview warnings preserve the resolved execution request.
   Engine direct-read, operation-direct-read, and binary-download executors
   preserve bounded HTTP URL/query/body diagnostics before downstream rendering.
@@ -801,13 +824,19 @@ COMMANDS
     run, persist its digest, and issue the approval token in human-readable
     output. JSON omits the token. DryRunWrite engine preview warnings preserve
     the resolved execution request, including fields declared in redact_fields;
-    that preview is what the digest binds before dispatch.
+    that preview is what the digest binds before dispatch. A connector-command
+    plan that withheld declared sensitive fields needs them re-supplied here:
+    --from-env <flag>=ENV for an env_only field, or --<flag> <value> otherwise.
+    The error names each missing flag.
 
   run
     Execute a stored plan only when --approve is supplied with the approval
     token from human-readable plan or preview output. Destructive plans require
     a matching persisted preview and the closed --confirm destructive value. A
-    failed dispatch is recorded; pm does not automatically retry a failed dispatch.
+    connector-command plan that withheld declared sensitive fields needs the
+    same re-supply form: --from-env <flag>=ENV for an env_only field, or
+    --<flag> <value> otherwise. A failed dispatch is recorded; pm does not
+    automatically retry a failed dispatch.
 
   status
     Show a completed or failed reverse ETL run by run ID.
@@ -822,6 +851,10 @@ FLAGS
   --limit n                    maximum source rows to include in the plan
   --approve token              approval token required by run
   --confirm challenge          typed confirmation required by gated plans
+  --<withheld-flag> value      re-supply a non-env_only field the plan withheld;
+                               the flag is connector-owned, never persisted
+  --from-env flag=ENV          re-supply a declared env_only field from ENV;
+                               its value never enters argv or project state
   --json                       render machine-readable JSON
   --root path                  project root containing .polymetrics
 
@@ -869,9 +902,14 @@ SECURITY
   Execution requires a time-bounded, single-use approval token. Destructive
   tokens are created only after preview; execution revalidates the preview
   digest before dispatch. JSON plan and preview output omit tokens so agents
-  cannot silently self-approve external writes. DryRunWrite engine preview
-  warnings preserve the resolved execution request, including fields declared
-  in redact_fields. Engine direct-read, operation-direct-read, and binary-
+  cannot silently self-approve external writes. A connector-command plan never
+  persists the fields its write action declares in redact_fields, or its
+  direct_write operation declares in sensitive_policy.redact_fields; they are
+  re-supplied per invocation and are not written back at preview or run. A
+  redact_fields list declared on the command itself is not a withholding
+  guarantee and never has been. DryRunWrite engine
+  preview warnings preserve the resolved execution request, including fields
+  declared in redact_fields. Engine direct-read, operation-direct-read, and binary-
   download executors preserve bounded HTTP URL/query/body diagnostics before
   downstream rendering. These engine-level guarantees do not establish
   complete pm CLI output. Credential storage remains encrypted at rest.

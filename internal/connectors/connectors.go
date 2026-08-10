@@ -297,11 +297,16 @@ type DirectReadRequest struct {
 }
 
 type OperationDirectReadRequest struct {
-	Operation    string
-	Config       RuntimeConfig
-	PathParams   map[string]string
-	Query        map[string]string
-	Body         map[string]any
+	Operation  string
+	Config     RuntimeConfig
+	PathParams map[string]string
+	Query      map[string]string
+	Body       map[string]any
+	// RawBody is available only to an operation that explicitly declares a
+	// text/plain POST with a root string body schema. It is a pointer so an
+	// absent body is distinct from an intentionally empty one; the operation
+	// schema decides whether either is valid.
+	RawBody      *string
 	MaxBytes     int
 	OutputPolicy string
 	RedactFields []string
@@ -316,11 +321,43 @@ type DirectReadResult struct {
 	Path      string `json:"path"`
 	Status    int    `json:"status"`
 	Body      any    `json:"body"`
+	// GraphQL is present only for a declared fixed-document GraphQL operation.
+	// It deliberately exposes a small, redacted response summary rather than
+	// a provider error envelope, so a provider cannot turn errors/extensions
+	// into a secret-bearing output side channel.
+	GraphQL *GraphQLResponseMetadata `json:"graphql,omitempty"`
 	// Page answers "is this all of it?" — the question a direct-read caller
 	// previously had no way to ask. A single Status+Body cannot represent
 	// page 2..N, so before this field a truncated collection and a complete
 	// one were indistinguishable at status 200.
 	Page DirectReadPage `json:"page"`
+}
+
+// GraphQLResponseMetadata is the bounded protocol metadata retained for a
+// fixed-document GraphQL operation. Body remains the declared operation's
+// data value; errors and rate-limit fields never alter the document or its
+// selection set.
+type GraphQLResponseMetadata struct {
+	PartialData bool                 `json:"partial_data,omitempty"`
+	Errors      []GraphQLResultError `json:"errors,omitempty"`
+	RateLimit   *GraphQLRateLimit    `json:"rate_limit,omitempty"`
+}
+
+// GraphQLResultError intentionally carries only a sanitized, bounded message.
+// Provider extensions and paths may echo caller inputs or internal identifiers,
+// so neither is a CLI response contract.
+type GraphQLResultError struct {
+	Message string `json:"message"`
+}
+
+// GraphQLRateLimit is the fixed, scalar rate-limit selection a declared
+// GraphQL operation may return. It is observation metadata; requester-side
+// admission and accounting remain the engine's declared rate-limit policy.
+type GraphQLRateLimit struct {
+	Limit     int    `json:"limit,omitempty"`
+	Cost      int    `json:"cost,omitempty"`
+	Remaining int    `json:"remaining,omitempty"`
+	ResetAt   string `json:"reset_at,omitempty"`
 }
 
 // Reasons a direct read's page is not confirmed complete. They are declared
@@ -414,6 +451,15 @@ type OperationDirectReadPreflighter interface {
 	PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error
 }
 
+// OperationStructuredJSONVariablePreflighter exposes the deliberately narrow
+// admission check for a structured CLI value in a fixed GraphQL operation.
+// The operation declaration remains the only authority for which one
+// top-level variable may receive an object/array; this interface must never be
+// generalized into a request-body or raw-GraphQL parser.
+type OperationStructuredJSONVariablePreflighter interface {
+	PreflightOperationStructuredJSONVariable(operation, variable string) error
+}
+
 // OperationDirectWriteRequest is one declared, typed rest_write invocation.
 //
 // A caller must obtain PreviewDigest from PreviewOperationDirectWrite before
@@ -434,16 +480,17 @@ type OperationDirectWriteRequest struct {
 	PreviewDigest string
 }
 
-// OperationDirectWriteResult is the typed result of a single declared
-// rest_write operation. Body is nil only for an output policy that
+// OperationDirectWriteResult is the typed result of one declared REST or
+// fixed-document GraphQL mutation. Body is nil only for an output policy that
 // intentionally discards response content.
 type OperationDirectWriteResult struct {
-	Connector string `json:"connector"`
-	Operation string `json:"operation"`
-	Method    string `json:"method"`
-	Path      string `json:"path"`
-	Status    int    `json:"status"`
-	Body      any    `json:"body,omitempty"`
+	Connector string                   `json:"connector"`
+	Operation string                   `json:"operation"`
+	Method    string                   `json:"method"`
+	Path      string                   `json:"path"`
+	Status    int                      `json:"status"`
+	Body      any                      `json:"body,omitempty"`
+	GraphQL   *GraphQLResponseMetadata `json:"graphql,omitempty"`
 }
 
 // OperationDirectWriteMetadata is the no-network operation metadata needed by
@@ -463,18 +510,34 @@ type OperationDirectWriteMetadata struct {
 	// identities must be captured before preview, even when their names do not
 	// follow a file_path convention.
 	PayloadFileFields []string
+	// RedactFields is the operation's declared sensitive_policy.redact_fields.
+	// It is the ONLY redaction source for an operation-backed reverse plan:
+	// operation IDs and write-action names are separate namespaces that
+	// collide by name in at least one bundle, so resolving one against the
+	// other would withhold an unrelated set.
+	RedactFields []string
 }
 
 // OperationDirectWriter is implemented by connectors that can preview and
-// execute a declared rest_write operation through the shared write gate.
+// execute a declared REST or fixed-document GraphQL mutation through the
+// shared write gate.
 type OperationDirectWriter interface {
 	PreviewOperationDirectWrite(context.Context, OperationDirectWriteRequest) (WritePreview, error)
 	OperationDirectWrite(context.Context, OperationDirectWriteRequest) (OperationDirectWriteResult, error)
 }
 
+// OperationDirectWritePreflighter exposes the no-network admission check for
+// a command's exact direct-write binding. A command cannot be executable merely
+// because an operation has compatible metadata: its method, provider-relative
+// path, and output policy must match the fixed declaration that the runtime
+// will dispatch.
+type OperationDirectWritePreflighter interface {
+	PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error
+}
+
 // OperationDirectWriteMetadataProvider exposes the plan-safe metadata for a
-// declared rest_write operation without preparing credentials or making a
-// network request.
+// declared REST or fixed-document GraphQL mutation without preparing
+// credentials or making a network request.
 type OperationDirectWriteMetadataProvider interface {
 	OperationDirectWriteMetadata(operation string) (OperationDirectWriteMetadata, error)
 }

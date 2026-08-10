@@ -35,6 +35,50 @@ func TestCheckAPISurface_POSTDirectReadDoesNotRequireWriteCapability(t *testing.
 	}
 }
 
+// A fixed GraphQL query is a read even though its shared transport is POST.
+// The executable source root must therefore not let a connector claim
+// capabilities.read=false merely because the REST-specific check only looked
+// for GET endpoints.
+func TestCheckAPISurface_FixedGraphQLQueryRequiresReadCapability(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Read: false, Write: false},
+		},
+		Operations: []engine.OperationSpec{{
+			ID:      "acme.graphql.query.viewer",
+			Kind:    "graphql_query",
+			GraphQL: &engine.GraphQLOperationSpec{Path: "/graphql"},
+		}},
+		Surface: &engine.APISurface{
+			API: "https://api.acme.test",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "POST",
+				Path:      "/graphql",
+				CoveredBy: &engine.SurfaceCoverage{Operations: []string{"acme.graphql.query.viewer"}},
+			}},
+		},
+	}
+
+	findings := checkAPISurface(b)
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "capabilities.read") {
+		t.Fatalf("checkAPISurface GraphQL read-capability findings = %+v, want one read-capability finding", findings)
+	}
+}
+
+// One endpoint can back more than one write action, and covered_by.write is a
+// single string. github ships three actions on PATCH /repos/{owner}/{repo}/issues/
+// {issue_number} -- update_issue, close_issue and reopen_issue -- because the
+// close and reopen bodies are distinct contracts assembled by a Go hook that
+// switches on the action NAME (internal/connectors/hooks/github/hooks.go), and
+// certify's create/cleanup pairing binds create_issue to close_issue.
+//
+// Before covered_by.writes existed, the only way to reference all three was to
+// invent a second path -- "PATCH .../issues/{issue_number} (close)" -- encoding
+// a behaviour variant into the path. No such path is documented by any provider,
+// and it corrupts every documented-operation count taken from api_surface.json.
+// The plural array mirrors covered_by.direct_reads, which already solved exactly
+// this shape for reads.
 func TestCheckAPISurface_EndpointMayBackMultipleWriteActions(t *testing.T) {
 	b := engine.Bundle{
 		Name: "acme",
@@ -60,6 +104,8 @@ func TestCheckAPISurface_EndpointMayBackMultipleWriteActions(t *testing.T) {
 	}
 }
 
+// A plural entry naming a write action the bundle does not declare is still a
+// finding: widening the shape must not widen what goes unchecked.
 func TestCheckAPISurface_PluralWriteCoverageStillRejectsUnknownTargets(t *testing.T) {
 	b := engine.Bundle{
 		Name: "acme",

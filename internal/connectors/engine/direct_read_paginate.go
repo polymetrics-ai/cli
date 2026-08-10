@@ -50,14 +50,16 @@ func isAddressableStrategy(t string) bool {
 // (DirectRead and OperationDirectRead) fill it identically, so neither can
 // drift from the other's page contract.
 type directReadWalk struct {
-	method      string
-	declaredPat string
-	requestPath string
-	query       url.Values
-	body        any
-	maxBytes    int
-	page        int
-	pageCursor  string
+	method          string
+	declaredPat     string
+	requestPath     string
+	query           url.Values
+	body            any
+	bodyContentType string
+	outputPolicy    string
+	maxBytes        int
+	page            int
+	pageCursor      string
 }
 
 // directReadPageMode is what the bundle's declared pagination can actually do
@@ -224,14 +226,23 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	// all, and those requests still receive the provider's own default.
 	sizeSent := directReadRequestedSize(spec, strategy, query)
 
-	resp, err := requester.DoLimited(ctx, w.method, reqPath, query, w.body, w.maxBytes)
+	var resp *connsdk.Response
+	if w.bodyContentType == "text/plain" {
+		text, ok := w.body.(string)
+		if !ok {
+			return nil, connectors.DirectReadPage{}, nil, fmt.Errorf("declared text/plain direct-read body is not text")
+		}
+		resp, err = requester.DoTextLimited(ctx, w.method, reqPath, query, text, w.maxBytes)
+	} else {
+		resp, err = requester.DoLimited(ctx, w.method, reqPath, query, w.body, w.maxBytes)
+	}
 	if err != nil {
 		return nil, connectors.DirectReadPage{}, nil, err
 	}
 	if len(resp.Body) > w.maxBytes {
 		return nil, connectors.DirectReadPage{}, resp, errDirectReadTooLarge{got: len(resp.Body), limit: w.maxBytes}
 	}
-	decoded, err := decodeDirectReadBody(resp.Body, w.maxBytes)
+	decoded, err := decodeDirectReadResponse(w.outputPolicy, resp.Body, w.maxBytes)
 	if err != nil {
 		return nil, connectors.DirectReadPage{}, resp, err
 	}

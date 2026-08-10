@@ -175,6 +175,46 @@ func TestCheckSurfaceComplete_BinaryDownloadSatisfiesDirectReadCoverage(t *testi
 	}
 }
 
+// TestCheckSurfaceComplete_FixedGraphQLOperationsSatisfyCoverage keeps a
+// shared physical GraphQL transport honest.  The endpoint is covered only by
+// the fixed operation IDs it names; it is neither an arbitrary POST read nor a
+// generic raw GraphQL escape hatch.
+func TestCheckSurfaceComplete_FixedGraphQLOperationsSatisfyCoverage(t *testing.T) {
+	b := engine.Bundle{
+		Name:     "acme",
+		Metadata: engine.Metadata{Capabilities: engine.Capabilities{Read: true, Write: true}},
+		Operations: []engine.OperationSpec{
+			{ID: "acme.graphql.query.viewer", Kind: "graphql_query", GraphQL: &engine.GraphQLOperationSpec{Path: "/graphql"}},
+			{ID: "acme.graphql.mutation.close_widget", Kind: "graphql_mutation", GraphQL: &engine.GraphQLOperationSpec{Path: "/graphql"}},
+		},
+		Surface: &engine.APISurface{
+			API: "https://api.acme.test",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "POST",
+				Path:      "/graphql",
+				CoveredBy: &engine.SurfaceCoverage{Operations: []string{"acme.graphql.query.viewer", "acme.graphql.mutation.close_widget"}},
+			}},
+		},
+	}
+
+	if err := checkSurfaceComplete(b); err != nil {
+		t.Fatalf("checkSurfaceComplete: fixed GraphQL operation coverage = %v, want pass", err)
+	}
+
+	missing := b
+	missing.Surface = &engine.APISurface{
+		API: "https://api.acme.test",
+		Endpoints: []engine.SurfaceEndpoint{{
+			Method:    "POST",
+			Path:      "/graphql",
+			CoveredBy: &engine.SurfaceCoverage{Operations: []string{"acme.graphql.query.missing"}},
+		}},
+	}
+	if err := checkSurfaceComplete(missing); err == nil || !strings.Contains(err.Error(), "not a declared fixed GraphQL operation") {
+		t.Fatalf("checkSurfaceComplete missing operation error = %v, want exact fixed GraphQL binding rejection", err)
+	}
+}
+
 func TestCheckSurfaceComplete_RequiresV2EndpointProvenance(t *testing.T) {
 	b := engine.Bundle{
 		Name: "acme",

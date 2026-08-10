@@ -140,6 +140,25 @@ func (c *Connector) PreflightOperationDirectRead(operation, method, path string,
 	return PreflightOperationDirectRead(c.bundle, operation, method, path, maxBytes, outputPolicy)
 }
 
+// PreflightOperationStructuredJSONVariable lets commandrunner admit a JSON
+// flag only after the fixed GraphQL operation's own closed variables schema
+// has accepted that exact top-level variable. It resolves no credential and
+// makes no request.
+func (c *Connector) PreflightOperationStructuredJSONVariable(operation, variable string) error {
+	op, err := findOperation(c.bundle, operation)
+	if err != nil {
+		return err
+	}
+	return ValidateGraphQLOperationStructuredJSONVariable(op, variable)
+}
+
+// PreflightOperationDirectWrite proves a command's declared binding can reach
+// this connector's typed write executor without resolving credentials or
+// making a network request.
+func (c *Connector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
+	return PreflightOperationDirectWrite(c.bundle, operation, method, path, outputPolicy)
+}
+
 func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	return PreviewOperationDirectWrite(ctx, c.bundle, req, c.hooks)
 }
@@ -216,6 +235,18 @@ func (c *Connector) PreflightWriteAction(name string) error {
 	return ValidatePromotableRecordSchema(action.RecordSchema)
 }
 
+// PreflightStructuredJSONRecordField makes the concrete write schema the
+// authority for a commandrunner `json` flag. It intentionally accepts a field
+// name rather than a raw body or arbitrary path, so the runner cannot grow a
+// generic JSON request escape hatch around the declarative write contract.
+func (c *Connector) PreflightStructuredJSONRecordField(actionName, field string) error {
+	action, err := findWriteAction(c.bundle, actionName)
+	if err != nil {
+		return err
+	}
+	return ValidateStructuredJSONRecordField(action.RecordSchema, field)
+}
+
 // DryRunWrite satisfies connectors.DryRunWriter.
 func (c *Connector) DryRunWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
 	if len(c.bundle.Writes) == 0 {
@@ -265,6 +296,12 @@ func (b Base) CommandSurface() *connectors.CommandSurface {
 // operation direct-read binding without resolving credentials or network I/O.
 func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
 	return PreflightOperationDirectRead(b.bundle, operation, method, path, maxBytes, outputPolicy)
+}
+
+// PreflightOperationDirectWrite validates a native connector's declared
+// operation direct-write binding without resolving credentials or network I/O.
+func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
+	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy)
 }
 
 // OperationDirectReadMaxBytes returns the bounded response limit for a
@@ -563,6 +600,7 @@ func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 		AllowEmpty: cloneBoolPtr(flag.AllowEmpty),
 		Minimum:    cloneFloat64Ptr(flag.Minimum),
 		Required:   flag.Required,
+		EnvOnly:    flag.EnvOnly,
 		MaxItems:   flag.MaxItems,
 		MinItems:   flag.MinItems,
 	}

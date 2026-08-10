@@ -695,7 +695,7 @@ func TestNonDestructiveDirectWriteStillRequiresPreviewAndSingleUseApproval(t *te
 		t.Fatalf("RunReverseETL before preview error = %v, want preview requirement", err)
 	}
 
-	plan, previewResult, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+	plan, previewResult, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewConnectorCommandPlan: %v", err)
 	}

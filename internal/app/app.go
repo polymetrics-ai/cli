@@ -1550,6 +1550,11 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		return ReversePlan{}, nil, err
 	}
 	confirmation := confirmationFromChallenge(writeCommand.ConfirmationChallenge)
+	redactFields, err := connectorCommandRedactFields(connector, writeCommand.Operation, writeCommand.Write)
+	if err != nil {
+		return ReversePlan{}, nil, err
+	}
+	withheldRecord, withheldFields := withholdRecordFields(writeCommand.Record, redactFields)
 	created := time.Now().UTC()
 	expires := created.Add(24 * time.Hour)
 	var planSeal *connectors.WritePlanSeal
@@ -1583,12 +1588,14 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		ConnectorCommandOperation:  writeCommand.Operation,
 		ConnectorCommandPathParams: cloneStringMap(writeCommand.PathParams),
 		ConnectorCommandQuery:      cloneStringMap(writeCommand.Query),
-		ConnectorCommandRecord:     cloneRecord(writeCommand.Record),
+		ConnectorCommandRecord:     withheldRecord,
 		PayloadIdentity:            payloadIdentity,
 		ConfirmationChallenge:      writeCommand.ConfirmationChallenge,
 		ConfirmationPolicy:         confirmationFromChallenge(writeCommand.ConfirmationChallenge),
 		RecordCount:                1,
-		Sample:                     []connectors.Record{cloneRecord(writeCommand.RedactedRecord)},
+		RedactFields:               redactFields,
+		WithheldFields:             withheldFields,
+		Sample:                     RedactReversePlanRecords([]connectors.Record{cloneRecord(writeCommand.RedactedRecord)}, redactFields),
 		PlanHash:                   planHash,
 		PlanSeal:                   planSeal,
 		CreatedAt:                  created,
@@ -1622,7 +1629,39 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	return plan, writeCommand.Preview, nil
 }
 
-func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (ReversePlan, connectors.WritePreview, error) {
+// reconstituteConnectorCommandRecord restores the fields the plan withheld from
+// disk using the operator's re-supplied command flags. The resulting record is
+// what every hash, preview and dispatch downstream uses, so a missing field, a
+// wrong value and a tampered plan all fail on the existing plan-hash check.
+//
+// It iterates WithheldFields, the fields the plan actually removed, not the
+// declared redact list: a declared field the operator never supplied is not
+// owed back, and demanding it would strand the plan behind a precondition its
+// own hash cannot satisfy.
+func (a *App) reconstituteConnectorCommandRecord(plan ReversePlan, writer connectors.Connector, withheldFlags map[string][]string) (connectors.Record, error) {
+	pending := make([]string, 0, len(plan.WithheldFields))
+	for _, field := range plan.WithheldFields {
+		if !recordHasField(plan.ConnectorCommandRecord, field) {
+			pending = append(pending, strings.TrimSpace(field))
+		}
+	}
+	if len(pending) == 0 {
+		return cloneRecord(plan.ConnectorCommandRecord), nil
+	}
+	supplied, missing, err := commandrunner.ReconstituteWithheldFields(writer, plan.ConnectorCommandPath, pending, withheldFlags)
+	if err != nil {
+		return nil, err
+	}
+	if len(missing) > 0 {
+		return nil, fmt.Errorf(
+			"reverse plan %q withheld %s from disk; re-supply %s on this command to preview or approve it",
+			plan.ID, strings.Join(pending, ", "), strings.Join(missing, " "),
+		)
+	}
+	return mergeRecordFields(plan.ConnectorCommandRecord, supplied), nil
+}
+
+func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string, withheldFlags map[string][]string) (ReversePlan, connectors.WritePreview, error) {
 	plan, err := a.GetReversePlan(id)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
@@ -1647,11 +1686,15 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 	if err := a.verifyPlanSealForRuntime(plan, runtime); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, plan.ConnectorCommandRecord)
+	record, err := a.reconstituteConnectorCommandRecord(plan, writer, withheldFlags)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	currentHash, err := connectorCommandHashForPlan(plan, payloadIdentity)
+	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, record)
+	if err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
+	currentHash, err := connectorCommandHashForPlan(plan, record, payloadIdentity)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
@@ -1669,7 +1712,7 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 			Config:     runtime,
 			PathParams: plan.ConnectorCommandPathParams,
 			Query:      plan.ConnectorCommandQuery,
-			Body:       map[string]any(plan.ConnectorCommandRecord),
+			Body:       map[string]any(record),
 		})
 		if err != nil {
 			return ReversePlan{}, connectors.WritePreview{}, err
@@ -1681,7 +1724,7 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 		return plan, preview, nil
 	}
 	if validator, ok := writer.(connectors.WriteValidator); ok {
-		if err := validator.ValidateWrite(ctx, connectors.WriteRequest{Action: plan.Action, Config: runtime}, []connectors.Record{plan.ConnectorCommandRecord}); err != nil {
+		if err := validator.ValidateWrite(ctx, connectors.WriteRequest{Action: plan.Action, Config: runtime}, []connectors.Record{record}); err != nil {
 			return ReversePlan{}, connectors.WritePreview{}, err
 		}
 	}
@@ -1689,7 +1732,7 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 	if !ok {
 		return ReversePlan{}, connectors.WritePreview{}, fmt.Errorf("connector %q does not support reverse ETL previews", writer.Name())
 	}
-	preview, err := dryRunner.DryRunWrite(ctx, connectors.WriteRequest{Action: plan.Action, Config: runtime}, []connectors.Record{plan.ConnectorCommandRecord})
+	preview, err := dryRunner.DryRunWrite(ctx, connectors.WriteRequest{Action: plan.Action, Config: runtime}, []connectors.Record{record})
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
@@ -1702,7 +1745,7 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 	return plan, preview, nil
 }
 
-func connectorCommandHashForPlan(plan ReversePlan, payloadIdentity []PayloadIdentity) (string, error) {
+func connectorCommandHashForPlan(plan ReversePlan, record connectors.Record, payloadIdentity []PayloadIdentity) (string, error) {
 	if plan.ConnectorCommandOperation != "" {
 		return operationConnectorCommandPlanHash(
 			plan.Name,
@@ -1714,7 +1757,7 @@ func connectorCommandHashForPlan(plan ReversePlan, payloadIdentity []PayloadIden
 			plan.ConnectorCommandOperation,
 			plan.ConnectorCommandPathParams,
 			plan.ConnectorCommandQuery,
-			plan.ConnectorCommandRecord,
+			record,
 			payloadIdentity,
 		)
 	}
@@ -1726,7 +1769,7 @@ func connectorCommandHashForPlan(plan ReversePlan, payloadIdentity []PayloadIden
 		plan.ConnectorCommand,
 		plan.ConnectorCommandPath,
 		plan.Action,
-		plan.ConnectorCommandRecord,
+		record,
 		payloadIdentity,
 	)
 }
@@ -1735,7 +1778,7 @@ func connectorCommandHashForPlan(plan ReversePlan, payloadIdentity []PayloadIden
 // dispatching it. Destructive plans become approvable only after this preview
 // identity is persisted; source-row or payload drift fails before a token is
 // minted.
-func (a *App) PreviewReversePlan(ctx context.Context, id string) (ReversePlan, connectors.WritePreview, error) {
+func (a *App) PreviewReversePlan(ctx context.Context, id string, withheldFlags map[string][]string) (ReversePlan, connectors.WritePreview, error) {
 	plan, err := a.GetReversePlan(id)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
@@ -1744,7 +1787,7 @@ func (a *App) PreviewReversePlan(ctx context.Context, id string) (ReversePlan, c
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
 	if plan.Mode == reversePlanModeConnectorCommand {
-		return a.PreviewConnectorCommandPlan(ctx, id)
+		return a.PreviewConnectorCommandPlan(ctx, id, withheldFlags)
 	}
 	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
@@ -2208,11 +2251,15 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	if err != nil {
 		return ReverseRun{}, err
 	}
-	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, plan.ConnectorCommandRecord)
+	record, err := a.reconstituteConnectorCommandRecord(plan, writer, req.WithheldFlags)
 	if err != nil {
 		return ReverseRun{}, err
 	}
-	planHash, err := connectorCommandHashForPlan(plan, payloadIdentity)
+	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, record)
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	planHash, err := connectorCommandHashForPlan(plan, record, payloadIdentity)
 	if err != nil {
 		return ReverseRun{}, err
 	}
@@ -2222,13 +2269,13 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	}
 	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(plan.PayloadIdentity)
 	if plan.ConnectorCommandOperation != "" {
-		return a.runOperationDirectWritePlan(ctx, writer, runtime, plan, req)
+		return a.runOperationDirectWritePlan(ctx, writer, runtime, plan, record, req)
 	}
 	runID, err := prefixedID("rrun")
 	if err != nil {
 		return ReverseRun{}, err
 	}
-	records := []connectors.Record{plan.ConnectorCommandRecord}
+	records := []connectors.Record{record}
 	writeRequest := connectors.WriteRequest{Stream: "records", Table: plan.Name, Action: plan.Action, Config: runtime}
 	preview, err := a.validateDestructivePreview(ctx, writer, plan, writeRequest, records)
 	if err != nil {
@@ -2244,7 +2291,7 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	return a.finishReverseWrite(plan.ID, run, result, len(records), err)
 }
 
-func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors.Connector, runtime connectors.RuntimeConfig, plan ReversePlan, req RunReverseETLRequest) (ReverseRun, error) {
+func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors.Connector, runtime connectors.RuntimeConfig, plan ReversePlan, record connectors.Record, req RunReverseETLRequest) (ReverseRun, error) {
 	directWriter, ok := writer.(connectors.OperationDirectWriter)
 	if !ok {
 		return ReverseRun{}, fmt.Errorf("connector %q no longer supports direct writes", writer.Name())
@@ -2254,7 +2301,7 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 		Config:     runtime,
 		PathParams: plan.ConnectorCommandPathParams,
 		Query:      plan.ConnectorCommandQuery,
-		Body:       map[string]any(plan.ConnectorCommandRecord),
+		Body:       map[string]any(record),
 	}
 	preview, err := validateOperationDirectWritePreview(ctx, directWriter, plan, operationRequest)
 	if err != nil {

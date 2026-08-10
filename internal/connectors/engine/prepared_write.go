@@ -78,7 +78,14 @@ func PreviewPreparedWrite(prepared PreparedWrite) (connectors.WritePreview, erro
 		ConfigurationDigest: prepared.ConfigurationDigest,
 		Batchable:           prepared.Batchable,
 		Scope:               scope,
-		Confirmation:        connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}
+	// The preview publishes this target, so it must describe the gate the write
+	// will actually meet. Keying the declaration on the same RequiresApproval
+	// predicate GateDestructiveExecution uses keeps a safe write from previewing
+	// a typed confirmation nothing will ask for; a destructive one still carries
+	// it, which is what IssueWriteGrant demands before it mints any evidence.
+	if prepared.Target.RequiresApproval() {
+		approvalTarget.Confirmation = connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
 	}
 	payload := struct {
 		Version          int                            `json:"version"`

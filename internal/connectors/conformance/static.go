@@ -316,6 +316,12 @@ func checkSurfaceComplete(b engine.Bundle) error {
 		writes[w.Name] = true
 	}
 	directReads := map[string]bool{}
+	graphQLOperations := map[string]engine.OperationSpec{}
+	for _, operation := range b.Operations {
+		if operation.Kind == "graphql_query" || operation.Kind == "graphql_mutation" {
+			graphQLOperations[operation.ID] = operation
+		}
+	}
 	if b.CLISurface != nil {
 		for _, cmd := range b.CLISurface.Commands {
 			// binary_download commands consume an api_surface endpoint the same
@@ -335,7 +341,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0 || len(ep.CoveredBy.OperationTargets()) > 0)
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -360,6 +366,8 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				}
 				coveredStreams[ep.CoveredBy.Stream] = true
 			}
+			// Singular and plural alike: one documented endpoint may back
+			// several write contracts, and every one still has to exist.
 			for _, write := range ep.CoveredBy.WriteTargets() {
 				if !writes[write] {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.write %q is not a declared write action", i, ep.Method, ep.Path, write)
@@ -373,6 +381,21 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				method := strings.ToUpper(strings.TrimSpace(ep.Method))
 				if method != "GET" && method != "POST" {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET or POST", i, ep.Method, ep.Path)
+				}
+			}
+			for _, operationID := range ep.CoveredBy.OperationTargets() {
+				operation, ok := graphQLOperations[operationID]
+				if !ok || operation.GraphQL == nil {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.operations %q is not a declared fixed GraphQL operation", i, ep.Method, ep.Path, operationID)
+				}
+				if !strings.EqualFold(ep.Method, "POST") || operation.GraphQL.Path != ep.Path {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.operations %q does not match its declared GraphQL POST transport", i, ep.Method, ep.Path, operationID)
+				}
+				switch operation.Kind {
+				case "graphql_query":
+					hasNonExcludedGET = true
+				case "graphql_mutation":
+					hasNonExcludedMutation = true
 				}
 			}
 			if strings.EqualFold(ep.Method, "GET") {
@@ -407,7 +430,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 		return fmt.Errorf("capabilities.write is false but api_surface.json has a non-excluded POST/PUT/PATCH/DELETE endpoint")
 	}
 	if !b.Metadata.Capabilities.Read && hasNonExcludedGET {
-		return fmt.Errorf("capabilities.read is false but api_surface.json has a non-excluded GET endpoint")
+		return fmt.Errorf("capabilities.read is false but api_surface.json has a non-excluded executable read surface")
 	}
 
 	return nil

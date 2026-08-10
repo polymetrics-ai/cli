@@ -2,14 +2,17 @@ package commandrunner
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"math"
 	"net/http"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/safety"
@@ -19,6 +22,7 @@ const (
 	MaxDirectReadBytes          = 1 << 20
 	MaxOperationDirectReadBytes = 16 << 20
 	maxRecordPathArrayIndex     = 128
+	maxStructuredJSONFlagBytes  = 1 << 20
 )
 
 type Request struct {
@@ -78,6 +82,15 @@ var ErrNotWriteCommand = errors.New("connector command is not a reverse ETL writ
 // second, hand-maintained schema contract.
 type declarativeWritePreflighter interface {
 	PreflightWriteAction(name string) error
+}
+
+// structuredJSONRecordPreflighter is deliberately narrower than a generic
+// JSON parser. The engine owns the raw record schema, so it alone decides
+// whether a named, top-level record field may accept one structured JSON
+// value. Native connectors do not opt into this declarative flag type merely
+// by exposing a similarly named command.
+type structuredJSONRecordPreflighter interface {
+	PreflightStructuredJSONRecordField(actionName, field string) error
 }
 
 type BlockedCommandError struct {
@@ -203,7 +216,7 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 	if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
 		return WriteCommand{}, err
 	}
-	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
+	pathParams, query, body, _, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return WriteCommand{}, err
 	}
@@ -330,6 +343,17 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	if !ok {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
+	if cmd.Availability == "implemented" {
+		if err := preflightStructuredJSONFlags(connector, cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+				Connector:    connector.Name(),
+				Command:      command,
+				Intent:       cmd.Intent,
+				Availability: cmd.Availability,
+				Reason:       err.Error(),
+			}
+		}
+	}
 	if cmd.Operation != "" && cmd.Intent != "binary_download" &&
 		(cmd.Intent != "direct_read" || cmd.Availability != "implemented") &&
 		(cmd.Intent != "direct_write" || cmd.Availability != "implemented") {
@@ -389,6 +413,56 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 		Availability: cmd.Availability,
 		Reason:       blockReason(cmd),
 	}
+}
+
+// preflightStructuredJSONFlags preserves the original reverse-ETL record
+// boundary and adds one equally declaration-bound GraphQL exception. A JSON
+// flag never means "take an arbitrary request body": the GraphQL branch can
+// name only body.<one variable>, and the engine then proves that variable is a
+// closed object/array in a fixed operation's schema.
+func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
+	var preflighter structuredJSONRecordPreflighter
+	var graphQLPreflighter connectors.OperationStructuredJSONVariablePreflighter
+	for _, flag := range cmd.Flags {
+		if flag.Type != "json" {
+			continue
+		}
+		switch {
+		case cmd.Intent == "reverse_etl" && strings.TrimSpace(cmd.Write) != "":
+			field, ok := strings.CutPrefix(flag.MapsTo, "record.")
+			if !ok || field == "" {
+				return fmt.Errorf("structured JSON flag --%s must map to a record field", flag.Name)
+			}
+			if preflighter == nil {
+				var supported bool
+				preflighter, supported = connector.(structuredJSONRecordPreflighter)
+				if !supported {
+					return fmt.Errorf("structured JSON flag --%s requires a declarative record-schema preflight", flag.Name)
+				}
+			}
+			if err := preflighter.PreflightStructuredJSONRecordField(cmd.Write, field); err != nil {
+				return fmt.Errorf("structured JSON flag --%s is not declared safely: %w", flag.Name, err)
+			}
+		case (cmd.Intent == "direct_read" || cmd.Intent == "direct_write") && strings.TrimSpace(cmd.Operation) != "":
+			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
+			if !ok || variable == "" || strings.Contains(variable, ".") {
+				return fmt.Errorf("structured JSON flag --%s must map to one top-level body.<variable> of a fixed GraphQL operation", flag.Name)
+			}
+			if graphQLPreflighter == nil {
+				var supported bool
+				graphQLPreflighter, supported = connector.(connectors.OperationStructuredJSONVariablePreflighter)
+				if !supported {
+					return fmt.Errorf("structured JSON flag --%s requires fixed GraphQL variable preflight", flag.Name)
+				}
+			}
+			if err := graphQLPreflighter.PreflightOperationStructuredJSONVariable(cmd.Operation, variable); err != nil {
+				return fmt.Errorf("structured JSON flag --%s is not declared safely: %w", flag.Name, err)
+			}
+		default:
+			return fmt.Errorf("structured JSON flag --%s is allowed only on a declared reverse-ETL record field or fixed GraphQL variable", flag.Name)
+		}
+	}
+	return nil
 }
 
 // directReadPageFlagNames are consumed as Request.Page/Request.PageCursor
@@ -492,7 +566,7 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
 		return Result{}, err
 	}
-	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
+	pathParams, query, body, rawBody, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return Result{}, err
 	}
@@ -512,6 +586,7 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		PathParams:   pathParams,
 		Query:        query,
 		Body:         body,
+		RawBody:      rawBody,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
 		Page:         req.Page,
@@ -574,6 +649,15 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 			Reason:       "direct_read commands require an explicit supported output_policy",
 		}
 	}
+	if isOperationOnlyDirectReadOutputPolicy(cmd.OutputPolicy) {
+		return &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       fmt.Sprintf("direct_read output policy %q requires an operation-backed command", cmd.OutputPolicy),
+		}
+	}
 	return nil
 }
 
@@ -608,12 +692,16 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 }
 
 // validateOperationDirectWriteCommand is deliberately limited to the shape
-// the rest_write engine executor can prove safe. Its result makes a command
-// eligible for the plan lifecycle only; resolveRunnableCommand still refuses
-// direct execution so every write traverses plan -> preview -> approval.
+// the REST/fixed-GraphQL engine executor can prove safe. Its result makes a
+// command eligible for the plan lifecycle only; resolveRunnableCommand still
+// refuses direct execution so every write traverses plan -> preview -> approval.
 func validateOperationDirectWriteCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
 	if _, ok := connector.(connectors.OperationDirectWriter); !ok {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support operation direct writes"}
+	}
+	preflighter, ok := connector.(connectors.OperationDirectWritePreflighter)
+	if !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write metadata"}
 	}
 	metadataProvider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
 	if !ok {
@@ -645,6 +733,9 @@ func validateOperationDirectWriteCommand(connector connectors.Connector, cmd con
 	if metadata.OutputPolicy != cmd.OutputPolicy {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write command output_policy does not match declared operation"}
 	}
+	if err := preflighter.PreflightOperationDirectWrite(cmd.Operation, method, cmd.APISurface[0].Path, cmd.OutputPolicy); err != nil {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct write metadata is not executable: %v", err)}
+	}
 	return nil
 }
 
@@ -657,6 +748,8 @@ var (
 		"repository_contents_directory":     {},
 		"json_redacted":                     {},
 		"clinical_json_redacted":            {},
+		"none":                              {},
+		"text":                              {},
 	}
 	supportedDirectWriteOutputPolicies = map[string]struct{}{
 		"none":                        {},
@@ -670,6 +763,10 @@ var (
 func isSupportedDirectReadOutputPolicy(policy string) bool {
 	_, ok := supportedDirectReadOutputPolicies[policy]
 	return ok
+}
+
+func isOperationOnlyDirectReadOutputPolicy(policy string) bool {
+	return policy == "none" || policy == "text"
 }
 
 func isSupportedDirectWriteOutputPolicy(policy string) bool {
@@ -957,7 +1054,7 @@ func validateRequiredCommandFlags(cmd connectors.CommandSurfaceCommand, flags ma
 		if !ok || len(values) == 0 {
 			return missingRequiredFlagError(cmd, flag.Name)
 		}
-		value, err := coerceFlagValue(flag, values)
+		value, err := coerceCommandFlagValue(cmd, flag, values)
 		if err != nil {
 			return err
 		}
@@ -986,6 +1083,121 @@ func commandValueEmpty(value any) bool {
 
 func missingRequiredFlagError(cmd connectors.CommandSurfaceCommand, name string) error {
 	return fmt.Errorf("missing required flag --%s for command %q", name, cmd.Path)
+}
+
+// ReconstituteWithheldFields rebuilds the record fragment for fields a reverse
+// plan withheld from disk. Values are read from the same command flags the plan
+// accepted and coerced by the same rules, so a reconstituted record hashes
+// identically to the record the plan bound. Fields with no supplied value are
+// returned as operator-facing flag names rather than silently dropped.
+//
+// A declared sensitive field is not always a flag target. It can equally be an
+// ancestor of several flag targets -- recurly's create_invoice_retry declares
+// account.billing_infos while its command maps four separate leaves beneath it
+// -- and withholding removes that whole subtree, which is the correct reading of
+// the declaration. Such a field is rebuilt from its descendant flags in the same
+// target order recordOverrides applies them, so the subtree is byte-identical to
+// the one the plan hashed.
+func ReconstituteWithheldFields(connector connectors.Connector, path []string, fields []string, flags map[string][]string) (connectors.Record, []string, error) {
+	if len(fields) == 0 {
+		return connectors.Record{}, nil, nil
+	}
+	cmd, _, err := resolvePreflightCommand(connector, path)
+	if err != nil {
+		return nil, nil, err
+	}
+	// A direct_write command's record IS its body, so its fields are declared
+	// as body.<path>; a reverse_etl command declares record.<path>. Dispatch on
+	// mode rather than trying both, so a plan can never resolve a field through
+	// the other namespace.
+	prefix := "record."
+	if strings.TrimSpace(cmd.Operation) != "" {
+		prefix = "body."
+	}
+	byTarget := map[string]connectors.CommandSurfaceFlag{}
+	for _, flag := range cmd.Flags {
+		if target, ok := strings.CutPrefix(flag.MapsTo, prefix); ok && target != "" {
+			byTarget[target] = flag
+		}
+	}
+	record := connectors.Record{}
+	missing := make([]string, 0, len(fields))
+	for _, field := range fields {
+		target := strings.TrimPrefix(strings.TrimSpace(field), prefix)
+		if target == "" {
+			continue
+		}
+		if flag, ok := byTarget[target]; ok {
+			values := flags[flag.Name]
+			if len(values) == 0 {
+				missing = append(missing, "--"+flag.Name)
+				continue
+			}
+			value, err := coerceRecordFlagValue(flag, values)
+			if err != nil {
+				return nil, nil, err
+			}
+			if err := setRecordValue(record, target, value); err != nil {
+				return nil, nil, err
+			}
+			continue
+		}
+		unresolved, err := reconstituteWithheldSubtree(record, byTarget, target, flags)
+		if err != nil {
+			return nil, nil, err
+		}
+		missing = append(missing, unresolved...)
+	}
+	return record, missing, nil
+}
+
+// reconstituteWithheldSubtree rebuilds a withheld field that no single flag maps
+// to, from the flags that map beneath it. Targets are applied in the sorted
+// order recordOverrides uses, because setDottedValue refuses a sparse array
+// index and so depends on that order to build the same shape.
+//
+// An optional descendant with no supplied value is skipped rather than demanded:
+// recordOverrides skipped it too when the plan was built, so demanding it would
+// strand the plan the same way the declared-but-unsupplied case once did. A
+// required descendant is always demanded, because the plan could not have been
+// created without it.
+func reconstituteWithheldSubtree(record connectors.Record, byTarget map[string]connectors.CommandSurfaceFlag, target string, flags map[string][]string) ([]string, error) {
+	descendants := make([]string, 0, len(byTarget))
+	for candidate := range byTarget {
+		if dottedPathPrefix(target, candidate) {
+			descendants = append(descendants, candidate)
+		}
+	}
+	if len(descendants) == 0 {
+		return []string{target}, nil
+	}
+	sort.Strings(descendants)
+	missing := make([]string, 0, len(descendants))
+	applied := 0
+	for _, descendant := range descendants {
+		flag := byTarget[descendant]
+		values := flags[flag.Name]
+		if len(values) == 0 {
+			if flag.Required {
+				missing = append(missing, "--"+flag.Name)
+			}
+			continue
+		}
+		value, err := coerceRecordFlagValue(flag, values)
+		if err != nil {
+			return nil, err
+		}
+		if err := setRecordValue(record, descendant, value); err != nil {
+			return nil, err
+		}
+		applied++
+	}
+	if applied == 0 && len(missing) == 0 {
+		for _, descendant := range descendants {
+			missing = append(missing, "--"+byTarget[descendant].Name)
+		}
+	}
+	return missing, nil
 }
 
 func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
@@ -1126,59 +1338,77 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 	return pathParams, query, nil
 }
 
-func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, error) {
+// operationDirectReadOverrides shapes the explicitly declared request inputs
+// shared by operation-backed reads and writes. A literal body is intentionally
+// narrower than the dotted JSON body mapping: only an operation direct read
+// may name the exact maps_to value "body", and the engine subsequently admits
+// it only for its declared text/plain root-string contract.
+func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, *string, error) {
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, nil, err
 		}
 		allowed[flag.Name] = flag
 	}
 	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, nil, err
 	}
 
 	pathParams := map[string]string{}
 	query := map[string]string{}
 	body := map[string]any{}
+	var rawBody *string
 	for name, values := range flags {
 		if len(values) == 0 {
 			continue
 		}
 		if err := safety.ValidateIdentifier(name, "flag name"); err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, nil, err
 		}
 		flag, ok := allowed[name]
 		if !ok {
-			return nil, nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
+			return nil, nil, nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
 		}
-		value, err := coerceFlagValue(flag, values)
+		value, err := coerceCommandFlagValue(cmd, flag, values)
 		if err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, nil, err
 		}
 		switch {
 		case strings.HasPrefix(flag.MapsTo, "path."):
 			target := strings.TrimPrefix(flag.MapsTo, "path.")
 			if err := safety.ValidateIdentifier(target, "path parameter"); err != nil {
-				return nil, nil, nil, err
+				return nil, nil, nil, nil, err
 			}
 			pathParams[target] = stringifyCommandValue(value)
 		case strings.HasPrefix(flag.MapsTo, "query."):
 			target := strings.TrimPrefix(flag.MapsTo, "query.")
 			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
-				return nil, nil, nil, err
+				return nil, nil, nil, nil, err
 			}
 			query[target] = stringifyCommandValue(value)
 		case strings.HasPrefix(flag.MapsTo, "body."):
 			target := strings.TrimPrefix(flag.MapsTo, "body.")
 			if err := setBodyValue(body, target, value); err != nil {
-				return nil, nil, nil, err
+				return nil, nil, nil, nil, err
 			}
+		case flag.MapsTo == "body":
+			if cmd.Intent != "direct_read" || flag.Type != "string" {
+				return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
+			}
+			text, ok := value.(string)
+			if !ok {
+				return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to body but is not a string", name)}
+			}
+			rawBody = &text
 		default:
-			return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
+			return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
 		}
 	}
-	return pathParams, query, body, nil
+	if rawBody != nil && len(body) != 0 {
+		return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "raw body cannot mix with JSON body fields"}
+	}
+	return pathParams, query, body, rawBody, nil
 }
 
 func setBodyValue(body map[string]any, path string, value any) error {
@@ -1338,7 +1568,7 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 	})
 	record := connectors.Record{}
 	for _, app := range applications {
-		value, err := coerceFlagValue(app.flag, app.values)
+		value, err := coerceRecordFlagValue(app.flag, app.values)
 		if err != nil {
 			return nil, err
 		}
@@ -1380,6 +1610,100 @@ func dottedPathPrefix(parent, child string) bool {
 
 func setRecordValue(record connectors.Record, path string, value any) error {
 	return setBodyValue(map[string]any(record), path, value)
+}
+
+// coerceRecordFlagValue is the only route that admits the declarative `json`
+// flag kind. It is intentionally unavailable to direct reads, direct writes,
+// paths, queries, headers, and arbitrary body fields; preflight has already
+// tied it to one engine-validated reverse-ETL record property.
+func coerceRecordFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
+	if flag.Type == "json" {
+		return coerceDeclaredStructuredJSONRecordFlagValue(flag, values)
+	}
+	return coerceFlagValue(flag, values)
+}
+
+func coerceDeclaredStructuredJSONRecordFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
+	if len(values) != 1 {
+		return nil, fmt.Errorf("invalid --%s: structured JSON flags accept exactly one value", flag.Name)
+	}
+	raw := values[0]
+	if len(raw) > maxStructuredJSONFlagBytes {
+		return nil, fmt.Errorf("invalid --%s: structured JSON exceeds %d bytes", flag.Name, maxStructuredJSONFlagBytes)
+	}
+	if err := safety.RejectDangerousChars(raw, "flag value"); err != nil {
+		return nil, err
+	}
+
+	decoder := json.NewDecoder(strings.NewReader(raw))
+	decoder.UseNumber()
+	var value any
+	if err := decoder.Decode(&value); err != nil {
+		return nil, fmt.Errorf("invalid JSON for --%s: %w", flag.Name, err)
+	}
+	var trailing any
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		if err == nil {
+			return nil, fmt.Errorf("invalid JSON for --%s: must contain exactly one value", flag.Name)
+		}
+		return nil, fmt.Errorf("invalid JSON for --%s: %w", flag.Name, err)
+	}
+	switch value.(type) {
+	case map[string]any, []any:
+		return value, nil
+	default:
+		return nil, fmt.Errorf("invalid --%s: structured JSON must be an object or array", flag.Name)
+	}
+}
+
+// coerceCommandFlagValue retains the normal command-line control-character
+// guard everywhere except a literal text/plain operation body. Markdown and
+// similar declared text documents need line breaks; they are never used as a
+// URL, header, or JSON field because only the exact body mapping reaches this
+// path. Other control characters remain refused.
+func coerceCommandFlagValue(cmd connectors.CommandSurfaceCommand, flag connectors.CommandSurfaceFlag, values []string) (any, error) {
+	if cmd.Intent == "reverse_etl" && strings.HasPrefix(flag.MapsTo, "record.") {
+		return coerceRecordFlagValue(flag, values)
+	}
+	if flag.Type == "json" && isDeclaredStructuredGraphQLVariableFlag(cmd, flag) {
+		return coerceDeclaredStructuredJSONRecordFlagValue(flag, values)
+	}
+	if cmd.Intent == "direct_read" && flag.MapsTo == "body" {
+		return coerceDeclaredPlainTextBodyFlagValue(flag, values)
+	}
+	return coerceFlagValue(flag, values)
+}
+
+// isDeclaredStructuredGraphQLVariableFlag mirrors the non-network preflight
+// shape before admitting JSON parsing. Runtime has already called
+// preflightStructuredJSONFlags, which asks the engine to prove the matching
+// fixed GraphQL operation variable. Keeping this syntactic guard here ensures
+// an internal caller cannot accidentally route a nested/direct REST body
+// through the structured parser.
+func isDeclaredStructuredGraphQLVariableFlag(cmd connectors.CommandSurfaceCommand, flag connectors.CommandSurfaceFlag) bool {
+	if (cmd.Intent != "direct_read" && cmd.Intent != "direct_write") || strings.TrimSpace(cmd.Operation) == "" {
+		return false
+	}
+	variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
+	return ok && variable != "" && !strings.Contains(variable, ".")
+}
+
+func coerceDeclaredPlainTextBodyFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
+	if flag.Type != "string" {
+		return nil, &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s maps to raw body but is not a string", flag.Name)}
+	}
+	for _, value := range values {
+		for _, r := range value {
+			if unicode.IsControl(r) && r != '\n' && r != '\r' && r != '\t' {
+				return nil, fmt.Errorf("flag value contains unsupported control character for declared text body")
+			}
+		}
+	}
+	value := values[len(values)-1]
+	if err := validateFlagValue(flag, value); err != nil {
+		return nil, err
+	}
+	return value, nil
 }
 
 func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
@@ -1440,6 +1764,38 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 			Command: "unknown",
 			Reason:  fmt.Sprintf("flag --%s has unsupported type %q", flag.Name, flag.Type),
 		}
+	}
+}
+
+// ConfirmationChallengeForCommand reports the typed confirmation a command's
+// bound executor will demand at run, resolved from the same declarations
+// buildWriteCommand and buildOperationDirectWriteCommand read. It takes no
+// record and validates nothing, so help and documentation callers can answer
+// "will this ask me to confirm?" without restating the rule or building a plan.
+//
+// A bundle's cli_surface notes cannot serve that purpose: they are prose an
+// author writes per command, so they are silent on every command nobody
+// annotated, and silence there is indistinguishable from "no confirmation".
+func ConfirmationChallengeForCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) string {
+	switch cmd.Intent {
+	case "reverse_etl":
+		action, ok := findWriteAction(connectors.ManifestOf(connector), cmd.Write)
+		if !ok {
+			return ""
+		}
+		return string(connectors.ConfirmationForWriteAction(action).Kind)
+	case "direct_write":
+		provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+		if !ok || strings.TrimSpace(cmd.Operation) == "" {
+			return ""
+		}
+		metadata, err := provider.OperationDirectWriteMetadata(cmd.Operation)
+		if err != nil {
+			return ""
+		}
+		return metadata.ConfirmationChallenge
+	default:
+		return ""
 	}
 }
 

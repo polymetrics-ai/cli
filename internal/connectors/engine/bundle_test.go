@@ -511,6 +511,11 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 			want: "endpoints[0].path",
 		},
 		{
+			name: "all selector cannot exclude endpoints",
+			data: strings.Replace(validProviderCitedRateLimits, `"endpoints": [{"method": "POST", "path": "/graphql"}],`, `"all": true, "exclude_endpoints": [{"method": "POST", "path": "/graphql"}],`, 1),
+			want: "exclude_endpoints",
+		},
+		{
 			name: "leaky bucket needs a positive restore rate",
 			data: strings.Replace(validProviderCitedRateLimits, `"restore_per_second": 2`, `"restore_per_second": 0`, 1),
 			want: "restore_per_second",
@@ -604,6 +609,12 @@ func TestRateLimitSelectorsOverlap(t *testing.T) {
 			name:  "different endpoints do not overlap",
 			left:  connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}},
 			right: connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/projects"}}},
+			want:  false,
+		},
+		{
+			name:  "excluded endpoint does not overlap",
+			left:  connsdk.RateLimitSelector{AuthTypes: []string{"oauth"}, ExcludeEndpoints: []connsdk.RateLimitEndpointSelector{{Method: "POST", Path: "/graphql"}}},
+			right: connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "POST", Path: "/graphql"}}, AuthTypes: []string{"oauth"}},
 			want:  false,
 		},
 		{

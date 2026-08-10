@@ -1,0 +1,323 @@
+{
+  "phase": "github-parity-extract-r1",
+  "branch": "fm/cli-github-parity-extract-r1",
+  "base": "d453fbe256eb22d90ea77dbed634b245bd6e795b",
+  "source_branch": "origin/fm/cli-top50-sweep-resume2-r1",
+  "lifecycle": {
+    "discuss-phase": "scripts/gsd prompt discuss-phase github-parity-extract-r1 --auto; fixed scope re-confirmed inline",
+    "plan-phase --tdd": "scripts/gsd prompt plan-phase github-parity-extract-r1 --tdd --skip-research; existing PLAN.md retained",
+    "execute-phase": "scripts/gsd prompt execute-phase github-parity-extract-r1 --interactive; TDD-LEDGER.md holds the two red/green cycles",
+    "verify-work": "scripts/gsd prompt verify-work github-parity-extract-r1 --auto; fresh results in VERIFICATION.md section 7",
+    "code-review": "scripts/gsd prompt code-review github-parity-extract-r1 --depth=standard; fresh no-mistakes review/CI pipeline follows the validation evidence checkpoint"
+  },
+  "fallback": {
+    "used": true,
+    "reason": "The repo-local GSD prompts were resolved, but this runtime cannot provide compatible Pi-isolated roles and the canonical parent-worker contract forbids spawning extra roles for this job. The lifecycle is therefore executed inline with the same artifacts and red/green evidence, as AGENTS.md permits."
+  },
+  "extracted_commits": [
+    {
+      "sha": "6848cbb2d",
+      "subject": "test(connectors): add red github surface test at the derived 1220 (slice 1/5)"
+    },
+    {
+      "sha": "afa4a0fd4",
+      "subject": "feat(connectors): enumerate github's full documented GET surface (slice 2/5)"
+    },
+    {
+      "sha": "60719bfbe",
+      "subject": "fix(connectors): let one endpoint back several write actions"
+    },
+    {
+      "sha": "6fe60991d",
+      "subject": "feat(connectors): bring github to documented-operation parity"
+    }
+  ],
+  "dropped_from_pick": [
+    {
+      "path": "data/cli-top50-fixed-schema-sweep-r1/PROGRESS.md",
+      "reason": "sweep bookkeeping, absent from main, not github parity"
+    }
+  ],
+  "regenerated_artifacts": {
+    "internal/connectors/defs/operation_endpoint_ledger.json": "go run ./cmd/connectorgen surface-sync (after reset to main); byte-identical to the branch's version",
+    "docs/connectors/github/{MANUAL,SKILL}.md": "./pm docs generate --dir docs/cli",
+    "docs/skills/pm-github/SKILL.md": "./pm skills generate --dir docs/skills",
+    "website/data/connectors.generated.json": "node scripts/gen-connector-bundles.mjs",
+    "website/lib/connectors.catalog.data.generated.json": "node scripts/gen-connector-catalog.mjs",
+    "internal/cli/testdata/golden_transcripts.json": "POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli/ -run GoldenTranscript"
+  },
+  "delta_confined_to_github": {
+    "operation_endpoint_ledger.json": [
+      "github"
+    ],
+    "website/data/connectors.generated.json": [
+      "GitHub"
+    ],
+    "website/lib/connectors.catalog.data.generated.json": [
+      "GitHub"
+    ],
+    "golden_transcripts.json": [
+      "connectors_inspect_github_json",
+      "dynamic_connector_bare_json"
+    ],
+    "reverted_unrelated_churn": "551 connectors' MANUAL.md/SKILL.md and 4 pm-* skill files \u2014 pre-existing generator drift on main, not github's"
+  },
+  "reachability_sweep": {
+    "method": "invoke `pm github <path>` per command in an initialised project with no credential configured; `unknown command` is the discriminator; one project directory per parallel worker",
+    "parity_extraction_only": {
+      "probed": 1079,
+      "unreachable": 0
+    },
+    "final_binary": {
+      "probed": 1086,
+      "unreachable": 0,
+      "lock_races": 0
+    },
+    "histogram_final": {
+      "error: missing --credential": 1049,
+      "declared partial block reasons": 37
+    },
+    "restored_commands_spot_check": {
+      "repo create": "error: missing --credential",
+      "repo delete": "error: missing --credential",
+      "repo archive": "error: missing --credential",
+      "repo unarchive": "error: missing --credential",
+      "cache delete": "error: missing --credential",
+      "secret set": "error: missing --credential",
+      "secret delete": "error: missing --credential"
+    }
+  },
+  "fresh_validation_2026_08_08": {
+    "head": "8d276edac80599f483c901301283490f3698de12",
+    "reachability": {
+      "probed": 1086,
+      "unreachable": 0,
+      "credential_configured": false
+    },
+    "uncached_test_gates": {
+      "cmd/connectorgen": "ok (12.097s)",
+      "internal/connectors/engine": "ok (4.934s)",
+      "internal/connectors/commandrunner": "ok (13.034s)",
+      "internal/connectors/hooks/github": "ok (0.875s)",
+      "internal/connectors/conformance": "ok (21.038s)",
+      "internal/app": "ok (266.614s)",
+      "internal/cli": "ok (743.205s)"
+    },
+    "other_gates": [
+      "gofmt -l cmd internal",
+      "go vet ./...",
+      "connectorgen validate: 551 checked, 0 findings",
+      "connectorgen surface-sync --check: no drift",
+      "tidy-check",
+      "lint",
+      "docs-check",
+      "smoke-no-build",
+      "agent-contract-check",
+      "connectorgen-validate",
+      "connectorgen-surface-sync",
+      "connector-boundary",
+      "release-workflow-check",
+      "verify-gsd-workflow",
+      "go build ./cmd/pm"
+    ],
+    "skills_loaded": [
+      "golang-how-to",
+      "golang-cli",
+      "golang-testing",
+      "golang-error-handling",
+      "golang-security",
+      "golang-safety",
+      "golang-design-patterns",
+      "golang-structs-interfaces",
+      "golang-graphql",
+      "golang-lint",
+      "golang-documentation",
+      "vercel-react-best-practices",
+      "vercel-composition-patterns"
+    ],
+    "unavailable_required_design_skills": [
+      "frontend-design",
+      "web-design-guidelines"
+    ]
+  },
+  "surface_totals": {
+    "commands": 1147,
+    "implemented": 1049,
+    "partial": 37,
+    "reachable": 1086,
+    "unsafe_or_disallowed": 5,
+    "unsupported_api": 27,
+    "unsupported_local": 21,
+    "planned": 8,
+    "rest_endpoint_rows": 1224,
+    "documented_rest_operations": 1220,
+    "covered_endpoints": 1126,
+    "operation_blocked_endpoints": 98,
+    "ledger_rows_github": 164
+  },
+  "classification_changes": {
+    "restored": [
+      {
+        "command": "repo create",
+        "write": "repos_create_for_authenticated_user",
+        "method": "POST",
+        "confirmation": "plan/approval/execute (preview optional)"
+      },
+      {
+        "command": "repo delete",
+        "write": "repo",
+        "method": "DELETE",
+        "confirmation": "plan/preview/typed --confirm destructive/approval/execute"
+      },
+      {
+        "command": "repo archive",
+        "write": "archive_repo",
+        "method": "PATCH",
+        "confirmation": "plan/approval/execute (preview optional); cycle 6 declared confirm: destructive, cycle 11 removed it per the captain decision",
+        "new_write_action": true
+      },
+      {
+        "command": "repo unarchive",
+        "write": "unarchive_repo",
+        "method": "PATCH",
+        "confirmation": "plan/approval/execute (preview optional); cycle 6 declared confirm: destructive, cycle 11 removed it per the captain decision",
+        "new_write_action": true
+      },
+      {
+        "command": "cache delete",
+        "write": "actions_caches_cache_id",
+        "method": "DELETE",
+        "confirmation": "plan/preview/typed --confirm destructive/approval/execute"
+      },
+      {
+        "command": "secret set",
+        "write": "actions_secrets_secret_name3",
+        "method": "PUT",
+        "confirmation": "plan/approval/execute (preview optional)",
+        "redact_fields": [
+          "encrypted_value"
+        ]
+      },
+      {
+        "command": "secret delete",
+        "write": "actions_secrets_secret_name",
+        "method": "DELETE",
+        "confirmation": "plan/preview/typed --confirm destructive/approval/execute"
+      }
+    ],
+    "left_blocked_needs_runtime_capability": [
+      {
+        "command": "github issue delete",
+        "reason": "graphql_mutation; direct-write executor requires rest_write; no REST issue-delete endpoint exists"
+      },
+      {
+        "command": "github issue transfer",
+        "reason": "GraphQL-only; POST /repos/{owner}/{repo}/transfer is repository transfer, a different operation"
+      },
+      {
+        "command": "github pr revert",
+        "reason": "no documented REST endpoint in github's own api_surface"
+      },
+      {
+        "command": "bahmni documents upload",
+        "reason": "no write action; missing file snapshot/SHA-256 approval binding named in its own notes"
+      }
+    ],
+    "held_for_captain": [
+      {
+        "command": "github auth token",
+        "reason": "prints a credential; contradicts the standing never-print rule"
+      },
+      {
+        "command": "github api",
+        "reason": "arbitrary-request escape hatch; no declared params, no enum validation, no required-field enforcement, no ledger entry, no api_surface row"
+      }
+    ],
+    "captain_decision_confirmed_2026_08_08": {
+      "governs": "the later captain decision, not the original brief",
+      "repo delete": "stays destructive and implemented: plan, preview, caller-supplied intent acknowledgement, expiry, request binding, single-use grant; a typed machine gate on a plan, not human approval, and it implies no TTY, identity, or separation of duties",
+      "issue delete": "stays blocked; no GraphQL mutation executor exists",
+      "reclassified": "none",
+      "repo create / secret set": "stay non-destructive",
+      "repo archive / repo unarchive": "RESOLVED IN CYCLE 11: non-destructive, as the decision lists them. Cycle 10 left the cycle-6 confirm: destructive in place and flagged the disagreement rather than acting on an ambiguous reading, because removing it removes a working gate; the captain then confirmed the non-destructive classification explicitly. Both declarations are deleted, the approval sentence and help follow, and the app-level test now pins the safe contract end to end (plan mints the token, preview optional, no --confirm)."
+    }
+  },
+  "downstream": {
+    "sweep_branch_rebase_required": true,
+    "detail": "fm/cli-top50-sweep-resume2-r1 carries the same four github commits; after this merges it must be rebased onto the new main before resuming \u2014 its github commits will be already-applied and its operation_endpoint_ledger.json will conflict. Paused at stripe, so cheap now."
+  },
+  "constraints_honoured": {
+    "no_test_weakened_skipped_or_deleted": true,
+    "tests_added": 6,
+    "no_credential_or_token_value_printed": true,
+    "sweep_consolidated_pr_not_opened": true,
+    "pushed_to_default_branch": false
+  },
+  "cycle_10_corrections": {
+    "safe_preview_confirmation": "engine.PreviewPreparedWrite declares a confirmation only where DestructiveTarget.RequiresApproval() is true, the same predicate GateDestructiveExecution uses",
+    "conformance_grant_scope": "conformance.approvedFixtureWriteRequest no longer requests a write grant for actions the gate does not stop",
+    "approval_metadata": "349 safe github reverse_etl commands declare 'plan, approval, execute; preview is optional'; the 176 destructive ones are unchanged",
+    "generator": "scripts/gen-github-parity.py derives the approval sentence and emits no notes marker naming a flag pm does not parse",
+    "repo_delete_2_parity": "already correct; now pinned by TestGitHubGeneratedTwinsShareTheirAliasWriteContract, which passed on first run",
+    "tests_added": 3,
+    "regenerated_artifacts_changed_lines": {
+      "internal/connectors/defs/github/cli_surface.json": 349,
+      "docs/connectors/github/MANUAL.md": 349,
+      "docs/connectors/github/SKILL.md": 349,
+      "docs/skills/pm-github/SKILL.md": 349,
+      "website/data/connectors.generated.json": 349,
+      "website/lib/connectors.catalog.data.generated.json": "1 (minified single-line file)"
+    }
+  },
+  "cycle_11_correction": {
+    "decision": "the captain confirmed repo archive and repo unarchive as non-destructive, like repo create and secret set",
+    "change": "deleted confirm: destructive from archive_repo and unarchive_repo in internal/connectors/defs/github/writes.json; nothing else was declared",
+    "direction": "this REMOVES a gate. It is correct because the gate was never authorized, not because it was harmless: a typed confirmation on a command the decision lists as non-destructive dilutes the marker on the commands that carry it by right",
+    "enforced_now": "plan mints the approval token, preview is optional and publishes an empty confirmation kind, the plan-time token executes with no --confirm, and an unapproved run is still refused with zero requests dispatched",
+    "unchanged": {
+      "repo delete": "no token at plan, preview required, typed --confirm destructive, single-use request-bound grant; tests untouched",
+      "issue delete / issue transfer / pr revert": "stay blocked; no REST endpoint and no GraphQL mutation executor",
+      "WriteRecordHook": "kept: preview and execution build one body from one record, which is what stops repo unarchive forwarding an empty body. Only its stale destructive rationale in comments was corrected"
+    },
+    "reverse_etl_split": {
+      "before": "176 destructive / 349 safe",
+      "after": "174 destructive / 351 safe",
+      "total": 525
+    },
+    "declared_confirmations_github": {
+      "before_cycle_6": 181,
+      "after_cycle_6": 183,
+      "after_cycle_11": 181
+    },
+    "tests": "red-first and GitHub-scoped: TestGitHubRestoredCommandsAreExecutable rows flipped; TestGitHubRepoArchiveIsConfirmedAndSendsPinnedField rewritten as TestGitHubRepoArchiveIsApprovalOnlyAndSendsPinnedField; repo archive/unarchive moved to TestConnectorCommandHelpOmitsConfirmationWhereNoneIsDemanded with repo delete-2 taking the vacated states-it slot",
+    "tests_added": 0,
+    "tests_weakened_skipped_or_deleted": 0,
+    "phantom_flag_survey": {
+      "scope_of_fix": "github only; no repo-wide flag test added",
+      "other_instances_counted_not_changed": {
+        "commands": 21,
+        "command_flag_pairs": 26,
+        "connectors": 5,
+        "per_connector": {
+          "ashby": "12 commands / 16 pairs",
+          "youtube-analytics": "4 / 5",
+          "recurly": "3 / 3",
+          "gong": "1 / 1",
+          "gorgias": "1 / 1"
+        },
+        "difference_from_github": "these declare a flag as blocked pending a named foundation; github's claimed a flag was required. Same class, lower severity"
+      },
+      "widening_plan": "one issue per connector taking the github shape (read the note against declared flags and the parser, fix bundle and generator, add a connector-scoped guard test); promote the guard to a defs.FS sweep only once all five are closed"
+    },
+    "regenerated_artifacts_changed_lines": {
+      "internal/connectors/defs/github/cli_surface.json": 2,
+      "docs/connectors/github/MANUAL.md": 2,
+      "docs/connectors/github/SKILL.md": 2,
+      "docs/skills/pm-github/SKILL.md": 2,
+      "docs/connectors/catalog/all-connectors.json": 2,
+      "website/data/connectors.generated.json": 2,
+      "website/lib/connectors.catalog.data.generated.json": "1 (minified single-line file)",
+      "internal/cli/testdata/golden_transcripts.json": "1 (connectors_inspect_github_json; the two confirm lines, regenerated with POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1)"
+    }
+  }
+}

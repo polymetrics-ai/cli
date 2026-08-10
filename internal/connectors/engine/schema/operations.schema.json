@@ -175,8 +175,20 @@
             "properties": {
               "document": { "type": "string" },
               "operation_name": { "type": "string" },
+              "path": { "type": "string" },
+              "max_bytes": { "type": "integer" },
+              "variables_schema": { "type": "object" },
               "variables_path": { "type": "string" },
-              "pagination": { "type": "object" }
+              "pagination": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "connection_path": { "type": "string" },
+                  "cursor_variable": { "type": "string" },
+                  "page_size_variable": { "type": "string" },
+                  "max_page_size": { "type": "integer" }
+                }
+              }
             }
           },
           "xml": {

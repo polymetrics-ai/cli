@@ -112,7 +112,7 @@ connector path is a usage error even when `--help` is present (exit `2`; with `-
 `error.code` is `usage_error`). Declared product-safe command paths dispatch through the connector
 command runner. See
 [/docs/github-cli-surface](/docs/github-cli-surface) for the current command metadata, safety labels,
-and staged parity roadmap.
+and safety boundaries.
 
 ## Workspace commands
 
@@ -131,7 +131,8 @@ pm credentials add github-local \
   --connector github \
   --provider-family provider-family \
   --auth-profile service-profile \
-  --config repository=OWNER/REPO \
+  --config owner=OWNER \
+  --config repo=REPO \
   --from-env token=GITHUB_TOKEN \
   --json
 
@@ -239,9 +240,9 @@ Provenance never supplies a `covered_by` binding or enables a command.
 ## Extract, query, and write
 
 ```bash
-pm etl check --connector github --config repository=OWNER/REPO --json
-pm etl catalog --connector github --config repository=OWNER/REPO --json
-pm etl read --connector github --stream issues --limit 10 --config repository=OWNER/REPO --json
+pm etl check --connector github --config owner=OWNER --config repo=REPO --config public_access=true --json
+pm etl catalog --connector github --config owner=OWNER --config repo=REPO --config public_access=true --json
+pm etl read --connector github --stream issues --limit 10 --config owner=OWNER --config repo=REPO --config public_access=true --json
 pm etl run --connection github_to_warehouse --stream pull_requests --batch-size 500 --json
 pm etl status <run-id> --json
 ```

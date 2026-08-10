@@ -9,6 +9,7 @@ import (
 	"io"
 	"io/fs"
 	"mime"
+	"net/http"
 	"regexp"
 	"sort"
 	"strconv"
@@ -673,14 +674,24 @@ type SurfaceCoverage struct {
 	Write  string `json:"write,omitempty"`
 	// Writes names every write action an endpoint backs when it backs more than
 	// one. A provider documents one path per operation, but a bundle may model
-	// several distinct write contracts over that one path.
+	// several distinct write contracts over that one path -- github's
+	// update_issue, close_issue and reopen_issue all PATCH the same endpoint
+	// with different bodies. Without a plural, the only way to reference the
+	// others was to invent a variant path such as ".../issues/{n} (close)",
+	// which is not an endpoint any provider publishes and which inflates every
+	// documented-operation count taken from api_surface.json.
 	Writes      []string `json:"writes,omitempty"`
 	DirectRead  string   `json:"direct_read,omitempty"`
 	DirectReads []string `json:"direct_reads,omitempty"`
+	// Operations names fixed operation contracts sharing one provider
+	// transport endpoint. It is intentionally distinct from direct_read:
+	// GraphQL's physical POST /graphql path is not an OpenAPI read endpoint,
+	// so an operation ID is the only unambiguous executable binding.
+	Operations []string `json:"operations,omitempty"`
 }
 
 // WriteTargets returns every write action a coverage entry names, singular and
-// plural together, so callers do not need to distinguish their spellings.
+// plural together, so callers never have to remember that both spellings exist.
 func (c *SurfaceCoverage) WriteTargets() []string {
 	if c == nil {
 		return nil
@@ -691,6 +702,16 @@ func (c *SurfaceCoverage) WriteTargets() []string {
 	}
 	targets = append(targets, c.Writes...)
 	return targets
+}
+
+// OperationTargets returns the fixed operation IDs a shared physical endpoint
+// covers. Keeping this enumerable lets runtime preflight reject a GraphQL
+// operation that merely happens to use the same POST path as a listed one.
+func (c *SurfaceCoverage) OperationTargets() []string {
+	if c == nil {
+		return nil
+	}
+	return append([]string(nil), c.Operations...)
 }
 
 // SurfaceExclusion names why an endpoint is intentionally out of scope.
@@ -824,10 +845,34 @@ type SensitivePolicySpec struct {
 }
 
 type GraphQLOperationSpec struct {
-	Document      string         `json:"document"`
-	OperationName string         `json:"operation_name"`
-	VariablesPath string         `json:"variables_path,omitempty"`
-	Pagination    map[string]any `json:"pagination,omitempty"`
+	// Document and OperationName are fixed bundle metadata. They are never
+	// caller input, which is what keeps an operation declaration from becoming
+	// a raw GraphQL transport escape hatch.
+	Document      string `json:"document"`
+	OperationName string `json:"operation_name"`
+	// Path, MaxBytes, and VariablesSchema are required by the executable
+	// direct-operation path. They remain optional here because legacy GraphQL
+	// stream bindings are metadata-only operations until a generated command
+	// supplies the complete closed contract.
+	Path            string          `json:"path,omitempty"`
+	MaxBytes        int             `json:"max_bytes,omitempty"`
+	VariablesSchema json.RawMessage `json:"variables_schema,omitempty"`
+	// VariablesPath is legacy metadata for non-executable GraphQL stream
+	// bindings. The fixed-operation executor deliberately ignores it: caller
+	// variables are admitted only through VariablesSchema at the root.
+	VariablesPath string                          `json:"variables_path,omitempty"`
+	Pagination    *GraphQLOperationPaginationSpec `json:"pagination,omitempty"`
+}
+
+// GraphQLOperationPaginationSpec is the closed cursor contract for a
+// fixed-document GraphQL query. The connection and variable names originate
+// in the declaration's fixed document; callers may only submit the next
+// cursor returned by the preceding result.
+type GraphQLOperationPaginationSpec struct {
+	ConnectionPath   string `json:"connection_path"`
+	CursorVariable   string `json:"cursor_variable"`
+	PageSizeVariable string `json:"page_size_variable,omitempty"`
+	MaxPageSize      int    `json:"max_page_size,omitempty"`
 }
 
 type XMLOperationSpec struct {
@@ -930,6 +975,7 @@ type CLIFlag struct {
 	AllowEmpty *bool    `json:"allow_empty,omitempty"`
 	Minimum    *float64 `json:"minimum,omitempty"`
 	Required   bool     `json:"required,omitempty"`
+	EnvOnly    bool     `json:"env_only,omitempty"`
 	// MaxItems/MinItems bound a string_array flag's item count so a bounded
 	// provider-search list can be enforced against the flag the user typed, not
 	// only against the assembled body.
@@ -1303,19 +1349,43 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 }
 
 // deriveDirectWriteSurface builds the shipped runtime endpoint check solely
-// from rest_write declarations. It verifies internal declaration consistency,
-// not provider documented-surface provenance; #3773 owns that evidence model.
+// from rest_write and fixed graphql_mutation declarations. It verifies
+// internal declaration consistency, not provider documented-surface
+// provenance; #3773 owns that evidence model. GraphQL operations that share a
+// physical POST path retain their individual IDs so a generated source root
+// cannot borrow another root's transport binding.
 func deriveDirectWriteSurface(operations []OperationSpec) *APISurface {
 	endpoints := make([]SurfaceEndpoint, 0)
+	graphQLByPath := make(map[string]int)
 	for _, op := range operations {
-		if op.Kind != "rest_write" || op.REST == nil {
-			continue
+		switch op.Kind {
+		case "rest_write":
+			if op.REST == nil {
+				continue
+			}
+			endpoints = append(endpoints, SurfaceEndpoint{
+				Method:    strings.ToUpper(strings.TrimSpace(op.REST.Method)),
+				Path:      op.REST.Path,
+				Operation: &SurfaceOperation{},
+			})
+		case "graphql_mutation":
+			if op.GraphQL == nil || strings.TrimSpace(op.GraphQL.Path) == "" {
+				continue
+			}
+			key := http.MethodPost + ":" + op.GraphQL.Path
+			if index, ok := graphQLByPath[key]; ok {
+				endpoints[index].CoveredBy.Operations = append(endpoints[index].CoveredBy.Operations, op.ID)
+				continue
+			}
+			graphQLByPath[key] = len(endpoints)
+			endpoints = append(endpoints, SurfaceEndpoint{
+				Method: http.MethodPost,
+				Path:   op.GraphQL.Path,
+				CoveredBy: &SurfaceCoverage{
+					Operations: []string{op.ID},
+				},
+			})
 		}
-		endpoints = append(endpoints, SurfaceEndpoint{
-			Method:    strings.ToUpper(strings.TrimSpace(op.REST.Method)),
-			Path:      op.REST.Path,
-			Operation: &SurfaceOperation{},
-		})
 	}
 	if len(endpoints) == 0 {
 		return nil
@@ -2242,12 +2312,26 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if method == "POST" && len(op.REST.BodySchema) == 0 {
 			return fmt.Errorf("operation %d (%q) rest_read POST must declare body_schema", i, op.ID)
 		}
+		// text/plain is a new, closed operation contract. Validate it at load
+		// time so a bundle cannot declare raw input without its root-string
+		// schema. Keep existing non-text POST metadata on its established
+		// loader path; the operation direct-read preflight performs its stricter
+		// executable-contract validation only when a command names it.
+		if method == "POST" && operationDirectReadContentType(op) == "text/plain" {
+			if err := validateOperationDirectReadTextPlainContract(op); err != nil {
+				return fmt.Errorf("operation %d (%q) rest_read POST: %w", i, op.ID, err)
+			}
+		}
 		if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
 			return fmt.Errorf("operation %d (%q) rest_read must not declare mutating mutation_class %q", i, op.ID, op.MutationClass)
 		}
 	case "provider_search":
 		if err := validateProviderSearchSemantics(i, op); err != nil {
 			return err
+		}
+	case "graphql_query":
+		if err := validateGraphQLOperationDeclaration(op, "query"); err != nil {
+			return fmt.Errorf("operation %d (%q) graphql_query: %w", i, op.ID, err)
 		}
 	case "rest_write":
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
@@ -2260,7 +2344,17 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if strings.TrimSpace(op.Approval) == "" || op.Approval == "none" {
 			return fmt.Errorf("operation %d (%q) rest_write must declare approval requirements", i, op.ID)
 		}
-	case "graphql_mutation", "xml_import":
+	case "graphql_mutation":
+		if err := validateGraphQLOperationDeclaration(op, "mutation"); err != nil {
+			return fmt.Errorf("operation %d (%q) graphql_mutation: %w", i, op.ID, err)
+		}
+		if strings.TrimSpace(op.MutationClass) == "" || op.MutationClass == "none" {
+			return fmt.Errorf("operation %d (%q) %s must declare mutation_class", i, op.ID, op.Kind)
+		}
+		if strings.TrimSpace(op.Approval) == "" || op.Approval == "none" {
+			return fmt.Errorf("operation %d (%q) %s must declare approval requirements", i, op.ID, op.Kind)
+		}
+	case "xml_import":
 		if strings.TrimSpace(op.MutationClass) == "" || op.MutationClass == "none" {
 			return fmt.Errorf("operation %d (%q) %s must declare mutation_class", i, op.ID, op.Kind)
 		}

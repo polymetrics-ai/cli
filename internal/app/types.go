@@ -213,33 +213,41 @@ type ReversePlan struct {
 	ConnectorCommandPath  []string          `json:"connector_command_path,omitempty"`
 	// ConnectorCommandOperation identifies a direct_write operation. When it is
 	// empty, the plan retains the existing writes.json action path.
-	ConnectorCommandOperation  string                         `json:"connector_command_operation,omitempty"`
-	ConnectorCommandPathParams map[string]string              `json:"connector_command_path_params,omitempty"`
-	ConnectorCommandQuery      map[string]string              `json:"connector_command_query,omitempty"`
-	ConnectorCommandRecord     connectors.Record              `json:"connector_command_record,omitempty"`
-	PayloadIdentity            []PayloadIdentity              `json:"payload_identity,omitempty"`
-	ConfirmationChallenge      string                         `json:"confirmation_challenge,omitempty"`
-	ConfirmationPolicy         connectors.WriteConfirmation   `json:"confirmation,omitempty"`
-	RedactFields               []string                       `json:"redact_fields,omitempty"`
-	RecordCount                int                            `json:"record_count"`
-	Sample                     []connectors.Record            `json:"sample,omitempty"`
-	PlanHash                   string                         `json:"plan_hash"`
-	PlanSeal                   *connectors.WritePlanSeal      `json:"plan_seal,omitempty"`
-	PreviewDigest              string                         `json:"preview_digest,omitempty"`
-	PreviewedAt                time.Time                      `json:"previewed_at,omitempty"`
-	ApprovalTokenHash          string                         `json:"approval_token_hash,omitempty"`
-	ApprovalGrant              *connectors.WriteApprovalGrant `json:"approval_grant,omitempty"`
-	ApprovalToken              string                         `json:"approval_token,omitempty"`
-	ApprovalConsumedAt         time.Time                      `json:"approval_consumed_at,omitempty"`
-	ApprovalUncertainAt        time.Time                      `json:"approval_consumption_uncertain_at,omitempty"`
-	CreatedAt                  time.Time                      `json:"created_at"`
-	ExpiresAt                  time.Time                      `json:"expires_at"`
+	ConnectorCommandOperation  string                       `json:"connector_command_operation,omitempty"`
+	ConnectorCommandPathParams map[string]string            `json:"connector_command_path_params,omitempty"`
+	ConnectorCommandQuery      map[string]string            `json:"connector_command_query,omitempty"`
+	ConnectorCommandRecord     connectors.Record            `json:"connector_command_record,omitempty"`
+	PayloadIdentity            []PayloadIdentity            `json:"payload_identity,omitempty"`
+	ConfirmationChallenge      string                       `json:"confirmation_challenge,omitempty"`
+	ConfirmationPolicy         connectors.WriteConfirmation `json:"confirmation,omitempty"`
+	RedactFields               []string                     `json:"redact_fields,omitempty"`
+	// WithheldFields names the record fields this plan actually removed before
+	// persisting, which is a subset of RedactFields: a declared field the
+	// operator never supplied was never present and is never owed back. Only
+	// these have to be re-supplied to preview or run the plan.
+	WithheldFields      []string                       `json:"withheld_fields,omitempty"`
+	RecordCount         int                            `json:"record_count"`
+	Sample              []connectors.Record            `json:"sample,omitempty"`
+	PlanHash            string                         `json:"plan_hash"`
+	PlanSeal            *connectors.WritePlanSeal      `json:"plan_seal,omitempty"`
+	PreviewDigest       string                         `json:"preview_digest,omitempty"`
+	PreviewedAt         time.Time                      `json:"previewed_at,omitempty"`
+	ApprovalTokenHash   string                         `json:"approval_token_hash,omitempty"`
+	ApprovalGrant       *connectors.WriteApprovalGrant `json:"approval_grant,omitempty"`
+	ApprovalToken       string                         `json:"approval_token,omitempty"`
+	ApprovalConsumedAt  time.Time                      `json:"approval_consumed_at,omitempty"`
+	ApprovalUncertainAt time.Time                      `json:"approval_consumption_uncertain_at,omitempty"`
+	CreatedAt           time.Time                      `json:"created_at"`
+	ExpiresAt           time.Time                      `json:"expires_at"`
 }
 
 type RunReverseETLRequest struct {
 	PlanID        string                       `json:"plan_id"`
 	ApprovalToken string                       `json:"-"`
 	Confirmation  connectors.WriteConfirmation `json:"-"`
+	// WithheldFlags carries the command flags an operator re-supplies for
+	// fields the plan withheld from disk. It is never persisted.
+	WithheldFlags map[string][]string `json:"-"`
 }
 
 type ReverseRun struct {

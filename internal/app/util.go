@@ -92,29 +92,181 @@ func deepCloneRecordValue(v any) any {
 	}
 }
 
-func redactReversePlanField(record connectors.Record, field string) {
+// resolveRecordParent walks a dotted field path and returns the map that holds
+// the leaf together with the leaf key. It reports false when any intermediate
+// segment is absent or is not itself a record, which is the single traversal
+// every field helper below shares.
+func resolveRecordParent(record connectors.Record, field string) (map[string]any, string, bool) {
 	if field == "" {
-		return
+		return nil, "", false
 	}
 	parts := strings.Split(field, ".")
 	current := map[string]any(record)
 	for _, part := range parts[:len(parts)-1] {
 		next, ok := current[part]
 		if !ok {
-			return
+			return nil, "", false
 		}
-		switch typed := next.(type) {
-		case map[string]any:
-			current = typed
-		case connectors.Record:
-			current = map[string]any(typed)
-		default:
-			return
+		nested, ok := asRecordMap(next)
+		if !ok {
+			return nil, "", false
+		}
+		current = nested
+	}
+	return current, parts[len(parts)-1], true
+}
+
+func redactReversePlanField(record connectors.Record, field string) {
+	parent, leaf, ok := resolveRecordParent(record, field)
+	if !ok {
+		return
+	}
+	if _, present := parent[leaf]; present {
+		parent[leaf] = "redacted"
+	}
+}
+
+// withholdRecordFields returns a clone of in with every declared field removed
+// outright, alongside the fields it actually removed. The key is absent rather
+// than set to a placeholder: an absent key is unambiguous, where a placeholder
+// is indistinguishable from an operator who really supplied that string and
+// would be dispatched verbatim.
+//
+// The second return value is what makes re-supply solvable. A declared field
+// the operator never supplied was never in the record and was never withheld,
+// so demanding it back would be an unsatisfiable precondition on a plan whose
+// hash was computed without it. Only the fields removed here are owed back.
+//
+// fields must already be record-relative; connectorCommandRedactFields strips
+// the declaring surface's prefix.
+func withholdRecordFields(in connectors.Record, fields []string) (connectors.Record, []string) {
+	out := deepCloneRecord(in)
+	var withheld []string
+	for _, field := range fields {
+		trimmed := strings.TrimSpace(field)
+		if deleteRecordField(out, trimmed) {
+			withheld = append(withheld, trimmed)
 		}
 	}
-	if _, ok := current[parts[len(parts)-1]]; ok {
-		current[parts[len(parts)-1]] = "redacted"
+	return out, withheld
+}
+
+// deleteRecordField removes a dotted field and reports whether it was present.
+func deleteRecordField(record connectors.Record, field string) bool {
+	parent, leaf, ok := resolveRecordParent(record, field)
+	if !ok {
+		return false
 	}
+	if _, present := parent[leaf]; !present {
+		return false
+	}
+	delete(parent, leaf)
+	return true
+}
+
+// recordHasField reports whether a dotted field is present. A plan written
+// before fields were withheld still carries them, so nothing is re-supplied for
+// it.
+func recordHasField(record connectors.Record, field string) bool {
+	parent, leaf, ok := resolveRecordParent(record, strings.TrimSpace(field))
+	if !ok {
+		return false
+	}
+	_, present := parent[leaf]
+	return present
+}
+
+// mergeRecordFields overlays supplied onto base, descending into nested maps so
+// a withheld leaf is restored without discarding its siblings.
+func mergeRecordFields(base, overlay connectors.Record) connectors.Record {
+	out := deepCloneRecord(base)
+	for key, value := range overlay {
+		out[key] = mergeRecordValue(out[key], value)
+	}
+	return out
+}
+
+func mergeRecordValue(existing, overlay any) any {
+	existingMap, okExisting := asRecordMap(existing)
+	overlayMap, okOverlay := asRecordMap(overlay)
+	if !okExisting || !okOverlay {
+		return overlay
+	}
+	merged := make(map[string]any, len(existingMap)+len(overlayMap))
+	for key, value := range existingMap {
+		merged[key] = value
+	}
+	for key, value := range overlayMap {
+		merged[key] = mergeRecordValue(merged[key], value)
+	}
+	return merged
+}
+
+func asRecordMap(value any) (map[string]any, bool) {
+	switch typed := value.(type) {
+	case map[string]any:
+		return typed, true
+	case connectors.Record:
+		return map[string]any(typed), true
+	default:
+		return nil, false
+	}
+}
+
+// connectorCommandRedactFields answers "what does this plan withhold?" for a
+// connector-command plan. It dispatches on mode and never falls back between
+// the two branches: operation IDs and write-action names are separate
+// namespaces that collide by name in at least one bundle, so a fallback could
+// withhold an unrelated action's fields. An operation whose metadata cannot be
+// resolved is an error, never an empty withhold set.
+func connectorCommandRedactFields(connector connectors.Connector, operation, actionName string) ([]string, error) {
+	operation = strings.TrimSpace(operation)
+	prefix := connectorCommandRecordPrefix(operation)
+	if operation == "" {
+		return recordRelativeFields(reversePlanRedactFields(connector, actionName), prefix), nil
+	}
+	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+	if !ok {
+		return nil, fmt.Errorf("connector %q does not expose direct-write metadata for operation %q", connector.Name(), operation)
+	}
+	metadata, err := provider.OperationDirectWriteMetadata(operation)
+	if err != nil {
+		return nil, err
+	}
+	if metadata.Operation != operation {
+		return nil, fmt.Errorf("connector %q direct-write metadata did not match operation %q", connector.Name(), operation)
+	}
+	return recordRelativeFields(metadata.RedactFields, prefix), nil
+}
+
+// connectorCommandRecordPrefix is the field-path prefix the declaring surface
+// uses for the record a connector-command plan carries. A direct_write
+// operation's record IS its request body, so it declares body.<path>; a write
+// action declares record.<path>. commandrunner.ReconstituteWithheldFields
+// dispatches on the same rule, and the two halves have to agree or a withheld
+// field silently stays on disk.
+func connectorCommandRecordPrefix(operation string) string {
+	if strings.TrimSpace(operation) != "" {
+		return "body."
+	}
+	return "record."
+}
+
+// recordRelativeFields strips the declaring surface's prefix so every field
+// path a plan persists is relative to the record itself.
+func recordRelativeFields(fields []string, prefix string) []string {
+	out := make([]string, 0, len(fields))
+	for _, field := range fields {
+		trimmed := strings.TrimPrefix(strings.TrimSpace(field), prefix)
+		if trimmed == "" {
+			continue
+		}
+		out = append(out, trimmed)
+	}
+	if len(out) == 0 {
+		return nil
+	}
+	return out
 }
 
 func reversePlanRedactFields(connector connectors.Connector, actionName string) []string {

@@ -826,7 +826,7 @@ func renderConnectorCommandManual(connectorName string, connector connectors.Con
 	if len(path) > 0 {
 		command := strings.Join(path, " ")
 		if cmd, ok := connectorSurfaceCommand(surface, command); ok {
-			return connectorName + " " + command, renderConnectorCommandDetail(connectorName, surface, cmd)
+			return connectorName + " " + command, renderConnectorCommandDetail(connectorName, connector, surface, cmd)
 		}
 		if len(path) == 1 && connectorSurfaceHasPrefix(surface, path[0]) {
 			return connectorName + " " + path[0], renderConnectorCommandGroup(connectorName, connector, surface, path[0])
@@ -928,7 +928,7 @@ func renderConnectorCommandGroup(connectorName string, connector connectors.Conn
 	return b.String()
 }
 
-func renderConnectorCommandDetail(connectorName string, surface *connectors.CommandSurface, cmd connectors.CommandSurfaceCommand) string {
+func renderConnectorCommandDetail(connectorName string, connector connectors.Connector, surface *connectors.CommandSurface, cmd connectors.CommandSurfaceCommand) string {
 	var b strings.Builder
 	b.WriteString("NAME\n")
 	fmt.Fprintf(&b, "  pm %s %s", connectorName, cmd.Path)
@@ -952,6 +952,7 @@ func renderConnectorCommandDetail(connectorName string, surface *connectors.Comm
 	writeConnectorField(&b, "WRITE", cmd.Write)
 	writeConnectorField(&b, "OPERATION", cmd.Operation)
 	writeConnectorField(&b, "APPROVAL", cmd.Approval)
+	writeConnectorField(&b, "CONFIRMATION", connectorCommandConfirmationHelp(connector, cmd))
 	writeConnectorField(&b, "RISK", cmd.Risk)
 	writeConnectorField(&b, "OUTPUT POLICY", cmd.OutputPolicy)
 	writeConnectorField(&b, "NOTES", cmd.Notes)
@@ -984,6 +985,22 @@ func writeConnectorPageFlags(b *strings.Builder, cmd connectors.CommandSurfaceCo
 	for _, flag := range connectors.DirectReadPageFlags() {
 		writeConnectorFlag(b, flag)
 	}
+}
+
+// connectorCommandConfirmationHelp states the typed confirmation the command
+// will demand at run, phrased as the flag the operator has to type.
+//
+// It resolves through commandrunner rather than reading the bundle's notes, for
+// the same reason writeConnectorDownloadFlags reads BinaryDownloadFlags: help
+// and the runtime must not be able to disagree. A note is prose one author
+// wrote on one command, so it is absent on every command nobody annotated, and
+// an absent note reads exactly like "no confirmation needed".
+func connectorCommandConfirmationHelp(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) string {
+	challenge := strings.TrimSpace(commandrunner.ConfirmationChallengeForCommand(connector, cmd))
+	if challenge == "" {
+		return ""
+	}
+	return "execution requires the typed confirmation --confirm " + challenge
 }
 
 // writeConnectorDownloadFlags documents the destination flags that only a
@@ -1028,6 +1045,9 @@ func writeConnectorFlag(b *strings.Builder, flag connectors.CommandSurfaceFlag) 
 	}
 	if flag.Required {
 		b.WriteString(" required")
+	}
+	if flag.EnvOnly {
+		fmt.Fprintf(b, " env-only (use --from-env %s=ENV)", strings.TrimLeft(flag.Name, "-"))
 	}
 	if flag.Summary != "" {
 		fmt.Fprintf(b, ": %s", flag.Summary)
@@ -1158,21 +1178,6 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	if err != nil {
 		return err
 	}
-	// The page flags stay in commandFlags on purpose: only a direct_read can
-	// honour them, and the runner drops them for that intent alone. Stripping
-	// them here for every intent made `--page 3` on an ETL command
-	// accepted-and-ignored, which is the same quiet wrongness --page exists to
-	// remove.
-	commandFlags := map[string][]string{}
-	for name, values := range flags.values {
-		switch name {
-		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "confirm", "plan-name", "dest-root", "file-name":
-			continue
-		default:
-			commandFlags[name] = values
-		}
-	}
-
 	if flags.first("plan") != "" {
 		return runConnectorWriteCommandFromPlan(ctx, a, connectorName, path, flags, stdout, jsonOut)
 	}
@@ -1181,6 +1186,20 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	if err != nil {
 		return err
 	}
+	surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || surfaceProvider.CommandSurface() == nil {
+		return fmt.Errorf("connector %q has no command surface", connectorName)
+	}
+	resolvedFlags, err := resolveConnectorCommandEnvironmentOnlyFlags(surfaceProvider.CommandSurface(), path, flags.values)
+	if err != nil {
+		return err
+	}
+	// The page flags stay in commandFlags on purpose: only a direct_read can
+	// honour them, and the runner drops them for that intent alone. Stripping
+	// them here for every intent made `--page 3` on an ETL command
+	// accepted-and-ignored, which is the same quiet wrongness --page exists to
+	// remove.
+	commandFlags := connectorCommandFlags(resolvedFlags)
 
 	if err := runConnectorWriteCommand(ctx, a, connectorName, credential, config, path, commandFlags, flags, stdout, jsonOut); err != commandrunner.ErrNotWriteCommand {
 		if err != nil {
@@ -1269,6 +1288,93 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		_, _ = fmt.Fprintln(stdout, string(b))
 	}
 	return nil
+}
+
+func connectorCommandFlags(values map[string][]string) map[string][]string {
+	commandFlags := map[string][]string{}
+	for name, entries := range values {
+		switch name {
+		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "confirm", "plan-name", "dest-root", "file-name", "from-env":
+			continue
+		default:
+			commandFlags[name] = append([]string(nil), entries...)
+		}
+	}
+	return commandFlags
+}
+
+// resolveConnectorCommandEnvironmentOnlyFlags resolves only fields the
+// connector declaration marks env_only. It is intentionally command-specific:
+// a generic --from-env escape hatch would let a caller bypass the declaration
+// that identifies which values are sensitive and later withheld from state.
+// The environment value is held only in memory and then enters the ordinary
+// typed command flag coercion; this helper never formats it into an error.
+func resolveConnectorCommandEnvironmentOnlyFlags(surface *connectors.CommandSurface, path []string, values map[string][]string) (map[string][]string, error) {
+	if surface == nil {
+		return nil, fmt.Errorf("connector command has no command surface")
+	}
+	command, found := connectorSurfaceCommand(surface, strings.Join(path, " "))
+	if !found {
+		return nil, fmt.Errorf("unknown connector command %q", strings.Join(path, " "))
+	}
+	envOnly := map[string]connectors.CommandSurfaceFlag{}
+	for _, flag := range command.Flags {
+		if flag.EnvOnly {
+			envOnly[flag.Name] = flag
+		}
+	}
+	resolved := make(map[string][]string, len(values))
+	for name, entries := range values {
+		if name == "from-env" {
+			continue
+		}
+		resolved[name] = append([]string(nil), entries...)
+	}
+	for name := range envOnly {
+		if len(resolved[name]) != 0 {
+			return nil, validationErrorf("--%s must be supplied through --from-env %s=ENV", name, name)
+		}
+	}
+	seen := map[string]struct{}{}
+	for _, spec := range values["from-env"] {
+		field, envName, ok := strings.Cut(spec, "=")
+		if !ok || strings.TrimSpace(field) == "" || strings.TrimSpace(envName) == "" {
+			return nil, usageErrorf("invalid --from-env %q, want field=ENV", spec)
+		}
+		field = strings.TrimSpace(field)
+		envName = strings.TrimSpace(envName)
+		if _, ok := envOnly[field]; !ok {
+			return nil, validationErrorf("--from-env %s is not declared for connector command %q", field, command.Path)
+		}
+		if _, duplicate := seen[field]; duplicate {
+			return nil, validationErrorf("--from-env supplies %s more than once", field)
+		}
+		if err := safety.ValidateIdentifier(envName, "environment variable"); err != nil {
+			return nil, validationErrorf("%v", err)
+		}
+		value, present := os.LookupEnv(envName)
+		if !present || value == "" {
+			return nil, validationErrorf("environment variable %s is empty", envName)
+		}
+		resolved[field] = []string{value}
+		seen[field] = struct{}{}
+	}
+	return resolved, nil
+}
+
+func resolveReversePlanEnvironmentOnlyFlags(plan app.ReversePlan, values map[string][]string) (map[string][]string, error) {
+	if plan.ConnectorCommand == "" {
+		return values, nil
+	}
+	connector, ok := appRegistry().Get(plan.DestinationConnector)
+	if !ok {
+		return nil, fmt.Errorf("unknown connector %q", plan.DestinationConnector)
+	}
+	surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || surfaceProvider.CommandSurface() == nil {
+		return nil, fmt.Errorf("connector %q has no command surface", plan.DestinationConnector)
+	}
+	return resolveConnectorCommandEnvironmentOnlyFlags(surfaceProvider.CommandSurface(), plan.ConnectorCommandPath, values)
 }
 
 func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
@@ -1382,12 +1488,24 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 	if err != nil {
 		return err
 	}
+	connector, ok := appRegistry().Get(connectorName)
+	if !ok {
+		return fmt.Errorf("unknown connector %q", connectorName)
+	}
+	surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || surfaceProvider.CommandSurface() == nil {
+		return fmt.Errorf("connector %q has no command surface", connectorName)
+	}
+	resolvedFlags, err := resolveConnectorCommandEnvironmentOnlyFlags(surfaceProvider.CommandSurface(), path, flags.values)
+	if err != nil {
+		return err
+	}
 	if approvalToken != "" {
 		confirmation, err := connectors.ParseWriteConfirmation(flags.first("confirm"))
 		if err != nil {
 			return validationErrorf("invalid --confirm: %v", err)
 		}
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: confirmation})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: confirmation, WithheldFlags: resolvedFlags})
 		if err != nil {
 			return err
 		}
@@ -1398,7 +1516,7 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 		return nil
 	}
 	if preview {
-		plan, writePreview, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+		plan, writePreview, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, resolvedFlags)
 		if err != nil {
 			return err
 		}
@@ -1664,9 +1782,14 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if err != nil {
 			return err
 		}
+		flags := parseFlags(args[2:])
+		resolvedFlags, err := resolveReversePlanEnvironmentOnlyFlags(plan, flags.values)
+		if err != nil {
+			return err
+		}
 		var writePreview *connectors.WritePreview
 		if plan.ConnectorCommand != "" || plan.ConfirmationPolicy.Kind != "" || plan.ConfirmationChallenge != "" {
-			previewedPlan, preview, err := a.PreviewReversePlan(ctx, args[1])
+			previewedPlan, preview, err := a.PreviewReversePlan(ctx, args[1], resolvedFlags)
 			if err != nil {
 				return err
 			}
@@ -1696,11 +1819,19 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 			return errUsage
 		}
 		flags := parseFlags(args[2:])
+		plan, err := a.GetReversePlan(args[1])
+		if err != nil {
+			return err
+		}
+		resolvedFlags, err := resolveReversePlanEnvironmentOnlyFlags(plan, flags.values)
+		if err != nil {
+			return err
+		}
 		confirmation, err := connectors.ParseWriteConfirmation(flags.first("confirm"))
 		if err != nil {
 			return validationErrorf("invalid --confirm: %v", err)
 		}
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: confirmation})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: confirmation, WithheldFlags: resolvedFlags})
 		if err != nil {
 			return err
 		}

@@ -22,31 +22,35 @@ import (
 )
 
 type fakeConnector struct {
-	surface                   *connectors.CommandSurface
-	manifest                  connectors.Manifest
-	readReq                   connectors.ReadRequest
-	directReadReq             connectors.DirectReadRequest
-	operationDirectReadReq    connectors.OperationDirectReadRequest
-	operationReadPreflight    operationDirectReadPreflightCall
-	operationReadPreflightErr error
-	operationDirectWriteReq   connectors.OperationDirectWriteRequest
-	directWriteMetadata       connectors.OperationDirectWriteMetadata
-	binaryDownloadReq         connectors.OperationBinaryDownloadRequest
-	directReadErr             error
-	ignoresPageNavigation     bool
-	operationDirectReadErr    error
-	binaryDownloadErr         error
-	validateReq               connectors.WriteRequest
-	dryRunReq                 connectors.WriteRequest
-	writeReq                  connectors.WriteRequest
-	writeRecords              []connectors.Record
-	validateErr               error
-	dryRunErr                 error
-	readErr                   error
-	writeErr                  error
-	readRecords               []connectors.Record
-	preview                   connectors.WritePreview
-	writeResult               connectors.WriteResult
+	surface                    *connectors.CommandSurface
+	manifest                   connectors.Manifest
+	readReq                    connectors.ReadRequest
+	directReadReq              connectors.DirectReadRequest
+	operationDirectReadReq     connectors.OperationDirectReadRequest
+	operationReadPreflight     operationDirectReadPreflightCall
+	operationReadPreflightErr  error
+	operationJSONVariable      operationStructuredJSONVariablePreflightCall
+	operationJSONVariableErr   error
+	operationDirectWriteReq    connectors.OperationDirectWriteRequest
+	operationWritePreflight    operationDirectWritePreflightCall
+	operationWritePreflightErr error
+	directWriteMetadata        connectors.OperationDirectWriteMetadata
+	binaryDownloadReq          connectors.OperationBinaryDownloadRequest
+	directReadErr              error
+	ignoresPageNavigation      bool
+	operationDirectReadErr     error
+	binaryDownloadErr          error
+	validateReq                connectors.WriteRequest
+	dryRunReq                  connectors.WriteRequest
+	writeReq                   connectors.WriteRequest
+	writeRecords               []connectors.Record
+	validateErr                error
+	dryRunErr                  error
+	readErr                    error
+	writeErr                   error
+	readRecords                []connectors.Record
+	preview                    connectors.WritePreview
+	writeResult                connectors.WriteResult
 }
 
 type operationDirectReadPreflightCall struct {
@@ -54,6 +58,18 @@ type operationDirectReadPreflightCall struct {
 	method       string
 	path         string
 	maxBytes     int
+	outputPolicy string
+}
+
+type operationStructuredJSONVariablePreflightCall struct {
+	operation string
+	variable  string
+}
+
+type operationDirectWritePreflightCall struct {
+	operation    string
+	method       string
+	path         string
 	outputPolicy string
 }
 
@@ -140,6 +156,19 @@ func (f *fakeConnector) PreflightOperationDirectRead(operation, method, path str
 		outputPolicy: outputPolicy,
 	}
 	return f.operationReadPreflightErr
+}
+func (f *fakeConnector) PreflightOperationStructuredJSONVariable(operation, variable string) error {
+	f.operationJSONVariable = operationStructuredJSONVariablePreflightCall{operation: operation, variable: variable}
+	return f.operationJSONVariableErr
+}
+func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
+	f.operationWritePreflight = operationDirectWritePreflightCall{
+		operation:    operation,
+		method:       method,
+		path:         path,
+		outputPolicy: outputPolicy,
+	}
+	return f.operationWritePreflightErr
 }
 func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	f.operationDirectWriteReq = req
@@ -1251,6 +1280,80 @@ func TestCoerceFlagValueRejectsGenericJSONFlagType(t *testing.T) {
 	}
 }
 
+// The CLI metadata has long enumerated a `json` flag type, but the runner
+// deliberately refused it rather than let it become an untyped body escape
+// hatch. GitHub's documented oneOf arms need it for named object/array record
+// fields. This contract describes the narrow change: the value is structured,
+// the action schema remains the authority, and a scalar-shaped declaration is
+// rejected before a command can be planned.
+func TestBuildWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags(t *testing.T) {
+	newConnector := func(flagType, target string) connectors.Connector {
+		return engine.New(engine.Bundle{
+			Name: "widgets",
+			Writes: []engine.WriteAction{{
+				Name:   "create_widget",
+				Kind:   "create",
+				Method: http.MethodPost,
+				Path:   "/widgets",
+				RecordSchema: json.RawMessage(`{
+					"type":"object","additionalProperties":false,"required":["payload"],
+					"properties":{"payload":{"type":"object","additionalProperties":false,"required":["kind"],"properties":{"kind":{"type":"string"}}}}
+				}`),
+			}},
+			CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+				Path: "widgets create", Intent: "reverse_etl", Availability: "implemented", Write: "create_widget",
+				Flags: []engine.CLIFlag{{Name: "payload", Type: flagType, MapsTo: target, Required: true}},
+			}}},
+		}, nil)
+	}
+
+	connector := newConnector("json", "record.payload")
+	if err := Preflight(connector, []string{"widgets", "create"}); err != nil {
+		t.Fatalf("Preflight: %v", err)
+	}
+
+	tests := []struct {
+		name    string
+		value   string
+		wantErr string
+	}{
+		{name: "valid object becomes typed planned record", value: `{"kind":"fixture"}`},
+		{name: "malformed JSON never produces a plan", value: `{`, wantErr: "invalid JSON"},
+		{name: "array cannot satisfy object field", value: `[]`, wantErr: "does not match type"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			command, err := BuildWriteCommand(context.Background(), connector, Request{
+				Path: []string{"widgets", "create"}, Flags: map[string][]string{"payload": {tt.value}},
+			})
+			if tt.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+					t.Fatalf("BuildWriteCommand error = %v, want %q", err, tt.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("BuildWriteCommand: %v", err)
+			}
+			payload, ok := command.Record["payload"].(map[string]any)
+			if !ok || payload["kind"] != "fixture" {
+				t.Fatalf("planned payload = %#v, want parsed object", command.Record["payload"])
+			}
+		})
+	}
+
+	// A structured JSON flag must never turn into a generic scalar setter or
+	// body escape hatch just because a bundle says `json`: its target schema
+	// must explicitly admit one top-level object/array record field before
+	// preflight makes it reachable.
+	for _, target := range []string{"record.payload.kind", "body.payload"} {
+		invalid := newConnector("json", target)
+		if err := Preflight(invalid, []string{"widgets", "create"}); err == nil || !strings.Contains(err.Error(), "structured JSON") {
+			t.Fatalf("Preflight structured-json mapping %q error = %v, want declared object/array record rejection", target, err)
+		}
+	}
+}
+
 func TestRecordOverridesBuildsExplicitNestedScalarFields(t *testing.T) {
 	record, err := recordOverrides(connectors.CommandSurfaceCommand{
 		Path:         "diagnoses create",
@@ -1743,6 +1846,161 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredGraphQLVariable(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "graphql query widgets",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    "github.graphql.query.widgets",
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/graphql"}},
+		OutputPolicy: "json_redacted",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "input", Type: "json", Required: true, MapsTo: "body.input"},
+		},
+	}}}}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"graphql", "query", "widgets"},
+		Flags: map[string][]string{"input": {`{"ids":["widget-1"]}`}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for operation direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if got, want := connector.operationJSONVariable, (operationStructuredJSONVariablePreflightCall{operation: "github.graphql.query.widgets", variable: "input"}); got != want {
+		t.Fatalf("structured JSON preflight = %#v, want %#v", got, want)
+	}
+	input, ok := connector.operationDirectReadReq.Body["input"].(map[string]any)
+	if !ok {
+		t.Fatalf("typed GraphQL input = %#v, want object", connector.operationDirectReadReq.Body["input"])
+	}
+	ids, ok := input["ids"].([]any)
+	if !ok || len(ids) != 1 || ids[0] != "widget-1" {
+		t.Fatalf("typed GraphQL ids = %#v, want one declared item", input["ids"])
+	}
+
+	connector.operationJSONVariableErr = errors.New("variable is not a closed object or array")
+	_, err = Run(context.Background(), connector, Request{
+		Path:  []string{"graphql", "query", "widgets"},
+		Flags: map[string][]string{"input": {`{"ids":["widget-2"]}`}},
+	}, func(connectors.Record) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "closed object or array") {
+		t.Fatalf("Run rejected GraphQL variable = %v, want declaration-owned preflight rejection", err)
+	}
+}
+
+func TestRunOperationDirectReadPassesDeclaredPlainTextBody(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "markdown raw",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "github.render_raw_markdown",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: http.MethodPost, Path: "/markdown/raw"},
+				},
+				OutputPolicy: "text",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "text", Type: "string", Required: true, MapsTo: "body"},
+				},
+			},
+		},
+	}}
+
+	const source = "# hello\n"
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"markdown", "raw"},
+		Flags: map[string][]string{"text": {source}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for operation direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if connector.operationDirectReadReq.RawBody == nil || *connector.operationDirectReadReq.RawBody != source {
+		t.Fatalf("RawBody = %#v, want literal source", connector.operationDirectReadReq.RawBody)
+	}
+	if len(connector.operationDirectReadReq.Body) != 0 {
+		t.Fatalf("Body = %#v, want no JSON fields for raw input", connector.operationDirectReadReq.Body)
+	}
+}
+
+func TestRunOperationDirectReadRejectsMixedRawAndJSONBodyMappings(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "markdown raw",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "github.render_raw_markdown",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: http.MethodPost, Path: "/markdown/raw"},
+				},
+				OutputPolicy: "text",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "text", Type: "string", Required: true, MapsTo: "body"},
+					{Name: "context", Type: "string", MapsTo: "body.context"},
+				},
+			},
+		},
+	}}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"markdown", "raw"},
+		Flags: map[string][]string{"text": {"# hello"}, "context": {"octo/example"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for rejected operation direct-read command")
+		return nil
+	})
+	if err == nil {
+		t.Fatal("Run error = nil, want mixed body rejection")
+	}
+	if !strings.Contains(err.Error(), "raw body cannot mix with JSON body fields") {
+		t.Fatalf("Run error = %q, want mixed body rejection", err)
+	}
+	if connector.operationDirectReadReq.RawBody != nil {
+		t.Fatalf("OperationDirectRead dispatched with raw body %#v", connector.operationDirectReadReq.RawBody)
+	}
+}
+
+func TestRunOperationDirectReadPlainTextBodyOnlyAdmitsDocumentWhitespace(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "markdown raw",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "github.render_raw_markdown",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: http.MethodPost, Path: "/markdown/raw"},
+				},
+				OutputPolicy: "text",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "text", Type: "string", Required: true, MapsTo: "body"},
+				},
+			},
+		},
+	}}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"markdown", "raw"},
+		Flags: map[string][]string{"text": {"# hello\x00"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for rejected operation direct-read command")
+		return nil
+	})
+	if err == nil || !strings.Contains(err.Error(), "unsupported control character") {
+		t.Fatalf("Run error = %v, want raw control-character rejection", err)
+	}
+	if connector.operationDirectReadReq.RawBody != nil {
+		t.Fatalf("OperationDirectRead dispatched with raw body %#v", connector.operationDirectReadReq.RawBody)
+	}
+}
+
 func TestPreflightOperationDirectReadRejectsNonExecutableOperationMetadata(t *testing.T) {
 	connector := &fakeConnector{
 		operationReadPreflightErr: errors.New("operation direct read requires rest_read or provider_search operation, got \"graphql_query\""),
@@ -1888,6 +2146,37 @@ func TestPreflightOperationDirectWriteRejectsMismatchedOperationPolicy(t *testin
 	err := Preflight(connector, []string{"vote"})
 	if err == nil || !strings.Contains(err.Error(), "output_policy") {
 		t.Fatalf("Preflight(direct_write) error = %v, want mismatched output_policy rejection", err)
+	}
+}
+
+func TestPreflightOperationDirectWriteRequiresRuntimeBinding(t *testing.T) {
+	connector := &fakeConnector{
+		operationWritePreflightErr: errors.New("operation direct write path \"/graphql/raw\" does not match declared operation path \"/graphql\""),
+		directWriteMetadata: connectors.OperationDirectWriteMetadata{
+			Operation:    "github.delete_issue",
+			OutputPolicy: "json_redacted",
+		},
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "issue delete",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "github.delete_issue",
+			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/graphql/raw"}},
+			OutputPolicy: "json_redacted",
+		}}},
+	}
+
+	err := Preflight(connector, []string{"issue", "delete"})
+	if err == nil || !strings.Contains(err.Error(), "operation direct write metadata is not executable") {
+		t.Fatalf("Preflight(direct_write) error = %v, want runtime binding rejection", err)
+	}
+	if got, want := connector.operationWritePreflight, (operationDirectWritePreflightCall{
+		operation:    "github.delete_issue",
+		method:       http.MethodPost,
+		path:         "/graphql/raw",
+		outputPolicy: "json_redacted",
+	}); got != want {
+		t.Fatalf("operation write preflight = %#v, want %#v", got, want)
 	}
 }
 

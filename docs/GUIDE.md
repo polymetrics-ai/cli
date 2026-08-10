@@ -122,7 +122,7 @@ make verify          # gofmt + go vet + go test ./... + build + end-to-end smoke
 | **Connector** | A system Polymetrics can read from and/or write to (`github`, `stripe`, `postgres`, …). One package per system. |
 | **Connection** | A configured source → destination pairing with stream/primary-key/cursor/table mapping. |
 | **Catalog** | The set of streams a source exposes (`pm catalog refresh`). |
-| **Warehouse** | The local landing zone for extracted data (JSONL by default; DuckDB-queryable). |
+| **Warehouse** | Local Parquet tables rebuilt from append-only JSONL write-ahead logs and queried by DuckDB. |
 | **Sync mode** | How a stream is materialized: `full_refresh_overwrite`, `incremental_append`, `incremental_dedupe_history`, `incremental_dedupe_latest_record`. |
 
 ### Adding credentials without leaking secrets
@@ -132,11 +132,11 @@ Never paste secrets on the command line. Use one of:
 ```bash
 # from an environment variable
 export GITHUB_TOKEN=ghp_…
-pm credentials add gh --connector github --config repository=OWNER/REPO --from-env token=GITHUB_TOKEN
+pm credentials add gh --connector github --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN
 
 # from stdin (e.g. a private key file)
 pm credentials add gh-app --connector github \
-  --config repository=OWNER/REPO --config auth_type=github_app \
+  --config owner=OWNER --config repo=REPO --config auth_type=github_app \
   --config app_id=12345 --config installation_id=67890 \
   --value-stdin private_key < app-private-key.pem
 ```
@@ -154,7 +154,7 @@ Pull data from a source into the local warehouse. Example with a public GitHub r
 
 ```bash
 pm init
-pm credentials add github    --connector github    --config repository=octocat/Hello-World
+pm credentials add github    --connector github    --config owner=octocat --config repo=Hello-World --config public_access=true
 pm credentials add warehouse --connector warehouse --config path=.polymetrics/warehouse
 
 pm connections create gh \
@@ -171,7 +171,7 @@ For large streams, bound the work:
 ```bash
 pm etl run --connection gh --stream pull_requests --batch-size 100 --json
 # HTTP connectors default to one page for safe local runs; exhaust a stream with:
-pm credentials add github --connector github --config repository=OWNER/REPO --config max_pages=0
+pm credentials add github --connector github --config owner=OWNER --config repo=REPO --config public_access=true --config max_pages=0
 ```
 
 The same pattern works for `stripe`, `postgres`, `slack`, and other connectors with
@@ -218,7 +218,7 @@ through `plan → preview → approve → execute`.
 ```bash
 export GITHUB_TOKEN=ghp_…
 pm credentials add github-write --connector github \
-  --config repository=OWNER/REPO --from-env token=GITHUB_TOKEN
+  --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN
 
 # 1. PLAN — describe the write; returns a plan id + one-time approval token + a sample
 pm reverse plan prs_to_github \
@@ -264,13 +264,12 @@ pm connectors inspect stripe --json
 The generated connector catalog is the source of truth for current connector counts and
 capabilities. A few examples:
 
-- **GitHub** (`github`) — full certification passed for the current connector surface:
-  509 API endpoints accounted, 37 catalog streams, 2 direct-read command families, and
-  231 write actions accounted. Public reads need no token; private/higher-rate-limit
+- **GitHub** (`github`) — stream reads plus approval-gated fixed REST and GraphQL writes.
+  Set `public_access` for unauthenticated public reads; private or higher-rate-limit
   reads use a classic/fine-grained PAT, OAuth token, Actions `GITHUB_TOKEN`, an
-  installation token, or a GitHub App (auto-signs a JWT → installation token). The
-  safe `create_label` write lifecycle passed with read-back and cleanup; other writes
-  remain approval-gated and are either safe untested pairings or blocked by policy.
+  installation token, or a GitHub App (auto-signs a JWT → installation token). Use
+  `pm connectors inspect github --json` and the generated GitHub connector manual for
+  current action availability and certification status.
 - **Stripe** (`stripe`) — Bearer (secret key) auth, cursor pagination, core CRM/billing
   streams, plus approval-gated customer create/update/delete writes. Run
   `pm connectors inspect stripe --json` for the current action list and destructive confirmation notes.

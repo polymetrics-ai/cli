@@ -1,0 +1,24 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "version": "test-1"
+  },
+  "paths": {
+    "/widgets": {
+      "get": {
+        "operationId": "widgets/list"
+      },
+      "post": {
+        "operationId": "widgets/create"
+      },
+      "parameters": []
+    },
+    "/widgets/{widget_id}": {
+      "get": {
+        "operationId": "widgets/get",
+        "deprecated": true
+      },
+      "x-not-an-operation": true
+    }
+  }
+}

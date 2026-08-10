@@ -1,12 +1,13 @@
 # Overview
 
-GitHub reads 37 stream(s), and accounts for 231 approved or explicitly blocked write action(s).
+GitHub exposes connector-owned stream reads and approval-gated writes through fixed REST and GraphQL
+operations. The generated connector manual and `pm connectors inspect github --json` own the current
+stream, action, and request-contract inventory.
 
-Certification status: GitHub full certification passed for the current connector surface. The live
-certificate accounted for 509 API endpoints (440 covered, 69 blocked), 37 streams, 2 implemented
-direct-read command families, and 231 write actions. The safe `create_label` write lifecycle passed
-with read-back verification and cleanup. Remaining write actions are inventory-accounted as safe but
-untested pairings or blocked actions; destructive/admin/binary surfaces are not executed blindly.
+Certification status: the historical live certificate did not cover the current source-pinned
+operation inventory. It did verify the safe `create_label` lifecycle with read-back verification and
+cleanup. The GitHub CLI Surface reference owns current source-inventory and proof-status counts;
+destructive, admin, and binary surfaces are not executed blindly.
 
 The connector now declares a JSON-first command surface in `cli_surface.json`. This surface is a
 docs, validation, and safe dispatch contract for gh-inspired GitHub commands. Commands mapped to
@@ -22,22 +23,8 @@ Readable streams: `repository`, `issues`, `pull_requests`, `branches`, `commits`
 `secret_scanning_alerts`, `security_advisories`, `repo_rulesets`, `autolinks`, `languages`,
 `projects`, `project_items`, `discussions`, `discussion`.
 
-Write actions: `create_issue`, `update_issue`, `comment_issue`, `close_issue`,
-`create_pull_request`, `update_pull_request`, `close_pull_request`, `request_reviewers`,
-`merge_pull_request`, `create_label`, `update_label`, `delete_label`, `create_milestone`,
-`update_milestone`, `delete_milestone`, `create_release`, `update_release`, `delete_release`,
-`dispatch_workflow`, `rerun_workflow_run`, `cancel_workflow_run`, `delete_workflow_run`,
-`create_pull_request_review`, `create_or_update_file`, `delete_file`, `create_webhook`,
-`update_webhook`, `delete_webhook`, `create_deploy_key`, `delete_deploy_key`,
-`create_or_update_environment`, `delete_environment`, `create_commit_comment`,
-`update_commit_comment`, `delete_commit_comment`, `update_issue_comment`, `delete_issue_comment`,
-`lock_issue`, `unlock_issue`, `set_issue_labels`, `add_issue_labels`, `remove_issue_label`,
-`add_issue_assignees`, `remove_issue_assignees`, `create_review_comment`, `update_review_comment`,
-`delete_review_comment`, `submit_pull_request_review`, `dismiss_pull_request_review`,
-`update_pull_request_branch`, `update_release_asset`, `delete_release_asset`, `replace_repo_topics`,
-`add_collaborator`, `remove_collaborator`, `create_ref`, `update_ref`, `delete_ref`, `merge_branch`,
-`update_code_scanning_alert`, `update_dependabot_alert`, `create_deployment`, `create_fork`,
-`create_repo_ruleset`, `update_repo_ruleset`, `delete_repo_ruleset`, `update_secret_scanning_alert`.
+Action names and their request contracts are generated from `writes.json` into the connector manual;
+use `pm connectors inspect github --json` rather than this overview as an action inventory.
 
 Service API documentation: https://docs.github.com/en/rest and https://docs.github.com/en/graphql.
 
@@ -63,6 +50,13 @@ Connection fields:
   auth_type=github_app (alternative to private_key). Never logged.
 - `public_access` (optional, string); Explicit opt-in for unauthenticated (public) reads. Set to any
   non-empty value (e.g. 'true') to allow reads with no token/app credentials configured.
+- `rate_limit_account` (optional, string); Authenticated GitHub login used only as the non-secret
+  coordination subject for `auth_type=token` or `oauth` rate limits. It is not a token and need not
+  match the target repository owner.
+- `rate_limit_ip` (optional, string); Originating public IP address used only as the non-secret
+  coordination subject for unauthenticated GitHub rate limits.
+- `rate_limit_repository` (optional, string); Repository identity in `owner/repo` form used only as
+  the non-secret coordination subject for `auth_type=github_token` GitHub Actions rate limits.
 - `repo` (required, string); Repository name (without the owner prefix).
 - `since` (optional, string); format `date-time`; Lower-bound timestamp for issues, issue_comments,
   and pull_request_review_comments (incremental start; also usable as a fresh-sync start_config_key
@@ -86,6 +80,24 @@ Authentication behavior:
 Requests use the configured `base_url` value after applying defaults.
 
 Connection checks call GET `/repos/{{ config.owner }}/{{ config.repo }}`.
+
+## Rate-limit policy
+
+`rate_limits.json` declares GitHub's documented primary quotas: 5,000 requests/hour per
+authenticated user, 5,000 requests/hour minimum per GitHub App installation, 1,000
+requests/hour per repository for `GITHUB_TOKEN`, and 60 requests/hour per originating IP for
+unauthenticated traffic. The configured `auth_type` selects the matching policy; its scope is an
+explicit non-secret account, installation, repository, or IP subject and is projected by the
+coordination identity before it reaches the local registry.
+
+GitHub also documents a 900-point-per-minute REST secondary ceiling, with most writes costing five
+points and some endpoint costs unpublished. The declaration therefore charges every REST request
+five points against that budget. This is deliberately conservative for reads and keeps client traffic
+below the provider's per-endpoint limit rather than pretending the bundle can know unpublished
+endpoint costs. `POST /graphql` is excluded because its returned `rateLimit.cost` metadata is not
+limiter accounting; it remains unpaced until a cited GraphQL-specific policy can account for it.
+GitHub response `x-ratelimit-*` and `retry-after` values further tighten, never expand, the declared
+REST ceiling.
 
 ## Connector command writes
 
@@ -537,19 +549,9 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 37 stream-backed endpoint group(s), 67 write-backed endpoint group(s).
-- GitHub CLI parity is intentionally staged. The current metadata covers selected `gh` command
-  families modeled in this slice and maps implemented commands to current stream/write names. Runtime
-  dispatch is limited to stream reads, guarded direct reads, and reverse ETL write commands with
-  explicit `record.*` flag mappings.
-- GitHub Projects v2 and discussions now have fixed GraphQL read streams for repository-scoped
-  reads. Project/discussion mutations, gist, codespaces, organization-wide views, and several status
-  or search commands still require additional GraphQL or mixed REST/GraphQL coverage.
-- Secret and variable write commands are not exposed as reverse ETL actions until encryption,
-  redaction, scope, and approval semantics are modeled explicitly.
-- Raw `gh api` and `gh api graphql` style escape hatches are classified as unsafe unless constrained
-  to connector auth, connector base URLs, allowlisted methods, mutation approval, and secret
-  redaction.
-- Other documented endpoints are not exposed by this connector where they are classified as
-  binary_payload=10, deprecated=1, destructive_admin=5, duplicate_of=67, non_data_endpoint=9,
-  out_of_scope=143, requires_elevated_scope=168.
+- The GitHub CLI Surface reference is generated from the source-pinned REST and GraphQL inventory;
+  it owns exact counts plus current implementation and proof status.
+- A listed command is executable only when its declared availability and runtime preflight permit
+  it. Use `pm github <path> --help` to inspect a specific typed contract.
+- Raw `gh api` and `gh api graphql` style escape hatches remain unavailable. Fixed connector
+  operations preserve connector-scoped auth and hosts, declared methods, approval, and redaction.

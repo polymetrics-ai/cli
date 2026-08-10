@@ -22,7 +22,8 @@ DESCRIPTION
 
   ETL runs read records from a configured source connector stream, add
   Polymetrics metadata fields, and write records to the destination connector.
-  The MVP warehouse destination stores tables as JSONL files.
+  The warehouse destination uses an appendable JSONL write-ahead log and rebuilds
+  each final table as a single Parquet file.
 
   ETL and reverse ETL are separate first-class connector surfaces: ETL reads
   streams, while pm reverse executes connector write actions where the upstream

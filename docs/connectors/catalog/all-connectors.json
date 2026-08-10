@@ -60091,7 +60091,7 @@
   {
     "name": "github",
     "display_name": "GitHub",
-    "description": "Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and writes approved reverse ETL actions through the GitHub REST API (full-surface certified: 37 streams, 231 write actions accounted).",
+    "description": "Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and plans approval-gated reverse ETL actions through fixed GitHub REST and GraphQL operations.",
     "integration_type": "api",
     "docs_url": "https://docs.github.com/en/rest",
     "release_stage": "ga",
@@ -60151,12 +60151,24 @@
         },
         "auth_type": {
           "type": "string",
-          "description": "Legacy's auth_type string-enum surface (auth.go:81-82), restored ADDITIONALLY alongside public_access once engine.ResolveCheckWhen made the when-grammar's `in` operator statically validatable (S3 engine mini-wave item 2, ledger G14 R1 CONDITION). Only the 4 legacy PUBLIC synonyms are reproduced here — 'public', 'none', 'anonymous', or 'unauthenticated' (case-sensitive; legacy lowercases/normalizes before comparing, this bundle does not) arm the identical mode:none candidate public_access arms. Legacy's OTHER auth_type values (token/oauth/github_app/etc. synonyms, and auth_type=github_app's override-token-precedence behavior) are NOT reproduced — this key exists solely to close the public-enum migration gap, not to replicate legacy's full auth_type mode-selection semantics; any other auth_type value (or none at all) has zero effect on auth selection, which still resolves via the token/app_id-presence candidates ahead of it in the auth list."
+          "description": "Legacy's auth_type string-enum surface (auth.go:81-82), restored ADDITIONALLY alongside public_access once engine.ResolveCheckWhen made the when-grammar's `in` operator statically validatable (S3 engine mini-wave item 2, ledger G14 R1 CONDITION). Only the 4 legacy PUBLIC synonyms are reproduced here — 'public', 'none', 'anonymous', or 'unauthenticated' (case-sensitive; legacy lowercases/normalizes before comparing, this bundle does not) arm the identical mode:none candidate public_access arms. Legacy's OTHER auth_type values (token/oauth/github_app/etc. synonyms, and auth_type=github_app's override-token-precedence behavior) are NOT reproduced for auth selection — bearer/custom selection still follows token/app_id presence. Rate-limit policy does use this non-secret selector: use 'token' (or 'oauth') for a personal/OAuth/user token, 'github_app' for an installation token, 'github_token' for the GitHub Actions GITHUB_TOKEN, or one of the public values for unauthenticated traffic."
         },
         "since": {
           "type": "string",
           "format": "date-time",
           "description": "Lower-bound timestamp for issues, issue_comments, and pull_request_review_comments (incremental start; also usable as a fresh-sync start_config_key value)."
+        },
+        "rate_limit_account": {
+          "type": "string",
+          "description": "Authenticated GitHub user login used only as the non-secret coordination subject for auth_type=token or oauth rate limits. It is not a token and need not match the target repository owner."
+        },
+        "rate_limit_ip": {
+          "type": "string",
+          "description": "Originating public IP address used only as the non-secret coordination subject for unauthenticated GitHub rate limits."
+        },
+        "rate_limit_repository": {
+          "type": "string",
+          "description": "Repository identity in owner/repo form used only as the non-secret coordination subject for auth_type=github_token GitHub Actions rate limits."
         },
         "token": {
           "type": "string",
@@ -61135,7 +61147,7 @@
         "name": "repo",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}",
         "risk": "critical",
         "confirm": "destructive"
       },
@@ -61143,28 +61155,42 @@
         "name": "repo2",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}",
         "risk": "high"
+      },
+      {
+        "name": "unarchive_repo",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}",
+        "risk": "returns the configured repository to a writable state"
+      },
+      {
+        "name": "archive_repo",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}",
+        "risk": "archives the configured repository, making it read-only for every consumer"
       },
       {
         "name": "actions_cache_retention_limit2",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/cache/retention-limit",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/cache/retention-limit",
         "risk": "high"
       },
       {
         "name": "actions_cache_storage_limit2",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/cache/storage-limit",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/cache/storage-limit",
         "risk": "high"
       },
       {
         "name": "actions_caches",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/actions/caches",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/caches",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -61172,7 +61198,7 @@
         "name": "actions_caches_cache_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/actions/caches/{cache_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/caches/{{ record.cache_id }}",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -61180,91 +61206,91 @@
         "name": "actions_jobs_job_id_rerun",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/jobs/{{ record.job_id }}/rerun",
         "risk": "medium"
       },
       {
         "name": "actions_oidc_customization_sub2",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/oidc/customization/sub",
         "risk": "high"
       },
       {
         "name": "actions_permissions2",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/permissions",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions",
         "risk": "high"
       },
       {
         "name": "actions_permissions_access2",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/permissions/access",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/access",
         "risk": "high"
       },
       {
         "name": "actions_permissions_artifact_and_log_retention2",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/artifact-and-log-retention",
         "risk": "high"
       },
       {
         "name": "actions_permissions_fork_pr_contributor_approval2",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/fork-pr-contributor-approval",
         "risk": "high"
       },
       {
         "name": "actions_permissions_fork_pr_workflows_private_repos2",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/fork-pr-workflows-private-repos",
         "risk": "high"
       },
       {
         "name": "actions_permissions_selected_actions2",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/selected-actions",
         "risk": "high"
       },
       {
         "name": "actions_permissions_workflow2",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/permissions/workflow",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/workflow",
         "risk": "high"
       },
       {
         "name": "actions_runners_generate_jitconfig",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/actions/runners/generate-jitconfig",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/generate-jitconfig",
         "risk": "high"
       },
       {
         "name": "actions_runners_registration_token",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/actions/runners/registration-token",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/registration-token",
         "risk": "high"
       },
       {
         "name": "actions_runners_remove_token",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/actions/runners/remove-token",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/remove-token",
         "risk": "high"
       },
       {
         "name": "actions_runners_runner_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61272,7 +61298,7 @@
         "name": "actions_runners_runner_id_labels",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61280,21 +61306,21 @@
         "name": "actions_runners_runner_id_labels3",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels",
         "risk": "high"
       },
       {
         "name": "actions_runners_runner_id_labels4",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels",
         "risk": "high"
       },
       {
         "name": "actions_runners_runner_id_labels_name",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels/{{ record.name }}",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61302,21 +61328,21 @@
         "name": "actions_runs_run_id_approve",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approve",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/approve",
         "risk": "high"
       },
       {
         "name": "actions_runs_run_id_deployment_protection_rule",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/deployment_protection_rule",
         "risk": "high"
       },
       {
         "name": "actions_runs_run_id_logs",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/logs",
         "risk": "critical",
         "confirm": "destructive"
       },
@@ -61324,14 +61350,14 @@
         "name": "actions_runs_run_id_pending_deployments2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/pending_deployments",
         "risk": "high"
       },
       {
         "name": "actions_secrets_secret_name",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/secrets/{{ record.secret_name }}",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61339,21 +61365,21 @@
         "name": "actions_secrets_secret_name3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/secrets/{{ record.secret_name }}",
         "risk": "high"
       },
       {
         "name": "actions_variables2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/actions/variables",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/variables",
         "risk": "high"
       },
       {
         "name": "actions_variables_name",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/variables/{{ record.name }}",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61361,42 +61387,42 @@
         "name": "actions_variables_name3",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/variables/{{ record.name }}",
         "risk": "high"
       },
       {
         "name": "actions_workflows_workflow_id_disable",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/workflows/{{ record.workflow_id }}/disable",
         "risk": "high"
       },
       {
         "name": "actions_workflows_workflow_id_enable",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/workflows/{{ record.workflow_id }}/enable",
         "risk": "high"
       },
       {
         "name": "attestations",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/attestations",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/attestations",
         "risk": "high"
       },
       {
         "name": "autolinks",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/autolinks",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/autolinks",
         "risk": "medium"
       },
       {
         "name": "autolinks_autolink_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/autolinks/{{ record.autolink_id }}",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -61404,7 +61430,7 @@
         "name": "automated_security_fixes",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/automated-security-fixes",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/automated-security-fixes",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61412,14 +61438,14 @@
         "name": "automated_security_fixes3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/automated-security-fixes",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/automated-security-fixes",
         "risk": "high"
       },
       {
         "name": "branches_branch_protection",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61427,14 +61453,14 @@
         "name": "branches_branch_protection3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection",
         "risk": "high"
       },
       {
         "name": "branches_branch_protection_enforce_admins",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/enforce_admins",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61442,14 +61468,14 @@
         "name": "branches_branch_protection_enforce_admins3",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/enforce_admins",
         "risk": "high"
       },
       {
         "name": "branches_branch_protection_required_pull_request_reviews",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_pull_request_reviews",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61457,14 +61483,14 @@
         "name": "branches_branch_protection_required_pull_request_reviews3",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_pull_request_reviews",
         "risk": "high"
       },
       {
         "name": "branches_branch_protection_required_signatures",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_signatures",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61472,14 +61498,14 @@
         "name": "branches_branch_protection_required_signatures3",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_signatures",
         "risk": "high"
       },
       {
         "name": "branches_branch_protection_required_status_checks",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61487,14 +61513,14 @@
         "name": "branches_branch_protection_required_status_checks3",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks",
         "risk": "high"
       },
       {
         "name": "branches_branch_protection_required_status_checks_contexts",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks/contexts",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61502,21 +61528,21 @@
         "name": "branches_branch_protection_required_status_checks_contexts3",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks/contexts",
         "risk": "high"
       },
       {
         "name": "branches_branch_protection_required_status_checks_contexts4",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks/contexts",
         "risk": "high"
       },
       {
         "name": "branches_branch_protection_restrictions",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61524,7 +61550,7 @@
         "name": "branches_branch_protection_restrictions_apps",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/apps",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61532,21 +61558,21 @@
         "name": "branches_branch_protection_restrictions_apps3",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/apps",
         "risk": "high"
       },
       {
         "name": "branches_branch_protection_restrictions_apps4",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/apps",
         "risk": "high"
       },
       {
         "name": "branches_branch_protection_restrictions_teams",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/teams",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61554,21 +61580,21 @@
         "name": "branches_branch_protection_restrictions_teams3",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/teams",
         "risk": "high"
       },
       {
         "name": "branches_branch_protection_restrictions_teams4",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/teams",
         "risk": "high"
       },
       {
         "name": "branches_branch_protection_restrictions_users",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/users",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61576,21 +61602,21 @@
         "name": "branches_branch_protection_restrictions_users3",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/users",
         "risk": "high"
       },
       {
         "name": "branches_branch_protection_restrictions_users4",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/users",
         "risk": "high"
       },
       {
         "name": "branches_branch_rename",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/rename",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/rename",
         "risk": "critical",
         "confirm": "destructive"
       },
@@ -61598,70 +61624,70 @@
         "name": "check_runs",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/check-runs",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-runs",
         "risk": "medium"
       },
       {
         "name": "check_runs_check_run_id2",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-runs/{{ record.check_run_id }}",
         "risk": "medium"
       },
       {
         "name": "check_runs_check_run_id_rerequest",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-runs/{{ record.check_run_id }}/rerequest",
         "risk": "medium"
       },
       {
         "name": "check_suites",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/check-suites",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-suites",
         "risk": "medium"
       },
       {
         "name": "check_suites_preferences",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/check-suites/preferences",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-suites/preferences",
         "risk": "medium"
       },
       {
         "name": "check_suites_check_suite_id_rerequest",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-suites/{{ record.check_suite_id }}/rerequest",
         "risk": "medium"
       },
       {
         "name": "code_quality_setup2",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/code-quality/setup",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-quality/setup",
         "risk": "high"
       },
       {
         "name": "code_scanning_alerts_alert_number_autofix2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/alerts/{{ record.alert_number }}/autofix",
         "risk": "high"
       },
       {
         "name": "code_scanning_alerts_alert_number_autofix_commits",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/alerts/{{ record.alert_number }}/autofix/commits",
         "risk": "high"
       },
       {
         "name": "code_scanning_analyses_analysis_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/analyses/{{ record.analysis_id }}",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61669,7 +61695,7 @@
         "name": "code_scanning_codeql_databases_language",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/codeql/databases/{{ record.language }}",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61677,35 +61703,35 @@
         "name": "code_scanning_codeql_variant_analyses",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/codeql/variant-analyses",
         "risk": "high"
       },
       {
         "name": "code_scanning_default_setup2",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/code-scanning/default-setup",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/default-setup",
         "risk": "high"
       },
       {
         "name": "code_scanning_sarifs",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/code-scanning/sarifs",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/sarifs",
         "risk": "medium"
       },
       {
         "name": "codespaces2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/codespaces",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/codespaces",
         "risk": "medium"
       },
       {
         "name": "codespaces_secrets_secret_name",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/codespaces/secrets/{{ record.secret_name }}",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -61713,21 +61739,21 @@
         "name": "codespaces_secrets_secret_name3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/codespaces/secrets/{{ record.secret_name }}",
         "risk": "medium"
       },
       {
         "name": "comments_comment_id_reactions2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/comments/{{ record.comment_id }}/reactions",
         "risk": "medium"
       },
       {
         "name": "comments_comment_id_reactions_reaction_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -61735,7 +61761,7 @@
         "name": "dependabot_secrets_secret_name",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/dependabot/secrets/{{ record.secret_name }}",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61743,21 +61769,21 @@
         "name": "dependabot_secrets_secret_name3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/dependabot/secrets/{{ record.secret_name }}",
         "risk": "high"
       },
       {
         "name": "dependency_graph_snapshots",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/dependency-graph/snapshots",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/dependency-graph/snapshots",
         "risk": "medium"
       },
       {
         "name": "deployments_deployment_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/deployments/{deployment_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/deployments/{{ record.deployment_id }}",
         "risk": "critical",
         "confirm": "destructive"
       },
@@ -61765,28 +61791,28 @@
         "name": "deployments_deployment_id_statuses2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/deployments/{{ record.deployment_id }}/statuses",
         "risk": "medium"
       },
       {
         "name": "dispatches",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/dispatches",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/dispatches",
         "risk": "medium"
       },
       {
         "name": "environments_environment_name_deployment_branch_policies2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies",
         "risk": "high"
       },
       {
         "name": "environments_environment_name_deployment_branch_policies_branch_policy_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies/{{ record.branch_policy_id }}",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61794,21 +61820,21 @@
         "name": "environments_environment_name_deployment_branch_policies_branch_policy_id3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies/{{ record.branch_policy_id }}",
         "risk": "high"
       },
       {
         "name": "environments_environment_name_deployment_protection_rules2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment_protection_rules",
         "risk": "high"
       },
       {
         "name": "environments_environment_name_deployment_protection_rules_protection_rule_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment_protection_rules/{{ record.protection_rule_id }}",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61816,7 +61842,7 @@
         "name": "environments_environment_name_secrets_secret_name",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/secrets/{{ record.secret_name }}",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61824,21 +61850,21 @@
         "name": "environments_environment_name_secrets_secret_name3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/secrets/{{ record.secret_name }}",
         "risk": "high"
       },
       {
         "name": "environments_environment_name_variables2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/variables",
         "risk": "high"
       },
       {
         "name": "environments_environment_name_variables_name",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/variables/{{ record.name }}",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61846,56 +61872,56 @@
         "name": "environments_environment_name_variables_name3",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/variables/{{ record.name }}",
         "risk": "high"
       },
       {
         "name": "git_blobs",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/git/blobs",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/blobs",
         "risk": "medium"
       },
       {
         "name": "git_commits",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/git/commits",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/commits",
         "risk": "medium"
       },
       {
         "name": "git_trees",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/git/trees",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/trees",
         "risk": "medium"
       },
       {
         "name": "hooks_hook_id_deliveries_delivery_id_attempts",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/deliveries/{{ record.delivery_id }}/attempts",
         "risk": "medium"
       },
       {
         "name": "hooks_hook_id_pings",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/pings",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/pings",
         "risk": "low"
       },
       {
         "name": "hooks_hook_id_tests",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/tests",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/tests",
         "risk": "low"
       },
       {
         "name": "immutable_releases",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/immutable-releases",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/immutable-releases",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61903,14 +61929,14 @@
         "name": "immutable_releases3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/immutable-releases",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/immutable-releases",
         "risk": "high"
       },
       {
         "name": "import",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/import",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/import",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -61918,35 +61944,35 @@
         "name": "import3",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/import",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/import",
         "risk": "medium"
       },
       {
         "name": "import4",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/import",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/import",
         "risk": "medium"
       },
       {
         "name": "import_authors_author_id",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/import/authors/{author_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/import/authors/{{ record.author_id }}",
         "risk": "medium"
       },
       {
         "name": "import_lfs",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/import/lfs",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/import/lfs",
         "risk": "medium"
       },
       {
         "name": "interaction_limits",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/interaction-limits",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61954,14 +61980,14 @@
         "name": "interaction_limits3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/interaction-limits",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits",
         "risk": "high"
       },
       {
         "name": "interaction_limits_pulls_bypass_list",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits/pulls/bypass-list",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -61969,14 +61995,14 @@
         "name": "interaction_limits_pulls_bypass_list3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits/pulls/bypass-list",
         "risk": "high"
       },
       {
         "name": "invitations_invitation_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/invitations/{invitation_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/invitations/{{ record.invitation_id }}",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -61984,14 +62010,14 @@
         "name": "invitations_invitation_id2",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/invitations/{invitation_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/invitations/{{ record.invitation_id }}",
         "risk": "medium"
       },
       {
         "name": "issues_comments_comment_id_pin",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/pin",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -61999,21 +62025,21 @@
         "name": "issues_comments_comment_id_pin2",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/pin",
         "risk": "medium"
       },
       {
         "name": "issues_comments_comment_id_reactions2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/reactions",
         "risk": "medium"
       },
       {
         "name": "issues_comments_comment_id_reactions_reaction_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -62021,14 +62047,14 @@
         "name": "issues_issue_number_dependencies_blocked_by2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/dependencies/blocked_by",
         "risk": "medium"
       },
       {
         "name": "issues_issue_number_dependencies_blocked_by_issue_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/dependencies/blocked_by/{{ record.issue_id }}",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -62036,21 +62062,21 @@
         "name": "issues_issue_number_issue_field_values2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values",
         "risk": "high"
       },
       {
         "name": "issues_issue_number_issue_field_values3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values",
         "risk": "high"
       },
       {
         "name": "issues_issue_number_issue_field_values_issue_field_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values/{{ record.issue_field_id }}",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -62058,14 +62084,14 @@
         "name": "issues_issue_number_reactions2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/reactions",
         "risk": "medium"
       },
       {
         "name": "issues_issue_number_reactions_reaction_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/reactions/{{ record.reaction_id }}",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -62073,7 +62099,7 @@
         "name": "issues_issue_number_sub_issue",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issue",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/sub_issue",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -62081,35 +62107,35 @@
         "name": "issues_issue_number_sub_issues2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/sub_issues",
         "risk": "medium"
       },
       {
         "name": "issues_issue_number_sub_issues_priority",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/sub_issues/priority",
         "risk": "medium"
       },
       {
         "name": "merge_upstream",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/merge-upstream",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/merge-upstream",
         "risk": "medium"
       },
       {
         "name": "notifications2",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/notifications",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/notifications",
         "risk": "medium"
       },
       {
         "name": "pages",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/pages",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -62117,42 +62143,42 @@
         "name": "pages3",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/pages",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages",
         "risk": "medium"
       },
       {
         "name": "pages4",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/pages",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages",
         "risk": "medium"
       },
       {
         "name": "pages_builds2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/pages/builds",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages/builds",
         "risk": "medium"
       },
       {
         "name": "pages_deployments",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/pages/deployments",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages/deployments",
         "risk": "medium"
       },
       {
         "name": "pages_deployments_pages_deployment_id_cancel",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages/deployments/{{ record.pages_deployment_id }}/cancel",
         "risk": "medium"
       },
       {
         "name": "private_vulnerability_reporting",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/private-vulnerability-reporting",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -62160,28 +62186,28 @@
         "name": "private_vulnerability_reporting3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/private-vulnerability-reporting",
         "risk": "high"
       },
       {
         "name": "properties_values2",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/properties/values",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/properties/values",
         "risk": "high"
       },
       {
         "name": "pulls_comments_comment_id_reactions2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{ record.comment_id }}/reactions",
         "risk": "medium"
       },
       {
         "name": "pulls_comments_comment_id_reactions_reaction_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -62189,14 +62215,14 @@
         "name": "pulls_pull_number_codespaces",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/codespaces",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/codespaces",
         "risk": "medium"
       },
       {
         "name": "pulls_pull_number_requested_reviewers",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/requested_reviewers",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -62204,28 +62230,28 @@
         "name": "releases_generate_notes",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/releases/generate-notes",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/generate-notes",
         "risk": "low"
       },
       {
         "name": "releases_release_id_assets2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/releases/{release_id}/assets",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/assets",
         "risk": "medium"
       },
       {
         "name": "releases_release_id_reactions2",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/reactions",
         "risk": "medium"
       },
       {
         "name": "releases_release_id_reactions_reaction_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/reactions/{{ record.reaction_id }}",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -62233,56 +62259,56 @@
         "name": "secret_scanning_push_protection_bypasses",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/secret-scanning/push-protection-bypasses",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/push-protection-bypasses",
         "risk": "high"
       },
       {
         "name": "security_advisories",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/security-advisories",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories",
         "risk": "high"
       },
       {
         "name": "security_advisories_reports",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/security-advisories/reports",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories/reports",
         "risk": "high"
       },
       {
         "name": "security_advisories_ghsa_id",
         "kind": "update",
         "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories/{{ record.ghsa_id }}",
         "risk": "high"
       },
       {
         "name": "security_advisories_ghsa_id_cve",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories/{{ record.ghsa_id }}/cve",
         "risk": "high"
       },
       {
         "name": "security_advisories_ghsa_id_forks",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories/{{ record.ghsa_id }}/forks",
         "risk": "high"
       },
       {
         "name": "statuses_sha",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/statuses/{sha}",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/statuses/{{ record.sha }}",
         "risk": "medium"
       },
       {
         "name": "subscription",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/subscription",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/subscription",
         "risk": "medium",
         "confirm": "destructive"
       },
@@ -62290,14 +62316,14 @@
         "name": "subscription3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/subscription",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/subscription",
         "risk": "medium"
       },
       {
         "name": "transfer",
         "kind": "create",
         "method": "POST",
-        "path": "/repos/{owner}/{repo}/transfer",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/transfer",
         "risk": "critical",
         "confirm": "destructive"
       },
@@ -62305,7 +62331,7 @@
         "name": "vulnerability_alerts",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/vulnerability-alerts",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/vulnerability-alerts",
         "risk": "high",
         "confirm": "destructive"
       },
@@ -62313,8 +62339,2751 @@
         "name": "vulnerability_alerts3",
         "kind": "update",
         "method": "PUT",
-        "path": "/repos/{owner}/{repo}/vulnerability-alerts",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/vulnerability-alerts",
         "risk": "high"
+      },
+      {
+        "name": "agent_tasks_create_task_in_repo",
+        "kind": "create",
+        "method": "POST",
+        "path": "/agents/repos/{{ config.owner }}/{{ config.repo }}/tasks",
+        "risk": "Creates provider-side state: Start a task."
+      },
+      {
+        "name": "apps_create_from_manifest",
+        "kind": "create",
+        "method": "POST",
+        "path": "/app-manifests/{{ record.code }}/conversions",
+        "risk": "Creates provider-side state: Create a GitHub App from a manifest."
+      },
+      {
+        "name": "apps_update_webhook_config_for_app",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/app/hook/config",
+        "risk": "Mutates existing provider-side state: Update a webhook configuration for an app."
+      },
+      {
+        "name": "apps_redeliver_webhook_delivery",
+        "kind": "create",
+        "method": "POST",
+        "path": "/app/hook/deliveries/{{ record.delivery_id }}/attempts",
+        "risk": "Creates provider-side state: Redeliver a delivery for an app webhook."
+      },
+      {
+        "name": "apps_delete_installation",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/app/installations/{{ record.installation_id }}",
+        "risk": "Destructive: Delete an installation for the authenticated app. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "apps_suspend_installation",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/app/installations/{{ record.installation_id }}/suspended",
+        "risk": "Mutates existing provider-side state: Suspend an app installation."
+      },
+      {
+        "name": "apps_unsuspend_installation",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/app/installations/{{ record.installation_id }}/suspended",
+        "risk": "Destructive: Unsuspend an app installation. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "apps_scope_token",
+        "kind": "create",
+        "method": "POST",
+        "path": "/applications/{{ record.client_id }}/token/scoped",
+        "risk": "Creates provider-side state: Create a scoped access token."
+      },
+      {
+        "name": "credentials_revoke",
+        "kind": "create",
+        "method": "POST",
+        "path": "/credentials/revoke",
+        "risk": "Creates provider-side state: Revoke a list of credentials."
+      },
+      {
+        "name": "actions_set_actions_cache_retention_limit_for_enterprise",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/enterprises/{{ record.enterprise }}/actions/cache/retention-limit",
+        "risk": "Mutates existing provider-side state: Set GitHub Actions cache retention limit for an enterprise."
+      },
+      {
+        "name": "actions_set_actions_cache_storage_limit_for_enterprise",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/enterprises/{{ record.enterprise }}/actions/cache/storage-limit",
+        "risk": "Mutates existing provider-side state: Set GitHub Actions cache storage limit for an enterprise."
+      },
+      {
+        "name": "oidc_create_oidc_custom_property_inclusion_for_enterprise",
+        "kind": "create",
+        "method": "POST",
+        "path": "/enterprises/{{ record.enterprise }}/actions/oidc/customization/properties/repo",
+        "risk": "Creates provider-side state: Create an OIDC custom property inclusion for an enterprise."
+      },
+      {
+        "name": "oidc_delete_oidc_custom_property_inclusion_for_enterprise",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/enterprises/{{ record.enterprise }}/actions/oidc/customization/properties/repo/{{ record.custom_property_name }}",
+        "risk": "Destructive: Delete an OIDC custom property inclusion for an enterprise. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "code_security_create_configuration_for_enterprise",
+        "kind": "create",
+        "method": "POST",
+        "path": "/enterprises/{{ record.enterprise }}/code-security/configurations",
+        "risk": "Creates provider-side state: Create a code security configuration for an enterprise."
+      },
+      {
+        "name": "code_security_update_enterprise_configuration",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/enterprises/{{ record.enterprise }}/code-security/configurations/{{ record.configuration_id }}",
+        "risk": "Mutates existing provider-side state: Update a custom code security configuration for an enterprise."
+      },
+      {
+        "name": "code_security_delete_configuration_for_enterprise",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/enterprises/{{ record.enterprise }}/code-security/configurations/{{ record.configuration_id }}",
+        "risk": "Destructive: Delete a code security configuration for an enterprise. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "code_security_attach_enterprise_configuration",
+        "kind": "create",
+        "method": "POST",
+        "path": "/enterprises/{{ record.enterprise }}/code-security/configurations/{{ record.configuration_id }}/attach",
+        "risk": "Creates provider-side state: Attach an enterprise configuration to repositories."
+      },
+      {
+        "name": "code_security_set_configuration_as_default_for_enterprise",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/enterprises/{{ record.enterprise }}/code-security/configurations/{{ record.configuration_id }}/defaults",
+        "risk": "Mutates existing provider-side state: Set a code security configuration as a default for an enterprise."
+      },
+      {
+        "name": "copilot_set_enterprise_coding_agent_policy",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/enterprises/{{ record.enterprise }}/copilot/policies/coding_agent",
+        "risk": "Mutates existing provider-side state: Set the coding agent policy for an enterprise."
+      },
+      {
+        "name": "copilot_add_organizations_to_enterprise_coding_agent_policy",
+        "kind": "create",
+        "method": "POST",
+        "path": "/enterprises/{{ record.enterprise }}/copilot/policies/coding_agent/organizations",
+        "risk": "Creates provider-side state: Add organizations to the enterprise coding agent policy."
+      },
+      {
+        "name": "copilot_remove_organizations_from_enterprise_coding_agent_policy",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/enterprises/{{ record.enterprise }}/copilot/policies/coding_agent/organizations",
+        "risk": "Destructive: Remove organizations from the enterprise coding agent policy. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "dependabot_update_repository_access_for_enterprise",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/enterprises/{{ record.enterprise }}/dependabot/repository-access",
+        "risk": "Mutates existing provider-side state: Updates Dependabot's repository access list for an enterprise."
+      },
+      {
+        "name": "dependabot_set_repository_access_default_level_for_enterprise",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/enterprises/{{ record.enterprise }}/dependabot/repository-access/default-level",
+        "risk": "Mutates existing provider-side state: Set the default repository access level for Dependabot in an enterprise."
+      },
+      {
+        "name": "enterprise_teams_create",
+        "kind": "create",
+        "method": "POST",
+        "path": "/enterprises/{{ record.enterprise }}/teams",
+        "risk": "Creates provider-side state: Create an enterprise team."
+      },
+      {
+        "name": "enterprise_team_memberships_bulk_add",
+        "kind": "create",
+        "method": "POST",
+        "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/add",
+        "risk": "Creates provider-side state: Bulk add team members."
+      },
+      {
+        "name": "enterprise_team_memberships_bulk_remove",
+        "kind": "create",
+        "method": "POST",
+        "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/remove",
+        "risk": "Creates provider-side state: Bulk remove team members."
+      },
+      {
+        "name": "enterprise_team_memberships_add",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/{{ record.username }}",
+        "risk": "Mutates existing provider-side state: Add team member."
+      },
+      {
+        "name": "enterprise_team_memberships_remove",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/memberships/{{ record.username }}",
+        "risk": "Destructive: Remove team membership. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "enterprise_team_organizations_bulk_add",
+        "kind": "create",
+        "method": "POST",
+        "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/add",
+        "risk": "Creates provider-side state: Add organization assignments."
+      },
+      {
+        "name": "enterprise_team_organizations_bulk_remove",
+        "kind": "create",
+        "method": "POST",
+        "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/remove",
+        "risk": "Creates provider-side state: Remove organization assignments."
+      },
+      {
+        "name": "enterprise_team_organizations_add",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/{{ record.org }}",
+        "risk": "Mutates existing provider-side state: Add an organization assignment."
+      },
+      {
+        "name": "enterprise_team_organizations_delete",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.enterprise-team }}/organizations/{{ record.org }}",
+        "risk": "Destructive: Delete an organization assignment. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "enterprise_teams_update",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.team_slug }}",
+        "risk": "Mutates existing provider-side state: Update an enterprise team."
+      },
+      {
+        "name": "enterprise_teams_delete",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/enterprises/{{ record.enterprise }}/teams/{{ record.team_slug }}",
+        "risk": "Destructive: Delete an enterprise team. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "gists_create",
+        "kind": "create",
+        "method": "POST",
+        "path": "/gists",
+        "risk": "Creates provider-side state: Create a gist."
+      },
+      {
+        "name": "gists_update",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/gists/{{ record.gist_id }}",
+        "risk": "Mutates existing provider-side state: Update a gist."
+      },
+      {
+        "name": "gists_delete",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/gists/{{ record.gist_id }}",
+        "risk": "Destructive: Delete a gist. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "gists_create_comment",
+        "kind": "create",
+        "method": "POST",
+        "path": "/gists/{{ record.gist_id }}/comments",
+        "risk": "Creates provider-side state: Create a gist comment."
+      },
+      {
+        "name": "gists_update_comment",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/gists/{{ record.gist_id }}/comments/{{ record.comment_id }}",
+        "risk": "Mutates existing provider-side state: Update a gist comment."
+      },
+      {
+        "name": "gists_delete_comment",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/gists/{{ record.gist_id }}/comments/{{ record.comment_id }}",
+        "risk": "Destructive: Delete a gist comment. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "gists_fork",
+        "kind": "create",
+        "method": "POST",
+        "path": "/gists/{{ record.gist_id }}/forks",
+        "risk": "Creates provider-side state: Fork a gist."
+      },
+      {
+        "name": "gists_star",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/gists/{{ record.gist_id }}/star",
+        "risk": "Mutates existing provider-side state: Star a gist."
+      },
+      {
+        "name": "gists_unstar",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/gists/{{ record.gist_id }}/star",
+        "risk": "Destructive: Unstar a gist. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "apps_revoke_installation_access_token",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/installation/token",
+        "risk": "Destructive: Revoke an installation access token. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "activity_mark_notifications_as_read",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/notifications",
+        "risk": "Mutates existing provider-side state: Mark notifications as read."
+      },
+      {
+        "name": "activity_mark_thread_as_read",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/notifications/threads/{{ record.thread_id }}",
+        "risk": "Mutates existing provider-side state: Mark a thread as read."
+      },
+      {
+        "name": "activity_mark_thread_as_done",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/notifications/threads/{{ record.thread_id }}",
+        "risk": "Destructive: Mark a thread as done. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "activity_set_thread_subscription",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/notifications/threads/{{ record.thread_id }}/subscription",
+        "risk": "Mutates existing provider-side state: Set a thread subscription."
+      },
+      {
+        "name": "activity_delete_thread_subscription",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/notifications/threads/{{ record.thread_id }}/subscription",
+        "risk": "Destructive: Delete a thread subscription. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_set_actions_cache_retention_limit_for_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/organizations/{{ record.org }}/actions/cache/retention-limit",
+        "risk": "Mutates existing provider-side state: Set GitHub Actions cache retention limit for an organization."
+      },
+      {
+        "name": "actions_set_actions_cache_storage_limit_for_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/organizations/{{ record.org }}/actions/cache/storage-limit",
+        "risk": "Mutates existing provider-side state: Set GitHub Actions cache storage limit for an organization."
+      },
+      {
+        "name": "billing_create_organization_budget",
+        "kind": "create",
+        "method": "POST",
+        "path": "/organizations/{{ record.org }}/settings/billing/budgets",
+        "risk": "Creates provider-side state: Create a budget for an organization."
+      },
+      {
+        "name": "billing_update_budget_org",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/organizations/{{ record.org }}/settings/billing/budgets/{{ record.budget_id }}",
+        "risk": "Mutates existing provider-side state: Update a budget for an organization."
+      },
+      {
+        "name": "billing_delete_budget_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/organizations/{{ record.org }}/settings/billing/budgets/{{ record.budget_id }}",
+        "risk": "Destructive: Delete a budget for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_update",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}",
+        "risk": "Mutates existing provider-side state: Update an organization."
+      },
+      {
+        "name": "orgs_delete",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}",
+        "risk": "Destructive: Delete an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_create_hosted_runner_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/actions/hosted-runners",
+        "risk": "Creates provider-side state: Create a GitHub-hosted runner for an organization."
+      },
+      {
+        "name": "actions_delete_custom_image_from_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/hosted-runners/images/custom/{{ record.image_definition_id }}",
+        "risk": "Destructive: Delete a custom image from the organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_delete_custom_image_version_from_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/hosted-runners/images/custom/{{ record.image_definition_id }}/versions/{{ record.version }}",
+        "risk": "Destructive: Delete an image version of custom image from the organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_update_hosted_runner_for_org",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/actions/hosted-runners/{{ record.hosted_runner_id }}",
+        "risk": "Mutates existing provider-side state: Update a GitHub-hosted runner for an organization."
+      },
+      {
+        "name": "actions_delete_hosted_runner_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/hosted-runners/{{ record.hosted_runner_id }}",
+        "risk": "Destructive: Delete a GitHub-hosted runner for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "oidc_create_oidc_custom_property_inclusion_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/actions/oidc/customization/properties/repo",
+        "risk": "Creates provider-side state: Create an OIDC custom property inclusion for an organization."
+      },
+      {
+        "name": "oidc_delete_oidc_custom_property_inclusion_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/oidc/customization/properties/repo/{{ record.custom_property_name }}",
+        "risk": "Destructive: Delete an OIDC custom property inclusion for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "oidc_update_oidc_custom_sub_template_for_org",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/oidc/customization/sub",
+        "risk": "Mutates existing provider-side state: Set the customization template for an OIDC subject claim for an organization."
+      },
+      {
+        "name": "actions_set_github_actions_permissions_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/permissions",
+        "risk": "Mutates existing provider-side state: Set GitHub Actions permissions for an organization."
+      },
+      {
+        "name": "actions_set_artifact_and_log_retention_settings_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/permissions/artifact-and-log-retention",
+        "risk": "Mutates existing provider-side state: Set artifact and log retention settings for an organization."
+      },
+      {
+        "name": "actions_set_fork_pr_contributor_approval_permissions_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/permissions/fork-pr-contributor-approval",
+        "risk": "Mutates existing provider-side state: Set fork PR contributor approval permissions for an organization."
+      },
+      {
+        "name": "actions_set_private_repo_fork_pr_workflows_settings_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/permissions/fork-pr-workflows-private-repos",
+        "risk": "Mutates existing provider-side state: Set private repo fork PR workflow settings for an organization."
+      },
+      {
+        "name": "actions_set_selected_repositories_enabled_github_actions_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/permissions/repositories",
+        "risk": "Mutates existing provider-side state: Set selected repositories enabled for GitHub Actions in an organization."
+      },
+      {
+        "name": "actions_enable_selected_repository_github_actions_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/permissions/repositories/{{ record.repository_id }}",
+        "risk": "Mutates existing provider-side state: Enable a selected repository for GitHub Actions in an organization."
+      },
+      {
+        "name": "actions_disable_selected_repository_github_actions_organization",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/permissions/repositories/{{ record.repository_id }}",
+        "risk": "Destructive: Disable a selected repository for GitHub Actions in an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_set_allowed_actions_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/permissions/selected-actions",
+        "risk": "Mutates existing provider-side state: Set allowed actions and reusable workflows for an organization."
+      },
+      {
+        "name": "actions_set_self_hosted_runners_permissions_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/permissions/self-hosted-runners",
+        "risk": "Mutates existing provider-side state: Set self-hosted runners settings for an organization."
+      },
+      {
+        "name": "actions_set_selected_repositories_self_hosted_runners_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/permissions/self-hosted-runners/repositories",
+        "risk": "Mutates existing provider-side state: Set repositories allowed to use self-hosted runners in an organization."
+      },
+      {
+        "name": "actions_enable_selected_repository_self_hosted_runners_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/permissions/self-hosted-runners/repositories/{{ record.repository_id }}",
+        "risk": "Mutates existing provider-side state: Add a repository to the list of repositories allowed to use self-hosted runners in an organization."
+      },
+      {
+        "name": "actions_disable_selected_repository_self_hosted_runners_organization",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/permissions/self-hosted-runners/repositories/{{ record.repository_id }}",
+        "risk": "Destructive: Remove a repository from the list of repositories allowed to use self-hosted runners in an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_set_github_actions_default_workflow_permissions_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/permissions/workflow",
+        "risk": "Mutates existing provider-side state: Set default workflow permissions for an organization."
+      },
+      {
+        "name": "actions_create_self_hosted_runner_group_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/actions/runner-groups",
+        "risk": "Creates provider-side state: Create a self-hosted runner group for an organization."
+      },
+      {
+        "name": "actions_update_self_hosted_runner_group_for_org",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}",
+        "risk": "Mutates existing provider-side state: Update a self-hosted runner group for an organization."
+      },
+      {
+        "name": "actions_delete_self_hosted_runner_group_from_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}",
+        "risk": "Destructive: Delete a self-hosted runner group from an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_set_repo_access_to_self_hosted_runner_group_in_org",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/repositories",
+        "risk": "Mutates existing provider-side state: Set repository access for a self-hosted runner group in an organization."
+      },
+      {
+        "name": "actions_add_repo_access_to_self_hosted_runner_group_in_org",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/repositories/{{ record.repository_id }}",
+        "risk": "Mutates existing provider-side state: Add repository access to a self-hosted runner group in an organization."
+      },
+      {
+        "name": "actions_remove_repo_access_to_self_hosted_runner_group_in_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/repositories/{{ record.repository_id }}",
+        "risk": "Destructive: Remove repository access to a self-hosted runner group in an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_set_self_hosted_runners_in_group_for_org",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/runners",
+        "risk": "Mutates existing provider-side state: Set self-hosted runners in a group for an organization."
+      },
+      {
+        "name": "actions_add_self_hosted_runner_to_group_for_org",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/runners/{{ record.runner_id }}",
+        "risk": "Mutates existing provider-side state: Add a self-hosted runner to a group for an organization."
+      },
+      {
+        "name": "actions_remove_self_hosted_runner_from_group_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/runner-groups/{{ record.runner_group_id }}/runners/{{ record.runner_id }}",
+        "risk": "Destructive: Remove a self-hosted runner from a group for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_generate_runner_jitconfig_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/actions/runners/generate-jitconfig",
+        "risk": "Creates provider-side state: Create configuration for a just-in-time runner for an organization."
+      },
+      {
+        "name": "actions_create_registration_token_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/actions/runners/registration-token",
+        "risk": "Creates provider-side state: Create a registration token for an organization."
+      },
+      {
+        "name": "actions_create_remove_token_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/actions/runners/remove-token",
+        "risk": "Creates provider-side state: Create a remove token for an organization."
+      },
+      {
+        "name": "actions_delete_self_hosted_runner_from_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}",
+        "risk": "Destructive: Delete a self-hosted runner from an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_add_custom_labels_to_self_hosted_runner_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}/labels",
+        "risk": "Creates provider-side state: Add custom labels to a self-hosted runner for an organization."
+      },
+      {
+        "name": "actions_set_custom_labels_for_self_hosted_runner_for_org",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}/labels",
+        "risk": "Mutates existing provider-side state: Set custom labels for a self-hosted runner for an organization."
+      },
+      {
+        "name": "actions_remove_all_custom_labels_from_self_hosted_runner_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}/labels",
+        "risk": "Destructive: Remove all custom labels from a self-hosted runner for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_remove_custom_label_from_self_hosted_runner_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/runners/{{ record.runner_id }}/labels/{{ record.name }}",
+        "risk": "Destructive: Remove a custom label from a self-hosted runner for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_create_or_update_org_secret",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}",
+        "risk": "Mutates existing provider-side state: Create or update an organization secret."
+      },
+      {
+        "name": "actions_delete_org_secret",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}",
+        "risk": "Destructive: Delete an organization secret. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_set_selected_repos_for_org_secret",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}/repositories",
+        "risk": "Mutates existing provider-side state: Set selected repositories for an organization secret."
+      },
+      {
+        "name": "actions_add_selected_repo_to_org_secret",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
+        "risk": "Mutates existing provider-side state: Add selected repository to an organization secret."
+      },
+      {
+        "name": "actions_remove_selected_repo_from_org_secret",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
+        "risk": "Destructive: Remove selected repository from an organization secret. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_create_org_variable",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/actions/variables",
+        "risk": "Creates provider-side state: Create an organization variable."
+      },
+      {
+        "name": "actions_update_org_variable",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/actions/variables/{{ record.name }}",
+        "risk": "Mutates existing provider-side state: Update an organization variable."
+      },
+      {
+        "name": "actions_delete_org_variable",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/variables/{{ record.name }}",
+        "risk": "Destructive: Delete an organization variable. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_set_selected_repos_for_org_variable",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/variables/{{ record.name }}/repositories",
+        "risk": "Mutates existing provider-side state: Set selected repositories for an organization variable."
+      },
+      {
+        "name": "actions_add_selected_repo_to_org_variable",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/actions/variables/{{ record.name }}/repositories/{{ record.repository_id }}",
+        "risk": "Mutates existing provider-side state: Add selected repository to an organization variable."
+      },
+      {
+        "name": "actions_remove_selected_repo_from_org_variable",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/actions/variables/{{ record.name }}/repositories/{{ record.repository_id }}",
+        "risk": "Destructive: Remove selected repository from an organization variable. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "agents_create_or_update_org_secret",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}",
+        "risk": "Mutates existing provider-side state: Create or update an organization secret."
+      },
+      {
+        "name": "agents_delete_org_secret",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}",
+        "risk": "Destructive: Delete an organization secret. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "agents_set_selected_repos_for_org_secret",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}/repositories",
+        "risk": "Mutates existing provider-side state: Set selected repositories for an organization secret."
+      },
+      {
+        "name": "agents_add_selected_repo_to_org_secret",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
+        "risk": "Mutates existing provider-side state: Add selected repository to an organization secret."
+      },
+      {
+        "name": "agents_remove_selected_repo_from_org_secret",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/agents/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
+        "risk": "Destructive: Remove selected repository from an organization secret. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "agents_create_org_variable",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/agents/variables",
+        "risk": "Creates provider-side state: Create an organization variable."
+      },
+      {
+        "name": "agents_update_org_variable",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/agents/variables/{{ record.name }}",
+        "risk": "Mutates existing provider-side state: Update an organization variable."
+      },
+      {
+        "name": "agents_delete_org_variable",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/agents/variables/{{ record.name }}",
+        "risk": "Destructive: Delete an organization variable. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "agents_set_selected_repos_for_org_variable",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/agents/variables/{{ record.name }}/repositories",
+        "risk": "Mutates existing provider-side state: Set selected repositories for an organization variable."
+      },
+      {
+        "name": "agents_add_selected_repo_to_org_variable",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/agents/variables/{{ record.name }}/repositories/{{ record.repository_id }}",
+        "risk": "Mutates existing provider-side state: Add selected repository to an organization variable."
+      },
+      {
+        "name": "agents_remove_selected_repo_from_org_variable",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/agents/variables/{{ record.name }}/repositories/{{ record.repository_id }}",
+        "risk": "Destructive: Remove selected repository from an organization variable. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_create_artifact_deployment_record",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/artifacts/metadata/deployment-record",
+        "risk": "Creates provider-side state: Create an artifact deployment record."
+      },
+      {
+        "name": "orgs_set_cluster_deployment_records",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/artifacts/metadata/deployment-record/cluster/{{ record.cluster }}",
+        "risk": "Creates provider-side state: Set cluster deployment records."
+      },
+      {
+        "name": "orgs_create_cluster_deployment_records_job",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/artifacts/metadata/deployment-record/cluster/{{ record.cluster }}/jobs",
+        "risk": "Creates provider-side state: Create a cluster deployment records job."
+      },
+      {
+        "name": "orgs_create_artifact_storage_record",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/artifacts/metadata/storage-record",
+        "risk": "Creates provider-side state: Create artifact metadata storage record."
+      },
+      {
+        "name": "orgs_delete_attestations_by_subject_digest",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/attestations/digest/{{ record.subject_digest }}",
+        "risk": "Destructive: Delete attestations by subject digest. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_delete_attestations_by_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/attestations/{{ record.attestation_id }}",
+        "risk": "Destructive: Delete attestations by ID. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_block_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/blocks/{{ record.username }}",
+        "risk": "Mutates existing provider-side state: Block a user from an organization."
+      },
+      {
+        "name": "orgs_unblock_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/blocks/{{ record.username }}",
+        "risk": "Destructive: Unblock a user from an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "campaigns_update_campaign",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/campaigns/{{ record.campaign_number }}",
+        "risk": "Mutates existing provider-side state: Update a campaign."
+      },
+      {
+        "name": "campaigns_delete_campaign",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/campaigns/{{ record.campaign_number }}",
+        "risk": "Destructive: Delete a campaign for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "code_security_create_configuration",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/code-security/configurations",
+        "risk": "Creates provider-side state: Create a code security configuration."
+      },
+      {
+        "name": "code_security_detach_configuration",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/code-security/configurations/detach",
+        "risk": "Destructive: Detach configurations from repositories. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "code_security_update_configuration",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/code-security/configurations/{{ record.configuration_id }}",
+        "risk": "Mutates existing provider-side state: Update a code security configuration."
+      },
+      {
+        "name": "code_security_delete_configuration",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/code-security/configurations/{{ record.configuration_id }}",
+        "risk": "Destructive: Delete a code security configuration. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "code_security_attach_configuration",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/code-security/configurations/{{ record.configuration_id }}/attach",
+        "risk": "Creates provider-side state: Attach a configuration to repositories."
+      },
+      {
+        "name": "code_security_set_configuration_as_default",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/code-security/configurations/{{ record.configuration_id }}/defaults",
+        "risk": "Mutates existing provider-side state: Set a code security configuration as a default for an organization."
+      },
+      {
+        "name": "codespaces_set_codespaces_access",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/codespaces/access",
+        "risk": "Mutates existing provider-side state: Manage access control for organization codespaces (deprecated by GitHub, still documented)."
+      },
+      {
+        "name": "codespaces_set_codespaces_access_users",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/codespaces/access/selected_users",
+        "risk": "Creates provider-side state: Add users to Codespaces access for an organization (deprecated by GitHub, still documented)."
+      },
+      {
+        "name": "codespaces_delete_codespaces_access_users",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/codespaces/access/selected_users",
+        "risk": "Destructive: Remove users from Codespaces access for an organization (deprecated by GitHub, still documented). Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "codespaces_create_or_update_org_secret",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}",
+        "risk": "Mutates existing provider-side state: Create or update an organization secret."
+      },
+      {
+        "name": "codespaces_delete_org_secret",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}",
+        "risk": "Destructive: Delete an organization secret. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "codespaces_set_selected_repos_for_org_secret",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}/repositories",
+        "risk": "Mutates existing provider-side state: Set selected repositories for an organization secret."
+      },
+      {
+        "name": "codespaces_add_selected_repo_to_org_secret",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
+        "risk": "Mutates existing provider-side state: Add selected repository to an organization secret."
+      },
+      {
+        "name": "codespaces_remove_selected_repo_from_org_secret",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
+        "risk": "Destructive: Remove selected repository from an organization secret. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "copilot_spaces_create_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/copilot-spaces",
+        "risk": "Creates provider-side state: Create an organization Copilot Space."
+      },
+      {
+        "name": "copilot_spaces_update_for_org",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}",
+        "risk": "Mutates existing provider-side state: Set an organization Copilot Space."
+      },
+      {
+        "name": "copilot_spaces_delete_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}",
+        "risk": "Destructive: Delete an organization Copilot Space. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "copilot_spaces_add_collaborator_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/collaborators",
+        "risk": "Creates provider-side state: Add a collaborator to an organization Copilot Space."
+      },
+      {
+        "name": "copilot_spaces_update_collaborator_for_org",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/collaborators/{{ record.actor_type }}/{{ record.actor_identifier }}",
+        "risk": "Mutates existing provider-side state: Set a collaborator role for an organization Copilot Space."
+      },
+      {
+        "name": "copilot_spaces_remove_collaborator_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/collaborators/{{ record.actor_type }}/{{ record.actor_identifier }}",
+        "risk": "Destructive: Remove a collaborator from an organization Copilot Space. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "copilot_spaces_create_resource_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/resources",
+        "risk": "Creates provider-side state: Create a resource for an organization Copilot Space."
+      },
+      {
+        "name": "copilot_spaces_update_resource_for_org",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/resources/{{ record.space_resource_id }}",
+        "risk": "Mutates existing provider-side state: Set a resource for an organization Copilot Space."
+      },
+      {
+        "name": "copilot_spaces_delete_resource_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/copilot-spaces/{{ record.space_number }}/resources/{{ record.space_resource_id }}",
+        "risk": "Destructive: Delete a resource from an organization Copilot Space. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "copilot_add_copilot_seats_for_teams",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/copilot/billing/selected_teams",
+        "risk": "Creates provider-side state: Add teams to the Copilot subscription for an organization."
+      },
+      {
+        "name": "copilot_cancel_copilot_seat_assignment_for_teams",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/copilot/billing/selected_teams",
+        "risk": "Destructive: Remove teams from the Copilot subscription for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "copilot_add_copilot_seats_for_users",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/copilot/billing/selected_users",
+        "risk": "Creates provider-side state: Add users to the Copilot subscription for an organization."
+      },
+      {
+        "name": "copilot_cancel_copilot_seat_assignment_for_users",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/copilot/billing/selected_users",
+        "risk": "Destructive: Remove users from the Copilot subscription for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "copilot_set_copilot_coding_agent_permissions_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/copilot/coding-agent/permissions",
+        "risk": "Mutates existing provider-side state: Set Copilot cloud agent permissions for an organization."
+      },
+      {
+        "name": "copilot_set_copilot_coding_agent_selected_repositories_for_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/copilot/coding-agent/permissions/repositories",
+        "risk": "Mutates existing provider-side state: Set selected repositories for Copilot cloud agent in an organization."
+      },
+      {
+        "name": "copilot_enable_copilot_coding_agent_for_repository_in_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/copilot/coding-agent/permissions/repositories/{{ record.repository_id }}",
+        "risk": "Mutates existing provider-side state: Enable a repository for Copilot cloud agent in an organization."
+      },
+      {
+        "name": "copilot_disable_copilot_coding_agent_for_repository_in_organization",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/copilot/coding-agent/permissions/repositories/{{ record.repository_id }}",
+        "risk": "Destructive: Disable a repository for Copilot cloud agent in an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "copilot_set_copilot_content_exclusion_for_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/copilot/content_exclusion",
+        "risk": "Mutates existing provider-side state: Set Copilot content exclusion rules for an organization."
+      },
+      {
+        "name": "dependabot_update_repository_access_for_org",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/dependabot/repository-access",
+        "risk": "Mutates existing provider-side state: Updates Dependabot's repository access list for an organization."
+      },
+      {
+        "name": "dependabot_set_repository_access_default_level",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/dependabot/repository-access/default-level",
+        "risk": "Mutates existing provider-side state: Set the default repository access level for Dependabot."
+      },
+      {
+        "name": "dependabot_create_or_update_org_secret",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}",
+        "risk": "Mutates existing provider-side state: Create or update an organization secret."
+      },
+      {
+        "name": "dependabot_delete_org_secret",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}",
+        "risk": "Destructive: Delete an organization secret. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "dependabot_set_selected_repos_for_org_secret",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}/repositories",
+        "risk": "Mutates existing provider-side state: Set selected repositories for an organization secret."
+      },
+      {
+        "name": "dependabot_add_selected_repo_to_org_secret",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
+        "risk": "Mutates existing provider-side state: Add selected repository to an organization secret."
+      },
+      {
+        "name": "dependabot_remove_selected_repo_from_org_secret",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/dependabot/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
+        "risk": "Destructive: Remove selected repository from an organization secret. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_create_webhook",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/hooks",
+        "risk": "Creates provider-side state: Create an organization webhook."
+      },
+      {
+        "name": "orgs_update_webhook",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/hooks/{{ record.hook_id }}",
+        "risk": "Mutates existing provider-side state: Update an organization webhook."
+      },
+      {
+        "name": "orgs_delete_webhook",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/hooks/{{ record.hook_id }}",
+        "risk": "Destructive: Delete an organization webhook. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_update_webhook_config_for_org",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/hooks/{{ record.hook_id }}/config",
+        "risk": "Mutates existing provider-side state: Update a webhook configuration for an organization."
+      },
+      {
+        "name": "orgs_redeliver_webhook_delivery",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/hooks/{{ record.hook_id }}/deliveries/{{ record.delivery_id }}/attempts",
+        "risk": "Creates provider-side state: Redeliver a delivery for an organization webhook."
+      },
+      {
+        "name": "orgs_ping_webhook",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/hooks/{{ record.hook_id }}/pings",
+        "risk": "Creates provider-side state: Ping an organization webhook."
+      },
+      {
+        "name": "interactions_set_restrictions_for_org",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/interaction-limits",
+        "risk": "Mutates existing provider-side state: Set interaction restrictions for an organization."
+      },
+      {
+        "name": "interactions_remove_restrictions_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/interaction-limits",
+        "risk": "Destructive: Remove interaction restrictions for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "interactions_update_pull_request_creation_cap_for_org",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/interaction-limits/pulls/creation-cap",
+        "risk": "Mutates existing provider-side state: Update pull request creation cap for an org."
+      },
+      {
+        "name": "orgs_create_invitation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/invitations",
+        "risk": "Creates provider-side state: Create an organization invitation."
+      },
+      {
+        "name": "orgs_cancel_invitation",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/invitations/{{ record.invitation_id }}",
+        "risk": "Destructive: Cancel an organization invitation. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_create_issue_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/issue-fields",
+        "risk": "Creates provider-side state: Create issue field for an organization."
+      },
+      {
+        "name": "orgs_update_issue_field",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/issue-fields/{{ record.issue_field_id }}",
+        "risk": "Mutates existing provider-side state: Update issue field for an organization."
+      },
+      {
+        "name": "orgs_delete_issue_field",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/issue-fields/{{ record.issue_field_id }}",
+        "risk": "Destructive: Delete issue field for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_create_issue_type",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/issue-types",
+        "risk": "Creates provider-side state: Create issue type for an organization."
+      },
+      {
+        "name": "orgs_update_issue_type",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/issue-types/{{ record.issue_type_id }}",
+        "risk": "Mutates existing provider-side state: Update issue type for an organization."
+      },
+      {
+        "name": "orgs_delete_issue_type",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/issue-types/{{ record.issue_type_id }}",
+        "risk": "Destructive: Delete issue type for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_remove_member",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/members/{{ record.username }}",
+        "risk": "Destructive: Remove an organization member. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "codespaces_delete_from_organization",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/members/{{ record.username }}/codespaces/{{ record.codespace_name }}",
+        "risk": "Destructive: Delete a codespace from the organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "codespaces_stop_in_organization",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/members/{{ record.username }}/codespaces/{{ record.codespace_name }}/stop",
+        "risk": "Creates provider-side state: Stop a codespace for an organization user."
+      },
+      {
+        "name": "orgs_set_membership_for_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/memberships/{{ record.username }}",
+        "risk": "Mutates existing provider-side state: Set organization membership for a user."
+      },
+      {
+        "name": "orgs_remove_membership_for_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/memberships/{{ record.username }}",
+        "risk": "Destructive: Remove organization membership for a user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "migrations_start_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/migrations",
+        "risk": "Creates provider-side state: Start an organization migration."
+      },
+      {
+        "name": "migrations_delete_archive_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/migrations/{{ record.migration_id }}/archive",
+        "risk": "Destructive: Delete an organization migration archive. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "migrations_unlock_repo_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/migrations/{{ record.migration_id }}/repos/{{ record.repo_name }}/lock",
+        "risk": "Destructive: Unlock an organization repository. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_revoke_all_org_roles_team",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/organization-roles/teams/{{ record.team_slug }}",
+        "risk": "Destructive: Remove all organization roles for a team. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_assign_team_to_org_role",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/organization-roles/teams/{{ record.team_slug }}/{{ record.role_id }}",
+        "risk": "Mutates existing provider-side state: Assign an organization role to a team."
+      },
+      {
+        "name": "orgs_revoke_org_role_team",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/organization-roles/teams/{{ record.team_slug }}/{{ record.role_id }}",
+        "risk": "Destructive: Remove an organization role from a team. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_revoke_all_org_roles_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/organization-roles/users/{{ record.username }}",
+        "risk": "Destructive: Remove all organization roles for a user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_assign_user_to_org_role",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/organization-roles/users/{{ record.username }}/{{ record.role_id }}",
+        "risk": "Mutates existing provider-side state: Assign an organization role to a user."
+      },
+      {
+        "name": "orgs_revoke_org_role_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/organization-roles/users/{{ record.username }}/{{ record.role_id }}",
+        "risk": "Destructive: Remove an organization role from a user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_convert_member_to_outside_collaborator",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/outside_collaborators/{{ record.username }}",
+        "risk": "Mutates existing provider-side state: Convert an organization member to outside collaborator."
+      },
+      {
+        "name": "orgs_remove_outside_collaborator",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/outside_collaborators/{{ record.username }}",
+        "risk": "Destructive: Remove outside collaborator from an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "packages_delete_package_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}",
+        "risk": "Destructive: Delete a package for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "packages_restore_package_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}/restore",
+        "risk": "Creates provider-side state: Restore a package for an organization."
+      },
+      {
+        "name": "packages_delete_package_version_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}",
+        "risk": "Destructive: Delete package version for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "packages_restore_package_version_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}/restore",
+        "risk": "Creates provider-side state: Restore package version for an organization."
+      },
+      {
+        "name": "orgs_review_pat_grant_requests_in_bulk",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/personal-access-token-requests",
+        "risk": "Creates provider-side state: Review requests to access organization resources with fine-grained personal access tokens."
+      },
+      {
+        "name": "orgs_review_pat_grant_request",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/personal-access-token-requests/{{ record.pat_request_id }}",
+        "risk": "Creates provider-side state: Review a request to access organization resources with a fine-grained personal access token."
+      },
+      {
+        "name": "orgs_update_pat_accesses",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/personal-access-tokens",
+        "risk": "Creates provider-side state: Update the access to organization resources via fine-grained personal access tokens."
+      },
+      {
+        "name": "orgs_update_pat_access",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/personal-access-tokens/{{ record.pat_id }}",
+        "risk": "Creates provider-side state: Update the access a fine-grained personal access token has to organization resources."
+      },
+      {
+        "name": "private_registries_create_org_private_registry",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/private-registries",
+        "risk": "Creates provider-side state: Create a private registry for an organization."
+      },
+      {
+        "name": "private_registries_update_org_private_registry",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/private-registries/{{ record.secret_name }}",
+        "risk": "Mutates existing provider-side state: Update a private registry for an organization."
+      },
+      {
+        "name": "private_registries_delete_org_private_registry",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/private-registries/{{ record.secret_name }}",
+        "risk": "Destructive: Delete a private registry for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "projects_create_draft_item_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/drafts",
+        "risk": "Creates provider-side state: Create draft item for organization owned project."
+      },
+      {
+        "name": "projects_update_item_for_org",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/items/{{ record.item_id }}",
+        "risk": "Mutates existing provider-side state: Update project item for organization."
+      },
+      {
+        "name": "projects_delete_item_for_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/items/{{ record.item_id }}",
+        "risk": "Destructive: Delete project item for organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "projects_create_view_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/views",
+        "risk": "Creates provider-side state: Create a view for an organization-owned project."
+      },
+      {
+        "name": "orgs_custom_properties_for_repos_create_or_update_organization_definitions",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/properties/schema",
+        "risk": "Mutates existing provider-side state: Create or update custom properties for an organization."
+      },
+      {
+        "name": "orgs_custom_properties_for_repos_create_or_update_organization_definition",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/properties/schema/{{ record.custom_property_name }}",
+        "risk": "Mutates existing provider-side state: Create or update a custom property for an organization."
+      },
+      {
+        "name": "orgs_custom_properties_for_repos_delete_organization_definition",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/properties/schema/{{ record.custom_property_name }}",
+        "risk": "Destructive: Remove a custom property for an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_custom_properties_for_repos_create_or_update_organization_values",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/properties/values",
+        "risk": "Mutates existing provider-side state: Create or update custom property values for organization repositories."
+      },
+      {
+        "name": "orgs_set_public_membership_for_authenticated_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/public_members/{{ record.username }}",
+        "risk": "Mutates existing provider-side state: Set public organization membership for the authenticated user."
+      },
+      {
+        "name": "orgs_remove_public_membership_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/public_members/{{ record.username }}",
+        "risk": "Destructive: Remove public organization membership for the authenticated user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "repos_create_in_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/repos",
+        "risk": "Creates provider-side state: Create an organization repository."
+      },
+      {
+        "name": "repos_create_org_ruleset",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/rulesets",
+        "risk": "Creates provider-side state: Create an organization repository ruleset."
+      },
+      {
+        "name": "repos_update_org_ruleset",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/rulesets/{{ record.ruleset_id }}",
+        "risk": "Mutates existing provider-side state: Update an organization repository ruleset."
+      },
+      {
+        "name": "repos_delete_org_ruleset",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/rulesets/{{ record.ruleset_id }}",
+        "risk": "Destructive: Delete an organization repository ruleset. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "secret_scanning_bulk_create_org_custom_patterns",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns",
+        "risk": "Creates provider-side state: Bulk create organization custom patterns."
+      },
+      {
+        "name": "secret_scanning_bulk_delete_org_custom_patterns",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns",
+        "risk": "Destructive: Bulk delete organization custom patterns. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "secret_scanning_update_org_pattern_configs",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/secret-scanning/pattern-configurations",
+        "risk": "Mutates existing provider-side state: Update organization pattern configurations."
+      },
+      {
+        "name": "orgs_add_security_manager_team",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/security-managers/teams/{{ record.team_slug }}",
+        "risk": "Mutates existing provider-side state: Add a security manager team (deprecated by GitHub, still documented)."
+      },
+      {
+        "name": "orgs_remove_security_manager_team",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/security-managers/teams/{{ record.team_slug }}",
+        "risk": "Destructive: Remove a security manager team (deprecated by GitHub, still documented). Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_set_immutable_releases_settings",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/settings/immutable-releases",
+        "risk": "Mutates existing provider-side state: Set immutable releases settings for an organization."
+      },
+      {
+        "name": "orgs_set_immutable_releases_settings_repositories",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/settings/immutable-releases/repositories",
+        "risk": "Mutates existing provider-side state: Set selected repositories for immutable releases enforcement."
+      },
+      {
+        "name": "orgs_enable_selected_repository_immutable_releases_organization",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/settings/immutable-releases/repositories/{{ record.repository_id }}",
+        "risk": "Mutates existing provider-side state: Enable a selected repository for immutable releases in an organization."
+      },
+      {
+        "name": "orgs_disable_selected_repository_immutable_releases_organization",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/settings/immutable-releases/repositories/{{ record.repository_id }}",
+        "risk": "Destructive: Disable a selected repository for immutable releases in an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "hosted_compute_create_network_configuration_for_org",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/settings/network-configurations",
+        "risk": "Creates provider-side state: Create a hosted compute network configuration for an organization."
+      },
+      {
+        "name": "hosted_compute_update_network_configuration_for_org",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/settings/network-configurations/{{ record.network_configuration_id }}",
+        "risk": "Mutates existing provider-side state: Update a hosted compute network configuration for an organization."
+      },
+      {
+        "name": "hosted_compute_delete_network_configuration_from_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/settings/network-configurations/{{ record.network_configuration_id }}",
+        "risk": "Destructive: Delete a hosted compute network configuration from an organization. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "teams_create",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/teams",
+        "risk": "Creates provider-side state: Create a team."
+      },
+      {
+        "name": "teams_update_in_org",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/teams/{{ record.team_slug }}",
+        "risk": "Mutates existing provider-side state: Update a team."
+      },
+      {
+        "name": "teams_delete_in_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/teams/{{ record.team_slug }}",
+        "risk": "Destructive: Delete a team. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "teams_add_or_update_membership_for_user_in_org",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/teams/{{ record.team_slug }}/memberships/{{ record.username }}",
+        "risk": "Mutates existing provider-side state: Add or update team membership for a user."
+      },
+      {
+        "name": "teams_remove_membership_for_user_in_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/teams/{{ record.team_slug }}/memberships/{{ record.username }}",
+        "risk": "Destructive: Remove team membership for a user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "teams_add_or_update_repo_permissions_in_org",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org }}/teams/{{ record.team_slug }}/repos/{{ config.owner }}/{{ config.repo }}",
+        "risk": "Mutates existing provider-side state: Add or update team repository permissions."
+      },
+      {
+        "name": "teams_remove_repo_in_org",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org }}/teams/{{ record.team_slug }}/repos/{{ config.owner }}/{{ config.repo }}",
+        "risk": "Destructive: Remove a repository from a team. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_enable_or_disable_security_product_on_all_org_repos",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/{{ record.security_product }}/{{ record.enablement }}",
+        "risk": "Creates provider-side state: Enable or disable a security feature for an organization (deprecated by GitHub, still documented)."
+      },
+      {
+        "name": "interactions_update_pull_request_creation_cap_for_repo",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits/pulls/creation-cap",
+        "risk": "Mutates existing provider-side state: Update pull request creation cap for a repository."
+      },
+      {
+        "name": "issues_approve_suggestion",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/suggestions/{{ record.suggestion_id }}/approve",
+        "risk": "Creates provider-side state: Approve an issue suggestion."
+      },
+      {
+        "name": "issues_dismiss_suggestion",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/suggestions/{{ record.suggestion_id }}/dismiss",
+        "risk": "Creates provider-side state: Dismiss an issue suggestion."
+      },
+      {
+        "name": "pulls_merge_async",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/merge-async",
+        "risk": "Mutates existing provider-side state: Merge a pull request asynchronously."
+      },
+      {
+        "name": "secret_scanning_bulk_create_repo_custom_patterns",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns",
+        "risk": "Creates provider-side state: Bulk create repository custom patterns."
+      },
+      {
+        "name": "secret_scanning_bulk_delete_repo_custom_patterns",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns",
+        "risk": "Destructive: Bulk delete repository custom patterns. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "pull_request_stacks_create",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/stacks",
+        "risk": "Creates provider-side state: Create a pull request stack."
+      },
+      {
+        "name": "pull_request_stacks_add",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/stacks/{{ record.stack_number }}/add",
+        "risk": "Creates provider-side state: Add pull requests to a pull request stack."
+      },
+      {
+        "name": "pull_request_stacks_unstack",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/stacks/{{ record.stack_number }}/unstack",
+        "risk": "Creates provider-side state: Remove pull requests from a pull request stack."
+      },
+      {
+        "name": "repos_create_using_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ record.template_owner }}/{{ record.template_repo }}/generate",
+        "risk": "Creates provider-side state: Create a repository using a template."
+      },
+      {
+        "name": "teams_update_legacy",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/teams/{{ record.team_id }}",
+        "risk": "Mutates existing provider-side state: Update a team (Legacy) (deprecated by GitHub, still documented)."
+      },
+      {
+        "name": "teams_delete_legacy",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/teams/{{ record.team_id }}",
+        "risk": "Destructive: Delete a team (Legacy) (deprecated by GitHub, still documented). Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "teams_add_member_legacy",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/teams/{{ record.team_id }}/members/{{ record.username }}",
+        "risk": "Mutates existing provider-side state: Add team member (Legacy) (deprecated by GitHub, still documented)."
+      },
+      {
+        "name": "teams_remove_member_legacy",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/teams/{{ record.team_id }}/members/{{ record.username }}",
+        "risk": "Destructive: Remove team member (Legacy) (deprecated by GitHub, still documented). Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "teams_add_or_update_membership_for_user_legacy",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/teams/{{ record.team_id }}/memberships/{{ record.username }}",
+        "risk": "Mutates existing provider-side state: Add or update team membership for a user (Legacy) (deprecated by GitHub, still documented)."
+      },
+      {
+        "name": "teams_remove_membership_for_user_legacy",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/teams/{{ record.team_id }}/memberships/{{ record.username }}",
+        "risk": "Destructive: Remove team membership for a user (Legacy) (deprecated by GitHub, still documented). Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "teams_add_or_update_repo_permissions_legacy",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/teams/{{ record.team_id }}/repos/{{ config.owner }}/{{ config.repo }}",
+        "risk": "Mutates existing provider-side state: Add or update team repository permissions (Legacy) (deprecated by GitHub, still documented)."
+      },
+      {
+        "name": "teams_remove_repo_legacy",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/teams/{{ record.team_id }}/repos/{{ config.owner }}/{{ config.repo }}",
+        "risk": "Destructive: Remove a repository from a team (Legacy) (deprecated by GitHub, still documented). Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "users_update_authenticated",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/user",
+        "risk": "Mutates existing provider-side state: Update the authenticated user."
+      },
+      {
+        "name": "users_block",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/user/blocks/{{ record.username }}",
+        "risk": "Mutates existing provider-side state: Block a user."
+      },
+      {
+        "name": "users_unblock",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/blocks/{{ record.username }}",
+        "risk": "Destructive: Unblock a user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "codespaces_create_or_update_secret_for_authenticated_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/user/codespaces/secrets/{{ record.secret_name }}",
+        "risk": "Mutates existing provider-side state: Create or update a secret for the authenticated user."
+      },
+      {
+        "name": "codespaces_delete_secret_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/codespaces/secrets/{{ record.secret_name }}",
+        "risk": "Destructive: Delete a secret for the authenticated user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "codespaces_set_repositories_for_secret_for_authenticated_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/user/codespaces/secrets/{{ record.secret_name }}/repositories",
+        "risk": "Mutates existing provider-side state: Set selected repositories for a user secret."
+      },
+      {
+        "name": "codespaces_add_repository_for_secret_for_authenticated_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/user/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
+        "risk": "Mutates existing provider-side state: Add a selected repository to a user secret."
+      },
+      {
+        "name": "codespaces_remove_repository_for_secret_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/codespaces/secrets/{{ record.secret_name }}/repositories/{{ record.repository_id }}",
+        "risk": "Destructive: Remove a selected repository from a user secret. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "codespaces_update_for_authenticated_user",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/user/codespaces/{{ record.codespace_name }}",
+        "risk": "Mutates existing provider-side state: Update a codespace for the authenticated user."
+      },
+      {
+        "name": "codespaces_delete_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/codespaces/{{ record.codespace_name }}",
+        "risk": "Destructive: Delete a codespace for the authenticated user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "codespaces_export_for_authenticated_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/codespaces/{{ record.codespace_name }}/exports",
+        "risk": "Creates provider-side state: Export a codespace for the authenticated user."
+      },
+      {
+        "name": "codespaces_publish_for_authenticated_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/codespaces/{{ record.codespace_name }}/publish",
+        "risk": "Creates provider-side state: Create a repository from an unpublished codespace."
+      },
+      {
+        "name": "codespaces_start_for_authenticated_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/codespaces/{{ record.codespace_name }}/start",
+        "risk": "Creates provider-side state: Start a codespace for the authenticated user."
+      },
+      {
+        "name": "codespaces_stop_for_authenticated_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/codespaces/{{ record.codespace_name }}/stop",
+        "risk": "Creates provider-side state: Stop a codespace for the authenticated user."
+      },
+      {
+        "name": "users_set_primary_email_visibility_for_authenticated_user",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/user/email/visibility",
+        "risk": "Mutates existing provider-side state: Set primary email visibility for the authenticated user."
+      },
+      {
+        "name": "users_follow",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/user/following/{{ record.username }}",
+        "risk": "Mutates existing provider-side state: Follow a user."
+      },
+      {
+        "name": "users_unfollow",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/following/{{ record.username }}",
+        "risk": "Destructive: Unfollow a user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "users_create_gpg_key_for_authenticated_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/gpg_keys",
+        "risk": "Creates provider-side state: Create a GPG key for the authenticated user."
+      },
+      {
+        "name": "users_delete_gpg_key_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/gpg_keys/{{ record.gpg_key_id }}",
+        "risk": "Destructive: Delete a GPG key for the authenticated user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "apps_add_repo_to_installation_for_authenticated_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/user/installations/{{ record.installation_id }}/repositories/{{ record.repository_id }}",
+        "risk": "Mutates existing provider-side state: Add a repository to an app installation."
+      },
+      {
+        "name": "apps_remove_repo_from_installation_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/installations/{{ record.installation_id }}/repositories/{{ record.repository_id }}",
+        "risk": "Destructive: Remove a repository from an app installation. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "interactions_set_restrictions_for_authenticated_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/user/interaction-limits",
+        "risk": "Mutates existing provider-side state: Set interaction restrictions for your public repositories."
+      },
+      {
+        "name": "interactions_remove_restrictions_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/interaction-limits",
+        "risk": "Destructive: Remove interaction restrictions from your public repositories. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "users_create_public_ssh_key_for_authenticated_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/keys",
+        "risk": "Creates provider-side state: Create a public SSH key for the authenticated user."
+      },
+      {
+        "name": "users_delete_public_ssh_key_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/keys/{{ record.key_id }}",
+        "risk": "Destructive: Delete a public SSH key for the authenticated user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_update_membership_for_authenticated_user",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/user/memberships/orgs/{{ record.org }}",
+        "risk": "Mutates existing provider-side state: Update an organization membership for the authenticated user."
+      },
+      {
+        "name": "migrations_start_for_authenticated_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/migrations",
+        "risk": "Creates provider-side state: Start a user migration."
+      },
+      {
+        "name": "migrations_delete_archive_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/migrations/{{ record.migration_id }}/archive",
+        "risk": "Destructive: Delete a user migration archive. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "migrations_unlock_repo_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/migrations/{{ record.migration_id }}/repos/{{ record.repo_name }}/lock",
+        "risk": "Destructive: Unlock a user repository. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "packages_delete_package_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/packages/{{ record.package_type }}/{{ record.package_name }}",
+        "risk": "Destructive: Delete a package for the authenticated user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "packages_restore_package_for_authenticated_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/packages/{{ record.package_type }}/{{ record.package_name }}/restore",
+        "risk": "Creates provider-side state: Restore a package for the authenticated user."
+      },
+      {
+        "name": "packages_delete_package_version_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}",
+        "risk": "Destructive: Delete a package version for the authenticated user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "packages_restore_package_version_for_authenticated_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}/restore",
+        "risk": "Creates provider-side state: Restore a package version for the authenticated user."
+      },
+      {
+        "name": "repos_create_for_authenticated_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/repos",
+        "risk": "Creates provider-side state: Create a repository for the authenticated user."
+      },
+      {
+        "name": "repos_accept_invitation_for_authenticated_user",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/user/repository_invitations/{{ record.invitation_id }}",
+        "risk": "Mutates existing provider-side state: Accept a repository invitation."
+      },
+      {
+        "name": "repos_decline_invitation_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/repository_invitations/{{ record.invitation_id }}",
+        "risk": "Destructive: Decline a repository invitation. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "users_add_social_account_for_authenticated_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/social_accounts",
+        "risk": "Creates provider-side state: Add social accounts for the authenticated user."
+      },
+      {
+        "name": "users_delete_social_account_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/social_accounts",
+        "risk": "Destructive: Delete social accounts for the authenticated user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "users_create_ssh_signing_key_for_authenticated_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/ssh_signing_keys",
+        "risk": "Creates provider-side state: Create a SSH signing key for the authenticated user."
+      },
+      {
+        "name": "users_delete_ssh_signing_key_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/ssh_signing_keys/{{ record.ssh_signing_key_id }}",
+        "risk": "Destructive: Delete an SSH signing key for the authenticated user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "activity_star_repo_for_authenticated_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/user/starred/{{ config.owner }}/{{ config.repo }}",
+        "risk": "Mutates existing provider-side state: Star a repository for the authenticated user."
+      },
+      {
+        "name": "activity_unstar_repo_for_authenticated_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/starred/{{ config.owner }}/{{ config.repo }}",
+        "risk": "Destructive: Unstar a repository for the authenticated user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "projects_create_draft_item_for_authenticated_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/{{ record.user_id }}/projectsV2/{{ record.project_number }}/drafts",
+        "risk": "Creates provider-side state: Create draft item for user owned project."
+      },
+      {
+        "name": "projects_create_view_for_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.user_id }}/projectsV2/{{ record.project_number }}/views",
+        "risk": "Creates provider-side state: Create a view for a user-owned project."
+      },
+      {
+        "name": "users_delete_attestations_by_subject_digest",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.username }}/attestations/digest/{{ record.subject_digest }}",
+        "risk": "Destructive: Delete attestations by subject digest. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "users_delete_attestations_by_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.username }}/attestations/{{ record.attestation_id }}",
+        "risk": "Destructive: Delete attestations by ID. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "copilot_spaces_create_for_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.username }}/copilot-spaces",
+        "risk": "Creates provider-side state: Create a Copilot Space for a user."
+      },
+      {
+        "name": "copilot_spaces_update_for_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/users/{{ record.username }}/copilot-spaces/{{ record.space_number }}",
+        "risk": "Mutates existing provider-side state: Set a Copilot Space for a user."
+      },
+      {
+        "name": "copilot_spaces_delete_for_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.username }}/copilot-spaces/{{ record.space_number }}",
+        "risk": "Destructive: Delete a Copilot Space for a user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "copilot_spaces_add_collaborator_for_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/collaborators",
+        "risk": "Creates provider-side state: Add a collaborator to a Copilot Space for a user."
+      },
+      {
+        "name": "copilot_spaces_update_collaborator_for_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/collaborators/{{ record.actor_type }}/{{ record.actor_identifier }}",
+        "risk": "Mutates existing provider-side state: Set a collaborator role for a Copilot Space for a user."
+      },
+      {
+        "name": "copilot_spaces_remove_collaborator_for_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/collaborators/{{ record.actor_type }}/{{ record.actor_identifier }}",
+        "risk": "Destructive: Remove a collaborator from a Copilot Space for a user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "copilot_spaces_create_resource_for_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/resources",
+        "risk": "Creates provider-side state: Create a resource for a Copilot Space for a user."
+      },
+      {
+        "name": "copilot_spaces_update_resource_for_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/resources/{{ record.space_resource_id }}",
+        "risk": "Mutates existing provider-side state: Set a resource for a Copilot Space for a user."
+      },
+      {
+        "name": "copilot_spaces_delete_resource_for_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.username }}/copilot-spaces/{{ record.space_number }}/resources/{{ record.space_resource_id }}",
+        "risk": "Destructive: Delete a resource from a Copilot Space for a user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "packages_delete_package_for_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}",
+        "risk": "Destructive: Delete a package for a user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "packages_restore_package_for_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}/restore",
+        "risk": "Creates provider-side state: Restore a package for a user."
+      },
+      {
+        "name": "packages_delete_package_version_for_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}",
+        "risk": "Destructive: Delete package version for a user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "packages_restore_package_version_for_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.username }}/packages/{{ record.package_type }}/{{ record.package_name }}/versions/{{ record.package_version_id }}/restore",
+        "risk": "Creates provider-side state: Restore package version for a user."
+      },
+      {
+        "name": "projects_update_item_for_user",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/items/{{ record.item_id }}",
+        "risk": "Mutates existing provider-side state: Update project item for user."
+      },
+      {
+        "name": "projects_delete_item_for_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/items/{{ record.item_id }}",
+        "risk": "Destructive: Delete project item for user. Removes provider-side state.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_attestations_delete_request_by_subject_digests",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/attestations/delete-request",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_attestations_delete_request_by_attestation_ids",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/attestations/delete-request",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "orgs_campaigns_create_code_scanning",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/campaigns",
+        "risk": "low"
+      },
+      {
+        "name": "orgs_campaigns_create_secret_scanning",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/campaigns",
+        "risk": "low"
+      },
+      {
+        "name": "orgs_projectsv2_fields_create_existing_issue_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/fields",
+        "risk": "low"
+      },
+      {
+        "name": "orgs_projectsv2_fields_create_new_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/fields",
+        "risk": "low"
+      },
+      {
+        "name": "orgs_projectsv2_fields_create_single_select",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/fields",
+        "risk": "low"
+      },
+      {
+        "name": "orgs_projectsv2_fields_create_iteration",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/fields",
+        "risk": "low"
+      },
+      {
+        "name": "orgs_projectsv2_items_create_by_id",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/items",
+        "risk": "low"
+      },
+      {
+        "name": "orgs_projectsv2_items_create_by_repo_number",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org }}/projectsV2/{{ record.project_number }}/items",
+        "risk": "low"
+      },
+      {
+        "name": "user_codespaces_create_from_repository",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/codespaces",
+        "risk": "low"
+      },
+      {
+        "name": "user_codespaces_create_from_pull_request",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/codespaces",
+        "risk": "low"
+      },
+      {
+        "name": "users_attestations_delete_request_by_subject_digests",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.username }}/attestations/delete-request",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "users_attestations_delete_request_by_attestation_ids",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.username }}/attestations/delete-request",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "users_projectsv2_fields_create_new_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/fields",
+        "risk": "low"
+      },
+      {
+        "name": "users_projectsv2_fields_create_single_select",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/fields",
+        "risk": "low"
+      },
+      {
+        "name": "users_projectsv2_fields_create_iteration",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/fields",
+        "risk": "low"
+      },
+      {
+        "name": "users_projectsv2_items_create_by_id",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/items",
+        "risk": "low"
+      },
+      {
+        "name": "users_projectsv2_items_create_by_repo_number",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/items",
+        "risk": "low"
+      },
+      {
+        "name": "app_installations_installation_id_access_tokens",
+        "kind": "create",
+        "method": "POST",
+        "path": "/app/installations/{{ record.installation_id }}/access_tokens",
+        "risk": "low"
+      },
+      {
+        "name": "actions_artifacts_artifact_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/artifacts/{{ record.artifact_id }}",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_runs_run_id_force_cancel",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/force-cancel",
+        "risk": "low"
+      },
+      {
+        "name": "actions_runs_run_id_rerun_failed_jobs",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/rerun-failed-jobs",
+        "risk": "low"
+      },
+      {
+        "name": "agents_secrets_secret_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/secrets/{{ record.secret_name }}",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "agents_secrets_secret_name3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/secrets/{{ record.secret_name }}",
+        "risk": "low"
+      },
+      {
+        "name": "agents_variables2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/variables",
+        "risk": "low"
+      },
+      {
+        "name": "agents_variables_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/variables/{{ record.name }}",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "agents_variables_name3",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/variables/{{ record.name }}",
+        "risk": "low"
+      },
+      {
+        "name": "git_tags",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/tags",
+        "risk": "low"
+      },
+      {
+        "name": "hooks_hook_id_config2",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/config",
+        "risk": "low"
+      },
+      {
+        "name": "issues_issue_number_labels",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/labels",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "pulls_pull_number_comments_comment_id_replies",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/comments/{{ record.comment_id }}/replies",
+        "risk": "low"
+      },
+      {
+        "name": "pulls_pull_number_reviews_review_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/reviews/{{ record.review_id }}",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "pulls_pull_number_reviews_review_id3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/reviews/{{ record.review_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "applications_client_id_grant",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/applications/{{ record.client_id }}/grant",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "applications_client_id_token",
+        "kind": "create",
+        "method": "POST",
+        "path": "/applications/{{ record.client_id }}/token",
+        "risk": "low"
+      },
+      {
+        "name": "applications_client_id_token2",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/applications/{{ record.client_id }}/token",
+        "risk": "low"
+      },
+      {
+        "name": "applications_client_id_token3",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/applications/{{ record.client_id }}/token",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "org_custom_pattern_update_pattern",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "org_custom_pattern_update_start_delimiter",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "org_custom_pattern_update_end_delimiter",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "org_custom_pattern_update_must_match",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "org_custom_pattern_update_must_not_match",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "repo_custom_pattern_update_pattern",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "repo_custom_pattern_update_start_delimiter",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "repo_custom_pattern_update_end_delimiter",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "repo_custom_pattern_update_must_match",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "repo_custom_pattern_update_must_not_match",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "user_emails_add_object",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/emails",
+        "risk": "low"
+      },
+      {
+        "name": "user_emails_add_array",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/emails",
+        "risk": "low"
+      },
+      {
+        "name": "user_emails_delete_object",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/emails",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "user_emails_delete_array",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/emails",
+        "risk": "low",
+        "confirm": "destructive"
       }
     ],
     "risk": {

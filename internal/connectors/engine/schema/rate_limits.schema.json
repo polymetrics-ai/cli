@@ -46,6 +46,18 @@
                   }
                 }
               },
+              "exclude_endpoints": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["method", "path"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "method": { "type": "string" },
+                    "path": { "type": "string" }
+                  }
+                }
+              },
               "tiers": { "type": "array", "items": { "type": "string" } },
               "auth_types": { "type": "array", "items": { "type": "string" } }
             }

@@ -109,7 +109,7 @@ func (r *rateLimitResolver) defaultRequester(base *connsdk.Requester) (*connsdk.
 	}
 	matched := make([]resolvedRateLimitPolicy, 0, len(r.policies))
 	for _, policy := range r.policies {
-		if len(policy.Selector.Endpoints) != 0 || !rateLimitSelectorMatches(policy.Selector, "", "", r.config) {
+		if len(policy.Selector.Endpoints) != 0 || len(policy.Selector.ExcludeEndpoints) != 0 || !rateLimitSelectorMatches(policy.Selector, "", "", r.config) {
 			continue
 		}
 		resolved, err := r.resolve(policy)
@@ -195,21 +195,26 @@ func rateLimitSelectorMatches(selector connsdk.RateLimitSelector, method, path s
 		return true
 	}
 	if len(selector.Endpoints) > 0 {
-		endpointMatch := false
-		for _, endpoint := range selector.Endpoints {
-			if endpoint.Method == method && endpoint.Path == path {
-				endpointMatch = true
-				break
-			}
-		}
-		if !endpointMatch {
+		if !rateLimitEndpointMatches(selector.Endpoints, method, path) {
 			return false
 		}
+	}
+	if rateLimitEndpointMatches(selector.ExcludeEndpoints, method, path) {
+		return false
 	}
 	if len(selector.Tiers) > 0 && !rateLimitSelectorValueMatches(selector.Tiers, cfg["tier"]) {
 		return false
 	}
 	return len(selector.AuthTypes) == 0 || rateLimitSelectorValueMatches(selector.AuthTypes, cfg["auth_type"])
+}
+
+func rateLimitEndpointMatches(endpoints []connsdk.RateLimitEndpointSelector, method, path string) bool {
+	for _, endpoint := range endpoints {
+		if endpoint.Method == method && endpoint.Path == path {
+			return true
+		}
+	}
+	return false
 }
 
 func rateLimitSelectorValueMatches(values []string, value string) bool {

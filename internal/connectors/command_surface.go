@@ -36,6 +36,10 @@ type CommandSurfaceFlag struct {
 	AllowEmpty *bool
 	Minimum    *float64
 	Required   bool
+	// EnvOnly requires the CLI to receive this command value through the
+	// declared --from-env field=ENV channel. The resolved value is still
+	// validated by the ordinary typed flag path, but it never appears in argv.
+	EnvOnly bool
 	// MaxItems/MinItems bound a string_array flag's item count. This is a second,
 	// independent bound alongside the body schema's maxItems: the schema bound
 	// only fires after the flag has been expanded into a body, whereas this one
@@ -73,6 +77,13 @@ type CommandSurfaceCommand struct {
 	// RedactFields is retained for bundle compatibility. Commandrunner does not
 	// use it to mutate connector-command records or errors, or forward it to
 	// executor requests.
+	//
+	// It is also the third declaration site for a redact list, alongside a
+	// write action's redact_fields and an operation's
+	// sensitive_policy.redact_fields. Reverse-plan withholding deliberately
+	// consults neither this field nor a merge of the three: two sources
+	// feeding one path is how a withhold set silently resolves to the wrong
+	// list. Wiring it in needs a deliberate decision, not a default.
 	RedactFields []string
 	Risk         string
 	Approval     string

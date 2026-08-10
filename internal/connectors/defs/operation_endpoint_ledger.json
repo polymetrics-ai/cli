@@ -1146,6 +1146,42 @@
   "github": [
     {
       "method": "GET",
+      "path": "/gists/{gist_id}/star",
+      "kind": "rest_read",
+      "max_bytes": 1024
+    },
+    {
+      "method": "GET",
+      "path": "/octocat",
+      "kind": "rest_read",
+      "max_bytes": 16384
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{org}/blocks/{username}",
+      "kind": "rest_read",
+      "max_bytes": 1024
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{org}/members/{username}",
+      "kind": "rest_read",
+      "max_bytes": 1024
+    },
+    {
+      "method": "GET",
+      "path": "/orgs/{org}/public_members/{username}",
+      "kind": "rest_read",
+      "max_bytes": 1024
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/cache/retention-limit",
       "kind": "rest_read",
       "max_bytes": 1048576
@@ -1272,7 +1308,19 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approvals",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/artifacts",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -1344,7 +1392,73 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/activity",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/organization-secrets",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/organization-variables",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/secrets",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/secrets/public-key",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/variables",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/agents/variables/{name}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/assignees",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -1362,7 +1476,19 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/automated-security-fixes",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/branches/{branch}",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -1465,6 +1591,12 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-quality/setup",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -1590,6 +1722,24 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/collaborators/{username}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/collaborators/{username}/permission",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/comments/{comment_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions",
       "kind": "rest_read",
       "max_bytes": 1048576
@@ -1602,7 +1752,19 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/commits/{commit_sha}/comments",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/commits/{commit_sha}/pulls",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/commits/{ref}",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -1650,6 +1812,12 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/dependabot/secrets",
       "kind": "rest_read",
       "max_bytes": 1048576
@@ -1674,7 +1842,25 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/deployments/{deployment_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/environments/{environment_name}",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -1740,7 +1926,25 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/events",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/git/blobs/{file_sha}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/git/commits/{commit_sha}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/git/matching-refs/{ref}",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -1765,6 +1969,18 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/hash-algorithm",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/hooks/{hook_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -1830,13 +2046,37 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/events/{event_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/comments",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -1854,7 +2094,19 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/events",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -1878,7 +2130,31 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number}/timeline",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/keys/{key_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/labels/{name}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/license",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/milestones/{milestone_number}",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -1944,7 +2220,25 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/comments",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -1968,7 +2262,19 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -1998,6 +2304,24 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/releases/latest",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/releases/tags/{tag}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/releases/{release_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/releases/{release_id}/assets",
       "kind": "rest_read",
       "max_bytes": 1048576
@@ -2005,6 +2329,12 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/rules/branches/{branch}",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -2022,6 +2352,12 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history",
       "kind": "rest_read",
       "max_bytes": 1048576
@@ -2034,6 +2370,12 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
       "kind": "rest_read",
       "max_bytes": 1048576
@@ -2041,6 +2383,12 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/secret-scanning/scan-history",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -2088,6 +2436,12 @@
     },
     {
       "method": "GET",
+      "path": "/repos/{owner}/{repo}/topics",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/repos/{owner}/{repo}/traffic/clones",
       "kind": "rest_read",
       "max_bytes": 1048576
@@ -2113,6 +2467,283 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/vulnerability-alerts",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/members/{username}",
+      "kind": "rest_read",
+      "max_bytes": 1024
+    },
+    {
+      "method": "GET",
+      "path": "/user/blocks/{username}",
+      "kind": "rest_read",
+      "max_bytes": 1024
+    },
+    {
+      "method": "GET",
+      "path": "/user/following/{username}",
+      "kind": "rest_read",
+      "max_bytes": 1024
+    },
+    {
+      "method": "GET",
+      "path": "/user/starred/{owner}/{repo}",
+      "kind": "rest_read",
+      "max_bytes": 1024
+    },
+    {
+      "method": "GET",
+      "path": "/users/{username}/following/{target_user}",
+      "kind": "rest_read",
+      "max_bytes": 1024
+    },
+    {
+      "method": "GET",
+      "path": "/zen",
+      "kind": "rest_read",
+      "max_bytes": 1024
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.code-of-conduct",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.codes-of-conduct",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.enterprise",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.enterprise-administrator-invitation",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.enterprise-administrator-invitation-by-token",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.enterprise-member-invitation",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.enterprise-member-invitation-by-token",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.id",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.license",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.licenses",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.marketplace-categories",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.marketplace-category",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.marketplace-listing",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.marketplace-listings",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.meta",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.node",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.nodes",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.organization",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.rate-limit",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.relay",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.repository",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.repository-owner",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.resource",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.search",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.security-advisories",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.security-advisory",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.security-vulnerabilities",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.sponsorables",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.topic",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.user",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/graphql",
+      "kind": "graphql_query",
+      "operation": "github.graphql.query.viewer",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/markdown",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/markdown/raw",
+      "kind": "rest_read",
+      "max_bytes": 409600
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{org}/attestations/bulk-list",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/users/{username}/attestations/bulk-list",
       "kind": "rest_read",
       "max_bytes": 1048576
     }

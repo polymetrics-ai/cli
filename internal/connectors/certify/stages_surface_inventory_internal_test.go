@@ -16,26 +16,44 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	if result.Result != "pass" {
 		t.Fatalf("Result = %q reason=%q", result.Result, result.Reason)
 	}
-	if result.Endpoints != 509 {
-		t.Fatalf("Endpoints = %d, want 509", result.Endpoints)
+	transportEndpoints, transportOperations := githubFixedGraphQLTransportCoverage(t)
+	if transportEndpoints != 1 {
+		t.Fatalf("Fixed GraphQL transport endpoints = %d, want exactly one shared POST /graphql endpoint", transportEndpoints)
 	}
-	if result.Covered != 440 {
-		t.Fatalf("Covered = %d, want 440", result.Covered)
+	if transportOperations != githubSourceLockedGraphQLRootCount(t) {
+		t.Fatalf("Fixed GraphQL transport operations = %d, want every source-locked GraphQL root %d", transportOperations, githubSourceLockedGraphQLRootCount(t))
 	}
-	if result.Blocked != 69 {
-		t.Fatalf("Blocked = %d, want 69", result.Blocked)
+	wantEndpoints := githubSourceLockedRESTCount(t) + githubLegacyGraphQLBindingCount(t) + transportEndpoints
+	if result.Endpoints != wantEndpoints {
+		t.Fatalf("Endpoints = %d, want source-derived REST plus legacy bindings plus fixed GraphQL transport %d", result.Endpoints, wantEndpoints)
+	}
+	if result.Covered != wantEndpoints {
+		t.Fatalf("Covered = %d, want every source-derived endpoint covered %d", result.Covered, wantEndpoints)
+	}
+	if result.Blocked != 0 {
+		t.Fatalf("Blocked = %d, want 0 after complete parity", result.Blocked)
 	}
 	if result.CoveredBy["stream"] != 37 {
 		t.Fatalf("CoveredBy[stream] = %d, want 37", result.CoveredBy["stream"])
 	}
-	if result.CoveredBy["write"] != 231 {
-		t.Fatalf("CoveredBy[write] = %d, want 231", result.CoveredBy["write"])
+	// covered_by.writes is plural for the three PATCH endpoints that back
+	// several write contracts each, so this count has to come from
+	// WriteTargets(); reading only the singular field leaves those endpoints
+	// looking uncovered and fails the whole inventory.
+	if result.CoveredBy["write"] != 607 {
+		t.Fatalf("CoveredBy[write] = %d, want 607", result.CoveredBy["write"])
 	}
-	if result.CoveredBy["direct_reads"] != 173 {
-		t.Fatalf("CoveredBy[direct_reads] = %d, want 173", result.CoveredBy["direct_reads"])
+	if result.CoveredBy["direct_read"] != 366 {
+		t.Fatalf("CoveredBy[direct_read] = %d, want 366", result.CoveredBy["direct_read"])
 	}
-	if result.BlockedByModel["duplicate"] != 67 {
-		t.Fatalf("BlockedByModel[duplicate] = %d, want 67", result.BlockedByModel["duplicate"])
+	if result.CoveredBy["direct_reads"] != 252 {
+		t.Fatalf("CoveredBy[direct_reads] = %d, want 252", result.CoveredBy["direct_reads"])
+	}
+	if result.CoveredBy["operation"] != transportOperations {
+		t.Fatalf("CoveredBy[operation] = %d, want every source-locked GraphQL root %d", result.CoveredBy["operation"], transportOperations)
+	}
+	if len(result.BlockedByModel) != 0 || len(result.BlockedByStatus) != 0 {
+		t.Fatalf("blocked classifications = models=%v status=%v, want none after complete parity", result.BlockedByModel, result.BlockedByStatus)
 	}
 	if result.Provenance == nil {
 		t.Fatal("Provenance = nil, want legacy provenance evidence")
@@ -153,6 +171,61 @@ func TestSurfaceInventoryPluralOnlyBundlesUseNoSingularWrite(t *testing.T) {
 				t.Errorf("%s has %d plural covered_by.writes rows, want %d", connector, plural, wantPlural)
 			}
 		})
+	}
+}
+
+// TestSurfaceInventoryCountsPluralWriteCoverage pins the plural spelling of
+// covered_by. An endpoint that backs several write contracts names them under
+// "writes" and leaves "write" empty; reading only the singular field made it
+// read as uncovered, and with no typed operation block to fall back to, the
+// whole inventory failed.
+func TestSurfaceInventoryCountsPluralWriteCoverage(t *testing.T) {
+	raw := `{
+		"api": "test API",
+		"endpoints": [{
+			"method": "PATCH",
+			"path": "/widgets/{id}",
+			"covered_by": {"writes": ["update_widget", "close_widget", "reopen_widget"]}
+		}]
+	}`
+
+	result, err := surfaceInventoryFromRaw([]byte(raw))
+	if err != nil {
+		t.Fatalf("surfaceInventoryFromRaw: %v", err)
+	}
+	if result.Result != "pass" {
+		t.Fatalf("Result = %q reason = %q, want pass", result.Result, result.Reason)
+	}
+	if result.Covered != 1 {
+		t.Fatalf("Covered = %d, want 1", result.Covered)
+	}
+	if result.CoveredBy["write"] != 3 {
+		t.Fatalf("CoveredBy[write] = %d, want all 3 plural targets counted", result.CoveredBy["write"])
+	}
+}
+
+func TestSurfaceInventoryCountsFixedGraphQLOperationCoverage(t *testing.T) {
+	raw := `{
+		"api": "test API",
+		"endpoints": [{
+			"method": "POST",
+			"path": "/graphql",
+			"covered_by": {"operations": ["acme.graphql.query.viewer", "acme.graphql.mutation.close_widget"]}
+		}]
+	}`
+
+	result, err := surfaceInventoryFromRaw([]byte(raw))
+	if err != nil {
+		t.Fatalf("surfaceInventoryFromRaw: %v", err)
+	}
+	if result.Result != "pass" {
+		t.Fatalf("Result = %q reason = %q, want pass", result.Result, result.Reason)
+	}
+	if result.Covered != 1 {
+		t.Fatalf("Covered = %d, want one physical transport endpoint", result.Covered)
+	}
+	if result.CoveredBy["operation"] != 2 {
+		t.Fatalf("CoveredBy[operation] = %d, want both fixed operation IDs", result.CoveredBy["operation"])
 	}
 }
 

@@ -482,6 +482,164 @@ func TestValidate_CLISurfaceReverseETLRejectsStructuredStringAndMissingNestedMap
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceMissingMapping)
 }
 
+func TestValidate_CLISurfaceReverseETLStructuredJSONRequiresDeclaredTopLevelContainer(t *testing.T) {
+	const originalFlag = `{ "name": "name", "type": "string", "summary": "Widget name.", "maps_to": "record.name" }`
+	newBundle := func(target, payloadSchema string) fstest.MapFS {
+		cliSurface := strings.Replace(validCLISurfaceJSON(), originalFlag, `{"name": "payload", "type": "json", "summary": "Structured widget payload.", "maps_to": "`+target+`", "required": true}`, 1)
+		fsys := cliSurfaceBundleFS(cliSurface)
+		fsys["cli-surface/writes.json"] = &fstest.MapFile{Data: []byte(`{
+			"actions": [{
+				"name": "create_widget",
+				"kind": "create",
+				"method": "POST",
+				"path": "/widgets",
+				"record_schema": {
+					"type": "object",
+					"required": ["payload"],
+					"properties": {"payload": ` + payloadSchema + `},
+					"additionalProperties": false
+				},
+				"risk": "creates a widget"
+			}]
+		}`)}
+		return fsys
+	}
+
+	for _, tc := range []struct {
+		name, target, payloadSchema string
+		wantFinding                 bool
+	}{
+		{
+			name:          "closed object field is accepted",
+			target:        "record.payload",
+			payloadSchema: `{"type":"object","required":["kind"],"properties":{"kind":{"type":"string"}},"additionalProperties":false}`,
+		},
+		{
+			name:          "scalar field is rejected",
+			target:        "record.payload",
+			payloadSchema: `{"type":"string"}`,
+			wantFinding:   true,
+		},
+		{
+			name:          "nested field is rejected",
+			target:        "record.payload.kind",
+			payloadSchema: `{"type":"object","properties":{"kind":{"type":"string"}},"additionalProperties":false}`,
+			wantFinding:   true,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			report, err := validateDir(newBundle(tc.target, tc.payloadSchema))
+			if err != nil {
+				t.Fatalf("validateDir: %v", err)
+			}
+			if tc.wantFinding {
+				assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+				return
+			}
+			if len(report.Findings) != 0 {
+				t.Fatalf("valid declared structured JSON flag has findings: %+v", report.Findings)
+			}
+		})
+	}
+
+	findings := checkCLISurfaceStructuredJSONFlags(engine.Bundle{Name: "cli-surface"}, 0, engine.CLICommand{
+		Path: "widget raw", Intent: "direct_read", Availability: "implemented", Operation: "widgets.raw",
+		Flags: []engine.CLIFlag{{Name: "payload", Type: "json", MapsTo: "body.payload"}},
+	})
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "allowed only on a declared reverse-ETL record field") {
+		t.Fatalf("non-reverse structured JSON findings = %+v, want closed placement rejection", findings)
+	}
+}
+
+func TestValidate_CLISurfaceFixedGraphQLCommandRequiresDeclaredTopLevelJSONVariable(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "cli-surface",
+		Operations: []engine.OperationSpec{{
+			ID:           "cli-surface.widgets.query",
+			Kind:         "graphql_query",
+			Summary:      "Read one widget",
+			Risk:         "low",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			GraphQL: &engine.GraphQLOperationSpec{
+				OperationName:   "QueryWidget",
+				Document:        "query QueryWidget($input: WidgetInput!) { widget(input: $input) { __typename } }",
+				Path:            "/graphql",
+				MaxBytes:        1024,
+				VariablesSchema: json.RawMessage("{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"input\"],\"properties\":{\"input\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"id\"],\"properties\":{\"id\":{\"type\":\"string\"}}}}}"),
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: "POST",
+			Path:   "/graphql",
+			CoveredBy: &engine.SurfaceCoverage{
+				Operations: []string{"cli-surface.widgets.query"},
+			},
+		}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "graphql query widget",
+			Summary:      "Read one widget",
+			Intent:       "direct_read",
+			Availability: "implemented",
+			Operation:    "cli-surface.widgets.query",
+			OutputPolicy: "json_redacted",
+			Flags: []engine.CLIFlag{{
+				Name: "input", Type: "json", Required: true, MapsTo: "body.input",
+			}},
+			APISurface: []engine.CLISurfaceEndpointRef{{Method: "POST", Path: "/graphql"}},
+		}}},
+	}
+
+	if findings := checkCLISurface(bundle); len(findings) != 0 {
+		t.Fatalf("fixed GraphQL command findings = %+v, want none", findings)
+	}
+
+	bundle.CLISurface.Commands[0].Flags[0].MapsTo = "body.input.id"
+	findings := checkCLISurface(bundle)
+	if len(findings) == 0 || !strings.Contains(findings[0].Message, "top-level") {
+		t.Fatalf("nested fixed GraphQL JSON flag findings = %+v, want top-level rejection", findings)
+	}
+}
+
+func TestValidate_CLISurfaceEnvOnlyFlagRequiresDeclaredSecretGraphQLContract(t *testing.T) {
+	op := engine.OperationSpec{
+		ID:            "cli-surface.organization.migration",
+		Kind:          "graphql_mutation",
+		MutationClass: "secret",
+		SensitivePolicy: &engine.SensitivePolicySpec{
+			InputMode:    "env",
+			RedactFields: []string{"body.input"},
+			ApprovalMode: "typed_confirmation",
+		},
+	}
+	command := engine.CLICommand{
+		Path:         "graphql mutation start-organization-migration",
+		Intent:       "direct_write",
+		Availability: "implemented",
+		Operation:    op.ID,
+		Flags: []engine.CLIFlag{{
+			Name: "input", Type: "json", Required: true, MapsTo: "body.input", EnvOnly: true,
+		}},
+	}
+	operations := map[string]engine.OperationSpec{op.ID: op}
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, command, operations); len(findings) != 0 {
+		t.Fatalf("declared secret GraphQL env_only contract findings = %+v, want none", findings)
+	}
+
+	command.Flags[0].EnvOnly = false
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, command, operations); len(findings) != 0 {
+		t.Fatalf("ordinary typed input should not require env_only findings = %+v", findings)
+	}
+
+	command.Flags[0].EnvOnly = true
+	op.SensitivePolicy.InputMode = "inline"
+	operations[op.ID] = op
+	findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, command, operations)
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "secret GraphQL mutation") {
+		t.Fatalf("env_only without environment redaction contract findings = %+v, want one closed-surface rejection", findings)
+	}
+}
+
 func TestValidate_CLISurfaceImplementedRawAPIIsBlocked(t *testing.T) {
 	cliSurface := strings.Replace(validCLISurfaceJSON(), `"intent": "etl"`, `"intent": "raw_api"`, 1)
 	report, err := validateDir(cliSurfaceBundleFS(cliSurface))
@@ -842,6 +1000,90 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for required body flag, got %+v", report.Findings)
 	}
+}
+
+func TestValidate_CLISurfaceOperationDirectReadPlainTextBodyRequiresOneRequiredStringFlag(t *testing.T) {
+	cliSurface := `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "markdown raw",
+				"summary": "Render raw Markdown",
+				"intent": "direct_read",
+				"availability": "implemented",
+				"operation": "cli-surface.markdown.raw",
+				"api_surface": [
+					{ "method": "POST", "path": "/markdown/raw" }
+				],
+				"output_policy": "text",
+				"flags": [
+					{ "name": "text", "type": "string", "required": true, "maps_to": "body" }
+				],
+				"examples": ["pm cli-surface markdown raw --text '# heading' --json"]
+			}
+		]
+	}`
+	operations := `{
+		"operations": [
+			{
+				"id": "cli-surface.markdown.raw",
+				"kind": "rest_read",
+				"summary": "Render raw Markdown",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "text",
+				"rest": {
+					"method": "POST",
+					"path": "/markdown/raw",
+					"content_type": "text/plain",
+					"max_bytes": 1024,
+					"body_schema": { "type": "string" }
+				}
+			}
+		]
+	}`
+	apiSurface := `{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "POST", "path": "/markdown/raw", "covered_by": { "direct_read": "markdown raw" } }
+		]
+	}`
+
+	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for declared text/plain raw body, got %+v", report.Findings)
+	}
+
+	invalid := strings.Replace(cliSurface, `"required": true, "maps_to": "body"`, `"maps_to": "body"`, 1)
+	fsys = cliSurfaceBundleFS(invalid)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err = validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir invalid: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+
+	mixed := strings.Replace(cliSurface, `"flags": [`, `"flags": [
+					{ "name": "context", "type": "string", "maps_to": "body.context" },`, 1)
+	fsys = cliSurfaceBundleFS(mixed)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err = validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir mixed: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 }
 
 func TestValidate_CLISurfaceOperationRepositoryOutputPolicyRequiresPathVariable(t *testing.T) {
