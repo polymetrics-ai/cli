@@ -2,11 +2,11 @@
   "issue": 3974,
   "phase": "issue-3974-typed-database-foundation",
   "mode": "manual-inline-gsd-fallback",
-  "status": "verified-pending-commit",
+  "status": "captain-mediation-amendment-validation-pending",
   "discuss_phase": "recorded",
   "plan_phase_tdd": "recorded",
   "execute_phase": "recorded",
   "verify_work": "recorded-manual-inline-fallback",
   "code_review": "recorded-manual-inline-fallback",
-  "reason": "Issue foundation is not a numbered roadmap phase and this task is constrained to one canonical worker."
+  "reason": "Issue foundation is not a numbered roadmap phase and this task is constrained to one canonical worker. The captain's warehouse-mediation amendment is being validated through the documented manual inline GSD fallback."
 }

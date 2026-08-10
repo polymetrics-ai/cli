@@ -16,7 +16,12 @@
       and cancellation behavior have focused unit coverage.
 - [x] PostgreSQL has only a compile-time reference driver seam and its public
       `write` / `cdc` capabilities remain false.
-- [x] Red/Green TDD evidence and manual GSD lifecycle evidence are complete.
+- [ ] Warehouse mediation amendment: shared artifact/owner identity, isolated
+      database inbound/outbound legs, mode-declaration refusal, and MySQL
+      layer-two conformance proof. Pending refreshed full validation.
+- [x] Red/Green TDD evidence and manual GSD lifecycle evidence are complete for
+      the original slice; amendment Red evidence is captured and awaits Green
+      completion.
 
 ## Local gates
 
@@ -36,6 +41,11 @@
 - [x] `make release-workflow-check`
 - [x] generated `verify-work` and `code-review` prompts recorded with the
       manual inline fallback.
+
+The gates above passed for the original F1 commit. The captain amendment
+touches `internal/warehouse` and `internal/connectors/database`; focused,
+race, static/build, and required make-gate checks are rerun before this
+checklist is finalized.
 
 ## Deliberate non-goals / parity
 
@@ -66,3 +76,7 @@ capability promotion.
   prompts were executed through the documented manual inline fallback. The
   coverage-backed UAT result is in `UAT.md`; review findings and dispositions
   are in `REVIEW.md`.
+- **Captain amendment Red:** `traces/warehouse-layer-red-run.txt` and
+  `traces/warehouse-owner-identity-red-run.txt` were captured before the
+  respective production seams existed. Updated Green and review evidence is
+  pending this validation pass.

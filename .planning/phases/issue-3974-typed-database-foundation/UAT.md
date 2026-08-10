@@ -31,8 +31,9 @@ All deliverables are internal typed contracts with deterministic automated
 proofs. No UI, product choice, credentialed connection, target mutation, or
 human judgment is required for this slice.
 
-## Verdict
+## Amendment status
 
-Pass. The F1 foundation acceptance criteria are proven by automated evidence.
-F2/F3/F4/F5/P-unit behaviors remain deliberately outstanding rather than being
-claimed by this issue.
+The captain's warehouse-mediation change reopens automated verification for
+the shared artifact/owner identity and the isolated inbound/outbound database
+legs. The original UAT result remains valid for its original scope; this file
+is finalized only after the amendment's focused and repository gates pass.

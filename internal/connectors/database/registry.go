@@ -45,6 +45,10 @@ var (
 	// ErrNativeDriverAdmissionRequired prevents a descriptor-only reference
 	// driver from being used as an admitted database operation.
 	ErrNativeDriverAdmissionRequired = errors.New("database driver requires matching native executor admission")
+	// ErrDriverModeNotDeclared prevents a driver from using a closed sync mode
+	// that its own database.json has not explicitly declared. An empty mode list
+	// admits no operation, even if an object has matching native evidence.
+	ErrDriverModeNotDeclared = errors.New("database driver does not declare the requested sync mode")
 )
 
 // DriverRegistry maps closed driver identities to actual registered objects.
@@ -121,10 +125,15 @@ func (r *DriverRegistry) Resolve(ctx context.Context, definition Definition) (Dr
 	return driver, nil
 }
 
-// Admit validates both the definition's exact registered driver and the shared
-// native command descriptor/evidence. A declaration-only Driver always fails;
-// no capability or execution path can be inferred from a manifest alone.
-func (r *DriverRegistry) Admit(ctx context.Context, definition Definition, contract synccontract.NativeCommandContract) (NativeAdmittedDriver, error) {
+// Admit validates both the definition's exact registered driver and a sealed,
+// warehouse-bound layer-two command. A declaration-only Driver always fails;
+// no capability, direct source-to-target path, or execution can be inferred
+// from a manifest alone.
+func (r *DriverRegistry) Admit(ctx context.Context, definition Definition, command DatabaseWarehouseCommand) (NativeAdmittedDriver, error) {
+	if isNilInterface(command) {
+		return nil, errors.New("database warehouse command is required")
+	}
+	contract := command.nativeCommandContract()
 	driver, err := r.Resolve(ctx, definition)
 	if err != nil {
 		return nil, err
@@ -139,6 +148,9 @@ func (r *DriverRegistry) Admit(ctx context.Context, definition Definition, contr
 	if contract.Protocol != definition.Driver().Protocol {
 		return nil, errors.New("native command protocol does not match the database definition")
 	}
+	if !definitionAdmitsModes(definition.AdmittedModes(), contract.Modes) {
+		return nil, ErrDriverModeNotDeclared
+	}
 	if err := synccontract.ValidateNativeAdmission(admitted, contract); err != nil {
 		return nil, err
 	}
@@ -146,6 +158,22 @@ func (r *DriverRegistry) Admit(ctx context.Context, definition Definition, contr
 		return nil, err
 	}
 	return admitted, nil
+}
+
+func definitionAdmitsModes(declared, requested []synccontract.Mode) bool {
+	if len(declared) == 0 || len(requested) == 0 {
+		return false
+	}
+	allowed := make(map[synccontract.Mode]struct{}, len(declared))
+	for _, mode := range declared {
+		allowed[mode] = struct{}{}
+	}
+	for _, mode := range requested {
+		if _, exists := allowed[mode]; !exists {
+			return false
+		}
+	}
+	return true
 }
 
 func isNilDriver(driver Driver) bool {

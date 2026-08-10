@@ -5,6 +5,8 @@ import (
 	"strings"
 	"unicode"
 	"unicode/utf8"
+
+	"polymetrics.ai/internal/warehouse"
 )
 
 // CatalogRef is one structured catalog/database identifier component.
@@ -74,28 +76,16 @@ func (r ColumnRef) equal(other ColumnRef) bool {
 	return r.Relation.equal(other.Relation) && r.Name == other.Name
 }
 
-// ConnectionIdentity is the opaque owner triple shared by source and target
-// references. It deliberately excludes display names, server connection data,
-// credential revisions, DSNs, and all secret material.
-type ConnectionIdentity struct {
-	WorkspaceID  string
-	ConnectorID  string
-	ConnectionID string
-}
+// ConnectionIdentity aliases the shared warehouse artifact owner triple. The
+// database layer cannot invent a second source/target identity rule; it stays
+// aligned with the structural identity already used by warehouse paths.
+type ConnectionIdentity = warehouse.ArtifactIdentity
 
-// Validate rejects an incomplete or unsafe opaque identity before it can reach
-// a target path, catalog, or driver boundary.
-func (i ConnectionIdentity) Validate() error {
-	if !validOpaqueIdentityComponent(i.WorkspaceID) || !validConnectorID(i.ConnectorID) || !validOpaqueIdentityComponent(i.ConnectionID) {
+func validateDatabaseConnectionIdentity(identity ConnectionIdentity) error {
+	if err := identity.Validate(); err != nil || !validConnectorID(identity.ConnectorID) {
 		return errors.New("database connection identity is incomplete or invalid")
 	}
 	return nil
-}
-
-// SameIdentity ignores any display or credential concept because neither is a
-// member of this type. It is the only equality rule used by source/target refs.
-func (i ConnectionIdentity) SameIdentity(other ConnectionIdentity) bool {
-	return i.WorkspaceID == other.WorkspaceID && i.ConnectorID == other.ConnectorID && i.ConnectionID == other.ConnectionID
 }
 
 // SourceRef pins a source owner triple and relation.
@@ -106,7 +96,7 @@ type SourceRef struct {
 
 // NewSourceRef creates a typed source reference.
 func NewSourceRef(identity ConnectionIdentity, relation RelationRef) (SourceRef, error) {
-	if err := identity.Validate(); err != nil {
+	if err := validateDatabaseConnectionIdentity(identity); err != nil {
 		return SourceRef{}, err
 	}
 	if err := relation.validate(); err != nil {
@@ -116,7 +106,7 @@ func NewSourceRef(identity ConnectionIdentity, relation RelationRef) (SourceRef,
 }
 
 func (r SourceRef) validate() error {
-	if err := r.identity.Validate(); err != nil {
+	if err := validateDatabaseConnectionIdentity(r.identity); err != nil {
 		return err
 	}
 	return r.relation.validate()
@@ -139,7 +129,7 @@ type TargetRef struct {
 // NewTargetRef creates a typed target reference without any DDL or ownership
 // side effect.
 func NewTargetRef(identity ConnectionIdentity, relation RelationRef) (TargetRef, error) {
-	if err := identity.Validate(); err != nil {
+	if err := validateDatabaseConnectionIdentity(identity); err != nil {
 		return TargetRef{}, err
 	}
 	if err := relation.validate(); err != nil {
@@ -148,11 +138,92 @@ func NewTargetRef(identity ConnectionIdentity, relation RelationRef) (TargetRef,
 	return TargetRef{identity: identity, relation: relation}, nil
 }
 
+func (r TargetRef) validate() error {
+	if err := validateDatabaseConnectionIdentity(r.identity); err != nil {
+		return err
+	}
+	return r.relation.validate()
+}
+
 // Identity returns the target's complete opaque owner triple.
 func (r TargetRef) Identity() ConnectionIdentity { return r.identity }
 
 // Relation returns the structured logical target relation.
 func (r TargetRef) Relation() RelationRef { return r.relation }
+
+// WarehouseInboundRef is the database-specific extraction side of the shared
+// warehouse mediator: a database source can land only in the warehouse
+// artifact owned by that source connection. It deliberately has no target.
+type WarehouseInboundRef struct {
+	source    SourceRef
+	warehouse warehouse.ArtifactRef
+}
+
+// NewWarehouseInboundRef binds a database source to its own durable warehouse
+// artifact. It does not open the database or write an artifact; shared layer
+// one owns those operations.
+func NewWarehouseInboundRef(source SourceRef, artifact warehouse.ArtifactRef) (WarehouseInboundRef, error) {
+	ref := WarehouseInboundRef{source: source, warehouse: artifact}
+	if err := ref.validate(); err != nil {
+		return WarehouseInboundRef{}, err
+	}
+	return ref, nil
+}
+
+func (r WarehouseInboundRef) validate() error {
+	if err := r.source.validate(); err != nil {
+		return errors.New("database warehouse inbound source is invalid")
+	}
+	if err := r.warehouse.Validate(); err != nil {
+		return errors.New("database warehouse inbound artifact is invalid")
+	}
+	if !r.source.Identity().SameIdentity(r.warehouse.Identity()) {
+		return errors.New("database warehouse inbound artifact is not owned by the source connection")
+	}
+	return nil
+}
+
+// Source returns the source side of an inbound-only database leg.
+func (r WarehouseInboundRef) Source() SourceRef { return r.source }
+
+// Warehouse returns the neutral shared warehouse artifact for this inbound
+// leg. It is not a database-specific materializer.
+func (r WarehouseInboundRef) Warehouse() warehouse.ArtifactRef { return r.warehouse }
+
+// WarehouseOutboundRef is the database-specific apply side of the shared
+// warehouse mediator: it receives rows from one warehouse artifact and names
+// one database target. It deliberately has no source.
+type WarehouseOutboundRef struct {
+	warehouse warehouse.ArtifactRef
+	target    TargetRef
+}
+
+// NewWarehouseOutboundRef binds a warehouse artifact to a database target
+// without creating a direct source-to-target route or executing any write.
+func NewWarehouseOutboundRef(artifact warehouse.ArtifactRef, target TargetRef) (WarehouseOutboundRef, error) {
+	ref := WarehouseOutboundRef{warehouse: artifact, target: target}
+	if err := ref.validate(); err != nil {
+		return WarehouseOutboundRef{}, err
+	}
+	return ref, nil
+}
+
+func (r WarehouseOutboundRef) validate() error {
+	if err := r.warehouse.Validate(); err != nil {
+		return errors.New("database warehouse outbound artifact is invalid")
+	}
+	if err := r.target.validate(); err != nil {
+		return errors.New("database warehouse outbound target is invalid")
+	}
+	return nil
+}
+
+// Warehouse returns the shared warehouse side of an outbound-only database
+// leg.
+func (r WarehouseOutboundRef) Warehouse() warehouse.ArtifactRef { return r.warehouse }
+
+// Target returns the database destination side of an outbound-only leg.
+func (r WarehouseOutboundRef) Target() TargetRef { return r.target }
 
 // NativeRelationIdentity is an opaque database-native relation identifier
 // (such as a PostgreSQL OID) observed by a future driver. Its value is never

@@ -134,13 +134,21 @@ type Owner struct {
 	CreatedAt   time.Time `json:"created_at"`
 }
 
-// SameIdentity reports whether two owner records describe the same connection.
-// DisplayName is deliberately excluded: renaming a connection does not change
-// which data is its own.
+// Identity returns the shared structural owner triple for this warehouse
+// region. DisplayName is deliberately absent: renaming a connection does not
+// change which data is its own.
+func (o Owner) Identity() ArtifactIdentity {
+	return ArtifactIdentity{
+		WorkspaceID:  o.Workspace,
+		ConnectorID:  o.Connector,
+		ConnectionID: o.Connection,
+	}
+}
+
+// SameIdentity reports whether two owner records describe the same connection
+// through the shared artifact identity rule.
 func (o Owner) SameIdentity(other Owner) bool {
-	return o.Workspace == other.Workspace &&
-		o.Connector == other.Connector &&
-		o.Connection == other.Connection
+	return o.Identity().SameIdentity(other.Identity())
 }
 
 // OwnershipError reports that a warehouse directory is owned by a different

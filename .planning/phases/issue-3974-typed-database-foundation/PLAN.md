@@ -34,6 +34,9 @@ an executable database write, SQL surface, changefeed, or capability claim.
   generator/load path validates it.
 - `internal/connectors/defs/postgres/database.json` and the native PostgreSQL
   package's compile-time interface assertion — the reference seam only.
+- `internal/warehouse/artifact.go` and the existing ownership comparison — the
+  neutral layer-one artifact/identity value required by the captain's mediator
+  ruling, without a new warehouse executor.
 - `.planning/phases/issue-3974-typed-database-foundation/**` — lifecycle and
   red/green evidence.
 
@@ -48,6 +51,9 @@ an executable database write, SQL surface, changefeed, or capability claim.
   `capabilities.cdc` stay false.
 - No raw credential, DSN, secret, or display name in database references,
   definitions, logs, errors, or tests.
+- No replacement for the existing durable warehouse inbound/outbound paths.
+  F1 may type their shared artifact boundary, but it must not add a second
+  writer, a receipt, or a zero-copy shortcut.
 
 ## Design
 
@@ -91,6 +97,28 @@ driver, protocol/API-version mismatch, missing evidence, or an object that is
 not a native admission fails closed. This issue does not register an executable
 PostgreSQL operation.
 
+### Warehouse mediation boundary
+
+The foundation makes the captain's N + M seam structural without expanding
+into F2/F3/F4/F5 implementation. Layer one remains connector-agnostic:
+`warehouse.ArtifactIdentity` names the existing workspace/connector/connection
+owner triple and `ArtifactRef` adds an opaque table component. `Owner.Identity`
+uses that same value, so the warehouse layout and connector contract do not
+carry competing equality rules.
+
+Layer two lives in `database`: `WarehouseInboundRef` is source → artifact and
+requires the artifact to be owned by the source identity; `WarehouseOutboundRef`
+is artifact → target. `DatabaseInboundCommand` and `DatabaseOutboundCommand`
+are sealed values that carry one leg plus the existing native-admission
+contract. Neither exposes a source/target pair or executes any I/O. The
+existing `runWarehouseETL` remains the single inbound implementation and the
+existing reverse Parquet read remains the shared outbound primitive.
+
+A MySQL implementation is deliberately modeled in a conformance test using
+only `database`, `warehouse`, and `synccontract` contracts. In follow-on work,
+the MySQL author would add its own definition, descriptor, and native
+extract/apply mechanisms; no shared layer-one or PostgreSQL file is changed.
+
 ### Resource/cancellation boundary
 
 Pages, batches, pools, deadlines, and bind parameters all have positive safe
@@ -114,6 +142,9 @@ driver admission, and typed read-plan construction.
 5. **Refactor/verify:** simplify package boundaries, run focused tests and the
    required non-suite gates, then use the generated verify/review prompts and
    record their manual fallback evidence.
+6. **Captain amendment Red/Green:** add the neutral artifact and isolated
+   inbound/outbound leg tests before the mediator production values; retain the
+   failed compile output, then prove database and warehouse packages together.
 
 ## Required proof
 
@@ -123,4 +154,7 @@ catalogs; type compatibility cannot coerce unknown/unsafe types to text;
 identity preserves workspace/connector/connection; a cancelled context stops
 work; declaration-only and incompatible driver cases fail; PostgreSQL satisfies
 the intentionally non-executing driver interface; and metadata continues to
-advertise neither write nor CDC.
+advertise neither write nor CDC. The amendment additionally proves that a
+read-plan and database admission have a warehouse leg, an inbound artifact
+cannot cross source identities, layer-one owner equality is shared, and a
+MySQL-shaped layer-two implementation needs no PostgreSQL or layer-one change.
