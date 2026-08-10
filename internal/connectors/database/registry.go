@@ -37,7 +37,80 @@ func (d DriverDescriptor) validate() error { return d.declaration().validate() }
 // synccontract.NativeSyncExecutor.
 type NativeAdmittedDriver interface {
 	Driver
-	DatabaseNativeAdmissions() []synccontract.NativeExecutorAdmission
+	DatabaseNativeAdmissions() []DatabaseNativeAdmission
+}
+
+// DatabaseNativeAdmission binds shared native evidence to one sealed database
+// warehouse leg.
+type DatabaseNativeAdmission struct {
+	descriptor synccontract.NativeSyncExecutorDescriptor
+	evidence   synccontract.ConformanceEvidence
+	leg        databaseWarehouseLeg
+}
+
+var _ synccontract.NativeExecutorAdmission = DatabaseNativeAdmission{}
+
+// NewDatabaseInboundAdmission binds shared native evidence to a
+// source-to-warehouse database leg.
+func NewDatabaseInboundAdmission(admission synccontract.NativeExecutorAdmission) (DatabaseNativeAdmission, error) {
+	return newDatabaseNativeAdmission(databaseWarehouseLegInbound, admission)
+}
+
+// NewDatabaseOutboundAdmission binds shared native evidence to a
+// warehouse-to-target database leg.
+func NewDatabaseOutboundAdmission(admission synccontract.NativeExecutorAdmission) (DatabaseNativeAdmission, error) {
+	return newDatabaseNativeAdmission(databaseWarehouseLegOutbound, admission)
+}
+
+func newDatabaseNativeAdmission(leg databaseWarehouseLeg, admission synccontract.NativeExecutorAdmission) (DatabaseNativeAdmission, error) {
+	if isNilNativeAdmission(admission) {
+		return DatabaseNativeAdmission{}, errors.New("database native admission is required")
+	}
+	descriptor := admission.NativeSyncExecutorDescriptor()
+	evidence := admission.NativeSyncConformanceEvidence()
+	contract := synccontract.NativeCommandContract{
+		ContractVersion: synccontract.NativeCommandContractVersion,
+		Protocol:        descriptor.Protocol,
+		Command:         descriptor.Command,
+		Executor:        descriptor.Executor,
+		Modes:           append([]synccontract.Mode(nil), descriptor.Modes...),
+		Conformance:     cloneConformanceEvidence(evidence),
+	}
+	if err := contract.Validate(); err != nil {
+		return DatabaseNativeAdmission{}, err
+	}
+	return DatabaseNativeAdmission{
+		descriptor: cloneNativeExecutorDescriptor(descriptor),
+		evidence:   cloneConformanceEvidence(evidence),
+		leg:        leg,
+	}, nil
+}
+
+func (a DatabaseNativeAdmission) NativeSyncExecutorDescriptor() synccontract.NativeSyncExecutorDescriptor {
+	return cloneNativeExecutorDescriptor(a.descriptor)
+}
+
+func (a DatabaseNativeAdmission) NativeSyncConformanceEvidence() synccontract.ConformanceEvidence {
+	return cloneConformanceEvidence(a.evidence)
+}
+
+func (a DatabaseNativeAdmission) matches(leg databaseWarehouseLeg, contract synccontract.NativeCommandContract) error {
+	if a.leg != leg {
+		return ErrNativeDriverAdmissionMismatch
+	}
+	return synccontract.ValidateNativeAdmission(a, contract)
+}
+
+func cloneNativeExecutorDescriptor(descriptor synccontract.NativeSyncExecutorDescriptor) synccontract.NativeSyncExecutorDescriptor {
+	clone := descriptor
+	clone.Modes = append([]synccontract.Mode(nil), descriptor.Modes...)
+	return clone
+}
+
+func cloneConformanceEvidence(evidence synccontract.ConformanceEvidence) synccontract.ConformanceEvidence {
+	clone := evidence
+	clone.FixtureIDs = append([]string(nil), evidence.FixtureIDs...)
+	return clone
 }
 
 var (
@@ -139,6 +212,7 @@ func (r *DriverRegistry) Admit(ctx context.Context, definition Definition, comma
 		return nil, errors.New("database warehouse command is required")
 	}
 	contract := command.nativeCommandContract()
+	leg := command.databaseWarehouseLeg()
 	driver, err := r.Resolve(ctx, definition)
 	if err != nil {
 		return nil, err
@@ -156,7 +230,7 @@ func (r *DriverRegistry) Admit(ctx context.Context, definition Definition, comma
 	if !definitionAdmitsModes(definition.AdmittedModes(), contract.Modes) {
 		return nil, ErrDriverModeNotDeclared
 	}
-	if err := validateDriverNativeAdmission(admitted, contract); err != nil {
+	if err := validateDriverNativeAdmission(admitted, leg, contract); err != nil {
 		return nil, err
 	}
 	if err := ctx.Err(); err != nil {
@@ -181,12 +255,9 @@ func definitionAdmitsModes(declared, requested []synccontract.Mode) bool {
 	return true
 }
 
-func validateDriverNativeAdmission(driver NativeAdmittedDriver, contract synccontract.NativeCommandContract) error {
+func validateDriverNativeAdmission(driver NativeAdmittedDriver, leg databaseWarehouseLeg, contract synccontract.NativeCommandContract) error {
 	for _, admission := range driver.DatabaseNativeAdmissions() {
-		if isNilNativeAdmission(admission) {
-			continue
-		}
-		if err := synccontract.ValidateNativeAdmission(admission, contract); err == nil {
+		if err := admission.matches(leg, contract); err == nil {
 			return nil
 		}
 	}

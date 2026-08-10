@@ -301,6 +301,9 @@ func Load(ctx context.Context, fsys fs.FS) (Definition, error) {
 	if err := ctx.Err(); err != nil {
 		return Definition{}, err
 	}
+	if containsJSONNull(raw) {
+		return Definition{}, invalidDefinition("JSON must match the closed schema")
+	}
 
 	var document definitionDocument
 	decoder := json.NewDecoder(bytes.NewReader(raw))
@@ -320,6 +323,36 @@ func Load(ctx context.Context, fsys fs.FS) (Definition, error) {
 		return Definition{}, invalidDefinition("semantic validation failed")
 	}
 	return definition.clone(), nil
+}
+
+func containsJSONNull(raw []byte) bool {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.UseNumber()
+	var document any
+	if err := decoder.Decode(&document); err != nil {
+		return false
+	}
+	return hasJSONNull(document)
+}
+
+func hasJSONNull(value any) bool {
+	switch value := value.(type) {
+	case nil:
+		return true
+	case []any:
+		for _, item := range value {
+			if hasJSONNull(item) {
+				return true
+			}
+		}
+	case map[string]any:
+		for _, item := range value {
+			if hasJSONNull(item) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 type definitionDocument struct {
@@ -390,6 +423,14 @@ func (d definitionDocument) definition() (Definition, error) {
 	if d.AdmittedModes == nil {
 		return Definition{}, errors.New("admitted modes are required")
 	}
+	connectTimeout, err := durationFromMilliseconds(d.Resources.ConnectTimeoutMS, hardMaximumConnectTimeout)
+	if err != nil {
+		return Definition{}, err
+	}
+	operationTimeout, err := durationFromMilliseconds(d.Resources.OperationTimeoutMS, hardMaximumOperationTimeout)
+	if err != nil {
+		return Definition{}, err
+	}
 	mappings := make([]TypeMapping, len(d.TypeMappings))
 	for i, mapping := range d.TypeMappings {
 		logical, err := mapping.Logical.logicalType()
@@ -418,8 +459,8 @@ func (d definitionDocument) definition() (Definition, error) {
 			ReadPage:         Limit{Default: d.Resources.ReadPage.Default, Maximum: d.Resources.ReadPage.Maximum},
 			WriteBatch:       Limit{Default: d.Resources.WriteBatch.Default, Maximum: d.Resources.WriteBatch.Maximum},
 			Pool:             Limit{Default: d.Resources.Pool.Default, Maximum: d.Resources.Pool.Maximum},
-			ConnectTimeout:   time.Duration(d.Resources.ConnectTimeoutMS) * time.Millisecond,
-			OperationTimeout: time.Duration(d.Resources.OperationTimeoutMS) * time.Millisecond,
+			ConnectTimeout:   connectTimeout,
+			OperationTimeout: operationTimeout,
 			MaxParameters:    d.Resources.MaxParameters,
 		},
 		typeMappings:  mappings,
@@ -429,6 +470,13 @@ func (d definitionDocument) definition() (Definition, error) {
 		return Definition{}, err
 	}
 	return definition, nil
+}
+
+func durationFromMilliseconds(milliseconds int, maximum time.Duration) (time.Duration, error) {
+	if milliseconds <= 0 || milliseconds > int(maximum/time.Millisecond) {
+		return 0, errors.New("database timeout is outside the finite resource bound")
+	}
+	return time.Duration(milliseconds) * time.Millisecond, nil
 }
 
 func (d logicalTypeDocument) logicalType() (LogicalType, error) {

@@ -12,7 +12,15 @@ import (
 type DatabaseWarehouseCommand interface {
 	databaseWarehouseCommand()
 	nativeCommandContract() synccontract.NativeCommandContract
+	databaseWarehouseLeg() databaseWarehouseLeg
 }
+
+type databaseWarehouseLeg uint8
+
+const (
+	databaseWarehouseLegInbound databaseWarehouseLeg = iota + 1
+	databaseWarehouseLegOutbound
+)
 
 // DatabaseInboundCommand admits a database extraction operation whose only
 // far-side address is a shared warehouse artifact.
@@ -34,6 +42,10 @@ func NewDatabaseInboundCommand(inbound WarehouseInboundRef, contract synccontrac
 }
 
 func (DatabaseInboundCommand) databaseWarehouseCommand() {}
+
+func (DatabaseInboundCommand) databaseWarehouseLeg() databaseWarehouseLeg {
+	return databaseWarehouseLegInbound
+}
 
 func (c DatabaseInboundCommand) nativeCommandContract() synccontract.NativeCommandContract {
 	return cloneNativeCommandContract(c.contract)
@@ -68,6 +80,10 @@ func NewDatabaseOutboundCommand(outbound WarehouseOutboundRef, contract synccont
 }
 
 func (DatabaseOutboundCommand) databaseWarehouseCommand() {}
+
+func (DatabaseOutboundCommand) databaseWarehouseLeg() databaseWarehouseLeg {
+	return databaseWarehouseLegOutbound
+}
 
 func (c DatabaseOutboundCommand) nativeCommandContract() synccontract.NativeCommandContract {
 	return cloneNativeCommandContract(c.contract)

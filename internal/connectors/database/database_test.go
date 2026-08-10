@@ -43,8 +43,23 @@ func TestDatabaseDefinitionStrictLoadAndDefensiveProjection(t *testing.T) {
 			wantError: true,
 		},
 		{
+			name:      "explicit null is rejected",
+			document:  strings.Replace(validDefinitionJSON, `"logical": {"kind": "signed_integer", "bits": 32}`, `"logical": {"kind": "boolean", "bits": null}`, 1),
+			wantError: true,
+		},
+		{
 			name:      "unbounded page policy is rejected",
 			document:  strings.Replace(validDefinitionJSON, `"default": 100`, `"default": 0`, 1),
+			wantError: true,
+		},
+		{
+			name:      "overflowing connect timeout is rejected",
+			document:  strings.Replace(validDefinitionJSON, `"connect_timeout_ms": 1000`, `"connect_timeout_ms": 18446744073710`, 1),
+			wantError: true,
+		},
+		{
+			name:      "overflowing operation timeout is rejected",
+			document:  strings.Replace(validDefinitionJSON, `"operation_timeout_ms": 5000`, `"operation_timeout_ms": 18446744073710`, 1),
 			wantError: true,
 		},
 	}
@@ -225,6 +240,7 @@ func TestLogicalTypeCompatibilityIsLosslessOrRejected(t *testing.T) {
 }
 
 func TestStructuredCatalogIdentityAndReadPlanAreStable(t *testing.T) {
+	definition := loadTestDefinition(t, validDefinitionJSON)
 	identity := database.ConnectionIdentity{
 		WorkspaceID:  "workspace-1",
 		ConnectorID:  "postgres",
@@ -298,21 +314,25 @@ func TestStructuredCatalogIdentityAndReadPlanAreStable(t *testing.T) {
 	}
 
 	plan, err := database.NewReadPlan(context.Background(), database.ReadPlanRequest{
-		Inbound:  inbound,
-		Catalog:  catalog,
-		Relation: relation,
-		Columns:  []database.ColumnRef{idColumn, updatedAtColumn},
+		Inbound:    inbound,
+		Definition: definition,
+		Catalog:    catalog,
+		Relation:   relation,
+		Columns:    []database.ColumnRef{idColumn, updatedAtColumn},
 		Order: []database.OrderTerm{
 			{Column: updatedAtColumn, Direction: database.SortAscending},
 			{Column: idColumn, Direction: database.SortAscending},
 		},
-		PageSize: 100,
+		PageSize: 0,
 	})
 	if err != nil {
 		t.Fatalf("NewReadPlan() error = %v", err)
 	}
 	if plan.SchemaFingerprint().IsZero() {
 		t.Fatal("read plan has no schema fingerprint")
+	}
+	if got := plan.PageSize(); got != definition.Resources().ReadPage.Default {
+		t.Fatalf("read plan page size = %d, want definition default %d", got, definition.Resources().ReadPage.Default)
 	}
 	if got := plan.Warehouse(); got.Identity() != identity || got.Table() != "widgets" {
 		t.Fatalf("read plan warehouse = %#v/%q, want source-owned widgets artifact", got.Identity(), got.Table())
@@ -352,24 +372,74 @@ func TestStructuredCatalogIdentityAndReadPlanAreStable(t *testing.T) {
 	}
 
 	_, err = database.NewReadPlan(context.Background(), database.ReadPlanRequest{
-		Inbound:  inbound,
-		Catalog:  catalog,
-		Relation: relation,
-		Columns:  []database.ColumnRef{idColumn, updatedAtColumn},
-		Order:    []database.OrderTerm{{Column: updatedAtColumn, Direction: database.SortAscending}},
-		PageSize: 100,
+		Inbound:    inbound,
+		Definition: definition,
+		Catalog:    catalog,
+		Relation:   relation,
+		Columns:    []database.ColumnRef{idColumn, updatedAtColumn},
+		Order:      []database.OrderTerm{{Column: updatedAtColumn, Direction: database.SortAscending}},
+		PageSize:   100,
 	})
 	if err == nil {
 		t.Fatal("NewReadPlan() accepted an order without the unique-key suffix")
 	}
 
+	_, err = database.NewReadPlan(context.Background(), database.ReadPlanRequest{
+		Inbound:    inbound,
+		Definition: definition,
+		Catalog:    catalog,
+		Relation:   relation,
+		Columns:    []database.ColumnRef{idColumn, updatedAtColumn},
+		Order: []database.OrderTerm{
+			{Column: updatedAtColumn, Direction: database.SortAscending},
+			{Column: idColumn, Direction: database.SortAscending},
+		},
+		PageSize: definition.Resources().ReadPage.Maximum + 1,
+	})
+	if err == nil {
+		t.Fatal("NewReadPlan() accepted a page size above the definition maximum")
+	}
+
+	emailColumn := database.ColumnRef{Relation: relation, Name: "email"}
+	textType, err := database.NewString(0, "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	nullableUniqueCatalog, err := database.NewCatalog(database.CatalogRef{Name: "analytics"}, []database.Relation{{
+		Ref: relation,
+		Columns: []database.Column{
+			{Ref: idColumn, Type: int64Type, Ordinal: 1},
+			{Ref: emailColumn, Type: textType, Nullable: true, Ordinal: 2},
+		},
+		Keys: []database.Key{{
+			Name:    "widgets_email_key",
+			Kind:    database.KeyUnique,
+			Columns: []database.ColumnRef{emailColumn},
+		}},
+	}})
+	if err != nil {
+		t.Fatalf("NewCatalog(nullable unique key) error = %v", err)
+	}
+	if _, err := database.NewReadPlan(context.Background(), database.ReadPlanRequest{
+		Inbound:    inbound,
+		Definition: definition,
+		Catalog:    nullableUniqueCatalog,
+		Relation:   relation,
+		Columns:    []database.ColumnRef{emailColumn},
+		Order:      []database.OrderTerm{{Column: emailColumn, Direction: database.SortAscending}},
+		PageSize:   100,
+	}); err == nil {
+		t.Fatal("NewReadPlan() accepted a nullable unique-key suffix")
+	}
+
 	cancelled, cancel := context.WithCancel(context.Background())
 	cancel()
 	if _, err := database.NewReadPlan(cancelled, database.ReadPlanRequest{
-		Inbound:  inbound,
-		Catalog:  catalog,
-		Relation: relation,
-		Columns:  []database.ColumnRef{idColumn, updatedAtColumn},
+		Inbound:    inbound,
+		Definition: definition,
+		Catalog:    catalog,
+		Relation:   relation,
+		Columns:    []database.ColumnRef{idColumn, updatedAtColumn},
 		Order: []database.OrderTerm{
 			{Column: updatedAtColumn, Direction: database.SortAscending},
 			{Column: idColumn, Direction: database.SortAscending},
@@ -394,9 +464,10 @@ func TestDriverAdmissionRequiresRegisteredCompatibleNativeAdmission(t *testing.T
 		t.Fatal("driver declaration alone passed admission without a native admission object")
 	}
 
+	inboundAdmission := testInboundNativeAdmission(t, contract)
 	admitted := admittedDriver{
 		declaredDriver: declaredDriver{descriptor: postgresDriverDescriptor()},
-		admissions:     []synccontract.NativeExecutorAdmission{nativeAdmissionFor(contract)},
+		admissions:     []database.DatabaseNativeAdmission{inboundAdmission},
 	}
 	registry, err = database.NewDriverRegistry(admitted)
 	if err != nil {
@@ -415,6 +486,26 @@ func TestDriverAdmissionRequiresRegisteredCompatibleNativeAdmission(t *testing.T
 	cancel()
 	if _, err := registry.Admit(cancelled, definition, inbound); !errors.Is(err, context.Canceled) {
 		t.Fatalf("cancelled admission error = %v, want context.Canceled", err)
+	}
+}
+
+func TestDatabaseNativeAdmissionIsBoundToOneWarehouseLeg(t *testing.T) {
+	definition := loadTestDefinition(t, definitionWithAdmittedMode(validDefinitionJSON))
+	contract := nativeContract("postgres-wire", "fixture-postgres-warehouse-leg", "fixture-postgres-warehouse-leg-v1")
+	inbound := testInboundCommand(t, contract)
+	outbound := testOutboundCommand(t, contract)
+	registry, err := database.NewDriverRegistry(admittedDriver{
+		declaredDriver: declaredDriver{descriptor: postgresDriverDescriptor()},
+		admissions:     []database.DatabaseNativeAdmission{testInboundNativeAdmission(t, contract)},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := registry.Admit(context.Background(), definition, inbound); err != nil {
+		t.Fatalf("inbound admission error = %v", err)
+	}
+	if _, err := registry.Admit(context.Background(), definition, outbound); !errors.Is(err, database.ErrNativeDriverAdmissionMismatch) {
+		t.Fatalf("outbound admission through an inbound record error = %v, want ErrNativeDriverAdmissionMismatch", err)
 	}
 }
 
@@ -502,11 +593,13 @@ func TestWarehouseMediationUsesSharedArtifactAndSeparateDatabaseLegs(t *testing.
 		`"admitted_modes": ["full_append"]`,
 		1,
 	))
+	inboundAdmission := testInboundNativeAdmission(t, inboundContract)
+	outboundAdmission := testOutboundNativeAdmission(t, outboundContract)
 	admitted := admittedDriver{
 		declaredDriver: declaredDriver{descriptor: postgresDriverDescriptor()},
-		admissions: []synccontract.NativeExecutorAdmission{
-			nativeAdmissionFor(inboundContract),
-			nativeAdmissionFor(outboundContract),
+		admissions: []database.DatabaseNativeAdmission{
+			inboundAdmission,
+			outboundAdmission,
 		},
 	}
 	registry, err := database.NewDriverRegistry(admitted)
@@ -521,7 +614,7 @@ func TestWarehouseMediationUsesSharedArtifactAndSeparateDatabaseLegs(t *testing.
 	}
 	inboundOnly, err := database.NewDriverRegistry(admittedDriver{
 		declaredDriver: declaredDriver{descriptor: postgresDriverDescriptor()},
-		admissions:     []synccontract.NativeExecutorAdmission{nativeAdmissionFor(inboundContract)},
+		admissions:     []database.DatabaseNativeAdmission{inboundAdmission},
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -601,9 +694,9 @@ func TestMySQLLayerTwoReferenceCompilesAgainstSharedWarehouseArtifact(t *testing
 		t.Fatal(err)
 	}
 	mysql := mysqlLayerTwo{
-		admissions: []synccontract.NativeExecutorAdmission{
-			nativeAdmissionFor(inboundContract),
-			nativeAdmissionFor(outboundContract),
+		admissions: []database.DatabaseNativeAdmission{
+			testInboundNativeAdmission(t, inboundContract),
+			testOutboundNativeAdmission(t, outboundContract),
 		},
 	}
 	registry, err := database.NewDriverRegistry(mysql)
@@ -622,15 +715,15 @@ func TestMySQLLayerTwoReferenceCompilesAgainstSharedWarehouseArtifact(t *testing
 // mysqlLayerTwo is a test-only layer-two proof. It declares no production
 // connector capability or executable MySQL operation.
 type mysqlLayerTwo struct {
-	admissions []synccontract.NativeExecutorAdmission
+	admissions []database.DatabaseNativeAdmission
 }
 
 func (mysqlLayerTwo) DatabaseDriverDescriptor() database.DriverDescriptor {
 	return database.DriverDescriptor{ID: "mysql", Protocol: "mysql-wire", APIVersion: 1}
 }
 
-func (d mysqlLayerTwo) DatabaseNativeAdmissions() []synccontract.NativeExecutorAdmission {
-	return cloneNativeAdmissions(d.admissions)
+func (d mysqlLayerTwo) DatabaseNativeAdmissions() []database.DatabaseNativeAdmission {
+	return cloneDatabaseNativeAdmissions(d.admissions)
 }
 
 func loadTestDefinition(t *testing.T, document string) database.Definition {
@@ -681,6 +774,44 @@ func testInboundCommand(t *testing.T, contract synccontract.NativeCommandContrac
 	return command
 }
 
+func testOutboundCommand(t *testing.T, contract synccontract.NativeCommandContract) database.DatabaseOutboundCommand {
+	t.Helper()
+	sourceIdentity := database.ConnectionIdentity{
+		WorkspaceID:  "workspace-1",
+		ConnectorID:  "postgres",
+		ConnectionID: "source-connection",
+	}
+	targetIdentity := database.ConnectionIdentity{
+		WorkspaceID:  "workspace-1",
+		ConnectorID:  "postgres",
+		ConnectionID: "target-connection",
+	}
+	relation := database.RelationRef{
+		Schema: database.SchemaRef{
+			Catalog: database.CatalogRef{Name: "analytics"},
+			Name:    "public",
+		},
+		Name: "widgets",
+	}
+	artifact, err := warehouse.NewArtifactRef(sourceIdentity, "widgets")
+	if err != nil {
+		t.Fatal(err)
+	}
+	target, err := database.NewTargetRef(targetIdentity, relation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	outbound, err := database.NewWarehouseOutboundRef(artifact, target)
+	if err != nil {
+		t.Fatal(err)
+	}
+	command, err := database.NewDatabaseOutboundCommand(outbound, contract)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return command
+}
+
 type declaredDriver struct {
 	descriptor database.DriverDescriptor
 }
@@ -689,11 +820,11 @@ func (d declaredDriver) DatabaseDriverDescriptor() database.DriverDescriptor { r
 
 type admittedDriver struct {
 	declaredDriver
-	admissions []synccontract.NativeExecutorAdmission
+	admissions []database.DatabaseNativeAdmission
 }
 
-func (d admittedDriver) DatabaseNativeAdmissions() []synccontract.NativeExecutorAdmission {
-	return cloneNativeAdmissions(d.admissions)
+func (d admittedDriver) DatabaseNativeAdmissions() []database.DatabaseNativeAdmission {
+	return cloneDatabaseNativeAdmissions(d.admissions)
 }
 
 type nativeAdmission struct {
@@ -724,6 +855,24 @@ func nativeAdmissionFor(contract synccontract.NativeCommandContract) nativeAdmis
 	}
 }
 
+func testInboundNativeAdmission(t *testing.T, contract synccontract.NativeCommandContract) database.DatabaseNativeAdmission {
+	t.Helper()
+	admission, err := database.NewDatabaseInboundAdmission(nativeAdmissionFor(contract))
+	if err != nil {
+		t.Fatal(err)
+	}
+	return admission
+}
+
+func testOutboundNativeAdmission(t *testing.T, contract synccontract.NativeCommandContract) database.DatabaseNativeAdmission {
+	t.Helper()
+	admission, err := database.NewDatabaseOutboundAdmission(nativeAdmissionFor(contract))
+	if err != nil {
+		t.Fatal(err)
+	}
+	return admission
+}
+
 func (d nativeAdmission) NativeSyncExecutorDescriptor() synccontract.NativeSyncExecutorDescriptor {
 	return d.native
 }
@@ -732,8 +881,8 @@ func (d nativeAdmission) NativeSyncConformanceEvidence() synccontract.Conformanc
 	return d.evidence
 }
 
-func cloneNativeAdmissions(admissions []synccontract.NativeExecutorAdmission) []synccontract.NativeExecutorAdmission {
-	return append([]synccontract.NativeExecutorAdmission(nil), admissions...)
+func cloneDatabaseNativeAdmissions(admissions []database.DatabaseNativeAdmission) []database.DatabaseNativeAdmission {
+	return append([]database.DatabaseNativeAdmission(nil), admissions...)
 }
 
 func postgresDriverDescriptor() database.DriverDescriptor {
