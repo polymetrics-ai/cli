@@ -84,6 +84,16 @@ run_hooked() {
     "$@"
 }
 
+run_delayed_hooked() {
+  delayed_exec_path=$1
+  shift
+
+  GIT_EXEC_PATH="$delayed_exec_path" \
+    PM_TEST_HOOK_LOG="$CURRENT_HOOK_LOG" \
+    PM_TEST_OPERATION_LOG="$CURRENT_OPERATION_LOG" \
+    "$@"
+}
+
 rate_ref() {
   printf 'refs/pm-autopush/%s\n' "$1"
 }
@@ -105,9 +115,12 @@ status_file() {
   GIT_DIR="$status_common_dir" git rev-parse --git-path "pm-autopush/$2.log"
 }
 
+git_path() {
+  git -C "$1" rev-parse --path-format=absolute --git-path "$2"
+}
+
 operation_file() {
-  operation_git_dir="$(git -C "$1" rev-parse --path-format=absolute --git-dir)"
-  printf '%s/pm-autopush-operation\n' "$operation_git_dir"
+  git_path "$1" pm-autopush-operation
 }
 
 install_receive_delay() {
@@ -174,18 +187,30 @@ wait_for_file() {
 
 install_ls_remote_delay() {
   delay_wrapper_dir=$1
+  delay_real_git=$2
+  delay_real_exec_path=$3
+  delay_ready_file=$4
+  delay_release_file=$5
+
+  mkdir -p "$delay_wrapper_dir/real"
+  ln -s "$delay_real_git" "$delay_wrapper_dir/real/git"
+  ln -s "$delay_real_exec_path/git-upload-pack" "$delay_wrapper_dir/git-upload-pack"
+  ln -s "$delay_real_exec_path/git-receive-pack" "$delay_wrapper_dir/git-receive-pack"
+  ln -s "$delay_ready_file" "$delay_wrapper_dir/ready"
+  ln -s "$delay_release_file" "$delay_wrapper_dir/release"
 
   printf '%s\n' \
     '#!/bin/sh' \
+    "wrapper_dir=\"\$(CDPATH='' cd \"\$(dirname \"\$0\")\" 2>/dev/null && pwd)\" || exit 0" \
     "if [ \"\$1\" = \"ls-remote\" ]; then" \
-    "  : > \"\$PM_AUTOPUSH_LS_REMOTE_READY\"" \
+    "  : > \"\$wrapper_dir/ready\"" \
     '  wait_attempt=0' \
-    "  while [ ! -f \"\$PM_AUTOPUSH_LS_REMOTE_RELEASE\" ] && [ \"\$wait_attempt\" -lt 10 ]; do" \
+    "  while [ ! -f \"\$wrapper_dir/release\" ] && [ \"\$wait_attempt\" -lt 10 ]; do" \
     '    sleep 1' \
     "    wait_attempt=\$((wait_attempt + 1))" \
     '  done' \
     'fi' \
-    "exec \"\$PM_AUTOPUSH_REAL_GIT\" \"\$@\"" > "$delay_wrapper_dir/git"
+    "exec \"\$wrapper_dir/real/git\" \"\$@\"" > "$delay_wrapper_dir/git"
   chmod +x "$delay_wrapper_dir/git"
 }
 
@@ -561,7 +586,7 @@ test_manual_merge_completion_refusal() {
   if ! run_hooked git -C "$TEST_REPO" merge --no-ff --no-commit merge-source; then
     fail "manual merge setup should succeed"
   fi
-  merge_head="$(git -C "$TEST_REPO" rev-parse --git-path MERGE_HEAD)"
+  merge_head="$(git_path "$TEST_REPO" MERGE_HEAD)"
   [ -f "$merge_head" ] || fail "manual merge did not retain MERGE_HEAD"
   if ! run_hooked git -C "$TEST_REPO" commit -qm "test: manual merge completion"; then
     fail "manual merge completion should succeed"
@@ -594,7 +619,7 @@ test_manual_cherry_pick_completion_refusal() {
   if run_hooked git -C "$TEST_REPO" cherry-pick "$cherry_source"; then
     fail "cherry-pick should stop for manual conflict resolution"
   fi
-  cherry_head="$(git -C "$TEST_REPO" rev-parse --git-path CHERRY_PICK_HEAD)"
+  cherry_head="$(git_path "$TEST_REPO" CHERRY_PICK_HEAD)"
   [ -f "$cherry_head" ] || fail "manual cherry-pick did not retain CHERRY_PICK_HEAD"
   printf 'resolved cherry-pick\n' > "$TEST_REPO/base"
   git -C "$TEST_REPO" add base
@@ -627,7 +652,7 @@ test_manual_revert_completion_refusal() {
   if run_hooked git -C "$TEST_REPO" revert "$revert_target"; then
     fail "revert should stop for manual conflict resolution"
   fi
-  revert_head="$(git -C "$TEST_REPO" rev-parse --git-path REVERT_HEAD)"
+  revert_head="$(git_path "$TEST_REPO" REVERT_HEAD)"
   [ -f "$revert_head" ] || fail "manual revert did not retain REVERT_HEAD"
   printf 'resolved revert\n' > "$TEST_REPO/base"
   git -C "$TEST_REPO" add base
@@ -657,13 +682,41 @@ test_squash_merge_completion_refusal() {
   if ! run_hooked git -C "$TEST_REPO" merge --squash squash-source; then
     fail "squash merge setup should succeed"
   fi
-  squash_message="$(git -C "$TEST_REPO" rev-parse --git-path SQUASH_MSG)"
+  squash_message="$(git_path "$TEST_REPO" SQUASH_MSG)"
   [ -f "$squash_message" ] || fail "squash merge did not retain SQUASH_MSG"
   if ! run_hooked git -C "$TEST_REPO" commit -qm "test: squash merge completion"; then
     fail "squash merge completion should succeed"
   fi
   assert_hook_invoked "$CURRENT_HOOK_LOG"
   [ -s "$CURRENT_OPERATION_LOG" ] || fail "squash merge did not capture an operation snapshot"
+  assert_manual_operation_refusal "$TEST_REPO" "$TEST_REMOTE" feature
+}
+
+test_amended_squash_merge_refusal() {
+  case_dir="$TMP_DIR/amended-squash-merge"
+  mkdir -p "$case_dir"
+  new_repo "$case_dir"
+  git -C "$TEST_REPO" checkout -qb feature
+  git -C "$TEST_REPO" checkout -qb squash-source
+  record_change "$TEST_REPO" amended-squash-source
+  git -C "$TEST_REPO" commit -qm "test: amended squash source"
+  git -C "$TEST_REPO" checkout -q feature
+  install_hook "$TEST_REPO"
+  CURRENT_HOOK_LOG="$case_dir/hook.log"
+  CURRENT_OPERATION_LOG="$case_dir/operation.log"
+  : > "$CURRENT_HOOK_LOG"
+  : > "$CURRENT_OPERATION_LOG"
+
+  if ! run_hooked git -C "$TEST_REPO" merge --squash squash-source; then
+    fail "amended squash merge setup should succeed"
+  fi
+  squash_message="$(git_path "$TEST_REPO" SQUASH_MSG)"
+  [ -f "$squash_message" ] || fail "amended squash merge did not retain SQUASH_MSG"
+  if ! run_hooked git -C "$TEST_REPO" commit --amend --no-edit; then
+    fail "amended squash merge completion should succeed"
+  fi
+  assert_hook_invoked "$CURRENT_HOOK_LOG"
+  [ -s "$CURRENT_OPERATION_LOG" ] || fail "amended squash merge did not capture an operation snapshot"
   assert_manual_operation_refusal "$TEST_REPO" "$TEST_REMOTE" feature
 }
 
@@ -686,13 +739,42 @@ test_clean_cherry_pick_no_commit_refusal() {
   if ! run_hooked git -C "$TEST_REPO" cherry-pick --no-commit "$cherry_source"; then
     fail "clean no-commit cherry-pick should succeed"
   fi
-  merge_message="$(git -C "$TEST_REPO" rev-parse --git-path MERGE_MSG)"
+  merge_message="$(git_path "$TEST_REPO" MERGE_MSG)"
   [ -f "$merge_message" ] || fail "clean no-commit cherry-pick did not retain MERGE_MSG"
   if ! run_hooked git -C "$TEST_REPO" commit -qm "test: clean cherry-pick completion"; then
     fail "clean no-commit cherry-pick completion should succeed"
   fi
   assert_hook_invoked "$CURRENT_HOOK_LOG"
   [ -s "$CURRENT_OPERATION_LOG" ] || fail "clean no-commit cherry-pick did not capture an operation snapshot"
+  assert_manual_operation_refusal "$TEST_REPO" "$TEST_REMOTE" feature
+}
+
+test_amended_cherry_pick_no_commit_refusal() {
+  case_dir="$TMP_DIR/amended-clean-cherry-pick"
+  mkdir -p "$case_dir"
+  new_repo "$case_dir"
+  git -C "$TEST_REPO" checkout -qb feature
+  git -C "$TEST_REPO" checkout -qb cherry-source
+  record_change "$TEST_REPO" amended-clean-cherry-source
+  git -C "$TEST_REPO" commit -qm "test: amended clean cherry source"
+  cherry_source="$(git -C "$TEST_REPO" rev-parse HEAD)"
+  git -C "$TEST_REPO" checkout -q feature
+  install_hook "$TEST_REPO"
+  CURRENT_HOOK_LOG="$case_dir/hook.log"
+  CURRENT_OPERATION_LOG="$case_dir/operation.log"
+  : > "$CURRENT_HOOK_LOG"
+  : > "$CURRENT_OPERATION_LOG"
+
+  if ! run_hooked git -C "$TEST_REPO" cherry-pick --no-commit "$cherry_source"; then
+    fail "amended clean no-commit cherry-pick should succeed"
+  fi
+  merge_message="$(git_path "$TEST_REPO" MERGE_MSG)"
+  [ -f "$merge_message" ] || fail "amended clean no-commit cherry-pick did not retain MERGE_MSG"
+  if ! run_hooked git -C "$TEST_REPO" commit --amend --no-edit; then
+    fail "amended clean no-commit cherry-pick completion should succeed"
+  fi
+  assert_hook_invoked "$CURRENT_HOOK_LOG"
+  [ -s "$CURRENT_OPERATION_LOG" ] || fail "amended clean no-commit cherry-pick did not capture an operation snapshot"
   assert_manual_operation_refusal "$TEST_REPO" "$TEST_REMOTE" feature
 }
 
@@ -718,6 +800,36 @@ test_clean_revert_no_edit_refusal() {
   assert_manual_operation_refusal "$TEST_REPO" "$TEST_REMOTE" feature
 }
 
+test_amended_revert_no_commit_refusal() {
+  case_dir="$TMP_DIR/amended-clean-revert"
+  mkdir -p "$case_dir"
+  new_repo "$case_dir"
+  git -C "$TEST_REPO" checkout -qb feature
+  record_change "$TEST_REPO" amended-clean-revert-target
+  git -C "$TEST_REPO" commit -qm "test: amended clean revert target"
+  revert_target="$(git -C "$TEST_REPO" rev-parse HEAD)"
+  printf 'amended-clean-revert-later\n' > "$TEST_REPO/later"
+  git -C "$TEST_REPO" add later
+  git -C "$TEST_REPO" commit -qm "test: amended clean revert later change"
+  install_hook "$TEST_REPO"
+  CURRENT_HOOK_LOG="$case_dir/hook.log"
+  CURRENT_OPERATION_LOG="$case_dir/operation.log"
+  : > "$CURRENT_HOOK_LOG"
+  : > "$CURRENT_OPERATION_LOG"
+
+  if ! run_hooked git -C "$TEST_REPO" revert --no-commit "$revert_target"; then
+    fail "amended clean no-commit revert should succeed"
+  fi
+  merge_message="$(git_path "$TEST_REPO" MERGE_MSG)"
+  [ -f "$merge_message" ] || fail "amended clean no-commit revert did not retain MERGE_MSG"
+  if ! run_hooked git -C "$TEST_REPO" commit --amend --no-edit; then
+    fail "amended clean no-commit revert completion should succeed"
+  fi
+  assert_hook_invoked "$CURRENT_HOOK_LOG"
+  [ -s "$CURRENT_OPERATION_LOG" ] || fail "amended clean no-commit revert did not capture an operation snapshot"
+  assert_manual_operation_refusal "$TEST_REPO" "$TEST_REMOTE" feature
+}
+
 test_delayed_child_refuses_operation_tip() {
   case_dir="$TMP_DIR/delayed-child"
   wrapper_dir="$case_dir/wrappers"
@@ -727,7 +839,8 @@ test_delayed_child_refuses_operation_tip() {
   new_repo "$case_dir"
   git -C "$TEST_REPO" checkout -qb feature
   git -C "$TEST_REPO" checkout -qb merge-source
-  record_change "$TEST_REPO" merge-source
+  printf 'merge-source\n' > "$TEST_REPO/merge-source"
+  git -C "$TEST_REPO" add merge-source
   git -C "$TEST_REPO" commit -qm "test: delayed merge source"
   git -C "$TEST_REPO" checkout -q feature
   install_hook "$TEST_REPO"
@@ -736,14 +849,12 @@ test_delayed_child_refuses_operation_tip() {
   : > "$CURRENT_HOOK_LOG"
 
   real_git="$(command -v git)"
-  install_ls_remote_delay "$wrapper_dir"
+  real_git_exec_path="$(git --exec-path)"
+  install_ls_remote_delay "$wrapper_dir" "$real_git" "$real_git_exec_path" "$ready_file" "$release_file"
 
   record_change "$TEST_REPO" scheduled-normal
-  if ! PATH="$wrapper_dir:$PATH" \
-    PM_AUTOPUSH_LS_REMOTE_READY="$ready_file" \
-    PM_AUTOPUSH_LS_REMOTE_RELEASE="$release_file" \
-    PM_AUTOPUSH_REAL_GIT="$real_git" \
-    run_hooked git -C "$TEST_REPO" commit -qm "test: delayed child source"; then
+  if ! run_delayed_hooked "$wrapper_dir" \
+    git -C "$TEST_REPO" commit -qm "test: delayed child source"; then
     fail "scheduled normal commit should succeed"
   fi
   assert_hook_invoked "$CURRENT_HOOK_LOG"
@@ -772,7 +883,8 @@ test_delayed_child_refuses_active_operation() {
   new_repo "$case_dir"
   git -C "$TEST_REPO" checkout -qb feature
   git -C "$TEST_REPO" checkout -qb merge-source
-  record_change "$TEST_REPO" merge-source
+  printf 'merge-source\n' > "$TEST_REPO/merge-source"
+  git -C "$TEST_REPO" add merge-source
   git -C "$TEST_REPO" commit -qm "test: active merge source"
   git -C "$TEST_REPO" checkout -q feature
   install_hook "$TEST_REPO"
@@ -781,13 +893,11 @@ test_delayed_child_refuses_active_operation() {
   : > "$CURRENT_HOOK_LOG"
 
   real_git="$(command -v git)"
-  install_ls_remote_delay "$wrapper_dir"
+  real_git_exec_path="$(git --exec-path)"
+  install_ls_remote_delay "$wrapper_dir" "$real_git" "$real_git_exec_path" "$ready_file" "$release_file"
   record_change "$TEST_REPO" scheduled-normal
-  if ! PATH="$wrapper_dir:$PATH" \
-    PM_AUTOPUSH_LS_REMOTE_READY="$ready_file" \
-    PM_AUTOPUSH_LS_REMOTE_RELEASE="$release_file" \
-    PM_AUTOPUSH_REAL_GIT="$real_git" \
-    run_hooked git -C "$TEST_REPO" commit -qm "test: delayed child active operation"; then
+  if ! run_delayed_hooked "$wrapper_dir" \
+    git -C "$TEST_REPO" commit -qm "test: delayed child active operation"; then
     fail "scheduled normal commit should succeed"
   fi
   assert_hook_invoked "$CURRENT_HOOK_LOG"
@@ -796,7 +906,7 @@ test_delayed_child_refuses_active_operation() {
   if ! git -C "$TEST_REPO" merge --no-ff --no-commit merge-source; then
     fail "active-operation merge setup should succeed"
   fi
-  merge_head="$(git -C "$TEST_REPO" rev-parse --git-path MERGE_HEAD)"
+  merge_head="$(git_path "$TEST_REPO" MERGE_HEAD)"
   [ -f "$merge_head" ] || fail "active-operation merge did not retain MERGE_HEAD"
   : > "$release_file"
   active_log="$(status_file "$TEST_REPO" feature)"
@@ -855,8 +965,11 @@ test_manual_merge_completion_refusal
 test_manual_cherry_pick_completion_refusal
 test_manual_revert_completion_refusal
 test_squash_merge_completion_refusal
+test_amended_squash_merge_refusal
 test_clean_cherry_pick_no_commit_refusal
+test_amended_cherry_pick_no_commit_refusal
 test_clean_revert_no_edit_refusal
+test_amended_revert_no_commit_refusal
 test_delayed_child_refuses_operation_tip
 test_delayed_child_refuses_active_operation
 test_rejected_push_is_swallowed_without_force

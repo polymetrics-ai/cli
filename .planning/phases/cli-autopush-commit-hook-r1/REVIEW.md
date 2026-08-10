@@ -20,9 +20,8 @@ shellcheck passed.
 
 - R1 was legitimate: Git can remove a manual merge, cherry-pick, or revert
   marker before `post-commit`. A tracked `prepare-commit-msg` companion now
-  records a Git-resolved operation snapshot in the worktree Git directory, and
-  `post-commit` consumes it only when its parent matches the just-created
-  commit.
+  records a commit-scoped Git-resolved operation marker in the worktree Git
+  directory, and `post-commit` consumes it before scheduling.
 - R2 was legitimate: a local remote `HEAD` symref can be absent or stale. The
   detached child resolves the remote's live symbolic `HEAD`, logs an unavailable
   or matching default branch, and returns without push.
@@ -51,9 +50,12 @@ shellcheck passed.
 - R10 was legitimate: the parent chose a tracking remote before Git's explicit
   push destination settings. It now resolves branch-specific, global, and
   tracking remotes in Git's push precedence order.
+- R11 was legitimate: an amended operation completion replaces the old tip, so
+  it cannot be recognized from the new commit's parent. The operation marker is
+  now consumed independent of commit topology.
 
 The focused executable harness covers each follow-up, including clean squash,
-cherry-pick, and revert paths, concurrent expired-rate compare-and-swap, delayed
-children during and after a manual merge, mixed safe/default push URLs, and
-branch-specific/global/tracking remote selection, alongside the original
-non-force rejection and detached-push behavior.
+amended squash, cherry-pick, and revert paths, concurrent expired-rate
+compare-and-swap, delayed children during and after a manual merge, mixed
+safe/default push URLs, and branch-specific/global/tracking remote selection,
+alongside the original non-force rejection and detached-push behavior.

@@ -12,11 +12,10 @@ if ! pm_autopush_operation_in_progress; then
   exit 0
 fi
 
-parent="$(git rev-parse --verify HEAD 2>/dev/null)" || exit 0
 umask 077
 mkdir -p "$operation_dir" 2>/dev/null || exit 0
 operation_temp="$operation_file.$$.tmp"
-if ! printf '%s\n' "$parent" > "$operation_temp" 2>/dev/null; then
+if ! : > "$operation_temp" 2>/dev/null; then
   rm -f "$operation_temp" 2>/dev/null || :
   exit 0
 fi

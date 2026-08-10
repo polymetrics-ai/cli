@@ -13,10 +13,8 @@ scheduled_oid="$(git rev-parse --verify HEAD 2>/dev/null)" || exit 0
 worktree_git_dir="$(git rev-parse --path-format=absolute --git-dir 2>/dev/null)" || exit 0
 operation_file="$worktree_git_dir/pm-autopush-operation"
 if [ -f "$operation_file" ]; then
-  operation_parent="$(sed -n '1p' "$operation_file" 2>/dev/null || :)"
-  commit_parent="$(git rev-parse --verify HEAD^1 2>/dev/null || :)"
   rm -f "$operation_file" 2>/dev/null || :
-  [ "$operation_parent" = "$commit_parent" ] && exit 0
+  exit 0
 fi
 
 pm_autopush_operation_in_progress && exit 0

@@ -46,9 +46,9 @@ commits, default/detached heads, or any non-fast-forward update.
    or matching default before it can push.
 2. A shared sourced helper resolves every Git operation path with `git rev-parse
    --git-path`, including sequencer, squash, and merge message state.
-   `prepare-commit-msg` records the current parent before Git clears that state
-   and clears stale records on ordinary commits. `post-commit` consumes a matching
-   record before using the same helper in both parent and detached child paths.
+   `prepare-commit-msg` records a commit-scoped marker before Git clears that state
+   and clears stale records on ordinary commits. `post-commit` consumes that marker
+   before using the same helper in both parent and detached child paths.
 3. Select `branch.<name>.pushRemote`, then `remote.pushDefault`, then
    `branch.<name>.remote`, falling back to an existing `origin` only when none
    is configured. Resolve Git's common directory, then resolve the local log below
@@ -67,8 +67,8 @@ commits, default/detached heads, or any non-fast-forward update.
 5. The harness uses temporary bare remotes and hook wrappers to prove stale and
    pushurl-specific default refusal, branch-specific/global/tracking push-target
    precedence, concurrent linked-worktree compare-and-swap from an expired rate
-   timestamp, delayed children during and after a manual merge, clean squash,
-   cherry-pick, and revert completions, a real two-commit rebase, expiry behavior,
+   timestamp, delayed children during and after a manual merge, clean and amended
+   squash, cherry-pick, and revert completions, a real two-commit rebase, expiry behavior,
    commit non-blocking behavior, and a genuine non-fast-forward rejection without
    force.
 
