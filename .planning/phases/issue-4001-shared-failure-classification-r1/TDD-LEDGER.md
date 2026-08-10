@@ -6,7 +6,7 @@
 | R2 | Retry safety | Configuration errors can be retried by default. | `Retryable` is true only for transient; configuration and system are false. |
 | R3 | Stable dispatch vocabulary | Dispatch kinds are strings that callers can misspell. | The five required kinds validate; unknown kinds and non-system dispatch classifications fail. |
 | R4 | Safe diagnostic separation | User JSON can contain a Go cause, or callers must parse error text. | JSON contains domain/code/message/path/kind/references only; `Cause`/`Unwrap` retain the private cause. |
-| R5 | Exact path | A field path is absent or an arbitrary unsafe string, including invalid UTF-8. | JSON Pointer validation accepts escaped pointers and rejects malformed or invalid UTF-8 values. |
+| R5 | Exact path | A field path is absent or an arbitrary unsafe string, including invalid UTF-8 from direct input or JSON decoding. | JSON Pointer validation accepts escaped pointers and rejects malformed or invalid UTF-8 values before or during JSON decoding. |
 | R6 | Database configuration consumer | The generic validation boundary cannot preserve a typed non-retryable configuration failure. | Focused `internal/connectors` test observes the exact classification and its cause unchanged. |
 | R7 | Engine configuration consumer | Schema constraints produce only text errors. | Focused engine test observes configuration domain, code, exact field path, and private cause. |
 | R8 | Engine dispatch consumer | Commandrunner has no common carrier for #3991's result. | `BlockedCommandError` carries and unwraps every valid dispatch classification. |
@@ -31,7 +31,7 @@ go vet ./internal/failures ./internal/connectors ./internal/connectors/engine ./
 go build ./cmd/pm
 ```
 
-`internal/failures/classification_test.go` proves R1-R5, including invalid UTF-8 JSON Pointer rejection. The generic configuration boundary test
+`internal/failures/classification_test.go` proves R1-R5, including invalid UTF-8 JSON Pointer rejection at both construction and raw JSON decoding boundaries. The generic configuration boundary test
 proves R6 without changing the in-flight PostgreSQL driver. Engine validation proves R7, the
 commandrunner carrier proves R8, and certification report JSON proves R9. The second green run
 also pins unknown domain/dispatch JSON rejection and RFC 6901 escaping for declaration keys.

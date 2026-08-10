@@ -132,3 +132,11 @@ func TestClassificationUnmarshalRejectsInvalidWireCodes(t *testing.T) {
 		}
 	}
 }
+
+func TestClassificationUnmarshalRejectsInvalidUTF8FieldPath(t *testing.T) {
+	raw := []byte("{\"domain\":\"system\",\"code\":\"dispatch_refused\",\"message\":\"the field path is invalid\",\"field_path\":\"/\xff\"}")
+	var classification Classification
+	if err := json.Unmarshal(raw, &classification); err == nil {
+		t.Fatal("json.Unmarshal() error = nil, want invalid UTF-8 rejection")
+	}
+}

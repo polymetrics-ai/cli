@@ -30,7 +30,7 @@ review was completed inline over the nine source and test files listed in `SUMMA
 
 ## Follow-up disposition
 
-- Fixed: JSON Pointer validation now rejects invalid UTF-8 before a classification can serialize it
-  differently from its in-memory value; regression coverage exercises the constructor boundary.
+- Fixed: JSON Pointer validation now rejects invalid UTF-8 at both construction and raw JSON decode
+  boundaries before a classification can serialize it differently from its in-memory value.
 
 No open critical, warning, or informational findings remain.
