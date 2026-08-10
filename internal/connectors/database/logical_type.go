@@ -181,6 +181,10 @@ func (t LogicalType) clone() LogicalType {
 	return clone
 }
 
+func (t LogicalType) containsOpaqueNative() bool {
+	return t.kind == LogicalOpaqueNative || (t.element != nil && t.element.containsOpaqueNative())
+}
+
 // Equal reports structural logical-type equality, including all parameters.
 func (t LogicalType) Equal(other LogicalType) bool {
 	if t.kind != other.kind || t.bits != other.bits || t.precision != other.precision ||
@@ -368,7 +372,7 @@ func ClassifyTypeCompatibility(source, target LogicalType) (Compatibility, error
 	if err := target.validate(0); err != nil {
 		return CompatibilityUnsupported, err
 	}
-	if source.kind == LogicalOpaqueNative || target.kind == LogicalOpaqueNative {
+	if source.containsOpaqueNative() || target.containsOpaqueNative() {
 		return CompatibilityUnsupported, nil
 	}
 	if source.Equal(target) {
