@@ -1,0 +1,18 @@
+{
+  "issue": 3864,
+  "parent_issue": 3862,
+  "branch": "feat/3864-closed-transport-dispatch",
+  "base": "origin/feat/3862-any-to-any-transport",
+  "lifecycle": {
+    "mode": "manual_gsd_fallback",
+    "reason": "issue key is not a numbered roadmap phase and canonical contract forbids role spawning",
+    "discuss_phase": "completed",
+    "plan_phase_tdd": "completed",
+    "execute_phase": "in_progress",
+    "verify_work": "pending",
+    "code_review": "pending"
+  },
+  "correction_rounds": 0,
+  "conformance": "external verifier required; self-asserted evidence is not admitted",
+  "supervisor_compatible_evidence": "pending"
+}
