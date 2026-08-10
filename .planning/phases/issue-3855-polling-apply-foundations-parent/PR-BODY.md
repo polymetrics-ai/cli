@@ -38,7 +38,8 @@ this parent does not cherry-pick or reimplement it.
 ## Parent orchestration
 
 - State ledger: `.planning/phases/issue-3855-polling-apply-foundations-parent/`
-- Current canonical state: `parent_draft_pr`
+- Current canonical state: `issue_map`
+- Next state: `parent_draft_pr` after live draft PR creation and inspection evidence is recorded.
 - Worker mode: single-worker inline/manual GSD fallback; no roles were spawned.
 - Integration/merge: prohibited in this scaffold; final parent integration remains human-gated.
 
