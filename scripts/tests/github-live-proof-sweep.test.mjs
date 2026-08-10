@@ -12,6 +12,7 @@ import {
   executeBarrier,
   enumerateImplementedCommands,
   redactForReport,
+  runProcess,
   validateProofRecords,
 } from "../github-live-proof-sweep.mjs";
 
@@ -45,6 +46,22 @@ test("releases all applicable operations from one barrier rather than serially",
     "started:repo view",
   ]);
   assert.deepEqual(results.sort(), ["issue list", "label list", "repo view"]);
+});
+
+test("bounds a non-terminating pm child before it can stall a live proof run", async () => {
+  const temp = await mkdtemp(path.join(os.tmpdir(), "github-live-proof-timeout-"));
+  try {
+    const sleeper = path.join(temp, "sleeper.mjs");
+    await writeFile(sleeper, "setInterval(() => {}, 1000);\n", "utf8");
+
+    const result = await runProcess(process.execPath, [sleeper], temp, { timeoutMs: 100 });
+
+    assert.equal(result.timedOut, true);
+    assert.equal(result.timeoutMs, 100);
+    assert.ok(["SIGTERM", "SIGKILL"].includes(result.signal));
+  } finally {
+    await rm(temp, { recursive: true, force: true });
+  }
 });
 
 test("rejects an omitted command instead of treating a sample as a sweep", () => {

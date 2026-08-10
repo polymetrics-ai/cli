@@ -39,6 +39,8 @@ const TOKEN_PATTERNS = [
   /\b(?:bearer|token)\s+[A-Za-z0-9._~+\/-]{12,}\b/gi,
 ];
 const OUTPUT_LIMIT_BYTES = 2 * 1024 * 1024;
+const PROCESS_TIMEOUT_MS = 45_000;
+const PROCESS_KILL_GRACE_MS = 1_000;
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPOSITORY_ROOT = path.resolve(SCRIPT_DIR, "..");
 const SURFACE_PATH = path.join(
@@ -507,13 +509,33 @@ function shellSafeInvocation(command, args, credential, root) {
   ];
 }
 
-function runProcess(binary, args, cwd) {
+export function runProcess(binary, args, cwd, { timeoutMs = PROCESS_TIMEOUT_MS } = {}) {
+  if (!Number.isInteger(timeoutMs) || timeoutMs <= 0) {
+    throw new Error("process timeout must be a positive integer");
+  }
   return new Promise((resolve, reject) => {
     const child = spawn(binary, args, { cwd, stdio: ["ignore", "pipe", "pipe"] });
     let stdout = "";
     let stderr = "";
     let bytes = 0;
     let overflow = false;
+    let timedOut = false;
+    let settled = false;
+    let forceKill;
+    const timer = setTimeout(() => {
+      timedOut = true;
+      child.kill("SIGTERM");
+      forceKill = setTimeout(() => child.kill("SIGKILL"), PROCESS_KILL_GRACE_MS);
+    }, timeoutMs);
+    const finish = (callback) => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      clearTimeout(timer);
+      clearTimeout(forceKill);
+      callback();
+    };
     const consume = (target, chunk) => {
       bytes += chunk.length;
       if (bytes > OUTPUT_LIMIT_BYTES) {
@@ -529,8 +551,10 @@ function runProcess(binary, args, cwd) {
     };
     child.stdout.on("data", (chunk) => consume("stdout", chunk));
     child.stderr.on("data", (chunk) => consume("stderr", chunk));
-    child.on("error", reject);
-    child.on("close", (code, signal) => resolve({ code, signal, stdout, stderr, overflow }));
+    child.once("error", (error) => finish(() => reject(error)));
+    child.once("close", (code, signal) =>
+      finish(() => resolve({ code, signal, stdout, stderr, overflow, timedOut, timeoutMs })),
+    );
   });
 }
 
@@ -542,6 +566,9 @@ function httpStatusFromFailure(text) {
 function parseJSONOutput(result, step) {
   if (result.overflow) {
     throw new Error(`${step} exceeded the bounded in-memory output limit`);
+  }
+  if (result.timedOut) {
+    throw new Error(`${step} exceeded the ${result.timeoutMs} ms terminal bound`);
   }
   if (result.code !== 0) {
     const status = httpStatusFromFailure(`${result.stdout}\n${result.stderr}`);
