@@ -140,3 +140,36 @@ func TestClassificationUnmarshalRejectsInvalidUTF8FieldPath(t *testing.T) {
 		t.Fatal("json.Unmarshal() error = nil, want invalid UTF-8 rejection")
 	}
 }
+
+func TestClassificationUnmarshalValidatesJSONPointerSurrogateEscapes(t *testing.T) {
+	tests := []struct {
+		name      string
+		fieldPath string
+		wantPath  string
+		wantError bool
+	}{
+		{name: "unpaired high surrogate", fieldPath: `"/\uD800"`, wantError: true},
+		{name: "unpaired low surrogate", fieldPath: `"/\uDC00"`, wantError: true},
+		{name: "paired surrogate", fieldPath: `"/\uD83D\uDE00"`, wantPath: "/😀"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			raw := []byte(`{"domain":"system","code":"dispatch_refused","message":"the field path is invalid","field_path":` + tt.fieldPath + `}`)
+			var classification Classification
+			err := json.Unmarshal(raw, &classification)
+			if tt.wantError {
+				if err == nil {
+					t.Fatal("json.Unmarshal() error = nil, want surrogate rejection")
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("json.Unmarshal() error = %v", err)
+			}
+			if got := classification.FieldPath(); got != tt.wantPath {
+				t.Fatalf("FieldPath() = %q, want %q", got, tt.wantPath)
+			}
+		})
+	}
+}
