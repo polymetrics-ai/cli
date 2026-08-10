@@ -50,6 +50,8 @@ This section supplements the preserved original verification record without chan
 - [x] Formatting, changed-path build/vet, lint, connector-boundary, docs, agent-contract, and
       relevant repository gates on the replay head.
 - [x] Manual-inline GSD `verify-work` and deep `code-review`, recorded without spawning roles.
+- [x] No-mistakes local child pipeline passed at `e133822f9c1e510cbf40110781a93a8103c6cd48`:
+      intent, rebase, review, test, document, and lint all passed with zero findings.
 
 PR #4013 remains the preserved direct-to-main audit record until the replacement child is green;
 this stacked delivery neither retargets, closes, nor mutates it.
@@ -78,3 +80,12 @@ All commands below exited successfully on the replay before the delivery-evidenc
 
 The smoke project used only local sample connectors and was moved to the system Trash after the
 check. No credentials, provider calls, PostgreSQL work, or reverse-ETL provider execution occurred.
+
+### Correction-cap and no-mistakes custody result
+
+The original #4013 delivery's four production/test correction loops count against this stacked
+replacement's maximum of five. After no-mistakes run `01KZPSZDQ0VSQZ0Q8RV8K4MJ77` released
+custody, the final accounting was **4/5 inherited, 0 new, 1 remaining**. The run completed its
+local intent, rebase, review, test, documentation, and lint gates with zero findings; its push,
+PR, and CI stages were intentionally left for the manual stacked delivery because this child must
+target `docs/4015-connector-release-certification`, not `main`.

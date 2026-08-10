@@ -44,4 +44,6 @@ The exact seven-patch #4001 series was replayed conflict-free onto current campa
 `feat/4001-stack-shared-certification-failures`. Range-diff and stable patch IDs matched every
 source patch. The current-base focused/full tests, public Save/Load safety proof, changed-path
 build/vet/format checks, lint, docs, generator/boundary, agent-contract, and release checks passed.
-PR #4013 remains unchanged as the historical audit record.
+No-mistakes run `01KZPSZDQ0VSQZ0Q8RV8K4MJ77` then passed its local intent, rebase, review, test,
+documentation, and lint gates with zero findings. The correction accounting is 4/5 inherited from
+PR #4013 and 0 new replay corrections. PR #4013 remains unchanged as the historical audit record.
