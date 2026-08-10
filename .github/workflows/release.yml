@@ -105,7 +105,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         with:
           go-version: '1.25.12'
           cache: true
@@ -119,7 +119,7 @@ jobs:
           go build -trimpath -ldflags "-s -w" -o "binaries/linux_${{ matrix.goarch }}/pm" ./cmd/pm
 
       - name: Upload binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: package-check_linux_${{ matrix.goarch }}
           path: binaries/linux_${{ matrix.goarch }}/pm
@@ -143,7 +143,7 @@ jobs:
         run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
 
       - name: Download natively built binaries
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: package-check_*
           path: binaries
@@ -159,7 +159,7 @@ jobs:
           ls -R binaries
 
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         with:
           go-version: '1.25.12'
           cache: true
@@ -189,7 +189,7 @@ jobs:
             --targets linux/amd64,linux/arm64
 
       - name: Set up QEMU for Linux package tests
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
         with:
           platforms: arm64
 
@@ -240,7 +240,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         with:
           go-version: '1.25.12'
           cache: true
@@ -266,7 +266,7 @@ jobs:
           "binaries/${GOOS}_${GOARCH}/$binary" version || true
 
       - name: Upload binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release_${{ matrix.goos }}_${{ matrix.goarch }}
           path: binaries/${{ matrix.goos }}_${{ matrix.goarch }}/*
@@ -412,14 +412,14 @@ jobs:
 
       - name: Set up Go
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         with:
           go-version: '1.25.12'
           cache: true
 
       - name: Download natively built release binaries
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: release_*
           path: release-binaries
@@ -467,7 +467,7 @@ jobs:
 
       - name: Set up QEMU for Linux package tests
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
         with:
           platforms: arm64
 
