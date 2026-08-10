@@ -44,6 +44,19 @@ coverage:
         ref: internal/connectors/engine/database_definition_test.go:TestBundleLoadPostgresDatabaseDefinitionWithoutCapabilityPromotion
         status: pass
     human_judgment: false
+  - id: D6
+    description: Connector-agnostic warehouse artifact identity and isolated database-to-warehouse / warehouse-to-database legs prevent a direct database pair; a MySQL-shaped layer-two implementation compiles against the shared seam.
+    verification:
+      - kind: unit
+        ref: internal/warehouse/artifact_test.go:TestArtifactRefIsConnectorAgnosticAndStructurallyBound
+        status: pending-amendment-validation
+      - kind: unit
+        ref: internal/connectors/database/database_test.go:TestWarehouseMediationUsesSharedArtifactAndSeparateDatabaseLegs
+        status: pending-amendment-validation
+      - kind: unit
+        ref: internal/connectors/database/database_test.go:TestMySQLLayerTwoReferenceCompilesAgainstSharedWarehouseArtifact
+        status: pending-amendment-validation
+    human_judgment: false
 ---
 
 # Summary — Issue #3974: typed database connector foundation
@@ -70,6 +83,10 @@ capability.
   admission registry.
 - PostgreSQL's compile-time reference driver and the optional bundle loading
   seam, with `capabilities.write=false` and `capabilities.cdc=false` retained.
+- A captain-mandated two-layer mediator seam: neutral warehouse artifact/owner
+  identity in `internal/warehouse`, plus database-only inbound and outbound
+  legs that cannot contain a direct source/target pair. The amendment is under
+  refreshed validation; it does not add a warehouse executor or database I/O.
 
 ## TDD and lifecycle evidence
 

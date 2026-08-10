@@ -10,6 +10,7 @@ import (
 
 	"polymetrics.ai/internal/connectors/database"
 	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/warehouse"
 )
 
 func TestDatabaseDefinitionStrictLoadAndDefensiveProjection(t *testing.T) {
@@ -271,6 +272,14 @@ func TestStructuredCatalogIdentityAndReadPlanAreStable(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	artifact, err := warehouse.NewArtifactRef(identity, "widgets")
+	if err != nil {
+		t.Fatal(err)
+	}
+	inbound, err := database.NewWarehouseInboundRef(source, artifact)
+	if err != nil {
+		t.Fatal(err)
+	}
 	target, err := database.NewTargetRef(identity, relation)
 	if err != nil {
 		t.Fatal(err)
@@ -289,7 +298,7 @@ func TestStructuredCatalogIdentityAndReadPlanAreStable(t *testing.T) {
 	}
 
 	plan, err := database.NewReadPlan(context.Background(), database.ReadPlanRequest{
-		Source:   source,
+		Inbound:  inbound,
 		Catalog:  catalog,
 		Relation: relation,
 		Columns:  []database.ColumnRef{idColumn, updatedAtColumn},
@@ -304,6 +313,9 @@ func TestStructuredCatalogIdentityAndReadPlanAreStable(t *testing.T) {
 	}
 	if plan.SchemaFingerprint().IsZero() {
 		t.Fatal("read plan has no schema fingerprint")
+	}
+	if got := plan.Warehouse(); got.Identity() != identity || got.Table() != "widgets" {
+		t.Fatalf("read plan warehouse = %#v/%q, want source-owned widgets artifact", got.Identity(), got.Table())
 	}
 	relations := catalog.Relations()
 	relations[0].Columns[0].Ref.Name = "mutated"
@@ -340,7 +352,7 @@ func TestStructuredCatalogIdentityAndReadPlanAreStable(t *testing.T) {
 	}
 
 	_, err = database.NewReadPlan(context.Background(), database.ReadPlanRequest{
-		Source:   source,
+		Inbound:  inbound,
 		Catalog:  catalog,
 		Relation: relation,
 		Columns:  []database.ColumnRef{idColumn, updatedAtColumn},
@@ -354,7 +366,7 @@ func TestStructuredCatalogIdentityAndReadPlanAreStable(t *testing.T) {
 	cancelled, cancel := context.WithCancel(context.Background())
 	cancel()
 	if _, err := database.NewReadPlan(cancelled, database.ReadPlanRequest{
-		Source:   source,
+		Inbound:  inbound,
 		Catalog:  catalog,
 		Relation: relation,
 		Columns:  []database.ColumnRef{idColumn, updatedAtColumn},
@@ -369,7 +381,7 @@ func TestStructuredCatalogIdentityAndReadPlanAreStable(t *testing.T) {
 }
 
 func TestDriverAdmissionRequiresRegisteredCompatibleNativeAdmission(t *testing.T) {
-	definition := loadTestDefinition(t, validDefinitionJSON)
+	definition := loadTestDefinition(t, definitionWithAdmittedMode(validDefinitionJSON))
 	contract := synccontract.NativeCommandContract{
 		ContractVersion: synccontract.NativeCommandContractVersion,
 		Protocol:        "postgres-wire",
@@ -378,12 +390,13 @@ func TestDriverAdmissionRequiresRegisteredCompatibleNativeAdmission(t *testing.T
 		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 		Conformance:     synccontract.RequiredConformanceEvidence(),
 	}
+	inbound := testInboundCommand(t, contract)
 
 	registry, err := database.NewDriverRegistry(declaredDriver{descriptor: postgresDriverDescriptor()})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := registry.Admit(context.Background(), definition, contract); err == nil {
+	if _, err := registry.Admit(context.Background(), definition, inbound); err == nil {
 		t.Fatal("driver declaration alone passed admission without a native admission object")
 	}
 
@@ -401,18 +414,18 @@ func TestDriverAdmissionRequiresRegisteredCompatibleNativeAdmission(t *testing.T
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := registry.Admit(context.Background(), definition, contract); err != nil {
+	if _, err := registry.Admit(context.Background(), definition, inbound); err != nil {
 		t.Fatalf("registered compatible native admission rejected: %v", err)
 	}
 
-	wrongVersion := loadTestDefinition(t, strings.Replace(validDefinitionJSON, `"api_version": 1`, `"api_version": 2`, 1))
-	if _, err := registry.Admit(context.Background(), wrongVersion, contract); err == nil {
+	wrongVersion := loadTestDefinition(t, strings.Replace(definitionWithAdmittedMode(validDefinitionJSON), `"api_version": 1`, `"api_version": 2`, 1))
+	if _, err := registry.Admit(context.Background(), wrongVersion, inbound); err == nil {
 		t.Fatal("incompatible driver API version passed admission")
 	}
 
 	cancelled, cancel := context.WithCancel(context.Background())
 	cancel()
-	if _, err := registry.Admit(cancelled, definition, contract); !errors.Is(err, context.Canceled) {
+	if _, err := registry.Admit(cancelled, definition, inbound); !errors.Is(err, context.Canceled) {
 		t.Fatalf("cancelled admission error = %v, want context.Canceled", err)
 	}
 }
@@ -425,6 +438,216 @@ func TestDatabaseLoadAndReadPlanHonorCancellation(t *testing.T) {
 	}
 }
 
+func TestWarehouseMediationUsesSharedArtifactAndSeparateDatabaseLegs(t *testing.T) {
+	sourceIdentity := database.ConnectionIdentity{
+		WorkspaceID:  "workspace-1",
+		ConnectorID:  "postgres",
+		ConnectionID: "source-connection",
+	}
+	targetIdentity := database.ConnectionIdentity{
+		WorkspaceID:  "workspace-1",
+		ConnectorID:  "postgres",
+		ConnectionID: "target-connection",
+	}
+	relation := database.RelationRef{
+		Schema: database.SchemaRef{
+			Catalog: database.CatalogRef{Name: "analytics"},
+			Name:    "public",
+		},
+		Name: "widgets",
+	}
+	source, err := database.NewSourceRef(sourceIdentity, relation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	target, err := database.NewTargetRef(targetIdentity, relation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	artifact, err := warehouse.NewArtifactRef(sourceIdentity, "widgets")
+	if err != nil {
+		t.Fatal(err)
+	}
+	inboundRef, err := database.NewWarehouseInboundRef(source, artifact)
+	if err != nil {
+		t.Fatal(err)
+	}
+	outboundRef, err := database.NewWarehouseOutboundRef(artifact, target)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := inboundRef.Warehouse().Identity(); !got.SameIdentity(sourceIdentity) {
+		t.Fatalf("warehouse landing owner = %#v, want source identity %#v", got, sourceIdentity)
+	}
+	if got := outboundRef.Warehouse().Identity(); !got.SameIdentity(sourceIdentity) {
+		t.Fatalf("warehouse delivery owner = %#v, want source identity %#v", got, sourceIdentity)
+	}
+	if got := outboundRef.Target().Identity(); !got.SameIdentity(targetIdentity) {
+		t.Fatalf("warehouse delivery target = %#v, want target identity %#v", got, targetIdentity)
+	}
+
+	wrongArtifact, err := warehouse.NewArtifactRef(targetIdentity, "widgets")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := database.NewWarehouseInboundRef(source, wrongArtifact); err == nil {
+		t.Fatal("NewWarehouseInboundRef() accepted a warehouse owned by another source connection")
+	}
+	if _, err := warehouse.NewArtifactRef(sourceIdentity, ".."); err == nil {
+		t.Fatal("NewArtifactRef() accepted an unsafe warehouse table component")
+	}
+
+	contract := synccontract.NativeCommandContract{
+		ContractVersion: synccontract.NativeCommandContractVersion,
+		Protocol:        "postgres-wire",
+		Command:         "managed-table-apply",
+		Executor:        synccontract.ExecutorReference{Kind: "native", ID: "postgres-managed-table-v1"},
+		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
+		Conformance:     synccontract.RequiredConformanceEvidence(),
+	}
+	inbound, err := database.NewDatabaseInboundCommand(inboundRef, contract)
+	if err != nil {
+		t.Fatal(err)
+	}
+	outbound, err := database.NewDatabaseOutboundCommand(outboundRef, contract)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	definition := loadTestDefinition(t, strings.Replace(
+		validDefinitionJSON,
+		`"admitted_modes": []`,
+		`"admitted_modes": ["full_append"]`,
+		1,
+	))
+	admitted := admittedDriver{
+		declaredDriver: declaredDriver{descriptor: postgresDriverDescriptor()},
+		native: synccontract.NativeSyncExecutorDescriptor{
+			Protocol: contract.Protocol,
+			Command:  contract.Command,
+			Executor: contract.Executor,
+			Modes:    contract.Modes,
+		},
+		evidence: synccontract.RequiredConformanceEvidence(),
+	}
+	registry, err := database.NewDriverRegistry(admitted)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := registry.Admit(context.Background(), definition, inbound); err != nil {
+		t.Fatalf("warehouse inbound admission error = %v", err)
+	}
+	if _, err := registry.Admit(context.Background(), definition, outbound); err != nil {
+		t.Fatalf("warehouse outbound admission error = %v", err)
+	}
+	mutatedContract := inbound.Contract()
+	mutatedContract.Modes[0] = synccontract.ModeFullOverwrite
+	if got := inbound.Contract().Modes; len(got) != 1 || got[0] != synccontract.ModeFullAppend {
+		t.Fatalf("DatabaseInboundCommand.Contract() = %v after caller mutation, want independent full_append projection", got)
+	}
+	if _, err := registry.Admit(context.Background(), loadTestDefinition(t, validDefinitionJSON), inbound); !errors.Is(err, database.ErrDriverModeNotDeclared) {
+		t.Fatalf("empty declared modes admission error = %v, want ErrDriverModeNotDeclared", err)
+	}
+}
+
+func TestMySQLLayerTwoReferenceCompilesAgainstSharedWarehouseArtifact(t *testing.T) {
+	var _ database.Driver = mysqlLayerTwo{}
+	var _ database.NativeAdmittedDriver = mysqlLayerTwo{}
+
+	identity := database.ConnectionIdentity{
+		WorkspaceID:  "workspace-1",
+		ConnectorID:  "mysql",
+		ConnectionID: "mysql-connection",
+	}
+	relation := database.RelationRef{
+		Schema: database.SchemaRef{
+			Catalog: database.CatalogRef{Name: "analytics"},
+			Name:    "public",
+		},
+		Name: "widgets",
+	}
+	source, err := database.NewSourceRef(identity, relation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	target, err := database.NewTargetRef(identity, relation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	artifact, err := warehouse.NewArtifactRef(identity, "widgets")
+	if err != nil {
+		t.Fatal(err)
+	}
+	inboundRef, err := database.NewWarehouseInboundRef(source, artifact)
+	if err != nil {
+		t.Fatal(err)
+	}
+	outboundRef, err := database.NewWarehouseOutboundRef(artifact, target)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := inboundRef.Warehouse().Identity(); !got.SameIdentity(identity) {
+		t.Fatalf("MySQL inbound warehouse identity = %#v, want %#v", got, identity)
+	}
+	if got := outboundRef.Warehouse().Identity(); !got.SameIdentity(identity) {
+		t.Fatalf("MySQL outbound warehouse identity = %#v, want %#v", got, identity)
+	}
+
+	contract := synccontract.NativeCommandContract{
+		ContractVersion: synccontract.NativeCommandContractVersion,
+		Protocol:        "mysql-wire",
+		Command:         "managed-table-apply",
+		Executor:        synccontract.ExecutorReference{Kind: "native", ID: "mysql-managed-table-v1"},
+		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
+		Conformance:     synccontract.RequiredConformanceEvidence(),
+	}
+	inbound, err := database.NewDatabaseInboundCommand(inboundRef, contract)
+	if err != nil {
+		t.Fatal(err)
+	}
+	outbound, err := database.NewDatabaseOutboundCommand(outboundRef, contract)
+	if err != nil {
+		t.Fatal(err)
+	}
+	mysql := mysqlLayerTwo{
+		native: synccontract.NativeSyncExecutorDescriptor{
+			Protocol: contract.Protocol,
+			Command:  contract.Command,
+			Executor: contract.Executor,
+			Modes:    contract.Modes,
+		},
+		evidence: synccontract.RequiredConformanceEvidence(),
+	}
+	registry, err := database.NewDriverRegistry(mysql)
+	if err != nil {
+		t.Fatal(err)
+	}
+	definition := loadTestDefinition(t, definitionWithAdmittedMode(mysqlDefinitionJSON))
+	if _, err := registry.Admit(context.Background(), definition, inbound); err != nil {
+		t.Fatalf("MySQL inbound admission error = %v", err)
+	}
+	if _, err := registry.Admit(context.Background(), definition, outbound); err != nil {
+		t.Fatalf("MySQL outbound admission error = %v", err)
+	}
+}
+
+type mysqlLayerTwo struct {
+	native   synccontract.NativeSyncExecutorDescriptor
+	evidence synccontract.ConformanceEvidence
+}
+
+func (mysqlLayerTwo) DatabaseDriverDescriptor() database.DriverDescriptor {
+	return database.DriverDescriptor{ID: "mysql", Protocol: "mysql-wire", APIVersion: 1}
+}
+
+func (d mysqlLayerTwo) NativeSyncExecutorDescriptor() synccontract.NativeSyncExecutorDescriptor {
+	return d.native
+}
+
+func (d mysqlLayerTwo) NativeSyncConformanceEvidence() synccontract.ConformanceEvidence {
+	return d.evidence
+}
+
 func loadTestDefinition(t *testing.T, document string) database.Definition {
 	t.Helper()
 	definition, err := database.Load(context.Background(), fstest.MapFS{
@@ -434,6 +657,43 @@ func loadTestDefinition(t *testing.T, document string) database.Definition {
 		t.Fatalf("Load() error = %v", err)
 	}
 	return definition
+}
+
+func definitionWithAdmittedMode(document string) string {
+	return strings.Replace(document, `"admitted_modes": []`, `"admitted_modes": ["full_append"]`, 1)
+}
+
+func testInboundCommand(t *testing.T, contract synccontract.NativeCommandContract) database.DatabaseInboundCommand {
+	t.Helper()
+	identity := database.ConnectionIdentity{
+		WorkspaceID:  "workspace-1",
+		ConnectorID:  "postgres",
+		ConnectionID: "source-connection",
+	}
+	relation := database.RelationRef{
+		Schema: database.SchemaRef{
+			Catalog: database.CatalogRef{Name: "analytics"},
+			Name:    "public",
+		},
+		Name: "widgets",
+	}
+	source, err := database.NewSourceRef(identity, relation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	artifact, err := warehouse.NewArtifactRef(identity, "widgets")
+	if err != nil {
+		t.Fatal(err)
+	}
+	inbound, err := database.NewWarehouseInboundRef(source, artifact)
+	if err != nil {
+		t.Fatal(err)
+	}
+	command, err := database.NewDatabaseInboundCommand(inbound, contract)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return command
 }
 
 type declaredDriver struct {
@@ -459,6 +719,25 @@ func (d admittedDriver) NativeSyncConformanceEvidence() synccontract.Conformance
 func postgresDriverDescriptor() database.DriverDescriptor {
 	return database.DriverDescriptor{ID: "postgres", Protocol: "postgres-wire", APIVersion: 1}
 }
+
+const mysqlDefinitionJSON = `{
+  "schema_version": 1,
+  "driver": {"id": "mysql", "protocol": "mysql-wire", "api_version": 1},
+  "catalog": {"qualification_order": ["schema", "relation"]},
+  "identifiers": {"quote_style": "double_quote", "case_fold": "lower", "max_bytes": 63},
+  "resources": {
+    "read_page": {"default": 100, "maximum": 1000},
+    "write_batch": {"default": 25, "maximum": 250},
+    "pool": {"default": 2, "maximum": 8},
+    "connect_timeout_ms": 1000,
+    "operation_timeout_ms": 5000,
+    "max_parameters": 1000
+  },
+  "type_mappings": [
+    {"native": {"name": "int"}, "logical": {"kind": "signed_integer", "bits": 32}}
+  ],
+  "admitted_modes": []
+}`
 
 const validDefinitionJSON = `{
   "schema_version": 1,

@@ -3,6 +3,8 @@ package database
 import (
 	"context"
 	"errors"
+
+	"polymetrics.ai/internal/warehouse"
 )
 
 // SortDirection is the closed direction vocabulary for a typed stable read
@@ -29,10 +31,10 @@ func (o OrderTerm) validate(relation Relation) error {
 }
 
 // ReadPlanRequest is the typed input for an immutable stable read plan. It
-// contains catalog objects, ordering and limits only; it has no SQL or source
-// connection material.
+// contains catalog objects, ordering, limits, and one source-to-warehouse leg;
+// it has no SQL, target, credential, or raw connection material.
 type ReadPlanRequest struct {
-	Source   SourceRef
+	Inbound  WarehouseInboundRef
 	Catalog  Catalog
 	Relation RelationRef
 	Columns  []ColumnRef
@@ -43,7 +45,7 @@ type ReadPlanRequest struct {
 // ReadPlan is a non-executing, immutable description of a stable paged read.
 // A future driver may render it only through its own closed primitives.
 type ReadPlan struct {
-	source      SourceRef
+	inbound     WarehouseInboundRef
 	relation    RelationRef
 	fingerprint SchemaFingerprint
 	columns     []ColumnRef
@@ -60,13 +62,13 @@ func NewReadPlan(ctx context.Context, request ReadPlanRequest) (ReadPlan, error)
 	if err := ctx.Err(); err != nil {
 		return ReadPlan{}, err
 	}
-	if err := request.Source.validate(); err != nil {
-		return ReadPlan{}, errors.New("database read plan source is invalid")
+	if err := request.Inbound.validate(); err != nil {
+		return ReadPlan{}, errors.New("database read plan warehouse inbound leg is invalid")
 	}
 	if err := request.Catalog.validate(); err != nil {
 		return ReadPlan{}, errors.New("database read plan catalog is invalid")
 	}
-	if err := request.Relation.validate(); err != nil || !request.Source.Relation().equal(request.Relation) {
+	if err := request.Relation.validate(); err != nil || !request.Inbound.Source().Relation().equal(request.Relation) {
 		return ReadPlan{}, errors.New("database read plan relation is invalid")
 	}
 	if request.PageSize <= 0 || request.PageSize > hardMaximumReadPageSize {
@@ -86,7 +88,7 @@ func NewReadPlan(ctx context.Context, request ReadPlanRequest) (ReadPlan, error)
 		return ReadPlan{}, err
 	}
 	return ReadPlan{
-		source:      request.Source,
+		inbound:     request.Inbound,
 		relation:    request.Relation,
 		fingerprint: request.Catalog.Fingerprint(),
 		columns:     append([]ColumnRef(nil), request.Columns...),
@@ -164,8 +166,18 @@ func hasStableKeySuffix(order []OrderTerm, keys []Key) bool {
 	return false
 }
 
-// Source returns the typed source reference.
-func (p ReadPlan) Source() SourceRef { return p.source }
+// Inbound returns the source-to-warehouse leg this plan may serve. It has no
+// database target and therefore cannot encode a direct connector pair.
+func (p ReadPlan) Inbound() WarehouseInboundRef { return p.inbound }
+
+// Source returns the typed database source reference for compatibility with
+// readers that need source catalog identity. The warehouse remains mandatory
+// and is available through Warehouse().
+func (p ReadPlan) Source() SourceRef { return p.inbound.Source() }
+
+// Warehouse returns the connector-agnostic artifact into which layer one must
+// land the extracted records.
+func (p ReadPlan) Warehouse() warehouse.ArtifactRef { return p.inbound.Warehouse() }
 
 // Relation returns the structured relation reference.
 func (p ReadPlan) Relation() RelationRef { return p.relation }
