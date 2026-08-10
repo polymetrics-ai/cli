@@ -28,6 +28,7 @@ The local audit found mutable action refs in these workflow files:
 - `.github/workflows/website-data.yml`
 - `.github/workflows/website.yml`
 - `.github/workflows/claude-review.yml`
+- `.github/workflows/gsd-workflow.yml`
 - `.github/workflows/verify.yml`
 - `.github/workflows/release.yml`
 
