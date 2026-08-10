@@ -759,10 +759,6 @@ func matchingCapabilityEvidence(evidence []acceptedEvidence, connectorName, kind
 	return matched
 }
 
-func capabilityComplete(cells []certificationCell) bool {
-	return certificationComplete(cells)
-}
-
 func certificationComplete(cells []certificationCell) bool {
 	applicable := 0
 	for _, cell := range cells {
@@ -861,8 +857,8 @@ func validateAcceptedEvidence(evidence acceptedEvidence) error {
 	if err := validateFullParityCredential(evidence.CredentialScope, evidence.CredentialNote); err != nil {
 		return fmt.Errorf("credential: %w", err)
 	}
-	if strings.TrimSpace(evidence.Provider) == "" {
-		return errors.New("provider is required")
+	if err := validateEvidenceProvider(evidence.Provider); err != nil {
+		return fmt.Errorf("provider: %w", err)
 	}
 	if _, err := time.Parse(time.RFC3339, evidence.ExecutedAt); err != nil {
 		return fmt.Errorf("executed_at must be RFC3339: %w", err)
@@ -879,12 +875,18 @@ func validateAcceptedEvidence(evidence acceptedEvidence) error {
 		if strings.TrimSpace(evidence.Connector) == "" || strings.TrimSpace(evidence.FunctionKind) == "" {
 			return errors.New("capability evidence requires connector and function_kind")
 		}
+		if !isSafeProofIdentifier(evidence.Connector) || !isSafeProofIdentifier(evidence.FunctionKind) {
+			return errors.New("capability evidence connector and function_kind must be safe identifiers")
+		}
 		if evidence.Proof.Flow != nil {
 			return errors.New("capability evidence cannot carry a flow proof")
 		}
 	case evidenceScopeFlow:
 		if strings.TrimSpace(evidence.Source) == "" || strings.TrimSpace(evidence.Destination) == "" || strings.TrimSpace(evidence.FlowKind) == "" {
 			return errors.New("flow evidence requires source, destination, and flow_kind")
+		}
+		if !isSafeProofIdentifier(evidence.Source) || !isSafeProofIdentifier(evidence.Destination) || !isSafeProofIdentifier(evidence.FlowKind) {
+			return errors.New("flow evidence source, destination, and flow_kind must be safe identifiers")
 		}
 		if evidence.Proof.Flow == nil {
 			return errors.New("flow evidence requires an embedded round-trip proof")
@@ -893,12 +895,18 @@ func validateAcceptedEvidence(evidence acceptedEvidence) error {
 		if strings.TrimSpace(evidence.Connector) == "" || strings.TrimSpace(evidence.WorkflowKind) == "" {
 			return errors.New("workflow evidence requires connector and workflow_kind")
 		}
+		if !isSafeProofIdentifier(evidence.Connector) || !isSafeProofIdentifier(evidence.WorkflowKind) {
+			return errors.New("workflow evidence connector and workflow_kind must be safe identifiers")
+		}
 		if evidence.Proof.Flow != nil {
 			return errors.New("workflow evidence cannot carry a flow proof")
 		}
 	case evidenceScopeSyncMode:
 		if strings.TrimSpace(evidence.Connector) == "" || strings.TrimSpace(evidence.SyncMode) == "" || strings.TrimSpace(evidence.Primitive) == "" {
 			return errors.New("sync-mode evidence requires connector, sync_mode, and primitive")
+		}
+		if !isSafeProofIdentifier(evidence.Connector) || !isSafeProofIdentifier(evidence.SyncMode) || !isSafeProofIdentifier(evidence.Primitive) {
+			return errors.New("sync-mode evidence connector, sync_mode, and primitive must be safe identifiers")
 		}
 		if evidence.Proof.Flow != nil {
 			return errors.New("sync-mode evidence cannot carry a flow proof")
@@ -931,8 +939,11 @@ func loadAcceptedEvidence(repoRoot string) ([]acceptedEvidence, error) {
 
 	items := make([]acceptedEvidence, 0)
 	for _, entry := range entries {
-		if entry.IsDir() || strings.HasSuffix(entry.Name(), ".json") == false {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
 			continue
+		}
+		if !isSafeProofIdentifier(strings.TrimSuffix(entry.Name(), ".json")) {
+			return nil, fmt.Errorf("accepted evidence %q has an unsafe record name", entry.Name())
 		}
 		if entry.Type()&fs.ModeSymlink != 0 {
 			return nil, fmt.Errorf("accepted evidence %q must not be a symlink", entry.Name())

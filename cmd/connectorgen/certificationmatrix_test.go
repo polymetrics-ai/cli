@@ -147,6 +147,31 @@ func TestCertificationRejectsMalformedAcceptedLiveEvidence(t *testing.T) {
 	}
 }
 
+func TestCertificationRejectsUnsafeEvidenceIdentifiers(t *testing.T) {
+	err := validateAcceptedEvidence(acceptedEvidence{
+		SchemaVersion:   certificationSchemaVersion,
+		Scope:           evidenceScopeCapability,
+		Status:          evidenceStatusPassed,
+		CredentialScope: credentialScopeFullParity,
+		CredentialNote:  fullParityCredentialNote,
+		Connector:       "github",
+		FunctionKind:    "capability:read",
+		Provider:        "github credential",
+	})
+	if err == nil {
+		t.Fatal("validateAcceptedEvidence() error = nil, want unsafe provider rejection")
+	}
+	if !strings.Contains(err.Error(), "provider") {
+		t.Fatalf("validateAcceptedEvidence() error = %q, want provider context", err)
+	}
+
+	root := t.TempDir()
+	_, err = acceptedEvidenceOutputPath(root, filepath.Join(root, "internal", "connectors", "certifications", "evidence", "credential value.json"))
+	if err == nil {
+		t.Fatal("acceptedEvidenceOutputPath() error = nil, want unsafe record-name rejection")
+	}
+}
+
 func TestCertificationRejectsProoflessAcceptedLiveEvidence(t *testing.T) {
 	err := validateAcceptedEvidence(acceptedEvidence{
 		SchemaVersion:   1,

@@ -337,7 +337,8 @@ func acceptedEvidenceOutputPath(repoRoot, path string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("resolve proof evidence path: %w", err)
 	}
-	if filepath.Dir(output) != dir || filepath.Ext(output) != ".json" || filepath.Base(output) == ".json" {
+	recordName := strings.TrimSuffix(filepath.Base(output), ".json")
+	if filepath.Dir(output) != dir || filepath.Ext(output) != ".json" || !isSafeProofIdentifier(recordName) {
 		return "", fmt.Errorf("proof evidence must be a new JSON record directly under %q", filepath.ToSlash(dir))
 	}
 	return output, nil

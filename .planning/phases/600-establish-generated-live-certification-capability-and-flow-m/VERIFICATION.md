@@ -1,7 +1,7 @@
 # Phase 600 verification checklist
 
 **Issue:** #3984  
-**Status:** implementation complete; local gate pass in progress
+**Status:** verified locally; automated PR review pending
 
 ## Capability matrix
 
@@ -48,7 +48,19 @@
       -run '^TestCertification' -count=1`
 - [x] Generated transcript test: `go test -timeout 20m ./internal/cli -run
       '^TestGoldenTranscripts$' -count=1`
-- [ ] Changed-package tests and vet/build gates
-- [ ] `go run ./cmd/connectorgen certification-matrix --check`
-- [ ] Individual `make verify` sub-gates required by `AGENTS.md`
-- [ ] Inline `verify-work` and `code-review` records completed
+- [x] Changed-package tests, vet, formatting, and build gates
+- [x] Generator drift check is current
+- [x] Individual Make verify sub-gates required by AGENTS.md
+- [x] Inline verify-work and code-review records completed
+
+## Recorded commands
+
+- Focused and full connectorgen tests; full internal/cli, engine, and status
+  package tests.
+- Go vet for changed packages, gofmt diff for changed Go files, and builds of
+  cmd/connectorgen and cmd/pm.
+- tidy-check, lint, docs-check, smoke-no-build, agent-contract-check,
+  connectorgen-validate, connectorgen-surface-sync,
+  github-parity-artifacts-check, connectorgen-certification-matrix,
+  connector-boundary, and release-workflow-check.
+- scripts/verify-gsd-workflow as the final PR-lifecycle guard.
