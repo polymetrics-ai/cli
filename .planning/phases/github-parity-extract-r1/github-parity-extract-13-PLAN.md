@@ -38,19 +38,32 @@ read-back gates are green for each affected slice.
 ## Reconciled source facts at plan start
 
 The captain's historical REST proof ledger remains a valid preserved artifact but is not the
-current all-source denominator:
+plan-start all-source denominator:
 
 | artifact | mechanically derived fact |
 | --- | --- |
-| `OPERATION-PROOF-LEDGER.json` / `COMMAND-PROOF-LEDGER.json` | current binding: 1,225 endpoints; 1,571 commands; 1,521 implemented; 0 partial; 0 endpoint rows blocked |
-| `api_surface.json` | 1,221 pinned REST rows plus 4 GraphQL bindings; 1,225 covered rows and 0 blocked rows |
-| `cli_surface.json` | 1,571 current commands: 1,521 implemented, 0 partial, 0 planned, 0 unsafe/disallowed, 27 unsupported-api, 23 unsupported-local |
+| `OPERATION-PROOF-LEDGER.json` / `COMMAND-PROOF-LEDGER.json` | legacy REST binding: 1,224 endpoints; 1,179 commands; 1,081 implemented; 37 partial; 77 endpoint rows blocked |
+| `api_surface.json` | 1,220 pinned REST rows plus 4 legacy GraphQL bindings; 1,147 covered REST rows and 77 blocked rows |
+| `cli_surface.json` | 1,484 current commands: 1,381 implemented, 37 partial, 8 planned, 10 unsafe/disallowed, 27 unsupported-api, 21 unsupported-local |
 | `GITHUB-COMBINED-OPERATION-LEDGER.json` | 1,525 authoritative source operations: 1,220 REST + 31 GraphQL query + 274 GraphQL mutation; 1,345 classified implemented |
 
 The stated historical `143` is `1224 - 1081`; it is not a mutually exclusive current command
 partition (`45 + 37 + 8 = 90`).  This plan therefore makes every closure claim from generated,
 source-derived ledgers rather than preserving a contradictory hand count.  The first executable
 test locks this reconciliation and fails on any unresolved current classification.
+
+## Current-ref — merged GitHub surface
+
+**Measurement:** 2026-08-10 at ref `9cc25b5c47c01277d77e2b8dcfef08801e8ad0c7`, derived from
+the checked-in GitHub source bundles and generated ledgers.
+
+- 1,571 commands: 1,521 implemented, 23 unsupported-local, and 27 unsupported-api; zero
+  partial, planned, or `unsafe_or_disallowed` commands.
+- 1,225 / 1,225 endpoints covered with zero blocked; 37 streams, 607 write actions, and 768
+  operations.
+
+The plan-start table remains historical evidence preserved at base ref
+`4df0b0416e46958d9acb1b02708464570c070e0f` on 2026-08-10.
 
 ## Scope and safety boundary
 
