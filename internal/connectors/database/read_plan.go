@@ -92,14 +92,18 @@ func NewReadPlan(ctx context.Context, request ReadPlanRequest) (ReadPlan, error)
 	if err := ctx.Err(); err != nil {
 		return ReadPlan{}, err
 	}
-	return ReadPlan{
+	plan := ReadPlan{
 		inbound:     request.Inbound,
 		relation:    request.Relation,
 		fingerprint: request.Catalog.Fingerprint(),
 		columns:     append([]ColumnRef(nil), request.Columns...),
 		order:       append([]OrderTerm(nil), request.Order...),
 		pageSize:    pageSize,
-	}, nil
+	}
+	if err := ctx.Err(); err != nil {
+		return ReadPlan{}, err
+	}
+	return plan, nil
 }
 
 func validateReadColumns(columns []ColumnRef, relation Relation) error {
