@@ -22,6 +22,94 @@ does not invent a generic SQL/replication CLI surface. Until the committed-
 transaction stage exists, the catalogue/inspect projection remains fail-closed
 and is the public capability proof.
 
+## Captain execution-proof amendment — 2026-08-10
+
+### Recorded plan gap
+
+There is **no product path for a GitHub-to-PostgreSQL sync today**:
+`native/postgres.Connector.Write` returns `ErrUnsupportedOperation`, and the
+engine has no database-write executor. A single end-to-end GitHub → PostgreSQL
+test would therefore prove neither the GitHub reader nor PostgreSQL CDC. This
+is an explicit scope boundary, not a skipped test or a reason to invent a
+generic SQL write surface.
+
+### Required proof, deliberately split in two
+
+1. **GitHub read/rate-limit half.** Build and invoke the real `pm` binary
+   against read-only public `rails/rails` issues or pull requests, requesting a
+   high-volume stream. Record the observed request count and wall-clock rate,
+   whether the connector limiter imposed a wait, and whether GitHub returned
+   403 or 429. Do not configure, print, store, or depend on a token, and do not
+   perform a GitHub write.
+2. **PostgreSQL CDC half.** Start an isolated **PostgreSQL 14+** container using
+   Docker through Colima (never Podman for this proof), with `wal_level=logical`.
+   Load the first half's non-secret public record data directly through an
+   explicit local test loader/`psql` path because no product write executor
+   exists. The live conformance test must prove ordered inserts, updates, and
+   deletes; byte-exact non-ASCII text; a mid-stream restart/resume from the
+   durable source-bound checkpoint; and connector-owned slot teardown leaving
+   no pinned replication slot. It must run under `POLYMETRICS_INTEGRATION=1`;
+   no test may remain disabled merely because CDC was formerly planned.
+
+The staged executor remains subject to the earlier captain ruling: PostgreSQL
+14+ only, `proto_version=2` with streaming enabled, a bounded
+crash-recoverable private source-transaction stage, `StreamAbort` discard, and
+source progress only after the downstream port durably accepts the **whole**
+transaction at `StreamCommit`. A hard quota raises
+`TransactionStageLimitExceeded` without acknowledgement. Slot-health
+observability and an explicit connector-owned teardown/rebootstrap procedure
+ship with the admission change. No cursor or timestamp reconciliation may
+substitute for change capture. `capabilities.cdc` remains false until every
+live proof in this amendment and the staged-transaction contract passes.
+
+### TDD and delivery checkpoints for this amendment
+
+1. **Red — executable admission:** add a regression showing the planned reader
+   cannot be promoted until it requires PostgreSQL 14+, protocol v2 streaming,
+   a bounded stage, and a durable whole-transaction receipt.
+2. **Red — real system proof:** make the PostgreSQL integration suite fail when
+   `POLYMETRICS_INTEGRATION=1` if its Docker/Colima server cannot start, if the
+   disabled historical conformance test is not enabled, or if a post-teardown
+   slot remains. Add an explicit public-read runner that reports only aggregate
+   request/rate/status statistics.
+3. **Green — implementation and proof:** implement the smallest native
+   PostgreSQL-only staged executor and teardown/rebootstrap procedure that
+   satisfies those red tests, run both halves against real services, and record
+   exact aggregate measurements in `VERIFICATION.md` and the PR body.
+4. **Promotion checkpoint:** regenerate every derivable connector artifact;
+   flip `changefeed.json` and `capabilities.cdc` only after the green live
+   proof, then rerun capability, help/manual/website parity, and conformance
+   checks. If any proof is unavailable or fails, leave the capability false and
+   report the named blocker.
+
+### Execution-blocking foundation gaps confirmed — 2026-08-10
+
+The first proof half is independently executable and has been run. The second
+half is **not safely implementable inside this connector lane yet**, for two
+concrete reasons:
+
+1. `connectors.CDCReadRequest` exposes only a per-record
+   `emit func(CDCEvent) error` callback and an envelope-only
+   `DurableChangefeedCheckpointCommitter`. It has no
+   committed-transaction/receipt port that can atomically accept one sealed
+   source transaction at `StreamCommit`. Adding the required
+   `CommittedLogicalTransactionSink` (or equivalent) changes shared
+   `internal/connectors` runtime contract, which the issue-first connector
+   contract requires be split into a foundation issue/PR rather than absorbed
+   here.
+2. The merged `native/dbtest` harness is explicitly Podman-only: its `Config`
+   takes a direct local Podman endpoint and its runner invokes Podman. It has
+   no Docker/Colima target or safety/cleanup implementation. The captain's
+   required Docker-via-Colima proof therefore needs a separate shared harness
+   foundation; a hand-rolled Docker command path would bypass the harness's
+   resource-ownership and cleanup contract.
+
+With `POLYMETRICS_INTEGRATION=1`, the retained historical conformance test
+still exits at its unconditional planned-CDC skip before it can contact a
+server. The focused fail-closed regression passes. These are evidence of
+containment, not CDC conformance. Do not remove the skip, start a v1 reader,
+or flip the capability merely to make a live-test command appear green.
+
 ## GSD and skills
 
 `scripts/gsd doctor`, all required `scripts/gsd sources` resolutions,

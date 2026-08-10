@@ -2,6 +2,51 @@
 
 ## Current containment evidence
 
+## Captain execution proof
+
+- [x] The plan explicitly records that a GitHub → PostgreSQL product sync is
+  impossible today because PostgreSQL `Write` is unsupported and no database
+  write executor exists; rate-limit and CDC evidence are separate halves.
+- [x] Real `pm` public `rails/rails` high-volume read: the freshly built
+  Darwin/arm64 binary ran `etl read` for **2,000 pull-request records** in
+  **28 seconds** with explicit `auth_type=public` and no secret field. The
+  stream's declared `per_page=100` means the 2,000 returned records occupied
+  **20 full pages**, an implied page pace of **0.71 requests/s** and record
+  pace of **71.43 records/s**. GitHub returned neither 403 nor 429 (exit 0;
+  no such status in the binary diagnostic channel). The GitHub bundle has
+  neither a legacy `rate_limit` nor a declared `rate_limits.json`, so no
+  connector limiter throttled this run. The public response payload is not
+  included in this artifact or a commit.
+- [ ] Docker-via-Colima PostgreSQL 14+ with `wal_level=logical`: integration
+  test runs with `POLYMETRICS_INTEGRATION=1` and proves ordered insert/update/
+  delete, byte-exact non-ASCII, restart/resume, source-bound durable checkpoint,
+  and post-teardown absence of the derived replication slot.
+- [ ] PostgreSQL CDC promotion only after the bounded protocol-v2 streamed
+  transaction-stage contract, named quota failure, slot-health observability,
+  and explicit teardown/rebootstrap procedure pass live conformance.
+
+### Current blocking evidence
+
+- [x] Docker is available through the `colima` context, but no PostgreSQL
+  container was started: the required merged `dbtest` harness only accepts a
+  direct local Podman endpoint and contains no Docker/Colima backend. A
+  hand-authored Docker runner would violate its deterministic ownership and
+  cleanup contract.
+- [x] `POLYMETRICS_INTEGRATION=1 go test -count=1 -run
+  '^TestHistoricalLogicalReplicationResumesAndCleansSlot$' -v
+  ./internal/connectors/native/postgres` executed the named test and it
+  **SKIPPED** at its unconditional planned-CDC guard before configuration or
+  source access. This is not a live conformance pass.
+- [x] `go test -count=1 -run
+  '^TestCDCIsFailClosedUntilStreamedTransactionStagingExists$' -v
+  ./internal/connectors/native/postgres` passes, proving the current reader
+  remains non-executable before a source connection, slot creation, or LSN
+  acknowledgement.
+- [x] The shared `CDCReadRequest` only supplies per-record `emit` and an
+  envelope-only checkpoint committer; it cannot establish the captain's
+  whole-transaction durable downstream receipt. The required receipt port is
+  a shared-runtime foundation change, not a native PostgreSQL-only diff.
+
 - [x] Focused native PostgreSQL tests prove `ReadCDC` fails closed before a connection, non-ASCII values round-trip byte-exact, invalid UTF-8 is rejected, and replica-identity mode guards are named.
 - [x] Focused CLI capability-projection tests prove `cdc=false`, PostgreSQL is absent from the CDC catalogue, and inspect reports `planned` with a reason.
 - [x] Full `go test -count=1 -timeout 20m ./internal/cli` passes after containment (**662.780s**); scoped PostgreSQL tests, vet/build, connector validation/surface sync, connector docs validation, and `agentcontractgen check` also pass.

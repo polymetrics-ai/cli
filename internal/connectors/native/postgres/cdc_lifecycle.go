@@ -54,6 +54,9 @@ type postgresReplicationSlot struct {
 }
 
 func replicationConnection(ctx context.Context, conn connConfig) (*pgconn.PgConn, error) {
+	if err := preflightReplicationServer(ctx, conn); err != nil {
+		return nil, err
+	}
 	config, err := conn.replicationConfig()
 	if err != nil {
 		return nil, fmt.Errorf("postgres CDC: configure replication connection: %w", err)
@@ -64,6 +67,44 @@ func replicationConnection(ctx context.Context, conn connConfig) (*pgconn.PgConn
 		return nil, errors.New("postgres CDC: connect replication source failed")
 	}
 	return replication, nil
+}
+
+var (
+	errCDCWALLevel         = errors.New("postgres CDC requires wal_level=logical; self-managed PostgreSQL needs a restart after changing it, RDS/Aurora need rds.logical_replication=1 in a parameter group and reboot, and Cloud SQL needs cloudsql.logical_decoding enabled (Azure uses its logical-decoding equivalent)")
+	errCDCReplicationSlots = errors.New("postgres CDC requires max_replication_slots > 0; increase it in the server parameter group and restart PostgreSQL")
+	errCDCWALSenders       = errors.New("postgres CDC requires max_wal_senders > 0; increase it in the server parameter group and restart PostgreSQL")
+	errCDCReplicationRole  = errors.New("postgres CDC requires the connecting role to have REPLICATION; grant the role REPLICATION or use a dedicated replication role")
+)
+
+func preflightReplicationServer(ctx context.Context, conn connConfig) error {
+	cfg, err := conn.dataConfig()
+	if err != nil {
+		return fmt.Errorf("postgres CDC server preflight: %w", err)
+	}
+	db, err := pgx.ConnectConfig(ctx, cfg)
+	if err != nil {
+		return errors.New("postgres CDC server preflight: connect failed")
+	}
+	defer db.Close(context.Background())
+	var walLevel string
+	var slots, senders int
+	var replication bool
+	if err := db.QueryRow(ctx, "SELECT current_setting('wal_level'), current_setting('max_replication_slots')::int, current_setting('max_wal_senders')::int, (SELECT rolreplication FROM pg_roles WHERE rolname = current_user)").Scan(&walLevel, &slots, &senders, &replication); err != nil {
+		return errors.New("postgres CDC server preflight: unable to inspect wal_level, replication slots, WAL senders, and role attributes")
+	}
+	if !strings.EqualFold(walLevel, "logical") {
+		return fmt.Errorf("%w (server reports %q)", errCDCWALLevel, walLevel)
+	}
+	if slots <= 0 {
+		return fmt.Errorf("%w (server reports %d)", errCDCReplicationSlots, slots)
+	}
+	if senders <= 0 {
+		return fmt.Errorf("%w (server reports %d)", errCDCWALSenders, senders)
+	}
+	if !replication {
+		return errCDCReplicationRole
+	}
+	return nil
 }
 
 func configureCDCReplicationConfig(config *pgconn.Config) {
