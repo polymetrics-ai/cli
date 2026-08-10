@@ -5,7 +5,7 @@ behaviors, so no human judgment is required.
 
 | Deliverable | Automated evidence | Result |
 | --- | --- | --- |
-| Refusal and replay safety | `scripts/tests/post-commit-autopush.sh` runs a real two-commit rebase plus default/detached/opt-out cases. | Pass |
-| Rate and worktree safety | The same harness proves a shared linked-worktree state path, ten-minute skip, expiry catch-up, and a receive-delayed detached push. | Pass |
+| Refusal and replay safety | `scripts/tests/post-commit-autopush.sh` runs a real two-commit rebase, manual merge/cherry-pick/revert completion, stale-default, detached, and opt-out cases. | Pass |
+| Rate and worktree safety | The same harness proves a shared linked-worktree state path, concurrent leasing, ten-minute skip, expiry catch-up, and a receive-delayed detached push. | Pass |
 | Non-force rejection | The harness creates a real diverged feature branch; the remote rejects the local update, remains unchanged, and the commit exits zero with one local log line. | Pass |
 | Operator controls | `docs/GUIDE.md` documents manual hook-path opt-in and `PM_NO_AUTOPUSH=1`. | Pass |

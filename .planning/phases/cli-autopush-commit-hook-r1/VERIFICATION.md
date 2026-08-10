@@ -2,10 +2,10 @@
 
 ## Required behavioral checks
 
-- [x] Real two-commit rebase invokes the hook for replayed commits and records no push.
-- [x] `main` and detached HEAD record no push.
+- [x] Real two-commit rebase and manual merge/cherry-pick/revert completions invoke the hook and record no push.
+- [x] `main`, a detached HEAD, and a stale locally tracked remote default record no push.
 - [x] A feature branch pushes once, skips a second commit inside 600 seconds, and catches up after expiry.
-- [x] A linked worktree resolves the same per-branch timestamp path.
+- [x] Concurrent forced linked worktrees resolve the same per-branch timestamp path and schedule one receiver call.
 - [x] A real non-fast-forward push is rejected without a force option, is logged once, and leaves the commit successful.
 - [x] A deliberately delayed push does not delay the commit.
 - [x] `PM_NO_AUTOPUSH=1` skips the hook.

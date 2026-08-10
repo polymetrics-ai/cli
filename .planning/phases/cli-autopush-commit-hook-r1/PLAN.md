@@ -40,24 +40,28 @@ commits, default/detached heads, or any non-fast-forward update.
 ## Design
 
 1. Exit successfully when `PM_NO_AUTOPUSH` is set, when HEAD is detached, or when
-   the branch is `main`/the locally known remote default branch.
-2. Before selecting a remote, resolve each Git operation marker with `git
-   rev-parse --git-path`: `rebase-merge`, `rebase-apply`, `MERGE_HEAD`,
-   `CHERRY_PICK_HEAD`, `REVERT_HEAD`, and `BISECT_LOG`. Any present file or
-   directory is an immediate successful refusal.
+   the branch is `main`/a locally known remote default branch. The detached child
+   resolves the remote's live symbolic `HEAD` and refuses an unknown or matching
+   default before it can push.
+2. `prepare-commit-msg` resolves each Git operation marker with `git rev-parse
+   --git-path` before Git clears it, records the current parent in worktree-local
+   Git state, and clears stale records on ordinary commits. `post-commit` consumes
+   a matching record before also checking active `rebase-merge`, `rebase-apply`,
+   `MERGE_HEAD`, `CHERRY_PICK_HEAD`, `REVERT_HEAD`, and `BISECT_LOG` paths.
 3. Select the branch remote, then `remote.pushDefault`, then an existing `origin`.
    Resolve Git's common directory, then resolve rate-limit state below
-   `pm-autopush/` with `GIT_DIR=<common-dir> git rev-parse --git-path`. This
-   avoids letting a configured `core.hooksPath` turn state into a worktree file;
-   a branch timestamp younger than 600 seconds (or from the future) skips the
-   attempt.
+   `pm-autopush/` with `GIT_DIR=<common-dir> git rev-parse --git-path`. An atomic
+   sibling lock protects the timestamp decision and replacement across linked
+   worktrees; a branch timestamp younger than 600 seconds (or from the future)
+   skips the attempt.
 4. Persist the attempt timestamp before scheduling the child. Launch `git push --
    <remote> refs/heads/<branch>:refs/heads/<branch>` with `nohup`, standard input,
    output, and error detached from the commit terminal. The refspec has no `+` and
-   no force option. A child failure adds one short line to the per-branch local log;
-   the parent hook exits zero in every path.
-5. The harness uses temporary bare remotes and a temporary post-commit invocation
-   wrapper to prove skips, a real two-commit rebase, expiry behavior, commit
+   no force option. A child failure or default-resolution refusal adds one short
+   line to the per-branch local log; the parent hook exits zero in every path.
+5. The harness uses temporary bare remotes and hook wrappers to prove stale remote
+   default refusal, concurrent linked-worktree leasing, real manual merge/cherry-
+   pick/revert completions, a real two-commit rebase, expiry behavior, commit
    non-blocking behavior, and a genuine non-fast-forward rejection without force.
 
 ## TDD task sequence

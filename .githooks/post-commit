@@ -6,6 +6,15 @@ if [ -n "${PM_NO_AUTOPUSH:-}" ]; then
   exit 0
 fi
 
+worktree_git_dir="$(git rev-parse --path-format=absolute --git-dir 2>/dev/null)" || exit 0
+operation_file="$worktree_git_dir/pm-autopush-operation"
+if [ -f "$operation_file" ]; then
+  operation_parent="$(sed -n '1p' "$operation_file" 2>/dev/null || :)"
+  commit_parent="$(git rev-parse --verify HEAD^1 2>/dev/null || :)"
+  rm -f "$operation_file" 2>/dev/null || :
+  [ "$operation_parent" = "$commit_parent" ] && exit 0
+fi
+
 # Rebase (and git am) can replay a long series of commits. Check Git's own
 # state paths rather than assuming that .git is a directory in this worktree.
 for operation_path in \
@@ -38,8 +47,8 @@ if [ -z "$remote" ]; then
   fi
 fi
 
-# `main` is the hard repository default. Honor an already-known alternate
-# remote default too, without issuing a network request from the hook.
+# `main` is the hard repository default. Skip an already-known alternate
+# default before taking the rate-limit lease.
 remote_head="$(git symbolic-ref --quiet --short "refs/remotes/$remote/HEAD" 2>/dev/null || :)"
 case "$remote_head" in
   "$remote"/*)
@@ -63,6 +72,19 @@ case "$now" in
   ""|*[!0-9]*) exit 0 ;;
 esac
 
+lease_dir="$state_file.lock"
+if ! mkdir "$lease_dir" 2>/dev/null; then
+  exit 0
+fi
+state_temp=""
+trap '
+  if [ -n "$state_temp" ]; then
+    rm -f "$state_temp" 2>/dev/null || :
+  fi
+  rmdir "$lease_dir" 2>/dev/null || :
+' 0
+trap 'exit 0' 1 2 15
+
 last_push="$(sed -n '1p' "$state_file" 2>/dev/null || :)"
 case "$last_push" in
   ""|*[!0-9]*) ;;
@@ -75,13 +97,32 @@ esac
 
 # Record the attempt before forking so a burst of commits cannot enqueue one
 # push per commit. A rejected attempt is still rate-limited deliberately.
-printf '%s\n' "$now" > "$state_file" 2>/dev/null || exit 0
+state_temp="$state_file.$$.tmp"
+printf '%s\n' "$now" > "$state_temp" 2>/dev/null || exit 0
+mv -f "$state_temp" "$state_file" 2>/dev/null || exit 0
+state_temp=""
+if ! rmdir "$lease_dir" 2>/dev/null; then
+  exit 0
+fi
+trap - 0 1 2 15
 
 # Never wait for, force, or otherwise make the commit depend on this push.
 # The child records one short local line on any rejected/failed push and the
 # hook returns successfully even if nohup itself cannot be started.
 # shellcheck disable=SC2016 # The child receives its remote, branch, and log path as positional arguments.
 nohup sh -c '
+  remote_default_branch="$(
+    git ls-remote --symref -- "$1" HEAD 2>/dev/null |
+      awk "\$1 == \"ref:\" && index(\$2, \"refs/heads/\") == 1 && \$3 == \"HEAD\" { sub(\"^refs/heads/\", \"\", \$2); print \$2; exit }"
+  )"
+  if [ -z "$remote_default_branch" ]; then
+    printf "%s\n" "pm autopush: remote default unavailable for $2 (ignored)" >> "$3"
+    exit 0
+  fi
+  if [ "$remote_default_branch" = "$2" ]; then
+    printf "%s\n" "pm autopush: default branch skipped for $2 (ignored)" >> "$3"
+    exit 0
+  fi
   if git push -- "$1" "refs/heads/$2:refs/heads/$2" >/dev/null 2>&1; then
     exit 0
   fi

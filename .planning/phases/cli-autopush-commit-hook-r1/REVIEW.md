@@ -14,14 +14,19 @@ shellcheck passed.
 - `docs/GUIDE.md`
 - the companion GSD evidence
 
-## Findings
+## Follow-up findings
 
-No actionable findings.
+- R1 was legitimate: Git can remove a manual merge, cherry-pick, or revert
+  marker before `post-commit`. A tracked `prepare-commit-msg` companion now
+  records a Git-resolved operation snapshot in the worktree Git directory, and
+  `post-commit` consumes it only when its parent matches the just-created
+  commit.
+- R2 was legitimate: a local remote `HEAD` symref can be absent or stale. The
+  detached child resolves the remote's live symbolic `HEAD`, logs an unavailable
+  or matching default branch, and returns without push.
+- R3 was legitimate: the old read/check/write sequence was not a lease. A
+  common-Git-dir sibling directory now atomically protects the rate decision and
+  timestamp replacement.
 
-The review specifically checked that every operation marker is resolved with
-Git rather than a presumed `.git/` directory; state is derived from the common
-Git directory even when `core.hooksPath` is configured; branch/default/detached
-refusals precede remote work; the only push uses an ordinary refspec; timestamp
-write precedes detached scheduling; and a child failure cannot propagate into
-the commit. The executable diverged-branch case is the behavioral evidence that
-no force-capable path exists.
+The focused executable harness covers each follow-up alongside the original
+non-force rejection and detached-push behavior.

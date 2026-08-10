@@ -1,0 +1,39 @@
+#!/usr/bin/env sh
+
+worktree_git_dir="$(git rev-parse --path-format=absolute --git-dir 2>/dev/null)" || exit 0
+operation_file="$worktree_git_dir/pm-autopush-operation"
+operation_dir="$(dirname "$operation_file")" || exit 0
+operation_active=0
+
+for operation_path in \
+  rebase-merge \
+  rebase-apply \
+  MERGE_HEAD \
+  CHERRY_PICK_HEAD \
+  REVERT_HEAD \
+  BISECT_LOG; do
+  resolved_operation_path="$(git rev-parse --git-path "$operation_path" 2>/dev/null)" || exit 0
+  if [ -f "$resolved_operation_path" ] || [ -d "$resolved_operation_path" ]; then
+    operation_active=1
+    break
+  fi
+done
+
+if [ "$operation_active" -eq 0 ]; then
+  rm -f "$operation_file" 2>/dev/null || :
+  exit 0
+fi
+
+parent="$(git rev-parse --verify HEAD 2>/dev/null)" || exit 0
+umask 077
+mkdir -p "$operation_dir" 2>/dev/null || exit 0
+operation_temp="$operation_file.$$.tmp"
+if ! printf '%s\n' "$parent" > "$operation_temp" 2>/dev/null; then
+  rm -f "$operation_temp" 2>/dev/null || :
+  exit 0
+fi
+if ! mv -f "$operation_temp" "$operation_file" 2>/dev/null; then
+  rm -f "$operation_temp" 2>/dev/null || :
+fi
+
+exit 0

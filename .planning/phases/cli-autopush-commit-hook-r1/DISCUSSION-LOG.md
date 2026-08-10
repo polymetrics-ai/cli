@@ -17,11 +17,12 @@ record; no role or isolated-agent spawning is used.
 | Area | Decision | Source |
 | --- | --- | --- |
 | Enablement | Add a tracked hook only; do not set `core.hooksPath` or add an installer. | Task brief |
-| Safety boundary | Skip all in-progress Git operations, detached HEAD, `main`, and a locally known remote default branch; never force-push. | Task brief |
-| Rate limit | Store a per-branch timestamp under the shared Git hooks directory resolved with `git rev-parse --git-path`; one attempt per 600 seconds. | Task brief |
+| Safety boundary | Skip all in-progress Git operations, detached HEAD, `main`, and a locally known remote default branch; the detached child resolves the live remote default before push; never force-push. | Task brief + review follow-up |
+| Operation cleanup | Snapshot Git-resolved operation state in `prepare-commit-msg` and consume it from `post-commit` by matching the commit parent. | Review follow-up |
+| Rate limit | Store a per-branch timestamp under the shared Git hooks directory resolved with `git rev-parse --git-path`; an atomic lease makes one attempt per 600 seconds across linked worktrees. | Task brief + review follow-up |
 | Commit latency | Write the timestamp locally, then launch the push with standard input/output detached. The hook itself always exits zero. | Task brief |
 | Failure behavior | A rejected or failed asynchronous push is swallowed and recorded as one short local log line. | Task brief |
-| Testing | Use a POSIX-shell harness with temporary local bare remotes. It must run a real two-commit rebase and a real non-fast-forward rejection. | Task brief |
+| Testing | Use a POSIX-shell harness with temporary local bare remotes. It must run a real two-commit rebase, manually completed operation states, a stale remote default, a concurrent linked worktree lease, and a real non-fast-forward rejection. | Task brief + review follow-up |
 | Documentation | Explain opt-in setup and `PM_NO_AUTOPUSH=1` next to the existing hook instructions. | Task brief |
 
 No product ambiguity remains, no credentials are used, and the tests use only local Git repositories.

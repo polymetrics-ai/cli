@@ -413,9 +413,11 @@ pre-commit hook, which runs formatting, focused tests, a build, and docs validat
 deliberately, especially in shared worker worktrees.
 
 The tracked post-commit hook then attempts one ordinary (never force) feature-branch push at most
-once every ten minutes. It skips `main`, detached HEADs, and Git operations such as rebases, and
-runs the push detached so a network failure cannot hold up or fail the commit. To turn off only
-that automatic push for one commit or a shell session, set `PM_NO_AUTOPUSH=1`:
+once every ten minutes. It skips `main`, detached HEADs, remote default branches, and Git
+operations such as rebases, merges, cherry-picks, reverts, bisections, and `git am`; a detached
+child verifies the remote's current default branch before pushing. The push cannot hold up or fail
+the commit. To turn off only that automatic push for one commit or a shell session, set
+`PM_NO_AUTOPUSH=1`:
 
 ```bash
 PM_NO_AUTOPUSH=1 git commit -m "work locally"
