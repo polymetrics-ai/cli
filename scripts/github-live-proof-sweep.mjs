@@ -671,7 +671,9 @@ async function validateCredentialScope(binary, root, credential, owner, repo, cw
   if (envelope?.kind !== "Credential" || metadata?.connector !== CONNECTOR) {
     throw new Error("named credential is not a GitHub credential");
   }
-  if (metadata?.config?.owner !== owner || metadata?.config?.repo !== repo) {
+  const configuredOwner = String(metadata?.config?.owner || "").trim().toLowerCase();
+  const configuredRepo = String(metadata?.config?.repo || "").trim().toLowerCase();
+  if (configuredOwner !== owner.toLowerCase() || configuredRepo !== repo.toLowerCase()) {
     throw new Error("named credential is not scoped to the dedicated private test repository");
   }
 }

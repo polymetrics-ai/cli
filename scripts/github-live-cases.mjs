@@ -248,29 +248,27 @@ export function buildCases(surface, boundary) {
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
-  if (!options.boundary || !options.baseline || !options.out) {
-    throw new Error("usage: github-live-cases.mjs --boundary <path> --baseline <frozen-cases-path> --out <path>");
+  if (!options.boundary || !options.out) {
+    throw new Error("usage: github-live-cases.mjs --boundary <path> --out <path> [--baseline <frozen-cases-path>]");
   }
   const [surface, boundaryFile, baselineFile] = await Promise.all([
     readFile(SURFACE_PATH, "utf8"),
     readFile(path.resolve(options.boundary), "utf8"),
-    readFile(path.resolve(options.baseline), "utf8"),
+    options.baseline ? readFile(path.resolve(options.baseline), "utf8") : Promise.resolve(null),
   ]);
   const output = path.resolve(options.out);
   const boundary = resolveLiveBoundary(JSON.parse(boundaryFile));
   const result = buildCases(JSON.parse(surface), boundary);
-  const baseline = JSON.parse(baselineFile);
-  result.measurement = summarizeCaseMovement({
-    baselineCases: baseline.cases,
-    currentCases: result.cases,
-  });
+  if (baselineFile !== null) {
+    const baseline = JSON.parse(baselineFile);
+    result.measurement = summarizeCaseMovement({
+      baselineCases: baseline.cases,
+      currentCases: result.cases,
+    });
+  }
+  result.classification = tallyCases(result.cases);
   await writeFile(output, `${JSON.stringify(result, null, 2)}\n`, { mode: 0o600 });
-  const tally = result.cases.reduce((counts, item) => {
-    const key = item.untestable_reason ? "untestable" : "executable";
-    counts[key] += 1;
-    return counts;
-  }, { executable: 0, untestable: 0 });
-  process.stdout.write(`github live cases: executable=${tally.executable} untestable=${tally.untestable} output=${output}\n`);
+  process.stdout.write(`github live cases: executable=${result.classification.attemptable} untestable=${result.classification.blocked} output=${output}\n`);
 }
 
 if (path.resolve(process.argv[1] || "") === fileURLToPath(import.meta.url)) {
