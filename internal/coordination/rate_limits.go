@@ -80,10 +80,9 @@ type rateBudgetSet struct {
 }
 
 type rateBudgetLease struct {
-	expiresAt   time.Time
-	retainUntil time.Time
-	active      bool
-	sets        []*rateLimitSet
+	expiresAt time.Time
+	active    bool
+	sets      []*rateLimitSet
 }
 
 // RateBudgetCoordinatorOptions bounds only the optional batch-decision seam.
@@ -339,19 +338,17 @@ func (r *RateLimitRegistry) Decide(ctx context.Context, batch connsdk.Reservatio
 	}
 	expiresAt := now.Add(r.leaseTTL)
 	r.leases[lease] = rateBudgetLease{
-		expiresAt:   expiresAt,
-		retainUntil: expiresAt.Add(r.leaseTTL),
-		active:      true,
-		sets:        sets,
+		expiresAt: expiresAt,
+		active:    true,
+		sets:      sets,
 	}
 	return connsdk.AdmissionDecision{Granted: true, Lease: lease}, nil
 }
 
 // Finish releases the in-flight lease exactly once and applies only the
-// already-parsed stricter response facts. Expired leases remain briefly
-// finishable for a late response while no longer occupying concurrency; a
-// missing or fully retired lease is an idempotent no-op and its uncertain
-// consumptive reservation remains charged.
+// already-parsed stricter response facts. Expired leases remain finishable for
+// a late response while no longer occupying concurrency; a missing lease is an
+// idempotent no-op and its uncertain consumptive reservation remains charged.
 func (r *RateLimitRegistry) Finish(_ context.Context, lease connsdk.RateBudgetLease, observation connsdk.CompletionObservation) error {
 	if r == nil || r.clock == nil {
 		return errors.New("rate-budget coordinator is unavailable")
@@ -392,9 +389,6 @@ func (r *RateLimitRegistry) expireLeasesLocked(now time.Time) {
 		if record.active && !record.expiresAt.After(now) {
 			record.active = false
 			r.leases[lease] = record
-		}
-		if !record.active && !record.retainUntil.After(now) {
-			delete(r.leases, lease)
 		}
 	}
 }

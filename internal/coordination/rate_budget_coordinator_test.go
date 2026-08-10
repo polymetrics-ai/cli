@@ -126,7 +126,7 @@ func TestRateBudgetLeaseTTLFreesConcurrencyWithoutDroppingLateObservation(t *tes
 	if err != nil || !first.Granted {
 		t.Fatalf("first decision = %+v, %v", first, err)
 	}
-	clock.now = clock.now.Add(time.Second)
+	clock.now = clock.now.Add(3 * time.Second)
 	second, err := coordinator.Decide(context.Background(), batch)
 	if err != nil || !second.Granted {
 		t.Fatalf("decision after lease TTL = %+v, %v; want freed concurrency", second, err)

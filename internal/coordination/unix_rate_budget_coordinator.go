@@ -336,6 +336,13 @@ func (c *UnixRateBudgetCoordinatorClient) exchange(ctx context.Context, request 
 	if err := conn.SetDeadline(deadline); err != nil {
 		return unixRateBudgetResponse{}, &SharedCoordinatorError{reason: sharedCoordinatorUnavailable}
 	}
+	stop := context.AfterFunc(ctx, func() {
+		_ = conn.SetDeadline(time.Now())
+	})
+	defer stop()
+	if err := ctx.Err(); err != nil {
+		return unixRateBudgetResponse{}, err
+	}
 	if err := writeUnixRateBudgetRequest(conn, request); err != nil {
 		if ctx.Err() != nil {
 			return unixRateBudgetResponse{}, ctx.Err()
@@ -348,6 +355,9 @@ func (c *UnixRateBudgetCoordinatorClient) exchange(ctx context.Context, request 
 			return unixRateBudgetResponse{}, ctx.Err()
 		}
 		return unixRateBudgetResponse{}, &SharedCoordinatorError{reason: sharedCoordinatorUnavailable}
+	}
+	if err := ctx.Err(); err != nil {
+		return unixRateBudgetResponse{}, err
 	}
 	if response.Version != unixRateBudgetProtocolVersion || response.Kind != request.Kind {
 		return unixRateBudgetResponse{}, &SharedCoordinatorError{reason: sharedCoordinatorUnavailable}

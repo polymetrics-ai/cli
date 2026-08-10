@@ -2,10 +2,13 @@ package coordination
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
+	"net"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -19,6 +22,133 @@ const (
 	rateBudgetHelperPathEnv  = "PM_RATE_BUDGET_HELPER_SOCKET"
 	rateBudgetHelperEpochEnv = "PM_RATE_BUDGET_HELPER_EPOCH"
 )
+
+func newUnixRateBudgetTestListener(t *testing.T) (*net.UnixListener, string) {
+	t.Helper()
+	runDir, err := os.MkdirTemp("/tmp", "pmrb-test-")
+	if err != nil {
+		t.Fatalf("create rate-budget test directory: %v", err)
+	}
+	socketPath := filepath.Join(runDir, "s")
+	listener, err := net.ListenUnix("unix", &net.UnixAddr{Name: socketPath, Net: "unix"})
+	if err != nil {
+		_ = os.Remove(runDir)
+		t.Fatalf("listen for rate-budget test: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = listener.Close()
+		_ = os.Remove(socketPath)
+		_ = os.Remove(runDir)
+	})
+	return listener, socketPath
+}
+
+func TestUnixRateBudgetCoordinatorClientCancellationInterruptsStalledExchange(t *testing.T) {
+	listener, socketPath := newUnixRateBudgetTestListener(t)
+	accepted := make(chan struct{})
+	release := make(chan struct{}, 1)
+	serverDone := make(chan struct{})
+	go func() {
+		defer close(serverDone)
+		conn, err := listener.AcceptUnix()
+		if err != nil {
+			return
+		}
+		defer func() { _ = conn.Close() }()
+		close(accepted)
+		<-release
+	}()
+	t.Cleanup(func() {
+		_ = listener.Close()
+		select {
+		case release <- struct{}{}:
+		default:
+		}
+		select {
+		case <-serverDone:
+		case <-time.After(time.Second):
+			t.Error("stalled rate-budget test server did not stop")
+		}
+	})
+
+	client := &UnixRateBudgetCoordinatorClient{socketPath: socketPath, epoch: "test-epoch"}
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	result := make(chan error, 1)
+	go func() { result <- client.Ready(ctx) }()
+	select {
+	case <-accepted:
+	case <-time.After(time.Second):
+		t.Fatal("rate-budget test server did not accept the client")
+	}
+	cancel()
+	select {
+	case err := <-result:
+		if !errors.Is(err, context.Canceled) {
+			t.Fatalf("cancelled exchange error = %v, want context.Canceled", err)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("cancelled exchange did not return promptly")
+	}
+}
+
+func TestUnixRateBudgetCoordinatorClientCancellationWinsResponseRace(t *testing.T) {
+	listener, socketPath := newUnixRateBudgetTestListener(t)
+	requestRead := make(chan struct{})
+	release := make(chan struct{}, 1)
+	serverDone := make(chan struct{})
+	go func() {
+		defer close(serverDone)
+		conn, err := listener.AcceptUnix()
+		if err != nil {
+			return
+		}
+		defer func() { _ = conn.Close() }()
+		if _, err := readUnixRateBudgetRequest(conn); err != nil {
+			return
+		}
+		close(requestRead)
+		<-release
+		_ = writeUnixRateBudgetResponse(conn, unixRateBudgetResponse{
+			Version: unixRateBudgetProtocolVersion,
+			Kind:    unixRateBudgetReady,
+			Ready:   true,
+		})
+	}()
+	t.Cleanup(func() {
+		_ = listener.Close()
+		select {
+		case release <- struct{}{}:
+		default:
+		}
+		select {
+		case <-serverDone:
+		case <-time.After(time.Second):
+			t.Error("response-race rate-budget test server did not stop")
+		}
+	})
+
+	client := &UnixRateBudgetCoordinatorClient{socketPath: socketPath, epoch: "test-epoch"}
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	result := make(chan error, 1)
+	go func() { result <- client.Ready(ctx) }()
+	select {
+	case <-requestRead:
+	case <-time.After(time.Second):
+		t.Fatal("rate-budget test server did not read the request")
+	}
+	cancel()
+	release <- struct{}{}
+	select {
+	case err := <-result:
+		if !errors.Is(err, context.Canceled) {
+			t.Fatalf("response after cancellation error = %v, want context.Canceled", err)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("cancelled response race did not return promptly")
+	}
+}
 
 func TestUnixRateBudgetCoordinatorMultiProcessTinyBudget(t *testing.T) {
 	owner, client, err := StartUnixRateBudgetCoordinator(context.Background(), UnixRateBudgetCoordinatorOptions{
