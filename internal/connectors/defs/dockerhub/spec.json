@@ -2,12 +2,17 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Docker Hub Connection Specification",
   "type": "object",
-  "required": ["docker_username"],
+  "required": ["docker_username", "namespace"],
   "properties": {
     "docker_username": {
       "type": "string",
       "pattern": "^[a-z0-9_-]+$",
-      "description": "Docker Hub username or organization namespace to read repositories, tags, and the namespace profile for. Lowercase alphanumerics, underscores, and hyphens only."
+      "description": "Docker Hub username used to authenticate the optional Personal Access Token. Lowercase alphanumerics, underscores, and hyphens only."
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^[a-z0-9_-]+$",
+      "description": "Docker Hub user or organization namespace targeted by repository, tag, and connection-check requests. Required separately from docker_username so a requested target namespace is never silently replaced by the authentication identity. Lowercase alphanumerics, underscores, and hyphens only."
     },
     "repository": {
       "type": "string",
@@ -23,10 +28,42 @@
       "default": "https://hub.docker.com/v2",
       "description": "Docker Hub registry API base URL override for tests or self-hosted proxies."
     },
+    "auth_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://hub.docker.com/v2",
+      "description": "Docker Hub authentication API base URL. It is intentionally independent of base_url so a data API proxy cannot receive Docker Hub credential-exchange requests; the connector normalizes POST /v2/users/login beneath this base, including proxies whose prefix does not end in /v2. It must be an HTTPS URL without URL userinfo, query, or fragment components. Override only for a trusted HTTPS test or self-hosted authentication proxy."
+    },
     "page_size": {
       "type": "integer",
       "default": 100,
       "description": "Page size (1-100) for the initial request of each paginated stream (Docker Hub's page_size query param); subsequent pages follow the API's own absolute next URL verbatim."
+    },
+    "tier": {
+      "type": "string",
+      "enum": ["free", "paid"],
+      "default": "free",
+      "description": "Docker Registry subscription class used only by the provider-cited pull-rate policy. Use paid for Pro, Team, Business, or partner/unlimited Registry access; Hub API abuse limits are not inferred from this field."
+    },
+    "auth_type": {
+      "type": "string",
+      "enum": ["unauthenticated", "authenticated"],
+      "default": "unauthenticated",
+      "description": "Docker Registry pull authentication profile used only by the provider-cited Registry rate-limit policy. This is intentionally separate from the optional Docker Hub API PAT/session hook."
+    },
+    "registry_client_ip": {
+      "type": "string",
+      "description": "Public IPv4 address or IPv6 /64 used to scope the unauthenticated Docker Registry pull quota. Required only when base_url targets registry-1.docker.io and auth_type is unauthenticated; never store a credential here."
+    },
+    "docker_pat": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Docker Hub Personal Access Token for docker_username. Optional: omitted, the connector stays read-only-public exactly as before (streams.json falls back to unauthenticated requests). When set, it authenticates every account-scoped, organization, group/team, invite, access-token, audit-log, and repository-write command by exchanging it for a short-lived session bearer token via Docker Hub's own POST /v2/users/login (never sent or logged as a static bearer value itself). Never printed, logged, or echoed by any command."
+    },
+    "scim_bearer_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "A Docker Hub Enterprise SCIM API bearer token, distinct from docker_pat. Docker Hub's OpenAPI document declares SCIM (/v2/scim/2.0/**) under a separate bearerSCIMAuth security scheme from the rest of the API's bearerAuth; the two credentials are never interchangeable. Required only for the scim-users/scim-schemas/scim-resource-types commands; every other command is unaffected if this is omitted. Never printed, logged, or echoed by any command."
     }
   }
 }

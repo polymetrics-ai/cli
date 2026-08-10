@@ -58,6 +58,7 @@
                   }
                 }
               },
+              "hosts": { "type": "array", "items": { "type": "string" } },
               "tiers": { "type": "array", "items": { "type": "string" } },
               "auth_types": { "type": "array", "items": { "type": "string" } }
             }

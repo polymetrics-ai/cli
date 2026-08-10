@@ -407,11 +407,6 @@ func TestInterpolateStaticLiteralNoTemplateMarkersPassesThroughVerbatim(t *testi
 	}
 }
 
-// --- F9: InterpolatePath must reject a resolved segment that is exactly
-// ".." (or a raw "/../" survives after decode-normalization), closing the
-// SECURITY-REVIEW.md F9b/m3 gap where urlencodeSegment leaves bare "." (and
-// therefore "..") unescaped, so a literal ".." segment round-trips intact. ---
-
 func TestInterpolatePathRejectsDotDotSegment(t *testing.T) {
 	vars := baseVars()
 	vars.Config["traversal_id"] = ".."
@@ -430,17 +425,23 @@ func TestInterpolatePathRejectsDotDotAmongMultipleSegments(t *testing.T) {
 	}
 }
 
-func TestInterpolatePathSingleDotSegmentStillAllowed(t *testing.T) {
-	// A single "." (not "..") is not a traversal primitive on its own in the
-	// same dangerous sense; only ".." is rejected outright per the fix scope.
+func TestInterpolatePathRejectsDotSegment(t *testing.T) {
 	vars := baseVars()
 	vars.Config["dot"] = "."
-	got, err := InterpolatePath("/customers/{{ config.dot }}", vars)
-	if err != nil {
-		t.Fatalf("InterpolatePath: unexpected error for a lone \".\" segment: %v", err)
+	if _, err := InterpolatePath("/customers/{{ config.dot }}", vars); err == nil {
+		t.Fatal("InterpolatePath: expected error for a resolved value of exactly \".\"")
 	}
-	if got != "/customers/." {
-		t.Fatalf("InterpolatePath(lone dot) = %q, want /customers/.", got)
+}
+
+func TestInterpolatePathPreservesOpaqueSegment(t *testing.T) {
+	vars := baseVars()
+	vars.Config["tag"] = "release-1.2.3"
+	got, err := InterpolatePath("/customers/{{ config.tag }}", vars)
+	if err != nil {
+		t.Fatalf("InterpolatePath: unexpected error for opaque segment: %v", err)
+	}
+	if got != "/customers/release-1.2.3" {
+		t.Fatalf("InterpolatePath(opaque segment) = %q, want /customers/release-1.2.3", got)
 	}
 }
 

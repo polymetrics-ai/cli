@@ -23,6 +23,7 @@ func TestSanitizeTerminalStripsControlAndDangerousUnicode(t *testing.T) {
 func TestValidateIdentifierRejectsAgentUnsafeValues(t *testing.T) {
 	tests := []string{
 		"",
+		".",
 		"../secret",
 		"table name",
 		"bad\x1b[31m",
@@ -43,6 +44,42 @@ func TestValidateIdentifierAcceptsExpectedNames(t *testing.T) {
 		if err := safety.ValidateIdentifier(in, "test"); err != nil {
 			t.Fatalf("ValidateIdentifier(%q) error = %v", in, err)
 		}
+	}
+}
+
+func TestValidateURLPathSegment(t *testing.T) {
+	valid := []string{
+		"fixture-item",
+		"urn:ietf:params:scim:schemas:core:2.0:User",
+		"person+coverage@example.test",
+	}
+	for _, in := range valid {
+		t.Run("accept_"+in, func(t *testing.T) {
+			if err := safety.ValidateURLPathSegment(in, "test"); err != nil {
+				t.Fatalf("ValidateURLPathSegment(%q) error = %v", in, err)
+			}
+		})
+	}
+
+	invalid := []string{
+		"",
+		".",
+		"../secret",
+		"one/two",
+		"one\\two",
+		"item?query=value",
+		"item#fragment",
+		"item%2fchild",
+		"item value",
+		"bad\x1b[31m",
+		"\u202Espoof",
+	}
+	for _, in := range invalid {
+		t.Run("reject_"+in, func(t *testing.T) {
+			if err := safety.ValidateURLPathSegment(in, "test"); err == nil {
+				t.Fatalf("ValidateURLPathSegment(%q) succeeded, want error", in)
+			}
+		})
 	}
 }
 

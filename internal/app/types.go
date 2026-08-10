@@ -247,20 +247,20 @@ type RunReverseETLRequest struct {
 	Confirmation  connectors.WriteConfirmation `json:"-"`
 	// WithheldFlags carries the command flags an operator re-supplies for
 	// fields the plan withheld from disk. It is never persisted.
-	WithheldFlags map[string][]string `json:"-"`
+	RevealSensitiveResponse bool                `json:"-"`
+	WithheldFlags           map[string][]string `json:"-"`
 }
 
 type ReverseRun struct {
-	ID               string `json:"id"`
-	PlanID           string `json:"plan_id"`
-	Status           string `json:"status"`
-	RecordsStaged    int    `json:"records_staged"`
-	RecordsSucceeded int    `json:"records_succeeded"`
-	RecordsFailed    int    `json:"records_failed"`
-	Error            string `json:"error,omitempty"`
-	// OperationDirectWrite is populated only for a successful direct_write
-	// command. Its body is decoded according to the operation output policy.
-	OperationDirectWrite *connectors.OperationDirectWriteResult `json:"operation_direct_write,omitempty"`
-	StartedAt            time.Time                              `json:"started_at"`
-	CompletedAt          time.Time                              `json:"completed_at,omitempty"`
+	ID                     string                                 `json:"id"`
+	PlanID                 string                                 `json:"plan_id"`
+	Status                 string                                 `json:"status"`
+	RecordsStaged          int                                    `json:"records_staged"`
+	RecordsSucceeded       int                                    `json:"records_succeeded"`
+	RecordsFailed          int                                    `json:"records_failed"`
+	Error                  string                                 `json:"error,omitempty"`
+	OperationDirectWrite   *connectors.OperationDirectWriteResult `json:"operation_direct_write,omitempty"`
+	SensitiveWriteResponse any                                    `json:"-"`
+	StartedAt              time.Time                              `json:"started_at"`
+	CompletedAt            time.Time                              `json:"completed_at,omitempty"`
 }

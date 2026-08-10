@@ -3,7 +3,7 @@
   "docs": "https://docs.docker.com/reference/api/hub/latest/",
   "reviewed_at": "2026-08-06",
   "operation_ledger_version": 2,
-  "scope": "Provider-artifact inventory generated from the cited openapi artifact (54 documented HTTP operations). Existing executable stream/write bindings are retained only when the fetched provider method/path still matches; every other operation is explicitly provider-blocked or excluded.",
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (54 documented HTTP operations). Every listed operation has a typed executable binding; Enterprise-only operations remain fixture-verified rather than live-certified.",
   "artifacts": [
     {
       "id": "dockerhub-artifact-2026-08-06",
@@ -20,12 +20,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "personal access token management requires an authenticated user session this bundle has no credential for"
+      "covered_by": {
+        "direct_read": "access-tokens list"
       }
     },
     {
@@ -35,12 +31,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "personal access token creation; authenticated-session-only"
+      "covered_by": {
+        "write": "create_access_token"
       }
     },
     {
@@ -50,12 +42,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "personal access token detail; authenticated-session-only"
+      "covered_by": {
+        "direct_read": "access-tokens get"
       }
     },
     {
@@ -65,12 +53,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "personal access token update; authenticated-session-only"
+      "covered_by": {
+        "write": "update_access_token"
       }
     },
     {
@@ -80,12 +64,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "revokes a personal access token; destructive and authenticated-session-only"
+      "covered_by": {
+        "write": "delete_access_token"
       }
     },
     {
@@ -95,12 +75,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "organization audit log read; requires an authenticated org-admin session not available to this credential-free bundle"
+      "covered_by": {
+        "direct_read": "audit-logs list"
       }
     },
     {
@@ -110,12 +86,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "organization audit log action catalog; same auth gate as the audit log stream above"
+      "covered_by": {
+        "direct_read": "audit-logs actions list"
       }
     },
     {
@@ -125,12 +97,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "scoped registry bearer-token exchange (docker login/pull credential flow); not a data-read endpoint and out of scope for this credential-free public bundle"
+      "covered_by": {
+        "direct_write": "auth token create"
       }
     },
     {
@@ -140,12 +108,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "org member invitation creation; authenticated org-admin session required"
+      "covered_by": {
+        "write": "bulk_create_invites"
       }
     },
     {
@@ -155,12 +119,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "cancels a pending org invite; destructive and authenticated-session-only"
+      "covered_by": {
+        "write": "cancel_invite"
       }
     },
     {
@@ -170,12 +130,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "resends an org invite email; authenticated org-admin session required"
+      "covered_by": {
+        "write": "resend_invite"
       }
     },
     {
@@ -196,12 +152,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "repository creation requires an authenticated session; legacy never implemented repository create/update and this bundle's spec.json declares no credential to authenticate the request"
+      "covered_by": {
+        "write": "create_repository"
       }
     },
     {
@@ -222,12 +174,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "HEAD existence-check only; no response body to stream"
+      "covered_by": {
+        "direct_read": "repository check"
       }
     },
     {
@@ -237,12 +185,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "org-admin immutable-tag policy mutation; requires an authenticated session this credential-free public bundle has no auth path for"
+      "covered_by": {
+        "write": "update_repository_immutable_tags"
       }
     },
     {
@@ -252,12 +196,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "org-admin immutable-tag policy verification; requires an authenticated session this credential-free public bundle has no auth path for"
+      "covered_by": {
+        "direct_read": "repository immutable-tags verify"
       }
     },
     {
@@ -278,12 +218,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "HEAD existence-check only; no response body to stream"
+      "covered_by": {
+        "direct_read": "repository tags check"
       }
     },
     {
@@ -304,12 +240,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "HEAD existence-check only; no response body to stream"
+      "covered_by": {
+        "direct_read": "repository tag check"
       }
     },
     {
@@ -319,12 +251,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "org-scoped access token listing; authenticated org-admin session required"
+      "covered_by": {
+        "direct_read": "org access-tokens list"
       }
     },
     {
@@ -334,12 +262,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "org-scoped access token creation; authenticated org-admin session required"
+      "covered_by": {
+        "write": "create_org_access_token"
       }
     },
     {
@@ -349,12 +273,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "org settings read; authenticated org-admin session required"
+      "covered_by": {
+        "direct_read": "org settings get"
       }
     },
     {
@@ -364,12 +284,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "org settings mutation; authenticated org-admin session required"
+      "covered_by": {
+        "write": "update_org_settings"
       }
     },
     {
@@ -379,12 +295,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "org-scoped access token detail; authenticated org-admin session required"
+      "covered_by": {
+        "direct_read": "org access-tokens get"
       }
     },
     {
@@ -394,12 +306,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "org-scoped access token update; authenticated org-admin session required"
+      "covered_by": {
+        "write": "update_org_access_token"
       }
     },
     {
@@ -409,12 +317,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "revokes an org-scoped access token; destructive and authenticated-session-only"
+      "covered_by": {
+        "write": "delete_org_access_token"
       }
     },
     {
@@ -424,12 +328,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "org Teams/groups listing; authenticated org-admin session required"
+      "covered_by": {
+        "direct_read": "groups list"
       }
     },
     {
@@ -439,12 +339,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "org Team/group creation; authenticated org-admin session required"
+      "covered_by": {
+        "write": "create_group"
       }
     },
     {
@@ -454,12 +350,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "org Team/group detail; authenticated org-admin session required"
+      "covered_by": {
+        "direct_read": "groups get"
       }
     },
     {
@@ -469,12 +361,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "org Team/group full update; authenticated org-admin session required"
+      "covered_by": {
+        "write": "replace_group"
       }
     },
     {
@@ -484,12 +372,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "org Team/group partial update; authenticated org-admin session required"
+      "covered_by": {
+        "write": "update_group"
       }
     },
     {
@@ -499,12 +383,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "deletes an org Team/group; destructive and authenticated-session-only"
+      "covered_by": {
+        "write": "delete_group"
       }
     },
     {
@@ -514,12 +394,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "org Team/group membership listing; authenticated org-admin session required"
+      "covered_by": {
+        "direct_read": "groups members list"
       }
     },
     {
@@ -529,12 +405,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "adds a member to an org Team/group; authenticated org-admin session required"
+      "covered_by": {
+        "write": "add_group_member"
       }
     },
     {
@@ -544,12 +416,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "removes a user from an org Team/group; destructive and authenticated-session-only"
+      "covered_by": {
+        "write": "remove_group_member"
       }
     },
     {
@@ -559,12 +427,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "org pending-invite listing; authenticated org-admin session required"
+      "covered_by": {
+        "direct_read": "invites list"
       }
     },
     {
@@ -574,12 +438,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "org member listing; authenticated org-admin session required"
+      "covered_by": {
+        "direct_read": "org members list"
       }
     },
     {
@@ -589,12 +449,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "org member CSV export; authenticated org-admin session required"
+      "covered_by": {
+        "direct_read": "org members export"
       }
     },
     {
@@ -604,12 +460,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "updates an org member's role; authenticated org-admin session required"
+      "covered_by": {
+        "write": "update_org_member"
       }
     },
     {
@@ -619,12 +471,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "removes a member from an org; destructive and authenticated-session-only"
+      "covered_by": {
+        "write": "remove_org_member"
       }
     },
     {
@@ -634,12 +482,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "assigns a Team/group to a repository; org-admin operation requiring an authenticated session not available to this credential-free bundle"
+      "covered_by": {
+        "write": "assign_repository_group"
       }
     },
     {
@@ -649,12 +493,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "SCIM identity-provisioning metadata; requires a separate SCIM bearer token this bundle has no auth path for"
+      "covered_by": {
+        "direct_read": "scim-resource-types list"
       }
     },
     {
@@ -664,12 +504,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "SCIM identity-provisioning metadata; same SCIM-token gate"
+      "covered_by": {
+        "direct_read": "scim-resource-types get"
       }
     },
     {
@@ -679,12 +515,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "SCIM schema metadata; same SCIM-token gate"
+      "covered_by": {
+        "direct_read": "scim-schemas list"
       }
     },
     {
@@ -694,12 +526,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "SCIM schema metadata; same SCIM-token gate"
+      "covered_by": {
+        "direct_read": "scim-schemas get"
       }
     },
     {
@@ -709,12 +537,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "SCIM service provider config; same SCIM-token gate"
+      "covered_by": {
+        "direct_read": "scim-service-provider-config get"
       }
     },
     {
@@ -724,12 +548,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "SCIM-provisioned user listing; same SCIM-token gate, also PII-adjacent identity data outside this connector's public-registry-data scope"
+      "covered_by": {
+        "direct_read": "scim-users list"
       }
     },
     {
@@ -739,12 +559,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "SCIM user provisioning; same SCIM-token gate"
+      "covered_by": {
+        "write": "create_scim_user"
       }
     },
     {
@@ -754,12 +570,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "SCIM user detail; same SCIM-token gate"
+      "covered_by": {
+        "direct_read": "scim-users get"
       }
     },
     {
@@ -769,12 +581,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "SCIM user update; same SCIM-token gate"
+      "covered_by": {
+        "write": "update_scim_user"
       }
     },
     {
@@ -784,12 +592,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "second-factor login continuation of the excluded /v2/users/login session exchange"
+      "covered_by": {
+        "direct_write": "auth 2fa-login create"
       }
     },
     {
@@ -799,12 +603,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "username+password session-token exchange; this bundle's spec.json declares no password field and the public registry read surface needs no auth, so no login flow is wired"
+      "covered_by": {
+        "direct_write": "auth login create"
       }
     }
   ]

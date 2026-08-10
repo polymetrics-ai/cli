@@ -74,7 +74,6 @@ func TestSchemaValidateConfigurationAppliesDeclaredConstraintsOnly(t *testing.T)
 func TestSchemaWithoutConfigurationConstraintsIsNotAdvertised(t *testing.T) {
 	sch, err := CompileSchema(json.RawMessage(`{
 		"type": "object",
-		"required": ["count"],
 		"properties": {
 			"count": {"type": "integer"},
 			"label": {"type": "string"}
@@ -88,6 +87,54 @@ func TestSchemaWithoutConfigurationConstraintsIsNotAdvertised(t *testing.T) {
 	}
 	if err := sch.ValidateConfiguration(map[string]string{"count": "not-an-integer", "extra": "still accepted"}); err != nil {
 		t.Fatalf("ValidateConfiguration() error = %v, want no new constraints", err)
+	}
+}
+
+func TestSchemaRequiredConfigurationKeyIsNotCredentialAdmission(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"required": ["namespace"],
+		"properties": {
+			"namespace": {"type": "string"},
+			"label": {"type": "string"}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema() error = %v", err)
+	}
+	if sch.HasConfigurationConstraints() {
+		t.Fatal("HasConfigurationConstraints() = true, want false for required-only schema")
+	}
+	for _, config := range []map[string]string{nil, {}, {"label": "x"}, {"namespace": "  "}} {
+		if err := sch.ValidateConfiguration(config); err != nil {
+			t.Fatalf("ValidateConfiguration(%v) error = %v, want required-only admission", config, err)
+		}
+	}
+	if err := sch.ValidateConfiguration(map[string]string{"namespace": "target"}); err != nil {
+		t.Fatalf("ValidateConfiguration(complete) error = %v, want admission", err)
+	}
+}
+
+// The two kinds of required property this boundary cannot see stay optional
+// here: a secret is supplied through a separate map, and a defaulted property
+// is materialized by the engine rather than the caller.
+func TestSchemaRequiredSecretAndDefaultedKeysAreNotConfigurationConstraints(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"required": ["token", "base_url"],
+		"properties": {
+			"token": {"type": "string", "x-secret": true},
+			"base_url": {"type": "string", "default": "https://example.test"}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema() error = %v", err)
+	}
+	if sch.HasConfigurationConstraints() {
+		t.Fatal("HasConfigurationConstraints() = true, want false: neither a required secret nor a defaulted key is checkable against the config map")
+	}
+	if err := sch.ValidateConfiguration(map[string]string{}); err != nil {
+		t.Fatalf("ValidateConfiguration() error = %v, want admission", err)
 	}
 }
 

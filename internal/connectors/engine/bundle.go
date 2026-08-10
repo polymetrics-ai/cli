@@ -108,6 +108,7 @@ type RiskSpec struct {
 // every stream in the bundle.
 type HTTPBase struct {
 	URL        string            `json:"url"`
+	APIRoot    string            `json:"api_root,omitempty"`
 	UserAgent  string            `json:"user_agent,omitempty"`
 	Headers    map[string]string `json:"headers,omitempty"`
 	Auth       []AuthSpec        `json:"auth,omitempty"`
@@ -461,6 +462,7 @@ type WriteAction struct {
 	// samples and returned write errors. DryRunWrite preview warnings preserve
 	// their resolved values.
 	RedactFields []string `json:"redact_fields,omitempty"`
+	ContentType  string   `json:"content_type,omitempty"`
 	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload
 	// BodyRequired forces an empty JSON object onto the wire when body construction
 	// resolves no fields. It is valid only for the default json body type.
@@ -486,10 +488,11 @@ type WriteAction struct {
 	// mark every hand-constructed WriteAction as non-batchable. nil means the
 	// bundle did not declare it, which is the permissive default every shipped
 	// action relies on. Read it through IsBatchable, never directly.
-	Batchable    *bool             `json:"batchable,omitempty"`
-	Confirm      string            `json:"confirm,omitempty"` // legacy: "" | "destructive"
-	Confirmation *ConfirmationSpec `json:"confirmation,omitempty"`
-	Hook         string            `json:"hook,omitempty"`
+	Batchable         *bool             `json:"batchable,omitempty"`
+	ResponseSensitive bool              `json:"response_sensitive,omitempty"`
+	Confirm           string            `json:"confirm,omitempty"` // legacy: "" | "destructive"
+	Confirmation      *ConfirmationSpec `json:"confirmation,omitempty"`
+	Hook              string            `json:"hook,omitempty"`
 }
 
 // ConfirmationSpec is the closed, declarative confirmation policy shared by
@@ -687,7 +690,8 @@ type SurfaceCoverage struct {
 	// transport endpoint. It is intentionally distinct from direct_read:
 	// GraphQL's physical POST /graphql path is not an OpenAPI read endpoint,
 	// so an operation ID is the only unambiguous executable binding.
-	Operations []string `json:"operations,omitempty"`
+	Operations  []string `json:"operations,omitempty"`
+	DirectWrite string   `json:"direct_write,omitempty"`
 }
 
 // WriteTargets returns every write action a coverage entry names, singular and
@@ -753,19 +757,20 @@ type OperationSpec struct {
 	// It is a pointer because false is restrictive while the omitted default is
 	// permissive; see WriteAction.Batchable for the matching write-action
 	// contract. Read it through IsBatchable, never directly.
-	Batchable       *bool                   `json:"batchable,omitempty"`
-	SecretSensitive bool                    `json:"secret_sensitive,omitempty"`
-	SensitivePolicy *SensitivePolicySpec    `json:"sensitive_policy,omitempty"`
-	AuditEvent      string                  `json:"audit_event,omitempty"`
-	REST            *RESTOperationSpec      `json:"rest,omitempty"`
-	GraphQL         *GraphQLOperationSpec   `json:"graphql,omitempty"`
-	XML             *XMLOperationSpec       `json:"xml,omitempty"`
-	Binary          *BinaryOperationSpec    `json:"binary,omitempty"`
-	File            *FileOperationSpec      `json:"file,omitempty"`
-	LocalGit        *LocalGitOperationSpec  `json:"local_git,omitempty"`
-	LocalFile       *LocalFileOperationSpec `json:"local_file,omitempty"`
-	Browser         *BrowserOperationSpec   `json:"browser,omitempty"`
-	Composite       *CompositeOperationSpec `json:"composite,omitempty"`
+	Batchable         *bool                   `json:"batchable,omitempty"`
+	SecretSensitive   bool                    `json:"secret_sensitive,omitempty"`
+	ResponseSensitive bool                    `json:"response_sensitive,omitempty"`
+	SensitivePolicy   *SensitivePolicySpec    `json:"sensitive_policy,omitempty"`
+	AuditEvent        string                  `json:"audit_event,omitempty"`
+	REST              *RESTOperationSpec      `json:"rest,omitempty"`
+	GraphQL           *GraphQLOperationSpec   `json:"graphql,omitempty"`
+	XML               *XMLOperationSpec       `json:"xml,omitempty"`
+	Binary            *BinaryOperationSpec    `json:"binary,omitempty"`
+	File              *FileOperationSpec      `json:"file,omitempty"`
+	LocalGit          *LocalGitOperationSpec  `json:"local_git,omitempty"`
+	LocalFile         *LocalFileOperationSpec `json:"local_file,omitempty"`
+	Browser           *BrowserOperationSpec   `json:"browser,omitempty"`
+	Composite         *CompositeOperationSpec `json:"composite,omitempty"`
 }
 
 // IsBatchable reports whether the operation may be placed in a bulk plan.
@@ -789,7 +794,9 @@ type OperationParameter struct {
 type RESTOperationSpec struct {
 	Method      string `json:"method"`
 	Path        string `json:"path"`
+	BaseURL     string `json:"base_url,omitempty"`
 	ContentType string `json:"content_type,omitempty"`
+	AuthMode    string `json:"auth_mode,omitempty"`
 	MaxBytes    int    `json:"max_bytes,omitempty"`
 	// Parameters is the operation's accepted parameter set, imported from the
 	// connector's own provider specification by `connectorgen params-import`.
@@ -800,10 +807,12 @@ type RESTOperationSpec struct {
 	// requiredness, enum values, summary) and nothing about paging: page and
 	// page-size parameters are excluded at import, because paging comes from
 	// the connector's declared pagination spec instead.
-	Parameters []OperationParameter `json:"parameters,omitempty"`
-	Query      map[string]string    `json:"query,omitempty"`
-	Body       map[string]any       `json:"body,omitempty"`
-	BodySchema json.RawMessage      `json:"body_schema,omitempty"`
+	Parameters  []OperationParameter `json:"parameters,omitempty"`
+	Query       map[string]string    `json:"query,omitempty"`
+	Body        map[string]any       `json:"body,omitempty"`
+	BodySchema  json.RawMessage      `json:"body_schema,omitempty"`
+	Pagination  *PaginationSpec      `json:"pagination,omitempty"`
+	RecordsPath string               `json:"records_path,omitempty"`
 	// Multipart is an opt-in, operation-level multipart/form-data contract.
 	// It deliberately reuses writes.json's bounded field/file part model; an
 	// absent block preserves metadata-only multipart rows until their connector
@@ -998,24 +1007,25 @@ type CLIConstraint struct {
 
 // CLICommand is one provider-inspired command path.
 type CLICommand struct {
-	Path          string                  `json:"path"`
-	Summary       string                  `json:"summary"`
-	Intent        string                  `json:"intent"`
-	Availability  string                  `json:"availability"`
-	Stream        string                  `json:"stream,omitempty"`
-	Write         string                  `json:"write,omitempty"`
-	SourceCLIPath string                  `json:"source_cli_path,omitempty"`
-	SourceURL     string                  `json:"source_url,omitempty"`
-	Flags         []CLIFlag               `json:"flags,omitempty"`
-	Constraints   []CLIConstraint         `json:"constraints,omitempty"`
-	Examples      []string                `json:"examples,omitempty"`
-	APISurface    []CLISurfaceEndpointRef `json:"api_surface,omitempty"`
-	OutputPolicy  string                  `json:"output_policy,omitempty"`
-	RedactFields  []string                `json:"redact_fields,omitempty"`
-	Operation     string                  `json:"operation,omitempty"`
-	Risk          string                  `json:"risk,omitempty"`
-	Approval      string                  `json:"approval,omitempty"`
-	Notes         string                  `json:"notes,omitempty"`
+	Path               string                  `json:"path"`
+	Summary            string                  `json:"summary"`
+	Intent             string                  `json:"intent"`
+	Availability       string                  `json:"availability"`
+	Stream             string                  `json:"stream,omitempty"`
+	Write              string                  `json:"write,omitempty"`
+	SourceCLIPath      string                  `json:"source_cli_path,omitempty"`
+	SourceURL          string                  `json:"source_url,omitempty"`
+	Flags              []CLIFlag               `json:"flags,omitempty"`
+	Constraints        []CLIConstraint         `json:"constraints,omitempty"`
+	Examples           []string                `json:"examples,omitempty"`
+	APISurface         []CLISurfaceEndpointRef `json:"api_surface,omitempty"`
+	OutputPolicy       string                  `json:"output_policy,omitempty"`
+	RedactFields       []string                `json:"redact_fields,omitempty"`
+	AcceptsSecretInput bool                    `json:"accepts_secret_input,omitempty"`
+	Operation          string                  `json:"operation,omitempty"`
+	Risk               string                  `json:"risk,omitempty"`
+	Approval           string                  `json:"approval,omitempty"`
+	Notes              string                  `json:"notes,omitempty"`
 }
 
 // CLISurfaceEndpointRef points from a command to a tracked api_surface row.
@@ -1604,6 +1614,9 @@ func compileDynamicKeyPattern(pattern string) (*regexp.Regexp, error) {
 
 func validateWriteBodies(actions []WriteAction) error {
 	for i, action := range actions {
+		if _, err := writeActionContentType(action); err != nil {
+			return fmt.Errorf("action %d (%q): %w", i, action.Name, err)
+		}
 		if err := validateDynamicFields(i, action); err != nil {
 			return err
 		}
@@ -2297,6 +2310,9 @@ func multipartSchemaString(node map[string]any) bool {
 }
 
 func validateOperationSemantics(i int, op OperationSpec) error {
+	if op.REST != nil && op.REST.AuthMode != "" && op.REST.AuthMode != "none" {
+		return fmt.Errorf("operation %d (%q) rest auth_mode must be none when declared, got %q", i, op.ID, op.REST.AuthMode)
+	}
 	if err := validateRequiredQuery(i, op); err != nil {
 		return err
 	}
@@ -2306,8 +2322,8 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	switch op.Kind {
 	case "rest_read":
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
-		if method != "GET" && method != "POST" {
-			return fmt.Errorf("operation %d (%q) rest_read method must be GET or POST, got %s", i, op.ID, method)
+		if method != "GET" && method != "POST" && method != "HEAD" {
+			return fmt.Errorf("operation %d (%q) rest_read method must be GET, POST, or HEAD, got %s", i, op.ID, method)
 		}
 		if method == "POST" && len(op.REST.BodySchema) == 0 {
 			return fmt.Errorf("operation %d (%q) rest_read POST must declare body_schema", i, op.ID)
@@ -2321,6 +2337,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 			if err := validateOperationDirectReadTextPlainContract(op); err != nil {
 				return fmt.Errorf("operation %d (%q) rest_read POST: %w", i, op.ID, err)
 			}
+		}
+		if method == "HEAD" && op.OutputPolicy != "json_redacted" {
+			return fmt.Errorf("operation %d (%q) rest_read HEAD (status-only, no response body) must declare output_policy \"json_redacted\", got %q", i, op.ID, op.OutputPolicy)
 		}
 		if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
 			return fmt.Errorf("operation %d (%q) rest_read must not declare mutating mutation_class %q", i, op.ID, op.MutationClass)

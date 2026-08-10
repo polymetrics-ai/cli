@@ -63,6 +63,7 @@
             }
           },
           "secret_sensitive": { "type": "boolean" },
+          "response_sensitive": { "type": "boolean" },
           "sensitive_policy": {
             "type": "object",
             "additionalProperties": false,
@@ -94,7 +95,9 @@
             "properties": {
               "method": { "type": "string" },
               "path": { "type": "string" },
+              "base_url": { "type": "string" },
               "content_type": { "type": "string" },
+              "auth_mode": { "type": "string", "enum": ["none"] },
               "max_bytes": { "type": "integer" },
               "parameters": {
                 "type": "array",
@@ -136,6 +139,32 @@
                 "additionalProperties": true
               },
               "body_schema": { "type": "object" },
+              "pagination": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "type": { "type": "string" },
+                  "size_param": { "type": "string" },
+                  "page_param": { "type": "string" },
+                  "start_page": { "type": "integer" },
+                  "limit_param": { "type": "string" },
+                  "offset_param": { "type": "string" },
+                  "cursor_param": { "type": "string" },
+                  "token_path": { "type": "string" },
+                  "last_record_field": { "type": "string" },
+                  "stop_path": { "type": "string" },
+                  "next_url_path": { "type": "string" },
+                  "start_index_param": { "type": "string" },
+                  "count_param": { "type": "string" },
+                  "total_path": { "type": "string" },
+                  "start_index_path": { "type": "string" },
+                  "start_index_base": { "type": "integer" },
+                  "page_size": { "type": "integer" },
+                  "max_pages": { "type": "integer" },
+                  "allow_cross_host": { "type": "boolean" }
+                }
+              },
+              "records_path": { "type": "string" },
               "multipart": {
                 "type": "object",
                 "required": ["max_bytes", "parts"],

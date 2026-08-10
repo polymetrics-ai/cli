@@ -548,6 +548,11 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	if err := connectors.ValidateConfiguration(connector, req.Config); err != nil {
 		return CredentialMeta{}, fmt.Errorf("credential configuration: %w", err)
 	}
+	if preflighter, ok := connector.(connectors.RuntimeConfigPreflighter); ok {
+		if err := preflighter.PreflightRuntimeConfig(connectors.RuntimeConfig{Config: cloneStringMap(req.Config)}); err != nil {
+			return CredentialMeta{}, fmt.Errorf("credential configuration: %w", err)
+		}
+	}
 	if err := a.vault.Put(ctx, id, req.Secrets); err != nil {
 		return CredentialMeta{}, err
 	}
@@ -700,6 +705,9 @@ func (a *App) ListCredentials() []CredentialMeta {
 }
 
 func (a *App) validateCredentialConfig(connector string, config map[string]string) error {
+	if connector == "dockerhub" && strings.TrimSpace(config["namespace"]) == "" {
+		return errors.New("dockerhub namespace is required")
+	}
 	path := config["path"]
 	if path == "" {
 		return nil
@@ -2191,6 +2199,9 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 	if err != nil {
 		return ReverseRun{}, err
 	}
+	if err := validateSensitiveWriteResponseRequest(writer, plan.Action, req.RevealSensitiveResponse, len(mappedForHash)); err != nil {
+		return ReverseRun{}, err
+	}
 	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, mappedForHash)
 	if err != nil {
 		return ReverseRun{}, err
@@ -2205,7 +2216,7 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 	}
 	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(plan.PayloadIdentity)
 	mapped := mapReverseRecords(records, plan.Mappings)
-	writeRequest := connectors.WriteRequest{Stream: "records", Table: plan.Name, Action: plan.Action, Config: runtime}
+	writeRequest := connectors.WriteRequest{Stream: "records", Table: plan.Name, Action: plan.Action, Config: runtime, CaptureSensitiveResponse: req.RevealSensitiveResponse}
 	preview, err := a.validateDestructivePreview(ctx, writer, plan, writeRequest, mapped)
 	if err != nil {
 		return ReverseRun{}, err
@@ -2255,6 +2266,14 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	if err != nil {
 		return ReverseRun{}, err
 	}
+	if plan.ConnectorCommandOperation != "" && req.RevealSensitiveResponse {
+		return ReverseRun{}, errors.New("sensitive response delivery is only supported for write actions")
+	}
+	if plan.ConnectorCommandOperation == "" {
+		if err := validateSensitiveWriteResponseRequest(writer, plan.Action, req.RevealSensitiveResponse, 1); err != nil {
+			return ReverseRun{}, err
+		}
+	}
 	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, record)
 	if err != nil {
 		return ReverseRun{}, err
@@ -2276,7 +2295,7 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 		return ReverseRun{}, err
 	}
 	records := []connectors.Record{record}
-	writeRequest := connectors.WriteRequest{Stream: "records", Table: plan.Name, Action: plan.Action, Config: runtime}
+	writeRequest := connectors.WriteRequest{Stream: "records", Table: plan.Name, Action: plan.Action, Config: runtime, CaptureSensitiveResponse: req.RevealSensitiveResponse}
 	preview, err := a.validateDestructivePreview(ctx, writer, plan, writeRequest, records)
 	if err != nil {
 		return ReverseRun{}, err
@@ -2337,6 +2356,23 @@ func validateOperationDirectWritePreview(ctx context.Context, writer connectors.
 		return connectors.WritePreview{}, fmt.Errorf("reverse plan %q no longer matches its approved preview", plan.ID)
 	}
 	return preview, nil
+}
+
+func validateSensitiveWriteResponseRequest(writer connectors.Connector, action string, reveal bool, recordCount int) error {
+	if !reveal {
+		return nil
+	}
+	preflighter, ok := writer.(connectors.SensitiveWriteResponsePreflighter)
+	if !ok {
+		return fmt.Errorf("connector %q does not support sensitive response capture", writer.Name())
+	}
+	if err := preflighter.PreflightSensitiveWriteResponse(action); err != nil {
+		return err
+	}
+	if recordCount != 1 {
+		return errors.New("sensitive write response capture requires exactly one record")
+	}
+	return nil
 }
 
 func (a *App) loadReversePlan(id string) (ReversePlan, error) {
@@ -2442,22 +2478,37 @@ func approvalConsumptionUncertainError(plan ReversePlan, cause error) error {
 }
 
 func (a *App) finishReverseWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {
+	if result.SensitiveResponse != nil {
+		run.SensitiveWriteResponse = result.SensitiveResponse.Body
+	}
 	return a.finishReverseWriteWithErrorText(planID, run, result, staged, writeErr, func(err error) string {
 		return safety.RedactErrorText(err.Error())
-	})
+	}, stripSensitiveWriteResponse)
 }
 
-// finishOperationDirectWrite preserves the direct-write error text in its
-// persisted report. The generic reverse-ETL path deliberately retains its
-// existing rendering behavior; only rest_write has the captain's complete
-// runtime-content policy.
+func stripSensitiveWriteResponse(run ReverseRun) ReverseRun {
+	run.SensitiveWriteResponse = nil
+	return run
+}
+
 func (a *App) finishOperationDirectWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {
 	return a.finishReverseWriteWithErrorText(planID, run, result, staged, writeErr, func(err error) string {
 		return err.Error()
-	})
+	}, stripSensitiveOperationDirectWriteResponse)
 }
 
-func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error, errorText func(error) string) (ReverseRun, error) {
+func stripSensitiveOperationDirectWriteResponse(run ReverseRun) ReverseRun {
+	if run.OperationDirectWrite == nil || !run.OperationDirectWrite.ResponseSensitive {
+		return run
+	}
+	result := *run.OperationDirectWrite
+	result.Body = nil
+	result.ResponseSensitive = false
+	run.OperationDirectWrite = &result
+	return run
+}
+
+func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error, errorText func(error) string, persist func(ReverseRun) ReverseRun) (ReverseRun, error) {
 	run.RecordsSucceeded = result.RecordsWritten
 	run.RecordsFailed = result.RecordsFailed
 	run.CompletedAt = time.Now().UTC()
@@ -2472,8 +2523,12 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	} else {
 		run.Status = "completed"
 	}
+	persistedRun := run
+	if persist != nil {
+		persistedRun = persist(run)
+	}
 	updated, persistErr := a.updateState(func(current state) (state, error) {
-		current.ReverseRuns = append(current.ReverseRuns, run)
+		current.ReverseRuns = append(current.ReverseRuns, persistedRun)
 		for i := range current.ReversePlans {
 			if current.ReversePlans[i].ID == planID && (current.ReversePlans[i].Status == "executing" || current.ReversePlans[i].Status == reversePlanStatusApprovalConsumptionUncertain) {
 				current.ReversePlans[i].Status = planStatus
@@ -2541,6 +2596,11 @@ func (a *App) resolveEndpointWithCredential(ctx context.Context, endpoint Endpoi
 	connector, ok := a.registry.Get(cred.Connector)
 	if !ok {
 		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("connector %q not found", cred.Connector)
+	}
+	if preflighter, ok := connector.(connectors.RuntimeConfigPreflighter); ok {
+		if err := preflighter.PreflightRuntimeConfig(runtime); err != nil {
+			return nil, CredentialMeta{}, connectors.RuntimeConfig{}, err
+		}
 	}
 	return connector, cred, runtime, nil
 }

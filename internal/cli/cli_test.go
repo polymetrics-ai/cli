@@ -2,6 +2,8 @@ package cli_test
 
 import (
 	"bytes"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -9,10 +11,34 @@ import (
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 )
+
+func trustCLITransportForTLSServer(t *testing.T, server *httptest.Server) {
+	t.Helper()
+	roots := x509.NewCertPool()
+	roots.AddCert(server.Certificate())
+	previous, ok := http.DefaultTransport.(*http.Transport)
+	if !ok {
+		t.Fatalf("default transport = %T, want *http.Transport", http.DefaultTransport)
+	}
+	transport := previous.Clone()
+	tlsConfig := &tls.Config{RootCAs: roots}
+	if transport.TLSClientConfig != nil {
+		tlsConfig = transport.TLSClientConfig.Clone()
+		tlsConfig.RootCAs = roots
+	}
+	transport.TLSClientConfig = tlsConfig
+	previousDefaultTransport := http.DefaultTransport
+	http.DefaultTransport = transport
+	t.Cleanup(func() {
+		http.DefaultTransport = previousDefaultTransport
+		transport.CloseIdleConnections()
+	})
+}
 
 func TestHelpIncludesManPageStyleSections(t *testing.T) {
 	var stdout, stderr bytes.Buffer
@@ -162,6 +188,279 @@ func TestDynamicConnectorDeepHelpPathsResolveOrReportUsage(t *testing.T) {
 			t.Fatalf("valid group help missing group manual:\n%s", stdout.String())
 		}
 	})
+}
+
+func TestDockerHubAuthHelpGeneratesCredentialRetentionWarning(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"dockerhub", "auth", "login", "create", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(dockerhub auth login create --help) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{
+		"Warning: supplied credential values are written to plaintext local project state and retained for this command plan.",
+		"--from-env (field=ENV_VAR)",
+		"--value-stdin (field)",
+	} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("Docker Hub auth help missing %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestDockerHubAccessTokenHelpDocumentsExplicitResponseDisclosure(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"dockerhub", "access-tokens", "create", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(dockerhub access-tokens create --help) code = %d stderr = %s", code, stderr.String())
+	}
+	for _, want := range []string{
+		"--show-token only to the approved execution",
+		"terminal or JSON output and cannot be redacted",
+		"never retained in plan, run history, or state",
+	} {
+		if !strings.Contains(stdout.String(), want) {
+			t.Fatalf("Docker Hub access-token help missing %q:\n%s", want, stdout.String())
+		}
+	}
+}
+
+func TestDockerHubAuthLoginAcceptsEnvironmentCredentialInputAndRedactsPlanOutput(t *testing.T) {
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "dockerhub-auth-local",
+		"--connector", "dockerhub",
+		"--config", "namespace=fixture",
+		"--config", "base_url=https://example.test",
+		"--root", root,
+		"--json",
+	})
+	t.Setenv("PM_TEST_DOCKERHUB_AUTH_PASSWORD", "fixture-password")
+
+	stdout, stderr := runCLI(t, []string{
+		"dockerhub", "auth", "login", "create",
+		"--credential", "dockerhub-auth-local",
+		"--username", "fixture-user",
+		"--from-env", "password=PM_TEST_DOCKERHUB_AUTH_PASSWORD",
+		"--root", root,
+		"--json",
+	})
+	if !strings.Contains(stderr, "Warning: supplied credential values are written to plaintext local project state and retained for this command plan.") {
+		t.Fatalf("auth command warning = %q, want plaintext-retention warning", stderr)
+	}
+	if strings.Contains(stdout+stderr, "fixture-password") {
+		t.Fatalf("auth command output leaked supplied credential: stdout=%s stderr=%s", stdout, stderr)
+	}
+	var envelope struct {
+		Plan struct {
+			ID     string           `json:"id"`
+			Sample []map[string]any `json:"sample"`
+		} `json:"plan"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &envelope); err != nil {
+		t.Fatalf("decode plan JSON: %v\n%s", err, stdout)
+	}
+	if envelope.Plan.ID == "" || len(envelope.Plan.Sample) != 1 || envelope.Plan.Sample[0]["password"] != "redacted" {
+		t.Fatalf("safe plan output = %#v, want a redacted password sample", envelope.Plan)
+	}
+
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	stored, err := a.GetReversePlan(envelope.Plan.ID)
+	if err != nil {
+		t.Fatalf("GetReversePlan: %v", err)
+	}
+	if stored.ConnectorCommandRecord["password"] != "fixture-password" {
+		t.Fatalf("stored execution record = %#v, want retained value after point-of-use warning", stored.ConnectorCommandRecord)
+	}
+}
+
+func TestDockerHubAuthPlanRejectsReplacementSensitiveInputs(t *testing.T) {
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "dockerhub-auth-local",
+		"--connector", "dockerhub",
+		"--config", "namespace=fixture",
+		"--config", "base_url=https://example.test",
+		"--root", root,
+		"--json",
+	})
+	t.Setenv("PM_TEST_DOCKERHUB_AUTH_PASSWORD", "fixture-password")
+
+	stdout, _ := runCLI(t, []string{
+		"dockerhub", "auth", "login", "create",
+		"--credential", "dockerhub-auth-local",
+		"--username", "fixture-user",
+		"--from-env", "password=PM_TEST_DOCKERHUB_AUTH_PASSWORD",
+		"--root", root,
+		"--json",
+	})
+	var plan struct {
+		Plan struct {
+			ID string `json:"id"`
+		} `json:"plan"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &plan); err != nil {
+		t.Fatalf("decode plan JSON: %v\n%s", err, stdout)
+	}
+	if plan.Plan.ID == "" {
+		t.Fatal("plan ID is empty")
+	}
+
+	for _, supplied := range [][]string{
+		{"--from-env", "password=PM_TEST_DOCKERHUB_AUTH_PASSWORD"},
+		{"--value-stdin", "password"},
+	} {
+		args := append([]string{
+			"dockerhub", "auth", "login", "create",
+			"--plan", plan.Plan.ID,
+			"--preview",
+			"--root", root,
+			"--json",
+		}, supplied...)
+		var out, errOut bytes.Buffer
+		code := cli.Run(args, &out, &errOut)
+		combined := out.String() + errOut.String()
+		if code != 2 || !strings.Contains(combined, "cannot be used with --plan") {
+			t.Fatalf("Run(%v) code = %d stdout=%s stderr=%s", args, code, out.String(), errOut.String())
+		}
+		if strings.Contains(combined, "fixture-password") {
+			t.Fatalf("Run(%v) leaked supplied credential: stdout=%s stderr=%s", args, out.String(), errOut.String())
+		}
+	}
+}
+
+func TestDockerHubAccessTokenOutputRequiresExplicitShowToken(t *testing.T) {
+	const issuedToken = "fixture-one-time-access-token"
+	const providerErrorToken = "fixture-provider-error-token"
+	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/v2/users/login":
+			if r.Method != http.MethodPost {
+				t.Fatalf("login method = %s, want POST", r.Method)
+			}
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"token":"fixture-session"}`))
+		case "/v2/access-tokens":
+			if r.Method != http.MethodPost {
+				t.Fatalf("access-token method = %s, want POST", r.Method)
+			}
+			var body map[string]any
+			if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+				t.Fatalf("decode access-token body: %v", err)
+			}
+			w.Header().Set("Content-Type", "application/json")
+			if body["token_label"] == "failure-token" {
+				w.WriteHeader(http.StatusInternalServerError)
+				_, _ = w.Write([]byte(`{"token":"` + providerErrorToken + `"}`))
+				return
+			}
+			_, _ = w.Write([]byte(`{"token":"` + issuedToken + `"}`))
+		default:
+			t.Fatalf("request path = %s, want Docker Hub auth or access-token endpoint", r.URL.Path)
+		}
+	}))
+	t.Cleanup(server.Close)
+	trustCLITransportForTLSServer(t, server)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	t.Setenv("PM_TEST_DOCKERHUB_PAT", "fixture-cli-pat")
+	runCLI(t, []string{
+		"credentials", "add", "dockerhub-token-local",
+		"--connector", "dockerhub",
+		"--config", "namespace=fixture",
+		"--config", "docker_username=fixture-user",
+		"--config", "base_url=" + server.URL + "/v2",
+		"--config", "auth_url=" + server.URL + "/v2",
+		"--from-env", "docker_pat=PM_TEST_DOCKERHUB_PAT",
+		"--root", root,
+		"--json",
+	})
+
+	newPlan := func(label string) (string, string) {
+		t.Helper()
+		stdout, _ := runCLI(t, []string{
+			"dockerhub", "access-tokens", "create",
+			"--credential", "dockerhub-token-local",
+			"--token-label", label,
+			"--scopes", "repo:read",
+			"--preview",
+			"--root", root,
+		})
+		planID := extractReverseField(t, stdout, `Created connector command plan (\S+)`)
+		approvalToken := extractReverseField(t, stdout, `Approval token: (\S+)`)
+		instance, err := app.Open(root)
+		if err != nil {
+			t.Fatalf("Open: %v", err)
+		}
+		plan, err := instance.GetReversePlan(planID)
+		if err != nil {
+			t.Fatalf("GetReversePlan: %v", err)
+		}
+		if plan.ApprovalToken != "" {
+			t.Fatal("stored plan retained its approval token")
+		}
+		return planID, approvalToken
+	}
+
+	defaultPlanID, defaultApprovalToken := newPlan("default-token")
+	defaultOut, _ := runCLI(t, []string{
+		"dockerhub", "access-tokens", "create",
+		"--plan", defaultPlanID,
+		"--approve", defaultApprovalToken,
+		"--root", root,
+		"--json",
+	})
+	if strings.Contains(defaultOut, issuedToken) {
+		t.Fatal("default Docker Hub access-token execution printed the provider token")
+	}
+
+	showPlanID, showApprovalToken := newPlan("shown-token")
+	showOut, _ := runCLI(t, []string{
+		"dockerhub", "access-tokens", "create",
+		"--plan", showPlanID,
+		"--approve", showApprovalToken,
+		"--show-token",
+		"--root", root,
+		"--json",
+	})
+	if !strings.Contains(showOut, issuedToken) {
+		t.Fatal("--show-token did not return the immediate provider token")
+	}
+
+	failurePlanID, failureApprovalToken := newPlan("failure-token")
+	var failureOut, failureErr bytes.Buffer
+	failureCode := cli.Run([]string{
+		"dockerhub", "access-tokens", "create",
+		"--plan", failurePlanID,
+		"--approve", failureApprovalToken,
+		"--root", root,
+		"--json",
+	}, &failureOut, &failureErr)
+	if failureCode == 0 {
+		t.Fatal("failed access-token execution exited successfully")
+	}
+	if strings.Contains(failureOut.String()+failureErr.String(), providerErrorToken) {
+		t.Fatal("failed access-token execution exposed the provider response token")
+	}
+
+	instance, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open after executions: %v", err)
+	}
+	for _, run := range instance.ListReverseRuns() {
+		if run.SensitiveWriteResponse != nil {
+			t.Fatal("reverse-run listing retained a sensitive response")
+		}
+		if strings.Contains(run.Error, issuedToken) || strings.Contains(run.Error, providerErrorToken) {
+			t.Fatal("reverse-run listing retained the provider token")
+		}
+	}
 }
 
 func TestGongCallsListHelpDocumentsDateFlagsAndLimitOutputCap(t *testing.T) {

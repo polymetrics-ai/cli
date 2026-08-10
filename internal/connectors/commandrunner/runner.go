@@ -68,6 +68,7 @@ type WriteCommand struct {
 	ConfirmationChallenge string                   `json:"confirmation_challenge,omitempty"`
 	Record                connectors.Record        `json:"record,omitempty"`
 	RedactedRecord        connectors.Record        `json:"redacted_record,omitempty"`
+	RedactFields          []string                 `json:"redact_fields,omitempty"`
 	PathParams            map[string]string        `json:"path_params,omitempty"`
 	Query                 map[string]string        `json:"query,omitempty"`
 	Batchable             bool                     `json:"batchable"`
@@ -216,6 +217,9 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 	if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
 		return WriteCommand{}, err
 	}
+	if err := connector.(connectors.OperationDirectWriteConfigPreflighter).PreflightOperationDirectWriteConfig(cmd.Operation, req.Config); err != nil {
+		return WriteCommand{}, err
+	}
 	pathParams, query, body, _, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return WriteCommand{}, err
@@ -234,6 +238,12 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 		return WriteCommand{}, &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write command output_policy does not match declared operation"}
 	}
 	record := connectors.Record(body)
+	redactedRecord := cloneRecord(record)
+	redactFields := []string(nil)
+	if cmd.AcceptsSecretInput {
+		redactedRecord = redactCommandRecord(record, cmd.RedactFields)
+		redactFields = append([]string(nil), cmd.RedactFields...)
+	}
 	return WriteCommand{
 		Connector:             connector.Name(),
 		Command:               command,
@@ -246,7 +256,8 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 		Approval:              firstNonEmpty(cmd.Approval, metadata.Approval, "direct writes require plan, preview, approval, execute"),
 		ConfirmationChallenge: metadata.ConfirmationChallenge,
 		Record:                cloneRecord(record),
-		RedactedRecord:        cloneRecord(record),
+		RedactedRecord:        redactedRecord,
+		RedactFields:          redactFields,
 		PathParams:            cloneStringMap(pathParams),
 		Query:                 cloneStringMap(query),
 		Batchable:             metadata.Batchable,
@@ -676,8 +687,8 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require exactly one api_surface endpoint"}
 	}
 	method := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
-	if method != http.MethodGet && method != http.MethodPost {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read commands require GET or POST api_surface endpoints, got %s", method)}
+	if method != http.MethodGet && method != http.MethodPost && method != http.MethodHead {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read commands require GET, POST, or HEAD api_surface endpoints, got %s", method)}
 	}
 	if isAbsoluteHTTPURL(cmd.APISurface[0].Path) {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands must not reference an absolute URL"}
@@ -706,6 +717,9 @@ func validateOperationDirectWriteCommand(connector connectors.Connector, cmd con
 	metadataProvider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
 	if !ok {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write metadata"}
+	}
+	if _, ok := connector.(connectors.OperationDirectWriteConfigPreflighter); !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write plan preflight"}
 	}
 	if strings.TrimSpace(cmd.Operation) == "" {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write commands require operation"}
@@ -1832,7 +1846,64 @@ func targetResourceOf(cmd connectors.CommandSurfaceCommand) string {
 func cloneRecord(in connectors.Record) connectors.Record {
 	out := make(connectors.Record, len(in))
 	for k, v := range in {
-		out[k] = v
+		out[k] = cloneRecordValue(v)
+	}
+	return out
+}
+
+func cloneRecordValue(value any) any {
+	switch typed := value.(type) {
+	case connectors.Record:
+		return cloneRecord(typed)
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, item := range typed {
+			out[key] = cloneRecordValue(item)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for i, item := range typed {
+			out[i] = cloneRecordValue(item)
+		}
+		return out
+	case []string:
+		out := make([]string, len(typed))
+		copy(out, typed)
+		return out
+	default:
+		return value
+	}
+}
+
+func redactCommandRecord(record connectors.Record, fields []string) connectors.Record {
+	out := cloneRecord(record)
+	for _, field := range fields {
+		parts := strings.Split(strings.TrimPrefix(strings.TrimSpace(field), "record."), ".")
+		if len(parts) == 0 || parts[0] == "" {
+			continue
+		}
+		current := map[string]any(out)
+		for _, part := range parts[:len(parts)-1] {
+			next, ok := current[part]
+			if !ok {
+				current = nil
+				break
+			}
+			switch typed := next.(type) {
+			case map[string]any:
+				current = typed
+			case connectors.Record:
+				current = map[string]any(typed)
+			default:
+				current = nil
+			}
+		}
+		if current != nil {
+			if _, ok := current[parts[len(parts)-1]]; ok {
+				current[parts[len(parts)-1]] = "redacted"
+			}
+		}
 	}
 	return out
 }

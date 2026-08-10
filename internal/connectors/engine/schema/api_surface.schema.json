@@ -50,6 +50,7 @@
                 "items": { "type": "string" }
               },
               "direct_read": { "type": "string" },
+              "direct_write": { "type": "string" },
               "direct_reads": {
                 "type": "array",
                 "items": { "type": "string" }

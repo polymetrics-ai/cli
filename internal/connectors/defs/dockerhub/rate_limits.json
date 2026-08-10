@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "state": "declared",
+  "reason": "The declared fixed windows apply only to registry-1.docker.io pull traffic. Docker Hub's separate abuse limiter has no published numeric budget; the shared requester honors provider Retry-After on HTTP 429 instead of inventing one.",
+  "policies": [
+    {
+      "id": "registry-pull-unauthenticated",
+      "source": {
+        "url": "https://docs.docker.com/docker-hub/download-rate-limit/",
+        "retrieved_at": "2026-08-08"
+      },
+      "selector": {
+        "hosts": ["registry-1.docker.io"],
+        "auth_types": ["unauthenticated"]
+      },
+      "scope": {
+        "subject_kind": "ip",
+        "subject_config": "registry_client_ip"
+      },
+      "budgets": [
+        {
+          "model": "fixed_window",
+          "dimension": "sustained",
+          "unit": "requests",
+          "limit": 100,
+          "window_seconds": 21600
+        }
+      ]
+    },
+    {
+      "id": "registry-pull-authenticated-free",
+      "source": {
+        "url": "https://docs.docker.com/docker-hub/download-rate-limit/",
+        "retrieved_at": "2026-08-08"
+      },
+      "selector": {
+        "hosts": ["registry-1.docker.io"],
+        "tiers": ["free"],
+        "auth_types": ["authenticated"]
+      },
+      "scope": {
+        "subject_kind": "account",
+        "subject_config": "docker_username"
+      },
+      "budgets": [
+        {
+          "model": "fixed_window",
+          "dimension": "sustained",
+          "unit": "requests",
+          "limit": 200,
+          "window_seconds": 21600
+        }
+      ]
+    }
+  ]
+}

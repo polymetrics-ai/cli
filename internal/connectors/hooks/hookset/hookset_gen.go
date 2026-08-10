@@ -23,6 +23,7 @@ import (
 	_ "polymetrics.ai/internal/connectors/hooks/chift"
 	_ "polymetrics.ai/internal/connectors/hooks/copper"
 	_ "polymetrics.ai/internal/connectors/hooks/dixa"
+	_ "polymetrics.ai/internal/connectors/hooks/dockerhub"
 	_ "polymetrics.ai/internal/connectors/hooks/ebay-fulfillment"
 	_ "polymetrics.ai/internal/connectors/hooks/elasticsearch"
 	_ "polymetrics.ai/internal/connectors/hooks/fastbill"

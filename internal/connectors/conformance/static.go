@@ -294,7 +294,7 @@ func checkWriteSchemasValid(b engine.Bundle) error {
 
 // checkSurfaceComplete enforces design §E.1 rules 1-4: every endpoint has
 // exactly one executable covered_by row or an explicit blocked non-executable
-// classifier; covered_by resolves to a declared stream/action/direct-read
+// classifier; covered_by resolves to a declared stream/action/direct-read/direct-write
 // command and every declared stream/action appears in the surface;
 // excluded/operation classifiers use closed vocabularies; capabilities.write/read
 // == false is only legal when the surface has no executable mutation/GET
@@ -322,6 +322,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 			graphQLOperations[operation.ID] = operation
 		}
 	}
+	directWrites := map[string]bool{}
 	if b.CLISurface != nil {
 		for _, cmd := range b.CLISurface.Commands {
 			// binary_download commands consume an api_surface endpoint the same
@@ -330,6 +331,9 @@ func checkSurfaceComplete(b engine.Bundle) error {
 			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download") &&
 				cmd.Availability == "implemented" {
 				directReads[cmd.Path] = true
+			}
+			if cmd.Intent == "direct_write" && cmd.Availability == "implemented" {
+				directWrites[cmd.Path] = true
 			}
 		}
 	}
@@ -341,7 +345,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0 || len(ep.CoveredBy.OperationTargets()) > 0)
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0 || len(ep.CoveredBy.OperationTargets()) > 0 || ep.CoveredBy.DirectWrite != "")
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -379,8 +383,8 @@ func checkSurfaceComplete(b engine.Bundle) error {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead)
 				}
 				method := strings.ToUpper(strings.TrimSpace(ep.Method))
-				if method != "GET" && method != "POST" {
-					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET or POST", i, ep.Method, ep.Path)
+				if method != "GET" && method != "POST" && method != "HEAD" {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET, POST, or HEAD", i, ep.Method, ep.Path)
 				}
 			}
 			for _, operationID := range ep.CoveredBy.OperationTargets() {
@@ -398,10 +402,18 @@ func checkSurfaceComplete(b engine.Bundle) error {
 					hasNonExcludedMutation = true
 				}
 			}
+			if directWrite := ep.CoveredBy.DirectWrite; directWrite != "" {
+				if !directWrites[directWrite] {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_write %q is not an implemented direct_write command", i, ep.Method, ep.Path, directWrite)
+				}
+				if !mutationMethods[strings.ToUpper(ep.Method)] {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_write must use POST, PUT, PATCH, or DELETE", i, ep.Method, ep.Path)
+				}
+			}
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
 			}
-			if len(ep.CoveredBy.WriteTargets()) > 0 && mutationMethods[strings.ToUpper(ep.Method)] {
+			if (len(ep.CoveredBy.WriteTargets()) > 0 || ep.CoveredBy.DirectWrite != "") && mutationMethods[strings.ToUpper(ep.Method)] {
 				hasNonExcludedMutation = true
 			}
 		case hasExcluded:

@@ -256,6 +256,14 @@ type RuntimeConfig struct {
 	SecretStore SecretStore `json:"-"`
 }
 
+type RuntimeConfigPreflighter interface {
+	PreflightRuntimeConfig(RuntimeConfig) error
+}
+
+type SensitiveWriteResponsePreflighter interface {
+	PreflightSensitiveWriteResponse(action string) error
+}
+
 // PayloadApprovalKey identifies a file field within an approved write batch.
 func PayloadApprovalKey(recordIndex int, field string) string {
 	return fmt.Sprintf("%d:%s", recordIndex, field)
@@ -485,13 +493,14 @@ type OperationDirectWriteRequest struct {
 // fixed-document GraphQL mutation. Body is nil only for an output policy that
 // intentionally discards response content.
 type OperationDirectWriteResult struct {
-	Connector string                   `json:"connector"`
-	Operation string                   `json:"operation"`
-	Method    string                   `json:"method"`
-	Path      string                   `json:"path"`
-	Status    int                      `json:"status"`
-	Body      any                      `json:"body,omitempty"`
-	GraphQL   *GraphQLResponseMetadata `json:"graphql,omitempty"`
+	Connector         string                   `json:"connector"`
+	Operation         string                   `json:"operation"`
+	Method            string                   `json:"method"`
+	Path              string                   `json:"path"`
+	Status            int                      `json:"status"`
+	Body              any                      `json:"body,omitempty"`
+	GraphQL           *GraphQLResponseMetadata `json:"graphql,omitempty"`
+	ResponseSensitive bool                     `json:"-"`
 }
 
 // OperationDirectWriteMetadata is the no-network operation metadata needed by
@@ -506,6 +515,7 @@ type OperationDirectWriteMetadata struct {
 	ConfirmationChallenge string
 	OutputPolicy          string
 	Batchable             bool
+	MaxRequestBytes       int
 	// PayloadFileFields is nil for non-multipart operations. For a declared
 	// multipart operation it is the closed set of body paths whose local-file
 	// identities must be captured before preview, even when their names do not
@@ -541,6 +551,14 @@ type OperationDirectWritePreflighter interface {
 // credentials or making a network request.
 type OperationDirectWriteMetadataProvider interface {
 	OperationDirectWriteMetadata(operation string) (OperationDirectWriteMetadata, error)
+}
+
+// OperationDirectWriteConfigPreflighter validates a direct-write plan
+// configuration without resolving credentials or making a network request.
+// It complements the fixed-binding admission check above: response-sensitive
+// operations must also reject an unsafe resolved base URL before persistence.
+type OperationDirectWriteConfigPreflighter interface {
+	PreflightOperationDirectWriteConfig(operation string, config RuntimeConfig) error
 }
 
 // OperationBinaryDownloadRequest is one bounded binary/file download driven by
@@ -626,13 +644,14 @@ func legacyBareConnectorName(name string) string {
 }
 
 type WriteRequest struct {
-	Stream     string
-	Table      string
-	Action     string
-	Overwrite  bool
-	Config     RuntimeConfig
-	PrimaryKey []string
-	Approval   *WriteApprovalEvidence
+	Stream                   string
+	Table                    string
+	Action                   string
+	Overwrite                bool
+	Config                   RuntimeConfig
+	PrimaryKey               []string
+	Approval                 *WriteApprovalEvidence
+	CaptureSensitiveResponse bool
 }
 
 // ConfirmationKind is the closed runtime vocabulary for an explicit write
@@ -661,8 +680,13 @@ func ParseWriteConfirmation(raw string) (WriteConfirmation, error) {
 }
 
 type WriteResult struct {
-	RecordsWritten int `json:"records_written"`
-	RecordsFailed  int `json:"records_failed"`
+	RecordsWritten    int                     `json:"records_written"`
+	RecordsFailed     int                     `json:"records_failed"`
+	SensitiveResponse *SensitiveWriteResponse `json:"-"`
+}
+
+type SensitiveWriteResponse struct {
+	Body any `json:"-"`
 }
 
 type QueryRequest struct {

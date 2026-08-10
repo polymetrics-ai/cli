@@ -60,6 +60,8 @@ type directReadWalk struct {
 	maxBytes        int
 	page            int
 	pageCursor      string
+	pagination      *PaginationSpec
+	recordsPath     string
 }
 
 // directReadPageMode is what the bundle's declared pagination can actually do
@@ -125,7 +127,9 @@ func resolveDirectReadPageMode(spec PaginationSpec, method string, paginatorErr 
 // where that page sits in the collection.
 func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk) (any, connectors.DirectReadPage, *connsdk.Response, error) {
 	var spec PaginationSpec
-	if b.HTTP.Pagination != nil {
+	if w.pagination != nil {
+		spec = *w.pagination
+	} else if b.HTTP.Pagination != nil {
 		spec = *b.HTTP.Pagination
 	}
 	pageSize := spec.PageSize
@@ -237,12 +241,21 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 		resp, err = requester.DoLimited(ctx, w.method, reqPath, query, w.body, w.maxBytes)
 	}
 	if err != nil {
-		return nil, connectors.DirectReadPage{}, nil, err
+		absent := statusOnlyAbsenceResponse(w.method, err)
+		if absent == nil {
+			return nil, connectors.DirectReadPage{}, nil, err
+		}
+		resp = absent
 	}
 	if len(resp.Body) > w.maxBytes {
 		return nil, connectors.DirectReadPage{}, resp, errDirectReadTooLarge{got: len(resp.Body), limit: w.maxBytes}
 	}
-	decoded, err := decodeDirectReadResponse(w.outputPolicy, resp.Body, w.maxBytes)
+	var decoded any
+	if strings.EqualFold(strings.TrimSpace(w.method), http.MethodHead) {
+		decoded, err = decodeDirectReadPageBody(w.method, resp, w.maxBytes)
+	} else {
+		decoded, err = decodeDirectReadResponse(w.outputPolicy, resp.Body, w.maxBytes)
+	}
 	if err != nil {
 		return nil, connectors.DirectReadPage{}, resp, err
 	}
@@ -262,7 +275,17 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	if engineChosePage {
 		page.Number = number
 	}
-	collection, isList, ambiguous := directReadCollectionKey(decoded)
+	collection := strings.TrimSpace(w.recordsPath)
+	isList := false
+	ambiguous := false
+	if collection != "" {
+		_, isList = directReadItemsAt(decoded, collection)
+		if !isList {
+			return nil, connectors.DirectReadPage{}, resp, errDirectReadPagination{err: fmt.Errorf("declared records_path %q does not select an array", collection)}
+		}
+	} else {
+		collection, isList, ambiguous = directReadCollectionKey(decoded)
+	}
 	if ambiguous {
 		// Which array pages cannot be known, so this read will not guess. What
 		// it must not do is claim zero rows for a body that plainly carries
@@ -698,10 +721,17 @@ func directReadItemsAt(decoded any, key string) ([]any, bool) {
 		items, ok := decoded.([]any)
 		return items, ok
 	}
-	obj, ok := decoded.(map[string]any)
-	if !ok {
-		return nil, false
+	value := decoded
+	for _, segment := range strings.Split(key, ".") {
+		obj, ok := value.(map[string]any)
+		if !ok {
+			return nil, false
+		}
+		value, ok = obj[segment]
+		if !ok {
+			return nil, false
+		}
 	}
-	items, ok := obj[key].([]any)
+	items, ok := value.([]any)
 	return items, ok
 }

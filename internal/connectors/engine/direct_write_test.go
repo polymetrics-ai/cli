@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -10,6 +11,139 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 )
+
+func TestOperationDirectWriteAuthModeNoneSkipsAuthenticatorConstruction(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("Authorization") != "" {
+			t.Fatalf("Authorization = %q, want empty", r.Header.Get("Authorization"))
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	hooks := &fakeHooks{name: "acme", authErr: errors.New("custom authentication should not be constructed")}
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{
+			URL:  srv.URL,
+			Auth: []AuthSpec{{Mode: "custom", Hook: "acme"}},
+		},
+		Operations: []OperationSpec{{
+			ID:            "acme.auth-login",
+			Kind:          "rest_write",
+			Summary:       "Exchange credentials",
+			Risk:          "low",
+			Approval:      "none",
+			OutputPolicy:  "json",
+			MutationClass: "create",
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/auth/login",
+				ContentType: "application/json",
+				AuthMode:    "none",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","required":["username","password"],"properties":{"username":{"type":"string"},"password":{"type":"string"}}}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/auth/login",
+			Operation: &SurfaceOperation{Model: "write_action"},
+		}}},
+	}
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.auth-login",
+		Body:      map[string]any{"username": "fixture-user", "password": "fixture-password"},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, hooks)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+
+	result, err := OperationDirectWrite(context.Background(), bundle, req, hooks)
+	if err != nil {
+		t.Fatalf("OperationDirectWrite: %v", err)
+	}
+	if result.Status != http.StatusOK {
+		t.Fatalf("status = %d, want %d", result.Status, http.StatusOK)
+	}
+	if hooks.authCalls != 0 {
+		t.Fatalf("custom authenticator calls = %d, want 0", hooks.authCalls)
+	}
+}
+
+func TestOperationDirectWriteResponseSensitiveBaseURLRequiresHTTPS(t *testing.T) {
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: "https://data.example.invalid/v2"},
+		Operations: []OperationSpec{{
+			ID:                "acme.login",
+			Kind:              "rest_write",
+			Summary:           "Exchange credentials",
+			Risk:              "low",
+			Approval:          "none",
+			OutputPolicy:      "json",
+			MutationClass:     "create",
+			ResponseSensitive: true,
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/v2/users/login",
+				BaseURL:     "{{ config.auth_url }}",
+				ContentType: "application/json",
+				AuthMode:    "none",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","required":["username","password"],"properties":{"username":{"type":"string"},"password":{"type":"string"}}}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/v2/users/login",
+			Operation: &SurfaceOperation{Model: "write_action"},
+		}}},
+	}
+	metadata, err := OperationDirectWriteMetadata(bundle, "acme.login")
+	if err != nil {
+		t.Fatalf("OperationDirectWriteMetadata: %v", err)
+	}
+	if metadata.MaxRequestBytes != 1024 {
+		t.Fatalf("MaxRequestBytes = %d, want 1024", metadata.MaxRequestBytes)
+	}
+	for _, tt := range []struct {
+		name      string
+		authURL   string
+		wantError string
+	}{
+		{name: "rejects cleartext config overlay", authURL: "http://auth.example.invalid/v2", wantError: "requires an HTTPS base URL"},
+		{name: "rejects userinfo config overlay", authURL: "https://fixture-user:fixture-pass@auth.example.invalid/v2", wantError: "without URL userinfo"},
+		{name: "rejects query config overlay", authURL: "https://auth.example.invalid/v2?tenant=fixture", wantError: "without a query or fragment"},
+		{name: "rejects fragment config overlay", authURL: "https://auth.example.invalid/v2#tenant", wantError: "without a query or fragment"},
+		{name: "accepts HTTPS config overlay", authURL: "https://auth.example.invalid/v2"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			config := connectors.RuntimeConfig{Config: map[string]string{"auth_url": tt.authURL}}
+			err := PreflightOperationDirectWriteConfig(bundle, "acme.login", config)
+			if tt.wantError != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantError) {
+					t.Fatalf("PreflightOperationDirectWriteConfig error = %v, want %q", err, tt.wantError)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("PreflightOperationDirectWriteConfig: %v", err)
+			}
+			_, err = PreviewOperationDirectWrite(context.Background(), bundle, connectors.OperationDirectWriteRequest{
+				Operation: "acme.login",
+				Config:    config,
+				Body:      map[string]any{"username": "fixture-user", "password": "fixture-password"},
+			}, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite: %v", err)
+			}
+		})
+	}
+}
 
 func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *testing.T) {
 	calls := 0
@@ -403,5 +537,34 @@ func TestOperationDirectWriteRefusesRedirectReplay(t *testing.T) {
 	}
 	if calls != 1 || redirectedCalls != 0 {
 		t.Fatalf("redirect calls = total %d / followed %d, want exactly 1 / 0", calls, redirectedCalls)
+	}
+}
+
+func TestOperationDirectWriteProxyBasePathConsumesAPIRootOnce(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost || r.URL.Path != "/dockerhub/v2/namespaces/acme/repositories" {
+			t.Fatalf("request = %s %s, want POST proxy base plus one provider root", r.Method, r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+	bundle := Bundle{
+		Name: "dockerhub",
+		HTTP: HTTPBase{URL: srv.URL + "/dockerhub/v2", APIRoot: "/v2"},
+		Operations: []OperationSpec{{
+			ID: "dockerhub.create-repository", Kind: "rest_write", Summary: "Create repository", Risk: "low", Approval: "none", OutputPolicy: "json", MutationClass: "create",
+			REST: &RESTOperationSpec{Method: http.MethodPost, Path: "/v2/namespaces/acme/repositories", ContentType: "application/json", MaxBytes: 1024, BodySchema: json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}},"additionalProperties":false}`)},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/v2/namespaces/acme/repositories", Operation: &SurfaceOperation{Model: "write_action"}}}},
+	}
+	req := connectors.OperationDirectWriteRequest{Operation: "dockerhub.create-repository", Body: map[string]any{"name": "fixture"}}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err != nil {
+		t.Fatalf("OperationDirectWrite: %v", err)
 	}
 }

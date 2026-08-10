@@ -1,14 +1,14 @@
 {
   "name": "dockerhub",
   "display_name": "Docker Hub",
-  "description": "Reads public Docker Hub repositories and image tags for a configured username or organization via the Docker Hub registry API.",
+  "description": "Reads public Docker Hub repositories and image tags for a configured target namespace; an optional Personal Access Token authenticates as a separately configured Docker Hub username. It also manages access tokens, organizations, groups/teams, invites, audit logs, and repositories via the Docker Hub API.",
   "integration_type": "api",
   "docs_url": "https://docs.docker.com/docker-hub/api/latest/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,11 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Docker Hub API read of public repository and tag data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Docker Hub API read of public repository/tag data, and, when authenticated, account-scoped access-token/org/group/invite/audit-log metadata",
+    "approval": "reverse ETL mutations (repository, access-token, group, invite, org member/settings writes) require plan, preview, explicit approval, and execute; destructive actions require typed destructive confirmation"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "custom-auth-optional (mode:custom dockerhub AuthHook gated by when: secrets.docker_pat, then by when: secrets.scim_bearer_token for SCIM-only connections, falling back to mode:none for unauthenticated public reads) -- conformance's runtimeConfigForEngine synthesizes a non-empty value for every x-secret property unconditionally, so the docker_pat when-gate always evaluates true under conformance and every dynamic check (even the 4 pre-existing public-read streams) is forced onto the custom-hook path, which then fails closed on the synthetic non-URL base_url value; there is no synthetic-config shape that can exercise both the authenticated and unauthenticated branches faithfully. The AuthHook's own login-exchange behavior (request shape, JWT-exp-driven caching/refresh, error handling, secret redaction) is proven by internal/connectors/hooks/dockerhub/hooks_test.go against a real httptest.Server, and the 4 pre-existing public-read stream fixtures under fixtures/streams/** are unchanged from before this phase and were passing dynamic conformance prior to the auth hook's addition."
   }
 }

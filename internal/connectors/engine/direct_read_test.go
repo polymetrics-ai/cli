@@ -79,6 +79,32 @@ func TestDirectReadAllowsSlashBearingRefPathVariables(t *testing.T) {
 	}
 }
 
+func TestDirectReadAcceptsOpaqueEmailPathSegment(t *testing.T) {
+	const email = "person+coverage@example.test"
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if got, want := r.URL.Path, "/status/"+email; got != want {
+			t.Fatalf("path = %q, want %q", got, want)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"status":"ok"}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/status/{emailAddress}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/status/{emailAddress}",
+		PathParams:   map[string]string{"emailAddress": email},
+		MaxBytes:     1024,
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if result.Status != http.StatusOK {
+		t.Fatalf("status = %d, want %d", result.Status, http.StatusOK)
+	}
+}
+
 func TestDirectReadPreservesHTTPErrorText(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if got, want := r.URL.Query().Get("trace"), "direct-read-fixture"; got != want {
@@ -608,6 +634,188 @@ func TestOperationDirectReadAppliesDeclaredSensitiveRedactFields(t *testing.T) {
 	}
 	if patient["uuid"] != "patient-opaque-ref" {
 		t.Fatalf("opaque patient uuid = %v, want retained", patient["uuid"])
+	}
+}
+
+// --- HEAD (status-only existence check) operation direct reads ------------
+//
+// A HEAD response never carries a body (RFC 9110 §9.3.2); these commands
+// exist purely to surface the provider's status code, e.g. "does this
+// resource exist" without paying for/streaming the full GET body. See
+// operationDirectReadSpec's HEAD branch and OperationDirectRead's
+// method == http.MethodHead special case.
+
+func headCheckBundle(url string) Bundle {
+	return Bundle{
+		Name: "dockerhub",
+		HTTP: HTTPBase{URL: url},
+		Operations: []OperationSpec{{
+			ID:           "dockerhub.check_repository",
+			Kind:         "rest_read",
+			Summary:      "Check repository existence",
+			Risk:         "low",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method:   http.MethodHead,
+				Path:     "/v2/namespaces/{namespace}/repositories/{repository}",
+				MaxBytes: 1024,
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method: http.MethodHead,
+			Path:   "/v2/namespaces/{namespace}/repositories/{repository}",
+			Operation: &SurfaceOperation{
+				Model:            "direct_read",
+				Status:           "blocked",
+				Risk:             "low",
+				BlockedByDefault: true,
+				Reason:           "typed operation metadata",
+			},
+		}}},
+	}
+}
+
+func TestOperationDirectReadHEADReturnsStatusOnlyNoBodyDecode(t *testing.T) {
+	var sawMethod string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sawMethod = r.Method
+		// A real HEAD response has no body — net/http's server strips any
+		// written body for a HEAD request automatically, but write nothing
+		// here anyway to mirror the wire behavior exactly.
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	result, err := OperationDirectRead(context.Background(), headCheckBundle(srv.URL), connectors.OperationDirectReadRequest{
+		Operation:  "dockerhub.check_repository",
+		PathParams: map[string]string{"namespace": "library", "repository": "alpine"},
+		MaxBytes:   1024,
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if sawMethod != http.MethodHead {
+		t.Fatalf("provider saw method %s, want HEAD", sawMethod)
+	}
+	if result.Status != http.StatusOK {
+		t.Fatalf("result.Status = %d, want 200", result.Status)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("result.Body = %#v (%T), want a status-only map", result.Body, result.Body)
+	}
+	statusCode, ok := body["status_code"]
+	if !ok {
+		t.Fatalf("result.Body missing status_code key: %+v", body)
+	}
+	if n, ok := statusCode.(int); !ok || n != http.StatusOK {
+		t.Fatalf("status_code = %#v, want int 200", statusCode)
+	}
+}
+
+// A status-only existence check exists to answer "is this resource there".
+// 404 IS that answer, so it is a structured result, not a transport error —
+// otherwise `repository check` can only ever succeed, and absence exits
+// non-zero with an error string carrying no status code.
+func TestOperationDirectReadHEADAbsenceReturnsStructuredNotFound(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+	}))
+	defer srv.Close()
+
+	result, err := OperationDirectRead(context.Background(), headCheckBundle(srv.URL), connectors.OperationDirectReadRequest{
+		Operation:  "dockerhub.check_repository",
+		PathParams: map[string]string{"namespace": "library", "repository": "does-not-exist"},
+		MaxBytes:   1024,
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead for an absent resource: %v", err)
+	}
+	if result.Status != http.StatusNotFound {
+		t.Fatalf("result.Status = %d, want 404", result.Status)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("result.Body = %#v (%T), want a status-only map", result.Body, result.Body)
+	}
+	if n, ok := body["status_code"].(int); !ok || n != http.StatusNotFound {
+		t.Fatalf("status_code = %#v, want int 404", body["status_code"])
+	}
+}
+
+// Only 404, and only for HEAD. Every other non-2xx is the provider declining
+// to answer (or an auth problem), not a fact about the resource.
+func TestOperationDirectReadHEADNonAbsenceStatusesStayErrors(t *testing.T) {
+	for _, status := range []int{
+		http.StatusUnauthorized,
+		http.StatusForbidden,
+		http.StatusTooManyRequests,
+		http.StatusInternalServerError,
+	} {
+		t.Run(http.StatusText(status), func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(status)
+			}))
+			defer srv.Close()
+
+			_, err := OperationDirectRead(context.Background(), headCheckBundle(srv.URL), connectors.OperationDirectReadRequest{
+				Operation:  "dockerhub.check_repository",
+				PathParams: map[string]string{"namespace": "library", "repository": "alpine"},
+				MaxBytes:   1024,
+			}, nil)
+			if err == nil {
+				t.Fatalf("OperationDirectRead error = nil for a %d HEAD response, want an error", status)
+			}
+		})
+	}
+}
+
+// The 404-as-result narrowing must not reach any other direct read: a GET 404
+// is still a failure.
+func TestOperationDirectReadGETNotFoundIsStillError(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+	}))
+	defer srv.Close()
+
+	b := headCheckBundle(srv.URL)
+	b.Operations[0].REST.Method = http.MethodGet
+	b.Surface.Endpoints[0].Method = http.MethodGet
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation:  "dockerhub.check_repository",
+		PathParams: map[string]string{"namespace": "library", "repository": "does-not-exist"},
+		MaxBytes:   1024,
+	}, nil)
+	if err == nil {
+		t.Fatal("OperationDirectRead error = nil for a 404 GET response, want an error (only status-only HEAD checks report absence as a result)")
+	}
+}
+
+func TestOperationDirectReadSpecRejectsHEADWithoutJSONRedactedPolicy(t *testing.T) {
+	b := headCheckBundle("https://example.invalid")
+	b.Operations[0].OutputPolicy = "clinical_json_redacted"
+	if _, err := operationDirectReadSpec(b, "dockerhub.check_repository"); err == nil {
+		t.Fatal("operationDirectReadSpec error = nil, want an error for a HEAD rest_read operation not declaring output_policy json_redacted")
+	} else if !strings.Contains(err.Error(), "json_redacted") {
+		t.Fatalf("error = %q, want it to name json_redacted", err.Error())
+	}
+}
+
+func TestOperationDirectReadSpecAcceptsHEADForRestRead(t *testing.T) {
+	b := headCheckBundle("https://example.invalid")
+	if _, err := operationDirectReadSpec(b, "dockerhub.check_repository"); err != nil {
+		t.Fatalf("operationDirectReadSpec: %v", err)
+	}
+}
+
+func TestPreflightOperationDirectReadAcceptsHEAD(t *testing.T) {
+	b := headCheckBundle("https://example.invalid")
+	err := PreflightOperationDirectRead(b, "dockerhub.check_repository", "HEAD",
+		"/v2/namespaces/{namespace}/repositories/{repository}", 1024, "json_redacted")
+	if err != nil {
+		t.Fatalf("PreflightOperationDirectRead: %v", err)
 	}
 }
 
@@ -1205,5 +1413,38 @@ func TestOperationDirectReadRequiredQueryEveryGroupMustBeSatisfied(t *testing.T)
 	}
 	if issued {
 		t.Fatal("request must not be issued while a group is unsatisfied")
+	}
+}
+
+func TestOperationDirectReadProxyBasePathConsumesAPIRootOnce(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/dockerhub/v2/namespaces/acme/repositories" {
+			t.Fatalf("request path = %q, want proxy base plus one provider root", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`[]`))
+	}))
+	defer srv.Close()
+	bundle := Bundle{
+		Name: "dockerhub",
+		HTTP: HTTPBase{URL: srv.URL + "/dockerhub/v2", APIRoot: "/v2"},
+		Operations: []OperationSpec{{
+			ID: "dockerhub.repositories", Kind: "rest_read", Summary: "Repositories", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/v2/namespaces/acme/repositories", MaxBytes: 1024},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/v2/namespaces/acme/repositories", Operation: &SurfaceOperation{Model: "direct_read"}}}},
+	}
+	if _, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "dockerhub.repositories"}, nil); err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+}
+
+func TestRequestURLForBaseURLNormalizesAPIRoot(t *testing.T) {
+	got, err := RequestURLForBaseURL("/v2/users/login", "https://proxy.example.test/dockerhub", "/v2")
+	if err != nil {
+		t.Fatalf("RequestURLForBaseURL: %v", err)
+	}
+	if want := "https://proxy.example.test/dockerhub/v2/users/login"; got != want {
+		t.Fatalf("RequestURLForBaseURL = %q, want %q", got, want)
 	}
 }

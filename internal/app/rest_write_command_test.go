@@ -2,6 +2,8 @@ package app_test
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -9,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"testing"
 
 	"polymetrics.ai/internal/app"
@@ -21,6 +24,31 @@ const (
 	restWriteDemoConnector          = "restwrite-demo"
 	multipartRestWriteDemoConnector = "multipart-restwrite-demo"
 )
+
+func trustDefaultTransportForTLSServers(t *testing.T, servers ...*httptest.Server) {
+	t.Helper()
+	roots := x509.NewCertPool()
+	for _, server := range servers {
+		roots.AddCert(server.Certificate())
+	}
+	previous, ok := http.DefaultTransport.(*http.Transport)
+	if !ok {
+		t.Fatalf("default transport = %T, want *http.Transport", http.DefaultTransport)
+	}
+	transport := previous.Clone()
+	tlsConfig := &tls.Config{RootCAs: roots}
+	if transport.TLSClientConfig != nil {
+		tlsConfig = transport.TLSClientConfig.Clone()
+		tlsConfig.RootCAs = roots
+	}
+	transport.TLSClientConfig = tlsConfig
+	previousDefaultTransport := http.DefaultTransport
+	http.DefaultTransport = transport
+	t.Cleanup(func() {
+		http.DefaultTransport = previousDefaultTransport
+		transport.CloseIdleConnections()
+	})
+}
 
 func setupRestWriteDemoApp(t *testing.T, ctx context.Context, baseURL string) *app.App {
 	return setupRestWriteDemoAppWithBundle(t, ctx, baseURL, nil)
@@ -285,6 +313,592 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 	}
 	if calls != 1 {
 		t.Fatalf("replayed approval reached the network; calls = %d", calls)
+	}
+}
+
+func TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken(t *testing.T) {
+	ctx := context.Background()
+	const suppliedPassword = "fixture-password"
+	const returnedToken = "fixture-session-token"
+	foreignCalls := 0
+	foreign := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		foreignCalls++
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	t.Cleanup(foreign.Close)
+
+	authCalls := 0
+	authServer := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authCalls++
+		if r.Method != http.MethodPost || r.URL.Path != "/v2/users/login" {
+			t.Fatalf("request = %s %s, want POST /v2/users/login", r.Method, r.URL.Path)
+		}
+		if got := r.Header.Get("Authorization"); got != "" {
+			t.Fatalf("auth login request Authorization = %q, want no inherited connector auth", got)
+		}
+		var body map[string]string
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode request body: %v", err)
+		}
+		if body["username"] != "fixture-user" || body["password"] != suppliedPassword {
+			t.Fatal("login request did not contain the supplied fields")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"token":"` + returnedToken + `"}`))
+	}))
+	t.Cleanup(authServer.Close)
+	trustDefaultTransportForTLSServers(t, foreign, authServer)
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "dockerhub-auth-local",
+		Connector: "dockerhub",
+		Config: map[string]string{
+			"namespace": "fixture",
+			"base_url":  foreign.URL + "/v2",
+			"auth_url":  authServer.URL + "/v2",
+		},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  "dockerhub",
+		Credential: "dockerhub-auth-local",
+		Path:       []string{"auth", "login", "create"},
+		Flags: map[string][]string{
+			"username": {"fixture-user"},
+			"password": {suppliedPassword},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+	if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+		t.Fatal("plan did not produce a preview-bound approval")
+	}
+	if authCalls != 0 || foreignCalls != 0 {
+		t.Fatal("planning reached a network endpoint")
+	}
+	if got := plan.ConnectorCommandRecord["password"]; got != suppliedPassword {
+		t.Fatal("execution record did not retain the supplied password")
+	}
+	if len(plan.Sample) != 1 || plan.Sample[0]["password"] != "redacted" {
+		t.Fatal("plan sample did not redact the password")
+	}
+	// Command-surface redact_fields protect operator-visible samples and CLI
+	// output. They intentionally do not become a sensitive_policy withholding
+	// contract, because this approved auth exchange retains its credential input
+	// locally after warning the caller.
+	if len(plan.RedactFields) != 0 || len(plan.WithheldFields) != 0 {
+		t.Fatalf("plan redaction/withholding = %#v/%#v, want command-local sample redaction only", plan.RedactFields, plan.WithheldFields)
+	}
+
+	reopened, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("reopen: %v", err)
+	}
+	stored, err := reopened.GetReversePlan(plan.ID)
+	if err != nil {
+		t.Fatalf("GetReversePlan: %v", err)
+	}
+	if stored.ConnectorCommandRecord["password"] != suppliedPassword || len(stored.Sample) != 1 || stored.Sample[0]["password"] != "redacted" {
+		t.Fatal("stored plan did not retain the execution record and redacted sample")
+	}
+
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+	if err != nil {
+		t.Fatalf("RunReverseETL: %v", err)
+	}
+	if authCalls != 1 || run.OperationDirectWrite == nil {
+		t.Fatal("approved direct auth write did not reach the dedicated authentication endpoint")
+	}
+	if foreignCalls != 0 {
+		t.Fatal("foreign base URL received a direct authentication request")
+	}
+	body, ok := run.OperationDirectWrite.Body.(map[string]any)
+	if !ok || body["token"] != returnedToken {
+		t.Fatal("immediate operation response did not retain the provider token")
+	}
+
+	persisted, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("reopen after direct auth: %v", err)
+	}
+	history, err := persisted.GetReverseRun(run.ID)
+	if err != nil {
+		t.Fatalf("GetReverseRun: %v", err)
+	}
+	if history.OperationDirectWrite == nil || history.OperationDirectWrite.Body != nil {
+		t.Fatal("reverse-run history retained a direct authentication response body")
+	}
+	listed := persisted.ListReverseRuns()
+	if len(listed) != 1 || listed[0].OperationDirectWrite == nil || listed[0].OperationDirectWrite.Body != nil {
+		t.Fatal("reverse-run listing retained a direct authentication response body")
+	}
+	stateBytes, err := os.ReadFile(filepath.Join(a.ProjectDir(), "state", "state.json"))
+	if err != nil {
+		t.Fatalf("read reverse-run state: %v", err)
+	}
+	if strings.Contains(string(stateBytes), returnedToken) {
+		t.Fatal("state retained the session token")
+	}
+}
+
+func TestDockerHubAuthLoginRejectsUserinfoBeforeUnpreviewedPlanPersistence(t *testing.T) {
+	ctx := context.Background()
+	authCalls := 0
+	authServer := httptest.NewTLSServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		authCalls++
+	}))
+	t.Cleanup(authServer.Close)
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "dockerhub-auth-plan-preflight",
+		Connector: "dockerhub",
+		Config: map[string]string{
+			"namespace": "fixture",
+			"base_url":  "https://data.example.invalid/v2",
+		},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	statePath := filepath.Join(a.ProjectDir(), "state", "state.json")
+	before, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state before rejected plan: %v", err)
+	}
+	authURL := "https://fixture-user:fixture-value@" + strings.TrimPrefix(authServer.URL, "https://") + "/v2"
+	_, _, err = a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  "dockerhub",
+		Credential: "dockerhub-auth-plan-preflight",
+		Path:       []string{"auth", "login", "create"},
+		Config:     map[string]string{"auth_url": authURL},
+		Flags: map[string][]string{
+			"username": {"fixture-user"},
+			"password": {"fixture-value"},
+		},
+		Preview: false,
+	})
+	if err == nil || !strings.Contains(err.Error(), "URL userinfo") {
+		t.Fatalf("PlanConnectorCommand error = %v, want userinfo rejection", err)
+	}
+	if authCalls != 0 {
+		t.Fatalf("rejected plan reached authentication endpoint %d times", authCalls)
+	}
+	if plans := a.ListReversePlans(); len(plans) != 0 {
+		t.Fatalf("rejected plan persisted reverse plans = %#v, want none", plans)
+	}
+	after, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state after rejected plan: %v", err)
+	}
+	if string(after) != string(before) {
+		t.Fatal("rejected plan mutated project state")
+	}
+}
+
+func TestDockerHubCredentialAdmissionRejectsAuthURLUserinfoBeforePersistence(t *testing.T) {
+	ctx := context.Background()
+	const userinfoMarker = "fixture-proxy-secret"
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	statePath := filepath.Join(a.ProjectDir(), "state", "state.json")
+	before, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state before rejected credential: %v", err)
+	}
+	_, err = a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "dockerhub-unsafe-auth-url",
+		Connector: "dockerhub",
+		Config: map[string]string{
+			"namespace": "fixture",
+			"base_url":  "https://data.example.invalid/v2",
+			"auth_url":  "https://fixture-user:" + userinfoMarker + "@auth.example.invalid/v2",
+		},
+	})
+	if err == nil || !strings.Contains(err.Error(), "URL userinfo") {
+		t.Fatalf("AddCredential() error = %v, want userinfo rejection", err)
+	}
+	if strings.Contains(err.Error(), userinfoMarker) {
+		t.Fatalf("AddCredential() exposed auth URL userinfo: %q", err)
+	}
+	if credentials := a.ListCredentials(); len(credentials) != 0 {
+		t.Fatalf("rejected credential persisted metadata %#v", credentials)
+	}
+	after, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state after rejected credential: %v", err)
+	}
+	if string(after) != string(before) {
+		t.Fatal("rejected credential mutated project state")
+	}
+}
+
+func TestDockerHubStoredPATAuthURLRejectedBeforePlanPersistence(t *testing.T) {
+	ctx := context.Background()
+	newApp := func(t *testing.T) (*app.App, string, string, *int) {
+		t.Helper()
+		authCalls := 0
+		authServer := httptest.NewTLSServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+			authCalls++
+		}))
+		t.Cleanup(authServer.Close)
+		trustDefaultTransportForTLSServers(t, authServer)
+
+		root := t.TempDir()
+		if err := app.InitProject(root); err != nil {
+			t.Fatalf("InitProject: %v", err)
+		}
+		a, err := app.Open(root)
+		if err != nil {
+			t.Fatalf("Open: %v", err)
+		}
+		if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+			Name:      "dockerhub-stored-pat-plan-preflight",
+			Connector: "dockerhub",
+			Config: map[string]string{
+				"namespace":       "fixture",
+				"docker_username": "fixture-user",
+				"base_url":        "https://data.example.invalid/v2",
+			},
+			Secrets: map[string]string{"docker_pat": "fixture-pat-value"},
+		}); err != nil {
+			t.Fatalf("AddCredential: %v", err)
+		}
+		authURL := "https://fixture-user:fixture-value@" + strings.TrimPrefix(authServer.URL, "https://") + "/v2"
+		return a, root, authURL, &authCalls
+	}
+	assertRejected := func(t *testing.T, a *app.App, authCalls *int, wantError, forbidden string, invoke func() error) {
+		t.Helper()
+		statePath := filepath.Join(a.ProjectDir(), "state", "state.json")
+		before, err := os.ReadFile(statePath)
+		if err != nil {
+			t.Fatalf("read state before rejected plan: %v", err)
+		}
+		err = invoke()
+		if err == nil || !strings.Contains(err.Error(), wantError) {
+			t.Fatalf("plan error = %v, want rejection %q", err, wantError)
+		}
+		if forbidden != "" && strings.Contains(err.Error(), forbidden) {
+			t.Fatalf("plan error exposed URL userinfo: %q", err)
+		}
+		if *authCalls != 0 {
+			t.Fatalf("rejected plan reached authentication endpoint %d times", *authCalls)
+		}
+		if plans := a.ListReversePlans(); len(plans) != 0 {
+			t.Fatalf("rejected plan persisted reverse plans = %#v, want none", plans)
+		}
+		after, err := os.ReadFile(statePath)
+		if err != nil {
+			t.Fatalf("read state after rejected plan: %v", err)
+		}
+		if string(after) != string(before) {
+			t.Fatal("rejected plan mutated project state")
+		}
+	}
+
+	t.Run("connector command", func(t *testing.T) {
+		a, _, authURL, authCalls := newApp(t)
+		assertRejected(t, a, authCalls, "must not include URL userinfo", "fixture-value", func() error {
+			_, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+				Connector:  "dockerhub",
+				Credential: "dockerhub-stored-pat-plan-preflight",
+				Path:       []string{"repository", "create"},
+				Config:     map[string]string{"auth_url": authURL},
+				Flags: map[string][]string{
+					"name":      {"fixture-repository"},
+					"namespace": {"fixture"},
+				},
+			})
+			return err
+		})
+	})
+
+	t.Run("generic reverse etl", func(t *testing.T) {
+		a, root, authURL, authCalls := newApp(t)
+		seedWarehouseTableRows(t, root, "dockerhub_plan_rows", `{"name":"fixture-repository","namespace":"fixture"}`)
+		assertRejected(t, a, authCalls, "must not include URL userinfo", "fixture-value", func() error {
+			_, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+				Name:                  "dockerhub_stored_pat_auth_url",
+				SourceTable:           "dockerhub_plan_rows",
+				DestinationConnector:  "dockerhub",
+				DestinationCredential: "dockerhub-stored-pat-plan-preflight",
+				DestinationConfig:     map[string]string{"auth_url": authURL},
+				Action:                "create_repository",
+				Mappings:              map[string]string{"name": "name", "namespace": "namespace"},
+				Limit:                 1,
+			})
+			return err
+		})
+	})
+
+	t.Run("connector command empty auth URL", func(t *testing.T) {
+		a, _, _, authCalls := newApp(t)
+		assertRejected(t, a, authCalls, "auth_url is required", "", func() error {
+			_, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+				Connector:  "dockerhub",
+				Credential: "dockerhub-stored-pat-plan-preflight",
+				Path:       []string{"repository", "create"},
+				Config:     map[string]string{"auth_url": ""},
+				Flags: map[string][]string{
+					"name":      {"fixture-repository"},
+					"namespace": {"fixture"},
+				},
+			})
+			return err
+		})
+	})
+
+	t.Run("generic reverse etl empty auth URL", func(t *testing.T) {
+		a, root, _, authCalls := newApp(t)
+		seedWarehouseTableRows(t, root, "dockerhub_empty_auth_url_rows", `{"name":"fixture-repository","namespace":"fixture"}`)
+		assertRejected(t, a, authCalls, "auth_url is required", "", func() error {
+			_, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+				Name:                  "dockerhub_empty_auth_url",
+				SourceTable:           "dockerhub_empty_auth_url_rows",
+				DestinationConnector:  "dockerhub",
+				DestinationCredential: "dockerhub-stored-pat-plan-preflight",
+				DestinationConfig:     map[string]string{"auth_url": ""},
+				Action:                "create_repository",
+				Mappings:              map[string]string{"name": "name", "namespace": "namespace"},
+				Limit:                 1,
+			})
+			return err
+		})
+	})
+}
+
+func TestDockerHubAuthFailureRedactsProviderBody(t *testing.T) {
+	ctx := context.Background()
+	const providerBodyMarker = "fixture-auth-failure-body"
+	foreignCalls := 0
+	foreign := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		foreignCalls++
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	t.Cleanup(foreign.Close)
+
+	authCalls := 0
+	authServer := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authCalls++
+		if r.Method != http.MethodPost || r.URL.Path != "/v2/users/login" {
+			t.Fatalf("request = %s %s, want POST /v2/users/login", r.Method, r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		_, _ = w.Write([]byte(`{"error":"` + providerBodyMarker + `"}`))
+	}))
+	t.Cleanup(authServer.Close)
+	trustDefaultTransportForTLSServers(t, foreign, authServer)
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "dockerhub-auth-failure",
+		Connector: "dockerhub",
+		Config: map[string]string{
+			"namespace": "fixture",
+			"base_url":  foreign.URL + "/v2",
+			"auth_url":  authServer.URL + "/v2",
+		},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  "dockerhub",
+		Credential: "dockerhub-auth-failure",
+		Path:       []string{"auth", "login", "create"},
+		Flags: map[string][]string{
+			"username": {"fixture-user"},
+			"password": {"fixture-password"},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+	if err == nil {
+		t.Fatal("RunReverseETL error = nil, want provider failure")
+	}
+	if authCalls != 1 || foreignCalls != 0 {
+		t.Fatalf("auth and foreign calls = %d and %d, want 1 and 0", authCalls, foreignCalls)
+	}
+	if !strings.Contains(err.Error(), "http 401") || strings.Contains(err.Error(), providerBodyMarker) {
+		t.Fatal("returned direct authentication error did not redact the provider body")
+	}
+	if strings.Contains(run.Error, providerBodyMarker) {
+		t.Fatal("immediate reverse run retained the provider body")
+	}
+
+	persisted, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("reopen after direct auth failure: %v", err)
+	}
+	history, err := persisted.GetReverseRun(run.ID)
+	if err != nil {
+		t.Fatalf("GetReverseRun: %v", err)
+	}
+	if strings.Contains(history.Error, providerBodyMarker) {
+		t.Fatal("reverse-run history retained the provider body")
+	}
+	listed := persisted.ListReverseRuns()
+	if len(listed) != 1 || strings.Contains(listed[0].Error, providerBodyMarker) {
+		t.Fatal("reverse-run listing retained the provider body")
+	}
+	stateBytes, err := os.ReadFile(filepath.Join(a.ProjectDir(), "state", "state.json"))
+	if err != nil {
+		t.Fatalf("read reverse-run state: %v", err)
+	}
+	if strings.Contains(string(stateBytes), providerBodyMarker) {
+		t.Fatal("state retained the provider body")
+	}
+}
+
+func TestDockerHubAccessTokenShowTokenRejectsMultipleRecordsBeforeApproval(t *testing.T) {
+	ctx := context.Background()
+	var mu sync.Mutex
+	authCalls := 0
+	writeCalls := 0
+	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		mu.Lock()
+		defer mu.Unlock()
+		switch r.URL.Path {
+		case "/v2/users/login":
+			authCalls++
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"token":"fixture-session"}`))
+		case "/v2/access-tokens":
+			writeCalls++
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"token":"fixture-one-time-token"}`))
+		default:
+			t.Fatalf("request path = %s, want Docker Hub auth or access-token endpoint", r.URL.Path)
+		}
+	}))
+	t.Cleanup(server.Close)
+	trustDefaultTransportForTLSServers(t, server)
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "dockerhub-access-token-local",
+		Connector: "dockerhub",
+		Config: map[string]string{
+			"namespace":       "fixture",
+			"docker_username": "fixture-user",
+			"base_url":        server.URL + "/v2",
+			"auth_url":        server.URL + "/v2",
+		},
+		Secrets: map[string]string{"docker_pat": "fixture-pat"},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+	seedWarehouseTableRows(t, root, "dockerhub_access_token_rows",
+		`{"token_label":"first-token","scopes":["repo:read"]}`,
+		`{"token_label":"second-token","scopes":["repo:read"]}`,
+	)
+
+	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name:                  "dockerhub_access_tokens",
+		SourceTable:           "dockerhub_access_token_rows",
+		DestinationConnector:  "dockerhub",
+		DestinationCredential: "dockerhub-access-token-local",
+		Action:                "create_access_token",
+		Mappings:              map[string]string{"token_label": "token_label", "scopes": "scopes"},
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL: %v", err)
+	}
+	if plan.RecordCount != 2 {
+		t.Fatalf("plan RecordCount = %d, want 2", plan.RecordCount)
+	}
+	statePath := filepath.Join(a.ProjectDir(), "state", "state.json")
+	before, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state before rejected capture: %v", err)
+	}
+
+	_, err = a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:                  plan.ID,
+		ApprovalToken:           plan.ApprovalToken,
+		RevealSensitiveResponse: true,
+	})
+	if err == nil || !strings.Contains(err.Error(), "requires exactly one record") {
+		t.Fatalf("RunReverseETL(show token) error = %v, want a single-record rejection", err)
+	}
+	mu.Lock()
+	rejectedAuthCalls, rejectedWriteCalls := authCalls, writeCalls
+	mu.Unlock()
+	if rejectedAuthCalls != 0 || rejectedWriteCalls != 0 {
+		t.Fatalf("rejected capture dispatched auth=%d writes=%d, want zero", rejectedAuthCalls, rejectedWriteCalls)
+	}
+	after, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state after rejected capture: %v", err)
+	}
+	if string(after) != string(before) {
+		t.Fatal("rejected capture consumed approval state")
+	}
+	stored, err := a.GetReversePlan(plan.ID)
+	if err != nil {
+		t.Fatalf("GetReversePlan: %v", err)
+	}
+	if stored.ApprovalTokenHash == "" {
+		t.Fatal("rejected capture consumed the approval token")
+	}
+
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+	})
+	if err != nil {
+		t.Fatalf("RunReverseETL(default capture) error = %v", err)
+	}
+	if run.Status != "completed" || run.RecordsSucceeded != 2 || run.SensitiveWriteResponse != nil {
+		t.Fatalf("default multi-record run = %+v, want two writes without a captured response", run)
+	}
+	mu.Lock()
+	completedAuthCalls, completedWriteCalls := authCalls, writeCalls
+	mu.Unlock()
+	if completedAuthCalls != 1 || completedWriteCalls != 2 {
+		t.Fatalf("default run dispatched auth=%d writes=%d, want 1 and 2", completedAuthCalls, completedWriteCalls)
 	}
 }
 

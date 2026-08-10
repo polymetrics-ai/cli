@@ -26,13 +26,17 @@ func (n *schemaNode) hasConfigurationConstraints() bool {
 	return len(n.enum) > 0 || n.pattern != nil || n.format != ""
 }
 
-// ValidateConfiguration evaluates only declared configuration constraints on
-// supplied top-level credential fields. It deliberately does not apply the
-// full schema's required/type/additional-properties rules: credentials are
-// accepted as a flat string map, and changing those existing semantics is not
-// part of configuration-constraint validation.
+// ValidateConfiguration evaluates declared configuration constraints on
+// supplied top-level credential fields.
+// It deliberately does not apply the full schema's type/additional-properties
+// rules: credentials are accepted as a flat string map, and changing those
+// existing semantics is not part of configuration-constraint validation.
+//
+// Supplied values are checked before omitted ones: a caller who typed a value
+// this schema rejects is told what is wrong with what they typed, not handed a
+// different key's absence first.
 func (s *Schema) ValidateConfiguration(config map[string]string) error {
-	if s == nil || s.node == nil || len(config) == 0 || len(s.node.properties) == 0 {
+	if s == nil || s.node == nil || len(s.node.properties) == 0 {
 		return nil
 	}
 

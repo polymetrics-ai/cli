@@ -1,3 +1,486 @@
 {
-  "operations": []
+  "operations": [
+    {
+      "id": "dockerhub.verify_repository_immutable_tags",
+      "kind": "rest_read",
+      "summary": "Verify repository immutable tags",
+      "description": "Bounded Docker Hub read for POST /v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation with typed request fields and JSON redaction",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "regex": {
+              "type": "string",
+              "description": "Immutable tags rule regex pattern."
+            }
+          },
+          "required": [
+            "regex"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "dockerhub.check_repository",
+      "kind": "rest_read",
+      "summary": "Check repository in a namespace",
+      "description": "Status-only Docker Hub existence check for HEAD /v2/namespaces/{namespace}/repositories/{repository}. Returns {\"status_code\": 200} when the resource exists and {\"status_code\": 404} when it does not; every other status (401, 403, 429, 5xx) is an error, not an answer about the resource. No response body to stream.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: status-only existence check, no response body",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "HEAD",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.check_repository_tags",
+      "kind": "rest_read",
+      "summary": "Check repository tags",
+      "description": "Status-only Docker Hub existence check for HEAD /v2/namespaces/{namespace}/repositories/{repository}/tags. Returns {\"status_code\": 200} when the resource exists and {\"status_code\": 404} when it does not; every other status (401, 403, 429, 5xx) is an error, not an answer about the resource. No response body to stream.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: status-only existence check, no response body",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "HEAD",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.check_repository_tag",
+      "kind": "rest_read",
+      "summary": "Check repository tag",
+      "description": "Status-only Docker Hub existence check for HEAD /v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}. Returns {\"status_code\": 200} when the resource exists and {\"status_code\": 404} when it does not; every other status (401, 403, 429, 5xx) is an error, not an answer about the resource. No response body to stream.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: status-only existence check, no response body",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "HEAD",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.list_access_tokens",
+      "kind": "rest_read",
+      "summary": "List personal access tokens",
+      "description": "Bounded Docker Hub read for GET /v2/access-tokens (metadata only; the raw token value is never returned by this endpoint).",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation with typed request fields and JSON redaction",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/access-tokens",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.get_access_token",
+      "kind": "rest_read",
+      "summary": "Get personal access token",
+      "description": "Bounded Docker Hub read for GET /v2/access-tokens/{uuid} (metadata only).",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation with typed request fields and JSON redaction",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/access-tokens/{uuid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.list_org_access_tokens",
+      "kind": "rest_read",
+      "summary": "List organization access tokens",
+      "description": "Bounded Docker Hub read for GET /v2/orgs/{name}/access-tokens (metadata only).",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation with typed request fields and JSON redaction",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{name}/access-tokens",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.get_org_access_token",
+      "kind": "rest_read",
+      "summary": "Get organization access token",
+      "description": "Bounded Docker Hub read for GET /v2/orgs/{org_name}/access-tokens/{access_token_id} (metadata only).",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation with typed request fields and JSON redaction",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.list_audit_logs",
+      "kind": "rest_read",
+      "summary": "List audit log events",
+      "description": "Bounded Docker Hub read for GET /v2/auditlogs/{account}.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation with typed request fields and JSON redaction",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/auditlogs/{account}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.list_audit_log_actions",
+      "kind": "rest_read",
+      "summary": "List audit log actions",
+      "description": "Bounded Docker Hub read for GET /v2/auditlogs/{account}/actions.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation with typed request fields and JSON redaction",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/auditlogs/{account}/actions",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.list_groups",
+      "kind": "rest_read",
+      "summary": "Get groups of an organization",
+      "description": "Bounded Docker Hub read for GET /v2/orgs/{org_name}/groups.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation with typed request fields and JSON redaction",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/groups",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.get_group",
+      "kind": "rest_read",
+      "summary": "Get a group of an organization",
+      "description": "Bounded Docker Hub read for GET /v2/orgs/{org_name}/groups/{group_name}.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation with typed request fields and JSON redaction",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.list_group_members",
+      "kind": "rest_read",
+      "summary": "List members of a group",
+      "description": "Bounded Docker Hub read for GET /v2/orgs/{org_name}/groups/{group_name}/members.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation with typed request fields and JSON redaction",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.list_org_invites",
+      "kind": "rest_read",
+      "summary": "List org invites",
+      "description": "Bounded Docker Hub read for GET /v2/orgs/{org_name}/invites.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation with typed request fields and JSON redaction",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/invites",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.get_org_settings",
+      "kind": "rest_read",
+      "summary": "Get organization settings",
+      "description": "Bounded Docker Hub read for GET /v2/orgs/{name}/settings.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation with typed request fields and JSON redaction",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{name}/settings",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.list_org_members",
+      "kind": "rest_read",
+      "summary": "List org members",
+      "description": "Bounded Docker Hub read for GET /v2/orgs/{org_name}/members.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation with typed request fields and JSON redaction",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/members",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.export_org_members",
+      "kind": "binary_download",
+      "summary": "Export org members CSV",
+      "description": "Bounded Docker Hub CSV download for GET /v2/orgs/{org_name}/members/export.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded binary export",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/members/export",
+        "max_bytes": 10485760,
+        "content_types": [
+          "text/csv"
+        ]
+      }
+    },
+    {
+      "id": "dockerhub.list_scim_resource_types",
+      "kind": "rest_read",
+      "summary": "List resource types",
+      "description": "Bounded Docker Hub SCIM read for GET /v2/scim/2.0/ResourceTypes.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation; requires the separately-configured scim_bearer_token credential (distinct from docker_pat)",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/ResourceTypes",
+        "pagination": {
+          "type": "start_index",
+          "page_size": 100
+        },
+        "records_path": "Resources",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.get_scim_resource_type",
+      "kind": "rest_read",
+      "summary": "Get a resource type",
+      "description": "Bounded Docker Hub SCIM read for GET /v2/scim/2.0/ResourceTypes/{name}.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation; requires the separately-configured scim_bearer_token credential (distinct from docker_pat)",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/ResourceTypes/{name}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.list_scim_schemas",
+      "kind": "rest_read",
+      "summary": "List schemas",
+      "description": "Bounded Docker Hub SCIM read for GET /v2/scim/2.0/Schemas.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation; requires the separately-configured scim_bearer_token credential (distinct from docker_pat)",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/Schemas",
+        "pagination": {
+          "type": "start_index",
+          "page_size": 100
+        },
+        "records_path": "Resources",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.get_scim_schema",
+      "kind": "rest_read",
+      "summary": "Get a schema",
+      "description": "Bounded Docker Hub SCIM read for GET /v2/scim/2.0/Schemas/{id}.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation; requires the separately-configured scim_bearer_token credential (distinct from docker_pat)",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/Schemas/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.get_scim_service_provider_config",
+      "kind": "rest_read",
+      "summary": "Get service provider config",
+      "description": "Bounded Docker Hub SCIM read for GET /v2/scim/2.0/ServiceProviderConfig.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation; requires the separately-configured scim_bearer_token credential (distinct from docker_pat)",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/ServiceProviderConfig",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.list_scim_users",
+      "kind": "rest_read",
+      "summary": "List users",
+      "description": "Bounded Docker Hub SCIM read for GET /v2/scim/2.0/Users.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation; requires the separately-configured scim_bearer_token credential (distinct from docker_pat)",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/Users",
+        "pagination": {
+          "type": "start_index",
+          "page_size": 100
+        },
+        "records_path": "Resources",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.get_scim_user",
+      "kind": "rest_read",
+      "summary": "Get a user",
+      "description": "Bounded Docker Hub SCIM read for GET /v2/scim/2.0/Users/{id}.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "low",
+      "approval": "none: read-only bounded operation; requires the separately-configured scim_bearer_token credential (distinct from docker_pat)",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/Users/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.create_auth_token",
+      "kind": "rest_write",
+      "summary": "Exchange identifier and secret for an access token",
+      "description": "Docker Hub token exchange for POST /v2/auth/token.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "requires a plan, preview, explicit approval, and execution",
+      "mutation_class": "create",
+      "batchable": false,
+      "response_sensitive": true,
+      "output_policy": "json",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/auth/token",
+        "base_url": "{{ config.auth_url }}",
+        "content_type": "application/json",
+        "auth_mode": "none",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": ["identifier", "secret"],
+          "properties": {
+            "identifier": { "type": "string" },
+            "secret": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "dockerhub.create_login",
+      "kind": "rest_write",
+      "summary": "Exchange username and password for a session token",
+      "description": "Docker Hub login for POST /v2/users/login.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "requires a plan, preview, explicit approval, and execution",
+      "mutation_class": "create",
+      "batchable": false,
+      "response_sensitive": true,
+      "output_policy": "json",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users/login",
+        "base_url": "{{ config.auth_url }}",
+        "content_type": "application/json",
+        "auth_mode": "none",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": ["username", "password"],
+          "properties": {
+            "username": { "type": "string" },
+            "password": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "dockerhub.create_2fa_login",
+      "kind": "rest_write",
+      "summary": "Complete a second-factor login",
+      "description": "Docker Hub second-factor login for POST /v2/users/2fa-login.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "requires a plan, preview, explicit approval, and execution",
+      "mutation_class": "create",
+      "batchable": false,
+      "response_sensitive": true,
+      "output_policy": "json",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users/2fa-login",
+        "base_url": "{{ config.auth_url }}",
+        "content_type": "application/json",
+        "auth_mode": "none",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": ["login_2fa_token", "code"],
+          "properties": {
+            "login_2fa_token": { "type": "string" },
+            "code": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
 }

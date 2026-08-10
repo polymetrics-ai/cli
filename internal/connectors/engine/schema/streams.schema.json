@@ -11,6 +11,7 @@
       "additionalProperties": false,
       "properties": {
         "url": { "type": "string" },
+        "api_root": { "type": "string" },
         "user_agent": { "type": "string" },
         "headers": { "type": "object" },
         "auth": {

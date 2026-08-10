@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"polymetrics.ai/internal/connectors"
 )
@@ -171,6 +172,31 @@ func (c *Connector) OperationDirectWriteMetadata(operation string) (connectors.O
 	return OperationDirectWriteMetadata(c.bundle, operation)
 }
 
+// PreflightOperationDirectWriteConfig validates resolved configuration needed
+// before a response-sensitive direct-write plan can be persisted.
+func (c *Connector) PreflightOperationDirectWriteConfig(operation string, cfg connectors.RuntimeConfig) error {
+	return PreflightOperationDirectWriteConfig(c.bundle, operation, cfg)
+}
+
+func (c *Connector) PreflightRuntimeConfig(cfg connectors.RuntimeConfig) error {
+	preflighter, ok := c.hooks.(RuntimeConfigPreflightHook)
+	if !ok {
+		return nil
+	}
+	return preflighter.PreflightRuntimeConfig(materializeConfigDefaults(c.bundle, cfg))
+}
+
+func (c *Connector) PreflightSensitiveWriteResponse(name string) error {
+	action, err := findWriteAction(c.bundle, name)
+	if err != nil {
+		return err
+	}
+	if !action.ResponseSensitive {
+		return fmt.Errorf("engine: write action %q does not support sensitive response capture", name)
+	}
+	return nil
+}
+
 // OperationBinaryDownload satisfies connectors.OperationBinaryDownloader by
 // delegating to the package-level executor. The engine-local request type stays
 // the executor's own contract; this adapter is the seam that lets a CLI command
@@ -302,6 +328,12 @@ func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBy
 // operation direct-write binding without resolving credentials or network I/O.
 func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
 	return PreflightOperationDirectWrite(b.bundle, operation, method, path, outputPolicy)
+}
+
+// PreflightOperationDirectWriteConfig validates a native connector's resolved
+// direct-write configuration without resolving credentials or network I/O.
+func (b Base) PreflightOperationDirectWriteConfig(operation string, cfg connectors.RuntimeConfig) error {
+	return PreflightOperationDirectWriteConfig(b.bundle, operation, cfg)
 }
 
 // OperationDirectReadMaxBytes returns the bounded response limit for a
@@ -556,24 +588,25 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			flags = append(flags, commandSurfaceFlag(flag))
 		}
 		out.Commands = append(out.Commands, connectors.CommandSurfaceCommand{
-			Path:          cmd.Path,
-			Summary:       cmd.Summary,
-			Intent:        cmd.Intent,
-			Availability:  cmd.Availability,
-			Stream:        cmd.Stream,
-			Write:         cmd.Write,
-			Operation:     cmd.Operation,
-			SourceCLIPath: cmd.SourceCLIPath,
-			SourceURL:     cmd.SourceURL,
-			Flags:         flags,
-			Constraints:   commandSurfaceConstraints(cmd.Constraints),
-			Examples:      append([]string(nil), cmd.Examples...),
-			APISurface:    commandSurfaceEndpointRefs(cmd.APISurface),
-			OutputPolicy:  cmd.OutputPolicy,
-			RedactFields:  append([]string(nil), cmd.RedactFields...),
-			Risk:          cmd.Risk,
-			Approval:      cmd.Approval,
-			Notes:         cmd.Notes,
+			Path:               cmd.Path,
+			Summary:            cmd.Summary,
+			Intent:             cmd.Intent,
+			Availability:       cmd.Availability,
+			Stream:             cmd.Stream,
+			Write:              cmd.Write,
+			Operation:          cmd.Operation,
+			SourceCLIPath:      cmd.SourceCLIPath,
+			SourceURL:          cmd.SourceURL,
+			Flags:              flags,
+			Constraints:        commandSurfaceConstraints(cmd.Constraints),
+			Examples:           append([]string(nil), cmd.Examples...),
+			APISurface:         commandSurfaceEndpointRefs(cmd.APISurface),
+			OutputPolicy:       cmd.OutputPolicy,
+			RedactFields:       append([]string(nil), cmd.RedactFields...),
+			AcceptsSecretInput: cmd.AcceptsSecretInput,
+			Risk:               cmd.Risk,
+			Approval:           cmd.Approval,
+			Notes:              cmd.Notes,
 		})
 	}
 	for _, topic := range surface.HelpTopics {

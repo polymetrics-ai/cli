@@ -108,7 +108,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg), b.HTTP.APIRoot)
 	decoded, pageInfo, resp, err := readDirectPage(ctx, b, rt, directReadWalk{
 		method:          method,
 		declaredPat:     op.REST.Path,
@@ -120,6 +120,8 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		maxBytes:        maxBytes,
 		page:            req.Page,
 		pageCursor:      req.PageCursor,
+		pagination:      op.REST.Pagination,
+		recordsPath:     op.REST.RecordsPath,
 	})
 	if err != nil {
 		var tooLarge errDirectReadTooLarge
@@ -224,11 +226,14 @@ func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) 
 		return OperationSpec{}, fmt.Errorf("operation direct read requires rest_read or provider_search operation, got %q", op.Kind)
 	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
-	if method != http.MethodGet && method != http.MethodPost {
-		return OperationSpec{}, fmt.Errorf("operation direct read requires GET or POST, got %s", method)
+	if method != http.MethodGet && method != http.MethodPost && method != http.MethodHead {
+		return OperationSpec{}, fmt.Errorf("operation direct read requires GET, POST, or HEAD, got %s", method)
 	}
 	if op.Kind == "provider_search" && method != http.MethodPost {
 		return OperationSpec{}, fmt.Errorf("provider search requires POST, got %s", method)
+	}
+	if op.Kind == "rest_read" && method == http.MethodHead && op.OutputPolicy != directReadPolicyJSONRedacted {
+		return OperationSpec{}, fmt.Errorf("operation direct read HEAD (status-only, no response body) requires output_policy %q, got %q", directReadPolicyJSONRedacted, op.OutputPolicy)
 	}
 	if isAbsoluteHTTPURL(op.REST.Path) {
 		return OperationSpec{}, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
@@ -286,7 +291,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	}
 
 	maxBytes := clampDirectReadMaxBytes(req.MaxBytes)
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg), b.HTTP.APIRoot)
 	body, pageInfo, resp, err := readDirectPage(ctx, b, rt, directReadWalk{
 		method:       method,
 		declaredPat:  req.Path,
@@ -552,6 +557,55 @@ func clampOperationDirectReadMaxBytes(requested, operationMax int) int {
 	return maxBytes
 }
 
+// decodeDirectReadPageBody turns one fetched page into the value the direct-read
+// pipeline works over. A HEAD response never carries a body (RFC 9110 §9.3.2) —
+// there is nothing to JSON-decode. The provider's status code is itself the
+// entire signal a status-only "check" command exists to surface;
+// operationDirectReadSpec already requires a HEAD-shaped operation to declare
+// output_policy "json_redacted", so the redaction/policy pipeline still runs
+// uniformly over this small synthetic object rather than special-casing HEAD
+// out of it. It lives beside the fetch rather than in OperationDirectRead
+// because decoding is what readDirectPage owns.
+func decodeDirectReadPageBody(method string, resp *connsdk.Response, maxBytes int) (any, error) {
+	if isStatusOnlyMethod(method) {
+		return map[string]any{"status_code": resp.Status}, nil
+	}
+	return decodeDirectReadBody(resp.Body, maxBytes)
+}
+
+func isStatusOnlyMethod(method string) bool {
+	return strings.EqualFold(strings.TrimSpace(method), http.MethodHead)
+}
+
+// statusOnlyAbsenceResponse converts the ONE provider answer a status-only
+// existence check exists to ask for — "this resource is not there" — from a
+// transport error into the result the operation documents.
+//
+// A HEAD operation is status-only by construction (operationDirectReadSpec
+// requires output_policy "json_redacted" and decodeDirectReadPageBody returns
+// {"status_code": N} for it), so its whole product is the status code. Routing
+// 404 through the error path made `repository check` able to answer only
+// "yes": absence, the question it is for, exited non-zero with an error string
+// and no status code.
+//
+// The narrowing is deliberate and total. Only HEAD, and only 404: 401/403 are
+// an auth problem rather than an answer about the resource, 429 and 5xx are
+// the provider declining to answer at all, and every non-HEAD direct read
+// keeps treating every non-2xx as the failure it is. Nothing here can widen
+// on its own — a GET returns nil from the first branch regardless of status.
+// It returns nil when err is not that case, so the caller propagates the
+// original error unchanged.
+func statusOnlyAbsenceResponse(method string, err error) *connsdk.Response {
+	if !isStatusOnlyMethod(method) {
+		return nil
+	}
+	var httpErr *connsdk.HTTPError
+	if !errors.As(err, &httpErr) || httpErr.Status != http.StatusNotFound {
+		return nil
+	}
+	return &connsdk.Response{Status: httpErr.Status}
+}
+
 func decodeDirectReadBody(raw []byte, maxBytes int) (any, error) {
 	var body any
 	dec := json.NewDecoder(io.LimitReader(bytes.NewReader(raw), int64(maxBytes)+1))
@@ -694,7 +748,7 @@ func directReadBaseURL(b Bundle, cfg connectors.RuntimeConfig) string {
 	return baseURL
 }
 
-func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL string) string {
+func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL, apiRoot string) string {
 	parsed, err := url.Parse(baseURL)
 	if err != nil {
 		return resolvedPath
@@ -710,7 +764,44 @@ func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL string) string {
 	if strings.HasPrefix(resolvedPath, prefix) {
 		return "/" + strings.TrimPrefix(resolvedPath, prefix)
 	}
+	root := strings.Trim(strings.TrimSpace(apiRoot), "/")
+	if root == "" {
+		return resolvedPath
+	}
+	root = "/" + root
+	if (basePath == root || strings.HasSuffix(basePath, root)) && (resolvedPath == root || strings.HasPrefix(resolvedPath, root+"/")) {
+		relative := strings.TrimPrefix(resolvedPath, root)
+		if relative == "" {
+			return "/"
+		}
+		return relative
+	}
 	return resolvedPath
+}
+
+func RequestURLPathForBaseURL(resolvedPath, baseURL, apiRoot string) string {
+	parsed, requestPath, err := requestURLForBaseURL(resolvedPath, baseURL, apiRoot)
+	if err != nil || parsed == nil || parsed.Path == "" {
+		return requestPath
+	}
+	return parsed.Path
+}
+
+func RequestURLForBaseURL(resolvedPath, baseURL, apiRoot string) (string, error) {
+	parsed, _, err := requestURLForBaseURL(resolvedPath, baseURL, apiRoot)
+	if err != nil {
+		return "", fmt.Errorf("resolve request URL: %w", err)
+	}
+	if parsed == nil || parsed.Scheme == "" || parsed.Host == "" {
+		return "", errors.New("request base URL is invalid")
+	}
+	return parsed.String(), nil
+}
+
+func requestURLForBaseURL(resolvedPath, baseURL, apiRoot string) (*url.URL, string, error) {
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, baseURL, apiRoot)
+	parsed, err := url.Parse(joinURL(baseURL, requestPath))
+	return parsed, requestPath, err
 }
 
 func redactJSONValue(value any) any {
@@ -944,7 +1035,7 @@ func encodeSurfacePathValue(name, value string) (string, error) {
 		}
 		return strings.Join(parts, "/"), nil
 	}
-	if err := safety.ValidateIdentifier(value, "path variable "+name); err != nil {
+	if err := safety.ValidateURLPathSegment(value, "path variable "+name); err != nil {
 		return "", err
 	}
 	return url.PathEscape(value), nil

@@ -813,6 +813,7 @@ func connectorHelpFlagsArePassive(flags parsedFlags, surface *connectors.Command
 		"limit": true, "max-bytes": true,
 		"page": true, "page-cursor": true,
 		"dest-root": true, "file-name": true,
+		"from-env": true, "value-stdin": true,
 	}
 	for _, flag := range surface.GlobalFlags {
 		declared[flag.Name] = true
@@ -976,6 +977,7 @@ func renderConnectorCommandDetail(connectorName string, connector connectors.Con
 	}
 	writeConnectorDownloadFlags(&b, cmd)
 	writeConnectorPageFlags(&b, cmd)
+	writeConnectorSecretInputFlags(&b, cmd)
 	writeConnectorGlobalFlags(&b, surface)
 	return b.String()
 }
@@ -1029,6 +1031,17 @@ func writeConnectorDownloadFlags(b *strings.Builder, cmd connectors.CommandSurfa
 	for _, flag := range connectors.BinaryDownloadFlags() {
 		writeConnectorFlag(b, flag)
 	}
+}
+
+func writeConnectorSecretInputFlags(b *strings.Builder, cmd connectors.CommandSurfaceCommand) {
+	if !commandRetainsSensitiveInputs(cmd) {
+		return
+	}
+	b.WriteString("\nSECURITY\n")
+	b.WriteString("  " + sensitiveCommandInputWarning + "\n")
+	b.WriteString("\nSECRET INPUT FLAGS\n")
+	b.WriteString("  --from-env (field=ENV_VAR) reads a redacted command field from an environment variable.\n")
+	b.WriteString("  --value-stdin (field) reads one redacted command field from standard input.\n")
 }
 
 func writeConnectorField(b *strings.Builder, title, value string) {
@@ -1210,6 +1223,21 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	// accepted-and-ignored, which is the same quiet wrongness --page exists to
 	// remove.
 	commandFlags := connectorCommandFlags(resolvedFlags)
+	cmd, err := connectorCommandSurfaceCommand(connector, path)
+	if err != nil {
+		return err
+	}
+	sensitiveInputMaxBytes, err := sensitiveCommandInputMaxBytes(connector, cmd, flags)
+	if err != nil {
+		return err
+	}
+	commandFlags, err = applySensitiveCommandInputs(commandFlags, flags, cmd, sensitiveInputMaxBytes)
+	if err != nil {
+		return err
+	}
+	if commandRetainsSensitiveInputs(cmd) {
+		_, _ = fmt.Fprintln(stderr, sensitiveCommandInputWarning)
+	}
 
 	if err := runConnectorWriteCommand(ctx, a, connectorName, credential, config, path, commandFlags, flags, stdout, jsonOut); err != commandrunner.ErrNotWriteCommand {
 		if err != nil {
@@ -1304,7 +1332,7 @@ func connectorCommandFlags(values map[string][]string) map[string][]string {
 	commandFlags := map[string][]string{}
 	for name, entries := range values {
 		switch name {
-		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "confirm", "plan-name", "dest-root", "file-name", "from-env":
+		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "confirm", "plan-name", "dest-root", "file-name", "from-env", "value-stdin", "show-token":
 			continue
 		default:
 			commandFlags[name] = append([]string(nil), entries...)
@@ -1354,7 +1382,11 @@ func resolveConnectorCommandEnvironmentOnlyFlags(surface *connectors.CommandSurf
 		field = strings.TrimSpace(field)
 		envName = strings.TrimSpace(envName)
 		if _, ok := envOnly[field]; !ok {
-			return nil, validationErrorf("--from-env %s is not declared for connector command %q", field, command.Path)
+			// Declared redacted direct-write inputs are resolved by
+			// applySensitiveCommandInputs after this env_only pass. Leaving them
+			// here preserves env_only's closed contract without turning it into
+			// a second, incompatible secret-input channel.
+			continue
 		}
 		if _, duplicate := seen[field]; duplicate {
 			return nil, validationErrorf("--from-env supplies %s more than once", field)
@@ -1384,7 +1416,213 @@ func resolveReversePlanEnvironmentOnlyFlags(plan app.ReversePlan, values map[str
 	if !ok || surfaceProvider.CommandSurface() == nil {
 		return nil, fmt.Errorf("connector %q has no command surface", plan.DestinationConnector)
 	}
-	return resolveConnectorCommandEnvironmentOnlyFlags(surfaceProvider.CommandSurface(), plan.ConnectorCommandPath, values)
+	surface := surfaceProvider.CommandSurface()
+	command, found := connectorSurfaceCommand(surface, strings.Join(plan.ConnectorCommandPath, " "))
+	if !found {
+		return nil, fmt.Errorf("unknown connector command %q", strings.Join(plan.ConnectorCommandPath, " "))
+	}
+	if err := rejectPlanSensitiveInputs(command, parsedFlags{values: values}); err != nil {
+		return nil, err
+	}
+	return resolveConnectorCommandEnvironmentOnlyFlags(surface, plan.ConnectorCommandPath, values)
+}
+
+func connectorCommandSurfaceCommand(connector connectors.Connector, path []string) (connectors.CommandSurfaceCommand, error) {
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		return connectors.CommandSurfaceCommand{}, usageErrorf("connector %q has no command surface", connector.Name())
+	}
+	want := strings.Join(path, " ")
+	for _, cmd := range provider.CommandSurface().Commands {
+		if cmd.Path == want {
+			return cmd, nil
+		}
+	}
+	return connectors.CommandSurfaceCommand{}, usageErrorf("unknown connector command %q", want)
+}
+
+func commandRetainsSensitiveInputs(cmd connectors.CommandSurfaceCommand) bool {
+	return cmd.Intent == "direct_write" && cmd.AcceptsSecretInput && len(cmd.RedactFields) > 0
+}
+
+func rejectPlanSensitiveInputs(cmd connectors.CommandSurfaceCommand, flags parsedFlags) error {
+	if len(flags.values["from-env"]) == 0 && len(flags.values["value-stdin"]) == 0 {
+		return nil
+	}
+	if len(flags.values["value-stdin"]) > 0 {
+		return usageErrorf("--from-env and --value-stdin cannot be used with --plan")
+	}
+	envOnly := map[string]bool{}
+	for _, flag := range cmd.Flags {
+		if flag.EnvOnly {
+			envOnly[flag.Name] = true
+		}
+	}
+	sensitive := sensitiveCommandFlagLookup(cmd)
+	for _, assignment := range flags.values["from-env"] {
+		field, _, ok := strings.Cut(assignment, "=")
+		if !ok || strings.TrimSpace(field) == "" {
+			continue // The environment-only resolver names malformed assignments.
+		}
+		field = strings.TrimSpace(field)
+		if envOnly[field] {
+			continue
+		}
+		if commandRetainsSensitiveInputs(cmd) {
+			if _, ok := sensitive[field]; ok {
+				return usageErrorf("--from-env and --value-stdin cannot be used with --plan")
+			}
+		}
+		return validationErrorf("--from-env %s is not declared for connector command %q", field, cmd.Path)
+	}
+	return nil
+}
+
+const sensitiveCommandInputWarning = "Warning: supplied credential values are written to plaintext local project state and retained for this command plan."
+
+func sensitiveCommandInputMaxBytes(connector connectors.Connector, cmd connectors.CommandSurfaceCommand, flags parsedFlags) (int, error) {
+	if len(flags.values["value-stdin"]) == 0 || !commandRetainsSensitiveInputs(cmd) {
+		return 0, nil
+	}
+	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+	if !ok {
+		return 0, fmt.Errorf("connector %q cannot resolve the declared request body limit", connector.Name())
+	}
+	metadata, err := provider.OperationDirectWriteMetadata(cmd.Operation)
+	if err != nil {
+		return 0, err
+	}
+	if metadata.Operation != cmd.Operation {
+		return 0, fmt.Errorf("connector %q returned direct-write metadata for %q, want %q", connector.Name(), metadata.Operation, cmd.Operation)
+	}
+	if metadata.MaxRequestBytes <= 0 {
+		return 0, fmt.Errorf("connector %q direct-write operation %q has no declared request body limit", connector.Name(), cmd.Operation)
+	}
+	return metadata.MaxRequestBytes, nil
+}
+
+func applySensitiveCommandInputs(commandFlags map[string][]string, flags parsedFlags, cmd connectors.CommandSurfaceCommand, stdinMaxBytes int) (map[string][]string, error) {
+	if len(flags.values["from-env"]) == 0 && len(flags.values["value-stdin"]) == 0 {
+		return commandFlags, nil
+	}
+	envOnly := map[string]bool{}
+	for _, flag := range cmd.Flags {
+		if flag.EnvOnly {
+			envOnly[flag.Name] = true
+		}
+	}
+	hasSensitiveInput := len(flags.values["value-stdin"]) > 0
+	for _, assignment := range flags.values["from-env"] {
+		field, _, ok := strings.Cut(assignment, "=")
+		if !ok || !envOnly[strings.TrimSpace(field)] {
+			hasSensitiveInput = true
+		}
+	}
+	if !hasSensitiveInput {
+		return commandFlags, nil
+	}
+	if !commandRetainsSensitiveInputs(cmd) {
+		return nil, usageErrorf("--from-env and --value-stdin are only available for commands with declared redacted inputs")
+	}
+	lookup := sensitiveCommandFlagLookup(cmd)
+	out := make(map[string][]string, len(commandFlags)+1)
+	for name, values := range commandFlags {
+		out[name] = append([]string(nil), values...)
+	}
+	seen := map[string]bool{}
+	resolveField := func(rawField string) (string, error) {
+		field, ok := lookup[rawField]
+		if !ok {
+			return "", usageErrorf("--from-env/--value-stdin field %q is not a declared redacted command input", rawField)
+		}
+		if len(out[field]) > 0 || seen[field] {
+			return "", usageErrorf("redacted command input --%s was supplied more than once", field)
+		}
+		return field, nil
+	}
+	setResolved := func(field, value string) {
+		out[field] = []string{value}
+		seen[field] = true
+	}
+	set := func(rawField, value string) error {
+		field, err := resolveField(rawField)
+		if err != nil {
+			return err
+		}
+		setResolved(field, value)
+		return nil
+	}
+	for _, assignment := range flags.values["from-env"] {
+		field, envName, ok := strings.Cut(assignment, "=")
+		if !ok || strings.TrimSpace(field) == "" || strings.TrimSpace(envName) == "" {
+			return nil, usageErrorf("invalid --from-env %q, want field=ENV_VAR", assignment)
+		}
+		field = strings.TrimSpace(field)
+		envName = strings.TrimSpace(envName)
+		if envOnly[field] {
+			continue
+		}
+		value, present := os.LookupEnv(envName)
+		if !present {
+			return nil, usageErrorf("environment variable %q is not set", envName)
+		}
+		if err := set(field, value); err != nil {
+			return nil, err
+		}
+	}
+	stdinFields := flags.values["value-stdin"]
+	if len(stdinFields) > 1 {
+		return nil, usageErrorf("--value-stdin accepts exactly one field")
+	}
+	if len(stdinFields) == 1 {
+		field := strings.TrimSpace(stdinFields[0])
+		if field == "" || field == "true" {
+			return nil, usageErrorf("--value-stdin requires a field")
+		}
+		resolvedField, err := resolveField(field)
+		if err != nil {
+			return nil, err
+		}
+		value, err := readBoundedSensitiveCommandInput(os.Stdin, stdinMaxBytes)
+		if err != nil {
+			return nil, err
+		}
+		setResolved(resolvedField, value)
+	}
+	return out, nil
+}
+
+func readBoundedSensitiveCommandInput(reader io.Reader, maxBytes int) (string, error) {
+	if maxBytes <= 0 {
+		return "", fmt.Errorf("--value-stdin has no declared request body limit")
+	}
+	value, err := io.ReadAll(io.LimitReader(reader, int64(maxBytes)+1))
+	if err != nil {
+		return "", fmt.Errorf("read --value-stdin: %w", err)
+	}
+	if len(value) > maxBytes {
+		return "", usageErrorf("--value-stdin input is too large: %d bytes exceeds limit %d", len(value), maxBytes)
+	}
+	return strings.TrimSuffix(strings.TrimSuffix(string(value), "\n"), "\r"), nil
+}
+
+func sensitiveCommandFlagLookup(cmd connectors.CommandSurfaceCommand) map[string]string {
+	redacted := map[string]bool{}
+	for _, field := range cmd.RedactFields {
+		redacted[strings.TrimPrefix(strings.TrimSpace(field), "record.")] = true
+		redacted[strings.TrimPrefix(strings.TrimSpace(field), "body.")] = true
+	}
+	lookup := map[string]string{}
+	for _, flag := range cmd.Flags {
+		mapped := strings.TrimPrefix(strings.TrimSpace(flag.MapsTo), "body.")
+		mapped = strings.TrimPrefix(mapped, "record.")
+		if !redacted[mapped] {
+			continue
+		}
+		lookup[flag.Name] = flag.Name
+		lookup[mapped] = flag.Name
+	}
+	return lookup
 }
 
 func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
@@ -1453,6 +1691,9 @@ func connectorCommandPage(flags parsedFlags) (int, string, error) {
 }
 
 func runConnectorWriteCommand(ctx context.Context, a *app.App, connectorName, credential string, config map[string]string, path []string, commandFlags map[string][]string, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
+	if truthyFlag(flags.first("show-token")) {
+		return usageErrorf("--show-token is only valid with --plan and --approve")
+	}
 	preview := truthyFlag(flags.first("preview"))
 	plan, writePreview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
 		Name:       flags.first("plan-name"),
@@ -1494,6 +1735,7 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 	planID := strings.TrimSpace(flags.first("plan"))
 	approvalToken := strings.TrimSpace(flags.first("approve"))
 	preview := truthyFlag(flags.first("preview"))
+	showToken := truthyFlag(flags.first("show-token"))
 	plan, err := connectorCommandPlanForPath(a, planID, connectorName, path)
 	if err != nil {
 		return err
@@ -1506,23 +1748,54 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 	if !ok || surfaceProvider.CommandSurface() == nil {
 		return fmt.Errorf("connector %q has no command surface", connectorName)
 	}
+	cmd, err := connectorCommandSurfaceCommand(connector, path)
+	if err != nil {
+		return err
+	}
+	if err := rejectPlanSensitiveInputs(cmd, flags); err != nil {
+		return err
+	}
 	resolvedFlags, err := resolveConnectorCommandEnvironmentOnlyFlags(surfaceProvider.CommandSurface(), path, flags.values)
 	if err != nil {
 		return err
+	}
+	if showToken {
+		if approvalToken == "" {
+			return usageErrorf("--show-token requires --approve for the approved execution")
+		}
+		if err := validateDockerHubTokenOutputPlan(plan); err != nil {
+			return err
+		}
 	}
 	if approvalToken != "" {
 		confirmation, err := connectors.ParseWriteConfirmation(flags.first("confirm"))
 		if err != nil {
 			return validationErrorf("invalid --confirm: %v", err)
 		}
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: confirmation, WithheldFlags: resolvedFlags})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: confirmation, WithheldFlags: resolvedFlags, RevealSensitiveResponse: showToken})
 		if err != nil {
 			return err
 		}
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
+			env := envelope{"kind": "ReverseRun", "run": run}
+			if showToken {
+				env["response"] = run.SensitiveWriteResponse
+			}
+			return writeJSON(stdout, env)
 		}
 		_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
+		if run.OperationDirectWrite != nil {
+			body, marshalErr := json.MarshalIndent(run.OperationDirectWrite.Body, "", "  ")
+			if marshalErr != nil {
+				return marshalErr
+			}
+			_, _ = fmt.Fprintln(stdout, string(body))
+		}
+		if showToken {
+			if err := writeSensitiveWriteResponse(stdout, run.SensitiveWriteResponse); err != nil {
+				return err
+			}
+		}
 		return nil
 	}
 	if preview {
@@ -1573,6 +1846,22 @@ func connectorCommandBlockedError(err error) error {
 		message:  err.Error(),
 		err:      err,
 	}
+}
+
+func validateDockerHubTokenOutputPlan(plan app.ReversePlan) error {
+	if plan.DestinationConnector != "dockerhub" || (plan.Action != "create_access_token" && plan.Action != "create_org_access_token") {
+		return usageErrorf("--show-token is only available for Docker Hub access-token create plans")
+	}
+	return nil
+}
+
+func writeSensitiveWriteResponse(stdout io.Writer, response any) error {
+	body, err := json.MarshalIndent(response, "", "  ")
+	if err != nil {
+		return err
+	}
+	_, _ = fmt.Fprintln(stdout, string(body))
+	return nil
 }
 
 func truthyFlag(raw string) bool {
@@ -1838,18 +2127,33 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if err != nil {
 			return err
 		}
+		showToken := truthyFlag(flags.first("show-token"))
+		if showToken {
+			if err := validateDockerHubTokenOutputPlan(plan); err != nil {
+				return err
+			}
+		}
 		confirmation, err := connectors.ParseWriteConfirmation(flags.first("confirm"))
 		if err != nil {
 			return validationErrorf("invalid --confirm: %v", err)
 		}
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: confirmation, WithheldFlags: resolvedFlags})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: confirmation, WithheldFlags: resolvedFlags, RevealSensitiveResponse: showToken})
 		if err != nil {
 			return err
 		}
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
+			env := envelope{"kind": "ReverseRun", "run": run}
+			if showToken {
+				env["response"] = run.SensitiveWriteResponse
+			}
+			return writeJSON(stdout, env)
 		}
 		_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
+		if showToken {
+			if err := writeSensitiveWriteResponse(stdout, run.SensitiveWriteResponse); err != nil {
+				return err
+			}
+		}
 		return nil
 	case "status":
 		if len(args) < 2 {

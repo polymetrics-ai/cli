@@ -174,7 +174,13 @@ func parseNonNegativeRateLimitHeader(header http.Header, names ...string) (int64
 		if value == "" {
 			continue
 		}
-		parsed, err := strconv.ParseInt(value, 10, 64)
+		// RFC-style RateLimit fields may append parameters after the numeric
+		// value. Docker Registry, for example, sends "200;w=21600". The
+		// numeric budget is safe to retain as a typed observation; the inline
+		// window is deliberately not promoted to a reset timestamp because it
+		// is not a provider promise about the current window boundary.
+		value, _, _ = strings.Cut(value, ";")
+		parsed, err := strconv.ParseInt(strings.TrimSpace(value), 10, 64)
 		if err == nil && parsed >= 0 {
 			return parsed, true
 		}

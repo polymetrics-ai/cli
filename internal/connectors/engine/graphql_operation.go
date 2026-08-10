@@ -621,7 +621,7 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	requestPath := normalizeDirectReadPathForBaseURL(op.GraphQL.Path, directReadBaseURL(b, cfg))
+	requestPath := normalizeDirectReadPathForBaseURL(op.GraphQL.Path, directReadBaseURL(b, cfg), b.HTTP.APIRoot)
 	response, err := requester.DoLimited(ctx, http.MethodPost, requestPath, nil, payload, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)

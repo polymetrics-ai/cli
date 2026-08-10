@@ -19,6 +19,7 @@
           "path_fields": { "type": "array", "items": { "type": "string" } },
           "query": { "type": "object" },
           "redact_fields": { "type": "array", "items": { "type": "string" } },
+          "content_type": { "type": "string" },
           "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql", "json_array", "multipart", "base64_upload"] },
           "body_required": { "type": "boolean" },
           "body_fields": { "type": "array", "items": { "type": "string" } },
@@ -106,6 +107,7 @@
           },
           "risk": { "type": "string" },
           "batchable": { "type": "boolean", "default": true },
+          "response_sensitive": { "type": "boolean" },
           "confirm": { "type": "string", "enum": ["", "destructive"] },
           "confirmation": {
             "type": "object",
