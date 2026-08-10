@@ -7,6 +7,12 @@ import (
 	"testing"
 )
 
+type typedNilCause struct{}
+
+func (*typedNilCause) Error() string {
+	return "typed nil cause"
+}
+
 func TestClassificationValidatesDomainsRetryabilityAndSafeJSON(t *testing.T) {
 	cause := errors.New("internal parser rejected declared ssl mode")
 	tests := []struct {
@@ -117,6 +123,28 @@ func TestClassificationAcceptsEveryDispatchKind(t *testing.T) {
 				t.Fatalf("DispatchKind() = %q, want %q", got, kind)
 			}
 		})
+	}
+}
+
+func TestClassificationNormalizesTypedNilCause(t *testing.T) {
+	var cause *typedNilCause
+	classification, err := New(Input{
+		Domain:  DomainSystem,
+		Code:    "dispatch_refused",
+		Message: "the command cannot be dispatched",
+	}, cause)
+	if err != nil {
+		t.Fatalf("New() error = %v", err)
+	}
+	if got := classification.Cause(); got != nil {
+		t.Fatalf("Cause() = %T, want nil", got)
+	}
+	if got := classification.Unwrap(); got != nil {
+		t.Fatalf("Unwrap() = %T, want nil", got)
+	}
+	var extracted *typedNilCause
+	if errors.As(classification, &extracted) {
+		t.Fatalf("errors.As() extracted = %T, want no typed nil cause", extracted)
 	}
 }
 

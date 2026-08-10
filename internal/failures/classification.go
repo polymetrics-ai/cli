@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"reflect"
 	"regexp"
 	"strings"
 	"unicode"
@@ -104,7 +105,7 @@ func New(input Input, cause error) (*Classification, error) {
 		fieldPath:    normalized.FieldPath,
 		dispatchKind: normalized.DispatchKind,
 		references:   cloneReferences(normalized.References),
-		cause:        cause,
+		cause:        normalizeCause(cause),
 	}, nil
 }
 
@@ -447,4 +448,18 @@ func jsonUTF16Escape(raw []byte, start int) (uint16, bool) {
 
 func cloneReferences(references []Reference) []Reference {
 	return append([]Reference(nil), references...)
+}
+
+func normalizeCause(cause error) error {
+	if cause == nil {
+		return nil
+	}
+	value := reflect.ValueOf(cause)
+	switch value.Kind() {
+	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice:
+		if value.IsNil() {
+			return nil
+		}
+	}
+	return cause
 }
