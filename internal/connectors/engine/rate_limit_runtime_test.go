@@ -3,10 +3,12 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -142,6 +144,80 @@ func TestAbsentRateLimitDeclarationPreservesRequesterBehavior(t *testing.T) {
 	}
 	if requester != runtime.Requester || requester.Admission != nil || requester.Observer != nil {
 		t.Fatal("absent declaration changed the requester")
+	}
+}
+
+func TestRequireSharedRefusesWithoutCoordinatorBeforeSend(t *testing.T) {
+	var hits atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		hits.Add(1)
+	}))
+	t.Cleanup(server.Close)
+
+	config := rateLimitTestConfig(t)
+	config.RateBudgetBackend = connsdk.RateBudgetBackendRequireShared
+	bundle := withAllRateLimit(Bundle{Name: "shared-required", HTTP: HTTPBase{URL: server.URL}})
+	runtime, err := newRuntime(context.Background(), bundle, config, nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+	requester, err := runtime.RequesterFor(http.MethodGet, "/shared-required")
+	if err != nil {
+		t.Fatalf("RequesterFor: %v", err)
+	}
+	_, err = requester.Do(context.Background(), http.MethodGet, "/shared-required", nil, nil)
+	var refusal *connsdk.RateBudgetRefusalError
+	if !errors.As(err, &refusal) || refusal.Reason != connsdk.RateBudgetRefusalSharedCoordinatorUnavailable {
+		t.Fatalf("missing shared coordinator error = %v, want typed unavailable refusal", err)
+	}
+	if got := hits.Load(); got != 0 {
+		t.Fatalf("transport hits = %d, want 0", got)
+	}
+}
+
+func TestSharedRateBudgetDeadlineTooShortDoesNotSend(t *testing.T) {
+	owner, client, err := coordination.StartUnixRateBudgetCoordinator(context.Background(), coordination.UnixRateBudgetCoordinatorOptions{
+		MaxInFlight: 8,
+		LeaseTTL:    time.Second,
+	})
+	if err != nil {
+		t.Fatalf("start shared coordinator: %v", err)
+	}
+	t.Cleanup(func() { _ = owner.Close() })
+
+	var hits atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		hits.Add(1)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	t.Cleanup(server.Close)
+
+	config := rateLimitTestConfig(t)
+	config.RateBudgetBackend = connsdk.RateBudgetBackendRequireShared
+	config.BudgetCoordinator = client
+	bundle := withAllRateLimit(Bundle{Name: "shared-deadline", HTTP: HTTPBase{URL: server.URL}})
+	runtime, err := newRuntime(context.Background(), bundle, config, nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+	requester, err := runtime.RequesterFor(http.MethodGet, "/deadline")
+	if err != nil {
+		t.Fatalf("RequesterFor: %v", err)
+	}
+	if _, err := requester.Do(context.Background(), http.MethodGet, "/deadline", nil, nil); err != nil {
+		t.Fatalf("initial shared request: %v", err)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	defer cancel()
+	_, err = requester.Do(ctx, http.MethodGet, "/deadline", nil, nil)
+	var refusal *connsdk.RateBudgetRefusalError
+	if !errors.As(err, &refusal) || refusal.Reason != connsdk.RateBudgetRefusalDeadlineTooShort {
+		t.Fatalf("deadline refusal = %v, want typed deadline-too-short refusal", err)
+	}
+	if got := hits.Load(); got != 1 {
+		t.Fatalf("transport hits = %d, want only the initial granted request", got)
 	}
 }
 
