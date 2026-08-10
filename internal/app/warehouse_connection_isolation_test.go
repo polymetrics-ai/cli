@@ -199,12 +199,54 @@ func TestBothConnectionsKeepTheirOwnRowsAndAreReadableByName(t *testing.T) {
 	}
 }
 
-// TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept guards the honesty half
-// for every surface that reads through SQL rather than through a table
-// selector — flow query steps and an action step's source table both reach the
-// warehouse this way, and a flow manifest step carries no connection field.
-// Those surfaces cannot resolve the ambiguity today, so the refusal must not
-// promise a flag they do not have. Naming one would be worse than naming none.
+func TestQuerySQLScopesConnectionOwnedAndUnattributedViews(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("scoped_sql_query", nil)
+	a, warehouseDir := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	source.records = []connectors.Record{{"id": "a1", "updated_at": "2026-08-06T00:00:00Z"}}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatal(err)
+	}
+	source.records = []connectors.Record{{"id": "g1", "updated_at": "2026-08-06T00:00:02Z"}}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "globex", Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatal(err)
+	}
+	if err := warehouse.WriteTable(ctx, filepath.Join(warehouseDir, "records"+warehouse.TableFileExt), []warehouse.Row{{"id": "root-1"}}); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, tc := range []struct {
+		name       string
+		connection string
+		wantID     string
+	}{
+		{name: "acme", connection: "acme", wantID: "a1"},
+		{name: "globex", connection: "globex", wantID: "g1"},
+		{name: "root", connection: warehouse.UnattributedConnection, wantID: "root-1"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			rows, err := a.QuerySQL(ctx, QuerySQLRequest{
+				SQL:        "SELECT id FROM records",
+				Connection: tc.connection,
+			})
+			if err != nil {
+				t.Fatalf("QuerySQL(%q) error = %v", tc.connection, err)
+			}
+			if len(rows) != 1 {
+				t.Fatalf("QuerySQL(%q) rows = %d, want 1: %v", tc.connection, len(rows), rows)
+			}
+			if got := toComparableString(rows[0]["id"]); got != tc.wantID {
+				t.Fatalf("QuerySQL(%q) id = %q, want %q", tc.connection, got, tc.wantID)
+			}
+		})
+	}
+}
+
+// TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept guards the default
+// honesty rule for generic SQL callers: unlike a flow manifest, this method
+// cannot describe which recovery syntax its caller exposes. Flow query and
+// action steps attach a manifest-field remedy at their own boundary.
 func TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("flow_query_ambiguity", nil)
@@ -219,22 +261,20 @@ func TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, err := a.QuerySQL(ctx, "SELECT * FROM records", 0)
+	_, err := a.QuerySQL(ctx, QuerySQLRequest{SQL: "SELECT * FROM records"})
 	if err == nil {
 		t.Fatal("QuerySQL(shared table name) error = nil, want the read refused rather than answered from one tenant")
 	}
 	if strings.Contains(err.Error(), "--") {
 		t.Fatalf("QuerySQL refusal %q names a flag this surface does not accept", err)
 	}
-	if a.QueryEngineName() == "jsonl" {
-		var ambiguous *warehouse.AmbiguousTableError
-		if !errors.As(err, &ambiguous) {
-			t.Fatalf("QuerySQL() error = %T %v, want *warehouse.AmbiguousTableError", err, err)
-		}
-		for _, want := range []string{"acme", "globex"} {
-			if !strings.Contains(ambiguous.Error(), want) {
-				t.Fatalf("ambiguity error %q does not name %q", ambiguous.Error(), want)
-			}
+	var ambiguous *warehouse.AmbiguousTableError
+	if !errors.As(err, &ambiguous) {
+		t.Fatalf("QuerySQL() error = %T %v, want *warehouse.AmbiguousTableError", err, err)
+	}
+	for _, want := range []string{"acme", "globex"} {
+		if !strings.Contains(ambiguous.Error(), want) {
+			t.Fatalf("ambiguity error %q does not name %q", ambiguous.Error(), want)
 		}
 	}
 }

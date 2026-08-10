@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -14,6 +15,7 @@ import (
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/config"
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/flow"
 	"polymetrics.ai/internal/warehouse"
 )
@@ -247,6 +249,11 @@ func TestFlowSourceConnectionSelectorsReadOnlyOwningRows(t *testing.T) {
 			}]
 		}`))
 		require.NoError(t, err)
+		encoded, err := json.Marshal(manifest)
+		require.NoError(t, err)
+		roundTripped, err := flow.ParseManifest(encoded)
+		require.NoError(t, err)
+		assert.Equal(t, "acme", roundTripped.Steps[0].Connection)
 
 		engine := &flow.Engine{
 			Manifest: manifest,
@@ -258,6 +265,7 @@ func TestFlowSourceConnectionSelectorsReadOnlyOwningRows(t *testing.T) {
 		assert.Equal(t, "ok", result.Status)
 		require.Len(t, adapter.lastRows, 1)
 		assert.Equal(t, "acme-1", adapter.lastRows[0]["id"])
+		assert.Equal(t, "acme", adapter.lastSQLConnection)
 	})
 
 	t.Run("action source selector reads only globex rows", func(t *testing.T) {
@@ -282,6 +290,12 @@ func TestFlowSourceConnectionSelectorsReadOnlyOwningRows(t *testing.T) {
 			}]
 		}`))
 		require.NoError(t, err)
+		encoded, err := json.Marshal(manifest)
+		require.NoError(t, err)
+		roundTripped, err := flow.ParseManifest(encoded)
+		require.NoError(t, err)
+		require.NotNil(t, roundTripped.Steps[0].ActionCfg)
+		assert.Equal(t, "globex", roundTripped.Steps[0].ActionCfg.SourceConnection)
 
 		engine := &flow.Engine{
 			Manifest:     manifest,
@@ -294,28 +308,175 @@ func TestFlowSourceConnectionSelectorsReadOnlyOwningRows(t *testing.T) {
 		assert.Equal(t, "ok", result.Status)
 		require.Len(t, runner.records, 1)
 		assert.Equal(t, "globex-1", runner.records[0]["id"])
+		assert.Equal(t, "globex", adapter.lastTableConnection)
+		require.NotNil(t, runner.step.ActionCfg)
+		assert.Equal(t, "globex", runner.step.ActionCfg.SourceConnection)
+	})
+}
+
+func TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed(t *testing.T) {
+	ctx := testCtx(t)
+	a := newFlowScopedWarehouseApp(t, ctx)
+
+	t.Run("query omission is a typed ambiguity with a manifest remedy", func(t *testing.T) {
+		adapter := &recordingFlowAppAdapter{app: a}
+		engine := &flow.Engine{
+			Manifest: flow.FlowManifest{
+				Version: 1,
+				Name:    "ambiguous-query",
+				Steps: []flow.FlowStep{{
+					ID:   "query-records",
+					Kind: flow.KindQuery,
+					SQL:  "SELECT * FROM records",
+					In:   []string{},
+					Out:  []string{},
+				}},
+			},
+			App:     adapter,
+			LockDir: t.TempDir(),
+		}
+
+		_, err := engine.Run(ctx, flow.RunOptions{})
+		require.Error(t, err)
+		var ambiguous *warehouse.AmbiguousTableError
+		require.Truef(t, errors.As(err, &ambiguous), "error = %T %v", err, err)
+		assert.NotContains(t, err.Error(), "--")
+		assert.Contains(t, err.Error(), "`connection`")
+		assert.Contains(t, ambiguous.Error(), "acme")
+		assert.Contains(t, ambiguous.Error(), "globex")
+	})
+
+	t.Run("action omission is typed before the local action runner", func(t *testing.T) {
+		adapter := &recordingFlowAppAdapter{app: a}
+		runner := &captureFlowActionRunner{}
+		engine := &flow.Engine{
+			Manifest: flow.FlowManifest{
+				Version: 1,
+				Name:    "ambiguous-action",
+				Steps: []flow.FlowStep{{
+					ID:   "act-on-records",
+					Kind: flow.KindAction,
+					ActionCfg: &flow.ActionConfig{
+						SourceTable:           "records",
+						DestinationConnector:  "future-connector",
+						DestinationCredential: "future-credential",
+						Action:                "create",
+						Mappings:              map[string]string{"id": "external_id"},
+					},
+					In:  []string{},
+					Out: []string{},
+				}},
+			},
+			App:          adapter,
+			ActionRunner: runner,
+			LockDir:      t.TempDir(),
+		}
+
+		_, err := engine.Run(ctx, flow.RunOptions{ApprovalToken: "test-only"})
+		require.Error(t, err)
+		var ambiguous *warehouse.AmbiguousTableError
+		require.Truef(t, errors.As(err, &ambiguous), "error = %T %v", err, err)
+		assert.NotContains(t, err.Error(), "--")
+		assert.Contains(t, err.Error(), "`action_cfg.source_connection`")
+		assert.Zero(t, runner.calls, "the source ambiguity must stop before any action dispatch")
+	})
+
+	t.Run("unattributed selectors see root-owned rows only", func(t *testing.T) {
+		rootTable := filepath.Join(a.ProjectDir(), "warehouse", "records"+warehouse.TableFileExt)
+		require.NoError(t, warehouse.WriteTable(ctx, rootTable, []warehouse.Row{{"id": "root-1"}}))
+
+		queryAdapter := &recordingFlowAppAdapter{app: a}
+		queryEngine := &flow.Engine{
+			Manifest: flow.FlowManifest{
+				Version: 1,
+				Name:    "root-query",
+				Steps: []flow.FlowStep{{
+					ID:         "query-root-records",
+					Kind:       flow.KindQuery,
+					Connection: warehouse.UnattributedConnection,
+					SQL:        "SELECT * FROM records",
+					In:         []string{},
+					Out:        []string{},
+				}},
+			},
+			App:     queryAdapter,
+			LockDir: t.TempDir(),
+		}
+		_, err := queryEngine.Run(ctx, flow.RunOptions{})
+		require.NoError(t, err)
+		require.Len(t, queryAdapter.lastRows, 1)
+		assert.Equal(t, "root-1", queryAdapter.lastRows[0]["id"])
+
+		actionAdapter := &recordingFlowAppAdapter{app: a}
+		runner := &captureFlowActionRunner{}
+		actionEngine := &flow.Engine{
+			Manifest: flow.FlowManifest{
+				Version: 1,
+				Name:    "root-action",
+				Steps: []flow.FlowStep{{
+					ID:   "act-on-root-records",
+					Kind: flow.KindAction,
+					ActionCfg: &flow.ActionConfig{
+						SourceTable:           "records",
+						SourceConnection:      warehouse.UnattributedConnection,
+						DestinationConnector:  "future-connector",
+						DestinationCredential: "future-credential",
+						Action:                "create",
+						Mappings:              map[string]string{"id": "external_id"},
+					},
+					In:  []string{},
+					Out: []string{},
+				}},
+			},
+			App:          actionAdapter,
+			ActionRunner: runner,
+			LockDir:      t.TempDir(),
+		}
+		_, err = actionEngine.Run(ctx, flow.RunOptions{ApprovalToken: "test-only"})
+		require.NoError(t, err)
+		require.Len(t, runner.records, 1)
+		assert.Equal(t, "root-1", runner.records[0]["id"])
+		assert.Equal(t, warehouse.UnattributedConnection, actionAdapter.lastTableConnection)
 	})
 }
 
 type recordingFlowAppAdapter struct {
-	app      *app.App
-	lastRows []map[string]any
+	app                 *app.App
+	lastRows            []map[string]any
+	lastSQLConnection   string
+	lastTableConnection string
 }
 
 func (a *recordingFlowAppAdapter) ETLRun(_ context.Context, _ string, _ []string) (flow.ETLResult, error) {
 	return flow.ETLResult{}, nil
 }
 
-func (a *recordingFlowAppAdapter) QuerySQL(ctx context.Context, sql string, limit int) ([]map[string]any, error) {
-	records, err := a.app.QuerySQL(ctx, sql, limit)
+func (a *recordingFlowAppAdapter) QuerySQL(ctx context.Context, sql, connection string, limit int) ([]map[string]any, error) {
+	records, err := a.app.QuerySQL(ctx, app.QuerySQLRequest{SQL: sql, Connection: connection, Limit: limit})
 	if err != nil {
 		return nil, err
 	}
-	a.lastRows = make([]map[string]any, len(records))
-	for i, record := range records {
-		a.lastRows[i] = map[string]any(record)
-	}
+	a.lastSQLConnection = connection
+	a.lastRows = recordsToMapRows(records)
 	return a.lastRows, nil
+}
+
+func (a *recordingFlowAppAdapter) QueryTable(ctx context.Context, table, connection string, limit int) ([]map[string]any, error) {
+	records, err := a.app.QueryTable(ctx, app.QueryTableRequest{Table: table, Connection: connection, Limit: limit})
+	if err != nil {
+		return nil, err
+	}
+	a.lastTableConnection = connection
+	a.lastRows = recordsToMapRows(records)
+	return a.lastRows, nil
+}
+
+func recordsToMapRows(records []connectors.Record) []map[string]any {
+	out := make([]map[string]any, len(records))
+	for i, record := range records {
+		out[i] = map[string]any(record)
+	}
+	return out
 }
 
 func (a *recordingFlowAppAdapter) RLMRun(_ context.Context, _ flow.RLMRunRequest) (flow.RLMResult, error) {
@@ -324,9 +485,13 @@ func (a *recordingFlowAppAdapter) RLMRun(_ context.Context, _ flow.RLMRunRequest
 
 type captureFlowActionRunner struct {
 	records []map[string]any
+	step    flow.FlowStep
+	calls   int
 }
 
-func (r *captureFlowActionRunner) ExecuteStep(_ context.Context, _ flow.FlowStep, records []map[string]any, _ string, _ string) (flow.ActionResult, error) {
+func (r *captureFlowActionRunner) ExecuteStep(_ context.Context, step flow.FlowStep, records []map[string]any, _ string, _ string) (flow.ActionResult, error) {
+	r.calls++
+	r.step = step
 	r.records = append([]map[string]any(nil), records...)
 	return flow.ActionResult{RecordsAttempted: len(records), RecordsSucceeded: len(records)}, nil
 }

@@ -77,7 +77,7 @@ func TestQuerySQLAggregatesOverParquetTables(t *testing.T) {
 		t.Fatalf("QueryEngineName() = %q, want %q", got, "duckdb")
 	}
 
-	grouped, err := a.QuerySQL(ctx, "SELECT status, count(*) AS n FROM records GROUP BY status ORDER BY status", 0)
+	grouped, err := a.QuerySQL(ctx, app.QuerySQLRequest{SQL: "SELECT status, count(*) AS n FROM records GROUP BY status ORDER BY status"})
 	if err != nil {
 		t.Fatalf("QuerySQL(GROUP BY) error = %v", err)
 	}
@@ -89,7 +89,7 @@ func TestQuerySQLAggregatesOverParquetTables(t *testing.T) {
 		t.Fatalf("QuerySQL(GROUP BY) = %v, want %v", gotGroups, want)
 	}
 
-	filtered, err := a.QuerySQL(ctx, "SELECT id FROM records WHERE status = 'active' ORDER BY id", 0)
+	filtered, err := a.QuerySQL(ctx, app.QuerySQLRequest{SQL: "SELECT id FROM records WHERE status = 'active' ORDER BY id"})
 	if err != nil {
 		t.Fatalf("QuerySQL(WHERE) error = %v", err)
 	}
@@ -101,7 +101,7 @@ func TestQuerySQLAggregatesOverParquetTables(t *testing.T) {
 		t.Fatalf("QuerySQL(WHERE) = %v, want %v", gotIDs, want)
 	}
 
-	aggregated, err := a.QuerySQL(ctx, "SELECT sum(amount) AS total, max(amount) AS peak FROM records", 0)
+	aggregated, err := a.QuerySQL(ctx, app.QuerySQLRequest{SQL: "SELECT sum(amount) AS total, max(amount) AS peak FROM records"})
 	if err != nil {
 		t.Fatalf("QuerySQL(aggregate) error = %v", err)
 	}
@@ -116,7 +116,7 @@ func TestQuerySQLAggregatesOverParquetTables(t *testing.T) {
 	}
 
 	// A write must still be refused, whatever the engine can express.
-	if _, err := a.QuerySQL(ctx, "DELETE FROM records", 0); err == nil {
+	if _, err := a.QuerySQL(ctx, app.QuerySQLRequest{SQL: "DELETE FROM records"}); err == nil {
 		t.Fatal("QuerySQL(DELETE) succeeded; only read-only queries are allowed")
 	}
 }

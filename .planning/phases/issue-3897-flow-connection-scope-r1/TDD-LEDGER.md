@@ -1,14 +1,14 @@
 # #3897 TDD Ledger
 
-**Status:** RED established; no production edit has begun.  
+**Status:** GREEN verified locally; delivery/checkpoint gates pending.
 **Correction rounds:** 0 / 5
 
 | Slice | Red evidence | Green evidence | Refactor / result |
 |---|---|---|---|
-| 1. Selected source rows | **RED 2026-08-11:** `go test -timeout 20m ./internal/cli -run '^TestFlowSourceConnectionSelectorsReadOnlyOwningRows$' -count=1` failed for both explicit selectors. DuckDB reported bare `records` absent and suggested only a qualified owner view. | Pending: each selector returns only its owner’s IDs through DuckDB/warehouse. | Pending |
-| 2. Omitted and root selectors | Pending: omitted duplicated source must be typed ambiguity; `_unattributed` must not read a connection table. | Pending: honest flow-manifest remedy and root-only success. | Pending |
-| 3. Serialization/action boundary | Pending: parse/serialize and runner-boundary selector assertions fail. | Pending: selectors survive JSON and the action source request/step boundary. | Pending |
-| 4. Public proof | Pending: binary flow fixture has no scoping syntax/returns wrong rows. | Pending: fresh `pm` reports only the selected owner’s returned IDs. | Pending |
+| 1. Selected source rows | **RED 2026-08-11:** `go test -timeout 20m ./internal/cli -run '^TestFlowSourceConnectionSelectorsReadOnlyOwningRows$' -count=1` failed for both explicit selectors. DuckDB reported bare `records` absent and suggested only a qualified owner view. | **GREEN:** the same focused test passes: `connection: "acme"` returns only `acme-1` through a real Parquet/DuckDB read; `action_cfg.source_connection: "globex"` returns only `globex-1` through `QueryTableRequest.Connection`. | Replaced action SQL string construction with the existing table request; selector conversion is centralized in the flow CLI adapter. |
+| 2. Omitted and root selectors | **RED:** the initial same-name materializations had no selectable bare source read, establishing that an implicit owner cannot be accepted. | **GREEN:** `TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed` verifies typed omissions with manifest-only remedies and root-only `_unattributed` query/action rows. | `warehouse.FindTable` remains the ownership authority; flow only decorates its typed error. |
+| 3. Serialization/action boundary | **RED:** the initial manifest had no action source selector to parse, serialize, or preserve at the runner boundary. | **GREEN:** focused CLI and flow-engine tests JSON round-trip both fields, assert the selected request connection, and assert the local action runner receives `SourceConnection`. | No preview/digest exists in this flow path; #3994 owns later action lifecycle work. |
+| 4. Public proof | **RED:** before implementation, the first focused flow test could not select either owner. | **GREEN:** a freshly built binary materialized same-named rows, ran a `connection: "acme"` flow query whose SQL fails if the wrong row is visible, and asserted returned `acme`/`globex` query rows. | Runtime help/manual, website docs, and three golden help surfaces document manifest syntax only; no flow CLI flag was added. |
 
 ## Red: required first executable test
 
@@ -43,3 +43,16 @@ read. The full non-secret result is in `traces/red-flow-source-selectors.txt`.
 - SQL receives no user-built identifier interpolation.
 - Omitted selection never falls back to an arbitrary owner.
 - An action remains a local stub boundary; #3994 owns dispatch.
+
+## Executed GREEN commands
+
+- `go test -timeout 20m ./internal/cli -run '^(TestFlowSourceConnectionSelectorsReadOnlyOwningRows|TestFlowSourceConnectionSelectorRefusesOmissionAndAcceptsUnattributed)$' -count=1`
+- `go test -timeout 20m ./internal/app -run '^(TestQuerySQLScopesConnectionOwnedAndUnattributedViews|TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept|TestQuerySQLHonorsCanceledContext)$' -count=1`
+- `go test -timeout 20m ./internal/app -count=1`
+- `go test -timeout 20m ./internal/flow -count=1`
+- `go test -timeout 20m ./internal/cli -count=1`
+- `go test -race -timeout 20m ./internal/app ./internal/flow -count=1`
+
+All listed commands passed. The first RED output remains in
+`traces/red-flow-source-selectors.txt`; the non-secret binary proof is in
+`traces/binary-flow-proof.txt`.

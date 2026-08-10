@@ -4,7 +4,8 @@
 **Parent:** #3988  
 **Branch:** `feat/3897-flow-connection-scope` from `feat/3988-github-certification`  
 **PR base:** exactly `feat/3988-github-certification`  
-**Status:** Planned — production edits have not started
+**Status:** GREEN verified locally — pending the required no-mistakes, push,
+draft-PR, and CI handoff gates
 
 ## Delivery mode
 
@@ -58,7 +59,10 @@ rows. The action test uses a local stub runner; it performs no provider write.
 **Refactor:** Centralize the source-read request conversion and avoid raw SQL
 concatenation for action `source_table`.
 
-**Checkpoint:** commit/push the passing source-read slice.
+**Result:** GREEN. The Parquet/DuckDB flow test returns `acme-1` only for the
+query selector and `globex-1` only for the action source selector. The action
+uses the existing connection-aware table request before a local capture
+runner; it does not construct a SQL identifier or call a provider.
 
 ### Slice 2 — RED: honesty and root-owned table semantics
 
@@ -75,7 +79,9 @@ warehouse layer.
 **Refactor:** Keep `warehouse.FindTable` and `WithAmbiguityRemedy` the one
 source of selection and wording mechanics.
 
-**Checkpoint:** commit/push the passing ambiguity/unattributed slice.
+**Result:** GREEN. Omitted selectors produce a typed
+`*warehouse.AmbiguousTableError` decorated only at the flow boundary with a
+usable manifest remedy. `_unattributed` returns only the root-owned row.
 
 ### Slice 3 — RED: manifest and action boundary identity
 
@@ -91,7 +97,11 @@ the absent boundary and leave #3994 to own it.
 **Refactor:** preserve backwards-compatible omitted fields and no new public
 CLI flag.
 
-**Checkpoint:** commit/push the manifest/boundary slice.
+**Result:** GREEN. Both fields survive JSON marshal/parse. Query forwards its
+connection to the DuckDB request and action forwards its source connection to
+`QueryTableRequest` before passing the unchanged `FlowStep` to the existing
+action-runner boundary. This path owns no separate preview or digest; #3994
+continues to own that later lifecycle.
 
 ### Slice 4 — docs, binary proof, and gate evidence
 
@@ -121,13 +131,12 @@ Remove the temporary project root and assert it no longer exists.
 
 ## CLI parity checklist
 
-- [ ] `pm help flow` checked.
-- [ ] `pm flow` bare namespace behaviour checked.
-- [ ] `pm flow run --help` checked.
-- [ ] `docs/cli/flow.md` updated or explicitly not applicable.
-- [ ] matching `website/**` flow documentation updated or explicitly not
-  applicable.
-- [ ] golden/help fixtures updated or explicitly not applicable.
+- [x] `pm help flow` checked.
+- [x] `pm flow` bare namespace behaviour checked.
+- [x] `pm flow run --help` checked.
+- [x] `docs/cli/flow.md` updated.
+- [x] matching `website/**` flow documentation updated.
+- [x] golden/help fixtures updated.
 
 ## Commit and PR record
 

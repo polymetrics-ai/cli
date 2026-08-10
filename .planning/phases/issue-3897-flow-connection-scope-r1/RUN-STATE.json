@@ -3,7 +3,7 @@
   "parent_issue": 3988,
   "branch": "feat/3897-flow-connection-scope",
   "base": "feat/3988-github-certification",
-  "status": "red_established",
+  "status": "local_verification_complete_pending_no_mistakes",
   "manual_gsd_fallback": {
     "used": true,
     "reason": "The active ROADMAP.md intentionally has no numbered phases and directs issue work to .planning/phases/<issue-or-phase>/; GSD phase-op cannot register issue-3897-flow-connection-scope-r1.",
@@ -26,13 +26,29 @@
   ],
   "tdd": {
     "red": "TestFlowSourceConnectionSelectorsReadOnlyOwningRows failed as expected: both declared selectors reached an unscoped DuckDB SQL read and duplicate records views were unavailable.",
-    "green": "pending",
-    "refactor": "pending"
+    "green": "Focused CLI/app/flow tests pass against real two-owner Parquet materializations: query uses a scoped DuckDB view, action uses QueryTableRequest.Connection, omitted selection is typed ambiguity, and _unattributed is root-only.",
+    "refactor": "Action source reads use QueryTable rather than raw SQL construction; request conversion is centralized in the flow adapter."
   },
   "correction_rounds": 0,
-  "verification": [],
+  "verification": [
+    "go test -timeout 20m ./internal/cli -run focused flow source selector tests -count=1",
+    "go test -timeout 20m ./internal/app -run focused scoped-query/cancellation tests -count=1",
+    "go test -timeout 20m ./internal/app -count=1",
+    "go test -timeout 20m ./internal/flow -count=1",
+    "go test -timeout 20m ./internal/cli -count=1",
+    "go test -race -timeout 20m ./internal/app ./internal/flow -count=1",
+    "go vet ./...",
+    "go build ./cmd/pm",
+    "golangci-lint run --new-from-rev=<parent-sha> ./internal/app ./internal/flow ./internal/cli",
+    "make tidy-check/docs-check/smoke-no-build/agent-contract-check/connectorgen-validate/connectorgen-surface-sync/connector-boundary/release-workflow-check/lint/github-parity-artifacts-check/connectorgen-certification-matrix/connector-canon-check/connector-runtime-preflight",
+    "website npm run gen:docs and npm run typecheck",
+    "fresh pm binary flow-query proof with returned-row assertions"
+  ],
   "cleanup": {
-    "temporary_roots": [],
-    "residue": "pending"
+    "temporary_roots": [
+      "/tmp/pm-flow-connection-scope-proof.yYENfn (moved to Trash; original path absent)",
+      "smoke temporary root (moved to Trash; original path absent)"
+    ],
+    "residue": "zero at the original temporary-root paths"
   }
 }

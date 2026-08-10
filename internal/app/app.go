@@ -48,7 +48,7 @@ type App struct {
 // implementation; the seam remains so a query path can be substituted in tests
 // without the engine choice becoming an install-time option.
 type sqlQueryEngine interface {
-	QuerySQL(ctx context.Context, sql string, limit int) ([]connectors.Record, error)
+	QuerySQL(ctx context.Context, req QuerySQLRequest) ([]connectors.Record, error)
 	Name() string
 }
 
@@ -1321,8 +1321,16 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 	return rows, nil
 }
 
-func (a *App) QuerySQL(ctx context.Context, sql string, limit int) ([]connectors.Record, error) {
-	return a.sqlEngine.QuerySQL(ctx, sql, limit)
+func (a *App) QuerySQL(ctx context.Context, req QuerySQLRequest) ([]connectors.Record, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	if req.Connection != "" && req.Connection != warehouse.UnattributedConnection {
+		if _, ok := a.findConnection(req.Connection); !ok {
+			return nil, fmt.Errorf("connection %q not found", req.Connection)
+		}
+	}
+	return a.sqlEngine.QuerySQL(ctx, req)
 }
 
 // warehouseRoot is this project's local warehouse root.

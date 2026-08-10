@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -40,6 +41,10 @@ var (
 		"attach", "copy", "pragma", "call", "export", "install", "load", "set",
 	}
 	wordRe = regexp.MustCompile(`[A-Za-z_][A-Za-z0-9_]*`)
+	// DuckDB reports an unregistered table by name. The engine uses this only
+	// to recover warehouse's typed ambiguity error after intentionally leaving
+	// duplicate unscoped views bare-less; it is not used to construct SQL.
+	duckDBMissingTableRe = regexp.MustCompile(`(?i)table with name ["']?([A-Za-z_][A-Za-z0-9_]*)["']? does not exist`)
 )
 
 // validateSelectOnly enforces that sql is a single read-only statement. It must
@@ -69,8 +74,8 @@ func validateSelectOnly(sql string) error {
 	return nil
 }
 
-func (e duckdbEngine) QuerySQL(ctx context.Context, query string, limit int) ([]connectors.Record, error) {
-	if err := validateSelectOnly(query); err != nil {
+func (e duckdbEngine) QuerySQL(ctx context.Context, req QuerySQLRequest) ([]connectors.Record, error) {
+	if err := validateSelectOnly(req.SQL); err != nil {
 		return nil, err
 	}
 
@@ -80,17 +85,22 @@ func (e duckdbEngine) QuerySQL(ctx context.Context, query string, limit int) ([]
 	}
 	defer db.Close()
 
-	if err := e.registerViews(ctx, db); err != nil {
+	if err := e.registerViews(ctx, db, req.Connection); err != nil {
 		return nil, err
 	}
 
-	finalSQL := query
-	if limit > 0 && !hasTopLevelLimit(query) {
-		finalSQL = fmt.Sprintf("SELECT * FROM (%s) AS _pm_q LIMIT %d", query, limit)
+	finalSQL := req.SQL
+	if req.Limit > 0 && !hasTopLevelLimit(req.SQL) {
+		finalSQL = fmt.Sprintf("SELECT * FROM (%s) AS _pm_q LIMIT %d", req.SQL, req.Limit)
 	}
 
 	rows, err := db.QueryContext(ctx, finalSQL)
 	if err != nil {
+		if req.Connection == "" {
+			if ambiguity := e.ambiguityForMissingTable(err); ambiguity != nil {
+				return nil, fmt.Errorf("execute query: %w", ambiguity)
+			}
+		}
 		return nil, fmt.Errorf("execute query: %w", err)
 	}
 	defer rows.Close()
@@ -132,7 +142,7 @@ func (e duckdbEngine) QuerySQL(ctx context.Context, query string, limit int) ([]
 //
 // View names are validated identifiers and file paths are passed as
 // quote-escaped string literals — never via user SQL interpolation.
-func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB) error {
+func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB, connection string) error {
 	// A warehouse that does not exist yet has no tables and is not an error.
 	// Faults are deliberately not fatal here: a damaged ownership record costs
 	// its own connection's views, not every other connection's. A query naming
@@ -144,6 +154,9 @@ func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB) error {
 	}
 	byName := make(map[string][]warehouse.Table, len(tables))
 	for _, table := range tables {
+		if !querySelectsConnection(connection, table.Connection) {
+			continue
+		}
 		byName[table.Name] = append(byName[table.Name], table)
 	}
 	names := make([]string, 0, len(byName))
@@ -176,6 +189,39 @@ func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB) error {
 				return fmt.Errorf("register view %q: %w", view, err)
 			}
 		}
+	}
+	return nil
+}
+
+// querySelectsConnection mirrors the warehouse selector contract while
+// registering the views available to one analytical query. The authoritative
+// ownership lookup remains warehouse.FindTable; this filter only prevents a
+// selected query from registering another connection's files in DuckDB.
+func querySelectsConnection(requested, owner string) bool {
+	switch requested {
+	case "":
+		return true
+	case warehouse.UnattributedConnection:
+		return owner == ""
+	default:
+		return owner == requested
+	}
+}
+
+// ambiguityForMissingTable restores warehouse's typed ambiguity result for a
+// normal unscoped SQL query. Duplicate table names intentionally have no bare
+// DuckDB view; when DuckDB reports that missing bare name, FindTable is the
+// single authority that determines whether it was ambiguous rather than truly
+// absent. Other query failures remain their original DuckDB errors.
+func (e duckdbEngine) ambiguityForMissingTable(queryErr error) error {
+	match := duckDBMissingTableRe.FindStringSubmatch(queryErr.Error())
+	if len(match) != 2 {
+		return nil
+	}
+	_, err := warehouse.FindTable(e.warehouseDir, match[1], "")
+	var ambiguous *warehouse.AmbiguousTableError
+	if errors.As(err, &ambiguous) {
+		return err
 	}
 	return nil
 }
