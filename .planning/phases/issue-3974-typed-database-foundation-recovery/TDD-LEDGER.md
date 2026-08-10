@@ -9,11 +9,14 @@
 | R5 | Warehouse mediation | A database value can carry both source and target or bypass the shared artifact. | Warehouse artifact and isolated inbound/outbound leg tests pass. |
 | R6 | PostgreSQL stays non-executing | Recovery can accidentally alter TLS/CDC behavior or raise a capability. | PostgreSQL reference seam and embedded definition tests retain `write:false`, `query:false`, `cdc:false`. |
 | R7 | Newer canon wins | Stale #4014 docs/connector wording can replace #4003 or current PostgreSQL hardening. | Recorded conflict dispositions retain current canon and fail-closed behavior. |
+| R8 | Generated certification projection stays attributable | `make connectorgen-certification-matrix` detects a source-location drift after the #3974 replay. | Correction child #4026 records ownership; regenerated matrix and capability-false binary evidence are green without capability promotion. |
 
 ## Commands and evidence
 
 **Red:** `go test -timeout 20m -count=1 ./internal/connectors/database -run '^TestDatabaseDefinitionStrictLoadAndDefensiveProjection$'` before replay. Its output is retained in `traces/typed-admission-red.txt`.
 
 **Red:** semantic replay conflict status and the three overlap paths are retained in `traces/semantic-replay-red.txt` before manual reconciliation.
+
+**Red:** correction round 1/5 records the failed derived-artifact check and branch-versus-parent attribution in `traces/capability-matrix-red.txt`; #4026 is its sole correction child.
 
 **Green:** focused tests, runtime metadata assertions, and repository gates are recorded in `VERIFICATION.md` and `traces/` after replay.

@@ -2,14 +2,21 @@
   "issue": 3974,
   "phase": "issue-3974-typed-database-foundation-recovery",
   "mode": "manual-inline-gsd-fallback",
-  "status": "planned",
+  "status": "review-complete-awaiting-no-mistakes",
   "base": "8242bedee0cfa75fc61d1fb0e47d73251605162d",
   "range": "0be21e1293a9e5c913d9b4e23a846237594630c7^..9e763fe07a69b48f8ed88484ccb18580c63ae160",
   "discuss_phase": "generated-and-recorded",
   "plan_phase_tdd": "generated-and-recorded",
-  "execute_phase": "pending-inline-replay",
-  "verify_work": "pending-inline-verification",
-  "code_review": "pending-inline-review",
-  "correction_loops": 0,
+  "execute_phase": "completed-inline-replay",
+  "verify_work": "completed-inline-after-4026",
+  "shepherd_3995": {
+    "implementation_ref": "ef66991350a5de137ab17e492acf2640feecf5c3",
+    "integrated_into_child_or_parent": false,
+    "transition": "integrate_sub_pr",
+    "decision": "RETRY-compatible-not-automatic",
+    "evidence": "SHEPHERD-COMPATIBILITY.json"
+  },
+  "code_review": "completed-inline-pass",
+  "correction_loops": 1,
   "fallback_reason": "#3974 is not a numbered roadmap phase and the canonical contract requires one inline worker without GSD role spawning."
 }
