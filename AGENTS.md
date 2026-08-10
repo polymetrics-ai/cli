@@ -27,12 +27,14 @@ file: that is a documented fallback with a named reason, never a silent exemptio
 
 An in-progress rewrite of the connector layer into JSON bundles (`internal/connectors/defs/<name>/`)
 interpreted by a declarative engine (`internal/connectors/engine/`). If you are continuing this
-work, read **`docs/migration/HANDOFF-CODEX.md`** first (parallel workstreams + collision rules),
+work, read **`docs/migration/HANDOFF-CODEX.md`** first (current canon entry point),
 then `docs/migration/conventions.md` (the connector authoring recipe) and
-`docs/architecture/connector-architecture-v2-design.md`. Reusable agent specs live under
-`.agents/`; connector migration agents are in `.agents/connector-migration/`. Agents may push
-committed, verified issue/PR branches and open PRs after local gates pass. Never push to `main`;
-the parent PR into `main` remains human-gated. Legacy connector Go under
+`docs/architecture/connector-architecture-v2-design.md`. The generated canonical workers are the
+active delivery agents. Legacy reusable YAML role specs under `.agents/` (including
+`.agents/connector-migration/`) are retained only for their owning cleanup waves and must not
+override the current connector delivery canon at `docs/connector-canon/INDEX.md`. Agents may push
+committed, verified issue/PR branches and open PRs after local gates pass. Never push to `main`; the
+parent PR into `main` remains human-gated. Legacy connector Go under
 `internal/connectors/<name>/*.go` stays until the human-gated wave 6 cutover.
 
 ## Project

@@ -85,6 +85,20 @@ The registry is generated from connector definition bundles. The public catalog 
 
 Connector operations are narrow: check, catalog, read, write, query, ETL, and reverse ETL. Agents get capability metadata and schemas, not generic HTTP, SQL write, or shell execution tools.
 
+### Delivery and certification status
+
+Every connector flow goes through the local warehouse: API → warehouse → API,
+API → warehouse → database, database → warehouse → API, or database →
+warehouse → database. A connection to the same connector does not permit a
+direct hop. Reverse delivery remains plan → preview → approval → execute.
+
+Before a command is declared implemented, the real runtime must accept it in
+preflight; a JSON declaration or generated manual is not enough. Run
+`make connector-runtime-preflight` and `make connector-canon-check` for the
+repository guardrails. There are currently zero accepted live certifications;
+fixtures and certification configuration are not live proof. See the
+[Connector Delivery Canon](/docs/connector-delivery) for the full procedure.
+
 ## ETL engine
 
 ```bash

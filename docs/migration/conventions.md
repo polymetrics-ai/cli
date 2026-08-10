@@ -1,7 +1,12 @@
-# Migration conventions — the single recipe
+# Migration conventions — bundle authoring reference
 
-Read this whole file before touching a connector. It is the ground truth every fan-out migration
-agent and reviewer follows; deviations are defects, not judgment calls. Goldens (read, don't copy
+> **Current delivery procedure:** [Connector Delivery Canon](../connector-canon/INDEX.md) and its
+> [Implementation Procedure](../connector-canon/IMPLEMENTATION-PROCEDURE.md) decide whether a
+> connector can be called complete. This document is the detailed bundle-authoring reference; it
+> cannot grant a capability, bypass the Foundation Check, or replace warehouse-mediated flow proof.
+
+Read this whole file before touching a connector. It is the bundle-authoring ground truth every
+migration agent and reviewer follows; deviations are defects, not judgment calls. Goldens (read, don't copy
 blindly — port the *pattern*): `internal/connectors/defs/stripe/**` (declarative HTTP + writes),
 `internal/connectors/defs/searxng/**` (read-only, no-auth), `internal/connectors/defs/postgres/**`
 + `internal/connectors/native/postgres/**` (Tier-3 split). Engine source of truth:
