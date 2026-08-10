@@ -16,7 +16,7 @@ progress:
 # Project State
 
 **Project:** Polymetrics CLI Connector Parity
-**Last activity:** 2026-07-08 — Runtime/RLM/Pi-agent/website integration knowledge added to GSD, agents, and non-phase planning docs; guidance now preserves Podman, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, RLM agent mode, and website stack details without making runtime checks mandatory.
+**Last activity:** 2026-08-10
 
 ## Current State
 
