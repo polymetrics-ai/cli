@@ -1,0 +1,22 @@
+{
+  "issue": 3985,
+  "phase": "issue-3985-connector-canon-r1",
+  "status": "planned",
+  "verificationPassed": false,
+  "inlineManualFallback": {
+    "used": true,
+    "reason": "The canonical single-worker contract forbids GSD role spawning; generated GSD prompts are executed inline."
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "discuss",
+      "decision": "local_critical_path",
+      "reason": "Captain task locks the substantive decisions; no compatible isolated GSD role may be spawned."
+    },
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Plan/TDD evidence is written inline under the single-worker delivery contract."
+    }
+  ]
+}
