@@ -12,7 +12,10 @@
       "scripts/gsd prompt code-review 3993 --depth=standard"
     ],
     "execution": "inline_manual",
-    "fallback_reason": "issue number 3993 is not a roadmap phase and dispatch forbids role spawning"
+    "fallback_reason": "issue number 3993 is not a roadmap phase and dispatch forbids role spawning",
+    "verify_work": "completed inline on 2026-08-11; UAT.md distinguishes the verified harness slice from the still-uncertified provider outcome",
+    "code_review": "completed inline at standard depth on 2026-08-11; REVIEW.md records one fixed #3993 config-scope boundary defect and explicit #3990/#3994/#3992 dependencies",
+    "shepherd_compatibility": "manual compatibility evidence only; no automatic #3995/Shepherd approval is asserted"
   },
   "boundary": {
     "allowed_owner": "Polymetrics-Cert",
@@ -30,6 +33,12 @@
     "credentialed_whole_surface_measurement": true,
     "sanitized_evidence_and_residue_cleanup": true,
     "inbound_github_parquet_duckdb_round_trip": true
+  },
+  "final_gate_corrections": {
+    "used": 1,
+    "limit": 5,
+    "issue": 4020,
+    "last": "proof-sweep write target scope now rejects --config owner/repo aliases before child-process launch"
   },
   "measurement": {
     "surface_commands": 1521,

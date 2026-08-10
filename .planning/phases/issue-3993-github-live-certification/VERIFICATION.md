@@ -1,7 +1,11 @@
 # Verification checklist — Issue #3993
 
+Status: harness slice verified inline on 2026-08-11; GitHub certification is
+intentionally not ready.
+
 - [x] Deterministic harness tests show that the supplied `Polymetrics-Cert` boundary controls both emitted cases and classification.
 - [x] Deterministic harness tests show a common barrier release; write cases require an independent read-back before any PM child can start.
+- [x] Write validation rejects every direct or `--config` owner/repository override before the credential-inspection child can start.
 - [x] The two artifact self-checks pass after regeneration.
 - [x] A real `pm` binary builds locally without secrets.
 - [x] The App installation credential is used without disclosure; the revoked fine-grained token is untouched.
@@ -10,6 +14,11 @@
 - [x] GitHub → Parquet warehouse → DuckDB inbound flow is independently proven.
 - [x] The outbound workflow refusal is attributed to #3994/#3992, with no duplicate action-path implementation.
 - [x] Targeted local checks and required non-full-suite verification gates pass.
+- [x] Inline/manual GSD `verify-work` is recorded in `UAT.md`; the adapter has
+  no roadmap phase for issue 3993 and the dispatch prohibits role spawning.
+- [x] Inline/manual standard code review is recorded in `REVIEW.md`; manual
+  Shepherd-compatible evidence in `SHEPHERD-COMPAT.md` explicitly is not an
+  automatic #3995 approval.
 
 ## Commands run
 
@@ -18,6 +27,7 @@ node --test scripts/tests/github-live-cases.test.mjs scripts/tests/github-live-p
 node scripts/github-live-proof-sweep.mjs --self-test
 node scripts/github-live-lab-manifest.mjs --check
 node scripts/github-live-bootstrap-probes.mjs --check
+node --test --test-name-pattern='rejects a write case that overrides' scripts/tests/github-live-proof-sweep.test.mjs
 go build ./cmd/pm
 go run ./cmd/connectorgen surface-sync --check
 make connector-runtime-preflight
@@ -52,3 +62,21 @@ The inbound flow was planned, previewed, run, and then queried through DuckDB:
 1 record read, 1 record written, 1 row returned from the connection-scoped
 Parquet table.  The temporary project (including local credential state and
 warehouse files) was deleted after its sanitized evidence was checked.
+
+## Verification interpretation
+
+The 0/665 barrier result is verified as a complete, truthful measurement, not
+as a provider-certification success. The isolated returned-record controls and
+rate snapshots rule out treating it as a revoked credential or a #3990 quota
+policy result. Follow-up is explicitly limited to #3990 admission, cleanup-safe
+fixtures, and outbound #3994/#3992 foundations.
+
+## Final correction loop
+
+One #3993-local correction was required during final verification ([#4020](https://github.com/polymetrics-ai/cli/issues/4020)): a forged
+write case could previously supply target scope through `--config` rather than
+the literal `--owner`/`--repo` flags. The new regression first demonstrated
+that the old validation reached a fake PM credential inspection; the green
+guard now rejects direct and config owner/repository aliases before a child
+process starts. This consumes **1 of 5** permitted correction loops and does
+not alter barrier concurrency, rate admission, or the measured 0/665 result.

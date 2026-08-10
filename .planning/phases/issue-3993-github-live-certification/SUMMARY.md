@@ -7,8 +7,9 @@
   owner, repository, and commit SHA no longer influence the live ledger.
 - The runner validates that boundary before credential use, releases every
   eligible operation through one barrier, requires an independent read-back for
-  any write case, bounds every child process at 45,000 ms, and redacts output
-  before it can reach a report.
+  any write case, rejects direct and `--config` owner/repository overrides
+  before a child starts ([#4020](https://github.com/polymetrics-ai/cli/issues/4020)), bounds every child process at 45,000 ms,
+  and redacts output before it can reach a report.
 - Current manifests are source-derived: `github-live-lab-manifest.mjs --check`
   reports 1,521 rows (900 repository, 308 organization, 33 App/install, 280
   feature/entitlement) and `github-live-bootstrap-probes.mjs --check` passes.

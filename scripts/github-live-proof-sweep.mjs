@@ -365,12 +365,36 @@ function flagValues(args, name) {
   return values;
 }
 
+function configValues(args, name) {
+  const values = [];
+  for (const raw of flagValues(args, "config")) {
+    const separator = raw.indexOf("=");
+    if (separator < 1) continue;
+    if (raw.slice(0, separator).trim().toLowerCase() === name) {
+      values.push(raw.slice(separator + 1));
+    }
+  }
+  return values;
+}
+
 function validateWriteRepositoryTarget(command, args, owner, repo) {
-  for (const [flag, expected] of [["owner", owner], ["repo", repo]]) {
-    for (const actual of flagValues(args, flag)) {
-      if (actual !== expected) {
+  const scopes = [
+    ["--owner", flagValues(args, "owner"), owner],
+    ["--repo", flagValues(args, "repo"), repo],
+    ["--repo-owner", flagValues(args, "repo-owner"), owner],
+    ["--repo-name", flagValues(args, "repo-name"), repo],
+    ["--repository", flagValues(args, "repository"), `${owner}/${repo}`],
+    ["--config owner", configValues(args, "owner"), owner],
+    ["--config repo", configValues(args, "repo"), repo],
+    ["--config repo-owner", configValues(args, "repo-owner"), owner],
+    ["--config repo-name", configValues(args, "repo-name"), repo],
+    ["--config repository", configValues(args, "repository"), `${owner}/${repo}`],
+  ];
+  for (const [label, values, expected] of scopes) {
+    for (const actual of values) {
+      if (actual.toLowerCase() !== expected.toLowerCase()) {
         throw new Error(
-          `write case ${JSON.stringify(command)} may not override the dedicated repository ${flag}`,
+          `write case ${JSON.stringify(command)} may not override the dedicated repository ${label}`,
         );
       }
     }

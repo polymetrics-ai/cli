@@ -38,4 +38,6 @@ Not applicable: this change alters certification tooling and evidence, not the u
 ## Required skills
 
 - `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`.
+- Final-gate verification/review additionally used `golang-lint`,
+  `github-issue-first-delivery`, and `no-mistakes`.
 - Manual inline GSD lifecycle because role spawning is prohibited by the dispatch.

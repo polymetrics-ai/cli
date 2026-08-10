@@ -232,11 +232,18 @@ test("rejects a write case that overrides the dedicated repository owner before 
     for (const args of [
       ["--owner", "outside-the-dedicated-repository"],
       ["--repo=outside-the-dedicated-repository"],
+      [
+        "--config",
+        "owner=outside-the-dedicated-repository",
+        "--config",
+        "repo=outside-the-dedicated-repository",
+      ],
     ]) {
       const cases = baseCases.map((item) => ({ ...item }));
       const target = cases.find((item) => item.command === "repos create-using-template");
       target.untestable_reason = undefined;
       target.args = args;
+      target.readback = { command: "repo view", args: [] };
       await writeFile(
         casesPath,
         JSON.stringify({
@@ -271,7 +278,7 @@ test("rejects a write case that overrides the dedicated repository owner before 
       );
 
       assert.notEqual(result.status, 0);
-      assert.match(`${result.stdout}\n${result.stderr}`, /dedicated repository (owner|repo)/i);
+      assert.match(`${result.stdout}\n${result.stderr}`, /dedicated repository|--config (owner|repo)/i);
       assert.equal(existsSync(marker), false, "case validation must finish before pm starts");
     }
 
