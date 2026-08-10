@@ -33,7 +33,7 @@ records are limited to `PROVEN`, `UNTESTABLE` with a concrete reason, or `FAILED
    is unbound, a generic-only surface member lacks an exercise route, or a shared generated delta
    is not GitHub-only.
 2. **Green — source-derived ledgers.** The generator/validator writes the two JSON ledgers and
-   reports exact 1,224 endpoint, 37 stream, 574 write-action, 377 operation, and 1,179 command
+   reports exact 1,225 endpoint, 37 stream, 607 write-action, 768 operation, and 1,571 command
    source counts without hand-maintained counts.
 3. **Red — current-head binary proof.** A regression fixture with an unknown command and a blocked
    command must fail the sweep contract; the real sweep then records every final command and its

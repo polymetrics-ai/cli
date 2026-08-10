@@ -42,9 +42,9 @@ current all-source denominator:
 
 | artifact | mechanically derived fact |
 | --- | --- |
-| `OPERATION-PROOF-LEDGER.json` / `COMMAND-PROOF-LEDGER.json` | legacy REST binding: 1,224 endpoints; 1,179 commands; 1,081 implemented; 37 partial; 77 endpoint rows blocked |
-| `api_surface.json` | 1,220 pinned REST rows plus 4 legacy GraphQL bindings; 1,147 covered REST rows and 77 blocked rows |
-| `cli_surface.json` | 1,484 current commands: 1,381 implemented, 37 partial, 8 planned, 10 unsafe/disallowed, 27 unsupported-api, 21 unsupported-local |
+| `OPERATION-PROOF-LEDGER.json` / `COMMAND-PROOF-LEDGER.json` | current binding: 1,225 endpoints; 1,571 commands; 1,521 implemented; 0 partial; 0 endpoint rows blocked |
+| `api_surface.json` | 1,221 pinned REST rows plus 4 GraphQL bindings; 1,225 covered rows and 0 blocked rows |
+| `cli_surface.json` | 1,571 current commands: 1,521 implemented, 0 partial, 0 planned, 0 unsafe/disallowed, 27 unsupported-api, 23 unsupported-local |
 | `GITHUB-COMBINED-OPERATION-LEDGER.json` | 1,525 authoritative source operations: 1,220 REST + 31 GraphQL query + 274 GraphQL mutation; 1,345 classified implemented |
 
 The stated historical `143` is `1224 - 1081`; it is not a mutually exclusive current command

@@ -455,7 +455,7 @@ connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 fie
 $ go build ./cmd/pm
 ```
 
-## Exhaustive recovery verification — frozen 1,224-operation inventory
+## Exhaustive recovery verification — current 1,225-endpoint / 768-operation inventory
 
 The final proof slice derives its inventory from the current GitHub bundle rather than inheriting
 historical sweep counts:
@@ -469,10 +469,10 @@ generic_streams=23 generic_write_actions=38
 
 `COMMAND-REACHABILITY.json` records a freshly built current-head binary and exact rendered command
 help for all `1179/1179` commands. It does not store subprocess output. The per-availability
-breakdown is 1081 implemented, 37 partial, 5 unsafe/disallowed, 21 unsupported-local, 8 planned,
+breakdown is 1,521 implemented, 0 partial, 0 unsafe/disallowed, 23 unsupported-local, 0 planned,
 and 27 unsupported-api, all with zero unreachable names.
 
-`PROVIDER-DOUBLE-PROOF.json` records 37 streams, 574 write actions, and 377 operations: 985
+`PROVIDER-DOUBLE-PROOF.json` records 37 streams, 607 write actions, and 768 operations.
 exercised, 3 explicitly untestable (GraphQL mutation, local workflow, sensitive secret operation),
 and 0 failed. The generic-only rows name `pm etl` or `pm reverse` as their route while using the
 same typed engine execution. Request evidence is metadata and hashes only.
