@@ -152,7 +152,6 @@
       "preserved_head": "b61d0fa7eefc719c39593e44afbcb1b7a3f76613",
       "custody": "returned via no-mistakes axi sync --recover before rebase"
     },
-    "argv": [
     "status": "audited_bridge_then_fresh_validation_pending",
     "pre_bridge_attempt": {
       "outcome": "rejected_before_new_run",
@@ -161,7 +160,6 @@
       "reason": "internal validation-gate push rejected non-fast-forward",
       "external_effects": false
     },
-    "argv": [
     "argv": [
       "no-mistakes",
       "axi",
