@@ -136,7 +136,7 @@ func (e *BlockedCommandError) Error() string {
 // Unwrap exposes an optional typed dispatch classification to callers without
 // requiring them to parse the blocked-command text.
 func (e *BlockedCommandError) Unwrap() error {
-	if e == nil {
+	if e == nil || e.Failure == nil {
 		return nil
 	}
 	return e.Failure
