@@ -98,6 +98,10 @@ func (c Connector) Metadata() connectors.Metadata {
 	return m
 }
 
+func (c Connector) Manifest() connectors.Manifest {
+	return c.BundleManifest()
+}
+
 // Write is unsupported: this is a read-only source connector (wave0 parity
 // with the legacy package; capabilities.write is false).
 func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
