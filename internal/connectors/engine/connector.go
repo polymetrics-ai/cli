@@ -177,6 +177,14 @@ func (c *Connector) PreflightOperationDirectWriteConfig(operation string, cfg co
 	return PreflightOperationDirectWriteConfig(c.bundle, operation, cfg)
 }
 
+func (c *Connector) PreflightRuntimeConfig(cfg connectors.RuntimeConfig) error {
+	preflighter, ok := c.hooks.(RuntimeConfigPreflightHook)
+	if !ok {
+		return nil
+	}
+	return preflighter.PreflightRuntimeConfig(materializeConfigDefaults(c.bundle, cfg))
+}
+
 // OperationBinaryDownload satisfies connectors.OperationBinaryDownloader by
 // delegating to the package-level executor. The engine-local request type stays
 // the executor's own contract; this adapter is the seam that lets a CLI command

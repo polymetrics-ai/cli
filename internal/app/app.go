@@ -2556,6 +2556,11 @@ func (a *App) resolveEndpointWithCredential(ctx context.Context, endpoint Endpoi
 	if !ok {
 		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("connector %q not found", cred.Connector)
 	}
+	if preflighter, ok := connector.(connectors.RuntimeConfigPreflighter); ok {
+		if err := preflighter.PreflightRuntimeConfig(runtime); err != nil {
+			return nil, CredentialMeta{}, connectors.RuntimeConfig{}, err
+		}
+	}
 	return connector, cred, runtime, nil
 }
 

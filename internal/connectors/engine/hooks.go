@@ -37,6 +37,10 @@ type AuthHook interface {
 	Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec AuthSpec) (connsdk.Authenticator, error)
 }
 
+type RuntimeConfigPreflightHook interface {
+	PreflightRuntimeConfig(cfg connectors.RuntimeConfig) error
+}
+
 // RecordHook post-processes a single record beyond the declarative
 // projection: raw is the untouched extracted record, projected is the
 // result after schema-driven projection/computed_fields. Returning

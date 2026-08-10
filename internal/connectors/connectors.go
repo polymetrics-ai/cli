@@ -256,6 +256,10 @@ type RuntimeConfig struct {
 	SecretStore SecretStore `json:"-"`
 }
 
+type RuntimeConfigPreflighter interface {
+	PreflightRuntimeConfig(RuntimeConfig) error
+}
+
 // PayloadApprovalKey identifies a file field within an approved write batch.
 func PayloadApprovalKey(recordIndex int, field string) string {
 	return fmt.Sprintf("%d:%s", recordIndex, field)

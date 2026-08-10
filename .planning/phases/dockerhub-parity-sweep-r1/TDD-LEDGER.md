@@ -1272,3 +1272,28 @@ ok   polymetrics.ai/internal/app
 ok   polymetrics.ai/internal/connectors/commandrunner
 ok   polymetrics.ai/internal/connectors/engine
 ```
+
+## Review repair — stored-PAT plan preflight and malformed auth URLs (2026-08-10)
+
+Manual-GSD fallback: this is a gate-owned no-mistakes review step. The outer executor owns the
+active lifecycle, so this repair records its Red/Green evidence here and does not invoke pipeline
+control commands.
+
+Red: the direct-auth command preflight did not cover Docker Hub's declarative stored-PAT writes.
+Both a `repository create` connector command and a generic reverse-ETL `create_repository` plan
+could retain an `auth_url` with URL userinfo before the auth hook rejected it at dispatch. In
+addition, a malformed auth URL returned the parser's raw input in its error.
+
+Green: endpoint resolution now invokes a connector-owned no-network runtime configuration
+preflight, with Docker Hub validating its independently configured authentication URL before either
+plan path can mutate state. Docker Hub's malformed URL error is field-only. Focused regressions use
+fixture values, prove neither plan route reaches the authentication endpoint or changes state, and
+assert malformed userinfo is not echoed.
+
+This gate-owned review uses golang-how-to, golang-cli, golang-design-patterns,
+golang-structs-interfaces, golang-security, golang-safety, golang-error-handling, golang-lint,
+and golang-testing; the outer executor retains GSD lifecycle ownership.
+
+```text
+go test -timeout 20m ./internal/app ./internal/connectors/engine ./internal/connectors/hooks/dockerhub -run '^(TestDockerHubStoredPATAuthURLRejectedBeforePlanPersistence|TestValidateHTTPSURLRejectsMalformedInputWithoutEchoingIt)$' -count=1
+```

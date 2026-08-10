@@ -63,8 +63,9 @@ type Hooks struct {
 }
 
 var (
-	_ engine.Hooks    = (*Hooks)(nil)
-	_ engine.AuthHook = (*Hooks)(nil)
+	_ engine.Hooks                      = (*Hooks)(nil)
+	_ engine.AuthHook                   = (*Hooks)(nil)
+	_ engine.RuntimeConfigPreflightHook = (*Hooks)(nil)
 )
 
 // New returns a fresh dockerhub Hooks value as engine.Hooks.
@@ -181,6 +182,11 @@ func dockerHubLoginURL(tokenURL string, cfg connectors.RuntimeConfig) (string, e
 	return loginURL, nil
 }
 
+func (h *Hooks) PreflightRuntimeConfig(cfg connectors.RuntimeConfig) error {
+	_, err := dockerHubLoginURL("", cfg)
+	return err
+}
+
 func scimPathPrefixes(cfg connectors.RuntimeConfig) []string {
 	baseURL := strings.TrimSpace(cfg.Config["base_url"])
 	if baseURL == "" {
@@ -253,7 +259,7 @@ func authVars(cfg connectors.RuntimeConfig) engine.Vars {
 func validateHTTPSURL(raw, field string) error {
 	parsed, err := url.Parse(raw)
 	if err != nil {
-		return fmt.Errorf("dockerhub auth: %s is invalid: %w", field, err)
+		return fmt.Errorf("dockerhub auth: %s is invalid", field)
 	}
 	if parsed.Scheme != "https" {
 		return fmt.Errorf("dockerhub auth: %s must use https, got %q", field, parsed.Scheme)

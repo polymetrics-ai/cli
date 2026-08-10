@@ -383,6 +383,20 @@ func TestAuthenticator_AuthURLRejectsUnsafeComponents(t *testing.T) {
 	}
 }
 
+func TestValidateHTTPSURLRejectsMalformedInputWithoutEchoingIt(t *testing.T) {
+	const malformed = "https://fixture-user:%zz@auth.example.invalid/v2"
+	err := validateHTTPSURL(malformed, "auth_url")
+	if err == nil {
+		t.Fatal("validateHTTPSURL() error = nil, want malformed URL rejection")
+	}
+	if got, want := err.Error(), "dockerhub auth: auth_url is invalid"; got != want {
+		t.Fatalf("validateHTTPSURL() error = %q, want %q", got, want)
+	}
+	if strings.Contains(err.Error(), "fixture-user") || strings.Contains(err.Error(), malformed) {
+		t.Fatalf("validateHTTPSURL() exposed malformed URL: %q", err)
+	}
+}
+
 func TestAuthenticator_TokenURLUnparseableIsError(t *testing.T) {
 	cfg := baseCfg()
 	h := New().(*Hooks)
