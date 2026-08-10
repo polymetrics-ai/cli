@@ -2,7 +2,7 @@
 
 ## Scope reviewed
 
-- Nine workflow files containing external actions.
+- Eleven workflow files containing external actions.
 - `website/Dockerfile` and the literal PostgreSQL service image.
 - The new `scripts/tests/pinned-build-dependencies.sh` regression gate and its `Makefile` integration.
 - GSD/TDD evidence for issue #3986 under parent #3971.

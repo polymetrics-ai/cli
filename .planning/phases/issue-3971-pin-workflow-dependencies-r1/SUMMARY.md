@@ -2,7 +2,7 @@
 
 ## Delivered
 
-- Pinned every external GitHub Action in the nine audited workflows to its current full commit SHA with the original version retained in a trailing comment.
+- Pinned every external GitHub Action in all audited workflows to its current full commit SHA with the original version retained in a trailing comment.
 - Pinned `node:26-alpine` in `website/Dockerfile` and `postgres:17-alpine` in the website CI service to their current manifest-list digests.
 - Added `scripts/tests/pinned-build-dependencies.sh` and wired it into `make release-workflow-check` so mutable action/image refs fail locally and in `make verify`.
 - Created child issue [#3986](https://github.com/polymetrics-ai/cli/issues/3986) and attached it to GitHub parity parent #3971 after duplicate searches found no equivalent issue.
