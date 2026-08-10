@@ -29,8 +29,8 @@ make a false `availability: implemented` claim visibly fail local and CI verific
 - Add `make connector-runtime-preflight`, invoking the real commandrunner sweep, and run it from
   `make verify`.
 - Add `make connector-canon-check`, validating the tracked source/archive/procedure contract.
-- Update README, connector documentation, and website architecture documentation to link the canon
-  and state zero accepted certifications plainly.
+- Update README, `docs/connectors/CANON.md`, generated connector documentation, and website
+  documentation to link the canon and state zero accepted certifications plainly.
 - Update the stale GSD/planning entry points with archive pointers while preserving their original
   content in `docs/connector-canon/archive/`.
 
@@ -50,9 +50,8 @@ make a false `availability: implemented` claim visibly fail local and CI verific
    target/canon exists. **Green:** add the canon files and deterministic check script, then run it.
 3. **Archive preservation.** Copy original superseded material before replacing entry-point files
    with archive pointers. Verify hashes and index references, including explicit ACTIVE-WRONG labels.
-4. **Documentation parity.** Update README, `docs/connectors/README.md`, and
-   `website/content/docs/architecture.mdx`; run the repository docs check and website test/type
-   checks appropriate to the touched content.
+4. **Documentation parity.** Update README, connector source/generated docs, and the website;
+   run the repository docs check and website test/type checks appropriate to the touched content.
 5. **Review and verification.** Run focused targets, format/diff checks, scoped Go tests and
    non-suite `make verify` gates separately per AGENTS.md, then GSD verify/code-review.
 

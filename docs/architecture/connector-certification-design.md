@@ -1,6 +1,12 @@
 # Connector Certification Harness Design — `pm connectors certify`
 
-Status: approved (2026-07-02). Program PRD: `docs/plans/universal-programming-loop-prd.md`.
+Status: architecture design (2026-07-02). The superseded program PRD is archived;
+current delivery rules are in [the connector canon](../connector-canon/INDEX.md).
+
+> **Current status:** this design describes a target harness. It does not grant
+> certification, and there are currently zero accepted live certifications.
+> A `certification.json` definition, fixture, or generated file is not live
+> proof.
 
 > **Current certification authority (r1).** The generated proof-bearing
 > artifacts under `internal/connectors/certifications/` supersede the legacy

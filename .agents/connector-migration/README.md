@@ -1,8 +1,10 @@
 # Connector Migration Agents
 
-These agents support connector-architecture-v2 migration and review work. They use the shared
-agent metadata shape from `.agents/agentic-delivery/schemas/agent-spec.schema.yaml` instead of a
-runner-specific format.
+These legacy role specifications are retained for audit and their owning migration waves. They are
+not an active delivery path: use the generated canonical worker and the
+[connector delivery canon](../../docs/connector-canon/INDEX.md) for current work. They use the
+shared agent metadata shape from `.agents/agentic-delivery/schemas/agent-spec.schema.yaml` instead
+of a runner-specific format.
 
 ## Layout
 

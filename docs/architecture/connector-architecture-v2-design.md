@@ -1,6 +1,12 @@
 # Polymetrics Connector Architecture v2 — Design Document
 
-Status: approved (2026-07-02). Program PRD: `docs/plans/universal-programming-loop-prd.md`.
+Status: architecture design (2026-07-02). Current delivery rules are in the
+[connector canon](../connector-canon/INDEX.md); the former program PRD is archived.
+
+> **Historical measurement warning:** counts and rollout completion statements in this design were
+> captured in 2026-07. They are architecture context, not current parity, capability, quarantine,
+> or certification evidence. The canon's source-pinned reports and Foundation Check control those
+> claims.
 Validated against `connectors.go`, `defs/*`, `engine/*`, `connsdk/*`, `hooks/*`, `native/*`,
 `conformance/*`, `internal/app/sync_modes.go`, and `internal/app/types.go`.
 
