@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"errors"
+	"net"
 	"testing"
 	"time"
 
@@ -18,6 +19,72 @@ func TestCDCIsFailClosedUntilStreamedTransactionStagingExists(t *testing.T) {
 	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
 		t.Fatalf("ReadCDC = %v, want unsupported while streamed transaction staging is unavailable", err)
 	}
+}
+
+func TestCDCFailClosedBeforeOpeningSourceConnection(t *testing.T) {
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatalf("Listen: %v", err)
+	}
+	accepted := make(chan struct{}, 1)
+	acceptDone := make(chan struct{})
+	go func() {
+		defer close(acceptDone)
+		conn, acceptErr := listener.Accept()
+		if acceptErr != nil {
+			return
+		}
+		_ = conn.Close()
+		accepted <- struct{}{}
+	}()
+	t.Cleanup(func() {
+		_ = listener.Close()
+		select {
+		case <-acceptDone:
+		case <-time.After(time.Second):
+			t.Error("listener did not stop")
+		}
+	})
+
+	host, port, err := net.SplitHostPort(listener.Addr().String())
+	if err != nil {
+		t.Fatalf("SplitHostPort: %v", err)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	err = New().ReadCDC(ctx, connectors.CDCReadRequest{
+		Stream: "public.users",
+		Config: connectors.RuntimeConfig{
+			Config: map[string]string{
+				"host":            host,
+				"port":            port,
+				"database":        "analytics",
+				"username":        "reader",
+				"sslmode":         "disabled",
+				"cdc_publication": "pm_publication",
+			},
+			Secrets: map[string]string{"password": t.Name()},
+		},
+		DurableCheckpointCommitter: cdcDiscardingCommitter{},
+	}, func(connectors.CDCEvent) error {
+		return nil
+	})
+	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
+		t.Fatalf("ReadCDC = %v, want fail-closed unsupported result", err)
+	}
+
+	select {
+	case <-accepted:
+		t.Fatal("ReadCDC opened a source connection while CDC is planned")
+	case <-time.After(50 * time.Millisecond):
+		t.Log("ReadCDC returned the planned-stage error without opening the local source listener")
+	}
+}
+
+type cdcDiscardingCommitter struct{}
+
+func (cdcDiscardingCommitter) CommitDurableChangefeedCheckpoint(context.Context, synccontract.CheckpointEnvelope) error {
+	return nil
 }
 
 func TestCDCSlotNameIsStableAndSourceBound(t *testing.T) {

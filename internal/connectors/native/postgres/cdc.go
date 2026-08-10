@@ -33,11 +33,13 @@ func requireCDCTransactionStage() error {
 	return errCDCTransactionStageUnavailable
 }
 
-// ReadCDC consumes one PostgreSQL logical-replication stream until ctx is
-// cancelled. Every transaction's events must be accepted before its full,
-// source-bound checkpoint is durably committed; only then does the connector
-// acknowledge the LSN to PostgreSQL. That order intentionally yields
-// at-least-once replay instead of a skipped transaction after a crash.
+// ReadCDC currently fails closed before validating a request or contacting a
+// PostgreSQL source because the retained pgoutput v1 path has no safe streamed
+// transaction boundary. A future runnable path must use PostgreSQL 14+
+// protocol-v2 streaming to stage each transaction under a finite quota,
+// discard StreamAbort, return TransactionStageLimitExceeded without source
+// acknowledgement, and wait for a whole-transaction durable downstream
+// receipt before acknowledging an LSN.
 func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
 	if err := ctx.Err(); err != nil {
 		return err
