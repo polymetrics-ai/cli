@@ -16,17 +16,17 @@
       and cancellation behavior have focused unit coverage.
 - [x] PostgreSQL has only a compile-time reference driver seam and its public
       `write` / `cdc` capabilities remain false.
-- [ ] Warehouse mediation amendment: shared artifact/owner identity, isolated
-      database inbound/outbound legs, mode-declaration refusal, and MySQL
-      layer-two conformance proof. Pending refreshed full validation.
+- [x] Warehouse mediation amendment: shared artifact/owner identity, isolated
+      database inbound/outbound legs, per-leg descriptor admission,
+      mode-declaration refusal, and MySQL layer-two conformance proof.
 - [x] Red/Green TDD evidence and manual GSD lifecycle evidence are complete for
-      the original slice; amendment Red evidence is captured and awaits Green
-      completion.
+      the original slice and the captain amendment.
 
 ## Local gates
 
-- [x] `gofmt -w internal/connectors/database internal/synccontract internal/connectors/engine internal/connectors/native/postgres`
+- [x] `gofmt -w internal/warehouse internal/connectors/database internal/synccontract internal/connectors/engine internal/connectors/native/postgres`
 - [x] focused database, synccontract, engine, native-postgres tests with `-count=1`
+- [x] race tests for `internal/warehouse`, `internal/connectors/database`, and `internal/synccontract`
 - [x] `go test -timeout 20m ./internal/cli -count=1`
 - [x] `go vet ./...`
 - [x] `go build ./cmd/pm`
@@ -42,10 +42,9 @@
 - [x] generated `verify-work` and `code-review` prompts recorded with the
       manual inline fallback.
 
-The gates above passed for the original F1 commit. The captain amendment
-touches `internal/warehouse` and `internal/connectors/database`; focused,
-race, static/build, and required make-gate checks are rerun before this
-checklist is finalized.
+The captain amendment touches `internal/warehouse` and
+`internal/connectors/database`; its focused, race, static/build, CLI, and
+required make-gate checks were rerun and passed.
 
 ## Deliberate non-goals / parity
 
@@ -76,7 +75,15 @@ capability promotion.
   prompts were executed through the documented manual inline fallback. The
   coverage-backed UAT result is in `UAT.md`; review findings and dispositions
   are in `REVIEW.md`.
-- **Captain amendment Red:** `traces/warehouse-layer-red-run.txt` and
-  `traces/warehouse-owner-identity-red-run.txt` were captured before the
-  respective production seams existed. Updated Green and review evidence is
-  pending this validation pass.
+- **Captain amendment Red/Green:**
+  `traces/warehouse-layer-red-run.txt`,
+  `traces/warehouse-owner-identity-red-run.txt`, and
+  `traces/warehouse-multi-admission-red-run.txt` were captured before their
+  respective production seams existed. The complete five-package Green result
+  is preserved in `traces/warehouse-layer-green-run.txt`.
+- **Captain amendment local validation:** focused and race tests, `go vet`,
+  `go build`, direct shared-package lint, `go test ./internal/cli`, and all
+  individual required make gates passed after the per-leg admission refinement.
+  `go list -deps` also confirmed that `internal/warehouse` and
+  `internal/connectors/database` import neither the PostgreSQL nor MySQL native
+  package.

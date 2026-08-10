@@ -40,12 +40,14 @@ zero-copy and direct source-to-destination paths are prohibited.
   `WarehouseInboundRef` (`database source → warehouse artifact`) or a
   `WarehouseOutboundRef` (`warehouse artifact → database target`). The sealed
   database admission command contains exactly one of those legs; no value or
-  executor in F1 receives both a source and target.
+  executor in F1 receives both a source and target. A native-admitted driver
+  supplies separate #3810 descriptor/evidence values for its distinct legs, so
+  one descriptor cannot silently represent both directions.
 - **MySQL seam.** A future MySQL author supplies only its own strict definition,
-  driver descriptor/conformance, and native extraction/apply mechanics in the
-  MySQL layer. The conformance test constructs both legs through the neutral
-  artifact and database contracts without a PostgreSQL import or change to
-  `internal/warehouse`, the generic app mediator, or the shared `database`
+  driver descriptor/per-leg conformance, and native extraction/apply mechanics
+  in the MySQL layer. The conformance test constructs both legs through the
+  neutral artifact and database contracts without a PostgreSQL import or change
+  to `internal/warehouse`, the generic app mediator, or the shared `database`
   package. This is illustrative type-level proof only; it does not declare a
   MySQL capability or executor.
 

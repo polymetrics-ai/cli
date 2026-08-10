@@ -13,8 +13,9 @@
 - Required skills loaded: `golang-how-to`, `golang-design-patterns`,
   `golang-structs-interfaces`, `golang-error-handling`, `golang-security`,
   `golang-safety`, `golang-testing`, `golang-context`, `golang-concurrency`,
-  `golang-database`, `no-mistakes`, `gsd-discuss-phase`, `gsd-plan-phase`,
-  `gsd-execute-phase`, `gsd-verify-work`, and `gsd-code-review`.
+  `golang-database`, `golang-naming`, `golang-documentation`, `golang-lint`,
+  `no-mistakes`, `gsd-discuss-phase`, `gsd-plan-phase`, `gsd-execute-phase`,
+  `gsd-verify-work`, and `gsd-code-review`.
 
 ## Goal
 
@@ -110,14 +111,18 @@ Layer two lives in `database`: `WarehouseInboundRef` is source → artifact and
 requires the artifact to be owned by the source identity; `WarehouseOutboundRef`
 is artifact → target. `DatabaseInboundCommand` and `DatabaseOutboundCommand`
 are sealed values that carry one leg plus the existing native-admission
-contract. Neither exposes a source/target pair or executes any I/O. The
-existing `runWarehouseETL` remains the single inbound implementation and the
-existing reverse Parquet read remains the shared outbound primitive.
+contract. A `NativeAdmittedDriver` supplies a separate #3810
+`NativeExecutorAdmission` for each concrete native leg; an inbound descriptor
+cannot be used to admit an outbound command. Neither value exposes a
+source/target pair or executes any I/O. The existing `runWarehouseETL` remains
+the single inbound implementation and the existing reverse Parquet read remains
+the shared outbound primitive.
 
 A MySQL implementation is deliberately modeled in a conformance test using
 only `database`, `warehouse`, and `synccontract` contracts. In follow-on work,
-the MySQL author would add its own definition, descriptor, and native
-extract/apply mechanisms; no shared layer-one or PostgreSQL file is changed.
+the MySQL author would add its own definition, two per-leg
+descriptor/evidence admissions, and native extract/apply mechanisms; no shared
+layer-one or PostgreSQL file is changed.
 
 ### Resource/cancellation boundary
 
