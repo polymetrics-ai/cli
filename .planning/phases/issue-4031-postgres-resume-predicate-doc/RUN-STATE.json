@@ -1,0 +1,34 @@
+{
+  "issue": 4031,
+  "parent_issue": 4015,
+  "branch": "fix/4015-postgres-resume-predicate-doc",
+  "base": "docs/4015-connector-release-certification",
+  "status": "verified_pending_no_mistakes",
+  "lifecycle": {
+    "adapter_doctor": "passed",
+    "sources_resolved": [
+      "discuss-phase",
+      "plan-phase",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ],
+    "manual_fallback": {
+      "active": true,
+      "reason": "gsd-sdk init.phase-op 4031 returned phase_found=false because the current ROADMAP intentionally delegates active delivery to issue-first work rather than numbered phases",
+      "mode": "single-worker inline execution"
+    },
+    "generated_prompts": [
+      "scripts/gsd prompt discuss-phase 4031 --auto",
+      "scripts/gsd prompt plan-phase 4031 --tdd --auto",
+      "scripts/gsd prompt execute-phase 4031 --interactive",
+      "scripts/gsd prompt verify-work 4031 --auto",
+      "scripts/gsd prompt code-review 4031 --files=docs/architecture/github-postgres-warehouse-certification.md,internal/connectors/native/postgres/postgres_test.go"
+    ],
+    "inline_execution": "completed",
+    "inline_verification": "completed",
+    "inline_code_review": "completed_no_findings"
+  },
+  "correction_loops": 1,
+  "maximum_correction_loops": 5
+}

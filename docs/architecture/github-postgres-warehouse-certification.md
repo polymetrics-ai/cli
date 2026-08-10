@@ -118,11 +118,11 @@ Flows and schedules must invoke this same connector writer. A schedule stores a 
 
 ### PostgreSQL to warehouse
 
-Polling resume must use an exact composite position `(cursor_value, primary_key)`. The query predicate and ordering must handle equal cursor values:
+Polling resume must use an exact composite position `(cursor_value, primary_key)`. For the architecture's composite contract, bind the prior cursor value as pgx argument 1 (`$1`) and the stable primary-key tie breaker as argument 2 (`$2`); the predicate and ordering must handle equal cursor values:
 
 ```sql
-WHERE cursor > $cursor
-   OR (cursor = $cursor AND primary_key > $primary_key)
+WHERE cursor > $1
+   OR (cursor = $1 AND primary_key > $2)
 ORDER BY cursor, primary_key
 ```
 
