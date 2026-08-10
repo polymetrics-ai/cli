@@ -1,0 +1,183 @@
+package database
+
+import (
+	"context"
+	"errors"
+)
+
+// SortDirection is the closed direction vocabulary for a typed stable read
+// order. It is not an arbitrary ORDER BY fragment.
+type SortDirection string
+
+const (
+	SortAscending  SortDirection = "ascending"
+	SortDescending SortDirection = "descending"
+)
+
+// OrderTerm is one relation-bound ordering term in a ReadPlan.
+type OrderTerm struct {
+	Column    ColumnRef
+	Direction SortDirection
+}
+
+func (o OrderTerm) validate(relation Relation) error {
+	if (o.Direction != SortAscending && o.Direction != SortDescending) ||
+		!o.Column.Relation.equal(relation.Ref) || !containsColumn(relation.Columns, o.Column) {
+		return errors.New("database read order term is invalid")
+	}
+	return nil
+}
+
+// ReadPlanRequest is the typed input for an immutable stable read plan. It
+// contains catalog objects, ordering and limits only; it has no SQL or source
+// connection material.
+type ReadPlanRequest struct {
+	Source   SourceRef
+	Catalog  Catalog
+	Relation RelationRef
+	Columns  []ColumnRef
+	Order    []OrderTerm
+	PageSize int
+}
+
+// ReadPlan is a non-executing, immutable description of a stable paged read.
+// A future driver may render it only through its own closed primitives.
+type ReadPlan struct {
+	source      SourceRef
+	relation    RelationRef
+	fingerprint SchemaFingerprint
+	columns     []ColumnRef
+	order       []OrderTerm
+	pageSize    int
+}
+
+// NewReadPlan validates a deterministic keyset read plan and observes a
+// stable catalog fingerprint. It honors cancellation before inspecting input.
+func NewReadPlan(ctx context.Context, request ReadPlanRequest) (ReadPlan, error) {
+	if ctx == nil {
+		return ReadPlan{}, errors.New("database read plan context is required")
+	}
+	if err := ctx.Err(); err != nil {
+		return ReadPlan{}, err
+	}
+	if err := request.Source.validate(); err != nil {
+		return ReadPlan{}, errors.New("database read plan source is invalid")
+	}
+	if err := request.Catalog.validate(); err != nil {
+		return ReadPlan{}, errors.New("database read plan catalog is invalid")
+	}
+	if err := request.Relation.validate(); err != nil || !request.Source.Relation().equal(request.Relation) {
+		return ReadPlan{}, errors.New("database read plan relation is invalid")
+	}
+	if request.PageSize <= 0 || request.PageSize > hardMaximumReadPageSize {
+		return ReadPlan{}, errors.New("database read plan page size is outside the finite framework bound")
+	}
+	relation, found := request.Catalog.relation(request.Relation)
+	if !found {
+		return ReadPlan{}, errors.New("database read plan relation is absent from the catalog")
+	}
+	if err := validateReadColumns(request.Columns, relation); err != nil {
+		return ReadPlan{}, err
+	}
+	if err := validateReadOrder(request.Order, request.Columns, relation); err != nil {
+		return ReadPlan{}, err
+	}
+	if err := ctx.Err(); err != nil {
+		return ReadPlan{}, err
+	}
+	return ReadPlan{
+		source:      request.Source,
+		relation:    request.Relation,
+		fingerprint: request.Catalog.Fingerprint(),
+		columns:     append([]ColumnRef(nil), request.Columns...),
+		order:       append([]OrderTerm(nil), request.Order...),
+		pageSize:    request.PageSize,
+	}, nil
+}
+
+func validateReadColumns(columns []ColumnRef, relation Relation) error {
+	if len(columns) == 0 {
+		return errors.New("database read plan requires selected columns")
+	}
+	seen := make(map[string]struct{}, len(columns))
+	for _, column := range columns {
+		if !column.Relation.equal(relation.Ref) || !containsColumn(relation.Columns, column) {
+			return errors.New("database read plan selects an unknown column")
+		}
+		if _, exists := seen[column.Name]; exists {
+			return errors.New("database read plan selects a duplicate column")
+		}
+		seen[column.Name] = struct{}{}
+	}
+	return nil
+}
+
+func validateReadOrder(order []OrderTerm, selected []ColumnRef, relation Relation) error {
+	if len(order) == 0 {
+		return errors.New("database read plan requires deterministic ordering")
+	}
+	seen := make(map[string]struct{}, len(order))
+	for _, term := range order {
+		if err := term.validate(relation); err != nil {
+			return err
+		}
+		if _, exists := seen[term.Column.Name]; exists {
+			return errors.New("database read plan contains duplicate ordering columns")
+		}
+		if !containsColumnRef(selected, term.Column) {
+			return errors.New("database read plan must select every ordering column")
+		}
+		seen[term.Column.Name] = struct{}{}
+	}
+	if !hasStableKeySuffix(order, relation.Keys) {
+		return errors.New("database read plan order must end with a declared unique key")
+	}
+	return nil
+}
+
+func containsColumnRef(columns []ColumnRef, expected ColumnRef) bool {
+	for _, column := range columns {
+		if column.equal(expected) {
+			return true
+		}
+	}
+	return false
+}
+
+func hasStableKeySuffix(order []OrderTerm, keys []Key) bool {
+	for _, key := range keys {
+		if key.Kind != KeyPrimary && key.Kind != KeyUnique || len(key.Columns) > len(order) {
+			continue
+		}
+		offset := len(order) - len(key.Columns)
+		matches := true
+		for index, column := range key.Columns {
+			if !order[offset+index].Column.equal(column) {
+				matches = false
+				break
+			}
+		}
+		if matches {
+			return true
+		}
+	}
+	return false
+}
+
+// Source returns the typed source reference.
+func (p ReadPlan) Source() SourceRef { return p.source }
+
+// Relation returns the structured relation reference.
+func (p ReadPlan) Relation() RelationRef { return p.relation }
+
+// SchemaFingerprint returns the pinned catalog fingerprint.
+func (p ReadPlan) SchemaFingerprint() SchemaFingerprint { return p.fingerprint }
+
+// Columns returns a defensive selected-column projection.
+func (p ReadPlan) Columns() []ColumnRef { return append([]ColumnRef(nil), p.columns...) }
+
+// Order returns a defensive deterministic-order projection.
+func (p ReadPlan) Order() []OrderTerm { return append([]OrderTerm(nil), p.order...) }
+
+// PageSize returns the proven finite page size.
+func (p ReadPlan) PageSize() int { return p.pageSize }
