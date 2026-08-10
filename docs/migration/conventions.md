@@ -85,8 +85,8 @@ split (design §B.7), each file well under ~400 lines:
   identifier-safety helpers (SQL injection / SSRF guards), `Check()`.
 - `reader.go` — `Read()`, snapshot/incremental query builder, `InitialState()`.
 - `cataloger.go` — `Catalog()` / dynamic schema discovery.
-- `cdc.go` — `ReadCDC()` (a documented stub is acceptable when the CDC dependency is gated — see
-  postgres below).
+- `cdc.go` — `ReadCDC()` (a planned CDC boundary must fail closed until its execution contract is
+  complete — see postgres below).
 
 Still ship a bundle (`internal/connectors/defs/<name>/{metadata.json,changefeed.json?,spec.json,
 api_surface.json,docs.md}`) so identity/spec/docs stay uniform with every other connector;
@@ -102,10 +102,10 @@ Worked example — **postgres** (`internal/connectors/native/postgres/` +
 prose explaining there is no REST surface to enumerate (schema-valid: no `minItems` on
 `endpoints`); `spec.json` has `password` marked `x-secret` and a `mode: fixture` config value that
 short-circuits all network access for credential-free testing (test/conformance-harness affordance
-only, never set in production); `cdc.go`'s `ReadCDC` is a **documented stub** returning
-`connectors.ErrUnsupportedOperation` wrapped with the recorded future implementation plan (gated
-`pglogrepl` dependency, not present in `go.mod`) — this is the sanctioned way to represent an
-out-of-scope capability without faking it. The package has **no `init()`/`RegisterFactory`/
+only, never set in production); `cdc.go` retains a `pglogrepl`-backed logical-replication
+foundation, but `ReadCDC` fails closed before source contact while its changefeed is planned. Its
+admission conditions are owned by the [PostgreSQL bundle docs](../../internal/connectors/defs/postgres/docs.md),
+so the capability stays false rather than faking a runnable CDC surface. The package has **no `init()`/`RegisterFactory`/
 `RegisterNativeLive` call** in wave0 (registration flip is wave6); a grep-guard test enforces this.
 
 ### Tier 2 — hooks (bundle + Go escape hatch, target ~8%)

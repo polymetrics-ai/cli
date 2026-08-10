@@ -13,9 +13,11 @@ then hand results back for validation. Read `docs/migration/conventions.md` and
 - **Full API surface (Pass B / wave 5): ~240 / 517 done**, ~275 still at migration parity. A Pass B
   fan-out is **actively running in the primary Claude session** and owns those 275 `defs/` dirs.
 - **Certify harness complete** (`internal/connectors/certify/`, 21 stages + batch + `pm connectors
-  certify` CLI). **CDC**: engine-ready but postgres `ReadCDC` is a documented stub (needs the
-  human-gated `pglogrepl` dependency). Which connectors advertise `cdc:true` is bundle state, not
-  a fact this snapshot tracks — read `capabilities.cdc` in each `defs/<name>/metadata.json`.
+  certify` CLI). **CDC**: PostgreSQL retains a `pglogrepl` foundation, but `ReadCDC` and
+  `capabilities.cdc` remain fail-closed; the admission boundary is owned by the
+  [PostgreSQL bundle docs](../../internal/connectors/defs/postgres/docs.md). Which connectors
+  advertise `cdc:true` is bundle state, not a fact this snapshot tracks — read
+  `capabilities.cdc` in each `defs/<name>/metadata.json`.
 - 95 fully-expanded connectors already committed/pushed to PR #27; more land as phased commits.
 
 ## Hard rule: avoid working-tree collisions
@@ -48,9 +50,9 @@ cutover plan for approval.
 - Un-block the 31 in `docs/migration/quarantine.json` (mostly AUTH_COMPLEX → Tier-2 OAuth-refresh
   hooks copying `internal/connectors/hooks/gmail/hooks.go`; a few NON_REST → Tier-3 native). These
   `defs/` dirs are NOT in the Pass B roster, so they don't collide.
-- CDC decoder: implement the postgres pgoutput Insert/Update/Delete → `connectors.CDCEvent` decoder
-  with unit tests against captured/synthetic messages (NO live DB, NO new dependency for the pure
-  decoder). Leave the live `START_REPLICATION` wiring behind the `pglogrepl` human gate.
+- PostgreSQL CDC: retain the current fail-closed `pglogrepl` foundation. Do not expose its v1
+  `START_REPLICATION` path; the admission conditions are owned by the
+  [PostgreSQL bundle docs](../../internal/connectors/defs/postgres/docs.md).
 
 ### C. Expansion review (Codex reviewer agent or Claude) — read-only
 Once a batch of Pass B connectors is committed, run the `connector-reviewer` agent spec over a

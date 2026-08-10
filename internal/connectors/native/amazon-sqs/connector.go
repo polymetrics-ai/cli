@@ -14,7 +14,8 @@
 // Component split (mirrors postgres's connector.go/connection.go/reader.go,
 // minus cataloger.go/cdc.go — this connector's single-stream catalog is a
 // two-line literal not worth a dedicated file, and legacy implements no
-// CDC path at all, unlike postgres's documented stub):
+// CDC path at all, unlike postgres's retained fail-closed logical-replication
+// foundation):
 //   - connector.go (this file) — entry/wiring, Metadata, Catalog, Write entrypoint.
 //   - connection.go — SigV4 signing, the signed HTTP request helper, config
 //     resolution/validation.

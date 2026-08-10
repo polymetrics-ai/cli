@@ -16,8 +16,8 @@ import (
 	"sync"
 	"time"
 
-	"polymetrics.ai/internal/warehouse"
 	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/warehouse"
 )
 
 var ErrUnsupportedOperation = errors.New("unsupported connector operation")
@@ -796,10 +796,10 @@ type ChangefeedDescriptor struct {
 	PollingWatermark *PollingWatermarkSpec  `json:"polling_watermark,omitempty"`
 }
 
-// ChangefeedExecutorDescriptor is the runtime half of an implemented
-// changefeed. It intentionally omits provider evidence: that remains in the
-// bundle declaration and the runtime proves only that it implements the same
-// executable contract.
+// ChangefeedExecutorDescriptor is the runtime half of a declared changefeed.
+// It reports the executor lifecycle and mechanism; an implemented declaration
+// also supplies the executor and checkpoint contract needed for promotion.
+// Provider evidence remains bundle-owned.
 type ChangefeedExecutorDescriptor struct {
 	Status     ChangefeedStatus      `json:"status"`
 	Mechanism  ChangefeedMechanism   `json:"mechanism"`
@@ -807,9 +807,10 @@ type ChangefeedExecutorDescriptor struct {
 	Checkpoint ChangefeedCheckpoint  `json:"checkpoint"`
 }
 
-// ChangefeedDescriptorProvider is implemented only by a runnable changefeed
-// executor. It is deliberately separate from CDCReader so a legacy stub
-// cannot advertise capability through method-set coincidence.
+// ChangefeedDescriptorProvider reports the lifecycle and mechanism associated
+// with a CDC reader. It is deliberately separate from CDCReader so method-set
+// coincidence cannot advertise capability; only a matching implemented
+// declaration can do that.
 type ChangefeedDescriptorProvider interface {
 	ChangefeedExecutorDescriptor() ChangefeedExecutorDescriptor
 }

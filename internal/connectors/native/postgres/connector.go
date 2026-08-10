@@ -6,8 +6,8 @@
 // following the mandated Tier-3
 // component split: connector.go (entry, wiring), connection.go
 // (config/DSN/identifier safety), reader.go (Read/InitialState), cataloger.go
-// (Catalog/discovery + fixtures), cdc.go (logical-replication CDC). Each file is
-// well under the design's <400-line cap.
+// (Catalog/discovery + fixtures), cdc.go (fail-closed logical-replication
+// foundation). Each file is well under the design's <400-line cap.
 //
 // Unlike a Tier-1/Tier-2 declarative bundle, this package implements
 // connectors.Connector directly: Check/Catalog/Read/Write are hand-written

@@ -7,8 +7,8 @@
 // (config resolution, requester/auth building), reader.go (Read/
 // InitialState/StreamHook-equivalent routing), cataloger.go (Catalog +
 // fixture generation). There is no cdc.go: Bing Ads has no change-data-
-// capture concept at all (unlike postgres, which documents a genuine
-// pglogrepl-gated CDC stub), so this file is simply omitted rather than
+// capture concept at all (unlike postgres, which retains a fail-closed
+// logical-replication foundation), so this file is simply omitted rather than
 // padded with an inapplicable stub.
 //
 // Unlike a Tier-1/Tier-2 declarative bundle, this package implements

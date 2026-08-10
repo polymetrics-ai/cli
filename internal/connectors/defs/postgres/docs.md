@@ -2,9 +2,10 @@
 
 Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and
 supports cursor-incremental reads on a configurable cursor column. PostgreSQL logical-replication
-change capture is deliberately planned, not executable: it requires PostgreSQL 14+ streamed
-transactions, a bounded crash-recoverable local stage, and a durable receipt for the complete
-transaction before any source LSN acknowledgement.
+change capture is deliberately planned, not executable: it requires PostgreSQL 14+ `pgoutput`
+protocol-v2 streaming, a bounded crash-recoverable per-transaction stage, `StreamAbort` discard,
+a named `TransactionStageLimitExceeded` outcome with no source acknowledgement, and a durable
+receipt for the complete transaction before any source LSN acknowledgement.
 
 This connector discovers available streams and schemas from the configured service at runtime.
 
@@ -80,9 +81,10 @@ This connector is read-only. Read behavior: low.
 - Schemas and stream availability depend on the configured service at runtime.
 - Logical-replication CDC is planned and fails closed before opening a replication connection,
   creating/reusing a slot, consuming WAL, or advancing a checkpoint. It will not be advertised
-  until PostgreSQL 14+ protocol-v2 streaming can stage each transaction privately under a hard
-  byte/record quota, discard aborts, and acknowledge the source only after a whole-transaction
-  durable downstream receipt.
+  until PostgreSQL 14+ `pgoutput` protocol-v2 streaming can stage each transaction privately under
+  a hard byte/record quota, discard `StreamAbort`, return a named
+  `TransactionStageLimitExceeded` outcome without acknowledging the source, and acknowledge the
+  source only after a whole-transaction durable downstream receipt.
 - Cursor or timestamp reconciliation is not a CDC fallback: it cannot faithfully recover hard
-  deletes or transaction history. A stage-limit failure must require explicit retry or connector-
+  deletes or transaction history. A stage-limit outcome must require explicit retry or connector-
   owned teardown/rebootstrap, with source slot health made visible.
