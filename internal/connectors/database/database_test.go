@@ -597,6 +597,17 @@ func TestDatabaseLoadChecksCancellationBeforeReturningProjection(t *testing.T) {
 	}
 }
 
+func TestReadPlanChecksCancellationBeforeReturningProjection(t *testing.T) {
+	ctx := &cancelOnErrCallContext{cancelAt: 3, done: make(chan struct{})}
+	plan, err := database.NewReadPlan(ctx, testReadPlanRequest(t))
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("NewReadPlan() error = %v, want context.Canceled", err)
+	}
+	if plan.PageSize() != 0 {
+		t.Fatalf("NewReadPlan() page size = %d, want zero plan after cancellation", plan.PageSize())
+	}
+}
+
 func TestWarehouseMediationUsesSharedArtifactAndSeparateDatabaseLegs(t *testing.T) {
 	sourceIdentity := database.ConnectionIdentity{
 		WorkspaceID:  "workspace-1",
@@ -815,6 +826,64 @@ func loadTestDefinition(t *testing.T, document string) database.Definition {
 		t.Fatalf("Load() error = %v", err)
 	}
 	return definition
+}
+
+func testReadPlanRequest(t *testing.T) database.ReadPlanRequest {
+	t.Helper()
+	definition := loadTestDefinition(t, validDefinitionJSON)
+	identity := database.ConnectionIdentity{
+		WorkspaceID:  "workspace-1",
+		ConnectorID:  "postgres",
+		ConnectionID: "connection-1",
+	}
+	relation := database.RelationRef{
+		Schema: database.SchemaRef{
+			Catalog: database.CatalogRef{Name: "analytics"},
+			Name:    "public",
+		},
+		Name: "widgets",
+	}
+	idColumn := database.ColumnRef{Relation: relation, Name: "id"}
+	integer, err := database.NewSignedInteger(32)
+	if err != nil {
+		t.Fatal(err)
+	}
+	catalog, err := database.NewCatalog(database.CatalogRef{Name: "analytics"}, []database.Relation{{
+		Ref: relation,
+		Columns: []database.Column{{
+			Ref:     idColumn,
+			Type:    integer,
+			Ordinal: 1,
+		}},
+		Keys: []database.Key{{
+			Name:    "widgets_pk",
+			Kind:    database.KeyPrimary,
+			Columns: []database.ColumnRef{idColumn},
+		}},
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	source, err := database.NewSourceRef(identity, relation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	artifact, err := warehouse.NewArtifactRef(identity, "widgets")
+	if err != nil {
+		t.Fatal(err)
+	}
+	inbound, err := database.NewWarehouseInboundRef(source, artifact)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return database.ReadPlanRequest{
+		Inbound:    inbound,
+		Definition: definition,
+		Catalog:    catalog,
+		Relation:   relation,
+		Columns:    []database.ColumnRef{idColumn},
+		Order:      []database.OrderTerm{{Column: idColumn, Direction: database.SortAscending}},
+	}
 }
 
 func definitionWithAdmittedMode(document string) string {
