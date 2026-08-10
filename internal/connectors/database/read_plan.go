@@ -34,12 +34,13 @@ func (o OrderTerm) validate(relation Relation) error {
 // contains catalog objects, ordering, limits, and one source-to-warehouse leg;
 // it has no SQL, target, credential, or raw connection material.
 type ReadPlanRequest struct {
-	Inbound  WarehouseInboundRef
-	Catalog  Catalog
-	Relation RelationRef
-	Columns  []ColumnRef
-	Order    []OrderTerm
-	PageSize int
+	Inbound    WarehouseInboundRef
+	Definition Definition
+	Catalog    Catalog
+	Relation   RelationRef
+	Columns    []ColumnRef
+	Order      []OrderTerm
+	PageSize   int
 }
 
 // ReadPlan is a non-executing, immutable description of a stable paged read.
@@ -65,14 +66,18 @@ func NewReadPlan(ctx context.Context, request ReadPlanRequest) (ReadPlan, error)
 	if err := request.Inbound.validate(); err != nil {
 		return ReadPlan{}, errors.New("database read plan warehouse inbound leg is invalid")
 	}
+	if err := request.Definition.Validate(); err != nil {
+		return ReadPlan{}, errors.New("database read plan definition is invalid")
+	}
 	if err := request.Catalog.validate(); err != nil {
 		return ReadPlan{}, errors.New("database read plan catalog is invalid")
 	}
 	if err := request.Relation.validate(); err != nil || !request.Inbound.Source().Relation().equal(request.Relation) {
 		return ReadPlan{}, errors.New("database read plan relation is invalid")
 	}
-	if request.PageSize <= 0 || request.PageSize > hardMaximumReadPageSize {
-		return ReadPlan{}, errors.New("database read plan page size is outside the finite framework bound")
+	pageSize, err := request.Definition.Resources().EffectivePageSize(request.PageSize)
+	if err != nil {
+		return ReadPlan{}, errors.New("database read plan page size is outside the declared resource bound")
 	}
 	relation, found := request.Catalog.relation(request.Relation)
 	if !found {
@@ -93,7 +98,7 @@ func NewReadPlan(ctx context.Context, request ReadPlanRequest) (ReadPlan, error)
 		fingerprint: request.Catalog.Fingerprint(),
 		columns:     append([]ColumnRef(nil), request.Columns...),
 		order:       append([]OrderTerm(nil), request.Order...),
-		pageSize:    request.PageSize,
+		pageSize:    pageSize,
 	}, nil
 }
 
@@ -131,7 +136,7 @@ func validateReadOrder(order []OrderTerm, selected []ColumnRef, relation Relatio
 		}
 		seen[term.Column.Name] = struct{}{}
 	}
-	if !hasStableKeySuffix(order, relation.Keys) {
+	if !hasStableKeySuffix(order, relation) {
 		return errors.New("database read plan order must end with a declared unique key")
 	}
 	return nil
@@ -146,8 +151,8 @@ func containsColumnRef(columns []ColumnRef, expected ColumnRef) bool {
 	return false
 }
 
-func hasStableKeySuffix(order []OrderTerm, keys []Key) bool {
-	for _, key := range keys {
+func hasStableKeySuffix(order []OrderTerm, relation Relation) bool {
+	for _, key := range relation.Keys {
 		if key.Kind != KeyPrimary && key.Kind != KeyUnique || len(key.Columns) > len(order) {
 			continue
 		}
@@ -159,11 +164,30 @@ func hasStableKeySuffix(order []OrderTerm, keys []Key) bool {
 				break
 			}
 		}
-		if matches {
+		if matches && keyColumnsAreNonNullable(key, relation.Columns) {
 			return true
 		}
 	}
 	return false
+}
+
+func keyColumnsAreNonNullable(key Key, columns []Column) bool {
+	for _, keyColumn := range key.Columns {
+		found := false
+		for _, column := range columns {
+			if column.Ref.equal(keyColumn) {
+				found = true
+				if column.Nullable {
+					return false
+				}
+				break
+			}
+		}
+		if !found {
+			return false
+		}
+	}
+	return true
 }
 
 // Inbound returns the source-to-warehouse leg this plan may serve. It has no
