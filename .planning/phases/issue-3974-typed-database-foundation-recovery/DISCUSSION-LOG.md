@@ -1,6 +1,6 @@
 # Discussion log — Issue #3974 typed database foundation recovery
 
-**Mode:** `discuss-phase --auto` with repository-approved inline fallback  
+**Mode:** `discuss-phase --auto` with repository-approved inline fallback\
 **Date:** 2026-08-11
 
 The supplied recovery brief fixed the material choices. This log records them rather than

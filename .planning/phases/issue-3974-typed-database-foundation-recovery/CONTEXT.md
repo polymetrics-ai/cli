@@ -1,6 +1,6 @@
 # Context — Issue #3974: typed database foundation recovery
 
-**Gathered:** 2026-08-11  
+**Gathered:** 2026-08-11\
 **Status:** Ready for TDD replay
 
 ## Discuss-phase record
