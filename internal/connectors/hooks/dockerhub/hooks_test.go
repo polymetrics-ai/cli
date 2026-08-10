@@ -38,6 +38,7 @@ func baseCfg() connectors.RuntimeConfig {
 	return connectors.RuntimeConfig{
 		Config: map[string]string{
 			"docker_username": "fixture-user",
+			"base_url":        "https://hub.docker.com/v2",
 		},
 		Secrets: map[string]string{
 			"docker_pat": "fixture-pat-value",
@@ -361,6 +362,35 @@ func TestAuthenticator_TokenURLRejectsPlainHTTP(t *testing.T) {
 	}
 }
 
+func TestAuthenticatorAndPreflightRejectUnsafeBaseURL(t *testing.T) {
+	for _, tt := range []struct {
+		name      string
+		baseURL   string
+		wantError string
+	}{
+		{name: "plain HTTP", baseURL: "http://data.example.invalid/v2", wantError: "base_url must use https"},
+		{name: "userinfo", baseURL: "https://fixture-user:fixture-pass@data.example.invalid/v2", wantError: "base_url must not include URL userinfo"},
+		{name: "query", baseURL: "https://data.example.invalid/v2?tenant=fixture", wantError: "base_url must not include a query or fragment"},
+		{name: "fragment", baseURL: "https://data.example.invalid/v2#tenant", wantError: "base_url must not include a query or fragment"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			cfg := baseCfg()
+			cfg.Config["base_url"] = tt.baseURL
+			h := newClientHooks(nil)
+
+			_, err := h.Authenticator(context.Background(), cfg, baseSpec("https://auth.example.invalid/v2/users/login"))
+			if err == nil || !strings.Contains(err.Error(), tt.wantError) {
+				t.Fatalf("Authenticator() error = %v, want base URL rejection %q", err, tt.wantError)
+			}
+
+			err = h.PreflightRuntimeConfig(cfg)
+			if err == nil || !strings.Contains(err.Error(), tt.wantError) {
+				t.Fatalf("PreflightRuntimeConfig() error = %v, want base URL rejection %q", err, tt.wantError)
+			}
+		})
+	}
+}
+
 func TestAuthenticator_AuthURLRejectsUnsafeComponents(t *testing.T) {
 	for _, tt := range []struct {
 		name      string
@@ -622,7 +652,7 @@ func TestAuthenticator_SCIMPathNeverFallsBackToSessionJWT(t *testing.T) {
 // docker_pat secret at all.
 func scimOnlyCfg() connectors.RuntimeConfig {
 	return connectors.RuntimeConfig{
-		Config:  map[string]string{"docker_username": "fixture-user"},
+		Config:  map[string]string{"docker_username": "fixture-user", "base_url": "https://hub.docker.com/v2"},
 		Secrets: map[string]string{"scim_bearer_token": "fixture-scim-token"},
 	}
 }
@@ -667,7 +697,7 @@ func TestAuthenticator_SCIMOnlyConnectionFailsClosedOnNonSCIMPath(t *testing.T) 
 }
 
 func TestAuthenticator_NoCredentialConfiguredIsError(t *testing.T) {
-	cfg := connectors.RuntimeConfig{Config: map[string]string{"docker_username": "fixture-user"}}
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"docker_username": "fixture-user", "base_url": "https://hub.docker.com/v2"}}
 	h := newClientHooks(nil)
 	if _, err := h.Authenticator(context.Background(), cfg, scimOnlySpec()); err == nil {
 		t.Fatal("Authenticator error = nil with neither docker_pat nor scim_bearer_token configured, want an error")

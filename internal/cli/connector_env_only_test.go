@@ -76,3 +76,25 @@ func TestResolveReversePlanEnvironmentOnlyFlags(t *testing.T) {
 		t.Fatalf("direct-value refusal leaked a secret-shaped value: %v", err)
 	}
 }
+
+func TestResolveReversePlanEnvironmentOnlyFlagsRejectsSensitivePlanInputs(t *testing.T) {
+	plan := app.ReversePlan{
+		DestinationConnector: "dockerhub",
+		ConnectorCommand:     "auth login create",
+		ConnectorCommandPath: []string{"auth", "login", "create"},
+	}
+	for _, tt := range []struct {
+		name   string
+		values map[string][]string
+	}{
+		{name: "from environment", values: map[string][]string{"from-env": {"password=PM_TEST_DOCKERHUB_PASSWORD"}}},
+		{name: "stdin", values: map[string][]string{"value-stdin": {"password"}}},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := resolveReversePlanEnvironmentOnlyFlags(plan, tt.values)
+			if err == nil || !strings.Contains(err.Error(), "cannot be used with --plan") {
+				t.Fatalf("resolve reverse-plan sensitive input error = %v, want plan-input rejection", err)
+			}
+		})
+	}
+}

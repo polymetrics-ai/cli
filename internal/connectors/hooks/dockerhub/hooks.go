@@ -113,6 +113,9 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
+	if err := validateDockerHubBaseURL(cfg); err != nil {
+		return nil, err
+	}
 
 	scimToken := strings.TrimSpace(cfg.Secrets["scim_bearer_token"])
 	auth := &dualAuth{scimToken: scimToken, scimPrefixes: scimPathPrefixes(cfg)}
@@ -183,11 +186,22 @@ func dockerHubLoginURL(tokenURL string, cfg connectors.RuntimeConfig) (string, e
 }
 
 func (h *Hooks) PreflightRuntimeConfig(cfg connectors.RuntimeConfig) error {
+	if err := validateDockerHubBaseURL(cfg); err != nil {
+		return err
+	}
 	if strings.TrimSpace(cfg.Config["auth_url"]) == "" {
 		return errors.New("dockerhub auth: auth_url is required")
 	}
 	_, err := dockerHubLoginURL("", cfg)
 	return err
+}
+
+func validateDockerHubBaseURL(cfg connectors.RuntimeConfig) error {
+	baseURL := strings.TrimSpace(cfg.Config["base_url"])
+	if baseURL == "" {
+		return errors.New("dockerhub auth: base_url is required")
+	}
+	return validateHTTPSURL(baseURL, "base_url")
 }
 
 func scimPathPrefixes(cfg connectors.RuntimeConfig) []string {

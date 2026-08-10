@@ -1416,7 +1416,15 @@ func resolveReversePlanEnvironmentOnlyFlags(plan app.ReversePlan, values map[str
 	if !ok || surfaceProvider.CommandSurface() == nil {
 		return nil, fmt.Errorf("connector %q has no command surface", plan.DestinationConnector)
 	}
-	return resolveConnectorCommandEnvironmentOnlyFlags(surfaceProvider.CommandSurface(), plan.ConnectorCommandPath, values)
+	surface := surfaceProvider.CommandSurface()
+	command, found := connectorSurfaceCommand(surface, strings.Join(plan.ConnectorCommandPath, " "))
+	if !found {
+		return nil, fmt.Errorf("unknown connector command %q", strings.Join(plan.ConnectorCommandPath, " "))
+	}
+	if err := rejectPlanSensitiveInputs(command, parsedFlags{values: values}); err != nil {
+		return nil, err
+	}
+	return resolveConnectorCommandEnvironmentOnlyFlags(surface, plan.ConnectorCommandPath, values)
 }
 
 func connectorCommandSurfaceCommand(connector connectors.Connector, path []string) (connectors.CommandSurfaceCommand, error) {

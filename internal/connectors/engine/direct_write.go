@@ -533,7 +533,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
-	baseURL, err := operationDirectWriteBaseURL(b, cfg)
+	baseURL, err := operationDirectWriteBaseURL(b, op, cfg)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
