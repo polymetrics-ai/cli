@@ -661,6 +661,39 @@ func TestDatabaseNativeAdmissionIsBoundToOneWarehouseLeg(t *testing.T) {
 	}
 }
 
+func TestDriverRegistryRejectsSharedNativeContractAcrossWarehouseLegs(t *testing.T) {
+	definition := loadTestDefinition(t, definitionWithAdmittedMode(validDefinitionJSON))
+	contract := nativeContract("postgres-wire", "fixture-shared-warehouse-leg", "fixture-shared-warehouse-leg-v1")
+	shared := nativeAdmissionFor(contract)
+	inboundAdmission, err := database.NewDatabaseInboundAdmission(shared)
+	if err != nil {
+		t.Fatal(err)
+	}
+	outboundAdmission, err := database.NewDatabaseOutboundAdmission(shared)
+	if err != nil {
+		t.Fatal(err)
+	}
+	registry, err := database.NewDriverRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.Register(admittedDriver{
+		declaredDriver: declaredDriver{descriptor: postgresDriverDescriptor()},
+		admissions:     []database.DatabaseNativeAdmission{inboundAdmission, outboundAdmission},
+	}); !errors.Is(err, database.ErrNativeDriverAdmissionLegConflict) {
+		t.Fatalf("Register(shared cross-leg admission) error = %v, want ErrNativeDriverAdmissionLegConflict", err)
+	}
+
+	inbound := testInboundCommand(t, contract)
+	if _, err := registry.Admit(context.Background(), definition, inbound); !errors.Is(err, database.ErrDriverNotRegistered) {
+		t.Fatalf("inbound admission after rejected registration error = %v, want ErrDriverNotRegistered", err)
+	}
+	outbound := testOutboundCommand(t, contract)
+	if _, err := registry.Admit(context.Background(), definition, outbound); !errors.Is(err, database.ErrDriverNotRegistered) {
+		t.Fatalf("outbound admission after rejected registration error = %v, want ErrDriverNotRegistered", err)
+	}
+}
+
 func TestDatabaseLoadAndReadPlanHonorCancellation(t *testing.T) {
 	cancelled, cancel := context.WithCancel(context.Background())
 	cancel()
