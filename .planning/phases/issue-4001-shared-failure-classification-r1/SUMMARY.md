@@ -46,4 +46,5 @@ source patch. The current-base focused/full tests, public Save/Load safety proof
 build/vet/format checks, lint, docs, generator/boundary, agent-contract, and release checks passed.
 No-mistakes run `01KZPSZDQ0VSQZ0Q8RV8K4MJ77` then passed its local intent, rebase, review, test,
 documentation, and lint gates with zero findings. The correction accounting is 4/5 inherited from
-PR #4013 and 0 new replay corrections. PR #4013 remains unchanged as the historical audit record.
+PR #4013 plus 1 new typed-nil cause correction: 5/5 consumed with 0 remaining. PR #4013 remains
+unchanged as the historical audit record.
