@@ -158,3 +158,19 @@ The final `make certify-timing` run completes in `104.664s` test elapsed / `122.
 within the approved 8-minute cap, and retains its full fixed topology: 25/25 harness calls and
 92/92 real CLI invocations. Hosted PR checks remain the final independent confirmation after the
 commit and push.
+
+## Harvest rate-limited conformance replay repair (2026-08-10)
+
+Hosted Verify failed in `TestConformance/harvest`, not in the generator or timing suite. The
+materialized `rate_limits.json` correctly declares Harvest's documented `general-account` account
+scope, but the non-live fixture `RuntimeConfig` omitted `CoordinationIdentity`; the resolver
+therefore refused every replayed request before it reached the local server. The fix keeps the
+policy and resolver active and constructs a deterministic, public fixture-only opaque identity.
+It does not use a credential, vault, provider, or live request.
+
+- **Red:** `TestHarvestRateLimitedFixturesReceiveSyntheticCoordinationIdentity` failed with
+  `rate-limit policy "general-account" scope identity: coordination identity is unavailable`.
+- **Green:** the focused regression, `TestConformance/harvest`, the complete
+  `./internal/connectors/conformance` package, and `./internal/connectors/engine` all pass under
+  `-timeout 20m -count=1`; `go vet ./internal/connectors/conformance` also passes. The next hosted
+  Verify run is the independent whole-repository confirmation.

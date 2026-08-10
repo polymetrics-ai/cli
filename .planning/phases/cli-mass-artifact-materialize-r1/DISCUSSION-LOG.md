@@ -61,3 +61,15 @@ constraint even though the requested two audits were already clean. The decision
 the repaired generator with the preserved pre-sweep command surface for all eleven, then replace
 only its generated output. Completion requires three zero-count audits: flag spelling,
 write-action redaction propagation, and baseline global-flag contract equality.
+
+## Harvest conformance rate-limit fixture decision (2026-08-10)
+
+Hosted Verify exposed a non-live fixture-harness gap after the materialized Harvest bundle added
+its documented `general-account` rate-limit policy. The replay harness already supplies synthetic
+non-secret configuration and secrets, but it omitted the opaque `CoordinationIdentity` required
+to derive a rate-limit scope. The result is a pre-request refusal for every Harvest check/read
+fixture, not a provider failure. The decision is fixed: preserve the declared policy and real
+rate-limit runtime, and make the shared conformance fixture configuration construct a deterministic
+synthetic identity from fixture-only public values. No credential, provider request, policy, or
+rate-limit budget is weakened. This is an inline/manual GSD lifecycle fallback for the single-worker
+lane; required Go skills are recorded in the plan and TDD ledger.

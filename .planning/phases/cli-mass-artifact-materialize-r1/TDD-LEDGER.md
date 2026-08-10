@@ -293,3 +293,15 @@
   test asserts the retained flags; and a generator-driven re-materialization of all eleven
   affected connectors brings the baseline global-flag comparison to zero without weakening the
   flag-spelling or redaction audits.
+
+## Harvest rate-limited fixture replay (2026-08-10)
+
+- **Red:** `TestHarvestRateLimitedFixturesReceiveSyntheticCoordinationIdentity` loads the real
+  Harvest bundle, whose declared `general-account` scope requires `account_id`, and runs its check
+  and one read fixture. Before the harness supplies `RuntimeConfig.CoordinationIdentity`, both fail
+  with `coordination identity is unavailable` before the replay server receives a request.
+- **Green:** `runtimeConfigForEngine` derives a fixture-only opaque identity from constant public
+  fixture values. The same check/read fixtures pass while the existing rate-limit
+  resolver and policy remain in force; no real secret, provider request, or budget is bypassed.
+  The focused regression first failed with the exact hosted message, then passed, as did
+  `TestConformance/harvest` and the full conformance package.

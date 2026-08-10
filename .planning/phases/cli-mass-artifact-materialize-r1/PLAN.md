@@ -259,3 +259,21 @@ focused materializer regression to assert it; regenerate each affected surface t
 `connectorgen batch materialize` from the preserved pre-sweep source contract and current endpoint
 inventory. A complete `f96a47e80` comparison must report zero global-flag differences alongside
 the required zero spelling and redaction counts.
+
+## Harvest conformance rate-limit fixture identity (2026-08-10)
+
+**Red:** after `rate_limits.json` declares Harvest's provider-documented `general-account` policy,
+the fixture driver builds `RuntimeConfig` without an opaque `CoordinationIdentity`. The production
+rate-limit resolver correctly refuses to derive a scope from that zero value, so `check_fixture`
+and every replayed read fail before an HTTP request.
+
+**Green plan:** make `runtimeConfigForEngine` create a deterministic synthetic identity from
+constant fixture-only public values. Add a focused conformance regression that loads the
+Harvest bundle and proves both `check_fixture` and a fixture-backed read pass with the policy still
+active. This changes neither real credential handling nor `rate_limits.json`; it only supplies the
+non-secret test input the runtime contract already requires. Run the focused conformance package,
+Harvest's dynamic checks, rate-limit engine tests, and then hosted Verify. This is the inline/manual
+execution of resolved `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and
+`code-review` prompts because compatible isolated GSD roles are unavailable. Skills: `golang-how-to`,
+`golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`,
+`golang-safety`, and `golang-testing`.
