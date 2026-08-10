@@ -415,8 +415,9 @@ deliberately, especially in shared worker worktrees.
 The tracked post-commit hook then attempts one ordinary (never force) feature-branch push at most
 once every ten minutes. It skips `main`, detached HEADs, remote default branches, and Git
 operations such as rebases, merges, cherry-picks, reverts, bisections, and `git am`; a detached
-child verifies the remote's current default branch before pushing. The push cannot hold up or fail
-the commit. To turn off only that automatic push for one commit or a shell session, set
+child verifies every effective push endpoint's current default branch and sends only its scheduling
+commit while the local branch still names it. The push cannot hold up or fail the commit. To turn
+off only that automatic push for one commit or a shell session, set
 `PM_NO_AUTOPUSH=1`:
 
 ```bash

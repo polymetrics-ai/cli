@@ -33,16 +33,16 @@ commits, default/detached heads, or any non-fast-forward update.
 
 - Do not change `core.hooksPath`, Git config, CI, server-side hooks, or any
   installer in the checked-out repository.
-- Do not force-push, use a `+` refspec, add dependencies, make network requests,
-  or change Go/CLI/connector behavior.
+- Do not force-push, use a `+` refspec, add dependencies, make synchronous
+  network requests from the commit path, or change Go/CLI/connector behavior.
 - Do not replace the existing tracked pre-commit hook.
 
 ## Design
 
 1. Exit successfully when `PM_NO_AUTOPUSH` is set, when HEAD is detached, or when
    the branch is `main`/a locally known remote default branch. The detached child
-   resolves the remote's live symbolic `HEAD` and refuses an unknown or matching
-   default before it can push.
+   resolves every effective push URL's live symbolic `HEAD` and refuses an unknown
+   or matching default before it can push.
 2. `prepare-commit-msg` resolves each Git operation marker with `git rev-parse
    --git-path` before Git clears it, records the current parent in worktree-local
    Git state, and clears stale records on ordinary commits. `post-commit` consumes
@@ -54,15 +54,19 @@ commits, default/detached heads, or any non-fast-forward update.
    sibling lock protects the timestamp decision and replacement across linked
    worktrees; a branch timestamp younger than 600 seconds (or from the future)
    skips the attempt.
-4. Persist the attempt timestamp before scheduling the child. Launch `git push --
-   <remote> refs/heads/<branch>:refs/heads/<branch>` with `nohup`, standard input,
-   output, and error detached from the commit terminal. The refspec has no `+` and
-   no force option. A child failure or default-resolution refusal adds one short
-   line to the per-branch local log; the parent hook exits zero in every path.
-5. The harness uses temporary bare remotes and hook wrappers to prove stale remote
-   default refusal, concurrent linked-worktree leasing, real manual merge/cherry-
-   pick/revert completions, a real two-commit rebase, expiry behavior, commit
-   non-blocking behavior, and a genuine non-fast-forward rejection without force.
+4. Persist the attempt timestamp before scheduling the child with the current HEAD
+   OID. The child re-resolves Git operation state, then only sends that OID after
+   confirming the branch still names it, using `git push -- <remote>
+   <scheduled-oid>:refs/heads/<branch>` with `nohup`, standard input, output, and
+   error detached from the commit terminal. The refspec has no `+` and no force
+   option. A child failure, operation, branch-change, or default-resolution refusal
+   adds one short line to the per-branch local log; the parent hook exits zero in
+   every path.
+5. The harness uses temporary bare remotes and hook wrappers to prove stale and
+   pushurl-specific default refusal, concurrent linked-worktree leasing, delayed
+   children during and after a manual merge, real manual merge/cherry-pick/revert
+   completions, a real two-commit rebase, expiry behavior, commit non-blocking
+   behavior, and a genuine non-fast-forward rejection without force.
 
 ## TDD task sequence
 

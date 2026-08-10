@@ -27,6 +27,16 @@ shellcheck passed.
 - R3 was legitimate: the old read/check/write sequence was not a lease. A
   common-Git-dir sibling directory now atomically protects the rate decision and
   timestamp replacement.
+- R4 was legitimate: a delayed detached child could observe and send a later
+  operation-generated branch tip, or send while a subsequent operation was active.
+  It now re-resolves Git operation paths, captures the scheduling HEAD, requires
+  the branch to remain at that OID before sending, and uses that captured OID as
+  the non-force push source.
+- R5 was legitimate: `git push <remote>` can use configured `pushurl` targets
+  that differ from the fetch URL checked by `ls-remote`. The child now resolves
+  and checks the live default of every effective push URL before it invokes the
+  named remote.
 
-The focused executable harness covers each follow-up alongside the original
-non-force rejection and detached-push behavior.
+The focused executable harness covers each follow-up, including delayed children
+during and after a manual merge plus mixed safe/default push URLs, alongside the
+original non-force rejection and detached-push behavior.

@@ -146,6 +146,36 @@ wait_for_text() {
   fail "timed out waiting for log text: $wait_text"
 }
 
+wait_for_file() {
+  wait_file=$1
+  wait_attempt=0
+
+  while [ "$wait_attempt" -lt 10 ]; do
+    [ -f "$wait_file" ] && return 0
+    sleep 1
+    wait_attempt=$((wait_attempt + 1))
+  done
+
+  fail "timed out waiting for file: $wait_file"
+}
+
+install_ls_remote_delay() {
+  delay_wrapper_dir=$1
+
+  printf '%s\n' \
+    '#!/bin/sh' \
+    "if [ \"\$1\" = \"ls-remote\" ]; then" \
+    "  : > \"\$PM_AUTOPUSH_LS_REMOTE_READY\"" \
+    '  wait_attempt=0' \
+    "  while [ ! -f \"\$PM_AUTOPUSH_LS_REMOTE_RELEASE\" ] && [ \"\$wait_attempt\" -lt 10 ]; do" \
+    '    sleep 1' \
+    "    wait_attempt=\$((wait_attempt + 1))" \
+    '  done' \
+    'fi' \
+    "exec \"\$PM_AUTOPUSH_REAL_GIT\" \"\$@\"" > "$delay_wrapper_dir/git"
+  chmod +x "$delay_wrapper_dir/git"
+}
+
 assert_hook_invoked() {
   [ -s "$1" ] || fail "Git did not invoke the post-commit hook"
 }
@@ -208,6 +238,44 @@ test_stale_remote_default_refusal() {
   wait_for_text "$default_log" "pm autopush: default branch skipped for release (ignored)"
   after_sha="$(git --git-dir="$TEST_REMOTE" rev-parse refs/heads/release)"
   [ "$before_sha" = "$after_sha" ] || fail "stale remote default branch was pushed"
+}
+
+test_pushurl_default_refusal() {
+  case_dir="$TMP_DIR/pushurl-default"
+  safe_push_remote="$case_dir/safe-push.git"
+  default_push_remote="$case_dir/default-push.git"
+  mkdir -p "$case_dir"
+  new_repo "$case_dir"
+  git -C "$TEST_REPO" checkout -qb trunk
+  git -C "$TEST_REPO" push -q -u origin trunk
+  git --git-dir="$TEST_REMOTE" symbolic-ref HEAD refs/heads/trunk
+  git -C "$TEST_REPO" remote set-head origin -a >/dev/null 2>&1 || fail "could not set fetch remote default"
+  git -C "$TEST_REPO" checkout -qb release main
+  git -C "$TEST_REPO" push -q -u origin release
+  git init --bare -q -b trunk "$safe_push_remote"
+  git -C "$TEST_REPO" push -q "$safe_push_remote" HEAD:refs/heads/trunk
+  git -C "$TEST_REPO" push -q "$safe_push_remote" HEAD:refs/heads/release
+  git init --bare -q -b release "$default_push_remote"
+  git -C "$TEST_REPO" push -q "$default_push_remote" HEAD:refs/heads/release
+  git -C "$TEST_REPO" remote set-url --add --push origin "$safe_push_remote"
+  git -C "$TEST_REPO" remote set-url --add --push origin "$default_push_remote"
+  install_hook "$TEST_REPO"
+  CURRENT_HOOK_LOG="$case_dir/hook.log"
+  : > "$CURRENT_HOOK_LOG"
+
+  safe_before="$(git --git-dir="$safe_push_remote" rev-parse refs/heads/release)"
+  default_before="$(git --git-dir="$default_push_remote" rev-parse refs/heads/release)"
+  record_change "$TEST_REPO" pushurl-default
+  if ! run_hooked git -C "$TEST_REPO" commit -qm "test: pushurl default refusal"; then
+    fail "pushurl-default commit should succeed"
+  fi
+  assert_hook_invoked "$CURRENT_HOOK_LOG"
+  default_log="$(status_file "$TEST_REPO" release)"
+  wait_for_text "$default_log" "pm autopush: default branch skipped for release (ignored)"
+  safe_after="$(git --git-dir="$safe_push_remote" rev-parse refs/heads/release)"
+  default_after="$(git --git-dir="$default_push_remote" rev-parse refs/heads/release)"
+  [ "$safe_before" = "$safe_after" ] || fail "validated non-default pushurl was pushed after another pushurl failed"
+  [ "$default_before" = "$default_after" ] || fail "default pushurl was pushed"
 }
 
 test_detached_head_refusal() {
@@ -490,6 +558,95 @@ test_manual_revert_completion_refusal() {
   assert_manual_operation_refusal "$TEST_REPO" "$TEST_REMOTE" feature
 }
 
+test_delayed_child_refuses_operation_tip() {
+  case_dir="$TMP_DIR/delayed-child"
+  wrapper_dir="$case_dir/wrappers"
+  ready_file="$case_dir/ls-remote-ready"
+  release_file="$case_dir/ls-remote-release"
+  mkdir -p "$case_dir" "$wrapper_dir"
+  new_repo "$case_dir"
+  git -C "$TEST_REPO" checkout -qb feature
+  git -C "$TEST_REPO" checkout -qb merge-source
+  record_change "$TEST_REPO" merge-source
+  git -C "$TEST_REPO" commit -qm "test: delayed merge source"
+  git -C "$TEST_REPO" checkout -q feature
+  install_hook "$TEST_REPO"
+  CURRENT_HOOK_LOG="$case_dir/hook.log"
+  CURRENT_OPERATION_LOG=""
+  : > "$CURRENT_HOOK_LOG"
+
+  real_git="$(command -v git)"
+  install_ls_remote_delay "$wrapper_dir"
+
+  record_change "$TEST_REPO" scheduled-normal
+  if ! PATH="$wrapper_dir:$PATH" \
+    PM_AUTOPUSH_LS_REMOTE_READY="$ready_file" \
+    PM_AUTOPUSH_LS_REMOTE_RELEASE="$release_file" \
+    PM_AUTOPUSH_REAL_GIT="$real_git" \
+    run_hooked git -C "$TEST_REPO" commit -qm "test: delayed child source"; then
+    fail "scheduled normal commit should succeed"
+  fi
+  assert_hook_invoked "$CURRENT_HOOK_LOG"
+  wait_for_file "$ready_file"
+
+  if ! git -C "$TEST_REPO" merge --no-ff --no-commit merge-source; then
+    fail "delayed child merge setup should succeed"
+  fi
+  if ! git -C "$TEST_REPO" commit -qm "test: delayed child merge completion"; then
+    fail "delayed child merge completion should succeed"
+  fi
+  : > "$release_file"
+  delayed_log="$(status_file "$TEST_REPO" feature)"
+  wait_for_text "$delayed_log" "pm autopush: branch changed for feature (ignored)"
+  if git --git-dir="$TEST_REMOTE" rev-parse --verify -q refs/heads/feature >/dev/null; then
+    fail "delayed child pushed an operation-generated tip"
+  fi
+}
+
+test_delayed_child_refuses_active_operation() {
+  case_dir="$TMP_DIR/active-operation"
+  wrapper_dir="$case_dir/wrappers"
+  ready_file="$case_dir/ls-remote-ready"
+  release_file="$case_dir/ls-remote-release"
+  mkdir -p "$case_dir" "$wrapper_dir"
+  new_repo "$case_dir"
+  git -C "$TEST_REPO" checkout -qb feature
+  git -C "$TEST_REPO" checkout -qb merge-source
+  record_change "$TEST_REPO" merge-source
+  git -C "$TEST_REPO" commit -qm "test: active merge source"
+  git -C "$TEST_REPO" checkout -q feature
+  install_hook "$TEST_REPO"
+  CURRENT_HOOK_LOG="$case_dir/hook.log"
+  CURRENT_OPERATION_LOG=""
+  : > "$CURRENT_HOOK_LOG"
+
+  real_git="$(command -v git)"
+  install_ls_remote_delay "$wrapper_dir"
+  record_change "$TEST_REPO" scheduled-normal
+  if ! PATH="$wrapper_dir:$PATH" \
+    PM_AUTOPUSH_LS_REMOTE_READY="$ready_file" \
+    PM_AUTOPUSH_LS_REMOTE_RELEASE="$release_file" \
+    PM_AUTOPUSH_REAL_GIT="$real_git" \
+    run_hooked git -C "$TEST_REPO" commit -qm "test: delayed child active operation"; then
+    fail "scheduled normal commit should succeed"
+  fi
+  assert_hook_invoked "$CURRENT_HOOK_LOG"
+  wait_for_file "$ready_file"
+
+  if ! git -C "$TEST_REPO" merge --no-ff --no-commit merge-source; then
+    fail "active-operation merge setup should succeed"
+  fi
+  merge_head="$(git -C "$TEST_REPO" rev-parse --git-path MERGE_HEAD)"
+  [ -f "$merge_head" ] || fail "active-operation merge did not retain MERGE_HEAD"
+  : > "$release_file"
+  active_log="$(status_file "$TEST_REPO" feature)"
+  wait_for_text "$active_log" "pm autopush: operation in progress for feature (ignored)"
+  if git --git-dir="$TEST_REMOTE" rev-parse --verify -q refs/heads/feature >/dev/null; then
+    fail "delayed child pushed while an operation was active"
+  fi
+  git -C "$TEST_REPO" merge --abort
+}
+
 test_rejected_push_is_swallowed_without_force() {
   case_dir="$TMP_DIR/rejected"
   upstream_repo="$case_dir/upstream"
@@ -527,6 +684,7 @@ test_rejected_push_is_swallowed_without_force() {
 
 test_default_branch_refusal
 test_stale_remote_default_refusal
+test_pushurl_default_refusal
 test_detached_head_refusal
 test_opt_out
 test_rate_limit_and_detached_push
@@ -535,6 +693,8 @@ test_real_multicommit_rebase_refusal
 test_manual_merge_completion_refusal
 test_manual_cherry_pick_completion_refusal
 test_manual_revert_completion_refusal
+test_delayed_child_refuses_operation_tip
+test_delayed_child_refuses_active_operation
 test_rejected_push_is_swallowed_without_force
 
 printf 'post-commit autopush: all executable refusal and safety checks passed\n'
