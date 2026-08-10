@@ -35,3 +35,22 @@ review was completed inline over the nine source and test files listed in `SUMMA
 - Fixed: an optional command-routing classification now unwraps to a true nil error when absent.
 
 No open critical, warning, or informational findings remain.
+
+## Stacked-delivery deep review — 2026-08-11
+
+The current replay was reviewed inline at deep cross-file depth because this issue foundation is
+not a roadmap phase and the canonical single-worker contract does not permit reviewer spawning.
+The generated `gsd-code-review` prompt was resolved; its adapter initialization reports
+`phase_found=false`, which is the recorded manual fallback reason.
+
+Reviewed current-base paths: `internal/failures/classification.go` and tests; configuration
+validation contract and engine boundary; `BlockedCommandError` transport and typed-nil boundary;
+certification report persistence and its public Save/Load proof; affected application assertions;
+and the certification design documentation.
+
+Result: **clean**. The review found no source, security, scope, serialization, or error-unwrapping
+defect. In particular, raw JSON UTF-8 and unpaired-surrogate handling precedes the standard decoder
+for JSON Pointers, `Unwrap` returns a true nil for an absent optional classification, private causes
+remain absent from report JSON and from loaded values, and the configuration boundary preserves the
+typed non-retryable error without provider or database behavior changes. No #4001 sub-issue was
+needed because no new defect was found.

@@ -57,3 +57,26 @@ stable object without another local enum.
   non-retryable field-scoped propagation.
 - Commandrunner demonstrates engine-dispatch carriage for each closed dispatch kind.
 - Certification serializes `untestable_reason` without the private cause.
+
+## Stacked-delivery topology supplement — 2026-08-11
+
+This supplement records delivery ancestry only. It does not alter the original implementation
+scope, TDD guarantees, source patches, or the audit record above.
+
+- Current parent base: `origin/docs/4015-connector-release-certification` at
+  `5996a8a2a5e99c8aa8eb5a8603ecb1f6bba21f12` (draft parent PR #4016).
+- Preserved source: `origin/fm/cli-cert-shared-foundations-r1` at
+  `d517756f0f9bc0cc41d90b4cf717325328352a3f` (direct-to-main PR #4013, left open and unchanged).
+- Child branch: `feat/4001-stack-shared-certification-failures`, replaying the seven source
+  patches in source order onto the current parent base; its child PR must target only
+  `docs/4015-connector-release-certification`.
+- Delivery scope remains the original shared classification foundation. Provider operations,
+  PostgreSQL work, GitHub connector behavior, scheduling, and new taxonomy remain excluded.
+
+The installed GSD command path was resolved for `discuss-phase`, `plan-phase --tdd`,
+`execute-phase`, `verify-work`, and `code-review`. This issue foundation is not a numbered
+roadmap phase, and the canonical single-worker contract prohibits role spawning in this isolated
+worktree, so the generated workflows are executed as a recorded manual-inline fallback. Required
+skills for the current replay review are `golang-how-to`, `golang-design-patterns`,
+`golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`,
+`golang-testing`, `golang-lint`, and `golang-documentation`.

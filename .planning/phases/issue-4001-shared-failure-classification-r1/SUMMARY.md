@@ -36,3 +36,12 @@ coverage:
 The full changed-package test suite, changed-package vet, PM build, and all non-suite `make verify`
 gates listed in `VERIFICATION.md` passed. The pre-implementation Red output is retained in
 `traces/red-run.txt`.
+
+## Stacked-delivery replay
+
+The exact seven-patch #4001 series was replayed conflict-free onto current campaign base
+`5996a8a2a5e99c8aa8eb5a8603ecb1f6bba21f12` for child branch
+`feat/4001-stack-shared-certification-failures`. Range-diff and stable patch IDs matched every
+source patch. The current-base focused/full tests, public Save/Load safety proof, changed-path
+build/vet/format checks, lint, docs, generator/boundary, agent-contract, and release checks passed.
+PR #4013 remains unchanged as the historical audit record.
