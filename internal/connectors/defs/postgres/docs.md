@@ -1,10 +1,10 @@
 # Overview
 
 Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and
-supports cursor-incremental reads on a configurable cursor column, and consumes change events
-through PostgreSQL logical replication. CDC maps insert, update, delete, and full-table truncate
-events for the selected stream. It uses a connector-owned, source-bound replication slot and
-commits an LSN only after downstream acknowledgement, so restart delivery is at-least-once.
+supports cursor-incremental reads on a configurable cursor column. PostgreSQL logical-replication
+change capture is deliberately planned, not executable: it requires PostgreSQL 14+ streamed
+transactions, a bounded crash-recoverable local stage, and a durable receipt for the complete
+transaction before any source LSN acknowledgement.
 
 This connector discovers available streams and schemas from the configured service at runtime.
 
@@ -38,8 +38,8 @@ Connection fields:
 
 - `cursor_field` (optional, string); Optional column name used for incremental reads (rows with
   cursor_field greater than the stored cursor are read, ordered by cursor_field ascending).
-- `cdc_publication` (optional, string); Existing PostgreSQL publication used for logical-
-  replication CDC. Required only for CDC; it must include the selected table.
+- `cdc_publication` (optional, string); Reserved for the planned logical-replication change
+  capture path. It is not invoked while CDC is non-executable.
 - `database` (required, string); Database name to connect to.
 - `host` (required, string); Bare hostname or IP of the PostgreSQL server (no scheme, path, or
   credentials - a URL-shaped value is rejected).
@@ -73,9 +73,11 @@ This connector is read-only. Read behavior: low.
 ## Known limits
 
 - Schemas and stream availability depend on the configured service at runtime.
-- CDC requires a real PostgreSQL source with `wal_level=logical`, a role permitted to use logical
-  replication, and an existing `cdc_publication` that contains the selected table.
-- CDC slots are derived from the PostgreSQL system identity, database, and fully qualified stream;
-  restart requires the matching durable checkpoint. An existing slot without that checkpoint is
-  refused until it is explicitly torn down and re-snapshotted. Teardown drops only that inactive
-  connector-owned slot. Do not delete a slot while another CDC reader is active.
+- Logical-replication CDC is planned and fails closed before opening a replication connection,
+  creating/reusing a slot, consuming WAL, or advancing a checkpoint. It will not be advertised
+  until PostgreSQL 14+ protocol-v2 streaming can stage each transaction privately under a hard
+  byte/record quota, discard aborts, and acknowledge the source only after a whole-transaction
+  durable downstream receipt.
+- Cursor or timestamp reconciliation is not a CDC fallback: it cannot faithfully recover hard
+  deletes or transaction history. A stage-limit failure must require explicit retry or connector-
+  owned teardown/rebootstrap, with source slot health made visible.

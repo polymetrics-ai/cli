@@ -1,4 +1,4 @@
-# Manual code review — PostgreSQL logical-replication CDC
+# Manual code review — PostgreSQL logical-replication CDC containment
 
 Date: 2026-08-10
 Mode: inline manual review (the issue-worker contract forbids reviewer-role
@@ -6,17 +6,15 @@ spawning for this lane).
 
 ## Reviewed scope
 
-- Native replication connection, source identity, slot lifecycle, `pgoutput`
-  decode, checkpointing, acknowledgement ordering, recovery classification,
-  and TLS parity for ordinary and replication connections.
-- The durable `CDCReadRequest` checkpoint port and unchanged fail-closed
-  capability projection.
-- Bundle declaration, generated website connector data, documentation, and
-  live integration test.
+- The retained native replication material, source identity, slot lifecycle,
+  `pgoutput` decoder, recovery classification, and the new UTF-8/replica-
+  identity guards.
+- The fail-closed `CDCReadRequest` boundary, bundle declaration, generated
+  website connector data, documentation, and skipped historical live test.
 
 ## Findings and dispositions
 
-1. **PostgreSQL 12 compatibility:** modern `SNAPSHOT 'nothing'` syntax did
+1. **Historical PostgreSQL 12 compatibility:** modern `SNAPSHOT 'nothing'` syntax did
    not create a slot on the approved local PostgreSQL 12 server. Replaced it
    with PostgreSQL-12-compatible `NOEXPORT_SNAPSHOT`; the final real protocol
    test passes on PostgreSQL 12.22.
@@ -38,14 +36,22 @@ spawning for this lane).
    changed; the actual focused `internal/cli` suite passes and the unresolved
    connector `--help --json` path returns usage exit code 2.
 6. **Secret safety:** no test fixture or planning artifact contains a password
-   or connection string. The live test accepts individual environment fields,
-   fails on an unreachable configured source, and only explicitly skips when
-   the integration environment is intentionally absent.
+   or connection string. The historical live test accepts individual environment
+   fields, but now skips before reading them because planned CDC must not contact
+   a source.
+7. **Large transaction safety:** the former protocol-v1 at-commit path has no
+   bounded per-transaction stage or whole-transaction durable receipt. It is
+   therefore unavailable rather than advertised. A future executor must use
+   PostgreSQL 14+ v2 streaming, a hard quota, `StreamAbort` discard, and an
+   explicit slot-health/rebootstrap procedure.
+8. **Data fidelity and identity:** replication configuration forces/verifies
+   UTF-8 and rejects malformed tuple/origin/type bytes before durable handling.
+   The retained path admits only DEFAULT replica identity with a primary key and
+   rejects FULL, USING INDEX, NOTHING, and unknown modes by named error.
 
 ## Verdict
 
-Pass. The executor remains fail-closed: metadata is discoverable as CDC only
-because the native connector provides the descriptor that exactly matches the
-implemented bundle; invocation requires a real source and a durable checkpoint
-committer. The real PostgreSQL conformance test proves lifecycle cleanup and
-restart behavior, not a mocked replication protocol.
+Pass for containment. The executor is fail-closed: metadata and catalogue do
+not advertise CDC, `ReadCDC` returns a named unsupported error before any
+source operation, and the historical real PostgreSQL test skips. This is not
+current end-to-end CDC conformance.

@@ -1,8 +1,15 @@
-# PLAN — PostgreSQL logical-replication CDC
+# PLAN — PostgreSQL logical-replication CDC (containment)
+
+> Captain ruling, 2026-08-10: do not expose `change_capture` until PostgreSQL
+> 14+ protocol-v2 streaming can stage each source transaction privately with a
+> hard quota, discard `StreamAbort`, and wait for a durable whole-transaction
+> downstream receipt at `StreamCommit` before acknowledging any LSN. The
+> current executor therefore fails closed before opening a replication
+> connection. Cursor/timestamp reconciliation is explicitly rejected.
 
 ## Scope and integration base
 
-Implement the native PostgreSQL logical-replication `ChangefeedExecutor` on
+The original implementation work targeted a native PostgreSQL logical-replication `ChangefeedExecutor` on
 `fm/cli-postgres-cdc-logical-replication-r1`. The branch is rebased onto
 `origin/main` after PR #3880 established the non-webhook executor shape and
 PR #3882 established the durable database sync contract. This lane changes
@@ -11,9 +18,9 @@ checkpoint extension needed to consume #3882, tests, dependency files, and
 this evidence.
 
 `pm` currently has no standalone CDC invocation command. This lane therefore
-does not invent a generic SQL/replication CLI surface. It makes the registered
-`postgres` connector genuinely executable through `ReadCDC`; the existing
-fail-closed catalogue/inspect projection is the public capability proof.
+does not invent a generic SQL/replication CLI surface. Until the committed-
+transaction stage exists, the catalogue/inspect projection remains fail-closed
+and is the public capability proof.
 
 ## GSD and skills
 
@@ -33,7 +40,7 @@ Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
 reference was also read: no command, help, manual, or website page is added,
 while the existing connector docs and capability tests are updated.
 
-## Design decisions
+## Historical design decisions
 
 1. `pglogrepl` is pinned only after the recorded conditional-approval evidence
    in `PR-BODY.md`. It is used solely by `native/postgres` for PostgreSQL
@@ -51,23 +58,24 @@ while the existing connector docs and capability tests are updated.
    logical slot. The explicit native teardown method drops only that derived
    slot. Tests always defer teardown and assert the slot is gone: a routine
    that leaves a WAL-retaining slot is not conforming.
-4. The caller declares the pre-existing PostgreSQL publication by a validated
-   identifier. The connector exposes no generic SQL or DDL surface. It starts
-   `pgoutput` with protocol version 1, decodes Relation/Insert/Update/Delete
-   frames, and emits the existing `CDCEvent` record shape.
-5. A commit frame becomes one `synccontract.CheckpointEnvelope` candidate. It
-   is handed to a typed durable checkpoint committer only after all transaction
-   records were accepted, and the server receives a standby status update only
-   after that durable commit succeeds. The committer is the adapter that uses
-   `CommitAfterDownstreamAcknowledgement`; its full envelope replaces, rather
-   than serializes alongside, the old state map.
-6. The descriptor declares `native/postgres_logical_replication`, `lsn`,
-   `downstream_ack`, `resnapshot_required`, source ordering, at-least-once
-   duplicate semantics, and tombstones. `Connector` implements the matching
-   executor descriptor, so the existing `HasImplementedChangefeed` gate is
-   unchanged and becomes true only for this working implementation.
+4. The parked protocol path has the caller declare a pre-existing PostgreSQL
+   publication by a validated identifier and exposes no generic SQL or DDL
+   surface. Its `pgoutput` v1 decoder can map Relation/Insert/Update/Delete
+   frames into the existing `CDCEvent` record shape, but `ReadCDC` deliberately
+   cannot reach that path: it has no streamed whole-transaction stage.
+5. The parked path creates a `synccontract.CheckpointEnvelope` candidate at
+   commit and hands it to the existing durable checkpoint committer only after
+   its records were accepted. That is not sufficient admission evidence for
+   v2 streamed transactions: a future stage must wait for a sealed source
+   transaction and its whole-transaction downstream receipt before using the
+   same committer or acknowledging a source LSN.
+6. The historical descriptor declared `native/postgres_logical_replication`,
+   `lsn`, `downstream_ack`, `resnapshot_required`, source ordering, at-least-
+   once duplicate semantics, and tombstones. The current descriptor instead
+   declares `planned`, so the existing `HasImplementedChangefeed` gate remains
+   unchanged and PostgreSQL cannot be discovered as CDC-capable.
 
-## TDD sequence
+## Historical TDD sequence
 
 1. **Red — admission and durable state:** replace the stub expectations with
    a `ChangefeedExecutor`/catalogue truth test; add source-identity mismatch,
@@ -102,3 +110,5 @@ while the existing connector docs and capability tests are updated.
   requirement for durable acknowledgement before source LSN acknowledgement.
 - Automatic publication creation/deletion. Operators own the declared
   publication; the connector owns only its uniquely derived replication slot.
+- Any at-commit transaction burst, acknowledgement on local stage durability,
+  or automatic cursor/timestamp recovery after a stage-limit failure.

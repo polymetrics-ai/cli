@@ -2,9 +2,12 @@
 
 ## Intent
 
-Implement real PostgreSQL logical-replication CDC on top of the durable database
-sync contract and the polling-watermark executor shape now merged to `main`.
-This PR references the fail-closed CDC discovery work in #2986.
+Preserve the approved PostgreSQL logical-replication design and its dependency
+evidence while `change_capture` remains deliberately planned and
+non-executable. The executor rejects before opening a source connection; this
+PR does not claim current end-to-end CDC, source-LSN progress, or replication-
+slot lifecycle execution. This PR references the fail-closed CDC discovery
+work in #2986.
 
 ## Linked work
 
@@ -15,8 +18,8 @@ database sync contract).
 
 ## Conditional dependency evidence — `github.com/jackc/pglogrepl`
 
-Recorded 2026-08-10 before updating the PR; the approval is limited to this
-native PostgreSQL CDC implementation.
+Recorded 2026-08-10 before updating the PR; the approval is limited to the
+native PostgreSQL CDC path and is not a general dependency licence.
 
 - **Maintenance / last release:** `go list -m` resolves `@latest` to
   `v0.0.0-20260401131349-e37c41485510`, released 2026-04-01, and the upstream
@@ -48,37 +51,41 @@ Sources: https://pkg.go.dev/github.com/jackc/pglogrepl ;
 https://osv.dev/ ;
 https://www.postgresql.org/docs/current/logicaldecoding-explanation.html
 
-## What changed
+## Current containment and retained implementation material
 
-- Adds a native `pglogrepl` executor that derives a deterministic slot from the
-  PostgreSQL system identity, database, and canonical schema-qualified stream.
-- Reuses the durable sync checkpoint envelope for LSN recovery, validates source
-  identity and generation before resume, and acknowledges PostgreSQL only after
-  a durable downstream checkpoint commit.
-- Validates that the publication includes the requested relation before slot
-  creation; decodes and filters `pgoutput` relation/insert/update/delete and
-  truncate messages while preserving transaction ordering.
-- Makes slot cleanup an explicit, safe lifecycle operation that refuses unknown,
-  active, or incompatible slots, and refuses an existing slot without the
-  matching durable checkpoint rather than risking a WAL skip.
-- Declares PostgreSQL CDC as implemented only through the exact native executor
-  and updates the connector contract and documentation.
+- Keeps `pglogrepl` limited to the native PostgreSQL CDC implementation material;
+  it is not used by another connector or as a general-purpose dependency.
+- Keeps the bundle, metadata, and runtime capability fail-closed: PostgreSQL is
+  absent from the CDC catalogue and `ReadCDC` returns a named unsupported error
+  before a source connection, slot creation/reuse, source acknowledgement, or
+  checkpoint advance.
+- Forces and verifies UTF-8 at the replication boundary; decoder regressions
+  prove a non-ASCII payload round-trips byte-exact and malformed text is rejected
+  before durable handling.
+- Admits only `REPLICA IDENTITY DEFAULT` with a primary key in the retained
+  protocol path. `FULL`, `USING INDEX`, `NOTHING`, and unknown modes return named
+  errors rather than silently misidentify updates or deletes.
+- The next executable phase must use PostgreSQL 14+ `proto_version 2` with
+  `streaming=on`, a bounded crash-recoverable transaction stage, `StreamAbort`
+  discard, a whole-transaction durable receipt at `StreamCommit`, and source LSN
+  acknowledgement only after that receipt. There is no cursor/timestamp fallback.
+  Slot-health observability plus explicit connector-owned teardown/rebootstrap
+  are mandatory for that phase.
 
 ## Verification
 
-- `go test -count=1 -timeout 20m ./internal/connectors ./internal/connectors/bundleregistry ./internal/connectors/engine`
-- `go test -count=1 -timeout 20m ./internal/cli` (including #3964's
-  unresolved connector-help exit-status coverage)
-- `POLYMETRICS_INTEGRATION=1 go test -count=1 -timeout 20m ./internal/connectors/native/postgres`
-- Live protocol conformance: `TestLogicalReplicationResumesAndCleansSlot` with
+- Current containment: focused PostgreSQL and CLI tests prove that the capability
+  is false, inspect reports a planned reason, and `ReadCDC` is unsupported before
+  any source interaction. No live source is contacted.
+- Historical, pre-containment protocol evidence: `TestHistoricalLogicalReplicationResumesAndCleansSlot` with
   an isolated **PostgreSQL 12.22** server configured with `wal_level=logical`,
   `max_replication_slots=8`, and `max_wal_senders=8` on a non-default port. It
-  proves publication-membership refusal before slot creation, active-slot
+  previously proved publication-membership refusal before slot creation, active-slot
   teardown refusal, selected-table insert/update/delete/truncate decoding,
   durable-LSN restart without duplicate prior records, rebootstrap refusal for
   an existing slot missing its checkpoint, and replication-slot absence after
-  teardown. The test fails on an unreachable configured source and explicitly
-  skips only when the integration environment is intentionally absent.
+  teardown. It is now skipped while CDC is planned, so it is not current
+  end-to-end conformance evidence.
 
 This body intentionally contains no connection string, password, or other
 credential value.

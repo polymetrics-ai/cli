@@ -25,7 +25,17 @@ const (
 	cdcCheckpointSchema    = "postgres-cdc-v1"
 	cdcChangefeedMechanism = "logical_replication"
 	cdcExecutorID          = "postgres_logical_replication"
+	cdcClientEncoding      = "UTF8"
 	cdcSlotCleanupTimeout  = 5 * time.Second
+)
+
+var (
+	errCDCClientEncoding         = errors.New("postgres CDC replication connection did not negotiate UTF-8 client encoding")
+	errCDCReplicaIdentityDefault = errors.New("postgres CDC requires a primary key when REPLICA IDENTITY is DEFAULT")
+	errCDCReplicaIdentityFull    = errors.New("postgres CDC does not support REPLICA IDENTITY FULL")
+	errCDCReplicaIdentityIndex   = errors.New("postgres CDC does not support REPLICA IDENTITY USING INDEX")
+	errCDCReplicaIdentityNothing = errors.New("postgres CDC does not support REPLICA IDENTITY NOTHING")
+	errCDCReplicaIdentityUnknown = errors.New("postgres CDC encountered an unknown replica identity mode")
 )
 
 type postgresCDCSource struct {
@@ -48,15 +58,37 @@ func replicationConnection(ctx context.Context, conn connConfig) (*pgconn.PgConn
 	if err != nil {
 		return nil, fmt.Errorf("postgres CDC: configure replication connection: %w", err)
 	}
-	if config.RuntimeParams == nil {
-		config.RuntimeParams = make(map[string]string)
-	}
-	config.RuntimeParams["replication"] = "database"
+	configureCDCReplicationConfig(config)
 	replication, err := pgconn.ConnectConfig(ctx, config)
 	if err != nil {
 		return nil, errors.New("postgres CDC: connect replication source failed")
 	}
 	return replication, nil
+}
+
+func configureCDCReplicationConfig(config *pgconn.Config) {
+	if config.RuntimeParams == nil {
+		config.RuntimeParams = make(map[string]string)
+	}
+	config.RuntimeParams["replication"] = "database"
+	config.RuntimeParams["client_encoding"] = cdcClientEncoding
+	previousValidateConnect := config.ValidateConnect
+	config.ValidateConnect = func(ctx context.Context, replication *pgconn.PgConn) error {
+		if err := validateCDCClientEncoding(replication.ParameterStatus("client_encoding")); err != nil {
+			return err
+		}
+		if previousValidateConnect != nil {
+			return previousValidateConnect(ctx, replication)
+		}
+		return nil
+	}
+}
+
+func validateCDCClientEncoding(encoding string) error {
+	if !strings.EqualFold(strings.TrimSpace(encoding), cdcClientEncoding) {
+		return errCDCClientEncoding
+	}
+	return nil
 }
 
 func closeReplicationConnection(conn *pgconn.PgConn) {
@@ -202,7 +234,49 @@ func validateCDCPublicationStream(ctx context.Context, conn connConfig, source p
 	if !included {
 		return errors.New("postgres CDC: publication does not include the requested stream")
 	}
+	var replicaIdentity string
+	var hasPrimaryKey bool
+	err = data.QueryRow(ctx, `
+	SELECT relation.relreplident::text,
+	       EXISTS (
+		   SELECT 1 FROM pg_index primary_index
+		   WHERE primary_index.indrelid = relation.oid AND primary_index.indisprimary
+	       )
+	FROM pg_class relation
+	JOIN pg_namespace relation_schema ON relation_schema.oid = relation.relnamespace
+	WHERE relation_schema.nspname = $1 AND relation.relname = $2`, schema, table).Scan(&replicaIdentity, &hasPrimaryKey)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return errors.New("postgres CDC: requested stream relation does not exist")
+	}
+	if err != nil {
+		return fmt.Errorf("postgres CDC: inspect replica identity: %w", err)
+	}
+	if err := validateCDCReplicaIdentity(replicaIdentity, hasPrimaryKey); err != nil {
+		return err
+	}
 	return nil
+}
+
+// validateCDCReplicaIdentity admits only the pgoutput shape the current
+// decoder can map without guessing. Other normal PostgreSQL modes are rejected
+// before slot creation with a stable, named reason rather than silently
+// misidentifying updates or deletes.
+func validateCDCReplicaIdentity(replicaIdentity string, hasPrimaryKey bool) error {
+	switch replicaIdentity {
+	case "d":
+		if !hasPrimaryKey {
+			return errCDCReplicaIdentityDefault
+		}
+		return nil
+	case "f":
+		return errCDCReplicaIdentityFull
+	case "i":
+		return errCDCReplicaIdentityIndex
+	case "n":
+		return errCDCReplicaIdentityNothing
+	default:
+		return fmt.Errorf("%w: %q", errCDCReplicaIdentityUnknown, replicaIdentity)
+	}
 }
 
 func validateReplicationSlot(slot postgresReplicationSlot, database string) error {
