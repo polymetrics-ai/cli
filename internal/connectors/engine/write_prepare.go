@@ -108,6 +108,7 @@ func prepareDeclarativeRequest(b Bundle, action WriteAction, record connectors.R
 	if err != nil {
 		return PreparedRequest{}, fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
 	}
+	path = normalizeWritePathForBaseURL(path, baseURL, b.HTTP.APIRoot)
 	query, err := buildWriteQuery(action, vars)
 	if err != nil {
 		return PreparedRequest{}, err

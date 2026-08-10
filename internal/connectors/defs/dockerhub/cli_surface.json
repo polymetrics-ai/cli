@@ -268,8 +268,7 @@
       ],
       "examples": [
         "pm dockerhub access-tokens update --uuid \"<uuid>\" --is-active false --json"
-      ],
-      "notes": "The provider can echo token metadata, including a raw value, back on update. The approved runtime returns that response unchanged; handle its output as secret material."
+      ]
     },
     {
       "path": "audit-logs actions list",

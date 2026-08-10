@@ -120,7 +120,8 @@ func resolveWriteRequestLine(b Bundle, action WriteAction, rec connectors.Record
 	if err != nil {
 		return "", "", fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
 	}
-	return methodOrDefault(action.Method), joinURL(baseURL, relPath), nil
+	requestPath := normalizeWritePathForBaseURL(relPath, baseURL, b.HTTP.APIRoot)
+	return methodOrDefault(action.Method), joinURL(baseURL, requestPath), nil
 }
 
 func copyRecordMap(src map[string]any) map[string]any {
@@ -283,6 +284,21 @@ func joinURL(base, path string) string {
 	return trimmedBase + "/" + strings.TrimLeft(path, "/")
 }
 
+func normalizeWritePathForBaseURL(resolvedPath, baseURL, apiRoot string) string {
+	if resolvedPath == "" || strings.HasPrefix(resolvedPath, "http://") || strings.HasPrefix(resolvedPath, "https://") {
+		return resolvedPath
+	}
+	root := strings.Trim(strings.TrimSpace(apiRoot), "/")
+	if root == "" {
+		return resolvedPath
+	}
+	rootPath := "/" + root
+	if resolvedPath != rootPath && !strings.HasPrefix(resolvedPath, rootPath+"/") {
+		resolvedPath = rootPath + "/" + strings.TrimLeft(resolvedPath, "/")
+	}
+	return normalizeDirectReadPathForBaseURL(resolvedPath, baseURL, apiRoot)
+}
+
 // Write executes action per record, one HTTP request per record (design
 // §B.5: batch semantics stay one-request-per-record in wave0). A WriteHook
 // that returns handled=true for a record bypasses the declarative body/
@@ -441,6 +457,7 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	if err != nil {
 		return nil, err
 	}
+	path = normalizeWritePathForBaseURL(path, requesterForAction.BaseURL, b.HTTP.APIRoot)
 	requester, err := writeRequester(requesterForAction, action)
 	if err != nil {
 		return nil, err

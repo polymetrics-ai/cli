@@ -1350,3 +1350,32 @@ executor retains GSD lifecycle ownership.
 ```text
 go test -timeout 20m ./internal/app -run '^TestDockerHubAccessTokenShowTokenRejectsMultipleRecordsBeforeApproval$' -count=1
 ```
+
+## Review repair — SCIM proxy writes and token disclosure contract (2026-08-10)
+
+Manual-GSD fallback: this is a gate-owned no-mistakes review step. The outer executor owns the
+active lifecycle, so this repair records Red/Green evidence here and does not invoke pipeline
+control commands.
+
+Red: Docker Hub declarative SCIM writes preserved their engine-relative `/scim/2.0/**` action path
+when a proxy `base_url` ended before `/v2`. That missed the path-aware SCIM authenticator and could
+either fail a SCIM-only write for missing `docker_pat` or send the session bearer under dual
+credentials. The personal access-token update surface also promised a provider response the generic
+write executor intentionally discards, while the generated guide overstated token disclosure.
+
+Green: generic writes now resolve root-relative action paths through the same API-root boundary as
+direct dispatch for bundles that declare an API root. Docker Hub SCIM preview and execution both
+reach the normalized proxy route and retain only the SCIM bearer in SCIM-only and dual-credential
+configurations. The unsupported update response claim is removed, and the generated guide limits
+unchanged-response language to authentication exchanges while documenting create-only `--show-token`
+disclosure.
+
+This gate-owned review uses golang-how-to, golang-cli, golang-design-patterns,
+golang-structs-interfaces, golang-security, golang-safety, golang-error-handling, golang-lint,
+golang-testing, and golang-documentation, plus CLI help/docs/website parity guidance. The outer
+executor retains GSD lifecycle ownership.
+
+```text
+Green: go test -timeout 20m ./internal/connectors/defs/dockerhub -run '^TestDockerhubSCIMWritesNormalizeProxyBaseAndUseSCIMBearer$' -count=1
+PASS: SCIM-only and dual-credential proxy-prefix writes preview and dispatch through /v2 with only the SCIM bearer.
+```

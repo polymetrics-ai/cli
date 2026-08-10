@@ -674,12 +674,11 @@ func securitySection(manifest Manifest) GuideSection {
 		// Docker Hub's documented auth exchanges deliberately retain compatible
 		// credential flags. Their command surface also offers env/stdin input,
 		// so the generated connector guide must describe the actual exposure
-		// boundary rather than falsely claiming argv input is impossible. The
-		// provider response is likewise runtime output, not a plan sample, and
-		// must remain intact for the caller.
+		// boundary rather than falsely claiming argv input is impossible.
 		lines = append(lines,
 			"For auth credential fields, prefer --from-env or --value-stdin over command-line flags; argv can be observed by other local processes and shell history.",
-			"The approved runtime returns Docker Hub response bodies unchanged, including a newly-created token; handle runtime output as secret material.",
+			"The approved runtime returns Docker Hub authentication-exchange response bodies unchanged; handle runtime output as secret material.",
+			"Access-token creation suppresses a raw token by default. Add --show-token only to an approved execution to display it immediately; terminal or JSON output cannot be redacted.",
 		)
 	} else {
 		lines = append(lines, "Never pass secret values in chat, shell arguments, logs, docs, or JSON output.")
