@@ -3,7 +3,7 @@
   "parent_issue": 3988,
   "branch": "feat/3897-flow-connection-scope",
   "base": "feat/3988-github-certification",
-  "status": "planned",
+  "status": "red_established",
   "manual_gsd_fallback": {
     "used": true,
     "reason": "The active ROADMAP.md intentionally has no numbered phases and directs issue work to .planning/phases/<issue-or-phase>/; GSD phase-op cannot register issue-3897-flow-connection-scope-r1.",
@@ -25,7 +25,7 @@
     "no-mistakes"
   ],
   "tdd": {
-    "red": "pending",
+    "red": "TestFlowSourceConnectionSelectorsReadOnlyOwningRows failed as expected: both declared selectors reached an unscoped DuckDB SQL read and duplicate records views were unavailable.",
     "green": "pending",
     "refactor": "pending"
   },

@@ -1,11 +1,15 @@
 # #3897 Verification Checklist
 
-**Status:** Pending implementation
+**Status:** RED established; GREEN pending
 
 ## Required acceptance evidence
 
-- [ ] Two different connection-owned materializations with the same table
-  name are created through normal ETL.
+- [x] RED: two different connection-owned Parquet materializations with the
+  same table name fail to resolve through explicitly scoped flow query/action
+  reads before implementation.
+- [ ] GREEN: two different connection-owned materializations with the same
+  table name are selected correctly through normal ETL-equivalent warehouse
+  ownership and Parquet materialization.
 - [ ] Explicit query selector returns only the selected owner’s rows through
   Parquet/DuckDB.
 - [ ] Explicit action source selector returns only the selected owner’s rows

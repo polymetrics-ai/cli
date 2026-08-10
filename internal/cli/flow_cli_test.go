@@ -12,7 +12,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/config"
+	"polymetrics.ai/internal/flow"
+	"polymetrics.ai/internal/warehouse"
 )
 
 func testCtx(t *testing.T) context.Context {
@@ -218,4 +221,165 @@ func TestFlowRunRLMFixtureMaterializesOutTable(t *testing.T) {
 	data, err := os.ReadFile(outPath)
 	require.NoError(t, err)
 	assert.NotEmpty(t, strings.TrimSpace(string(data)))
+}
+
+// TestFlowSourceConnectionSelectorsReadOnlyOwningRows is the red-first
+// regression for #3897. It deliberately uses two structurally owned Parquet
+// tables with the same name, then drives query and action source reads through
+// the flow adapter. The action runner is a local capture stub: no provider
+// call or mutation is possible in this test.
+func TestFlowSourceConnectionSelectorsReadOnlyOwningRows(t *testing.T) {
+	ctx := testCtx(t)
+	a := newFlowScopedWarehouseApp(t, ctx)
+
+	t.Run("query selector reads only acme rows", func(t *testing.T) {
+		adapter := &recordingFlowAppAdapter{app: a}
+		manifest, err := flow.ParseManifest([]byte(`{
+			"version": 1,
+			"name": "scoped-query",
+			"steps": [{
+				"id": "query-records",
+				"kind": "query",
+				"connection": "acme",
+				"sql": "SELECT * FROM records",
+				"in": [],
+				"out": []
+			}]
+		}`))
+		require.NoError(t, err)
+
+		engine := &flow.Engine{
+			Manifest: manifest,
+			App:      adapter,
+			LockDir:  t.TempDir(),
+		}
+		result, err := engine.Run(ctx, flow.RunOptions{})
+		require.NoError(t, err)
+		assert.Equal(t, "ok", result.Status)
+		require.Len(t, adapter.lastRows, 1)
+		assert.Equal(t, "acme-1", adapter.lastRows[0]["id"])
+	})
+
+	t.Run("action source selector reads only globex rows", func(t *testing.T) {
+		adapter := &recordingFlowAppAdapter{app: a}
+		runner := &captureFlowActionRunner{}
+		manifest, err := flow.ParseManifest([]byte(`{
+			"version": 1,
+			"name": "scoped-action",
+			"steps": [{
+				"id": "act-on-records",
+				"kind": "action",
+				"action_cfg": {
+					"source_table": "records",
+					"source_connection": "globex",
+					"destination_connector": "future-connector",
+					"destination_credential": "future-credential",
+					"action": "create",
+					"mappings": {"id": "external_id"}
+				},
+				"in": [],
+				"out": []
+			}]
+		}`))
+		require.NoError(t, err)
+
+		engine := &flow.Engine{
+			Manifest:     manifest,
+			App:          adapter,
+			ActionRunner: runner,
+			LockDir:      t.TempDir(),
+		}
+		result, err := engine.Run(ctx, flow.RunOptions{ApprovalToken: "test-only"})
+		require.NoError(t, err)
+		assert.Equal(t, "ok", result.Status)
+		require.Len(t, runner.records, 1)
+		assert.Equal(t, "globex-1", runner.records[0]["id"])
+	})
+}
+
+type recordingFlowAppAdapter struct {
+	app      *app.App
+	lastRows []map[string]any
+}
+
+func (a *recordingFlowAppAdapter) ETLRun(_ context.Context, _ string, _ []string) (flow.ETLResult, error) {
+	return flow.ETLResult{}, nil
+}
+
+func (a *recordingFlowAppAdapter) QuerySQL(ctx context.Context, sql string, limit int) ([]map[string]any, error) {
+	records, err := a.app.QuerySQL(ctx, sql, limit)
+	if err != nil {
+		return nil, err
+	}
+	a.lastRows = make([]map[string]any, len(records))
+	for i, record := range records {
+		a.lastRows[i] = map[string]any(record)
+	}
+	return a.lastRows, nil
+}
+
+func (a *recordingFlowAppAdapter) RLMRun(_ context.Context, _ flow.RLMRunRequest) (flow.RLMResult, error) {
+	return flow.RLMResult{}, nil
+}
+
+type captureFlowActionRunner struct {
+	records []map[string]any
+}
+
+func (r *captureFlowActionRunner) ExecuteStep(_ context.Context, _ flow.FlowStep, records []map[string]any, _ string, _ string) (flow.ActionResult, error) {
+	r.records = append([]map[string]any(nil), records...)
+	return flow.ActionResult{RecordsAttempted: len(records), RecordsSucceeded: len(records)}, nil
+}
+
+func newFlowScopedWarehouseApp(t *testing.T, ctx context.Context) *app.App {
+	t.Helper()
+	root := t.TempDir()
+	initProject(t, root)
+	a, err := app.Open(root)
+	require.NoError(t, err)
+
+	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
+	_, err = a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "warehouse-local",
+		Connector: "warehouse",
+		Config:    map[string]string{"path": warehouseDir},
+	})
+	require.NoError(t, err)
+
+	for _, name := range []string{"acme", "globex"} {
+		_, err := a.CreateConnection(ctx, app.CreateConnectionRequest{
+			Name: name,
+			Source: app.EndpointConfig{
+				Connector:  "warehouse",
+				Credential: "warehouse-local",
+			},
+			Destination: app.EndpointConfig{
+				Connector:  "warehouse",
+				Credential: "warehouse-local",
+			},
+			Streams: map[string]app.StreamConfig{
+				"records": {
+					SyncMode:         "incremental_append_deduped",
+					CursorField:      "updated_at",
+					PrimaryKey:       []string{"id"},
+					DestinationTable: "records",
+				},
+			},
+		})
+		require.NoError(t, err)
+	}
+
+	for _, connection := range a.ListConnections() {
+		location, err := warehouse.LocationFor(warehouseDir, "flow_scope", "warehouse", connection.ID, connection.Name)
+		require.NoError(t, err)
+		require.NoError(t, location.EnsureOwnership())
+		path, err := location.TablePath("records")
+		require.NoError(t, err)
+		row := warehouse.Row{
+			"id":         connection.Name + "-1",
+			"updated_at": "2026-08-11T00:00:00Z",
+		}
+		require.NoError(t, warehouse.WriteTable(ctx, path, []warehouse.Row{row}))
+	}
+	return a
 }
