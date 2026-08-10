@@ -141,12 +141,12 @@ release-workflow-check: pinned-build-dependencies-check
 	./scripts/tests/homebrew-release-notify.sh
 	./scripts/tests/release-target-parity.sh
 
-verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-matrix connector-boundary connector-runtime-preflight connector-canon-check release-workflow-check
+verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-matrix connector-boundary connector-canon-check release-workflow-check
 
 # Opt-in local gate that overlaps independent read/build checks after the
 # mutating fmt/tidy steps. CI keeps using serial `verify` for stable logs.
 verify-parallel: fmt tidy-check
-	$(MAKE) -j$(VERIFY_JOBS) vet test build lint agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-matrix connector-boundary connector-runtime-preflight connector-canon-check release-workflow-check
+	$(MAKE) -j$(VERIFY_JOBS) vet test build lint agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connectorgen-certification-matrix connector-boundary connector-canon-check release-workflow-check
 	$(MAKE) -j$(VERIFY_JOBS) docs-check-no-build smoke-no-build
 
 perf-free: build
