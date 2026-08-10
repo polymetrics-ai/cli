@@ -32,28 +32,39 @@ Dir[workflow_glob].sort.each do |path|
   relative_path = Pathname.new(path).relative_path_from(root)
 
   each_mapping_entry(workflow) do |key, value|
-    next unless key.is_a?(Psych::Nodes::Scalar) && key.value == "uses"
+    next unless key.is_a?(Psych::Nodes::Scalar)
 
-    line_number = value.start_line + 1
-    unless value.is_a?(Psych::Nodes::Scalar)
-      errors << "#{relative_path}:#{line_number}: action reference must be a scalar"
-      next
-    end
-
-    ref = value.value
-    next if ref.start_with?("./")
-
-    source_line = lines.fetch(value.start_line)
-    if ref.start_with?("docker://")
-      unless image_digest.match?(ref.delete_prefix("docker://"))
-        errors << "#{relative_path}:#{line_number}: Docker action must use a sha256 digest: #{ref}"
+    case key.value
+    when "uses"
+      line_number = value.start_line + 1
+      unless value.is_a?(Psych::Nodes::Scalar)
+        errors << "#{relative_path}:#{line_number}: action reference must be a scalar"
+        next
       end
-    elsif !action_sha.match?(ref)
-      errors << "#{relative_path}:#{line_number}: action must use a full 40-character commit SHA: #{ref}"
-    end
 
-    unless version_comment.match?(source_line)
-      errors << "#{relative_path}:#{line_number}: action must retain its version in a trailing '# v…' comment: #{ref}"
+      ref = value.value
+      next if ref.start_with?("./")
+
+      source_line = lines.fetch(value.start_line)
+      if ref.start_with?("docker://")
+        unless image_digest.match?(ref.delete_prefix("docker://"))
+          errors << "#{relative_path}:#{line_number}: Docker action must use a sha256 digest: #{ref}"
+        end
+      elsif !action_sha.match?(ref)
+        errors << "#{relative_path}:#{line_number}: action must use a full 40-character commit SHA: #{ref}"
+      end
+
+      unless version_comment.match?(source_line)
+        errors << "#{relative_path}:#{line_number}: action must retain its version in a trailing '# v…' comment: #{ref}"
+      end
+    when "image"
+      next unless value.is_a?(Psych::Nodes::Scalar)
+
+      image = value.value.strip
+      next if image.empty? || image.start_with?("${{")
+      unless image_digest.match?(image)
+        errors << "#{relative_path}:#{value.start_line + 1}: literal workflow image must use a sha256 digest: #{image}"
+      end
     end
   end
 end
@@ -71,24 +82,11 @@ import re
 import sys
 
 root = Path(sys.argv[1])
-workflow_dir = root / ".github" / "workflows"
-workflows = sorted([*workflow_dir.glob("*.yml"), *workflow_dir.glob("*.yaml")])
 
 image_digest = re.compile(r"@sha256:[0-9a-f]{64}$")
-image_line = re.compile(r"^\s*image:\s*(.*?)\s*$")
 from_line = re.compile(r"^\s*FROM\s+(?:--platform=[^\s]+\s+)?([^\s]+)(?:\s+AS\s+[^\s]+)?\s*(?:#.*)?$", re.IGNORECASE)
 
 errors = []
-
-for workflow in workflows:
-    for line_number, line in enumerate(workflow.read_text().splitlines(), start=1):
-        match = image_line.match(line)
-        if match:
-            image = match.group(1).split("#", 1)[0].strip().strip("'\"")
-            if not image or image.startswith("${{"):
-                continue
-            if not image_digest.search(image):
-                errors.append(f"{workflow.relative_to(root)}:{line_number}: literal workflow image must use a sha256 digest: {image}")
 
 for dockerfile in sorted(root.rglob("Dockerfile*")):
     if not dockerfile.is_file():
