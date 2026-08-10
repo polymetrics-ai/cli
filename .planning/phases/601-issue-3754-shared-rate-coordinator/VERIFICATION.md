@@ -1,39 +1,72 @@
 # Phase 601 verification checklist — #3754
 
-**Status:** planned; no production verification is claimed yet.
+**Status:** `verify-work` passed inline; code review and terminal PR gates
+remain pending.
 
 ## Required behavior
 
-- [ ] Existing `RateLimitRegistry`/`RateLimiter` behavior remains a
+- [x] Existing `RateLimitRegistry`/`RateLimiter` behavior remains a
       dependency-free `process_local` backend.
-- [ ] Matching policies are reserved atomically with one in-flight lease; a
+- [x] Matching policies are reserved atomically with one in-flight lease; a
       non-grant consumes neither policy capacity nor lease occupancy.
-- [ ] Policy identity contains only a deterministic typed-contract fingerprint
+- [x] Policy identity contains only a deterministic typed-contract fingerprint
       and #3863 opaque rate scope; no raw credential, revision, subject, URL,
       request body/header/variables, endpoint, or epoch reaches evidence.
-- [ ] UDS owner directory/socket modes are 0700/0600; protocol is versioned,
+- [x] UDS owner directory/socket modes are 0700/0600; protocol is versioned,
       closed, length-bounded, context/deadline-aware, and has no generic RPC.
-- [ ] `Finish` is opaque-lease-idempotent, releases concurrency, retains
+- [x] `Finish` is opaque-lease-idempotent, releases concurrency, retains
       indeterminate consumption, and applies only stricter observations.
-- [ ] `require_shared` has no local fallback; missing/dead/old/incompatible
+- [x] `require_shared` has no local fallback; missing/dead/old/incompatible
       owners refuse before a transport request.
-- [ ] Deadline-too-short refusal and owner crash have zero unapproved sends.
-- [ ] Eight actual helpers produce shared 3 grants/5 blocks and local 8
+- [x] Deadline-too-short refusal and owner crash have zero unapproved sends.
+- [x] Eight actual helpers produce shared 3 grants/5 blocks and local 8
       grants; normal close proves zero socket/run-directory residue.
 
 ## Local commands to record after GREEN
 
-- [ ] Focused mandatory suite and focused requester/engine coverage.
-- [ ] `go test -race -count=1 -timeout 20m ./internal/coordination`.
-- [ ] `gofmt` check, targeted `go vet`, and `go build ./cmd/pm`.
-- [ ] Individual non-monolithic gates required by AGENTS.md: tidy-check,
+- [x] Focused mandatory suite and focused requester/engine coverage.
+- [x] `go test -race -count=1 -timeout 20m ./internal/coordination`.
+- [x] `gofmt` check, targeted `go vet`, and `go build ./cmd/pm`.
+- [x] Individual non-monolithic gates required by AGENTS.md: tidy-check,
       lint, docs-check, smoke-no-build, agent-contract-check,
       connectorgen-validate, connectorgen-surface-sync, connector-boundary,
       and release-workflow-check.
-- [ ] `scripts/verify-gsd-workflow` against the parent base after production
+- [x] `scripts/verify-gsd-workflow` against the parent base after production
       evidence lands.
-- [ ] Generated inline `verify-work`, `code-review`, #3995 equivalent bounded
+- [x] Generated inline `verify-work` with coverage-aware UAT evidence.
+- [ ] Generated inline `code-review`, #3995 equivalent bounded
       supervisor evidence, and terminal child no-mistakes gate.
+
+## Executed verification
+
+All commands below exited 0 on 2026-08-11:
+
+```text
+go test -count=1 -timeout 20m ./internal/coordination ./internal/connectors/engine -run '^(TestRateBudgetReserveBatchAllOrNothing|TestUnixRateBudgetCoordinatorMultiProcessTinyBudget|TestRequireSharedRefusesWithoutCoordinatorBeforeSend|TestSharedRateBudgetScopesRemainIndependent|TestSharedRateBudgetDeadlineTooShortDoesNotSend|TestSharedRateBudgetOwnerCrashFailsClosed)$'
+go test -count=1 -timeout 20m ./internal/coordination
+go test -count=1 -timeout 20m ./internal/connectors/connsdk
+go test -count=1 -timeout 20m ./internal/connectors/engine
+go test -race -count=1 -timeout 20m ./internal/coordination
+go vet ./internal/coordination ./internal/connectors/connsdk ./internal/connectors/engine ./internal/connectors
+go build ./cmd/pm
+make tidy-check
+make lint
+make docs-check
+make smoke-no-build
+make agent-contract-check
+make connectorgen-validate
+make connectorgen-surface-sync
+make connector-boundary
+make connector-runtime-preflight
+make connector-canon-check
+make release-workflow-check
+scripts/verify-gsd-workflow origin/docs/4015-connector-release-certification
+```
+
+`601-UAT.md` records the coverage-aware inline `verify-work` outcome. The
+multi-process test itself asserts the 3/5 shared and 8/0 local outcomes, the
+0700/0600 permission modes, and absence of the owned socket/run directory
+after close; no endpoint or epoch is recorded in this evidence.
 
 ## Explicit non-applicability
 
