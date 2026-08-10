@@ -47,3 +47,9 @@ The image manifest-list digests were resolved on the same date with `docker buil
 - [x] Preserve the existing action/image tags in comments or tag-before-digest form; no action/image version upgrade is permitted in this slice. A final `git ls-remote` read confirmed every action SHA still resolves from its original ref, and `docker buildx imagetools inspect` confirmed both manifest-list digests.
 - [x] Inspect the final diff for only expected workflow, image, gate, and evidence changes.
 - [x] Run the explicit-file manual code review and record its result in `REVIEW.md`.
+
+## Post-rebase audit (origin/main at `4df0b0416`)
+
+- [x] Red: after #3970 merged, the focused gate failed on new `.github/workflows/github-source-drift.yml` references `actions/checkout@v7` at line 17 and `actions/setup-node@v6` at line 22.
+- [x] Green: `git ls-remote` confirmed those tags still resolve to `3d3c42e5aac5ba805825da76410c181273ba90b1` and `249970729cb0ef3589644e2896645e5dc5ba9c38`; the workflow now pins exactly those commits and retains `# v7`/`# v6` comments.
+- [x] Scope: comparison of pre-#3970 `f96a47e8` with current `origin/main` found this one new workflow and no new Dockerfile, Compose, or other build-image manifest. GitHub parity website documentation/generator files changed, but no build dependency ref was introduced. The existing deployment manifest's local runtime image was not introduced by #3970 and is outside Scorecard's build-dependency boundary.
