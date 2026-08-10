@@ -18,9 +18,12 @@ completed: 2026-08-10
 - Made the matrix reject generic N/A reasons and native
   `ErrUnsupportedOperation` stubs. PostgreSQL and MySQL Write appear as
   applicable `declared=false`, `implemented=false` rows.
-- Added the focused Make gate and architecture documentation. Public `pm`
-  help/manual/website parity is not applicable because this is a developer-only
-  `connectorgen` command.
+- Added the focused Make gate, proof-bearing evidence writer, local salt
+  boundary, and architecture documentation. The new generated status is
+  surfaced by connector inspection as CERTIFIED or COMMUNITY BUILD,
+  UNCERTIFIED; it never blocks a reachable connector.
+- Updated connector help, generated CLI documentation, website documentation,
+  and golden transcripts for that visible quality signal.
 
 ## TDD evidence
 
@@ -67,7 +70,8 @@ files). It is not a source of certification evidence.
 
 ## Follow-on
 
-Plan 600-02 adds the separately committed flow matrix. Per captain
-clarification, every candidate is a source → local Parquet warehouse →
-destination round trip, may use the same connector on both ends, and carries
-explicit delivery guarantees separate from whether the round trip worked.
+Plan 600-02 extends this same generated command with the separately reported
+flow, workflow, and sync-mode scoreboards. Per captain clarification, every
+candidate is a source → local Parquet warehouse → destination round trip, may
+use the same connector on both ends, and carries explicit delivery guarantees
+separate from whether the round trip worked.

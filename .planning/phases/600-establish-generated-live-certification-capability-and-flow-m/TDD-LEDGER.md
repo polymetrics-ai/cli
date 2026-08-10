@@ -16,23 +16,24 @@ the canonical delivery contract.
 
 | Slice | Red evidence | Green evidence | Refactor evidence | Status |
 |---|---|---|---|---|
-| Embedded proof required before a live claim | `go test -timeout 20m ./cmd/connectorgen -run '^TestCertificationRejectsProoflessAcceptedLiveEvidence$' -count=1` failed: `validateAcceptedEvidence() error = nil, want proof-bearing live evidence rejection`. | Pending | Pending | red recorded |
-| Prepared-value redaction before persistence | Pending: add sanitizer/unsafe-proof tests before implementation. | Pending | Pending | planned |
-| Artifact-first proof validation | Pending: add checker-order test before implementation. | Pending | Pending | planned |
+| Embedded proof required before a live claim | `go test -timeout 20m ./cmd/connectorgen -run '^TestCertificationRejectsProoflessAcceptedLiveEvidence$' -count=1` failed: `validateAcceptedEvidence() error = nil, want proof-bearing live evidence rejection`. | `go test -timeout 20m ./cmd/connectorgen -run '^TestCertification' -count=1` passed; proofless, malformed, narrow-scope, and unsafe evidence are rejected. | The accepted record embeds only a fingerprinted proof; a pass claim or external pointer cannot promote a cell. | green |
+| Prepared-value fingerprinting before persistence | The original proof contract had no local-salt writer or prepared-value sanitization boundary. | Same focused GREEN command passed `TestCertificationSanitizesPreparedValuesBeforeProofPersistence` and `TestCertificationEvidenceWriterUsesRepositoryLocalSaltBeforePersistence`. | HMAC-SHA-256 uses a local 0600 repository salt; raw prepared values are never serialized and unknown transcript values are fingerprinted. | green |
+| Artifact-first proof validation | The first strict proof test above exposed that invalid evidence could otherwise be read only after matrix generation. | Same focused GREEN command passed `TestCertificationArtifactProofValidationPrecedesCodeDrift`. | Check mode validates accepted evidence before comparing regenerated code-derived output, so a proof cannot become trusted merely because a matrix file exists. | green |
 
 ## Pair-flow matrix — Plan 02
 
 | Slice | Red evidence | Green evidence | Refactor evidence | Status |
 |---|---|---|---|---|
-| Endpoint roles and pair identity | Pending: roles/reasons and source+destination key tests | Pending | Pending | planned |
-| Durable destination and readback proof | Pending: API destination and missing-readback tests | Pending | Pending | planned |
-| Compact pair artifact and final certification | Pending: pair-set resolver and aggregation test | Pending | Pending | planned |
+| Endpoint roles, workflows, and pair identity | The original capability-only RED compiler failure in the transcript below established the missing matrix contracts. The captain added flow/workflow scope during the same checkpoint; no separate flow-only RED transcript was captured, recorded here as an inline-GSD limitation rather than invented evidence. | `go test -timeout 20m ./cmd/connectorgen -run '^TestCertification' -count=1` passed `TestCertificationWorkflowWithoutEvidencePreventsCompletion` and `TestCertificationFlowPairAllowsGitHubToItselfThroughWarehouse`. | Workflow kinds come from narrow source annotations, and pair keys include source, warehouse mediator, destination, and flow kind. | green |
+| Stable sync-mode scoreboard | Same capability-only RED baseline; no separate scope-expansion RED transcript was captured. | Same focused GREEN command passed `TestCertificationDiscoversStableWarehouseFacingSyncPrimitives`, `TestCertificationSyncModeDatabaseWriteStubIsNotImplemented`, and `TestCertificationChangeCaptureRequiresDatabaseReadIntoWarehouse`. | Modes derive from `synccontract.AllModes()`; the four primitive identities are stable and every impossible mode/primitive combination has a named reason. | green |
+| Durable destination, readback proof, and final certification | Same capability-only RED baseline; no separate scope-expansion RED transcript was captured. | Same focused GREEN command passed `TestCertificationFlowEvidenceRequiresRoundTripProof`; full matrix generation produces zero final certifications. | A flow requires one real-pm round trip with independent warehouse and destination readbacks; delivery guarantees remain separate from working state. | green |
 
 ## Commands
 
-Focused tests will use `go test -timeout 20m ./cmd/connectorgen`; generator
-checks will use `go run ./cmd/connectorgen certification-matrix --check`.
-No test may contact a real provider or use real credentials.
+Focused tests use `go test -timeout 20m ./cmd/connectorgen -run
+'^TestCertification' -count=1`; generator checks use `go run
+./cmd/connectorgen certification-matrix --check`. No test may contact a real
+provider or use real credentials.
 
 ## Red command transcript — 2026-08-10
 

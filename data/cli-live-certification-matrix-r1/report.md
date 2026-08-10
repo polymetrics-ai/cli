@@ -8,6 +8,11 @@ hide an uncertified connector: `pm connectors inspect <name>` shows either
 is embedded in the CLI from a generated projection and is what a website should
 render. Connector availability is unchanged.
 
+A normal user sees a CERTIFICATION section in the connector inspect command;
+automation receives the same certification object from JSON output. The website
+renders that generated label and warning directly in its connector reference:
+there is no third status vocabulary to reinterpret.
+
 The first shippable slice is deliberately small: a generator, checker,
 publishable-proof boundary, status renderer, and an all-red honest baseline. It
 enables the next GitHub and PostgreSQL live runs without pretending either has

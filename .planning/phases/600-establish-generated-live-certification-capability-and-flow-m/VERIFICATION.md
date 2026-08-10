@@ -1,7 +1,7 @@
 # Phase 600 verification checklist
 
 **Issue:** #3984  
-**Status:** planned
+**Status:** implementation complete; local gate pass in progress
 
 ## Capability matrix
 
@@ -18,23 +18,37 @@
 
 ## Pair-flow matrix
 
-- [ ] Each connector exposes all four API/database endpoint roles with reasons
+- [x] Each connector exposes all four API/database endpoint roles with reasons
       for roles that do not apply.
-- [ ] Every flow key includes source, destination, and flow kind.
-- [ ] API destinations without durable acknowledgement are not implemented.
-- [ ] A passed flow evidence record requires an independent destination
+- [x] Every flow key includes source, warehouse mediator, destination, and flow
+      kind, including GitHub-to-GitHub.
+- [x] API destinations without durable acknowledgement are not implemented.
+- [x] A passed flow evidence record requires an independent warehouse and destination
       readback reference.
-- [ ] Final connector certification requires all applicable function and flow
-      cells.
-- [ ] Capability and flow baselines are reported separately from generated
+- [x] Final connector certification requires all applicable function, workflow,
+      sync-mode, and flow cells.
+- [x] Capability and flow baselines are reported separately from generated
       summaries.
+
+## Workflow and sync-mode scoreboard
+
+- [x] ETL, reverse ETL, flow authoring, and schedule each have an explicit
+      generated workflow cell.
+- [x] Every mode from synccontract.AllModes() is crossed with the stable four
+      warehouse-facing primitive identifiers.
+- [x] Change capture is applicable only to database read into the warehouse.
+- [x] PostgreSQL and MySQL database write cells are applicable but
+      implemented=false; no database-write executor is inferred.
+- [x] Uncertified connector inspection visibly reports COMMUNITY BUILD,
+      UNCERTIFIED without changing reachability.
 
 ## Local gates
 
-- [ ] `go test -timeout 20m ./cmd/connectorgen`
-- [ ] `go test -timeout 20m ./internal/connectors/...`
-- [ ] `go vet ./...`
-- [ ] `go build ./cmd/pm`
+- [x] Focused certification tests: `go test -timeout 20m ./cmd/connectorgen
+      -run '^TestCertification' -count=1`
+- [x] Generated transcript test: `go test -timeout 20m ./internal/cli -run
+      '^TestGoldenTranscripts$' -count=1`
+- [ ] Changed-package tests and vet/build gates
 - [ ] `go run ./cmd/connectorgen certification-matrix --check`
 - [ ] Individual `make verify` sub-gates required by `AGENTS.md`
 - [ ] Inline `verify-work` and `code-review` records completed

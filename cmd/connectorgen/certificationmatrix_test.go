@@ -131,11 +131,13 @@ func TestCertificationRejectsNotApplicableWithoutNamedReason(t *testing.T) {
 
 func TestCertificationRejectsMalformedAcceptedLiveEvidence(t *testing.T) {
 	err := validateAcceptedEvidence(acceptedEvidence{
-		SchemaVersion: 1,
-		Scope:         evidenceScopeCapability,
-		Status:        evidenceStatusPassed,
-		Connector:     "github",
-		FunctionKind:  "capability:read",
+		SchemaVersion:   1,
+		Scope:           evidenceScopeCapability,
+		Status:          evidenceStatusPassed,
+		CredentialScope: credentialScopeFullParity,
+		CredentialNote:  fullParityCredentialNote,
+		Connector:       "github",
+		FunctionKind:    "capability:read",
 	})
 	if err == nil {
 		t.Fatal("validateAcceptedEvidence() error = nil, want missing real-provider evidence rejection")
