@@ -124,6 +124,61 @@ func TestDatabaseDefinitionStrictLoadAndDefensiveProjection(t *testing.T) {
 	}
 }
 
+func TestDatabaseDefinitionRejectsAmbiguousMembers(t *testing.T) {
+	tests := []struct {
+		name     string
+		document string
+		path     string
+	}{
+		{
+			name:     "repeated strict member",
+			document: strings.Replace(validDefinitionJSON, `"bits": 32`, `"bits": 32, "bits": 64`, 1),
+			path:     `$.type_mappings[0].logical.bits`,
+		},
+		{
+			name:     "case-aliased member alongside canonical member",
+			document: strings.Replace(validDefinitionJSON, `"bits": 32`, `"Bits": 32, "bits": 64`, 1),
+			path:     `$.type_mappings[0].logical.bits`,
+		},
+		{
+			name:     "case-aliased root strict member",
+			document: strings.Replace(validDefinitionJSON, `"schema_version": 1`, `"Schema_Version": 1`, 1),
+			path:     `$.schema_version`,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := database.Load(context.Background(), fstest.MapFS{
+				"database.json": &fstest.MapFile{Data: []byte(tt.document)},
+			})
+			if err == nil {
+				t.Fatal("Load() error = nil, want ambiguous member rejection")
+			}
+			if !errors.Is(err, database.ErrInvalidDefinition) {
+				t.Fatalf("Load() error = %v, want ErrInvalidDefinition", err)
+			}
+			if !strings.Contains(err.Error(), tt.path) {
+				t.Fatalf("Load() error = %v, want field path %q", err, tt.path)
+			}
+		})
+	}
+
+	_, err := database.Load(context.Background(), fstest.MapFS{
+		"database.json": &fstest.MapFile{Data: []byte(strings.Replace(validDefinitionJSON, `"max_bytes": 63`, `"max_bytes": "not-an-integer"`, 1))},
+	})
+	if err == nil {
+		t.Fatal("Load() error = nil, want typed configuration rejection")
+	}
+	var typeError *json.UnmarshalTypeError
+	if !errors.As(err, &typeError) {
+		t.Fatalf("Load() error = %v, want retained json.UnmarshalTypeError", err)
+	}
+	if !strings.Contains(err.Error(), `$.identifiers.max_bytes`) {
+		t.Fatalf("Load() error = %v, want exact typed field path", err)
+	}
+}
+
 func TestResourcePolicyBoundsEveryDatabaseResource(t *testing.T) {
 	policy := loadTestDefinition(t, validDefinitionJSON).Resources()
 
