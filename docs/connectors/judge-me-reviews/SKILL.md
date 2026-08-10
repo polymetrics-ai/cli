@@ -40,12 +40,12 @@ Reads and writes Judge.me reviews, widgets, reviewers, webhooks, shop metadata, 
 - reviewer_external_id
 - reviewer_id
 - setting_keys
-- shop_domain
+- shop_domain (required)
 - webhook_id
 - widget_page
 - widget_per_page
 - widget_review_type
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

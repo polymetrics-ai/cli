@@ -35,7 +35,7 @@ Reads NASA Open API data: Astronomy Picture of the Day, Near-Earth Objects (NeoW
 - sol
 - start_date
 - thumbs
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

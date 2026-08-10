@@ -27,8 +27,8 @@ Reads Hellobaton projects, milestones, tasks, phases, companies, and users throu
 
 ## Configuration
 
-- base_url
-- api_key (secret)
+- base_url (required)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -35,8 +35,8 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  email (secret)
-  password (secret)
+  email (secret) (required)
+  password (secret) (required)
 
 ETL STREAMS
   users:

@@ -45,9 +45,9 @@ CONFIGURATION
   promotion_id
   provider
   site_script_id
-  subdomain
+  subdomain (required)
   user_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   courses:

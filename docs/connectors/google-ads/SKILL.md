@@ -34,8 +34,8 @@ Declarative Google Ads connector for v22 customer, campaign, ad group, direct-re
 - max_pages
 - mode
 - page_size
-- access_token (secret)
-- developer_token (secret)
+- access_token (secret) (required)
+- developer_token (secret) (required)
 
 ## ETL Streams
 

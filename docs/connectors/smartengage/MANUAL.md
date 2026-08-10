@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   avatar_id
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   avatars:

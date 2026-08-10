@@ -34,7 +34,7 @@ Reads Mailosaur virtual servers, message summaries, and account usage transactio
 - received_after
 - server
 - username
-- password (secret)
+- password (secret) (required)
 
 ## ETL Streams
 

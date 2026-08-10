@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   content_id
   query
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   search:

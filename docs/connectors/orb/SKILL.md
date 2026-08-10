@@ -33,7 +33,7 @@ Reads Orb customers, subscriptions, plans, and invoices.
 - mode
 - page_size
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

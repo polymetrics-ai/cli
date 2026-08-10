@@ -28,12 +28,12 @@ Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf 
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - max_pages
 - mode
 - page_size
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

@@ -31,12 +31,12 @@ Reads Devin AI sessions, session child resources, playbooks, knowledge notes, re
 - metrics_time_after
 - metrics_time_before
 - mode
-- org_id
+- org_id (required)
 - page_size
 - repository_filter_name
 - start_date
 - user_email
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

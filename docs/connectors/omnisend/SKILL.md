@@ -32,7 +32,7 @@ Reads Omnisend contacts, campaigns, carts, orders, and products through the Omni
 - max_pages
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -31,8 +31,8 @@ Reads Navan flight, hotel, car, and rail travel bookings through the Navan REST 
 - base_url
 - mode
 - start_date
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

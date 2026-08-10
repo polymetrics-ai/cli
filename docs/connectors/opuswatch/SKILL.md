@@ -31,7 +31,7 @@ Reads OPUSWatch monitors, incidents, and checks.
 - base_url
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

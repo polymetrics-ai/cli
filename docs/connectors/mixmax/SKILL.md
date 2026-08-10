@@ -29,7 +29,7 @@ Reads Mixmax code snippets, messages, rules, sequences, and meeting types throug
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

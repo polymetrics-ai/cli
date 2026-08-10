@@ -30,7 +30,7 @@ Reads Everhour projects, clients, team members, team time records, per-project t
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

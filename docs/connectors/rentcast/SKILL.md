@@ -34,7 +34,7 @@ Reads RentCast properties, sale listings, rental listings, market data, and valu
 - property_type
 - state
 - zip_code
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

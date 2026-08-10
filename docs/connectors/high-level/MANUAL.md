@@ -29,8 +29,8 @@ AUTHENTICATION
 CONFIGURATION
   api_version
   base_url
-  location_id
-  api_key (secret)
+  location_id (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   pipelines:

@@ -36,7 +36,7 @@ Reads Fillout forms and manages webhooks/submission deletion through the Fillout
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

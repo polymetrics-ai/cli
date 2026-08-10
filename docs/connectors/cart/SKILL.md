@@ -28,10 +28,10 @@ Reads Cart.com orders, customers, products, and inventory through a read-only RE
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

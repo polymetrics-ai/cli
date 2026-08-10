@@ -27,7 +27,7 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  endpoint
+  endpoint (required)
   index
   max_pages
   mode

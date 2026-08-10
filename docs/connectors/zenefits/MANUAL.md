@@ -28,7 +28,7 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  token (secret)
+  token (secret) (required)
 
 ETL STREAMS
   people:

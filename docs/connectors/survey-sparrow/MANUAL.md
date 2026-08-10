@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   survey_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   surveys:

@@ -32,7 +32,7 @@ Reads Lago customers, invoices, subscriptions, plans, and billable metrics throu
 - max_pages
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

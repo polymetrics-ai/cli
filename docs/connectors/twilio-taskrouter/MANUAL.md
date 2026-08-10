@@ -28,9 +28,9 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  workspace_sid
-  account_sid (secret)
-  auth_token (secret)
+  workspace_sid (required)
+  account_sid (secret) (required)
+  auth_token (secret) (required)
 
 ETL STREAMS
   workers:

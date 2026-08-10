@@ -31,7 +31,7 @@ Reads Float people, projects, clients, tasks, and departments through the Float 
 - base_url
 - mode
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

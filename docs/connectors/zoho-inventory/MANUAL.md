@@ -38,7 +38,7 @@ CONFIGURATION
   mode
   organization_id
   page_size
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   contacts:

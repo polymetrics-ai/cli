@@ -36,7 +36,7 @@ Reads Postmark server-token API resources including messages, bounces, templates
 - mode
 - template_id_or_alias
 - webhook_id
-- X-Postmark-Server-Token (secret)
+- X-Postmark-Server-Token (secret) (required)
 
 ## ETL Streams
 

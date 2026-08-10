@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   limit
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   signature_requests:

@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   subscribers:

@@ -27,7 +27,7 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  company
+  company (required)
   api_key (secret)
 
 ETL STREAMS

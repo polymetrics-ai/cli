@@ -41,7 +41,7 @@ CONFIGURATION
   page_size
   product_id
   thirdparty_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   thirdparties:

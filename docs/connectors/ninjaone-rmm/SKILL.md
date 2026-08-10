@@ -31,7 +31,7 @@ Reads NinjaOne RMM organizations, devices, locations, activities, and policies t
 - base_url
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

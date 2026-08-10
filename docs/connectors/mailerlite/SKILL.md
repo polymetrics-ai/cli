@@ -30,7 +30,7 @@ Reads MailerLite subscribers, campaigns, groups, segments, and automations throu
 
 - base_url
 - mode
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

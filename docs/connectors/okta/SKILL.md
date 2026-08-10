@@ -37,7 +37,7 @@ Reads and writes documented Okta Admin Management API resources through the Okta
 - assignment_id
 - auth_server_id
 - authenticator_id
-- base_url
+- base_url (required)
 - behavior_id
 - brand_id
 - bundle_id

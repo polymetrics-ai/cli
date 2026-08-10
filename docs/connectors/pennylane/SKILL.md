@@ -33,7 +33,7 @@ Reads Pennylane v2 customers, customer invoices, suppliers, supplier invoices, p
 - mode
 - page_size
 - sort
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

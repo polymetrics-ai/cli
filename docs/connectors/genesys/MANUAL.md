@@ -27,14 +27,14 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   max_pages
   mode
   page_size
   scope
-  token_url
-  client_id (secret)
-  client_secret (secret)
+  token_url (required)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   users:

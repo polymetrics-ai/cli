@@ -29,7 +29,7 @@ Reads Shippo addresses, parcels, shipments, and transactions through the Shippo 
 ## Configuration
 
 - base_url
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

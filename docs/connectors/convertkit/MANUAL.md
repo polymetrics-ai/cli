@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   mode
   access_token (secret)
-  api_key (secret)
+  api_key (secret) (required)
   api_secret (secret)
 
 ETL STREAMS

@@ -30,7 +30,7 @@ Reads TikTok Business advertisers, campaigns, ad groups, and ads through the Tik
 
 - advertiser_id
 - base_url
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

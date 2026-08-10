@@ -31,7 +31,7 @@ Reads Intercom contacts, companies, conversations, admins, and tags through the 
 - api_version
 - base_url
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

@@ -33,7 +33,7 @@ CONFIGURATION
   contact_identifier_value
   contact_uuid
   segmentation_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   contacts:

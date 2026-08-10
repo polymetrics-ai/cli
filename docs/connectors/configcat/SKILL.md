@@ -44,7 +44,7 @@ Reads and writes ConfigCat feature-flag platform data: organizations, products, 
 - tag_id
 - username
 - webhook_id
-- password (secret)
+- password (secret) (required)
 
 ## ETL Streams
 

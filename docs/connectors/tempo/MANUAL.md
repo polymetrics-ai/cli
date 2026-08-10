@@ -31,7 +31,7 @@ CONFIGURATION
   max_pages
   mode
   page_size
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   accounts:

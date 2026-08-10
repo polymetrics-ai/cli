@@ -52,8 +52,8 @@ Reads and writes documented Nutshell CRM REST resources through the Nutshell RES
 - quote_id
 - task_id
 - user_id
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

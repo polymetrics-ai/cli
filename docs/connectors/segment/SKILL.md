@@ -29,7 +29,7 @@ Reads Segment workspace, source, and destination metadata through the Segment Pu
 ## Configuration
 
 - base_url
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

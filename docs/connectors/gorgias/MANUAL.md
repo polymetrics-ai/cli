@@ -27,11 +27,11 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   mode
   page_size
-  username
-  password (secret)
+  username (required)
+  password (secret) (required)
 
 ETL STREAMS
   tickets:

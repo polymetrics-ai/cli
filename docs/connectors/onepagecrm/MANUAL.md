@@ -55,9 +55,9 @@ CONFIGURATION
   status_id
   tag_name
   user_id
-  username
+  username (required)
   webhook_id
-  password (secret)
+  password (secret) (required)
 
 ETL STREAMS
   contacts:

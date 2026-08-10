@@ -29,7 +29,7 @@ Reads SendGrid Marketing Campaigns lists, segments, and contacts, plus suppressi
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

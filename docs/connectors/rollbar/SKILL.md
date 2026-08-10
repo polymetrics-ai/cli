@@ -52,7 +52,7 @@ Reads and writes documented Rollbar API v1 resources through the declarative con
 - user_id
 - uuid
 - version
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

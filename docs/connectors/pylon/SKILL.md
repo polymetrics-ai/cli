@@ -53,7 +53,7 @@ Reads and writes the documented Pylon REST API surface through concrete streams 
 - ticket_form_id
 - training_data_id
 - user_id
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

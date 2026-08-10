@@ -30,7 +30,7 @@ Reads BlueTally IT asset management data (assets, employees, licenses, maintenan
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

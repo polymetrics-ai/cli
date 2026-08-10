@@ -27,13 +27,13 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  appointment_date
-  base_url
-  lab_result_concepts
-  patient_query
-  patient_uuid
-  username
-  password (secret)
+  appointment_date (required)
+  base_url (required)
+  lab_result_concepts (required)
+  patient_query (required)
+  patient_uuid (required)
+  username (required)
+  password (secret) (required)
 
 ETL STREAMS
   patients:

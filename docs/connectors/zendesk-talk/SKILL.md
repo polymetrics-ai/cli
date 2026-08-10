@@ -28,7 +28,7 @@ Reads Zendesk Talk phone numbers, greetings, greeting categories, IVRs, and agen
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - access_token (secret)
 - api_token (secret)
 - email (secret)

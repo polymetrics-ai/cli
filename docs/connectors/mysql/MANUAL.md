@@ -28,15 +28,15 @@ AUTHENTICATION
 
 CONFIGURATION
   cursor_field
-  database
-  host
+  database (required)
+  host (required)
   page_size
   port
   read_limit
   sslmode
   sslrootcert
   sslservername
-  username
+  username (required)
   password (secret)
 
 SECURITY

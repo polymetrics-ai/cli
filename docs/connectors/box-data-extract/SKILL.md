@@ -35,8 +35,8 @@ Reads Box folder files and per-file detail metadata, and writes file rename/desc
 - mode
 - page_size
 - token_url
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

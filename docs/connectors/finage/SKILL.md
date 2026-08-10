@@ -33,7 +33,7 @@ Reads Finage US market data: most active stocks, top gainers and losers, sector 
 - calendar_to
 - mode
 - symbols
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

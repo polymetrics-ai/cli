@@ -30,7 +30,7 @@ Reads OneSignal account-level applications through the OneSignal REST API. Devic
 
 - base_url
 - mode
-- user_auth_key (secret)
+- user_auth_key (secret) (required)
 
 ## ETL Streams
 

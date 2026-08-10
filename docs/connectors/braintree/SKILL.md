@@ -29,11 +29,11 @@ Reads Braintree transactions, customers, subscriptions, reference data, payment 
 ## Configuration
 
 - base_url
-- merchant_id
+- merchant_id (required)
 - mode
 - page_size
-- private_key (secret)
-- public_key (secret)
+- private_key (secret) (required)
+- public_key (secret) (required)
 
 ## ETL Streams
 

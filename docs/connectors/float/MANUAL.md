@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   mode
   page_size
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   people:

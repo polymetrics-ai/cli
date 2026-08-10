@@ -34,8 +34,8 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  username
-  password (secret)
+  username (required)
+  password (secret) (required)
 
 ETL STREAMS
   projects:

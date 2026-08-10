@@ -31,7 +31,7 @@ CONFIGURATION
   newer_than
   older_than
   team_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   campaigns:

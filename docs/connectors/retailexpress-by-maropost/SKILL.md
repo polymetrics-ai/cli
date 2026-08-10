@@ -28,7 +28,7 @@ Reads Retail Express products, customers, orders, stock levels, and stores throu
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - created_after
 - status
 - store_id

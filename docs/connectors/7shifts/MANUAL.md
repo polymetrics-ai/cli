@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   availability_id
   base_url
-  company_id
+  company_id (required)
   date
   date_end
   date_start
@@ -55,7 +55,7 @@ CONFIGURATION
   to
   user_id
   uuid
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   companies:

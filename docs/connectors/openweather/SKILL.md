@@ -30,11 +30,11 @@ Reads current weather, hourly and daily forecasts, and government alerts for a c
 
 - base_url
 - lang
-- lat
-- lon
+- lat (required)
+- lon (required)
 - mode
 - units
-- appid (secret)
+- appid (secret) (required)
 
 ## ETL Streams
 

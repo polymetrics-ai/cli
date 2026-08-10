@@ -27,9 +27,9 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  email
-  api_token (secret)
+  base_url (required)
+  email (required)
+  api_token (secret) (required)
 
 ETL STREAMS
   issues:

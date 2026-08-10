@@ -40,7 +40,7 @@ CONFIGURATION
   template_id
   upload_id
   user_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   documents:

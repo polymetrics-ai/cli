@@ -32,7 +32,7 @@ Reads Planhat companies, end users, and licenses through the Planhat REST API.
 - max_pages
 - mode
 - page_size
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

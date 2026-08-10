@@ -28,7 +28,7 @@ Reads web and Reddit search results from a SearXNG metasearch instance's JSON AP
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - query
 - api_key (secret)
 

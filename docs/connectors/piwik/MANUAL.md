@@ -40,7 +40,7 @@ CONFIGURATION
   mode
   period
   site_id
-  token_auth (secret)
+  token_auth (secret) (required)
 
 ETL STREAMS
   sites:

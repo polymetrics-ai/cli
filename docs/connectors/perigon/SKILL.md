@@ -34,7 +34,7 @@ Reads Perigon news articles, story clusters, journalists, sources, companies, pe
 - page_size
 - query
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

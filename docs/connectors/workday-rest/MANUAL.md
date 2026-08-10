@@ -28,8 +28,8 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  tenant
-  access_token (secret)
+  tenant (required)
+  access_token (secret) (required)
 
 ETL STREAMS
   workers:

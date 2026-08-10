@@ -30,7 +30,7 @@ Reads the documented 7shifts v2 REST API surface and executes declarative single
 
 - availability_id
 - base_url
-- company_id
+- company_id (required)
 - date
 - date_end
 - date_start
@@ -56,7 +56,7 @@ Reads the documented 7shifts v2 REST API surface and executes declarative single
 - to
 - user_id
 - uuid
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

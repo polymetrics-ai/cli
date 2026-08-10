@@ -91,7 +91,7 @@ Reads broad FireHydrant REST API resources and exposes direct JSON/no-body FireH
 - type
 - user_id
 - webhook_id
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

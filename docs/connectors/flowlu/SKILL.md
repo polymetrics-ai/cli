@@ -28,7 +28,7 @@ Reads Flowlu CRM accounts, leads, tasks, projects, invoices, and agile issues th
 
 ## Configuration
 
-- company
+- company (required)
 - api_key (secret)
 
 ## ETL Streams

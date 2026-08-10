@@ -36,7 +36,7 @@ CONFIGURATION
   period
   property
   site_id
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   sites:

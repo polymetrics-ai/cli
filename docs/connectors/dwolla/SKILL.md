@@ -29,8 +29,8 @@ Reads Dwolla customers, events, exchange partners, and business classifications,
 ## Configuration
 
 - base_url
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

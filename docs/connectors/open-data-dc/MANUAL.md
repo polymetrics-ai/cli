@@ -31,7 +31,7 @@ CONFIGURATION
   location
   marid
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   locations:

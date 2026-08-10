@@ -27,9 +27,9 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  api_username
-  base_url
-  client_id
+  api_username (required)
+  base_url (required)
+  client_id (required)
   page_size
   password (secret)
   secret (secret)

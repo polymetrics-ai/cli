@@ -30,7 +30,7 @@ Reads affiliates, programs, coupons, referrals, and payments from the UpPromote 
 
 - base_url
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

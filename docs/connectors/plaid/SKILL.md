@@ -33,8 +33,8 @@ Reads Plaid institutions and category metadata through read-only POST endpoints.
 - max_pages
 - mode
 - page_size
-- client_id (secret)
-- secret (secret)
+- client_id (secret) (required)
+- secret (secret) (required)
 
 ## ETL Streams
 

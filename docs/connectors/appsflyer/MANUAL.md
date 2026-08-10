@@ -27,13 +27,13 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  app_id
+  app_id (required)
   base_url
   end_date
   mode
   start_date
   timezone
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   installs_report:

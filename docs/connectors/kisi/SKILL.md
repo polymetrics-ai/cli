@@ -32,7 +32,7 @@ Reads Kisi physical access-control data: members, locks, groups, users, and logi
 - max_pages
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -47,7 +47,7 @@ CONFIGURATION
   tax_id
   trip_id
   user_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   reports:

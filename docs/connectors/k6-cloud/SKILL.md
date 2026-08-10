@@ -31,7 +31,7 @@ Reads k6 Cloud organizations, projects, and load tests through the k6 Cloud REST
 - base_url
 - mode
 - page_size
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

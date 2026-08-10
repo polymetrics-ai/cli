@@ -29,7 +29,7 @@ Reads Marketo leads, programs, and activities through Marketo REST endpoints. Re
 ## Configuration
 
 - activity_type_ids
-- base_url
+- base_url (required)
 - max_pages
 - mode
 - page_size

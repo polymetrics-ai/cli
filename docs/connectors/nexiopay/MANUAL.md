@@ -29,8 +29,8 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  api_key (secret)
-  username (secret)
+  api_key (secret) (required)
+  username (secret) (required)
 
 ETL STREAMS
   card_tokens:

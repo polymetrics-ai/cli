@@ -30,7 +30,7 @@ Reads SavvyCal events, scheduling links, contacts, time zones, webhooks, and wor
 
 - base_url
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

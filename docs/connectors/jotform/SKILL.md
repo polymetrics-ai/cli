@@ -29,7 +29,7 @@ Reads Jotform forms, submissions, reports, folders, and the account profile thro
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

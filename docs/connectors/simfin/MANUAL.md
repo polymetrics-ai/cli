@@ -41,7 +41,7 @@ CONFIGURATION
   start_date
   statements
   tickers
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   companies:

@@ -36,7 +36,7 @@ CONFIGURATION
   base_url
   end_date
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   recipient_lists:

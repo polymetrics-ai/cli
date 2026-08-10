@@ -28,13 +28,13 @@ Reads Uptick field service management data through the Uptick REST API using OAu
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - page_size
 - start_date
-- username
-- client_id (secret)
-- client_secret (secret)
-- password (secret)
+- username (required)
+- client_id (secret) (required)
+- client_secret (secret) (required)
+- password (secret) (required)
 
 ## ETL Streams
 

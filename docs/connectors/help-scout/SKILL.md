@@ -42,8 +42,8 @@ Reads and writes the documented Help Scout Mailbox API v2 surface: conversations
 - start_date
 - teamid
 - token_url
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

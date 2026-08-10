@@ -29,7 +29,7 @@ Reads and writes Track PMS reservations, guests, units, owners, CRM contacts, an
 ## Configuration
 
 - base_url
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

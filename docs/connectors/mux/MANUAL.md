@@ -29,8 +29,8 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  username
-  password (secret)
+  username (required)
+  password (secret) (required)
 
 ETL STREAMS
   assets:

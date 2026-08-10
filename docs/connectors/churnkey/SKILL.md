@@ -28,9 +28,9 @@ Reads Churnkey cancel-flow sessions and aggregated session counts through the Ch
 
 ## Configuration
 
-- app_id
+- app_id (required)
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

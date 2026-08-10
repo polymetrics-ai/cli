@@ -28,7 +28,7 @@ AUTHENTICATION
 
 CONFIGURATION
   account_subdomain
-  base_url
+  base_url (required)
   candidate_id
   employee_id
   event_id
@@ -38,7 +38,7 @@ CONFIGURATION
   review_template_id
   start_date
   timeoff_from_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   jobs:

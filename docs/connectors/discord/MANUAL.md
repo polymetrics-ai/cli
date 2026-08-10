@@ -34,9 +34,9 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  guild_id
+  guild_id (required)
   mode
-  bot_token (secret)
+  bot_token (secret) (required)
 
 ETL STREAMS
   guilds:

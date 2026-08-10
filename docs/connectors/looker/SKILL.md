@@ -28,7 +28,7 @@ Reads Looker users, groups, folders, looks, and dashboards through the Looker AP
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
 - token_url
 - access_token (secret)

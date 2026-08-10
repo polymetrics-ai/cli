@@ -27,15 +27,15 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   max_pages
   mode
   page_size
-  realm
-  consumer_key (secret)
-  consumer_secret (secret)
-  token_key (secret)
-  token_secret (secret)
+  realm (required)
+  consumer_key (secret) (required)
+  consumer_secret (secret) (required)
+  token_key (secret) (required)
+  token_secret (secret) (required)
 
 ETL STREAMS
   customers:

@@ -28,11 +28,11 @@ Reads Klaus (Zendesk QA) users and rating categories through the Klaus public RE
 
 ## Configuration
 
-- account
+- account (required)
 - base_url
 - mode
 - workspace
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

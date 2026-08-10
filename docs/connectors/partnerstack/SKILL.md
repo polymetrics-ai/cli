@@ -32,7 +32,7 @@ Reads PartnerStack partnerships, customers, transactions, and groups through the
 - limit
 - max_pages
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

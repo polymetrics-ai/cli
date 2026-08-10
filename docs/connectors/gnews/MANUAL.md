@@ -41,7 +41,7 @@ CONFIGURATION
   start_date
   top_headlines_query
   top_headlines_topic
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   search:

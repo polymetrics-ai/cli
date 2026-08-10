@@ -35,7 +35,7 @@ Reads Interzoid data-matching lookups: company-name, individual-name, and street
 - company_match_algorithm
 - fullname
 - org
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

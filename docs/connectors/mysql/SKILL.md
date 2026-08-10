@@ -29,15 +29,15 @@ Native MySQL source connector for wire-protocol checks, dynamic schemas, and bou
 ## Configuration
 
 - cursor_field
-- database
-- host
+- database (required)
+- host (required)
 - page_size
 - port
 - read_limit
 - sslmode
 - sslrootcert
 - sslservername
-- username
+- username (required)
 - password (secret)
 
 ## Security

@@ -32,9 +32,9 @@ CONFIGURATION
   page_size
   profile_id
   token_url
-  client_id (secret)
-  client_secret (secret)
-  refresh_token (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
+  refresh_token (secret) (required)
 
 ETL STREAMS
   profiles:

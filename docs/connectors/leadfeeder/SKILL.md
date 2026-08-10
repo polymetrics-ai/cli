@@ -33,7 +33,7 @@ Reads Leadfeeder accounts and their leads, visits, and custom feeds through the 
 - end_date
 - mode
 - start_date
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

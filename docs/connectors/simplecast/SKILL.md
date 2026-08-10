@@ -29,7 +29,7 @@ Reads Simplecast podcasts and episodes through the Simplecast REST API.
 ## Configuration
 
 - base_url
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

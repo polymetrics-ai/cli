@@ -58,7 +58,7 @@ CONFIGURATION
   watch_region
   with_watch_providers
   year
-  api_key (secret)
+  api_key (secret) (required)
   guest_session_id (secret)
   session_id (secret)
 

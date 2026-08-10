@@ -30,7 +30,7 @@ Reads PagerDuty incidents, users, services, and teams through the REST API.
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

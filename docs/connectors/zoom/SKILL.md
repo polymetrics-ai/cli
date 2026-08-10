@@ -33,7 +33,7 @@ Reads Zoom users, meetings, and webinars through the Zoom REST API.
 - mode
 - page_size
 - user_id
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

@@ -30,7 +30,7 @@ Reads Buzzsprout podcasts and episodes (titles, publish dates, durations, play c
 
 - base_url
 - podcast_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

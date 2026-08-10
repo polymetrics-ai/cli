@@ -34,7 +34,7 @@ CONFIGURATION
   organization
   page_size
   start_date
-  user_token (secret)
+  user_token (secret) (required)
 
 ETL STREAMS
   issues:

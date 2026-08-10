@@ -52,7 +52,7 @@ Reads and writes Mantle Core API resources through the heymantle.com REST API.
 - run_id
 - skill_id
 - usage_metric_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

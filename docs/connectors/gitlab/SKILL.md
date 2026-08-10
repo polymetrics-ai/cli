@@ -32,7 +32,7 @@ Reads GitLab projects, groups, users, and issues through existing GitLab REST AP
 - mode
 - page_size
 - start_date
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

@@ -27,11 +27,11 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  domain_name
+  domain_name (required)
   max_pages
   mode
   view_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   contacts:

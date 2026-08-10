@@ -31,8 +31,8 @@ CONFIGURATION
   mode
   page_size
   start_date
-  account_token (secret)
-  api_token (secret)
+  account_token (secret) (required)
+  api_token (secret) (required)
 
 ETL STREAMS
   candidates:

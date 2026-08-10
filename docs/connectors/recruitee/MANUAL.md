@@ -27,8 +27,8 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  company_id
-  api_key (secret)
+  company_id (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   offers:

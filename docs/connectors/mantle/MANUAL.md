@@ -51,7 +51,7 @@ CONFIGURATION
   run_id
   skill_id
   usage_metric_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   customers:

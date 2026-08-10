@@ -35,7 +35,7 @@ Reads Pingdom checks, probes, actions, maintenance windows/occurrences, alerting
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

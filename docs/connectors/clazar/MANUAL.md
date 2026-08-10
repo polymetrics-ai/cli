@@ -30,8 +30,8 @@ CONFIGURATION
   base_url
   mode
   start_date
-  client_id (secret)
-  client_secret (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   buyers:

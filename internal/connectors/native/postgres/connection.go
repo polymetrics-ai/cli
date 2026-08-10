@@ -2,9 +2,13 @@ package postgres
 
 import (
 	"context"
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"net"
+	"os"
+	"os/user"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -39,8 +43,11 @@ var validSSLModes = map[string]bool{
 }
 
 var (
-	errPostgresPasswordAuthenticationRequired = errors.New("postgres password authentication requires secret password")
-	errPostgresAuthenticationModeUnsupported  = errors.New("postgres authentication mode is unsupported")
+	errPostgresPasswordAuthenticationRequired      = errors.New("postgres password authentication requires secret password")
+	errPostgresAuthenticationModeUnsupported       = errors.New("postgres authentication mode is unsupported")
+	errPostgresAmbientClientCertificateUnsupported = fmt.Errorf(
+		"%w: ambient client-certificate", errPostgresAuthenticationModeUnsupported,
+	)
 )
 
 // libpqSSLMode normalises one accepted spelling to what pgx expects. A libpq
@@ -94,11 +101,50 @@ func (c connConfig) dsn() string {
 	return strings.Join(parts, " ")
 }
 
+func (c connConfig) connectionString() (string, error) {
+	if c.tls.Encrypted() && postgresAmbientClientCertificateConfigured() {
+		return "", errPostgresAmbientClientCertificateUnsupported
+	}
+	return c.dsn(), nil
+}
+
+func postgresAmbientClientCertificateConfigured() bool {
+	if os.Getenv("PGSSLCERT") != "" || os.Getenv("PGSSLKEY") != "" {
+		return true
+	}
+	currentUser, err := user.Current()
+	return err == nil && postgresDefaultClientCertificateConfigured(currentUser.HomeDir)
+}
+
+func postgresDefaultClientCertificateConfigured(home string) bool {
+	if strings.TrimSpace(home) == "" {
+		return false
+	}
+	clientCertificate := filepath.Join(home, ".postgresql", "postgresql.crt")
+	clientKey := filepath.Join(home, ".postgresql", "postgresql.key")
+	if _, err := os.Stat(clientCertificate); err != nil {
+		return false
+	}
+	if _, err := os.Stat(clientKey); err != nil {
+		return false
+	}
+	return true
+}
+
 // applyTLSServerName applies the shared verify-identity override after pgx
 // has parsed the libpq-compatible connection fields. It is deliberately used
 // by normal SQL, replication, and slot-inspection connections so CDC cannot
 // silently use a different transport policy from the rest of the connector.
 func (c connConfig) applyTLSServerName(config *pgconn.Config) error {
+	clientCertificate := clearClientCertificates(config.TLSConfig)
+	for _, fallback := range config.Fallbacks {
+		if fallback != nil && clearClientCertificates(fallback.TLSConfig) {
+			clientCertificate = true
+		}
+	}
+	if clientCertificate {
+		return errPostgresAmbientClientCertificateUnsupported
+	}
 	if c.tls.Mode != sqltls.ModeVerifyIdentity || c.tls.ServerName == "" {
 		return nil
 	}
@@ -114,10 +160,24 @@ func (c connConfig) applyTLSServerName(config *pgconn.Config) error {
 	return nil
 }
 
+func clearClientCertificates(config *tls.Config) bool {
+	if config == nil {
+		return false
+	}
+	configured := len(config.Certificates) > 0 || config.GetClientCertificate != nil
+	config.Certificates = nil
+	config.GetClientCertificate = nil
+	return configured
+}
+
 // replicationConfig returns a parsed protocol connection configuration without
 // ever returning a parser error that could embed a connection string.
 func (c connConfig) replicationConfig() (*pgconn.Config, error) {
-	config, err := pgconn.ParseConfig(c.dsn())
+	connectionString, err := c.connectionString()
+	if err != nil {
+		return nil, err
+	}
+	config, err := pgconn.ParseConfig(connectionString)
 	if err != nil {
 		return nil, errors.New("postgres replication configuration is invalid")
 	}
@@ -130,7 +190,11 @@ func (c connConfig) replicationConfig() (*pgconn.Config, error) {
 // dataConfig returns the ordinary pgx configuration used to inspect a slot.
 // It shares the same TLS and secret-safe parse path as replicationConfig.
 func (c connConfig) dataConfig() (*pgx.ConnConfig, error) {
-	config, err := pgx.ParseConfig(c.dsn())
+	connectionString, err := c.connectionString()
+	if err != nil {
+		return nil, err
+	}
+	config, err := pgx.ParseConfig(connectionString)
 	if err != nil {
 		return nil, errors.New("postgres connection configuration is invalid")
 	}
@@ -147,7 +211,11 @@ func (c connConfig) dataConfig() (*pgx.ConnConfig, error) {
 // it. Strict modes have no plaintext fallback, and preferred/allow retain the
 // driver's documented fallback behavior.
 func (c connConfig) poolConfig() (*pgxpool.Config, error) {
-	poolConfig, err := pgxpool.ParseConfig(c.dsn())
+	connectionString, err := c.connectionString()
+	if err != nil {
+		return nil, err
+	}
+	poolConfig, err := pgxpool.ParseConfig(connectionString)
 	if err != nil {
 		// pgx can include caller-provided config in parse errors. Never return
 		// it to a command surface because it may include authentication data.

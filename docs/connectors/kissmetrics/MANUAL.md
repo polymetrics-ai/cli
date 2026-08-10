@@ -32,8 +32,8 @@ CONFIGURATION
   mode
   page_size
   product_id
-  username
-  password (secret)
+  username (required)
+  password (secret) (required)
 
 ETL STREAMS
   products:

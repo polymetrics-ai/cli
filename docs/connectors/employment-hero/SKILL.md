@@ -43,7 +43,7 @@ Reads Employment Hero organisations, employees, HR reference data, forms, goals,
 - rostered_shift_id
 - template_id
 - unavailability_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

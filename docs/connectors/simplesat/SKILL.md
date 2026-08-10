@@ -31,7 +31,7 @@ Reads and writes Simplesat surveys, answers, questions, customers, and responses
 - base_url
 - created_after
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

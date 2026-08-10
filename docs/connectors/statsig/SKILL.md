@@ -29,7 +29,7 @@ Reads and manages Statsig feature gates, dynamic configs, experiments, segments,
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

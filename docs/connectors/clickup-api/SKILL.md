@@ -36,7 +36,7 @@ Reads ClickUp workspaces (teams), spaces, folders, lists, tasks, goals, space ta
 - mode
 - space_id
 - team_id
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

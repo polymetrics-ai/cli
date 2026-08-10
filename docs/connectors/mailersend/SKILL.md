@@ -34,7 +34,7 @@ Reads MailerSend email activity, analytics, domains, messages, recipients, templ
 - domain_id
 - mode
 - start_date
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

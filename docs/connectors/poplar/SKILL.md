@@ -29,7 +29,7 @@ Reads Poplar campaigns and orders through read-only REST list endpoints.
 ## Configuration
 
 - base_url
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

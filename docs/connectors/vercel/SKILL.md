@@ -37,7 +37,7 @@ Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and 
 - base_url
 - start_date
 - team_id
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

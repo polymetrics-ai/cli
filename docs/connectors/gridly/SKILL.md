@@ -33,7 +33,7 @@ Reads Gridly views, per-view records (with flattened column cells), and per-view
 - mode
 - page_size
 - view_ids
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

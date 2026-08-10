@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   created_after
   page_size
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   answers:

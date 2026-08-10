@@ -15,7 +15,8 @@ This connector is read-only; no write actions are declared.
 Configure a TCP `host`, `database`, and `username`. `port` defaults to 5432. Live connections use
 password authentication: `password` is required, secret, and never logged. `mode=fixture` does
 not open a source connection and does not require a password. Peer/socket and client-certificate
-authentication are unsupported and rejected during connection validation. Do not put credentials
+authentication, including ambient `PGSSLCERT`/`PGSSLKEY` values and the default PostgreSQL client
+certificate pair, are unsupported and rejected during connection validation. Do not put credentials
 in a host or URL-shaped value.
 
 `sslmode` uses the same transport-security shape as the MySQL connector and is honestly enforced

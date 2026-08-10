@@ -34,7 +34,7 @@ CONFIGURATION
   metrics
   mode
   start_date
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   reports:

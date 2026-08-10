@@ -51,8 +51,8 @@ CONFIGURATION
   quote_id
   task_id
   user_id
-  username
-  password (secret)
+  username (required)
+  password (secret) (required)
 
 ETL STREAMS
   accounts:

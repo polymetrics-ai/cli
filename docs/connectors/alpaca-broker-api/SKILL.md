@@ -30,8 +30,8 @@ Reads Alpaca Broker API accounts, assets, market calendar, clock, account activi
 
 - base_url
 - limit
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

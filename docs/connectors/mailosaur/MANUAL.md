@@ -33,7 +33,7 @@ CONFIGURATION
   received_after
   server
   username
-  password (secret)
+  password (secret) (required)
 
 ETL STREAMS
   servers:

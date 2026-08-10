@@ -36,7 +36,7 @@ Reads Mailtrap accounts, inboxes, projects, and sending domains through the Mail
 
 - account_id
 - base_url
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

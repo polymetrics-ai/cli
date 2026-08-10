@@ -30,7 +30,7 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -37,7 +37,7 @@ Reads Google task lists and tasks through the Google Tasks REST API.
 - base_url
 - mode
 - records_limit
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -31,7 +31,7 @@ Reads and writes Yousign signature requests, contacts, documents, webhooks, temp
 - base_url
 - limit
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -29,8 +29,8 @@ Reads Teamwork projects, people, companies, tags, time entries, tasklists, miles
 ## Configuration
 
 - base_url
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

@@ -36,7 +36,7 @@ Reads Katana MRP (Cloud Inventory) products, materials, variants, sales orders, 
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

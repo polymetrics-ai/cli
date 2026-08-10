@@ -28,9 +28,9 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  tenant
-  password (secret)
-  username (secret)
+  tenant (required)
+  password (secret) (required)
+  username (secret) (required)
 
 ETL STREAMS
   workers:

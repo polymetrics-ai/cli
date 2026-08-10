@@ -34,13 +34,13 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  form_id
+  form_id (required)
   mode
   page_size
   start_date
   token_url
-  client_id (secret)
-  client_refresh_token (secret)
+  client_id (secret) (required)
+  client_refresh_token (secret) (required)
   client_secret (secret)
 
 ETL STREAMS

@@ -33,7 +33,7 @@ CONFIGURATION
   mode
   page_size
   start_date
-  client_secret (secret)
+  client_secret (secret) (required)
 
 ETL STREAMS
   customers:

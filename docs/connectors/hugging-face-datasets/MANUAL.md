@@ -34,7 +34,7 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  dataset_name
+  dataset_name (required)
   access_token (secret)
   api_token (secret)
   token (secret)

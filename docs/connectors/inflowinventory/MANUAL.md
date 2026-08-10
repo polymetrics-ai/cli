@@ -28,10 +28,10 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  companyid
+  companyid (required)
   mode
   page_size
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   products:

@@ -58,7 +58,7 @@ CONFIGURATION
   user_id
   webhook_id
   workspace_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   sheets:

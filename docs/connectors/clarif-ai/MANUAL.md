@@ -36,8 +36,8 @@ CONFIGURATION
   app_id
   base_url
   mode
-  user_id
-  api_key (secret)
+  user_id (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   applications:

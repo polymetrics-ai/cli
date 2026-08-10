@@ -108,7 +108,7 @@ func (c Connector) Manifest() connectors.Manifest {
 	}
 	manifest.AuthModes = []connectors.AuthModeSpec{{
 		Name:         "password",
-		Description:  "Live connections require password authentication; peer/socket and client-certificate modes are unsupported.",
+		Description:  "Live connections require password authentication; peer/socket and client-certificate modes, including ambient certificates, are unsupported.",
 		ConfigFields: []string{"host", "database", "username"},
 		SecretFields: []string{"password"},
 		Read:         true,

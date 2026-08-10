@@ -61,7 +61,7 @@ CONFIGURATION
   team_id
   to
   uri
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   boards:

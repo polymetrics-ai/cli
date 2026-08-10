@@ -51,7 +51,7 @@ CONFIGURATION
   user_id
   uuid
   version
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   activated_counts_report:

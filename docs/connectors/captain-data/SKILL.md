@@ -31,9 +31,9 @@ Reads Captain Data workspace, workflows, jobs, and job results, and writes a lau
 - base_url
 - job_uid
 - mode
-- project_uid
+- project_uid (required)
 - workflow_uid
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

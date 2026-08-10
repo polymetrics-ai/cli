@@ -37,7 +37,7 @@ CONFIGURATION
   mode
   pay_period
   payslip_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   employees:

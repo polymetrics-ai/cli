@@ -35,7 +35,7 @@ CONFIGURATION
   region_code
   search_query
   video_ids
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   channels:

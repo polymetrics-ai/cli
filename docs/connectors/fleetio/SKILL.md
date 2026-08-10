@@ -30,8 +30,8 @@ Reads Fleetio fleet management data: vehicles, contacts, fuel entries, issues, a
 
 - base_url
 - page_size
-- account_token (secret)
-- api_key (secret)
+- account_token (secret) (required)
+- api_key (secret) (required)
 
 ## ETL Streams
 

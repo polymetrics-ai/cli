@@ -31,7 +31,7 @@ Reads PostHog events and persons for a project via the PostHog REST API. Read-on
 - base_url
 - mode
 - page_size
-- project_id
+- project_id (required)
 - start_date
 - api_key (secret)
 

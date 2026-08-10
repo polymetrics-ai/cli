@@ -32,7 +32,7 @@ Reads Intruder issues, issue occurrences, scans, and targets through the Intrude
 - max_pages
 - mode
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

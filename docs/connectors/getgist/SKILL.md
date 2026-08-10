@@ -53,7 +53,7 @@ Reads Gist contacts, tags, segments, campaigns, forms, teammates, articles, coll
 - team_id
 - teammate_id
 - variant_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

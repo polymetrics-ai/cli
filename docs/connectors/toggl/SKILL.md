@@ -33,7 +33,7 @@ Reads and writes time entries, projects, clients, tags, tasks, and users through
 - organization_id
 - start_date
 - workspace_id
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

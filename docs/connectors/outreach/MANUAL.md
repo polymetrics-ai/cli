@@ -78,7 +78,7 @@ CONFIGURATION
   template_id
   user_id
   webhook_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   prospects:

@@ -33,8 +33,8 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  account_id
-  base_url
+  account_id (required)
+  base_url (required)
   start_date
   api_access_token (secret)
 

@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   form_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   forms:

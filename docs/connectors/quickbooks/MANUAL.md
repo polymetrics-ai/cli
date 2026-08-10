@@ -33,10 +33,10 @@ CONFIGURATION
   sandbox
   start_date
   token_url
-  client_id (secret)
-  client_secret (secret)
-  realm_id (secret)
-  refresh_token (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
+  realm_id (secret) (required)
+  refresh_token (secret) (required)
 
 ETL STREAMS
   customers:

@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  management_token (secret)
+  management_token (secret) (required)
 
 ETL STREAMS
   rooms:

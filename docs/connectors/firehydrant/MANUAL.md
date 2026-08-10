@@ -90,7 +90,7 @@ CONFIGURATION
   type
   user_id
   webhook_id
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   incidents:

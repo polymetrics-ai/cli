@@ -28,12 +28,12 @@ Reads Microsoft Dataverse accounts, contacts, leads, opportunities, and users th
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - login_base_url
 - max_pages
 - mode
 - page_size
-- scope
+- scope (required)
 - token_url
 - client_id (secret)
 - client_secret (secret)

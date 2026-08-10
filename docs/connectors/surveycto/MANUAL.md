@@ -27,12 +27,12 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   form_id
   mode
   server_name
-  password (secret)
-  username (secret)
+  password (secret) (required)
+  username (secret) (required)
 
 ETL STREAMS
   datasets:

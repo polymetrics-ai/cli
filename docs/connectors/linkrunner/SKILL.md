@@ -38,7 +38,7 @@ Reads Linkrunner mobile attribution campaigns and attributed users from the Link
 - page_size
 - start_timestamp
 - timezone
-- linkrunner-key (secret)
+- linkrunner-key (secret) (required)
 
 ## ETL Streams
 

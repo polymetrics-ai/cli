@@ -39,7 +39,7 @@ Reads and writes Brex transactions, users, expenses, vendors, budgets, cards, ac
 - mode
 - page_size
 - start_date
-- user_token (secret)
+- user_token (secret) (required)
 
 ## ETL Streams
 

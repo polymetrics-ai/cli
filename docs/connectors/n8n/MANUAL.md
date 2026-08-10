@@ -27,7 +27,7 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   credential_id
   credential_type_name
   data_table_column_id
@@ -56,7 +56,7 @@ CONFIGURATION
   workflow_name
   workflow_tags
   workflow_version_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   workflows:

@@ -32,7 +32,7 @@ Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and wri
 - mode
 - page_size
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -38,7 +38,7 @@ Reads PayFit legacy /v1 resources and current company-scoped PayFit API resource
 - mode
 - pay_period
 - payslip_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

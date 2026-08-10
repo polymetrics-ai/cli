@@ -30,7 +30,7 @@ Reads SmartEngage avatars, tags, custom fields, sequences, and subscribers; crea
 
 - avatar_id
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -30,8 +30,8 @@ Reads Breezy HR positions, hiring pipelines, per-position candidates, department
 
 - base_url
 - mode
-- api_key (secret)
-- company_id (secret)
+- api_key (secret) (required)
+- company_id (secret) (required)
 
 ## ETL Streams
 

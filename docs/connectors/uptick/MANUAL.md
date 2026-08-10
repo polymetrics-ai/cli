@@ -27,13 +27,13 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   page_size
   start_date
-  username
-  client_id (secret)
-  client_secret (secret)
-  password (secret)
+  username (required)
+  client_id (secret) (required)
+  client_secret (secret) (required)
+  password (secret) (required)
 
 ETL STREAMS
   tasks:

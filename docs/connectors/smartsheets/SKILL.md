@@ -59,7 +59,7 @@ Reads and writes Smartsheet sheets, rows, folders, reports, dashboards, users, w
 - user_id
 - webhook_id
 - workspace_id
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

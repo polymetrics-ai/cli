@@ -30,7 +30,7 @@ Reads Flexport logistics, network, billing, booking, purchase order, product, do
 
 - base_url
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

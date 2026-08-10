@@ -28,9 +28,9 @@ Reads and writes the full documented Jira Cloud platform REST API v3 surface: 61
 
 ## Configuration
 
-- base_url
-- email
-- api_token (secret)
+- base_url (required)
+- email (required)
+- api_token (secret) (required)
 
 ## ETL Streams
 

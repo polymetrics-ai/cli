@@ -35,7 +35,7 @@ Reads and writes events, orders, issued tickets, event series, holds, discounts,
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

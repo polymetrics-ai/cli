@@ -30,7 +30,7 @@ Reads aviationstack flights and aviation reference data (airlines, airports, air
 
 - base_url
 - mode
-- access_key (secret)
+- access_key (secret) (required)
 
 ## ETL Streams
 

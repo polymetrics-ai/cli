@@ -32,7 +32,7 @@ CONFIGURATION
   group_by
   search_store
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   reviews:

@@ -35,7 +35,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   organization_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   customers:

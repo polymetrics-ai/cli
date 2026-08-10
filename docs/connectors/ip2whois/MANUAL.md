@@ -28,9 +28,9 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  domains
+  domains (required)
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   whois:

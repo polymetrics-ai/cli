@@ -29,9 +29,9 @@ Reads HoorayHR users, time-off, leave-types, and sick-leave records through the 
 ## Configuration
 
 - base_url
-- hoorayhrusername
+- hoorayhrusername (required)
 - mode
-- hoorayhrpassword (secret)
+- hoorayhrpassword (secret) (required)
 
 ## ETL Streams
 

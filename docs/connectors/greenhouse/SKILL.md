@@ -54,7 +54,7 @@ Reads and writes documented Greenhouse Harvest REST API resources through the de
 - scorecard_id
 - token
 - user_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -28,9 +28,9 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  hoorayhrusername
+  hoorayhrusername (required)
   mode
-  hoorayhrpassword (secret)
+  hoorayhrpassword (secret) (required)
 
 ETL STREAMS
   users:

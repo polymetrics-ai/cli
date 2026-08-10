@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   max_pages
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   tasks:

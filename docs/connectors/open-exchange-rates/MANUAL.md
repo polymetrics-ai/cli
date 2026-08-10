@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  app_id (secret)
+  app_id (secret) (required)
 
 ETL STREAMS
   usage:

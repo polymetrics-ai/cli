@@ -29,8 +29,8 @@ Reads and writes the full documented Workday REST surface: 907 operations across
 ## Configuration
 
 - base_url
-- tenant
-- access_token (secret)
+- tenant (required)
+- access_token (secret) (required)
 
 ## ETL Streams
 

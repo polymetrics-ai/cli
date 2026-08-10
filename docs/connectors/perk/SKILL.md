@@ -33,7 +33,7 @@ Reads Perk/TravelPerk trips and invoices through read-only REST list endpoints.
 - mode
 - page_size
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

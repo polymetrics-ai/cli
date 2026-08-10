@@ -51,7 +51,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
 - scheduling_get_schedule_id
 - scheduling_get_shift_id
 - shift_differential_id
-- subdomain
+- subdomain (required)
 - table
 - task_id
 - time_off_requests_end
@@ -60,7 +60,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
 - timesheet_entries_end
 - timesheet_entries_start
 - webhook_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

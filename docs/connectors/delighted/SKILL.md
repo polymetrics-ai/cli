@@ -31,7 +31,7 @@ Reads Delighted survey responses, people, bounces, unsubscribes, and aggregate m
 - base_url
 - mode
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

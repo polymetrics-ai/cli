@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   countries_id
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   countries:

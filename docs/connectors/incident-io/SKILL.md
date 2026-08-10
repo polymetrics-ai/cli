@@ -31,7 +31,7 @@ Reads incident.io incidents, severities, incident roles, users, and follow-ups t
 - base_url
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

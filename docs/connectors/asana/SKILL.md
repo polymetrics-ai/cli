@@ -34,7 +34,7 @@ Reads implemented Asana project-management streams and executes typed, approval-
 - project_id
 - team_id
 - workspace_id
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

@@ -28,13 +28,13 @@ Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-
 
 ## Configuration
 
-- appointment_date
-- base_url
-- lab_result_concepts
-- patient_query
-- patient_uuid
-- username
-- password (secret)
+- appointment_date (required)
+- base_url (required)
+- lab_result_concepts (required)
+- patient_query (required)
+- patient_uuid (required)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

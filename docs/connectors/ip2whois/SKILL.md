@@ -29,9 +29,9 @@ Looks up WHOIS records for configured domains via the IP2WHOIS API, exposing a f
 ## Configuration
 
 - base_url
-- domains
+- domains (required)
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

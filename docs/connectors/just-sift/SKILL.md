@@ -30,7 +30,7 @@ Reads JustSift people directory profiles and person field definitions through th
 
 - base_url
 - mode
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

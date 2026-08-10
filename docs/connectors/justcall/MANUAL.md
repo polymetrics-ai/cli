@@ -31,7 +31,7 @@ CONFIGURATION
   mode
   page_size
   start_date
-  api_key_2 (secret)
+  api_key_2 (secret) (required)
 
 ETL STREAMS
   users:

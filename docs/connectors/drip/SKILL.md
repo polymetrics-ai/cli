@@ -28,10 +28,10 @@ Reads Drip subscribers, campaigns, broadcasts, accounts, workflows, forms, tags,
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -27,14 +27,14 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   fields
   mode
   query
   room_id
   updated_since
-  auth_token (secret)
-  user_id (secret)
+  auth_token (secret) (required)
+  user_id (secret) (required)
 
 ETL STREAMS
   users:

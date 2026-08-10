@@ -41,7 +41,7 @@ CONFIGURATION
   query_for_gif
   query_for_stickers
   rating
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   gif_search:

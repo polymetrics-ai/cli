@@ -29,7 +29,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
 ## Configuration
 
 - base_url
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

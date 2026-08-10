@@ -36,7 +36,7 @@ Reads and writes Nebius Token Factory OpenAI-compatible API resources, including
 - limit
 - operation_id
 - upload_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

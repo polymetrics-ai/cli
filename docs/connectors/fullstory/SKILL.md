@@ -34,7 +34,7 @@ Reads FullStory segments, users, events, and user-scoped sessions; writes server
 - page_size
 - session_email
 - session_uid
-- api_key (secret)
+- api_key (secret) (required)
 - uid (secret)
 
 ## ETL Streams

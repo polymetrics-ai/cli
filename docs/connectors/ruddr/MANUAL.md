@@ -29,8 +29,8 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  workspace_id
-  api_key (secret)
+  workspace_id (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   clients:

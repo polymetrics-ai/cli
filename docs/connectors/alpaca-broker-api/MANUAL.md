@@ -29,8 +29,8 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   limit
-  username
-  password (secret)
+  username (required)
+  password (secret) (required)
 
 ETL STREAMS
   accounts:

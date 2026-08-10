@@ -29,8 +29,8 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   board_ids
-  key (secret)
-  token (secret)
+  key (secret) (required)
+  token (secret) (required)
 
 ETL STREAMS
   boards:

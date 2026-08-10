@@ -28,7 +28,7 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  project_name
+  project_name (required)
 
 ETL STREAMS
   project:

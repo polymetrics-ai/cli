@@ -32,7 +32,7 @@ Reads SmartReach teams, campaigns, prospects, email settings, do-not-contact rec
 - newer_than
 - older_than
 - team_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

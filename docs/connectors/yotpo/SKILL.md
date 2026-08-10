@@ -31,8 +31,8 @@ Reads Yotpo store products, product variants, collections, customers, orders, an
 - base_url
 - mode
 - product_id
-- store_id
-- access_token (secret)
+- store_id (required)
+- access_token (secret) (required)
 
 ## ETL Streams
 

@@ -52,7 +52,7 @@ CONFIGURATION
   ticket_form_id
   training_data_id
   user_id
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   issues:

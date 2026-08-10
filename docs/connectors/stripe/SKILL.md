@@ -34,7 +34,7 @@ Reads Stripe customers, charges, invoices, subscriptions, and products, and writ
 - mode
 - page_size
 - start_date
-- client_secret (secret)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

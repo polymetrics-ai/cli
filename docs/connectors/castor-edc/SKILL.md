@@ -31,8 +31,8 @@ Reads Castor EDC studies, users, countries, and audit-trail events through the C
 - base_url
 - study_id
 - token_url
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

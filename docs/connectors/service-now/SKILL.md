@@ -28,10 +28,10 @@ Reads and writes ServiceNow incident, user, and group table data through the Ser
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

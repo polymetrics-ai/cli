@@ -108,7 +108,7 @@ CONFIGURATION
   vendor_credit_id
   vendor_credit_refund_id
   vendorpayment_refund_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   contacts:

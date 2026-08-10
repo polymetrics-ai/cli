@@ -37,7 +37,7 @@ CONFIGURATION
   page_size
   start_timestamp
   timezone
-  linkrunner-key (secret)
+  linkrunner-key (secret) (required)
 
 ETL STREAMS
   campaigns:

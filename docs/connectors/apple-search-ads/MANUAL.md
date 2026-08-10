@@ -35,11 +35,11 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   max_pages
-  org_id
+  org_id (required)
   page_size
   token_refresh_endpoint
-  client_id (secret)
-  client_secret (secret)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   campaigns:

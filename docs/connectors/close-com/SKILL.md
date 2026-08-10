@@ -29,7 +29,7 @@ Reads Close CRM leads, contacts, opportunities, activities, users, tasks, lead/o
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

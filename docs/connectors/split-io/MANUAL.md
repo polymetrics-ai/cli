@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   mode
   workspace_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   workspaces:

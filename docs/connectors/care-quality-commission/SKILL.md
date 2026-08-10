@@ -30,7 +30,7 @@ Reads Care Quality Commission (CQC) registered locations, providers, and inspect
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -29,7 +29,7 @@ Reads Sage HR employees, teams, time off, recruitment, and onboarding/offboardin
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

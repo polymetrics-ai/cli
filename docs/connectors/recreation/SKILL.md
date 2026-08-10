@@ -28,7 +28,7 @@ Reads Recreation.gov RIDB facilities, campsites, activities, organizations, and 
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

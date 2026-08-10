@@ -28,12 +28,12 @@ Reads Freshdesk tickets, contacts, companies, agents, and groups through the Fre
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - max_pages
 - mode
 - page_size
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

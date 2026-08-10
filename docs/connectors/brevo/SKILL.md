@@ -39,7 +39,7 @@ Reads and writes Brevo (formerly Sendinblue) contacts, email campaigns, contact 
 - mode
 - page_size
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 
