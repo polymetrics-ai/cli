@@ -29,8 +29,8 @@ tool, and verified green. It changes no capability semantics.
 
 ## Remaining delivery gates
 
-The source verification and inline code review are green. The next gates are the mandatory
-no-mistakes run/respond sequence, push, child PR creation/replacement linkage, and remote CI/
-automated-review observation. #3995 is recorded as a bounded non-automatic `RETRY` compatibility
-verdict because its implementation is outside the child/parent ancestry and PostgreSQL is
-intentionally uncertified at F1.
+The source verification, inline code review, and no-mistakes run
+`01KZPXF5VNSD89NNBWJT74BD00` are green. The next gates are push, child PR
+creation/replacement linkage, and remote CI/automated-review observation. #3995 is recorded as a
+bounded non-automatic `RETRY` compatibility verdict because its implementation is outside the
+child/parent ancestry and PostgreSQL is intentionally uncertified at F1.

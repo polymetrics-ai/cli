@@ -53,5 +53,8 @@ the CLI suite passed in 197.366s.
 - [x] Inline `verify-work` result recorded; #4026 is the sole gap-repair child and correction
   round 1/5.
 - [x] Deep inline code review is dispositioned in `REVIEW.md` (PASS; no actionable source finding).
-- [ ] no-mistakes gates are driven without `--yes`.
+- [x] no-mistakes run `01KZPXF5VNSD89NNBWJT74BD00` completed without `--yes`:
+  intent, rebase, review, test, document, and lint passed with zero findings. The canonical child
+  remote stages (`push`, `pr`, `ci`) were skipped because they cannot set the required non-default
+  parent base; those stages are owned manually below.
 - [ ] PR targets `feat/3972-postgres-parity`, uses both Refs lines, and preserves/links #4014 audit history.
