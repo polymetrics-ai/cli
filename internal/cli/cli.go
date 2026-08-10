@@ -1227,7 +1227,11 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	if err != nil {
 		return err
 	}
-	commandFlags, err = applySensitiveCommandInputs(commandFlags, flags, cmd)
+	sensitiveInputMaxBytes, err := sensitiveCommandInputMaxBytes(connector, cmd, flags)
+	if err != nil {
+		return err
+	}
+	commandFlags, err = applySensitiveCommandInputs(commandFlags, flags, cmd, sensitiveInputMaxBytes)
 	if err != nil {
 		return err
 	}
@@ -1468,7 +1472,28 @@ func rejectPlanSensitiveInputs(cmd connectors.CommandSurfaceCommand, flags parse
 
 const sensitiveCommandInputWarning = "Warning: supplied credential values are written to plaintext local project state and retained for this command plan."
 
-func applySensitiveCommandInputs(commandFlags map[string][]string, flags parsedFlags, cmd connectors.CommandSurfaceCommand) (map[string][]string, error) {
+func sensitiveCommandInputMaxBytes(connector connectors.Connector, cmd connectors.CommandSurfaceCommand, flags parsedFlags) (int, error) {
+	if len(flags.values["value-stdin"]) == 0 || !commandRetainsSensitiveInputs(cmd) {
+		return 0, nil
+	}
+	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+	if !ok {
+		return 0, fmt.Errorf("connector %q cannot resolve the declared request body limit", connector.Name())
+	}
+	metadata, err := provider.OperationDirectWriteMetadata(cmd.Operation)
+	if err != nil {
+		return 0, err
+	}
+	if metadata.Operation != cmd.Operation {
+		return 0, fmt.Errorf("connector %q returned direct-write metadata for %q, want %q", connector.Name(), metadata.Operation, cmd.Operation)
+	}
+	if metadata.MaxRequestBytes <= 0 {
+		return 0, fmt.Errorf("connector %q direct-write operation %q has no declared request body limit", connector.Name(), cmd.Operation)
+	}
+	return metadata.MaxRequestBytes, nil
+}
+
+func applySensitiveCommandInputs(commandFlags map[string][]string, flags parsedFlags, cmd connectors.CommandSurfaceCommand, stdinMaxBytes int) (map[string][]string, error) {
 	if len(flags.values["from-env"]) == 0 && len(flags.values["value-stdin"]) == 0 {
 		return commandFlags, nil
 	}
@@ -1497,16 +1522,26 @@ func applySensitiveCommandInputs(commandFlags map[string][]string, flags parsedF
 		out[name] = append([]string(nil), values...)
 	}
 	seen := map[string]bool{}
-	set := func(rawField, value string) error {
+	resolveField := func(rawField string) (string, error) {
 		field, ok := lookup[rawField]
 		if !ok {
-			return usageErrorf("--from-env/--value-stdin field %q is not a declared redacted command input", rawField)
+			return "", usageErrorf("--from-env/--value-stdin field %q is not a declared redacted command input", rawField)
 		}
 		if len(out[field]) > 0 || seen[field] {
-			return usageErrorf("redacted command input --%s was supplied more than once", field)
+			return "", usageErrorf("redacted command input --%s was supplied more than once", field)
 		}
+		return field, nil
+	}
+	setResolved := func(field, value string) {
 		out[field] = []string{value}
 		seen[field] = true
+	}
+	set := func(rawField, value string) error {
+		field, err := resolveField(rawField)
+		if err != nil {
+			return err
+		}
+		setResolved(field, value)
 		return nil
 	}
 	for _, assignment := range flags.values["from-env"] {
@@ -1536,16 +1571,31 @@ func applySensitiveCommandInputs(commandFlags map[string][]string, flags parsedF
 		if field == "" || field == "true" {
 			return nil, usageErrorf("--value-stdin requires a field")
 		}
-		value, err := io.ReadAll(os.Stdin)
+		resolvedField, err := resolveField(field)
 		if err != nil {
-			return nil, fmt.Errorf("read --value-stdin: %w", err)
-		}
-		secret := strings.TrimSuffix(strings.TrimSuffix(string(value), "\n"), "\r")
-		if err := set(field, secret); err != nil {
 			return nil, err
 		}
+		value, err := readBoundedSensitiveCommandInput(os.Stdin, stdinMaxBytes)
+		if err != nil {
+			return nil, err
+		}
+		setResolved(resolvedField, value)
 	}
 	return out, nil
+}
+
+func readBoundedSensitiveCommandInput(reader io.Reader, maxBytes int) (string, error) {
+	if maxBytes <= 0 {
+		return "", fmt.Errorf("--value-stdin has no declared request body limit")
+	}
+	value, err := io.ReadAll(io.LimitReader(reader, int64(maxBytes)+1))
+	if err != nil {
+		return "", fmt.Errorf("read --value-stdin: %w", err)
+	}
+	if len(value) > maxBytes {
+		return "", usageErrorf("--value-stdin input is too large: %d bytes exceeds limit %d", len(value), maxBytes)
+	}
+	return strings.TrimSuffix(strings.TrimSuffix(string(value), "\n"), "\r"), nil
 }
 
 func sensitiveCommandFlagLookup(cmd connectors.CommandSurfaceCommand) map[string]string {

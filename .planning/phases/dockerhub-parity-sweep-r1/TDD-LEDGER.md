@@ -1063,6 +1063,34 @@ ok   polymetrics.ai/internal/connectors/hooks/dockerhub
 ok   polymetrics.ai/internal/connectors/defs/dockerhub
 ```
 
+## Review repair — bounded secret stdin and auth URL userinfo (2026-08-10)
+
+Manual-GSD fallback: this is a gate-owned no-mistakes review step. The outer executor owns the
+active lifecycle, so this repair records its Red/Green evidence here and does not invoke pipeline
+control commands.
+
+Red: `--value-stdin` read its entire stream before checking whether its target was a declared
+redacted field or before the operation's body cap could apply. The response-sensitive direct-auth
+boundary and the stored-PAT hook also accepted URL userinfo, which could persist a proxy credential
+in a plan and cause implicit Basic authentication on the PAT request.
+
+Green: resolve the sensitive stdin target before touching stdin, obtain the declared direct-write
+body cap from closed operation metadata, and read no more than that cap plus one byte. Refuse URL
+userinfo in both trusted Docker Hub auth-base validators, update Docker Hub source documentation,
+and regenerate only Docker Hub-derived artifacts.
+
+This gate-owned review uses golang-how-to, golang-cli, golang-design-patterns,
+golang-structs-interfaces, golang-security, golang-safety, golang-error-handling, golang-lint,
+golang-testing, and golang-documentation, plus CLI help/docs/website parity guidance.
+
+```text
+go test -timeout 20m ./internal/cli ./internal/connectors/engine ./internal/connectors/hooks/dockerhub ./internal/connectors/defs/dockerhub -run '^(TestApplySensitiveCommandInputsReadsValueStdin|TestApplySensitiveCommandInputsValidatesValueStdinFieldBeforeReading|TestApplySensitiveCommandInputsRejectsOversizedValueStdin|TestSensitiveCommandInputMaxBytesUsesDeclaredOperationLimit|TestDocsGenerateAndValidateConnectorDocs|TestOperationDirectWriteResponseSensitiveBaseURLRequiresHTTPS|TestAuthenticator_AuthURLRejectsUnsafeComponents)$' -count=1
+ok   polymetrics.ai/internal/cli
+ok   polymetrics.ai/internal/connectors/engine
+ok   polymetrics.ai/internal/connectors/hooks/dockerhub
+ok   polymetrics.ai/internal/connectors/defs/dockerhub [no tests to run]
+```
+
 ## Review repair — Docker Hub sensitive auth transport and routing (2026-08-10)
 
 Red: response-sensitive direct authentication operations accepted a cleartext `auth_url` overlay,

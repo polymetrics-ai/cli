@@ -103,12 +103,20 @@ func TestOperationDirectWriteResponseSensitiveBaseURLRequiresHTTPS(t *testing.T)
 			Operation: &SurfaceOperation{Model: "write_action"},
 		}}},
 	}
+	metadata, err := OperationDirectWriteMetadata(bundle, "acme.login")
+	if err != nil {
+		t.Fatalf("OperationDirectWriteMetadata: %v", err)
+	}
+	if metadata.MaxRequestBytes != 1024 {
+		t.Fatalf("MaxRequestBytes = %d, want 1024", metadata.MaxRequestBytes)
+	}
 	for _, tt := range []struct {
 		name      string
 		authURL   string
 		wantError string
 	}{
 		{name: "rejects cleartext config overlay", authURL: "http://auth.example.invalid/v2", wantError: "requires an HTTPS base URL"},
+		{name: "rejects userinfo config overlay", authURL: "https://fixture-user:fixture-pass@auth.example.invalid/v2", wantError: "without URL userinfo"},
 		{name: "rejects query config overlay", authURL: "https://auth.example.invalid/v2?tenant=fixture", wantError: "without a query or fragment"},
 		{name: "rejects fragment config overlay", authURL: "https://auth.example.invalid/v2#tenant", wantError: "without a query or fragment"},
 		{name: "accepts HTTPS config overlay", authURL: "https://auth.example.invalid/v2"},

@@ -26,8 +26,8 @@ Connection fields:
 - `auth_url` (optional, string); default `https://hub.docker.com/v2`; format `uri`;
   Docker Hub authentication API base URL. It is intentionally independent of `base_url` so a
   data API proxy cannot receive Docker Hub credential-exchange requests; override it only for a
-  trusted HTTPS test or self-hosted authentication proxy. It must not include query or fragment
-  components.
+  trusted HTTPS test or self-hosted authentication proxy. It must not include URL userinfo, query,
+  or fragment components.
 - `docker_username` (required, string); Docker Hub username used to authenticate `docker_pat`.
   Lowercase alphanumerics, underscores, and hyphens only.
 - `namespace` (required, string); Docker Hub user or organization namespace whose repositories and

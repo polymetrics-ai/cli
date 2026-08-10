@@ -361,21 +361,23 @@ func TestAuthenticator_TokenURLRejectsPlainHTTP(t *testing.T) {
 	}
 }
 
-func TestAuthenticator_AuthURLRejectsQueryOrFragment(t *testing.T) {
+func TestAuthenticator_AuthURLRejectsUnsafeComponents(t *testing.T) {
 	for _, tt := range []struct {
-		name    string
-		authURL string
+		name      string
+		authURL   string
+		wantError string
 	}{
-		{name: "query", authURL: "https://auth.example.invalid/v2?tenant=fixture"},
-		{name: "fragment", authURL: "https://auth.example.invalid/v2#tenant"},
+		{name: "userinfo", authURL: "https://fixture-user:fixture-pass@auth.example.invalid/v2", wantError: "must not include URL userinfo"},
+		{name: "query", authURL: "https://auth.example.invalid/v2?tenant=fixture", wantError: "must not include a query or fragment"},
+		{name: "fragment", authURL: "https://auth.example.invalid/v2#tenant", wantError: "must not include a query or fragment"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			cfg := baseCfg()
 			cfg.Config["auth_url"] = tt.authURL
 			h := newClientHooks(nil)
 			_, err := h.Authenticator(context.Background(), cfg, baseSpec("{{ config.auth_url }}/users/login"))
-			if err == nil || !strings.Contains(err.Error(), "must not include a query or fragment") {
-				t.Fatalf("Authenticator() error = %v, want auth URL query or fragment rejection", err)
+			if err == nil || !strings.Contains(err.Error(), tt.wantError) {
+				t.Fatalf("Authenticator() error = %v, want auth URL rejection %q", err, tt.wantError)
 			}
 		})
 	}

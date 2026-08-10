@@ -507,6 +507,7 @@ type OperationDirectWriteMetadata struct {
 	ConfirmationChallenge string
 	OutputPolicy          string
 	Batchable             bool
+	MaxRequestBytes       int
 	// PayloadFileFields is nil for non-multipart operations. For a declared
 	// multipart operation it is the closed set of body paths whose local-file
 	// identities must be captured before preview, even when their names do not

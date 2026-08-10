@@ -274,6 +274,7 @@ func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.Operat
 		ConfirmationChallenge: confirmation,
 		OutputPolicy:          op.OutputPolicy,
 		Batchable:             op.IsBatchable(),
+		MaxRequestBytes:       clampOperationDirectWriteMaxBytes(op.REST.MaxBytes),
 		PayloadFileFields:     operationDirectWritePayloadFileFields(op),
 		RedactFields:          operationDirectWriteRedactFields(op),
 	}, nil
@@ -769,6 +770,9 @@ func operationDirectWriteBaseURL(b Bundle, op OperationSpec, cfg connectors.Runt
 		parsed, parseErr := url.Parse(baseURL)
 		if parseErr != nil || !strings.EqualFold(parsed.Scheme, "https") || parsed.Host == "" {
 			return "", fmt.Errorf("response-sensitive operation %q requires an HTTPS base URL", op.ID)
+		}
+		if parsed.User != nil {
+			return "", fmt.Errorf("response-sensitive operation %q requires an HTTPS base URL without URL userinfo", op.ID)
 		}
 		if parsed.RawQuery != "" || parsed.ForceQuery || parsed.Fragment != "" {
 			return "", fmt.Errorf("response-sensitive operation %q requires an HTTPS base URL without a query or fragment", op.ID)
