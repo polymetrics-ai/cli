@@ -19,6 +19,16 @@ func TestRenderCommandSurfaceCommandIncludesOperationMapping(t *testing.T) {
 	}
 }
 
+func TestConfigSectionRendersConditionalSecretRequirement(t *testing.T) {
+	section := configSection(Manifest{SecretFields: []SecretField{{
+		Name:         "password",
+		RequiredWhen: "mode is not fixture",
+	}}})
+	if len(section.Lines) != 1 || section.Lines[0] != "password (secret) (required when mode is not fixture)" {
+		t.Fatalf("configSection() = %#v, want conditional password requirement", section.Lines)
+	}
+}
+
 func TestEveryRegisteredConnectorHasGuideManualAndSkill(t *testing.T) {
 	registry := NewRegistry()
 	for _, meta := range registry.List() {

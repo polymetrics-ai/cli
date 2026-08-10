@@ -47,9 +47,9 @@ func TestNameAndMetadata(t *testing.T) {
 
 func TestManifestProjectsBundleCredentials(t *testing.T) {
 	manifest := connectors.ManifestOf(native.New())
-	configFields := make(map[string]bool, len(manifest.ConfigFields))
+	configFields := make(map[string]connectors.ConfigField, len(manifest.ConfigFields))
 	for _, field := range manifest.ConfigFields {
-		configFields[field.Name] = true
+		configFields[field.Name] = field
 	}
 	wantConfigFields := []string{
 		"cdc_publication",
@@ -69,15 +69,52 @@ func TestManifestProjectsBundleCredentials(t *testing.T) {
 		t.Fatalf("manifest config fields = %#v, want %#v", configFields, wantConfigFields)
 	}
 	for _, name := range wantConfigFields {
-		if !configFields[name] {
+		if _, ok := configFields[name]; !ok {
 			t.Fatalf("manifest config fields = %#v, missing %q", configFields, name)
+		}
+	}
+	for _, name := range []string{"database", "host", "username"} {
+		if !configFields[name].Required {
+			t.Fatalf("manifest config field %q = %#v, want required", name, configFields[name])
 		}
 	}
 	if len(manifest.SecretFields) != 1 || manifest.SecretFields[0].Name != "password" {
 		t.Fatalf("manifest secret fields = %#v, want password", manifest.SecretFields)
 	}
+	password := manifest.SecretFields[0]
+	if password.Required || password.RequiredWhen != "mode is not fixture" {
+		t.Fatalf("manifest password requirement = %#v, want conditional fixture exemption", password)
+	}
+	if len(manifest.AuthModes) != 1 || manifest.AuthModes[0].Name != "password" {
+		t.Fatalf("manifest auth modes = %#v, want password authentication", manifest.AuthModes)
+	}
 	if manifest.Metadata.Capabilities.CDC {
 		t.Fatal("PostgreSQL manifest must keep CDC fail-closed")
+	}
+}
+
+func TestGeneratedDocsDescribeAuthenticationRequirements(t *testing.T) {
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller(0) failed")
+	}
+	docsDir := filepath.Join(filepath.Dir(thisFile), "..", "..", "..", "..", "docs", "connectors", "postgres")
+	for _, name := range []string{"MANUAL.md", "SKILL.md"} {
+		raw, err := os.ReadFile(filepath.Join(docsDir, name))
+		if err != nil {
+			t.Fatalf("Read %s: %v", name, err)
+		}
+		for _, want := range []string{
+			"database (required)",
+			"host (required)",
+			"username (required)",
+			"password (secret) (required when mode is not fixture)",
+			"password: Live connections require password authentication; peer/socket and client-certificate modes are unsupported.",
+		} {
+			if !strings.Contains(string(raw), want) {
+				t.Fatalf("%s missing %q:\n%s", name, want, raw)
+			}
+		}
 	}
 }
 

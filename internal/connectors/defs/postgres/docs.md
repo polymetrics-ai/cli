@@ -12,8 +12,11 @@ This connector is read-only; no write actions are declared.
 
 ## Auth setup
 
-Configure a bare `host`, `database`, and `username`. `port` defaults to 5432. `password` is a
-secret field and is never logged. Do not put credentials in a host or URL-shaped value.
+Configure a TCP `host`, `database`, and `username`. `port` defaults to 5432. Live connections use
+password authentication: `password` is required, secret, and never logged. `mode=fixture` does
+not open a source connection and does not require a password. Peer/socket and client-certificate
+authentication are unsupported and rejected during connection validation. Do not put credentials
+in a host or URL-shaped value.
 
 `sslmode` uses the same transport-security shape as the MySQL connector and is honestly enforced
 for both local and remote servers:
@@ -41,10 +44,11 @@ Connection fields:
 - `cdc_publication` (optional, string); Reserved for the planned logical-replication change
   capture path. It is not invoked while CDC is non-executable.
 - `database` (required, string); Database name to connect to.
-- `host` (required, string); Bare hostname or IP of the PostgreSQL server (no scheme, path, or
-  credentials - a URL-shaped value is rejected).
+- `host` (required, string); TCP hostname or IP of the PostgreSQL server (no scheme, path, or
+  credentials - a URL-shaped value is rejected). Unix-socket/peer authentication is unsupported.
 - `mode` (optional, string); allowed values `fixture`.
-- `password` (optional, secret, string); Database role password. Never logged.
+- `password` (conditionally required, secret, string); Required for live password authentication.
+  Fixture mode does not require it. Never logged.
 - `port` (optional, string); TCP port, 1-65535. Defaults to 5432 when omitted.
 - `read_limit` (optional, string); Maximum rows returned per Read snapshot SELECT. Defaults to
   10000; set to 0, all, or unlimited to disable the bound.

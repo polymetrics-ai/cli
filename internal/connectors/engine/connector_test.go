@@ -87,7 +87,7 @@ func widgetsRecordSchema(t *testing.T, primaryKey, cursorField string) *StreamSc
 
 func minimalSpecSchema(t *testing.T) *Schema {
 	t.Helper()
-	sch, err := CompileSchema([]byte(`{"type":"object","properties":{"api_key":{"type":"string","x-secret":true}}}`))
+	sch, err := CompileSchema([]byte(`{"type":"object","required":["account_id","api_key"],"properties":{"account_id":{"type":"string"},"api_key":{"type":"string","x-secret":true}}}`))
 	if err != nil {
 		t.Fatalf("CompileSchema: %v", err)
 	}
@@ -160,6 +160,12 @@ func TestConnectorManifestSynthesizedFromBundleSpotFields(t *testing.T) {
 
 	if m.Metadata.Name != "acme" {
 		t.Fatalf("Manifest().Metadata.Name = %q, want acme", m.Metadata.Name)
+	}
+	if len(m.ConfigFields) != 1 || m.ConfigFields[0].Name != "account_id" || !m.ConfigFields[0].Required {
+		t.Fatalf("Manifest().ConfigFields = %#v, want required account_id", m.ConfigFields)
+	}
+	if len(m.SecretFields) != 1 || m.SecretFields[0].Name != "api_key" || !m.SecretFields[0].Required {
+		t.Fatalf("Manifest().SecretFields = %#v, want required api_key", m.SecretFields)
 	}
 	if len(m.Streams) != 1 || m.Streams[0].Name != "widgets" {
 		t.Fatalf("Manifest().Streams = %+v, want one stream named widgets", m.Streams)

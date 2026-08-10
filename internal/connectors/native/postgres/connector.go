@@ -99,7 +99,21 @@ func (c Connector) Metadata() connectors.Metadata {
 }
 
 func (c Connector) Manifest() connectors.Manifest {
-	return c.BundleManifest()
+	manifest := c.BundleManifest()
+	for i := range manifest.SecretFields {
+		if manifest.SecretFields[i].Name == "password" {
+			manifest.SecretFields[i].RequiredWhen = "mode is not fixture"
+			manifest.SecretFields[i].Description = "Fixture mode does not open a source connection."
+		}
+	}
+	manifest.AuthModes = []connectors.AuthModeSpec{{
+		Name:         "password",
+		Description:  "Live connections require password authentication; peer/socket and client-certificate modes are unsupported.",
+		ConfigFields: []string{"host", "database", "username"},
+		SecretFields: []string{"password"},
+		Read:         true,
+	}}
+	return manifest
 }
 
 // Write is unsupported: this is a read-only source connector (wave0 parity

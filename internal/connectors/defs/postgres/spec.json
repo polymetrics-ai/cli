@@ -6,7 +6,7 @@
   "properties": {
     "host": {
       "type": "string",
-      "description": "Bare hostname or IP of the PostgreSQL server (no scheme, path, or credentials — a URL-shaped value is rejected)."
+      "description": "TCP hostname or IP of the PostgreSQL server (no scheme, path, or credentials — a URL-shaped value is rejected). Unix-socket/peer authentication is not supported."
     },
     "port": {
       "type": "string",
@@ -23,7 +23,7 @@
     "password": {
       "type": "string",
       "x-secret": true,
-      "description": "Database role password. Never logged."
+      "description": "Required for live password authentication. Fixture mode does not require it. Never logged."
     },
     "sslmode": {
       "type": "string",

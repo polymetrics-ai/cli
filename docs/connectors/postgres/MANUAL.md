@@ -24,13 +24,16 @@ CAPABILITIES
   Integration type: database
 
 AUTHENTICATION
-  Use pm credentials add with --from-env or --value-stdin for secret fields.
+  password: Live connections require password authentication; peer/socket and client-certificate modes are unsupported.
+    config: host, database, username
+    secrets: password
+    supports: read=true write=false
 
 CONFIGURATION
   cdc_publication
   cursor_field
-  database
-  host
+  database (required)
+  host (required)
   mode
   port
   read_limit
@@ -38,8 +41,8 @@ CONFIGURATION
   sslmode
   sslrootcert
   sslservername
-  username
-  password (secret)
+  username (required)
+  password (secret) (required when mode is not fixture): Fixture mode does not open a source connection.
 
 SECURITY
   read risk: low
