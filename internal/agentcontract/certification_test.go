@@ -53,6 +53,7 @@ func TestCertificationGateBindingCriteriaYieldExactCellIDs(t *testing.T) {
 			switch criterion {
 			case "live_evidence":
 				cell[criterion] = []any{}
+				cell["live_tested"] = false
 			default:
 				cell[criterion] = false
 			}
@@ -82,7 +83,10 @@ func TestCertificationGatePreservesCoordinatesAcrossWorkflowSyncAndFlowCells(t *
 			name: "workflow",
 			mutate: func(t *testing.T, root string) {
 				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
-				matrix["workflows"].([]any)[0].(map[string]any)["cells"].([]any)[0].(map[string]any)["live_evidence"] = []any{}
+				cell := matrix["workflows"].([]any)[0].(map[string]any)["cells"].([]any)[0].(map[string]any)
+				cell["live_evidence"] = []any{}
+				cell["live_tested"] = false
+				matrix["workflows"].([]any)[0].(map[string]any)["complete"] = false
 				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
 			},
 			want: "workflow/github/etl/live_evidence",
@@ -91,7 +95,10 @@ func TestCertificationGatePreservesCoordinatesAcrossWorkflowSyncAndFlowCells(t *
 			name: "sync mode",
 			mutate: func(t *testing.T, root string) {
 				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
-				matrix["sync_mode_cells"].([]any)[0].(map[string]any)["cells"].([]any)[0].(map[string]any)["live_evidence"] = []any{}
+				cell := matrix["sync_mode_cells"].([]any)[0].(map[string]any)["cells"].([]any)[0].(map[string]any)
+				cell["live_evidence"] = []any{}
+				cell["live_tested"] = false
+				matrix["sync_mode_cells"].([]any)[0].(map[string]any)["complete"] = false
 				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
 			},
 			want: "sync_mode/github/full_overwrite/api_read_into_warehouse/live_evidence",
@@ -100,7 +107,9 @@ func TestCertificationGatePreservesCoordinatesAcrossWorkflowSyncAndFlowCells(t *
 			name: "flow pair",
 			mutate: func(t *testing.T, root string) {
 				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
-				matrix["pair_sets"].([]any)[0].(map[string]any)["cell"].(map[string]any)["live_evidence"] = []any{}
+				cell := matrix["pair_sets"].([]any)[0].(map[string]any)["cell"].(map[string]any)
+				cell["live_evidence"] = []any{}
+				cell["live_tested"] = false
 				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
 			},
 			want: "flow/api_to_api/github/github/live_evidence",
@@ -197,6 +206,267 @@ func TestCertificationGateMatchesSemanticallyEquivalentEvidenceProof(t *testing.
 	}
 	if verdict.Decision != CertificationGateProceed {
 		t.Fatalf("equivalent proof formatting decision = %#v, want PROCEED", verdict)
+	}
+}
+
+func TestCertificationGateMatchesEvidenceProofsWithReorderedJSONMembers(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := writeGreenCertificationFixture(t)
+	fingerprint := "{{pmcertfp:v1:" + strings.Repeat("a", 64) + "}}"
+	value := map[string]any{"a": fingerprint, "b": fingerprint}
+
+	matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/capability-matrix.json")
+	pointer := matrix["connectors"].([]any)[0].(map[string]any)["cells"].([]any)[0].(map[string]any)["live_evidence"].([]any)[0].(map[string]any)
+	pointerProof := pointer["proof"].(map[string]any)
+	pointerProof["http_exchanges"].([]any)[0].(map[string]any)["request"].(map[string]any)["body"].(map[string]any)["value"] = value
+	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/capability-matrix.json", matrix)
+
+	evidence := readCertificationFixtureObject(t, root, "internal/connectors/certifications/evidence/capability.json")
+	recordProof := evidence["proof"].(map[string]any)
+	recordProof["http_exchanges"].([]any)[0].(map[string]any)["request"].(map[string]any)["body"].(map[string]any)["value"] = value
+	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/evidence/capability.json", evidence)
+
+	path := filepath.Join(root, "internal", "connectors", "certifications", "evidence", "capability.json")
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ordered, err := json.Marshal(value)
+	if err != nil {
+		t.Fatal(err)
+	}
+	reordered, err := json.Marshal(struct {
+		B string `json:"b"`
+		A string `json:"a"`
+	}{B: fingerprint, A: fingerprint})
+	if err != nil {
+		t.Fatal(err)
+	}
+	changed := bytes.Replace(raw, ordered, reordered, 1)
+	if bytes.Equal(changed, raw) {
+		t.Fatal("fixture did not reorder an evidence JSON object")
+	}
+	if err := os.WriteFile(path, changed, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if verdict.Decision != CertificationGateProceed {
+		t.Fatalf("reordered proof decision = %#v, want PROCEED", verdict)
+	}
+}
+
+func TestCertificationGateRejectsEmptyFingerprintSequences(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	tests := []struct {
+		name   string
+		mutate func(map[string]any)
+	}{
+		{
+			name: "command fingerprint",
+			mutate: func(proof map[string]any) {
+				proof["pm_command_fingerprint"] = ""
+			},
+		},
+		{
+			name: "request target",
+			mutate: func(proof map[string]any) {
+				proof["http_exchanges"].([]any)[0].(map[string]any)["request"].(map[string]any)["target"] = ""
+			},
+		},
+		{
+			name: "credential fingerprint",
+			mutate: func(proof map[string]any) {
+				proof["credential_fingerprints"] = []any{""}
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := writeGreenCertificationFixture(t)
+			mutateCertificationFixtureCapabilityProof(t, root, test.mutate)
+
+			verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if verdict.Decision != CertificationGateHalt {
+				t.Fatalf("empty fingerprint decision = %#v, want HALT", verdict)
+			}
+		})
+	}
+}
+
+func TestCertificationGateRejectsIncompleteFlowTopology(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	tests := []struct {
+		name   string
+		mutate func(*testing.T, string)
+	}{
+		{
+			name: "sync mode primitive cross product",
+			mutate: func(t *testing.T, root string) {
+				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+				matrix["sync_mode_kinds"] = append(matrix["sync_mode_kinds"].([]any), map[string]any{"id": "incremental", "discovery_source": "test"})
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+			},
+		},
+		{
+			name: "required warehouse primitive inventory",
+			mutate: func(t *testing.T, root string) {
+				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+				matrix["sync_primitives"] = matrix["sync_primitives"].([]any)[:3]
+				set := matrix["sync_mode_cells"].([]any)[0].(map[string]any)
+				set["cells"] = set["cells"].([]any)[:3]
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+			},
+		},
+		{
+			name: "derived complete flag",
+			mutate: func(t *testing.T, root string) {
+				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+				matrix["sync_mode_cells"].([]any)[0].(map[string]any)["complete"] = false
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+			},
+		},
+		{
+			name: "flow pair coverage",
+			mutate: func(t *testing.T, root string) {
+				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+				matrix["flow_kinds"] = append(matrix["flow_kinds"].([]any), map[string]any{"id": "api_to_database", "source_role": "api_source", "destination_role": "api_destination"})
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+			},
+		},
+		{
+			name: "connector identity",
+			mutate: func(t *testing.T, root string) {
+				capabilities := readCertificationFixtureObject(t, root, "internal/connectors/certifications/capability-matrix.json")
+				capabilities["connectors"] = append(capabilities["connectors"].([]any), map[string]any{
+					"name": "other", "integration_type": "api", "capability_complete": false,
+					"cells": []any{map[string]any{
+						"function_kind": "capability:check", "applicable": false, "declared": false, "implemented": false,
+						"fixture_tested": false, "live_tested": false, "fixture_evidence": []any{}, "live_evidence": []any{},
+						"not_applicable": map[string]any{"code": "unsupported_capability", "reason": "fixture connector is outside the supported surface"},
+					}},
+				})
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/capability-matrix.json", capabilities)
+
+				status := readCertificationFixtureObject(t, root, "internal/connectors/certifications/status.json")
+				status["connectors"] = append(status["connectors"].([]any), map[string]any{
+					"connector": "other", "certified": false, "label": "COMMUNITY BUILD, UNCERTIFIED", "warning": "This connector is reachable but is a COMMUNITY BUILD, UNCERTIFIED.",
+				})
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/status.json", status)
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := writeGreenCertificationFixture(t)
+			test.mutate(t, root)
+
+			verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if verdict.Decision != CertificationGateHalt {
+				t.Fatalf("incomplete topology decision = %#v, want HALT", verdict)
+			}
+		})
+	}
+}
+
+func TestCertificationGateRejectsEscapedOrNonRegularInputs(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	tests := []struct {
+		name      string
+		prepare   func(*testing.T) string
+		failureID string
+	}{
+		{
+			name: "artifact ancestor symlink",
+			prepare: func(t *testing.T) string {
+				outside := writeGreenCertificationFixture(t)
+				root := t.TempDir()
+				parent := filepath.Join(root, "internal", "connectors")
+				if err := os.MkdirAll(parent, 0o755); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.Symlink(filepath.Join(outside, "internal", "connectors", "certifications"), filepath.Join(parent, "certifications")); err != nil {
+					t.Skipf("cannot create certification artifact symlink: %v", err)
+				}
+				return root
+			},
+		},
+		{
+			name: "evidence directory symlink",
+			prepare: func(t *testing.T) string {
+				root := writeGreenCertificationFixture(t)
+				outside := writeGreenCertificationFixture(t)
+				directory := filepath.Join(root, "internal", "connectors", "certifications", "evidence")
+				if err := os.RemoveAll(directory); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.Symlink(filepath.Join(outside, "internal", "connectors", "certifications", "evidence"), directory); err != nil {
+					t.Skipf("cannot create evidence directory symlink: %v", err)
+				}
+				return root
+			},
+		},
+		{
+			name: "non regular evidence record",
+			prepare: func(t *testing.T) string {
+				root := writeGreenCertificationFixture(t)
+				record := filepath.Join(root, "internal", "connectors", "certifications", "evidence", "capability.json")
+				if err := os.Remove(record); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.Mkdir(record, 0o755); err != nil {
+					t.Fatal(err)
+				}
+				return root
+			},
+			failureID: "input/evidence/decode",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := test.prepare(t)
+			verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if verdict.Decision != CertificationGateHalt {
+				t.Fatalf("unsafe input decision = %#v, want HALT", verdict)
+			}
+			if test.failureID != "" {
+				assertCertificationFailureID(t, verdict, test.failureID)
+			}
+		})
+	}
+}
+
+func TestCertificationGateAcceptsProducerValidDeliveryLimitations(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := writeGreenCertificationFixture(t)
+	mutateCertificationFixtureFlowProof(t, root, func(proof map[string]any) {
+		delivery := proof["flow"].(map[string]any)["delivery"].(map[string]any)
+		delivery["provider_idempotency_key"] = false
+		delivery["limitations"] = []any{map[string]any{
+			"guarantee": "provider_idempotency_key",
+			"code":      "provider_idempotency_unavailable",
+			"reason":    "The fixture provider does not expose an idempotency-key endpoint.",
+		}}
+	})
+
+	verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if verdict.Decision != CertificationGateProceed {
+		t.Fatalf("limited producer-valid flow decision = %#v, want PROCEED", verdict)
 	}
 }
 
@@ -310,6 +580,28 @@ func TestCertificationGateEnforcesEveryProtectedTransition(t *testing.T) {
 	}
 }
 
+func TestCertificationGateCommandIsRenderedForEveryHarness(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	argv, err := marshalArgv(contract.CertificationGate.Command.Argv)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, target := range contract.Projections {
+		t.Run(target.Harness+"/"+target.Role, func(t *testing.T) {
+			rendered, err := RenderProjection(contract, target)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if target.Harness == "codex" {
+				rendered = []byte(parseCodexProjection(t, rendered).GetString("developer_instructions"))
+			}
+			if !bytes.Contains(rendered, []byte(argv)) {
+				t.Fatalf("%s projection omits certification gate argv %s", target.Harness, argv)
+			}
+		})
+	}
+}
+
 func TestCertificationGateCurrentBaselineRejectsWithoutBreakingStructuralContractCheck(t *testing.T) {
 	root := repositoryRoot(t)
 	contract := loadRepositoryContract(t, root)
@@ -386,12 +678,39 @@ func writeGreenCertificationFixture(t *testing.T) string {
 		"connector":     "github",
 		"workflow_kind": "etl",
 	})
-	syncEvidence := certificationTestEvidence("sync.json", proof, map[string]any{
-		"scope":     "sync_mode",
-		"connector": "github",
-		"sync_mode": "full_overwrite",
-		"primitive": "api_read_into_warehouse",
-	})
+	type syncPrimitiveFixture struct {
+		id              string
+		integrationType string
+		capability      string
+		direction       string
+	}
+	syncPrimitives := []syncPrimitiveFixture{
+		{id: "api_read_into_warehouse", integrationType: "api", capability: "read", direction: "into_warehouse"},
+		{id: "api_write_from_warehouse", integrationType: "api", capability: "write", direction: "from_warehouse"},
+		{id: "database_read_into_warehouse", integrationType: "database", capability: "read", direction: "into_warehouse"},
+		{id: "database_write_from_warehouse", integrationType: "database", capability: "write", direction: "from_warehouse"},
+	}
+	syncEvidence := make([]map[string]any, 0, len(syncPrimitives))
+	syncCells := make([]any, 0, len(syncPrimitives))
+	syncPrimitiveDefinitions := make([]any, 0, len(syncPrimitives))
+	for _, primitive := range syncPrimitives {
+		evidence := certificationTestEvidence("sync-"+primitive.id+".json", proof, map[string]any{
+			"scope":     "sync_mode",
+			"connector": "github",
+			"sync_mode": "full_overwrite",
+			"primitive": primitive.id,
+		})
+		syncEvidence = append(syncEvidence, evidence)
+		syncCells = append(syncCells, certificationTestCell(map[string]any{
+			"sync_mode":     "full_overwrite",
+			"primitive":     primitive.id,
+			"live_evidence": []any{certificationTestEvidencePointer(evidence, proof)},
+		}))
+		syncPrimitiveDefinitions = append(syncPrimitiveDefinitions, map[string]any{
+			"id": primitive.id, "integration_type": primitive.integrationType, "capability": primitive.capability,
+			"warehouse_direction": primitive.direction, "discovery_source": "test",
+		})
+	}
 	flowEvidence := certificationTestEvidence("flow.json", flowProof, map[string]any{
 		"scope":       "flow",
 		"source":      "github",
@@ -399,7 +718,10 @@ func writeGreenCertificationFixture(t *testing.T) string {
 		"flow_kind":   "api_to_api",
 	})
 
-	for _, evidence := range []map[string]any{capabilityEvidence, workflowEvidence, syncEvidence, flowEvidence} {
+	evidenceRecords := []map[string]any{capabilityEvidence, workflowEvidence}
+	evidenceRecords = append(evidenceRecords, syncEvidence...)
+	evidenceRecords = append(evidenceRecords, flowEvidence)
+	for _, evidence := range evidenceRecords {
 		record := evidence["record"].(string)
 		sidecar := make(map[string]any, len(evidence)-1)
 		for key, value := range evidence {
@@ -417,11 +739,6 @@ func writeGreenCertificationFixture(t *testing.T) string {
 	workflowCell := certificationTestCell(map[string]any{
 		"workflow_kind": "etl",
 		"live_evidence": []any{certificationTestEvidencePointer(workflowEvidence, proof)},
-	})
-	syncCell := certificationTestCell(map[string]any{
-		"sync_mode":     "full_overwrite",
-		"primitive":     "api_read_into_warehouse",
-		"live_evidence": []any{certificationTestEvidencePointer(syncEvidence, proof)},
 	})
 	flowCell := certificationTestCell(map[string]any{
 		"live_evidence": []any{certificationTestEvidencePointer(flowEvidence, flowProof)},
@@ -451,11 +768,9 @@ func writeGreenCertificationFixture(t *testing.T) string {
 			"connector": "github", "complete": true, "cells": []any{workflowCell},
 		}},
 		"sync_mode_kinds": []any{map[string]any{"id": "full_overwrite", "discovery_source": "test"}},
-		"sync_primitives": []any{map[string]any{
-			"id": "api_read_into_warehouse", "integration_type": "api", "capability": "read", "warehouse_direction": "into_warehouse", "discovery_source": "test",
-		}},
+		"sync_primitives": syncPrimitiveDefinitions,
 		"sync_mode_cells": []any{map[string]any{
-			"connector": "github", "complete": true, "cells": []any{syncCell},
+			"connector": "github", "complete": true, "cells": syncCells,
 		}},
 		"connector_roles": []any{map[string]any{
 			"connector": "github", "roles": []any{
@@ -573,6 +888,30 @@ func certificationFixtureCapabilityCell(t *testing.T, root string) map[string]an
 	matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/capability-matrix.json")
 	connectors := matrix["connectors"].([]any)
 	return connectors[0].(map[string]any)["cells"].([]any)[0].(map[string]any)
+}
+
+func mutateCertificationFixtureCapabilityProof(t *testing.T, root string, mutate func(map[string]any)) {
+	t.Helper()
+	matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/capability-matrix.json")
+	pointer := matrix["connectors"].([]any)[0].(map[string]any)["cells"].([]any)[0].(map[string]any)["live_evidence"].([]any)[0].(map[string]any)
+	mutate(pointer["proof"].(map[string]any))
+	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/capability-matrix.json", matrix)
+
+	evidence := readCertificationFixtureObject(t, root, "internal/connectors/certifications/evidence/capability.json")
+	mutate(evidence["proof"].(map[string]any))
+	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/evidence/capability.json", evidence)
+}
+
+func mutateCertificationFixtureFlowProof(t *testing.T, root string, mutate func(map[string]any)) {
+	t.Helper()
+	matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+	pointer := matrix["pair_sets"].([]any)[0].(map[string]any)["cell"].(map[string]any)["live_evidence"].([]any)[0].(map[string]any)
+	mutate(pointer["proof"].(map[string]any))
+	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+
+	evidence := readCertificationFixtureObject(t, root, "internal/connectors/certifications/evidence/flow.json")
+	mutate(evidence["proof"].(map[string]any))
+	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/evidence/flow.json", evidence)
 }
 
 func writeCertificationFixtureCapabilityCell(t *testing.T, root string, cell map[string]any) {

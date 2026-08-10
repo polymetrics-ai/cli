@@ -154,11 +154,11 @@ func EvaluateCertificationGate(root string, contract *Contract, request Certific
 	if err := validateCapabilityMatrix(capabilities, gate); err != nil {
 		return certificationGateHalt(request, "capability_matrix/invalid", "input", err.Error()), nil
 	}
-	if err := validateFlowMatrix(flow, gate); err != nil {
-		return certificationGateHalt(request, "flow_matrix/invalid", "input", err.Error()), nil
-	}
 	if err := validateStatusArtifact(status, gate); err != nil {
 		return certificationGateHalt(request, "status/invalid", "input", err.Error()), nil
+	}
+	if err := validateFlowMatrix(flow, gate, capabilities, status); err != nil {
+		return certificationGateHalt(request, "flow_matrix/invalid", "input", err.Error()), nil
 	}
 
 	artifacts := certificationArtifacts{
@@ -871,12 +871,17 @@ func loadStatusArtifact(root string, gate ConnectorCertificationGate) (certifica
 }
 
 func readCertificationFile(root, relativePath string, destination any) error {
-	if !fs.ValidPath(relativePath) || pathpkg.Clean(relativePath) != relativePath || pathpkg.IsAbs(relativePath) {
-		return fmt.Errorf("certification input path %q is not local", relativePath)
-	}
-	raw, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(relativePath)))
+	reader, err := openCertificationRoot(root)
 	if err != nil {
 		return err
+	}
+	raw, readErr := reader.readFile(relativePath)
+	closeErr := reader.Close()
+	if readErr != nil {
+		return readErr
+	}
+	if closeErr != nil {
+		return fmt.Errorf("close certification root: %w", closeErr)
 	}
 	if err := decodeCertificationJSON(raw, destination); err != nil {
 		return err
@@ -886,10 +891,7 @@ func readCertificationFile(root, relativePath string, destination any) error {
 
 func loadAcceptedCertificationEvidence(root string, gate ConnectorCertificationGate) (map[string]certificationAcceptedEvidence, error) {
 	directory := gate.Inputs.EvidenceDirectory
-	if !fs.ValidPath(directory) || pathpkg.Clean(directory) != directory || pathpkg.IsAbs(directory) {
-		return nil, fmt.Errorf("evidence directory %q is not local", directory)
-	}
-	entries, err := os.ReadDir(filepath.Join(root, filepath.FromSlash(directory)))
+	entries, err := readCertificationDirectory(root, directory)
 	if errors.Is(err, fs.ErrNotExist) {
 		return map[string]certificationAcceptedEvidence{}, nil
 	}
@@ -898,10 +900,10 @@ func loadAcceptedCertificationEvidence(root string, gate ConnectorCertificationG
 	}
 	records := make(map[string]certificationAcceptedEvidence, len(entries))
 	for _, entry := range entries {
-		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
+		if !strings.HasSuffix(entry.Name(), ".json") {
 			continue
 		}
-		if entry.Type()&fs.ModeSymlink != 0 || !safeCertificationID(strings.TrimSuffix(entry.Name(), ".json")) {
+		if !safeCertificationID(strings.TrimSuffix(entry.Name(), ".json")) {
 			return nil, fmt.Errorf("evidence record %q is unsafe", entry.Name())
 		}
 		recordPath := pathpkg.Join(directory, entry.Name())
@@ -920,6 +922,88 @@ func loadAcceptedCertificationEvidence(root string, gate ConnectorCertificationG
 	return records, nil
 }
 
+type certificationRootReader struct {
+	root *os.Root
+}
+
+func openCertificationRoot(path string) (*certificationRootReader, error) {
+	info, err := os.Lstat(path)
+	if err != nil {
+		return nil, err
+	}
+	if info.Mode()&fs.ModeSymlink != 0 || !info.IsDir() {
+		return nil, fmt.Errorf("certification root %q must be a directory, not a symlink or special file", path)
+	}
+	root, err := os.OpenRoot(path)
+	if err != nil {
+		return nil, err
+	}
+	return &certificationRootReader{root: root}, nil
+}
+
+func readCertificationDirectory(root, directory string) ([]fs.DirEntry, error) {
+	reader, err := openCertificationRoot(root)
+	if err != nil {
+		return nil, err
+	}
+	entries, readErr := reader.readDirectory(directory)
+	closeErr := reader.Close()
+	if readErr != nil {
+		return nil, readErr
+	}
+	if closeErr != nil {
+		return nil, fmt.Errorf("close certification root: %w", closeErr)
+	}
+	return entries, nil
+}
+
+func (reader *certificationRootReader) Close() error {
+	return reader.root.Close()
+}
+
+func (reader *certificationRootReader) readFile(relativePath string) ([]byte, error) {
+	if err := reader.inspectPath(relativePath, true); err != nil {
+		return nil, err
+	}
+	return reader.root.ReadFile(filepath.FromSlash(relativePath))
+}
+
+func (reader *certificationRootReader) readDirectory(relativePath string) ([]fs.DirEntry, error) {
+	if err := reader.inspectPath(relativePath, false); err != nil {
+		return nil, err
+	}
+	return fs.ReadDir(reader.root.FS(), relativePath)
+}
+
+func (reader *certificationRootReader) inspectPath(relativePath string, regular bool) error {
+	if !fs.ValidPath(relativePath) || pathpkg.Clean(relativePath) != relativePath || pathpkg.IsAbs(relativePath) {
+		return fmt.Errorf("certification input path %q is not local", relativePath)
+	}
+	components := strings.Split(relativePath, "/")
+	for index := range components {
+		path := filepath.FromSlash(strings.Join(components[:index+1], "/"))
+		info, err := reader.root.Lstat(path)
+		if err != nil {
+			return err
+		}
+		if info.Mode()&fs.ModeSymlink != 0 {
+			return fmt.Errorf("certification input path %q contains a symlink", relativePath)
+		}
+		if index < len(components)-1 && !info.IsDir() {
+			return fmt.Errorf("certification input path %q has a non-directory ancestor", relativePath)
+		}
+		if index == len(components)-1 {
+			if regular && !info.Mode().IsRegular() {
+				return fmt.Errorf("certification input path %q is not a regular file", relativePath)
+			}
+			if !regular && !info.IsDir() {
+				return fmt.Errorf("certification input path %q is not a directory", relativePath)
+			}
+		}
+	}
+	return nil
+}
+
 func validateCapabilityMatrix(matrix certificationCapabilityMatrix, gate ConnectorCertificationGate) error {
 	if matrix.SchemaVersion != gate.SchemaVersion {
 		return fmt.Errorf("schema_version %d is unsupported", matrix.SchemaVersion)
@@ -933,35 +1017,148 @@ func validateCapabilityMatrix(matrix certificationCapabilityMatrix, gate Connect
 	if err := validateUniqueIDs("capability kind", matrix.FunctionKinds, func(kind certificationFunctionKind) string { return kind.ID }); err != nil {
 		return err
 	}
-	return validateUniqueIDs("capability connector", matrix.Connectors, func(connector certificationCapabilityConnector) string { return connector.Name })
+	if err := validateUniqueIDs("capability connector", matrix.Connectors, func(connector certificationCapabilityConnector) string { return connector.Name }); err != nil {
+		return err
+	}
+	kinds := make(map[string]bool, len(matrix.FunctionKinds))
+	for _, kind := range matrix.FunctionKinds {
+		kinds[kind.ID] = true
+	}
+	for _, connector := range matrix.Connectors {
+		if len(connector.Cells) != len(kinds) {
+			return fmt.Errorf("capability connector %q has %d cells for %d kinds", connector.Name, len(connector.Cells), len(kinds))
+		}
+		seen := make(map[string]bool, len(connector.Cells))
+		for _, cell := range connector.Cells {
+			if !kinds[cell.FunctionKind] || seen[cell.FunctionKind] {
+				return fmt.Errorf("capability connector %q has an unknown or duplicate kind %q", connector.Name, cell.FunctionKind)
+			}
+			if err := validateCertificationFacts(cell.certificationFacts, gate); err != nil {
+				return fmt.Errorf("capability connector %q kind %q is invalid: %w", connector.Name, cell.FunctionKind, err)
+			}
+			seen[cell.FunctionKind] = true
+		}
+	}
+	return nil
 }
 
-func validateFlowMatrix(matrix certificationFlowMatrix, gate ConnectorCertificationGate) error {
+func validateFlowMatrix(matrix certificationFlowMatrix, gate ConnectorCertificationGate, capabilities certificationCapabilityMatrix, status certificationStatusArtifact) error {
 	if matrix.SchemaVersion != gate.SchemaVersion {
 		return fmt.Errorf("schema_version %d is unsupported", matrix.SchemaVersion)
 	}
 	if matrix.GeneratedCommand != gate.GeneratedCommand || matrix.Mediator != localParquetWarehouse {
 		return errors.New("generated command or warehouse mediator is unsupported")
 	}
-	if len(matrix.FlowKinds) == 0 || len(matrix.WorkflowKinds) == 0 || len(matrix.Workflows) == 0 || len(matrix.SyncModeCells) == 0 || len(matrix.ConnectorRoles) == 0 {
-		return errors.New("flow kinds, workflows, sync-mode cells, and connector roles are required")
+	if len(matrix.FlowKinds) == 0 || len(matrix.WorkflowKinds) == 0 || len(matrix.Workflows) == 0 || len(matrix.SyncModeKinds) == 0 || len(matrix.SyncPrimitives) == 0 || len(matrix.SyncModeCells) == 0 || len(matrix.ConnectorRoles) == 0 {
+		return errors.New("flow kinds, workflows, sync modes, primitives, sync-mode cells, and connector roles are required")
 	}
 	if err := validateUniqueIDs("flow kind", matrix.FlowKinds, func(kind certificationFlowKind) string { return kind.ID }); err != nil {
 		return err
 	}
+	flowKinds := make(map[string]certificationFlowKind, len(matrix.FlowKinds))
+	for _, kind := range matrix.FlowKinds {
+		if !safeCertificationID(kind.SourceRole) || !safeCertificationID(kind.DestinationRole) {
+			return fmt.Errorf("flow kind %q has an unsafe role", kind.ID)
+		}
+		flowKinds[kind.ID] = kind
+	}
 	if err := validateUniqueIDs("workflow kind", matrix.WorkflowKinds, func(kind certificationWorkflowKind) string { return kind.ID }); err != nil {
 		return err
 	}
-	if err := validateUniqueIDs("workflow connector", matrix.Workflows, func(set certificationWorkflowSet) string { return set.Connector }); err != nil {
+	workflowKinds := make(map[string]bool, len(matrix.WorkflowKinds))
+	for _, kind := range matrix.WorkflowKinds {
+		if strings.TrimSpace(kind.DiscoverySource) == "" {
+			return fmt.Errorf("workflow kind %q has no discovery source", kind.ID)
+		}
+		workflowKinds[kind.ID] = true
+	}
+	if err := validateUniqueIDs("sync mode", matrix.SyncModeKinds, func(kind certificationSyncModeKind) string { return kind.ID }); err != nil {
 		return err
 	}
-	if err := validateUniqueIDs("sync-mode connector", matrix.SyncModeCells, func(set certificationSyncModeSet) string { return set.Connector }); err != nil {
+	syncModes := make(map[string]bool, len(matrix.SyncModeKinds))
+	for _, mode := range matrix.SyncModeKinds {
+		if strings.TrimSpace(mode.DiscoverySource) == "" {
+			return fmt.Errorf("sync mode %q has no discovery source", mode.ID)
+		}
+		syncModes[mode.ID] = true
+	}
+	if err := validateUniqueIDs("sync primitive", matrix.SyncPrimitives, func(primitive certificationSyncPrimitive) string { return primitive.ID }); err != nil {
 		return err
+	}
+	syncPrimitives := make(map[string]certificationSyncPrimitive, len(matrix.SyncPrimitives))
+	for _, primitive := range matrix.SyncPrimitives {
+		syncPrimitives[primitive.ID] = primitive
+	}
+	if err := validateRequiredCertificationSyncPrimitives(syncPrimitives); err != nil {
+		return err
+	}
+	primitiveIDs := make(map[string]bool, len(syncPrimitives))
+	for id := range syncPrimitives {
+		primitiveIDs[id] = true
 	}
 	if err := validateUniqueIDs("flow-role connector", matrix.ConnectorRoles, func(roles certificationConnectorRoles) string { return roles.Connector }); err != nil {
 		return err
 	}
-	return validateUniqueIDs("flow status", matrix.ConnectorStatuses, func(status certificationConnectorStatus) string { return status.Connector })
+	connectors := make(map[string]bool, len(matrix.ConnectorRoles))
+	for _, declaration := range matrix.ConnectorRoles {
+		connectors[declaration.Connector] = true
+		roles := make(map[string]bool, len(declaration.Roles))
+		for _, role := range declaration.Roles {
+			if !safeCertificationID(role.Role) || roles[role.Role] {
+				return fmt.Errorf("flow-role connector %q has an unsafe or duplicate role %q", declaration.Connector, role.Role)
+			}
+			roles[role.Role] = true
+			if !role.Applicable {
+				if role.NotApplicable == nil || role.Declared || role.Implemented {
+					return fmt.Errorf("flow-role connector %q role %q is invalid", declaration.Connector, role.Role)
+				}
+				if err := validateCertificationReason(role.NotApplicable.Code, role.NotApplicable.Reason); err != nil {
+					return fmt.Errorf("flow-role connector %q role %q is invalid: %w", declaration.Connector, role.Role, err)
+				}
+			} else if role.NotApplicable != nil {
+				return fmt.Errorf("flow-role connector %q role %q is invalid", declaration.Connector, role.Role)
+			}
+		}
+		for _, kind := range matrix.FlowKinds {
+			if !roles[kind.SourceRole] || !roles[kind.DestinationRole] {
+				return fmt.Errorf("flow-role connector %q omits a required role", declaration.Connector)
+			}
+		}
+	}
+	if err := validateWorkflowTopology(matrix.Workflows, connectors, workflowKinds, gate); err != nil {
+		return err
+	}
+	if err := validateSyncModeTopology(matrix.SyncModeCells, connectors, syncModes, primitiveIDs, gate); err != nil {
+		return err
+	}
+	if err := validateFlowPairTopology(matrix, flowKinds, connectors, gate); err != nil {
+		return err
+	}
+	if err := validateUniqueIDs("flow status", matrix.ConnectorStatuses, func(status certificationConnectorStatus) string { return status.Connector }); err != nil {
+		return err
+	}
+	flowStatuses := make([]string, 0, len(matrix.ConnectorStatuses))
+	for _, item := range matrix.ConnectorStatuses {
+		flowStatuses = append(flowStatuses, item.Connector)
+	}
+	if !sameCertificationConnectorSet(connectors, flowStatuses) {
+		return errors.New("flow connector statuses do not match connector roles")
+	}
+	capabilityConnectors := make([]string, 0, len(capabilities.Connectors))
+	for _, connector := range capabilities.Connectors {
+		capabilityConnectors = append(capabilityConnectors, connector.Name)
+	}
+	if !sameCertificationConnectorSet(connectors, capabilityConnectors) {
+		return errors.New("flow connector roles do not match capability connectors")
+	}
+	statusConnectors := make([]string, 0, len(status.Connectors))
+	for _, connector := range status.Connectors {
+		statusConnectors = append(statusConnectors, connector.Connector)
+	}
+	if !sameCertificationConnectorSet(connectors, statusConnectors) {
+		return errors.New("flow connector roles do not match status connectors")
+	}
+	return nil
 }
 
 func validateStatusArtifact(artifact certificationStatusArtifact, gate ConnectorCertificationGate) error {
@@ -971,7 +1168,253 @@ func validateStatusArtifact(artifact certificationStatusArtifact, gate Connector
 	if artifact.GeneratedCommand != gate.GeneratedCommand || len(artifact.Connectors) == 0 {
 		return errors.New("generated command or connector statuses are invalid")
 	}
-	return validateUniqueIDs("status connector", artifact.Connectors, func(status certificationConnectorStatus) string { return status.Connector })
+	if err := validateUniqueIDs("status connector", artifact.Connectors, func(status certificationConnectorStatus) string { return status.Connector }); err != nil {
+		return err
+	}
+	for _, status := range artifact.Connectors {
+		if status.Certified {
+			if status.Label != "CERTIFIED" || status.Warning != "" {
+				return fmt.Errorf("certified status %q is malformed", status.Connector)
+			}
+			continue
+		}
+		if status.Label != "COMMUNITY BUILD, UNCERTIFIED" || status.Warning != "This connector is reachable but is a COMMUNITY BUILD, UNCERTIFIED." {
+			return fmt.Errorf("uncertified status %q is malformed", status.Connector)
+		}
+	}
+	return nil
+}
+
+func validateWorkflowTopology(sets []certificationWorkflowSet, connectors, kinds map[string]bool, gate ConnectorCertificationGate) error {
+	if len(sets) != len(connectors) {
+		return errors.New("workflow sets omit one or more connectors")
+	}
+	seenSets := make(map[string]bool, len(sets))
+	for _, set := range sets {
+		if !connectors[set.Connector] || seenSets[set.Connector] {
+			return fmt.Errorf("workflow connector %q is unknown or duplicated", set.Connector)
+		}
+		seenSets[set.Connector] = true
+		if len(set.Cells) != len(kinds) {
+			return fmt.Errorf("workflow connector %q has %d cells for %d kinds", set.Connector, len(set.Cells), len(kinds))
+		}
+		seenCells := make(map[string]bool, len(set.Cells))
+		for _, cell := range set.Cells {
+			if !kinds[cell.WorkflowKind] || seenCells[cell.WorkflowKind] {
+				return fmt.Errorf("workflow connector %q has an unknown or duplicate kind %q", set.Connector, cell.WorkflowKind)
+			}
+			if err := validateCertificationFacts(cell.certificationFacts, gate); err != nil {
+				return fmt.Errorf("workflow connector %q kind %q is invalid: %w", set.Connector, cell.WorkflowKind, err)
+			}
+			seenCells[cell.WorkflowKind] = true
+		}
+		if set.Complete != certificationWorkflowCellsComplete(set.Cells) {
+			return fmt.Errorf("workflow connector %q complete disagrees with cells", set.Connector)
+		}
+	}
+	return nil
+}
+
+func validateSyncModeTopology(sets []certificationSyncModeSet, connectors, modes, primitives map[string]bool, gate ConnectorCertificationGate) error {
+	if len(sets) != len(connectors) {
+		return errors.New("sync-mode sets omit one or more connectors")
+	}
+	expected := len(modes) * len(primitives)
+	seenSets := make(map[string]bool, len(sets))
+	for _, set := range sets {
+		if !connectors[set.Connector] || seenSets[set.Connector] {
+			return fmt.Errorf("sync-mode connector %q is unknown or duplicated", set.Connector)
+		}
+		seenSets[set.Connector] = true
+		if len(set.Cells) != expected {
+			return fmt.Errorf("sync-mode connector %q has %d cells for %d mode/primitive combinations", set.Connector, len(set.Cells), expected)
+		}
+		seenCells := make(map[string]bool, len(set.Cells))
+		for _, cell := range set.Cells {
+			if !modes[cell.SyncMode] || !primitives[cell.Primitive] {
+				return fmt.Errorf("sync-mode connector %q has an unknown mode or primitive", set.Connector)
+			}
+			key := cell.SyncMode + "\x00" + cell.Primitive
+			if seenCells[key] {
+				return fmt.Errorf("sync-mode connector %q duplicates %q", set.Connector, key)
+			}
+			if err := validateCertificationFacts(cell.certificationFacts, gate); err != nil {
+				return fmt.Errorf("sync-mode connector %q %q is invalid: %w", set.Connector, key, err)
+			}
+			seenCells[key] = true
+		}
+		if set.Complete != certificationSyncModeCellsComplete(set.Cells) {
+			return fmt.Errorf("sync-mode connector %q complete disagrees with cells", set.Connector)
+		}
+	}
+	return nil
+}
+
+func validateFlowPairTopology(matrix certificationFlowMatrix, kinds map[string]certificationFlowKind, connectors map[string]bool, gate ConnectorCertificationGate) error {
+	for _, set := range matrix.PairSets {
+		if _, ok := kinds[set.FlowKind]; !ok || set.Mediator != matrix.Mediator || !sortedUniqueCertificationIDs(set.SourceConnectors) || !sortedUniqueCertificationIDs(set.DestinationConnectors) {
+			return errors.New("flow pair set is invalid")
+		}
+		for _, connector := range append(append([]string{}, set.SourceConnectors...), set.DestinationConnectors...) {
+			if !connectors[connector] {
+				return fmt.Errorf("flow pair set names unknown connector %q", connector)
+			}
+		}
+		if err := validateCertificationFacts(set.Cell.certificationFacts, gate); err != nil {
+			return fmt.Errorf("flow pair set %q is invalid: %w", set.FlowKind, err)
+		}
+	}
+	names := make([]string, 0, len(connectors))
+	for name := range connectors {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, kind := range matrix.FlowKinds {
+		for _, source := range names {
+			for _, destination := range names {
+				if countCertificationFlowPairSets(matrix.PairSets, kind.ID, source, destination) != 1 {
+					return fmt.Errorf("flow pair coverage %s %s -> %s is incomplete or duplicated", kind.ID, source, destination)
+				}
+			}
+		}
+	}
+	seenOverrides := make(map[string]bool, len(matrix.PairOverrides))
+	for _, override := range matrix.PairOverrides {
+		key := flowPairKey(override.FlowKind, override.Source, override.Destination)
+		if seenOverrides[key] || override.Mediator != matrix.Mediator || kinds[override.FlowKind].ID == "" || !connectors[override.Source] || !connectors[override.Destination] {
+			return errors.New("flow pair override is invalid")
+		}
+		seenOverrides[key] = true
+		base, ok := certificationFlowPairSetFor(matrix.PairSets, override.FlowKind, override.Source, override.Destination)
+		if !ok || !base.Cell.Applicable {
+			return errors.New("flow pair override has no default pair")
+		}
+		if err := validateCertificationFacts(override.Cell.certificationFacts, gate); err != nil || !override.Cell.Applicable {
+			return errors.New("flow pair override is invalid")
+		}
+	}
+	return nil
+}
+
+func validateRequiredCertificationSyncPrimitives(primitives map[string]certificationSyncPrimitive) error {
+	want := map[string]certificationSyncPrimitive{
+		"api_read_into_warehouse":       {ID: "api_read_into_warehouse", IntegrationType: "api", Capability: "read", WarehouseDirection: "into_warehouse"},
+		"api_write_from_warehouse":      {ID: "api_write_from_warehouse", IntegrationType: "api", Capability: "write", WarehouseDirection: "from_warehouse"},
+		"database_read_into_warehouse":  {ID: "database_read_into_warehouse", IntegrationType: "database", Capability: "read", WarehouseDirection: "into_warehouse"},
+		"database_write_from_warehouse": {ID: "database_write_from_warehouse", IntegrationType: "database", Capability: "write", WarehouseDirection: "from_warehouse"},
+	}
+	if len(primitives) != len(want) {
+		return fmt.Errorf("sync primitive inventory has %d entries, want four required warehouse-facing primitives", len(primitives))
+	}
+	for id, expected := range want {
+		actual, ok := primitives[id]
+		if !ok || actual.IntegrationType != expected.IntegrationType || actual.Capability != expected.Capability || actual.WarehouseDirection != expected.WarehouseDirection || strings.TrimSpace(actual.DiscoverySource) == "" {
+			return fmt.Errorf("sync primitive %q is missing or has an invalid warehouse-facing mapping", id)
+		}
+	}
+	return nil
+}
+
+func validateCertificationFacts(facts certificationFacts, gate ConnectorCertificationGate) error {
+	if !facts.Applicable {
+		if facts.NotApplicable == nil || facts.Declared || facts.Implemented || facts.FixtureTested || facts.LiveTested || len(facts.FixtureEvidence) != 0 || len(facts.LiveEvidence) != 0 {
+			return errors.New("non-applicable cell is invalid")
+		}
+		return validateCertificationReason(facts.NotApplicable.Code, facts.NotApplicable.Reason)
+	}
+	if facts.NotApplicable != nil {
+		return errors.New("applicable cell has a not_applicable reason")
+	}
+	if facts.FixtureTested && len(facts.FixtureEvidence) == 0 {
+		return errors.New("fixture_tested cell requires fixture evidence")
+	}
+	if facts.LiveTested && len(facts.LiveEvidence) == 0 {
+		return errors.New("live_tested cell requires live evidence")
+	}
+	if !facts.LiveTested && len(facts.LiveEvidence) != 0 {
+		return errors.New("live evidence requires live_tested=true")
+	}
+	for _, pointer := range facts.LiveEvidence {
+		if err := validateEvidencePointer(pointer, gate); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func certificationWorkflowCellsComplete(cells []certificationWorkflowCell) bool {
+	applicable := 0
+	for _, cell := range cells {
+		if !cell.Applicable {
+			continue
+		}
+		applicable++
+		if !certificationFactsComplete(cell.certificationFacts) {
+			return false
+		}
+	}
+	return applicable != 0
+}
+
+func certificationSyncModeCellsComplete(cells []certificationSyncModeCell) bool {
+	applicable := 0
+	for _, cell := range cells {
+		if !cell.Applicable {
+			continue
+		}
+		applicable++
+		if !certificationFactsComplete(cell.certificationFacts) {
+			return false
+		}
+	}
+	return applicable != 0
+}
+
+func certificationFactsComplete(facts certificationFacts) bool {
+	return facts.Applicable && facts.Declared && facts.Implemented && facts.FixtureTested && facts.LiveTested && len(facts.LiveEvidence) != 0
+}
+
+func certificationFlowPairSetFor(sets []certificationFlowPairSet, kind, source, destination string) (certificationFlowPairSet, bool) {
+	for _, set := range sets {
+		if set.FlowKind == kind && slices.Contains(set.SourceConnectors, source) && slices.Contains(set.DestinationConnectors, destination) {
+			return set, true
+		}
+	}
+	return certificationFlowPairSet{}, false
+}
+
+func sortedUniqueCertificationIDs(values []string) bool {
+	if len(values) == 0 {
+		return false
+	}
+	for index, value := range values {
+		if !safeCertificationID(value) || index > 0 && values[index-1] >= value {
+			return false
+		}
+	}
+	return true
+}
+
+func countCertificationFlowPairSets(sets []certificationFlowPairSet, kind, source, destination string) int {
+	count := 0
+	for _, set := range sets {
+		if set.FlowKind == kind && slices.Contains(set.SourceConnectors, source) && slices.Contains(set.DestinationConnectors, destination) {
+			count++
+		}
+	}
+	return count
+}
+
+func sameCertificationConnectorSet(expected map[string]bool, actual []string) bool {
+	if len(expected) != len(actual) {
+		return false
+	}
+	for _, name := range actual {
+		if !expected[name] {
+			return false
+		}
+	}
+	return true
 }
 
 func validateUniqueIDs[T any](label string, values []T, identifier func(T) string) error {
@@ -1098,14 +1541,60 @@ func validateEvidenceProof(proof certificationEvidenceProof, gate ConnectorCerti
 			flow.WarehouseReadbackOperation == flow.DestinationReadbackOperation {
 			return errors.New("flow proof lacks independent warehouse and destination readback exchanges")
 		}
-		if !flow.Delivery.Resumable || !flow.Delivery.ReceiptBacked || !flow.Delivery.Checkpointed || !flow.Delivery.ReplayIdentity || !flow.Delivery.ProviderIdempotencyKey {
-			return errors.New("flow proof delivery guarantees are incomplete")
+		if err := validateCertificationDeliveryGuarantees(flow.Delivery); err != nil {
+			return fmt.Errorf("flow proof delivery guarantees: %w", err)
 		}
-		for _, limitation := range flow.Delivery.Limitations {
-			if !safeCertificationID(limitation.Guarantee) || !safeCertificationID(limitation.Code) || strings.TrimSpace(limitation.Reason) == "" {
-				return errors.New("flow proof limitation is invalid")
-			}
+	}
+	return nil
+}
+
+func validateCertificationDeliveryGuarantees(delivery certificationDeliveryGuarantees) error {
+	guarantees := []struct {
+		name    string
+		isFalse bool
+	}{
+		{name: "resumable", isFalse: !delivery.Resumable},
+		{name: "receipt_backed", isFalse: !delivery.ReceiptBacked},
+		{name: "checkpointed", isFalse: !delivery.Checkpointed},
+		{name: "replay_identity", isFalse: !delivery.ReplayIdentity},
+		{name: "provider_idempotency_key", isFalse: !delivery.ProviderIdempotencyKey},
+	}
+	falseGuarantees := make(map[string]bool, len(guarantees))
+	for _, guarantee := range guarantees {
+		falseGuarantees[guarantee.name] = guarantee.isFalse
+	}
+	covered := make(map[string]bool, len(delivery.Limitations))
+	for _, limitation := range delivery.Limitations {
+		if !falseGuarantees[limitation.Guarantee] {
+			return fmt.Errorf("limitation %q does not correspond to a false guarantee", limitation.Guarantee)
 		}
+		if covered[limitation.Guarantee] {
+			return fmt.Errorf("limitation %q is duplicated", limitation.Guarantee)
+		}
+		if err := validateCertificationLimitation(limitation); err != nil {
+			return fmt.Errorf("limitation %q: %w", limitation.Guarantee, err)
+		}
+		covered[limitation.Guarantee] = true
+	}
+	for _, guarantee := range guarantees {
+		if guarantee.isFalse && !covered[guarantee.name] {
+			return fmt.Errorf("false guarantee %q requires a named limitation", guarantee.name)
+		}
+	}
+	return nil
+}
+
+func validateCertificationLimitation(limitation certificationDeliveryLimitation) error {
+	return validateCertificationReason(limitation.Code, limitation.Reason)
+}
+
+func validateCertificationReason(code, reason string) error {
+	switch strings.ToLower(strings.TrimSpace(code)) {
+	case "", "n/a", "na", "blocked", "not_applicable", "not-applicable":
+		return fmt.Errorf("reason code %q is generic", code)
+	}
+	if strings.TrimSpace(reason) == "" {
+		return errors.New("reason explanation is required")
 	}
 	return nil
 }
@@ -1203,6 +1692,9 @@ func safeProofFieldName(value string) bool {
 }
 
 func certificationFingerprintSequence(value string) bool {
+	if value == "" {
+		return false
+	}
 	for value != "" {
 		if !strings.HasPrefix(value, "{{pmcertfp:v1:") {
 			return false
@@ -1262,9 +1754,21 @@ func evidencePointerMatchesRecord(pointer certificationEvidencePointer, record c
 }
 
 func certificationProofEqual(left, right certificationEvidenceProof) bool {
-	leftJSON, leftErr := json.Marshal(left)
-	rightJSON, rightErr := json.Marshal(right)
-	return leftErr == nil && rightErr == nil && bytes.Equal(leftJSON, rightJSON)
+	leftValue, leftErr := certificationProofValue(left)
+	rightValue, rightErr := certificationProofValue(right)
+	return leftErr == nil && rightErr == nil && reflect.DeepEqual(leftValue, rightValue)
+}
+
+func certificationProofValue(proof certificationEvidenceProof) (any, error) {
+	raw, err := json.Marshal(proof)
+	if err != nil {
+		return nil, err
+	}
+	var value any
+	if err := decodeCertificationJSON(raw, &value); err != nil {
+		return nil, err
+	}
+	return value, nil
 }
 
 type certificationEvidenceBinding struct {
@@ -1444,12 +1948,17 @@ func RenderCertificationGateIO(contract *Contract) ([]byte, error) {
 		return nil, err
 	}
 	gate := contract.CertificationGate
+	commandArgv, err := marshalArgv(gate.Command.Argv)
+	if err != nil {
+		return nil, err
+	}
 	var output bytes.Buffer
 	fmt.Fprintln(&output, certificationGateBeginMarker)
 	fmt.Fprintln(&output, "## Connector certification Shepherd gate")
 	fmt.Fprintln(&output)
 	fmt.Fprintf(&output, "This is the versioned, read-only `%s` gate. It reads only `%s`, `%s`, `%s`, and accepted records below `%s`; it never creates evidence, loads credentials, invokes a provider, or mutates provider/production state.\n\n", gate.Name, gate.Inputs.CapabilityMatrix, gate.Inputs.FlowMatrix, gate.Inputs.Status, gate.Inputs.EvidenceDirectory)
 	fmt.Fprintf(&output, "- Enforce a `PROCEED` verdict before `%s`.\n", joinNatural(gate.EnforcedTransitions))
+	fmt.Fprintf(&output, "- Run argv `%s` at the transition boundary. %s\n", commandArgv, gate.Command.Instruction)
 	fmt.Fprintf(&output, "- Input schema v%d requires every field: %s.\n", gate.InputSchemaVersion, joinInlineCode(gate.InputFields))
 	fmt.Fprintf(&output, "- The nested `inputs` values must exactly equal the canonical paths above; no adapter-local default or replacement is allowed.\n")
 	fmt.Fprintf(&output, "- Every applicable capability, workflow, sync-mode primitive, and flow pair needs %s plus a matching accepted live-evidence record. File presence, reachability, or `implemented` alone cannot pass.\n", joinNatural(gate.BindingCriteria))

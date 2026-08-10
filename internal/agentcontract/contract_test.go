@@ -274,6 +274,12 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 			},
 		},
 		{
+			name: "certification gate executable argv changed",
+			mutate: func(value *Contract) {
+				value.CertificationGate.Command.Argv = []string{"go", "run", "./cmd/agentcontractgen", "check"}
+			},
+		},
+		{
 			name: "tracker omits certification gate",
 			mutate: func(value *Contract) {
 				value.Tracker.IntegrateWhen = value.Tracker.IntegrateWhen[:len(value.Tracker.IntegrateWhen)-1]
@@ -338,12 +344,12 @@ func TestRenderIsStableAndConnectorInheritsBase(t *testing.T) {
 		}
 	}
 
-	const expectedSHA256 = "64bda057bd8805f07d4484c301f10ab45da6bc0ff253183e6bb035948b61cc5d"
+	const expectedSHA256 = "1e060944958afaef2c522b301b91f73e9fe37d36976bb2977843b71b2b2579e1"
 	gotSHA256 := fmt.Sprintf("%x", sha256.Sum256(base))
 	if gotSHA256 != expectedSHA256 {
 		t.Fatalf("base rendering hash = %s, update expected hash after intentional canonical change", gotSHA256)
 	}
-	const expectedConnectorSHA256 = "95e3109d61ddc4c65935978ed9b13d1ab6022bc3ef1cea8bdd737db0d5b4d50d"
+	const expectedConnectorSHA256 = "6d77c5fdbd4e125f11233c3077ebdea405e6fb101c5f9ac59756df70377aa775"
 	gotConnectorSHA256 := fmt.Sprintf("%x", sha256.Sum256(connector))
 	if gotConnectorSHA256 != expectedConnectorSHA256 {
 		t.Fatalf("connector rendering hash = %s, update expected hash after intentional canonical change", gotConnectorSHA256)

@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -54,4 +55,38 @@ func TestRunCheckAndRender(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestRunCertificationGateBlocksCurrentGitHubBaseline(t *testing.T) {
+	root, err := filepath.Abs(filepath.Join("..", ".."))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	code := run(context.Background(), []string{
+		"certification-gate", "--root", root, "--connector", "github", "--transition", "integrate_sub_pr",
+	}, &stdout, &stderr)
+	if code != 1 {
+		t.Fatalf("certification gate code = %d, want 1\nstdout=%s\nstderr=%s", code, stdout.String(), stderr.String())
+	}
+	var verdict struct {
+		Decision string `json:"decision"`
+		Failures []struct {
+			ID string `json:"id"`
+		} `json:"failures"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &verdict); err != nil {
+		t.Fatalf("decode certification gate output: %v\n%s", err, stdout.String())
+	}
+	if verdict.Decision != "RETRY" {
+		t.Fatalf("certification gate decision = %#v, want RETRY", verdict)
+	}
+	for _, failure := range verdict.Failures {
+		if failure.ID == "capability/github/capability:check/live_evidence" {
+			return
+		}
+	}
+	t.Fatalf("certification gate failures = %#v, want GitHub live-evidence retry", verdict.Failures)
 }

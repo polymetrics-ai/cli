@@ -144,6 +144,7 @@ type ConnectorCertificationGate struct {
 	ProofRedactionStrategy         string                  `json:"proof_redaction_strategy"`
 	ReadOnly                       bool                    `json:"read_only"`
 	GeneratedCommand               string                  `json:"generated_command"`
+	Command                        ExecutableAction        `json:"command"`
 	Inputs                         CertificationGateInputs `json:"inputs"`
 	InputFields                    []string                `json:"input_fields"`
 	VerdictFields                  []string                `json:"verdict_fields"`
@@ -426,6 +427,10 @@ func (gate ConnectorCertificationGate) Validate() error {
 	if err := gate.Inputs.Validate(); err != nil {
 		return err
 	}
+	wantCommand := []string{"go", "run", "./cmd/agentcontractgen", "certification-gate", "--root", "<repository-root>", "--connector", "<connector>", "--transition", "<transition>"}
+	if !slices.Equal(gate.Command.Argv, wantCommand) || strings.TrimSpace(gate.Command.Instruction) == "" {
+		return fmt.Errorf("canonical contract: certification Shepherd gate command is invalid")
+	}
 	wantInputs := []string{"schema_version", "connector", "transition", "inputs.capability_matrix", "inputs.flow_matrix", "inputs.status", "inputs.evidence_directory"}
 	wantVerdicts := []string{"schema_version", "connector", "transition", "decision", "failures"}
 	wantCriteria := []string{"declared", "implemented", "fixture_tested", "live_tested", "live_evidence"}
@@ -558,7 +563,7 @@ type executableField struct {
 }
 
 func (contract *Contract) executableFields() []executableField {
-	fields := make([]executableField, 0, len(contract.GSD.Sequence)+3)
+	fields := make([]executableField, 0, len(contract.GSD.Sequence)+4)
 	for index, invocation := range contract.GSD.Sequence {
 		fields = append(fields, executableField{
 			name: fmt.Sprintf("gsd.sequence[%d]", index),
@@ -566,6 +571,7 @@ func (contract *Contract) executableFields() []executableField {
 		})
 	}
 	return append(fields,
+		executableField{name: "connector_certification_gate.command", argv: contract.CertificationGate.Command.Argv},
 		executableField{name: "no_mistakes.child_command", argv: contract.NoMistakes.ChildCommand.Argv},
 		executableField{name: "no_mistakes.sub_pr_open", argv: contract.NoMistakes.SubPROpen.Argv},
 		executableField{name: "no_mistakes.parent_command", argv: contract.NoMistakes.ParentCommand.Argv},

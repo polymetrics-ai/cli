@@ -67,6 +67,9 @@ func TestRegisteredHarnessesEmbedByteEquivalentCertificationGateInputs(t *testin
 		if target.Harness == "opencode" {
 			block, err = openCodeProjectionGateBlock(projection)
 		} else {
+			if target.Harness == "codex" {
+				projection = []byte(parseCodexProjection(t, projection).GetString("developer_instructions"))
+			}
 			block, err = extractCertificationGateBlock(projection)
 		}
 		if err != nil {

@@ -32,3 +32,25 @@ child-PR publication remain pending.
       records two findings, both fixed in correction round 1 of 5; no actionable review findings
       remain.
 - [ ] `no-mistakes` runs without `--yes`; final branch/PR target and parent references are correct.
+
+## Correction round 2 focused evidence
+
+- [x] Empty command/target/credential fingerprint sequences halt, while reordered proof JSON object
+      members compare semantically and a valid fixture proceeds.
+- [x] Missing sync-mode/primitive or flow-pair topology, connector-roster disagreement, symlinked
+      artifact/evidence paths, and non-regular evidence records halt before certification.
+- [x] A producer-valid false delivery guarantee with a named limitation proceeds; generic or
+      unmatched limitations still halt.
+- [x] The canonical `agentcontractgen certification-gate` argv is embedded in each Claude, Codex,
+      Pi, and OpenCode projection and the checked-in GitHub baseline exits nonzero with its
+      deterministic `RETRY` JSON.
+- [x] Focused review verification passed:
+
+      ```sh
+      go test -timeout 20m ./internal/agentcontract ./cmd/agentcontractgen -count=1
+      ```
+
+      Both packages reported `ok`. Full suite, lint, CI, PR, and outer pipeline validation were not
+      run in this review phase.
+- [x] CLI help/manual/website parity is not applicable: this adds a repository-internal
+      `agentcontractgen` transition command, not a `pm` command surface.

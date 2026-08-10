@@ -37,3 +37,31 @@ under #3995, with `Refs #3988`. It owns both R-1 fingerprint-only proof consumpt
 canonical semantic JSON comparison. The production remediation is commit `842f1c271`; the
 verification record is `d511186bc`. The issue is deliberately open pending this child branch's PR
 review and the parent acceptance flow.
+
+## Correction round 2 re-review
+
+| ID | Severity | Finding | Disposition | Tracking |
+| --- | --- | --- | --- | --- |
+| C2-1 | error | Empty proof fingerprint sequences could satisfy proof validation. | Fixed: empty sequences now halt; the sidecar and pointer are both rejected. | #4024 |
+| C2-2 | error | JSON object-member order caused semantically equal proof bodies to mismatch. | Fixed: typed proofs are decoded to semantic JSON values before comparison. | #4024 |
+| C2-3 | error | Missing sync-mode/primitive or flow-pair cells, and inconsistent connector rosters, could be omitted before a certified status proceeded. | Fixed: topology and connector identity are validated across capability, flow, and status artifacts. | #4028 |
+| C2-4 | error | Symlink ancestors and non-regular evidence records could escape the supplied input root. | Fixed: the shared root-bound reader rejects both before decoding. | #4028 |
+| C2-5 | warning | A producer-valid false delivery guarantee with a named limitation halted in the consumer. | Fixed: the consumer mirrors the producer's named-limitation rule. | #4028 |
+| C2-6 | error | The gate lacked an executable production transition surface. | Fixed: canonical projections now carry the exact read-only `agentcontractgen certification-gate` argv. | #4030 |
+
+The six reported correction tests were written before their production edits. The one permitted
+focused verification then passed:
+
+```sh
+go test -timeout 20m ./internal/agentcontract ./cmd/agentcontractgen -count=1
+```
+
+The command reported `ok` for both packages. This review phase intentionally did not run full
+repository tests, lint, CI, a PR action, or any outer delivery gate.
+
+## Current verdict
+
+PASS after correction round 2 of 5. The checked-in GitHub artifact deterministically returns
+`RETRY` with `capability/github/capability:check/live_evidence`; malformed, escaped, and
+producer-invalid inputs halt, while a complete producer-valid fixture can proceed. Remaining
+validation, branch/PR work, and human gates remain owned by the outer executor.

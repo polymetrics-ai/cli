@@ -16,7 +16,7 @@
     "no_mistakes": "pending",
     "child_pr": "pending"
   },
-  "correction_rounds": 1,
+  "correction_rounds": 2,
   "correction_tracking": {
     "round": 1,
     "maximum_rounds": 5,
@@ -26,6 +26,36 @@
     "remediation_commit": "842f1c271",
     "verification_commit": "d511186bc",
     "status": "code_remediated_child_open_pending_pr_review"
+  },
+  "correction_round_2": {
+    "round": 2,
+    "maximum_rounds": 5,
+    "children": [
+      {
+        "issue": 4024,
+        "scope": "empty fingerprint rejection and semantic RawMessage comparison"
+      },
+      {
+        "issue": 4028,
+        "scope": "matrix topology, root confinement, and producer-equivalent delivery limitations"
+      },
+      {
+        "issue": 4030,
+        "scope": "read-only executable certification gate and canonical protected-transition argv"
+      }
+    ],
+    "finding_ids": [
+      "certification-empty-fingerprint",
+      "certification-semantic-json-order",
+      "certification-matrix-coverage",
+      "certification-root-escape",
+      "certification-delivery-guarantee-divergence",
+      "certification-unwired-transition-gate"
+    ],
+    "red_tests_authored_before_production_changes": true,
+    "focused_verification": "go test -timeout 20m ./internal/agentcontract ./cmd/agentcontractgen -count=1",
+    "focused_verification_status": "passed",
+    "status": "code_remediated_review_verified_pending_outer_executor"
   },
   "workflow_recovery": {
     "cancelled_run": "01KZPTX65SYF6JJJK8QH7BWTBA",

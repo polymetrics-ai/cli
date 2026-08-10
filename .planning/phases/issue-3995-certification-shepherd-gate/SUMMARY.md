@@ -37,3 +37,18 @@ of 5: the remediation commit is `842f1c271` and the verification record is `d511
 available at `da7747a796049601a179a97c025bfb05f011f1e8`, although #3985 remains formally open.
 #3989 remains a held integration gate: this change accepts only the declared proof-schema version
 and halts unknown versions rather than inventing future proof fields.
+
+## Correction round 2
+
+The correction round adds empty-fingerprint rejection, semantic proof JSON comparison, complete
+matrix/connector topology validation, root-confined artifact loading, and producer-equivalent named
+delivery limitations. The canonical contract now renders the exact read-only
+`agentcontractgen certification-gate` argv for every registered harness, so protected transitions
+have an executable gate surface rather than an uncalled helper.
+
+The focused review command
+`go test -timeout 20m ./internal/agentcontract ./cmd/agentcontractgen -count=1` passed. The current
+GitHub artifact still returns deterministic `RETRY` with
+`capability/github/capability:check/live_evidence`; a complete producer-valid fixture may return
+`PROCEED`. Correction tracking is split deliberately: #4024 covers proof comparison/fingerprint
+consumption, #4028 invalid artifacts, and #4030 protected transitions.

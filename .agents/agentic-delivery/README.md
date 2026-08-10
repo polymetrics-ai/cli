@@ -72,6 +72,11 @@ with stable cell/evidence coordinates before protected connector/parent transiti
 evaluated explicitly at a protected transition, so a baseline with zero certified connectors does
 not make a general contract check red.
 
+At each protected transition, run the canonical command rendered in the registered projection:
+`go run ./cmd/agentcontractgen certification-gate --root <repository-root> --connector <connector>
+--transition <transition>`. It emits the complete verdict as JSON and exits zero only for
+`PROCEED`; `RETRY` and `HALT` preserve their evidence on stdout while blocking the transition.
+
 Codex loads the project-local `.codex` configuration layer only when the repository is trusted.
 The generated Codex workers therefore fail closed for project-local selection in an untrusted
 repository: trust it in Codex before selecting either worker. Their generated

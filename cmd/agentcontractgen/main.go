@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -33,6 +35,9 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 		}
 		_, _ = fmt.Fprintln(stdout, "agentcontractgen: canonical contract and registered projections are current")
 		return 0
+
+	case "certification-gate":
+		return runCertificationGate(args[1:], stdout, stderr)
 
 	case "render":
 		flags := flag.NewFlagSet("render", flag.ContinueOnError)
@@ -91,6 +96,94 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	}
 }
 
+func runCertificationGate(args []string, stdout, stderr io.Writer) int {
+	flags := flag.NewFlagSet("certification-gate", flag.ContinueOnError)
+	flags.SetOutput(stderr)
+	rootFlag := flags.String("root", "", "repository root")
+	connector := flags.String("connector", "", "connector name")
+	transition := flags.String("transition", "", "protected transition")
+	if err := flags.Parse(args); err != nil {
+		if errors.Is(err, flag.ErrHelp) {
+			return 0
+		}
+		return writeCertificationGateHalt(stdout, stderr, agentcontract.CertificationGateRequest{
+			Connector:  *connector,
+			Transition: *transition,
+		}, "request/decode", "request", err.Error())
+	}
+	if flags.NArg() != 0 {
+		return writeCertificationGateHalt(stdout, stderr, agentcontract.CertificationGateRequest{
+			Connector:  *connector,
+			Transition: *transition,
+		}, "request/decode", "request", "certification-gate accepts no positional arguments")
+	}
+
+	root, err := resolveRoot(*rootFlag)
+	if err != nil {
+		return writeCertificationGateHalt(stdout, stderr, agentcontract.CertificationGateRequest{
+			Connector:  *connector,
+			Transition: *transition,
+		}, "request/root", "request", err.Error())
+	}
+	contract, err := agentcontract.Load(filepath.Join(root, agentcontract.SourcePath))
+	if err != nil {
+		return writeCertificationGateHalt(stdout, stderr, agentcontract.CertificationGateRequest{
+			Connector:  *connector,
+			Transition: *transition,
+		}, "contract/invalid", "contract", err.Error())
+	}
+
+	request := agentcontract.CertificationGateRequest{
+		SchemaVersion: contract.CertificationGate.InputSchemaVersion,
+		Connector:     *connector,
+		Transition:    *transition,
+		Inputs:        contract.CertificationGate.Inputs,
+	}
+	verdict, err := agentcontract.EnforceCertificationGate(root, contract, request)
+	if err != nil {
+		var blocked *agentcontract.CertificationGateBlockedError
+		if errors.As(err, &blocked) {
+			if !writeCertificationGateVerdict(stdout, stderr, verdict) {
+				return 1
+			}
+			_, _ = fmt.Fprintf(stderr, "agentcontractgen: certification gate %s blocked %s for %s\n", verdict.Decision, verdict.Transition, verdict.Connector)
+			return 1
+		}
+		return writeCertificationGateHalt(stdout, stderr, request, "gate/evaluate", "gate", err.Error())
+	}
+	if !writeCertificationGateVerdict(stdout, stderr, verdict) {
+		return 1
+	}
+	return 0
+}
+
+func writeCertificationGateHalt(stdout, stderr io.Writer, request agentcontract.CertificationGateRequest, id, class, message string) int {
+	verdict := agentcontract.CertificationGateVerdict{
+		SchemaVersion: 1,
+		Connector:     request.Connector,
+		Transition:    request.Transition,
+		Decision:      agentcontract.CertificationGateHalt,
+		Failures: []agentcontract.CertificationGateFailure{{
+			ID:      id,
+			Class:   class,
+			Message: message,
+		}},
+	}
+	if !writeCertificationGateVerdict(stdout, stderr, verdict) {
+		return 1
+	}
+	_, _ = fmt.Fprintf(stderr, "agentcontractgen: certification gate HALT: %s\n", message)
+	return 1
+}
+
+func writeCertificationGateVerdict(stdout, stderr io.Writer, verdict agentcontract.CertificationGateVerdict) bool {
+	if err := json.NewEncoder(stdout).Encode(verdict); err != nil {
+		_, _ = fmt.Fprintf(stderr, "agentcontractgen: write certification gate verdict: %v\n", err)
+		return false
+	}
+	return true
+}
+
 func parseRoot(args []string, stderr io.Writer) (string, bool) {
 	flags := flag.NewFlagSet("root", flag.ContinueOnError)
 	flags.SetOutput(stderr)
@@ -135,5 +228,5 @@ func resolveRoot(value string) (string, error) {
 }
 
 func usage(output io.Writer) {
-	_, _ = fmt.Fprintln(output, "usage: agentcontractgen <check|render|sync> [--root <path>] [--role <name>]")
+	_, _ = fmt.Fprintln(output, "usage: agentcontractgen <check|certification-gate|render|sync> [--root <path>] [--connector <name>] [--transition <name>] [--role <name>]")
 }

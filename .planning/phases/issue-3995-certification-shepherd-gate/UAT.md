@@ -11,10 +11,16 @@
    Expected: the canonical contract and all eight registered Claude/Codex/Pi/OpenCode projections
    are current. This remains green even when no connector is certified.
 
-2. Evaluate GitHub `integrate_sub_pr` using the generated current inputs through the public
-   `internal/agentcontract` API.
+2. Evaluate GitHub `integrate_sub_pr` through the canonical protected-transition command:
 
-   Expected: deterministic `RETRY` containing
+   ```sh
+   go run ./cmd/agentcontractgen certification-gate \
+     --root . \
+     --connector github \
+     --transition integrate_sub_pr
+   ```
+
+   Expected: exit status `1` and deterministic JSON `RETRY` containing
    `capability/github/capability:check/live_evidence`. A file, a reachable route, or
    `implemented: true` does not substitute for accepted live evidence.
 
@@ -23,14 +29,18 @@
    Expected: `PROCEED`. Removing one binding criterion returns that criterion's exact failure ID;
    malformed/version-unknown input returns `HALT` with its exact cell/evidence coordinate.
 
-4. Attempt each protected state transition with a non-`PROCEED` verdict.
+4. Run the same command with each protected transition (`integrate_sub_pr`, `accepted`,
+   `ready_parent`, and `human_ready`) while the generated baseline remains non-certified.
 
    Expected: the gate blocks `integrate_sub_pr`, `accepted`, `ready_parent`, and `human_ready`
    while preserving the original deterministic failures for Shepherd retry/halt handling.
 
 ## Safety acceptance
 
-The evaluator reads only the declared generated JSON beneath its supplied root. It creates no
-evidence, has no provider action dependency, and does not access a credential or mutate production
-state. A future #3989 proof schema revision must be integrated explicitly; unsupported versions
-halt closed.
+The evaluator reads only declared generated JSON through a root-bound reader; symlink ancestors and
+non-regular evidence records halt rather than escaping the supplied root. It creates no evidence,
+has no provider action dependency, and does not access a credential or mutate production state. A
+future #3989 proof schema revision must be integrated explicitly; unsupported versions halt closed.
+
+This internal `agentcontractgen` command is not part of the `pm` CLI, so `pm` help/manual/website
+documentation has no new parity surface.
