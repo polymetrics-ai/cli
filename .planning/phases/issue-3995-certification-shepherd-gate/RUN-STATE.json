@@ -8,11 +8,13 @@
   "mode": "inline_manual_gsd_fallback",
   "fallback_reason": "gsd-sdk has no registered official numbered phase for issue-3995-certification-shepherd-gate",
   "stages": {
-    "discuss_phase": "recorded",
-    "plan_phase_tdd": "recorded",
-    "execute_phase": "green_pending_broader_verification",
-    "verify_work": "pending",
-    "code_review": "pending"
+    "discuss_phase": "completed_inline_manual_fallback",
+    "plan_phase_tdd": "completed_inline_manual_fallback",
+    "execute_phase": "completed",
+    "verify_work": "completed_inline_manual_fallback",
+    "code_review": "completed_inline_manual_fallback",
+    "no_mistakes": "pending",
+    "child_pr": "pending"
   },
   "correction_rounds": 1,
   "dependencies": {

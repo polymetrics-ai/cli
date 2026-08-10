@@ -1,0 +1,38 @@
+# SUMMARY — issue #3995 shared connector-certification Shepherd gate
+
+## Delivered boundary
+
+The canonical delivery contract now declares a versioned, read-only
+`connector-certification-shepherd` gate. `internal/agentcontract` decodes the generated
+capability, flow, status, and evidence JSON with strict schemas, evaluates one connector and
+transition deterministically, and returns `PROCEED`, `RETRY`, or `HALT` with stable failure
+coordinates. `EnforceCertificationGate` blocks `integrate_sub_pr`, `accepted`, `ready_parent`,
+and `human_ready` unless the decision is `PROCEED`.
+
+The single canonical projection registry now generates and verifies Claude, Codex, Pi, and
+OpenCode worker inputs. The shared projection block is byte-equivalent across all four harnesses;
+OpenCode is registered rather than handled as a one-off adapter.
+
+## Acceptance proof
+
+- The initial RED test loaded the generated GitHub baseline and required the unavailable evaluator
+  to return `RETRY` with `capability/github/capability:check/live_evidence`; its undefined-symbol
+  failure is recorded in `TDD-LEDGER.md`.
+- The implemented gate returns that exact `RETRY` for the current zero-certified GitHub baseline
+  and returns `PROCEED` for a complete temporary generated fixture.
+- Isolated binding defects preserve their exact cell/evidence coordinates. Invalid schemas,
+  unknown fields, omitted adapter-local inputs, unmatched/malformed sidecars, and unredacted proof
+  bodies halt closed.
+- Evaluation is tested as read-only. It cannot create evidence, access credentials, invoke a
+  provider, or change `cmd/connectorgen/certification*.go`.
+
+## Delivery state
+
+All local verification and manual review gates are green; `REVIEW.md` records two fixed findings in
+one of five permitted correction rounds. `no-mistakes` and child-PR publication are the remaining
+delivery steps.
+
+#3984 is consumed at `815dc1ab65380e03f6e0c078ba36030baaec21ea`. #3985's concrete canon is
+available at `da7747a796049601a179a97c025bfb05f011f1e8`, although #3985 remains formally open.
+#3989 remains a held integration gate: this change accepts only the declared proof-schema version
+and halts unknown versions rather than inventing future proof fields.
