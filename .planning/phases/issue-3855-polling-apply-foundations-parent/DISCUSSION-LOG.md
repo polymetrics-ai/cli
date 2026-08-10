@@ -9,10 +9,12 @@ were inspected. The workflow is therefore executed inline and recorded in this p
 
 ## Inputs treated as decisions
 
-1. The parent is #3855, with existing children #3856, #3857, #3858, and #3859; no issue is created.
+1. The parent is #3855, with existing children #3856, #3857, #3858, #3859, and #3860; no issue is
+   created.
 2. The parent starts on `origin/feat/3862-any-to-any-transport`, opens as a draft against that same
    branch, and later retargets only to `docs/4015-connector-release-certification`.
-3. Delivery order is #3856, then #3857, then #3858 and #3859 in parallel.
+3. Core delivery order is #3856, then #3857, then #3858 and #3859 in parallel. #3860 is a
+   follow-on documentation child that depends on all four core children.
 4. PR #3880 / `dc1a6a7171ca901c8dbaf8cd528f67b18e57d9bb` is recorded as partial reuse, not child
    completion.
 5. The sole deliverable is a reviewable parent seed and acceptance ledger; implementation and
@@ -27,5 +29,5 @@ were inspected. The workflow is therefore executed inline and recorded in this p
 
 ## External-state exception
 
-GitHub API reads through `gh-axi` were rate-limited. That is recorded as pending verification rather
-than converted into a topology assumption or a correction round.
+The recovered `gh-axi` read reports no PR with this branch as its head. That is an external
+draft-creation blocker, not a topology assumption or a correction round.

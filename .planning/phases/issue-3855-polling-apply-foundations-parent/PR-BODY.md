@@ -26,14 +26,16 @@ The temporary base records a dependency only. It does not authorize integrating 
 - #3857 — polling descriptor and transport preflight, after #3856
 - #3858 — page-safe polling source executor, after #3857
 - #3859 — native apply strategies, after #3857
+- #3860 — polling-watermark eligibility and limitation documentation, after #3856–#3859
 
-The required order is `#3856 -> #3857 -> (#3858 || #3859)`.
+The required core implementation order is `#3856 -> #3857 -> (#3858 || #3859)`. #3860 is a
+follow-on documentation child, not a parallel core implementation lane.
 
 ## Historical partial reuse
 
 Merged PR #3880 / commit `dc1a6a7171ca901c8dbaf8cd528f67b18e57d9bb` is recorded as partial
-reusable polling implementation. It does not complete or close #3856, #3857, #3858, or #3859, and
-this parent does not cherry-pick or reimplement it.
+reusable polling implementation. It does not complete or close #3856, #3857, #3858, #3859, or
+#3860, and this parent does not cherry-pick or reimplement it.
 
 ## Parent orchestration
 
