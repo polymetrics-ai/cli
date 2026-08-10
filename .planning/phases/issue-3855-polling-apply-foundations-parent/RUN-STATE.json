@@ -2,7 +2,12 @@
   "phase": "issue-3855-polling-apply-foundations-parent",
   "issue": 3855,
   "kind": "planning_only_parent_scaffold",
-  "canonical_state": "parent_draft_pr",
+  "canonical_state": "issue_map",
+  "next_state": "parent_draft_pr",
+  "next_state_evidence_required": [
+    "live draft PR creation",
+    "live draft PR inspection"
+  ],
   "completed_state_evidence": [
     "job_received",
     "issue_map"
