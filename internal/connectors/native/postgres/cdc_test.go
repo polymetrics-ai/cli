@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -8,8 +9,16 @@ import (
 	"github.com/jackc/pglogrepl"
 	"github.com/jackc/pgx/v5/pgconn"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/synccontract"
 )
+
+func TestCDCIsFailClosedUntilStreamedTransactionStagingExists(t *testing.T) {
+	err := New().ReadCDC(context.Background(), connectors.CDCReadRequest{}, nil)
+	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
+		t.Fatalf("ReadCDC = %v, want unsupported while streamed transaction staging is unavailable", err)
+	}
+}
 
 func TestCDCSlotNameIsStableAndSourceBound(t *testing.T) {
 	first := synccontract.SourceIdentity{
@@ -173,5 +182,59 @@ func TestClassifyCDCStartErrorRequiresRebootstrapForLostWAL(t *testing.T) {
 	var recovery *synccontract.RebootstrapRequiredError
 	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeRetentionGap {
 		t.Fatalf("classifyCDCStartError recovery = %#v, want retention gap", recovery)
+	}
+}
+
+func TestCDCReplicationConfigForcesAndVerifiesUTF8(t *testing.T) {
+	config := &pgconn.Config{RuntimeParams: map[string]string{"client_encoding": "LATIN1"}}
+	configureCDCReplicationConfig(config)
+	if got := config.RuntimeParams["replication"]; got != "database" {
+		t.Fatalf("replication runtime parameter = %q, want database", got)
+	}
+	if got := config.RuntimeParams["client_encoding"]; got != cdcClientEncoding {
+		t.Fatalf("client_encoding runtime parameter = %q, want %q", got, cdcClientEncoding)
+	}
+	for _, tc := range []struct {
+		encoding string
+		wantErr  bool
+	}{
+		{encoding: "UTF8"},
+		{encoding: "utf8"},
+		{encoding: "LATIN1", wantErr: true},
+		{wantErr: true},
+	} {
+		err := validateCDCClientEncoding(tc.encoding)
+		if tc.wantErr && !errors.Is(err, errCDCClientEncoding) {
+			t.Fatalf("validateCDCClientEncoding(%q) = %v, want UTF-8 rejection", tc.encoding, err)
+		}
+		if !tc.wantErr && err != nil {
+			t.Fatalf("validateCDCClientEncoding(%q) = %v, want nil", tc.encoding, err)
+		}
+	}
+}
+
+func TestCDCReplicaIdentityModesFailClosed(t *testing.T) {
+	for _, tc := range []struct {
+		name          string
+		identity      string
+		hasPrimaryKey bool
+		want          error
+	}{
+		{name: "default primary key", identity: "d", hasPrimaryKey: true},
+		{name: "default no primary key", identity: "d", want: errCDCReplicaIdentityDefault},
+		{name: "full", identity: "f", hasPrimaryKey: true, want: errCDCReplicaIdentityFull},
+		{name: "using index", identity: "i", hasPrimaryKey: true, want: errCDCReplicaIdentityIndex},
+		{name: "nothing", identity: "n", want: errCDCReplicaIdentityNothing},
+		{name: "unknown", identity: "x", want: errCDCReplicaIdentityUnknown},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			err := validateCDCReplicaIdentity(tc.identity, tc.hasPrimaryKey)
+			if tc.want == nil && err != nil {
+				t.Fatalf("validateCDCReplicaIdentity(%q) = %v, want nil", tc.identity, err)
+			}
+			if tc.want != nil && !errors.Is(err, tc.want) {
+				t.Fatalf("validateCDCReplicaIdentity(%q) = %v, want %v", tc.identity, err, tc.want)
+			}
+		})
 	}
 }

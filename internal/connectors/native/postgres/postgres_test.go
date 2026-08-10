@@ -40,8 +40,8 @@ func TestNameAndMetadata(t *testing.T) {
 	if caps.Write {
 		t.Fatalf("postgres source connector must be read-only, got Write=true")
 	}
-	if !connectors.MetadataOf(c).Capabilities.CDC {
-		t.Fatal("PostgreSQL CDC must be advertised only through its matching executor")
+	if connectors.MetadataOf(c).Capabilities.CDC {
+		t.Fatal("PostgreSQL CDC must remain undiscoverable until streamed staging is available")
 	}
 }
 
@@ -242,7 +242,7 @@ func TestInitialStateStatefulReader(t *testing.T) {
 	}
 }
 
-func TestCDCIsNotAnUnsupportedStub(t *testing.T) {
+func TestCDCIsFailClosedUntilStreamedStagingExists(t *testing.T) {
 	c := native.New()
 	cdc, ok := any(c).(connectors.ChangefeedExecutor)
 	if !ok {
@@ -251,8 +251,8 @@ func TestCDCIsNotAnUnsupportedStub(t *testing.T) {
 	err := cdc.ReadCDC(context.Background(), connectors.CDCReadRequest{Stream: "public.users", Config: fixtureConfig()}, func(connectors.CDCEvent) error {
 		return nil
 	})
-	if errors.Is(err, connectors.ErrUnsupportedOperation) {
-		t.Fatalf("ReadCDC = %v, must not return the removed unsupported CDC stub", err)
+	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
+		t.Fatalf("ReadCDC = %v, want fail-closed unsupported result", err)
 	}
 }
 

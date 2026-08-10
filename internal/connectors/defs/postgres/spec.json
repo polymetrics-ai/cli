@@ -44,7 +44,7 @@
     },
     "cdc_publication": {
       "type": "string",
-      "description": "Existing PostgreSQL publication used for logical-replication CDC. Required only for CDC; it must include the selected table."
+      "description": "Reserved for the planned PostgreSQL logical-replication CDC path; it is not used while change capture is non-executable."
     },
     "cursor_field": {
       "type": "string",

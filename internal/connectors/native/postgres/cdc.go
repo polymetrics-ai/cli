@@ -17,21 +17,20 @@ import (
 
 var _ connectors.ChangefeedExecutor = Connector{}
 
+var errCDCTransactionStageUnavailable = fmt.Errorf("%w: PostgreSQL CDC requires bounded crash-recoverable streamed transaction staging", connectors.ErrUnsupportedOperation)
+
 // ChangefeedExecutorDescriptor is the runtime half of the PostgreSQL bundle's
 // logical-replication declaration. The existing capability projection compares
 // it exactly with changefeed.json before advertising CDC.
 func (c Connector) ChangefeedExecutorDescriptor() connectors.ChangefeedExecutorDescriptor {
 	return connectors.ChangefeedExecutorDescriptor{
-		Status:    connectors.ChangefeedStatusImplemented,
+		Status:    connectors.ChangefeedStatusPlanned,
 		Mechanism: connectors.ChangefeedMechanismLogicalReplication,
-		Executor:  connectors.ChangefeedExecutorRef{Kind: "native", ID: cdcExecutorID},
-		Checkpoint: connectors.ChangefeedCheckpoint{
-			Kind:        "lsn",
-			Keys:        []string{"lsn"},
-			CommitAfter: "downstream_ack",
-			OnInvalid:   "resnapshot_required",
-		},
 	}
+}
+
+func requireCDCTransactionStage() error {
+	return errCDCTransactionStageUnavailable
 }
 
 // ReadCDC consumes one PostgreSQL logical-replication stream until ctx is
@@ -41,6 +40,13 @@ func (c Connector) ChangefeedExecutorDescriptor() connectors.ChangefeedExecutorD
 // at-least-once replay instead of a skipped transaction after a crash.
 func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
 	if err := ctx.Err(); err != nil {
+		return err
+	}
+	// pgoutput v1 only presents this executor with a complete transaction at
+	// commit. Do not advertise or invoke it until v2 streaming can stage every
+	// transaction privately, enforce a finite quota, and wait for a durable
+	// whole-transaction downstream receipt before source acknowledgement.
+	if err := requireCDCTransactionStage(); err != nil {
 		return err
 	}
 	if fixtureMode(req.Config) {
@@ -247,11 +253,17 @@ func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, 
 						return err
 					}
 				}
-			case *pglogrepl.OriginMessage, *pglogrepl.TypeMessage, *pglogrepl.LogicalDecodingMessage:
+			case *pglogrepl.OriginMessage, *pglogrepl.TypeMessage:
 				// These pgoutput frames carry replication metadata or a
-				// user-emitted logical message, not a row change for the
-				// selected table. They must not make a valid table stream fail.
-				// A transactional message is still covered by its CommitMessage.
+				// type definition, not a row change for the selected table. Decode
+				// their raw payload as well so invalid UTF-8 is rejected before a
+				// later transaction checkpoint could acknowledge it.
+				if _, err := decoder.decode(xlog.WALData, xlog.WALStart.String()); err != nil {
+					return fmt.Errorf("postgres CDC: decode pgoutput metadata: %w", err)
+				}
+			case *pglogrepl.LogicalDecodingMessage:
+				// Logical messages may intentionally contain arbitrary binary
+				// payloads and are not row changes for this selected relation.
 			default:
 				if !inTransaction {
 					return errors.New("postgres CDC: pgoutput data arrived outside a transaction")

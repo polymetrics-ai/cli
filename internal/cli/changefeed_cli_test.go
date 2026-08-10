@@ -14,13 +14,13 @@ import (
 	nativepostgres "polymetrics.ai/internal/connectors/native/postgres"
 )
 
-func TestCatalogedCDCRequiresDeclaredExecutableChangefeed(t *testing.T) {
+func TestCatalogedCDCRejectsPostgresUntilStreamedStagingExists(t *testing.T) {
 	bundle, err := engine.Load(defs.FS, "postgres")
 	if err != nil {
 		t.Fatalf("load postgres bundle: %v", err)
 	}
-	if !bundle.Metadata.Capabilities.CDC {
-		t.Fatal("postgres metadata must claim CDC after logical replication is implemented")
+	if bundle.Metadata.Capabilities.CDC {
+		t.Fatal("postgres metadata must not claim CDC before streamed staging is implemented")
 	}
 
 	var stdout, stderr bytes.Buffer
@@ -53,16 +53,16 @@ func TestCatalogedCDCRequiresDeclaredExecutableChangefeed(t *testing.T) {
 	stubErr := reader.ReadCDC(context.Background(), connectors.CDCReadRequest{}, func(connectors.CDCEvent) error {
 		return nil
 	})
-	if errors.Is(stubErr, connectors.ErrUnsupportedOperation) {
-		t.Fatalf("postgres ReadCDC = %v, must not return the removed unsupported stub", stubErr)
+	if !errors.Is(stubErr, connectors.ErrUnsupportedOperation) {
+		t.Fatalf("postgres ReadCDC = %v, want fail-closed unsupported result", stubErr)
 	}
 
-	if !postgresListed {
-		t.Fatalf("CDC catalog did not advertise postgres despite its matching executor: %v", stubErr)
+	if postgresListed {
+		t.Fatalf("CDC catalog advertised postgres before streamed staging is implemented: %v", stubErr)
 	}
 }
 
-func TestInspectPostgresReportsImplementedChangefeed(t *testing.T) {
+func TestInspectPostgresReportsPlannedChangefeed(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"connectors", "inspect", "postgres", "--json"}, &stdout, &stderr)
 	if code != 0 {
@@ -91,14 +91,14 @@ func TestInspectPostgresReportsImplementedChangefeed(t *testing.T) {
 	if err := json.Unmarshal(changefeedRaw, &changefeed); err != nil {
 		t.Fatalf("decode postgres changefeed descriptor: %v", err)
 	}
-	if changefeed.Status != "implemented" {
-		t.Fatalf("postgres changefeed status = %q, want implemented", changefeed.Status)
+	if changefeed.Status != "planned" {
+		t.Fatalf("postgres changefeed status = %q, want planned", changefeed.Status)
 	}
 	if changefeed.Mechanism != "logical_replication" {
 		t.Fatalf("postgres changefeed mechanism = %q, want logical_replication", changefeed.Mechanism)
 	}
-	if changefeed.Reason != "" {
-		t.Fatalf("implemented postgres changefeed reason = %q, want empty", changefeed.Reason)
+	if changefeed.Reason == "" {
+		t.Fatal("planned postgres changefeed must explain why it is not executable")
 	}
 	if changefeed.Source.ArtifactURL == "" || changefeed.Source.Version == "" || changefeed.Source.RetrievedAt == "" {
 		t.Fatalf("implemented postgres changefeed must retain source evidence, got %+v", changefeed.Source)

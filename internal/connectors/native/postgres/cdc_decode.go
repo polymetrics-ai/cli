@@ -2,13 +2,17 @@ package postgres
 
 import (
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"io"
 	"math"
 	"strconv"
+	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors"
 )
+
+var errCDCInvalidUTF8 = errors.New("postgres CDC logical replication payload is not valid UTF-8")
 
 type pgoutputDecoder struct {
 	relations      map[uint32]pgoutputRelation
@@ -46,6 +50,15 @@ func (d *pgoutputDecoder) decode(message []byte, lsn string) ([]connectors.CDCEv
 	switch message[0] {
 	case 'B', 'C':
 		return nil, nil
+	case 'O':
+		_ = r.uint64()
+		_ = r.cstring()
+		return nil, r.done()
+	case 'Y':
+		_ = r.uint32()
+		_ = r.cstring()
+		_ = r.cstring()
+		return nil, r.done()
 	case 'R':
 		rel, err := r.relation()
 		if err != nil {
@@ -230,6 +243,19 @@ func (r *pgoutputReader) uint32() uint32 {
 	return v
 }
 
+func (r *pgoutputReader) uint64() uint64 {
+	if r.err != nil {
+		return 0
+	}
+	if len(r.buf) < 8 {
+		r.err = io.ErrUnexpectedEOF
+		return 0
+	}
+	v := binary.BigEndian.Uint64(r.buf[:8])
+	r.buf = r.buf[8:]
+	return v
+}
+
 func (r *pgoutputReader) int32() int32 {
 	return int32(r.uint32())
 }
@@ -240,9 +266,13 @@ func (r *pgoutputReader) cstring() string {
 	}
 	for i, b := range r.buf {
 		if b == 0 {
-			s := string(r.buf[:i])
+			raw := r.buf[:i]
 			r.buf = r.buf[i+1:]
-			return s
+			if !utf8.Valid(raw) {
+				r.err = errCDCInvalidUTF8
+				return ""
+			}
+			return string(raw)
 		}
 	}
 	r.err = io.ErrUnexpectedEOF
@@ -307,6 +337,9 @@ func (r *pgoutputReader) tuple(rel pgoutputRelation) (connectors.Record, error) 
 			if r.err != nil {
 				return nil, r.err
 			}
+			if !utf8.Valid(raw) {
+				return nil, fmt.Errorf("column %q: %w", col.name, errCDCInvalidUTF8)
+			}
 			rec[col.name] = decodeTextValue(col.typeID, string(raw))
 		default:
 			return nil, fmt.Errorf("column %q has unsupported tuple kind %q", col.name, kind)
@@ -330,7 +363,19 @@ func decodeTextValue(typeID uint32, raw string) any {
 			return v
 		}
 	case 700, 701, 1700: // float4, float8, numeric
+		switch raw {
+		case "NaN", "Infinity", "-Infinity":
+			return raw
+		}
 		if v, err := strconv.ParseFloat(raw, 64); err == nil {
+			switch {
+			case math.IsNaN(v):
+				return "NaN"
+			case math.IsInf(v, 1):
+				return "Infinity"
+			case math.IsInf(v, -1):
+				return "-Infinity"
+			}
 			return v
 		}
 	}

@@ -15,12 +15,13 @@ import (
 	"polymetrics.ai/internal/synccontract"
 )
 
-// TestLogicalReplicationResumesAndCleansSlot is deliberately an opt-in live
-// conformance test. It exercises PostgreSQL's wire replication protocol and
-// pgoutput rather than mocking either one. The harness supplies individual
-// connection fields through its environment; it never constructs or reports a
-// connection string.
-func TestLogicalReplicationResumesAndCleansSlot(t *testing.T) {
+// TestHistoricalLogicalReplicationResumesAndCleansSlot preserves the
+// pre-containment PostgreSQL 12.22 proof. It must skip before integration
+// configuration is read, because planned CDC must not contact a source or
+// create a WAL-retaining slot.
+func TestHistoricalLogicalReplicationResumesAndCleansSlot(t *testing.T) {
+	t.Skip("historical PostgreSQL CDC conformance is disabled while change capture is planned")
+
 	cfg := postgresCDCIntegrationConfig(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 45*time.Second)
 	defer cancel()

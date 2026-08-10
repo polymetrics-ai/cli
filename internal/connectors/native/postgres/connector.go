@@ -35,8 +35,8 @@
 //     with the legacy package. Capabilities.Write is false and Write
 //     returns ErrUnsupportedOperation.
 //
-// CDC (change data capture) consumes PostgreSQL logical replication using a
-// source-bound slot and versioned durable checkpoints (cdc.go).
+// CDC (change data capture) remains fail-closed until the PostgreSQL 14+
+// streamed-transaction boundary is available (cdc.go).
 //
 // A mode=fixture config (cfg.Config["mode"]=="fixture") short-circuits all
 // network access so the conformance harness and unit tests can run with no
@@ -90,7 +90,11 @@ func New() Connector {
 // Description/DisplayName wording, never capability semantics.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
-	m.Description = "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, supports cursor-incremental reads, and consumes logical-replication CDC through source-bound durable LSN checkpoints. Read-only source."
+	m.Description = "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads. Read-only source."
+	// The bundle declares this too, but pin the native override to the same
+	// fail-closed state so this connector cannot accidentally advertise CDC
+	// while the executor remains unavailable.
+	m.Capabilities.CDC = false
 	return m
 }
 
