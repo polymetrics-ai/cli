@@ -36,9 +36,9 @@ DESCRIPTION
   A connector-command plan does not persist the fields declared sensitive by the
   write action it runs (writes.json redact_fields) or, for a direct_write
   operation, by that operation (operations.json sensitive_policy.redact_fields).
-  A redact_fields list on the command itself is not consulted, so a command that
-  declares one its write action does not declare withholds nothing; pm connectors
-  inspect <name> --json shows every declaration, not only the binding one.
+  A redact_fields list on the command itself is not consulted, so a command-level
+  declaration withholds nothing; pm connectors inspect <name> --json shows every
+  declaration, not only the binding one.
   Withheld keys are removed outright rather than stored as a placeholder, so they
   never reach the project state file. Preview and run therefore need those values
   re-supplied on the same command. Ordinary withheld fields use the connector

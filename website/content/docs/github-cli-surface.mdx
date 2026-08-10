@@ -1,6 +1,6 @@
 ---
 title: GitHub CLI Surface
-description: GitHub connector command parity, safety labels, and the staged path from gh-inspired metadata to executable pm commands.
+description: GitHub connector command parity, safety labels, and executable fixed REST and GraphQL operations.
 ---
 
 The GitHub connector now has a JSON-first command surface contract at
@@ -11,8 +11,8 @@ The GitHub connector now has a JSON-first command surface contract at
 [GitHub GraphQL docs](https://docs.github.com/en/graphql) as source material.
 
 This is metadata plus a guarded runtime path. It tells `pm` and docs renderers which GitHub commands
-are ETL reads, which can create approval-gated reverse ETL write plans, which require GraphQL or new
-API coverage, and which are local workflow features that should not become connector API commands.
+are ETL reads, which create approval-gated write plans through fixed REST or GraphQL operations, and
+which local workflow features stay outside connector API dispatch.
 
 ## Current surface
 
@@ -70,28 +70,18 @@ API coverage, and which are local workflow features that should not become conne
   move beyond metadata.
 </Callout>
 
-## Connector Capabilities Behind Modeled Commands
+## Interpreting the generated surface
 
-| Family | Backing capability |
+The table above is generated from the connector bundle and source lock; it owns counts and current
+availability. Inspect a path with `pm github <path> --help` before use—the command's declared
+contract, not its family name, determines what the binary can dispatch.
+
+| Family | Runtime boundary |
 |---|---|
-| `issue` | Issues stream plus issue create, edit, close, comment, lock, unlock, labels, and assignees writes. |
-| `pr` | Pull request stream plus create, edit, close, merge, review, reviewer, update-branch, lock, and unlock writes. |
-| `repo` | Repository, branches, commits, tags, deploy keys, autolinks, languages, collaborators, forks, and rulesets streams or writes. |
-| `release` | Release stream plus create, edit, delete, asset update, and asset delete writes. |
-| `workflow` and `run` | Workflow and run streams plus dispatch, rerun, cancel, and delete actions. |
-| `label` | Label stream plus create, edit, and delete writes. |
-| Related connector data | Milestones and security alerts are available as streams or writes, but they are not modeled as first-class gh command entries in this slice. |
-
-## Known gaps
-
-| Gap | Reason |
-|---|---|
-| Projects v2 | GitHub CLI uses GraphQL-heavy project operations; the current connector bundle is REST-first. |
-| Discussions, gists, codespaces, org-wide views | Useful API-backed surfaces, but not yet modeled by this repository-scoped connector bundle. |
-| Search and status | Require query-shaped direct reads and often combine REST with GraphQL. |
-| Secrets and variables | Sensitive writes need explicit encryption, redaction, scope, and approval semantics. |
-| Local workflow commands | `clone`, `checkout`, `browse`, `alias`, `extension`, `completion`, and local config should stay outside connector API dispatch. |
-| Raw API and GraphQL | Must be constrained before use; an unrestricted `gh api` clone would violate connector safety rules. |
+| Stream and direct reads | Typed reads use declared stream or operation contracts and connector-scoped authentication. |
+| Reverse ETL and direct writes | Fixed writes create plans and follow preview, approval, and execution gates. |
+| Typed GraphQL | Query and mutation operations use the fixed GitHub GraphQL transport; no generic GraphQL escape hatch is exposed. |
+| Unsupported entries | API and local-workflow entries remain declared for discoverability but are not executable. |
 
 ## Runtime write flow
 
@@ -108,23 +98,19 @@ pm github issue close --plan <plan-id> --preview --json
 pm github issue close --plan <plan-id> --approve <approval-token> --json
 ```
 
-Commands without explicit `record.*` flag mappings remain blocked until their input model is
-declared. Secret and variable writes remain out of runtime dispatch.
+Each command needs its own declared input contract; there is no generic raw-input fallback. Sensitive
+writes are available only where their declaration supplies the required input, redaction, scope, and
+approval controls.
 
-## Roadmap
+## Deliberate limits
 
-1. Validate optional `cli_surface.json` metadata and reject broken stream, write, endpoint, or
-   secret-looking references.
-2. Render connector help from the metadata and expose safe stream/direct-read command dispatch.
-3. Expand reverse ETL command input mappings across issue, pull request, label, release, workflow,
-   and ruleset write families.
-4. Add thin aliases such as `pm github issue list` only through the generic command surface.
-5. Add GraphQL and operation foundations for Projects v2, discussions, search, status, and other
-   gh parity gaps.
+The connector does not expose generic shell, unrestricted HTTP write, unrestricted SQL write, raw
+GraphQL mutation, or `gh api`-style escape hatches. Any future command must remain connector-scoped,
+typed, and subject to the same authentication, validation, approval, and redaction boundaries as the
+generated entries.
 
 ## Agent notes
 
-Agents should treat the issue as the implementation prompt, read the shared contract in
-`.agents/agentic-delivery/`, plan with the GSD programming loop before production edits, and record
-red-green-refactor evidence for every slice. Claude review is the post-implementation gate; each
-review item needs a reasoned disposition before the PR is ready for human approval.
+Contributors should follow the repository's issue-first delivery lifecycle and record red/green
+evidence for every slice. Automated review is input before human approval; each actionable item needs
+a reasoned disposition.

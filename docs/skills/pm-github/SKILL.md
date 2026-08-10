@@ -7,7 +7,7 @@ description: GitHub connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and writes approved reverse ETL actions through the GitHub REST API (37 streams, 555 write actions accounted).
+Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and plans approval-gated reverse ETL actions through fixed GitHub REST and GraphQL operations.
 
 ## Icon
 
@@ -4153,7 +4153,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - authentication - Use pm credentials for public, token, or GitHub App repository access. Never print stored tokens.
   - execution-model - ETL commands map to streams. Reverse ETL commands map to approved write actions and keep plan, preview, approval, execute.
   - local-workflows - Commands that depend on local git, browser, shell completion, extensions, or gh config are documented but not connector-dispatched.
-  - known-gaps - Projects, Discussions, Search, direct reads, and sensitive/admin surfaces are planned follow-up slices.
+  - known-gaps - Generic raw API, local-workflow, and unsupported provider operations remain non-executable; inspect each command's declared availability.
 
 ## Commands
 
@@ -4172,20 +4172,20 @@ pm connectors inspect github --json
 ### Public repository credential
 
 ```bash
-pm credentials add github-public --connector github --config repository=octocat/Hello-World
+pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config public_access=true
 ```
 
 ### Token credential
 
 ```bash
 export GITHUB_TOKEN=...
-pm credentials add github-token --connector github --config repository=OWNER/REPO --from-env token=GITHUB_TOKEN
+pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN
 ```
 
 ### GitHub App credential
 
 ```bash
-pm credentials add github-app --connector github --config repository=OWNER/REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app-private-key.pem
+pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app-private-key.pem
 ```
 
 ### Pull request ETL

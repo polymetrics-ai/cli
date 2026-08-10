@@ -33,7 +33,9 @@ For a connector that needs configuration:
 ```bash
 pm etl catalog \
   --connector github \
-  --config repository=OWNER/REPO \
+  --config owner=OWNER \
+  --config repo=REPO \
+  --config public_access=true \
   --json
 ```
 

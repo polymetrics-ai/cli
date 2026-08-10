@@ -33,7 +33,8 @@ CATALOG
 
 GITHUB AUTHENTICATION
   public
-    Unauthenticated public repository reads. Configure owner and repo.
+    Unauthenticated public repository reads. Configure owner and repo plus
+    public_access=true (or auth_type=public).
     This mode cannot execute reverse ETL writes.
 
   token

@@ -24,9 +24,9 @@ pm connectors list --json
 pm connectors inspect github --json
 pm connections list --json
 pm catalog show --connection my-github --json
-pm etl check --connector github --config repository=OWNER/REPO --json
-pm etl catalog --connector github --config repository=OWNER/REPO --json
-pm etl read --connector github --stream issues --limit 10 --config repository=OWNER/REPO --json
+pm etl check --connector github --config owner=OWNER --config repo=REPO --config public_access=true --json
+pm etl catalog --connector github --config owner=OWNER --config repo=REPO --config public_access=true --json
+pm etl read --connector github --stream issues --limit 10 --config owner=OWNER --config repo=REPO --config public_access=true --json
 pm etl run --connection my-github --stream issues --json
 pm etl status <run-id> --json
 pm query run --table issues --json

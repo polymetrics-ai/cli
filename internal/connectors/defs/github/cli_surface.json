@@ -45279,7 +45279,7 @@
     },
     {
       "name": "known-gaps",
-      "summary": "Projects, Discussions, Search, direct reads, and sensitive/admin surfaces are planned follow-up slices."
+      "summary": "Generic raw API, local-workflow, and unsupported provider operations remain non-executable; inspect each command's declared availability."
     }
   ]
 }

@@ -980,8 +980,9 @@ must carry an HTTPS provider artifact URL without userinfo, query parameters, or
 query-style fragment parameters (an ordinary documentation anchor fragment is allowed) and an ISO
 `retrieved_at` date. Every file starts with `schema_version: 1`; `version` is optional
 context, not a substitute for a retrieval date. Model the provider shape rather than flattening it
-to requests per minute: selectors can target an endpoint, tier, and auth type, and exclude exact
-declared endpoints; budgets label their
+to requests per minute: selectors can target an endpoint, tier, and auth type, while
+`exclude_endpoints` refines such a selector by removing exact declared endpoints; it cannot stand
+alone or combine with `all`. Budgets label their
 `burst` or `sustained` dimension, `requests` or `points` unit, and fixed/sliding-window or
 token/leaky-bucket replenishment model. Cost-weighted APIs can declare a default cost and the
 provider response header that reports cost. A policy may name at most one actual-cost header;
@@ -999,9 +1000,10 @@ projection. Never put a credential, token-derived value, or runtime subject valu
 logs, events, or persisted state. A subject kind outside this vocabulary is refused.
 
 For each outbound engine request, the runtime resolves every matching declared policy and admits all
-of their budgets before the logical requester send. `all` matches the whole HTTP connector; an
-endpoint selector matches its declared method/path pair; `exclude_endpoints` removes exact declared
-method/path pairs; optional `tiers` and `auth_types` match the non-secret `config.tier` and
+of their budgets before the logical requester send. `all` matches the whole HTTP connector and cannot
+combine with any other selector; an endpoint selector matches its declared method/path pair;
+`exclude_endpoints` removes exact declared method/path pairs from a non-`all` selector; optional
+`tiers` and `auth_types` match the non-secret `config.tier` and
 `config.auth_type` values as additional AND conditions. Check requests, stream pages (including
 pagination), direct and operation direct reads, declarative and operation writes (form, JSON, and
 multipart), and binary downloads use this same requester admission path. A selector with

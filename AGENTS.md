@@ -275,7 +275,7 @@ a filter nothing else supplies. The authoring rule lives in
 `docs/migration/conventions.md` §2.9; the user-facing surface is
 `docs/direct-read-pages-and-parameters.md`.
 
-## Command Surface Must Stay Executable
+## Parity Counts Must Be Proven by the Binary
 
 `availability: implemented` is a claim the runtime has to honour. Two rules keep
 it honest; both exist because a validator that hand-copied the runtime's rules
