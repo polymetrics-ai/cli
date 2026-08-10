@@ -186,70 +186,45 @@ SECURITY
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 COMMAND SURFACE
-  Read Freshchat data and safely plan Freshchat write actions without raw provider escape hatches.
-  Usage: pm freshchat <account|agents|users|conversations|groups|channels|roles|outbound|reports|metrics|business-hours|csat|direct|binary> <command> [flags]
-  Source CLI: Freshchat API (Freshchat API docs ETag W/"26e4fd8b1fe01578eae1dbaff6b69224")
-  Global flags:
-    --credential (string): Credential profile name; never pass secret values as flags.: maps_to=config.credential
-    --config (string_array): Connector config override as key=value; never pass secret values here.
-    --json (boolean): Render machine-readable JSON output.
-    --limit (integer): Maximum records to emit from stream-backed commands.
-    --preview (boolean): Preview a reverse-ETL write without making a network mutation.
-    --plan (string): Execute an approved reverse-ETL plan by id.
-    --approve (string): Approval token required to execute a reverse-ETL plan.
-    --confirm (string): Typed confirmation challenge for destructive/admin reverse-ETL writes.
-  Freshchat account read commands
+  Run Freshchat's declared streams and reverse-ETL actions.
+  Usage: pm freshchat <command> [flags]
+  Read streams
+  Reverse ETL writes
+  Other Commands
     account configuration - Read Freshchat account configuration. [intent=etl availability=implemented stream=account_configuration]
-  Freshchat agent read/write/admin commands
+    agents create - Plan creation of a Freshchat admin/agent account. [intent=reverse_etl availability=implemented write=create_agent]; approval: requires plan, preview, approval, and execute; risk: creates a Freshchat admin/agent account; requires typed destructive confirmation because this is an administrative user-management action; flags: --email (required)
+    agents delete - Plan deletion of a Freshchat admin/agent account. [intent=reverse_etl availability=implemented write=delete_agent]; approval: requires plan, preview, approval, and execute; risk: deletes a Freshchat admin/agent account; destructive and idempotent for configured missing statuses; flags: --agent_id (required)
     agents list - List Freshchat agents with optional documented filters. [intent=etl availability=implemented stream=agents]; flags: --is-deactivated, --groups, --availability-status, --sort-order, --sort-by
-    agents view - Read one Freshchat agent by configured agent id. [intent=etl availability=implemented stream=agent_details]; flags: --agent-id
+    agents status update - Plan update of a Freshchat agent availability status. [intent=reverse_etl availability=implemented write=update_agent_status]; approval: requires plan, preview, approval, and execute; risk: updates a Freshchat agent availability status; requires typed destructive confirmation for administrative agent-state mutation; flags: --agent_id (required), --status (required)
     agents statuses - List Freshchat agent statuses. [intent=etl availability=implemented stream=agent_statuses]
-    agents create - Plan creation of a Freshchat admin/agent account. [intent=reverse_etl availability=implemented write=create_agent]; approval: Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.; risk: Creates a Freshchat admin/agent account.; flags: --email, --first-name, --last-name, --role-id, --groups
-    agents update - Plan update of a Freshchat admin/agent account. [intent=reverse_etl availability=implemented write=update_agent]; approval: Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.; risk: Updates a Freshchat admin/agent account.; flags: --agent-id, --first-name, --last-name, --role-id, --groups, --is-deactivated
-    agents status update - Plan update of a Freshchat agent availability status. [intent=reverse_etl availability=implemented write=update_agent_status]; approval: Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.; risk: Updates a Freshchat agent availability status.; flags: --agent-id, --status
-    agents delete - Plan deletion of a Freshchat admin/agent account. [intent=reverse_etl availability=implemented write=delete_agent]; approval: Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.; risk: Deletes a Freshchat admin/agent account.; flags: --agent-id
-  Freshchat user read/write commands
-    users list - List Freshchat users with documented search filters. [intent=etl availability=implemented stream=users]; notes: Freshchat requires at least one user search filter for successful live /users responses; connector config and command metadata expose the documented filter set without a raw query escape hatch.; flags: --first-name, --last-name, --email, --reference-id, --phone-no, --created-from, --created-to, --updated-from, --updated-to
-    users view - Read one Freshchat user by configured user id. [intent=etl availability=implemented stream=user_details]; flags: --user-id
-    users conversations - List conversations for a Freshchat user. [intent=etl availability=implemented stream=user_conversations]; flags: --user-id
-    users create - Plan creation of a Freshchat user/contact. [intent=reverse_etl availability=implemented write=create_user]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Creates a Freshchat user/contact visible to agents.; flags: --email, --first-name, --last-name, --phone, --reference-id
-    users update - Plan update of a Freshchat user/contact. [intent=reverse_etl availability=implemented write=update_user]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Updates an existing Freshchat user/contact.; flags: --user-id, --email, --first-name, --last-name, --phone, --reference-id
-    users delete - Plan deletion of a Freshchat user/contact. [intent=reverse_etl availability=implemented write=delete_user]; approval: Destructive/admin reverse ETL writes require typed destructive confirmation plus plan -> preview -> explicit approval -> execute.; risk: Deletes a Freshchat user/contact.; flags: --user-id
-  Freshchat conversation read/write commands
-    conversations view - Read one Freshchat conversation. [intent=etl availability=implemented stream=conversation_detail]; flags: --conversation-id
-    conversations messages - List messages in a Freshchat conversation. [intent=etl availability=implemented stream=conversation_messages]; flags: --conversation-id, --from-time
-    conversations fields - List Freshchat conversation property fields. [intent=etl availability=implemented stream=conversation_fields]
-    conversations create - Plan creation of a Freshchat conversation. [intent=reverse_etl availability=implemented write=create_conversation]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Creates a Freshchat conversation.; flags: --user-id, --channel-id
-    conversations update - Plan update of a Freshchat conversation. [intent=reverse_etl availability=implemented write=update_conversation]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Updates status, routing, priority, or properties on a Freshchat conversation.; flags: --conversation-id, --status, --assigned-agent-id, --assigned-group-id, --priority
-    conversations message send - Plan sending a message into a Freshchat conversation. [intent=reverse_etl availability=implemented write=send_conversation_message]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Sends a visible message into an existing Freshchat conversation.; flags: --conversation-id, --actor-type, --actor-id
-  Freshchat group read commands
-    groups list - List Freshchat groups. [intent=etl availability=implemented stream=groups]; flags: --sort-order, --sort-by
-  Freshchat channel read commands
+    agents update - Plan update of a Freshchat admin/agent account. [intent=reverse_etl availability=implemented write=update_agent]; approval: requires plan, preview, approval, and execute; risk: updates a Freshchat admin/agent account; requires typed destructive confirmation because this mutates administrative access metadata; flags: --agent_id (required)
+    agents view - Read one Freshchat agent by configured agent id. [intent=etl availability=implemented stream=agent_details]; flags: --agent-id
+    api post files upload - Documented POST /files/upload (not implemented) [intent=direct_write availability=not_implemented operation=freshchat.post.files-upload]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+    api post images upload - Documented POST /images/upload (not implemented) [intent=direct_write availability=not_implemented operation=freshchat.post.images-upload]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+    api post users fetch - Documented POST /users/fetch (not implemented) [intent=direct_read availability=not_implemented operation=freshchat.post.users-fetch]; approval: not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract; risk: medium; notes: named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract; flags: --page, --page-cursor
+    business-hours status - Check whether a Freshchat group is within business hours. [intent=etl availability=implemented stream=business_hours_status]; flags: --group-id
     channels list - List Freshchat channels/topics. [intent=etl availability=implemented stream=channels]; flags: --locale
-  Freshchat role read commands
-    roles list - List Freshchat roles. [intent=etl availability=implemented stream=roles]
-  Freshchat outbound read/write commands
-    outbound messages list - List Freshchat outbound messages. [intent=etl availability=implemented stream=outbound_messages]; flags: --request-id
-    outbound whatsapp send - Plan sending an outbound WhatsApp message through Freshchat. [intent=reverse_etl availability=implemented write=send_outbound_whatsapp_message]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Sends an outbound WhatsApp message through Freshchat.; flags: --provider
-  Freshchat report read/write commands
-    reports status - Read Freshchat raw report status. [intent=etl availability=implemented stream=report_status]; flags: --report-id, --status
-    reports extract - Plan generation of a Freshchat raw report extract. [intent=reverse_etl availability=implemented write=extract_report]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Requests generation of a Freshchat raw report extract.; flags: --start, --end, --event, --format
-  Freshchat metrics read commands
+    conversations create - Plan creation of a Freshchat conversation. [intent=reverse_etl availability=implemented write=create_conversation]; approval: requires plan, preview, approval, and execute; risk: creates a Freshchat conversation
+    conversations fields - List Freshchat conversation property fields. [intent=etl availability=implemented stream=conversation_fields]
+    conversations message send - Plan sending a message into a Freshchat conversation. [intent=reverse_etl availability=implemented write=send_conversation_message]; approval: requires plan, preview, approval, and execute; risk: sends a message into an existing Freshchat conversation; flags: --conversation_id (required)
+    conversations messages - List messages in a Freshchat conversation. [intent=etl availability=implemented stream=conversation_messages]; flags: --conversation-id, --from-time
+    conversations update - Plan update of a Freshchat conversation. [intent=reverse_etl availability=implemented write=update_conversation]; approval: requires plan, preview, approval, and execute; risk: updates routing, status, or properties on an existing Freshchat conversation; flags: --conversation_id (required)
+    conversations view - Read one Freshchat conversation. [intent=etl availability=implemented stream=conversation_detail]; flags: --conversation-id
+    csat create - Plan creation of a Freshchat CSAT rating. [intent=reverse_etl availability=implemented write=create_csat_rating]; approval: requires plan, preview, approval, and execute; risk: creates a CSAT rating for a Freshchat conversation; flags: --conversation_id (required)
+    groups list - List Freshchat groups. [intent=etl availability=implemented stream=groups]; flags: --sort-order, --sort-by
     metrics historical - Read Freshchat historical metrics. [intent=etl availability=implemented stream=historical_metrics]; flags: --metric, --start, --end, --group-by, --filter-by, --aggregator, --interval
     metrics instant - Read Freshchat instant metrics. [intent=etl availability=implemented stream=instant_metrics]; flags: --metric, --group-by, --filter-by, --summary
-  Freshchat business-hours read commands
-    business-hours status - Check whether a Freshchat group is within business hours. [intent=etl availability=implemented stream=business_hours_status]; flags: --group-id
-  Freshchat CSAT write commands
-    csat create - Plan creation of a Freshchat CSAT rating. [intent=reverse_etl availability=implemented write=create_csat_rating]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute.; risk: Creates a CSAT rating for a Freshchat conversation.; flags: --conversation-id, --rating, --comment
-  Planned bounded provider-search commands
-    direct users fetch - Planned bounded subset fetch for up to 100 Freshchat user ids. [intent=direct_read availability=planned]; approval: none until #2985 provides executable provider_search/provider_query safety; no live call is available today.; risk: medium; notes: Blocked on #2985 typed provider-search/query foundation. The official request body is ids[] with a provider-documented maximum of 100 users; no raw body escape hatch is exposed.; flags: --ids, --page, --page-cursor
-  Planned binary/multipart commands
-    binary files upload - Planned Freshchat file upload. [intent=direct_write availability=planned]; approval: blocked until a typed binary/multipart plan -> preview -> approval -> execute contract exists.; risk: high; notes: Blocked binary/file operation. Official API accepts one multipart file with a documented 25 MB cap; this connector currently accepts no filesystem path or binary payload.; flags: --file
-    binary images upload - Planned Freshchat image upload. [intent=direct_write availability=planned]; approval: blocked until a typed binary/multipart plan -> preview -> approval -> execute contract exists.; risk: high; notes: Blocked binary/file operation. Official API accepts multipart image input; this connector currently accepts no filesystem path or binary payload.; flags: --image
-  Help topics:
-    destructive-confirmation - Freshchat DELETE and admin/agent-management operations require typed destructive confirmation plus reverse ETL plan -> preview -> approval -> execute.
-    provider-search - Freshchat POST /users/fetch remains planned/blocked on #2985 and is not exposed as a raw query/body command.
-    binary-uploads - Freshchat file/image uploads remain planned/blocked until a typed binary/multipart safety contract exists.
+    outbound messages list - List Freshchat outbound messages. [intent=etl availability=implemented stream=outbound_messages]; flags: --request-id
+    outbound whatsapp send - Plan sending an outbound WhatsApp message through Freshchat. [intent=reverse_etl availability=implemented write=send_outbound_whatsapp_message]; approval: requires plan, preview, approval, and execute; risk: sends an outbound WhatsApp message through Freshchat
+    reports extract - Plan generation of a Freshchat raw report extract. [intent=reverse_etl availability=implemented write=extract_report]; approval: requires plan, preview, approval, and execute; risk: requests generation of a Freshchat raw report extract; flags: --end (required), --event (required), --format (required), --start (required)
+    reports status - Read Freshchat raw report status. [intent=etl availability=implemented stream=report_status]; flags: --report-id, --status
+    roles list - List Freshchat roles. [intent=etl availability=implemented stream=roles]
+    users conversations - List conversations for a Freshchat user. [intent=etl availability=implemented stream=user_conversations]; flags: --user-id
+    users create - Plan creation of a Freshchat user/contact. [intent=reverse_etl availability=implemented write=create_user]; approval: requires plan, preview, approval, and execute; risk: creates a Freshchat user/contact visible to agents
+    users delete - Plan deletion of a Freshchat user/contact. [intent=reverse_etl availability=implemented write=delete_user]; approval: requires plan, preview, approval, and execute; risk: deletes a Freshchat user/contact; destructive and idempotent for configured missing statuses; flags: --user_id (required)
+    users list - List Freshchat users with documented search filters. [intent=etl availability=implemented stream=users]; notes: Freshchat requires at least one user search filter for successful live /users responses; connector config and command metadata expose the documented filter set without a raw query escape hatch.; flags: --first-name, --last-name, --email, --reference-id, --phone-no, --created-from, --created-to, --updated-from, --updated-to
+    users update - Plan update of a Freshchat user/contact. [intent=reverse_etl availability=implemented write=update_user]; approval: requires plan, preview, approval, and execute; risk: updates an existing Freshchat user/contact; flags: --user_id (required)
+    users view - Read one Freshchat user by configured user id. [intent=etl availability=implemented stream=user_details]; flags: --user-id
 
 EXAMPLES
   # Inspect as a manual

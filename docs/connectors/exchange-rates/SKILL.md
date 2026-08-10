@@ -66,6 +66,19 @@ Reads latest, currency-conversion, time-series, and fluctuation foreign-exchange
 - approval: none; read-only public data API
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Exchange Rates API's declared streams and reverse-ETL actions.
+- Usage: pm exchange-rates <command> [flags]
+- Read streams
+- Other Commands
+  - api get date - Documented GET /{date} (not implemented) [intent=direct_read availability=not_implemented operation=exchange-rates.get.date]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get symbols - Documented GET /symbols (not implemented) [intent=direct_read availability=not_implemented operation=exchange-rates.get.symbols]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - convert list - Run the convert ETL stream [intent=etl availability=implemented stream=convert]
+  - fluctuation list - Run the fluctuation ETL stream [intent=etl availability=implemented stream=fluctuation]
+  - latest list - Run the latest ETL stream [intent=etl availability=implemented stream=latest]
+  - timeseries list - Run the timeseries ETL stream [intent=etl availability=implemented stream=timeseries]
+
 ## Commands
 
 ### Inspect as a manual

@@ -58,6 +58,18 @@ SECURITY
   approval: required for create_episode/update_episode
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Buzzsprout's declared streams and reverse-ETL actions.
+  Usage: pm buzzsprout <command> [flags]
+  Read streams
+  Reverse ETL writes
+  Other Commands
+    api get api podcast-id episodes episode-id json - Documented GET /api/{podcast_id}/episodes/{episode_id}.json (not implemented) [intent=direct_read availability=not_implemented operation=buzzsprout.get.api-podcast-id-episodes-episode-id-json]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    create episode apply - Plan and execute the create episode reverse-ETL action [intent=reverse_etl availability=implemented write=create_episode]; approval: requires plan, preview, approval, and execute; risk: external mutation; creates a new episode (and can trigger audio processing/publication) on the configured podcast; approval required
+    episodes list - Run the episodes ETL stream [intent=etl availability=implemented stream=episodes]
+    podcasts list - Run the podcasts ETL stream [intent=etl availability=implemented stream=podcasts]
+    update episode apply - Plan and execute the update episode reverse-ETL action [intent=reverse_etl availability=implemented write=update_episode]; approval: requires plan, preview, approval, and execute; risk: external mutation; overwrites episode metadata on the configured podcast; approval required; flags: --id (required)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect buzzsprout

@@ -78,6 +78,25 @@ Reads and writes Campayn subscriber lists, signup forms, contacts, email campaig
 - approval: none; low-risk marketing-list mutations, no documented destructive writes
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Campayn's declared streams and reverse-ETL actions.
+- Usage: pm campayn <command> [flags]
+- Read streams
+- Reverse ETL writes
+- Other Commands
+  - add contact apply - Plan and execute the add contact reverse-ETL action [intent=reverse_etl availability=implemented write=add_contact]; approval: requires plan, preview, approval, and execute; risk: adds a new contact to a Campayn subscriber list; low-risk external mutation, no approval required; flags: --email (required), --list_id (required)
+  - api get contacts contact-id json - Documented GET /contacts/{contact_id}.json (not implemented) [intent=direct_read availability=not_implemented operation=campayn.get.contacts-contact-id-json]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get lists list-id forms form-id json - Documented GET /lists/{list_id}/forms/{form_id}.json (not implemented) [intent=direct_read availability=not_implemented operation=campayn.get.lists-list-id-forms-form-id-json]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api post signup - Documented POST /signup (not implemented) [intent=direct_write availability=not_implemented operation=campayn.post.signup]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+  - contacts list - Run the contacts ETL stream [intent=etl availability=implemented stream=contacts]
+  - emails list - Run the emails ETL stream [intent=etl availability=implemented stream=emails]
+  - forms list - Run the forms ETL stream [intent=etl availability=implemented stream=forms]
+  - lists list - Run the lists ETL stream [intent=etl availability=implemented stream=lists]
+  - reports list - Run the reports ETL stream [intent=etl availability=implemented stream=reports]
+  - unsubscribe contact apply - Plan and execute the unsubscribe contact reverse-ETL action [intent=reverse_etl availability=implemented write=unsubscribe_contact]; approval: requires plan, preview, approval, and execute; risk: unsubscribes a contact from a list by id (single contact) or email (every contact on the list sharing that email address); the docs note neither path shows up in Reporting; low-risk external mutation, no approval required; flags: --list_id (required)
+  - update contact apply - Plan and execute the update contact reverse-ETL action [intent=reverse_etl availability=implemented write=update_contact]; approval: requires plan, preview, approval, and execute; risk: replaces a contact's full field set (the upstream API's own docs warn any field not sent in the body is removed); external mutation, no approval required; flags: --id (required)
+
 ## Commands
 
 ### Inspect as a manual

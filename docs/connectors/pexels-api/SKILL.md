@@ -72,6 +72,22 @@ Reads Pexels photo/video search and curated/popular results plus featured and pe
 - approval: none; read-only, no writes (the Pexels API has no create/update/delete endpoint anywhere in its documented surface, per its own docs: "Collections cannot be created or modified using the Pexels API")
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Pexels API's declared streams and reverse-ETL actions.
+- Usage: pm pexels-api <command> [flags]
+- Read streams
+- Other Commands
+  - api get v1 photos id - Documented GET /v1/photos/{id} (not implemented) [intent=direct_read availability=not_implemented operation=pexels-api.get.v1-photos-id]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get v1 videos videos id - Documented GET /v1/videos/videos/{id} (not implemented) [intent=direct_read availability=not_implemented operation=pexels-api.get.v1-videos-videos-id]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - collection media list - Run the collection media ETL stream [intent=etl availability=implemented stream=collection_media]
+  - curated photos list - Run the curated photos ETL stream [intent=etl availability=implemented stream=curated_photos]
+  - featured collections list - Run the featured collections ETL stream [intent=etl availability=implemented stream=featured_collections]
+  - my collections list - Run the my collections ETL stream [intent=etl availability=implemented stream=my_collections]
+  - photos list - Run the photos ETL stream [intent=etl availability=implemented stream=photos]
+  - popular videos list - Run the popular videos ETL stream [intent=etl availability=implemented stream=popular_videos]
+  - videos list - Run the videos ETL stream [intent=etl availability=implemented stream=videos]
+
 ## Commands
 
 ### Inspect as a manual

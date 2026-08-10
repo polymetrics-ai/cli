@@ -65,6 +65,15 @@ Reads GNews articles from the keyword search and top-headlines endpoints of the 
 - approval: none; read-only news search API
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run GNews's declared streams and reverse-ETL actions.
+- Usage: pm gnews <command> [flags]
+- Read streams
+- Other Commands
+  - search list - Run the search ETL stream [intent=etl availability=implemented stream=search]
+  - top headlines list - Run the top headlines ETL stream [intent=etl availability=implemented stream=top_headlines]
+
 ## Commands
 
 ### Inspect as a manual

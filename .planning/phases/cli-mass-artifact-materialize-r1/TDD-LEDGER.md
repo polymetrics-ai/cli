@@ -175,3 +175,8 @@
 
 - Red: `TestGorgiasAPISurfaceOperationLedger` and `TestNotionAPISurfaceOperationLedger` failed after the completed source pass because they required `operation_ledger_version: 1` and looked for a blocked operation's citation in the removed v1 `operation.source_url` field. Notion's prior row arithmetic also omitted the generic blocked `POST /v1/search` contract alongside its two qualified stream bindings.
 - Green: both tests require version 2 and validate `endpoint.provenance.source_url` for blocked rows. Notion now explicitly asserts 51 unique documented operations in 55 rows (four qualified-binding views); the targeted pair and complete `go test -timeout 20m -count=1 ./cmd/connectorgen` suite pass.
+
+## Xero binary versus direct-read operation accounting
+
+- Red: `TestXeroOperationsLedgerMetrics` expected 118 operations by counting the 26 binary-download rows a second time as `rest_read`, while the materialized v2 catalog correctly held 92 operations.
+- Green: the regression now asserts the distinct category partition — 26 `binary_download`, 22 `rest_read`, 22 `file_upload`, and 22 `rest_write` operations — so binary, direct-read, and direct-write classifications cannot be conflated.

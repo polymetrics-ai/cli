@@ -60,6 +60,19 @@ SECURITY
   approval: none; read-only public API, no credentials
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Whisky Hunter's declared streams and reverse-ETL actions.
+  Usage: pm whisky-hunter <command> [flags]
+  Read streams
+  Other Commands
+    auction data list - Run the auction data ETL stream [intent=etl availability=implemented stream=auction_data]
+    auctions data list - Run the auctions data ETL stream [intent=etl availability=implemented stream=auctions_data]
+    auctions info list - Run the auctions info ETL stream [intent=etl availability=implemented stream=auctions_info]
+    auctions list - Run the auctions ETL stream [intent=etl availability=implemented stream=auctions]
+    distilleries info list - Run the distilleries info ETL stream [intent=etl availability=implemented stream=distilleries_info]
+    distilleries list - Run the distilleries ETL stream [intent=etl availability=implemented stream=distilleries]
+    distillery data list - Run the distillery data ETL stream [intent=etl availability=implemented stream=distillery_data]
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect whisky-hunter

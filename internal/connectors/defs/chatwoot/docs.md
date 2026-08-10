@@ -1,17 +1,19 @@
 # Overview
 
-Reads and writes the full account-scoped Chatwoot Application API support-desk surface: ETL streams
-for conversations, contacts, inboxes, agents, teams, labels, and conversation-scoped messages, plus
-34 bounded direct reads and 60 reverse-ETL write actions covering agent bots, canned responses,
-custom attribute definitions, custom filters, webhooks, integration hooks, automation rules,
-help-center portals, inbox membership, and account settings. See `pm chatwoot` (bare) and
-`pm chatwoot <group> --help` for the full, current command surface, or
+Reads and writes the account-scoped Chatwoot Application API support-desk surface: ETL streams for
+conversations, contacts, inboxes, agents, teams, labels, and conversation-scoped messages, plus
+bounded direct reads and reverse-ETL actions for agent bots, canned responses, custom attribute
+definitions, custom filters, webhooks, integration hooks, automation rules, help-center portals,
+inbox membership, and account settings. `api_surface.json` owns source-backed endpoint accounting;
+`cli_surface.json` owns command availability. See `pm chatwoot` (bare) and
+`pm chatwoot <group> --help` for the current available command surface, or
 `docs/connectors/chatwoot/MANUAL.md` for the generated reference.
 
 Readable streams: `conversations`, `contacts`, `inboxes`, `agents`, `teams`, `labels`, `messages`.
 
-The six write actions below were this connector's original build; see `cli_surface.json` /
-`writes.json` for the other 54 reverse-ETL actions added for full documented-operation parity.
+The six write actions below were this connector's original build. `writes.json` owns the complete
+action set; consult `cli_surface.json` or runtime help before assuming a namespace command is
+available for a declared action.
 
 Service API documentation: https://developers.chatwoot.com/api-reference.
 
@@ -106,12 +108,10 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - Batch defaults: read_page_size=15.
-- Full documented-operation parity: 148 documented operations (re-derived 2026-08-07 from
-  https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json), partitioned as
-  101 executable (7 ETL streams, 34 direct reads, 60 reverse-ETL writes) and 47
-  blocked-with-named-dependency or unsupported-with-source-citation. See
-  `internal/connectors/defs/chatwoot/api_surface.json` for the full, per-operation disposition.
-- The 47 non-executable operations fall outside this bundle's single account-scoped base URL
+- `api_surface.json` owns the Chatwoot operation inventory, artifact provenance, and endpoint
+  disposition. `cli_surface.json` owns command availability; a `covered_by.write` endpoint means
+  there is a declared write action, not necessarily an executable namespace command.
+- Blocked or unsupported operations fall outside this bundle's single account-scoped base URL
   (`/api/v1/accounts/{account_id}`): Chatwoot's `/api/v2` reporting surface, `/platform/api/v1`
   (a distinct, more-privileged credential), `/public/api/v1` (an anonymous widget-actor API),
   `/survey`, and `/api/v1/profile`. One inbox-provisioning pair (`POST`/`PATCH .../inboxes`) is

@@ -511,10 +511,6 @@ func requireBatchArtifactInventoryTotal(candidate BatchManifestConnector, invent
 	return inventory, nil
 }
 
-func parseBatchOpenAPIArtifactSource(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
-	return parseBatchOpenAPIArtifactSourceWithBudget(raw, source, fetch, newBatchArtifactReferenceBudget(raw))
-}
-
 func parseBatchOpenAPIArtifactSourceWithBudget(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, error) {
 	inventory, err := parseBatchOpenAPIArtifactAtWithBudget(raw, source.URL, fetch, budget)
 	if err != nil {
@@ -590,10 +586,6 @@ func normalizeBatchArtifactEndpointAlternatives(endpoint *batchArtifactEndpoint)
 	for _, alternative := range alternatives {
 		appendBatchArtifactEndpointAlternative(endpoint, alternative)
 	}
-}
-
-func parseBatchArtifactByKind(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
-	return parseBatchArtifactByKindWithBudget(raw, source, fetch, newBatchArtifactReferenceBudget(raw))
 }
 
 func parseBatchArtifactByKindWithBudget(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, error) {
@@ -1101,10 +1093,6 @@ func parseBatchReferenceURL(raw string) (*url.URL, error) {
 		return nil, err
 	}
 	return parsed, nil
-}
-
-func validateBatchArtifactRequestURL(ctx context.Context, parsed *url.URL, lookup batchArtifactLookupIPAddr) error {
-	return validateBatchArtifactRequestURLWithQuery(ctx, parsed, lookup, false)
 }
 
 func validateBatchArtifactRequestURLWithQuery(ctx context.Context, parsed *url.URL, lookup batchArtifactLookupIPAddr, allowQuery bool) error {
@@ -1640,10 +1628,6 @@ func normalizeBatchArtifactJSON(raw []byte) ([]byte, bool) {
 	return normalized, true
 }
 
-func newBatchArtifactResolver(root batchArtifactDocument, fetch batchArtifactFetchFunc) *batchArtifactResolver {
-	return newBatchArtifactResolverWithBudget(root, fetch, newBatchArtifactReferenceBudget(nil))
-}
-
 func newBatchArtifactResolverWithBudget(root batchArtifactDocument, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) *batchArtifactResolver {
 	if budget == nil {
 		budget = newBatchArtifactReferenceBudget(nil)
@@ -1888,19 +1872,6 @@ func batchArtifactPathItemEndpointsWithResolver(resolver *batchArtifactResolver,
 	return endpoints, nil
 }
 
-// batchArtifactEndpointsFromPaths remains the local-only helper used by
-// narrow parser tests and callers that do not have a source URL. Materialize
-// uses the source-aware variant above so external references are traversed.
-func batchArtifactEndpointsFromPaths(root, paths *yaml.Node) ([]batchArtifactEndpoint, error) {
-	root, err := batchYAMLDeref(root)
-	if err != nil {
-		return nil, err
-	}
-	document := batchArtifactDocument{Root: root, Source: batchArtifactSource{Kind: "openapi"}}
-	resolver := newBatchArtifactResolver(document, nil)
-	return batchArtifactEndpointsFromDocument(resolver, document, paths)
-}
-
 func parseBatchPostmanArtifact(raw []byte, source batchArtifactSource) (batchArtifactInventory, error) {
 	var collection struct {
 		Info struct {
@@ -1913,7 +1884,7 @@ func parseBatchPostmanArtifact(raw []byte, source batchArtifactSource) (batchArt
 		return batchArtifactInventory{}, fmt.Errorf("decode Postman collection: %w", err)
 	}
 	if len(collection.Item) == 0 {
-		return batchArtifactInventory{}, errors.New("Postman collection has no request items")
+		return batchArtifactInventory{}, errors.New("postman collection has no request items")
 	}
 	source.Kind = "postman"
 	if source.Version == "" {
@@ -1976,7 +1947,7 @@ func parseBatchPostmanArtifact(raw []byte, source batchArtifactSource) (batchArt
 		return batchArtifactInventory{}, err
 	}
 	if len(endpoints) == 0 {
-		return batchArtifactInventory{}, errors.New("Postman collection has no callable HTTP requests")
+		return batchArtifactInventory{}, errors.New("postman collection has no callable HTTP requests")
 	}
 	sort.Slice(endpoints, func(i, j int) bool {
 		if endpoints[i].Path != endpoints[j].Path {
@@ -2176,13 +2147,6 @@ func batchYAMLFieldString(fields map[string]*yaml.Node, key string) (string, err
 		return "", errors.New("must be a string")
 	}
 	return strings.TrimSpace(node.Value), nil
-}
-
-func resolveBatchArtifactLocalReference(root *yaml.Node, reference string) (*yaml.Node, error) {
-	if !strings.HasPrefix(reference, "#") {
-		return nil, batchArtifactInventoryUnknown("external path-item reference %q cannot be exhaustively resolved", reference)
-	}
-	return resolveBatchArtifactJSONPointer(root, strings.TrimPrefix(reference, "#"), reference)
 }
 
 func resolveBatchArtifactJSONPointer(root *yaml.Node, pointer, reference string) (*yaml.Node, error) {
