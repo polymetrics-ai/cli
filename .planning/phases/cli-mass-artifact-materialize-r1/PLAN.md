@@ -64,3 +64,54 @@ No credentialed or live-provider checks, certification, per-connector review, ru
 
 - Red: the materialized bundles for `apify-dataset`, `basecamp`, `copper`, `google-classroom`, `google-pagespeed-insights`, `metabase`, and `rootly` declare 25 implemented ETL commands, but `pm <connector> --help` exits 2 with `unknown command`. `bundleregistry.New` first constructs the hook-backed engine connector and then replaces it with the promoted legacy-native `definitionConnector`; the wrapper forwards only the bundle definition and configuration constraints, so it loses the bundle-owned `CommandSurface` required by the dynamic CLI.
 - Green: `definitionConnector.CommandSurface` forwards `engine.Base.CommandSurface`, retaining the established native `Check`/`Read` implementation while exposing the already-declared JSON command surface. A table-driven CLI regression proves all seven bare connector namespaces and one implemented command-help route each render successfully and no longer hit the unknown-command path. This restores existing runtime help/discovery only; generated manuals, CLI docs, and website data have no independent authored text to update.
+
+## PR #3957 CI-failure remediation (2026-08-10)
+
+This is an in-scope remediation for issue #3958 / PR #3957. The current branch has a complete
+426-target ledger; this slice repairs four CI gates without changing connector declarations or
+answering the parked no-mistakes review gate. The captain fixed the order and supplied the
+security disposition, so no product decision is pending.
+
+The lifecycle is executed inline under the established manual GSD fallback: `discuss-phase`,
+`plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` were resolved through
+`scripts/gsd`; the non-numeric existing phase and the single-worker constraint make generated
+role workers incompatible. `scripts/gsd doctor` and `go run ./cmd/agentcontractgen check` are
+green before implementation. Required skills used for this Go/CLI/security/test/website slice:
+`golang-how-to`, `golang-cli`, `golang-error-handling`, `golang-lint`, `golang-security`,
+`golang-safety`, `golang-testing`, `golang-design-patterns`, `golang-structs-interfaces`,
+`golang-project-layout`, and `vercel-react-best-practices`. The repository-named design-only
+website skills are unavailable in this runner; the website change is a focused test assertion,
+not a UI design change.
+
+1. **govulncheck first.** Red: `govulncheck ./...` stops before scanning because the two
+   task-scoped scripts in one `scripts/` package both define `main`. Green: move each standalone
+   program and its tests into its own `scripts/<command>/` package, update durable command
+   references, then run the actual vulnerability scan so a passing check means packages were
+   examined rather than merely compiled.
+2. **Reference-link scheme allowlist.** Red: a `data:` candidate can pass the early selected-link
+   filter even though later same-host and HTTPS gates reject it. Green: parse candidates at the
+   filter boundary, permit only relative references or explicit `http`/`https` schemes, and add
+   a regression proving `data:` is refused while a relative OpenAPI link remains eligible. This
+   is defense in depth; the downstream same-host and HTTPS admissions currently prevent an
+   exploit.
+3. **Connector-boundary scanner collision.** Red: generic static asset literals `.rss` and
+   `/rss.xml` are tokenized as the `rss` connector and incorrectly reported as shared
+   connector policy. Green: make the scanner recognize asset suffix/filename literal context,
+   retain detection for a standalone `"rss"` connector literal, and keep the asset filter text
+   unchanged.
+4. **Website search regression.** Red: `management_token` now has enough matching generated
+   connector metadata in the 552-connector corpus that 100ms ranks 14th, outside the stale
+   12-result test window. Green: use a connector-qualified query and assert the intended result
+   is present, avoiding a corpus-size-dependent top-N expectation; run the focused Vitest test.
+
+The verification order mirrors the requested fix order: focused script package tests and actual
+`govulncheck ./...`; focused `cmd/connectorgen` tests; focused boundary package tests plus the
+real connector-boundary gate; focused website test; then `surface-sync --check`, selected
+non-test verify gates, and the PR checks triggered by the push. No live provider request,
+credential, connector materialization, or no-mistakes gate response belongs to this remediation.
+
+`make verify` exposed one mechanical consequence of making `./...` loadable: its tidy step now
+correctly identifies the pre-existing production import of `golang.org/x/net/html` as direct.
+The only module change retained is that direct/indirect classification in `go.mod`; no module
+version, checksum, or dependency is added. It will be committed with this coherent green slice,
+then Verify is rerun from the committed baseline so `tidy-check` can validate the exact result.

@@ -247,6 +247,33 @@ var providers = []string{"Microsoft Teams", "FreeAgent"}
 	requireFinding(t, report, RuleConnectorLiteral, "free-agent-connector", "internal/connectors/engine/aliases.go", "FreeAgent")
 }
 
+func TestScanIgnoresStaticAssetLiteralsWithoutIgnoringConnectorIdentity(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"internal/connectors/defs/rss/metadata.json": `{"name":"rss","display_name":"RSS","integration_type":"api"}`,
+		"cmd/connectorgen/asset_filter.go": `package main
+
+var staticAssetSuffixes = []string{".rss", "/rss.xml"}
+
+const connectorName = "rss"
+`,
+	})
+
+	report, err := Scan(root, Options{Now: fixedNow})
+	if err != nil {
+		t.Fatalf("Scan: %v", err)
+	}
+	requireFinding(t, report, RuleConnectorLiteral, "rss", "cmd/connectorgen/asset_filter.go", "rss")
+	count := 0
+	for _, finding := range report.Findings {
+		if finding.Connector == "rss" && finding.Path == "cmd/connectorgen/asset_filter.go" {
+			count++
+		}
+	}
+	if count != 1 {
+		t.Fatalf("rss findings in static asset fixture = %d, want only the standalone connector literal; findings=%+v", count, report.Findings)
+	}
+}
+
 func TestScanDetectsConnectorSwitchForContextualMetadataName(t *testing.T) {
 	root := newFixtureRepo(t, map[string]string{
 		"internal/connectors/defs/mode/metadata.json": `{"name":"mode","display_name":"Mode","integration_type":"api"}`,

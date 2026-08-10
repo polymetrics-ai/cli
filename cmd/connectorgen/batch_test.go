@@ -2194,6 +2194,47 @@ func TestParseBatchHTMLReferenceSkipsStaticAssetCandidates(t *testing.T) {
 	}
 }
 
+func TestIsLikelyBatchReferenceLinkAllowsOnlyHTTPSchemesOrRelativeReferences(t *testing.T) {
+	tests := []struct {
+		name string
+		raw  string
+		want bool
+	}{
+		{
+			name: "data URI is not a reference document",
+			raw:  "data:application/openapi+json,{}",
+			want: false,
+		},
+		{
+			name: "vbscript URI is not a reference document",
+			raw:  "vbscript:msgbox('openapi')",
+			want: false,
+		},
+		{
+			name: "mailto URI is not a reference document",
+			raw:  "mailto:openapi@example.test",
+			want: false,
+		},
+		{
+			name: "HTTPS OpenAPI document remains eligible",
+			raw:  "https://provider.example/openapi.json",
+			want: true,
+		},
+		{
+			name: "relative OpenAPI document remains eligible",
+			raw:  "/reference/openapi.json",
+			want: true,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if got := isLikelyBatchReferenceLink(test.raw); got != test.want {
+				t.Fatalf("isLikelyBatchReferenceLink(%q) = %t, want %t", test.raw, got, test.want)
+			}
+		})
+	}
+}
+
 func TestParseBatchHTMLReferenceSkipsFeedCandidates(t *testing.T) {
 	rootURL := "https://provider.example/reference"
 	machineURL := "https://provider.example/openapi.json"

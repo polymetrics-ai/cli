@@ -500,10 +500,19 @@ func validateBatchReferenceURLObject(parsed *url.URL) error {
 
 func isLikelyBatchReferenceLink(raw string) bool {
 	lower := strings.ToLower(strings.TrimSpace(raw))
-	if lower == "" || strings.HasPrefix(lower, "#") || strings.HasPrefix(lower, "mailto:") || strings.HasPrefix(lower, "javascript:") {
+	if lower == "" || strings.HasPrefix(lower, "#") {
 		return false
 	}
 	if parsed, err := url.Parse(lower); err == nil {
+		// Relative references intentionally have no scheme: they are resolved
+		// against the provider-owned base URL before host and HTTPS admission.
+		// Every explicit scheme must be an HTTP transport, so new opaque or
+		// executable URI schemes cannot become selected traversal candidates.
+		switch parsed.Scheme {
+		case "", "http", "https":
+		default:
+			return false
+		}
 		for _, suffix := range []string{".css", ".js", ".mjs", ".map", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico", ".woff", ".woff2", ".ttf", ".eot", ".rss", "/rss.xml", ".atom", "/atom.xml"} {
 			if strings.HasSuffix(parsed.Path, suffix) {
 				return false

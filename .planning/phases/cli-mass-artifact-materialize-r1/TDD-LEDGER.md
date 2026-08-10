@@ -98,7 +98,7 @@
 ## 426-target rate-limit declaration completeness
 
 - Red: find internal/connectors/defs -name rate_limits.json returned zero files, while the one-flow captain order requires exactly one provider-cited declaration for every 426 target. TestEverySweepTargetLoadsRateLimitDeclaration is added before production changes and must fail until every target has an embedded, schema-loadable declaration.
-- Green: `scripts/materialize_cli_rate_limits.go` builds the immutable 426-entry `RATE-LIMIT-SOURCE-LEDGER.json` and writes no more than 40 declarations per atomic report. Its focused source-gap, bounded-selection, overwrite-refusal, and declared-over-unknown preservation tests pass. On a later rebase or batch resume, a valid provider-cited `declared` bundle record promotes the compact source ledger and is never replaced by a generated `unknown` fallback; reconciliation counts the on-disk declaration. The eleven B042 reports total 3 `declared`, 422 `unknown`, 1 `not_applicable`, and 426 files at this checkpoint. `TestEverySweepTargetLoadsRateLimitDeclaration` and `TestProductionDefinitionsEmbedEveryRateLimitDeclaration` load all 426 through production `defs.FS`; the reconciler refuses a ledger whose rate-limit state or file totals do not conserve the target manifest. `faker` alone is `not_applicable` because the target ledger records no external provider HTTP/API; every other non-declared policy carries the exact retained official-source publication gap rather than an inferred numeric limit.
+- Green: `go run ./scripts/materialize_cli_rate_limits` builds the immutable 426-entry `RATE-LIMIT-SOURCE-LEDGER.json` and writes no more than 40 declarations per atomic report. Its focused source-gap, bounded-selection, overwrite-refusal, and declared-over-unknown preservation tests pass. On a later rebase or batch resume, a valid provider-cited `declared` bundle record promotes the compact source ledger and is never replaced by a generated `unknown` fallback; reconciliation counts the on-disk declaration. The eleven B042 reports total 3 `declared`, 422 `unknown`, 1 `not_applicable`, and 426 files at this checkpoint. `TestEverySweepTargetLoadsRateLimitDeclaration` and `TestProductionDefinitionsEmbedEveryRateLimitDeclaration` load all 426 through production `defs.FS`; the reconciler refuses a ledger whose rate-limit state or file totals do not conserve the target manifest. `faker` alone is `not_applicable` because the target ledger records no external provider HTTP/API; every other non-declared policy carries the exact retained official-source publication gap rather than an inferred numeric limit.
 
 ## Complete root-reference fast path
 
@@ -159,12 +159,12 @@
 ## Ledger reconstruction and atomic replacement
 
 - Red: an ad-hoc `jq` ledger update evaluated a candidate-selection expression with the wrong input scope after shell redirection had already opened the destination. The command therefore replaced `MATERIALIZATION-LEDGER.json` and `RETRY-QUEUE.json` with zero-byte files and left `RUN-STATE.json` with null counts, despite every connector bundle and batch report remaining intact.
-- Green: `scripts/reconcile_cli_mass_artifact_ledgers.go --expected-materialized 194 --check` reads only the target manifest, retained batch reports/outcomes, the reconciliation record, and current bundle provenance. It rebuilt all three ledgers only after asserting 426 unique target names, a disjoint 232/194 queue/resolved partition, and `194 materialized + 232 retry_pending + 0 blocked = 426`. Its JSON writer stages validated non-empty temporary files before atomic rename; `TestStageValidatedJSONBytesLeavesDestinationUntouchedForInvalidCandidate` proves an invalid candidate cannot replace an existing ledger.
+- Green: `go run ./scripts/reconcile_cli_mass_artifact_ledgers --expected-materialized 194 --check` reads only the target manifest, retained batch reports/outcomes, the reconciliation record, and current bundle provenance. It rebuilt all three ledgers only after asserting 426 unique target names, a disjoint 232/194 queue/resolved partition, and `194 materialized + 232 retry_pending + 0 blocked = 426`. Its JSON writer stages validated non-empty temporary files before atomic rename; `TestStageValidatedJSONBytesLeavesDestinationUntouchedForInvalidCandidate` proves an invalid candidate cannot replace an existing ledger.
 
 ## Explicit terminal official-source exhaustion
 
 - Red: a normal `retry_pending` attempt must never become a terminal block merely because a later batch was run; the pre-final reconciler consequently retained the 195 unresolved targets in the retry queue.
-- Green: `TestFinalBlockedAttemptRequiresExplicitTerminalOutcome` accepts only a final `genuinely_blocked` event whose stage is `official_source_exhausted` and whose route, reason, and evidence are all nonempty. It rejects ordinary retries, malformed terminal data, and a valid terminal event followed by a new retry. B056 supplies that evidence for all 195 remaining targets, and `go run scripts/reconcile_cli_mass_artifact_ledgers.go --expected-materialized 231 --check` proves `231 materialized + 195 genuinely_blocked + 0 retry_pending = 426`.
+- Green: `TestFinalBlockedAttemptRequiresExplicitTerminalOutcome` accepts only a final `genuinely_blocked` event whose stage is `official_source_exhausted` and whose route, reason, and evidence are all nonempty. It rejects ordinary retries, malformed terminal data, and a valid terminal event followed by a new retry. B056 supplies that evidence for all 195 remaining targets, and `go run ./scripts/reconcile_cli_mass_artifact_ledgers --expected-materialized 231 --check` proves `231 materialized + 195 genuinely_blocked + 0 retry_pending = 426`.
 
 ## Zero-operation non-HTTP bundle
 
@@ -185,3 +185,32 @@
 
 - Red: `TestXeroOperationsLedgerMetrics` expected 118 operations by counting the 26 binary-download rows a second time as `rest_read`, while the materialized v2 catalog correctly held 92 operations.
 - Green: the regression now asserts the distinct category partition — 26 `binary_download`, 22 `rest_read`, 22 `file_upload`, and 22 `rest_write` operations — so binary, direct-read, and direct-write classifications cannot be conflated.
+
+## PR #3957 CI remediation (2026-08-10)
+
+- **GOVULNCHECK-SCRIPTS — Red:** the Security workflow's
+  `go run golang.org/x/vuln/cmd/govulncheck@latest ./...` stopped at package loading with
+  `scripts/reconcile_cli_mass_artifact_ledgers.go:133:6: main redeclared` and
+  `scripts/materialize_cli_rate_limits.go:115:6: other declaration of main`; no dependency
+  vulnerability analysis ran. **Green:** each command and its existing unit tests live in a
+  separate `scripts/<command>/` package, `go test ./scripts/...` loads both, and the actual
+  `govulncheck ./...` command completes.
+- **CODEQL-REFERENCE-SCHEMES — Red:** `isLikelyBatchReferenceLink` rejects only a short dangerous
+  scheme blocklist; a `data:` URI reaches later validation. **Green:** focused table-driven tests
+  prove `data:` and `vbscript:` candidates are refused, while HTTPS and same-host-relative
+  OpenAPI references stay eligible; the parser allowlists only explicit HTTP(S) schemes and
+  relative references.
+- **CONNECTOR-BOUNDARY-RSS-ASSET — Red:** the whole-tree scanner reports `.rss` and `/rss.xml`
+  from the generic batch reference static-asset filter as `connector_literal` findings for
+  `rss`. **Green:** a fixture uses those two asset entries and produces no `rss` finding, while
+  a separate literal `"rss"` in the same shared package still produces the expected
+  `connector_literal` finding.
+- **WEBSITE-SEARCH-CORPUS — Red:** the generated 552-connector catalog makes the generic
+  `management_token` query return 100ms at rank 14, outside the prior `limit=12` assertion.
+  **Green:** the targeted metadata/setup query returns the 100ms connector and the test asserts
+  its presence rather than relying on the global top-N order.
+- **TIDY-DIRECT-NET — Red:** after the script-main collision is removed, `make verify` reaches
+  `go mod tidy` and reports the existing production `golang.org/x/net/html` import as a direct
+  module requirement, while the committed file marks it indirect. **Green:** retain only tidy's
+  direct/indirect classification change, commit it with the loading repair, and rerun Verify from
+  that committed baseline; no version or checksum changes are permitted.

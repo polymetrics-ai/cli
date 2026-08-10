@@ -44,7 +44,7 @@ describe('search API index', () => {
   });
 
   it('indexes generated connector metadata and setup fields', async () => {
-    const payload = await search({ q: 'management_token', limit: '12' });
+    const payload = await search({ q: '100ms management_token', limit: '12' });
 
     expect(payload.results).toContainEqual(
       expect.objectContaining({
