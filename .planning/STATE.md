@@ -78,3 +78,9 @@ These are quick-map inputs only; authoritative counts require Phase 1 inventory 
 
 ---
 *State refreshed: 2026-07-08 via repo-local official GSD Core Pi adapter.*
+
+## Accumulated Context
+
+### Roadmap Evolution
+
+- Phase 600 added: issue #3984: standalone generated capability and pair-flow certification foundation

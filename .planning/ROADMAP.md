@@ -156,5 +156,15 @@ In Pi after trust/reload:
 /gsd-programming-loop init --phase <phase> --dry-run
 ```
 
+### Phase 600: Establish generated live certification capability and flow matrices
+
+**Goal:** Establish generated, code-derived capability and pair-scoped flow certification matrices so certification claims require checkable fixture and live evidence.
+**Requirements**: Issue #3984 — generated capability matrix, generated pair-flow matrix, all-or-nothing certification, drift detection, and honest zero-evidence baseline.
+**Depends on:** None (standalone certification foundation; issue #3984)
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 600 to break down)
+
 ---
 *Roadmap refreshed: 2026-07-08 via repo-local official GSD Core Pi adapter; `.planning/phases/**` intentionally unchanged.*
