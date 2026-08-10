@@ -59,6 +59,20 @@ SECURITY
   read risk: external Marketstack API read of financial market data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Marketstack's declared streams and reverse-ETL actions.
+  Usage: pm marketstack <command> [flags]
+  Read streams
+  Other Commands
+    api get v1 currencies - Documented GET /v1/currencies (not implemented) [intent=direct_read availability=not_implemented operation=marketstack.get.v1-currencies]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get v1 intraday - Documented GET /v1/intraday (not implemented) [intent=direct_read availability=not_implemented operation=marketstack.get.v1-intraday]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get v1 timezones - Documented GET /v1/timezones (not implemented) [intent=direct_read availability=not_implemented operation=marketstack.get.v1-timezones]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    dividends list - Run the dividends ETL stream [intent=etl availability=implemented stream=dividends]
+    eod list - Run the eod ETL stream [intent=etl availability=implemented stream=eod]
+    exchanges list - Run the exchanges ETL stream [intent=etl availability=implemented stream=exchanges]
+    splits list - Run the splits ETL stream [intent=etl availability=implemented stream=splits]
+    tickers list - Run the tickers ETL stream [intent=etl availability=implemented stream=tickers]
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect marketstack

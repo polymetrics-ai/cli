@@ -58,6 +58,19 @@ SECURITY
   approval: none; read-only, no reverse-ETL write surface
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run IP2WHOIS's declared streams and reverse-ETL actions.
+  Usage: pm ip2whois <command> [flags]
+  Read streams
+  Other Commands
+    api get v2 - Documented GET /v2 (not implemented) [intent=direct_read availability=not_implemented operation=ip2whois.get.v2]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: low; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get v2-domain-lookup-nameservers-array - Documented GET /v2 (domain lookup, nameservers[] array) (not implemented) [intent=direct_read availability=not_implemented operation=ip2whois.get.v2-domain-lookup-nameservers-array]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    contacts admin list - Run the contacts admin ETL stream [intent=etl availability=implemented stream=contacts_admin]; notes: discrepancy=present-in-surface-absent-from-artifact
+    contacts billing list - Run the contacts billing ETL stream [intent=etl availability=implemented stream=contacts_billing]; notes: discrepancy=present-in-surface-absent-from-artifact
+    contacts registrant list - Run the contacts registrant ETL stream [intent=etl availability=implemented stream=contacts_registrant]; notes: discrepancy=present-in-surface-absent-from-artifact
+    contacts tech list - Run the contacts tech ETL stream [intent=etl availability=implemented stream=contacts_tech]; notes: discrepancy=present-in-surface-absent-from-artifact
+    whois list - Run the whois ETL stream [intent=etl availability=implemented stream=whois]; notes: discrepancy=present-in-surface-absent-from-artifact
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect ip2whois

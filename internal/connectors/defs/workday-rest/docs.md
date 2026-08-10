@@ -3,11 +3,11 @@
 Reads and writes the documented Workday REST surface across the 52 independently versioned services
 Workday's own directory publishes, with bearer-token authentication.
 
-Current official operation ledger: 911 documented HTTP operations (651 GET, 153 POST, 56 PATCH, 32
-DELETE, 19 PUT). Implemented rows: 911 commands = 654 bounded direct reads + 252 typed writes + 5
-binary downloads. Those commands, together with the 3 stream-backed reads, classify 910 documented
-endpoints; 1 endpoint is blocked as deprecated. Certified rows: 0 (fixture-only; no live provider
-calls were made).
+`api_surface.json` owns Workday's source-backed endpoint ledger, while `cli_surface.json` owns
+per-command availability. The bundle includes stream-backed reads, bounded direct and binary reads,
+typed reverse-ETL actions, and an explicitly blocked deprecated operation; use runtime help or
+`cli_surface.json` to determine which command paths are currently executable. Certification is
+fixture-only; no live provider calls were made.
 
 Readable streams: `workers`, `organizations`, `jobs`.
 
@@ -51,9 +51,10 @@ Default pagination: page-number pagination; page parameter `page`; size paramete
 
 ## Write actions & risks
 
-The connector declares 252 typed write actions (145 POST creates, 56 PATCH updates, 32 DELETE
-removals, 19 PUT upserts) across the HCM, Financials, Student and Platform services, including
-HR/PII-adjacent worker, absence, payroll, and financial records.
+The connector declares typed write actions across the HCM, Financials, Student, and Platform
+services, including HR/PII-adjacent worker, absence, payroll, and financial records. `writes.json`
+owns those declarations; `cli_surface.json` records whether each action has an executable command
+path.
 
 Writes are only available through reverse ETL plan -> preview -> explicit approval -> execute. Every
 DELETE action is gated as destructive and additionally requires a typed confirmation. The bundle
@@ -66,9 +67,6 @@ Read behavior: external Workday REST API read across HCM, Financials, Student an
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 3 stream-backed endpoint group(s); the remaining documented reads are
-  exposed as bounded direct reads rather than ETL streams.
-- Other documented endpoints are not exposed by this connector where they are blocked in the
-  operation ledger as deprecated=1.
+- `api_surface.json` is the authoritative per-endpoint coverage and blocked-operation ledger.
 - Fixture-only evidence: no live Workday credentials, provider calls, provider writes, or
   certification run were used.

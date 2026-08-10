@@ -54,6 +54,23 @@ Reads Survicate surveys, survey questions, responses, and respondent attributes,
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Survicate's declared streams and reverse-ETL actions.
+- Usage: pm survicate <command> [flags]
+- Read streams
+- Reverse ETL writes
+- Other Commands
+  - api delete v2 personal-data - Documented DELETE /v2/personal-data (not implemented) [intent=direct_write availability=not_implemented operation=survicate.delete.v2-personal-data]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+  - api get v2 personal-data - Documented GET /v2/personal-data (not implemented) [intent=direct_read availability=not_implemented operation=survicate.get.v2-personal-data]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get v2 respondents respondent-uuid attributes - Documented GET /v2/respondents/{respondent_uuid}/attributes (not implemented) [intent=direct_read availability=not_implemented operation=survicate.get.v2-respondents-respondent-uuid-attributes]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get v2 respondents respondent-uuid responses - Documented GET /v2/respondents/{respondent_uuid}/responses (not implemented) [intent=direct_read availability=not_implemented operation=survicate.get.v2-respondents-respondent-uuid-responses]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get v2 surveys survey-id - Documented GET /v2/surveys/{survey_id} (not implemented) [intent=direct_read availability=not_implemented operation=survicate.get.v2-surveys-survey-id]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get v2 surveys survey-id responses response-uuid - Documented GET /v2/surveys/{survey_id}/responses/{response_uuid} (not implemented) [intent=direct_read availability=not_implemented operation=survicate.get.v2-surveys-survey-id-responses-response-uuid]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - responses list - Run the responses ETL stream [intent=etl availability=implemented stream=responses]
+  - survey questions list - Run the survey questions ETL stream [intent=etl availability=implemented stream=survey_questions]
+  - surveys list - Run the surveys ETL stream [intent=etl availability=implemented stream=surveys]
+
 ## Commands
 
 ### Inspect as a manual

@@ -118,6 +118,38 @@ Reads PersistIQ leads, users, campaigns, mailboxes, activities, accounts, DNC do
 - approval: required; every write can trigger or halt outbound-email automation, send a real email, or change account-wide contact policy outside this connector's control depending on the target PersistIQ account's own configuration
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run PersistIQ's declared streams and reverse-ETL actions.
+- Usage: pm persistiq <command> [flags]
+- Read streams
+- Reverse ETL writes
+- Other Commands
+  - accounts list - Run the accounts ETL stream [intent=etl availability=implemented stream=accounts]; notes: discrepancy=present-in-surface-absent-from-artifact
+  - activities list - Run the activities ETL stream [intent=etl availability=implemented stream=activities]; notes: discrepancy=present-in-surface-absent-from-artifact
+  - add dnc domain apply - Plan and execute the add dnc domain reverse-ETL action [intent=reverse_etl availability=implemented write=add_dnc_domain]; approval: requires plan, preview, approval, and execute; risk: adds a domain to the account's Do-Not-Contact list; blocks future outreach to that domain account-wide; approval required; flags: --name (required)
+  - add lead to campaign apply - Plan and execute the add lead to campaign reverse-ETL action [intent=reverse_etl availability=implemented write=add_lead_to_campaign]; approval: requires plan, preview, approval, and execute; risk: enrolls a lead into a live outbound-email campaign; the lead may start receiving automated outreach immediately depending on campaign schedule/state; approval required; flags: --campaign_id (required)
+  - api get v1 leads id - Documented GET /v1/leads/{id} (not implemented) [intent=direct_read availability=not_implemented operation=persistiq.get.v1-leads-id]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api post v1 leads - Documented POST /v1/leads (not implemented) [intent=direct_write availability=not_implemented operation=persistiq.post.v1-leads]; approval: not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation; risk: high; notes: named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation
+  - api put v1 webhook-plugin - Documented PUT /v1/webhook_plugin (not implemented) [intent=direct_write availability=not_implemented operation=persistiq.put.v1-webhook-plugin]; approval: not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract; risk: high; notes: named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract
+  - campaign leads list - Run the campaign leads ETL stream [intent=etl availability=implemented stream=campaign_leads]
+  - campaign replies list - Run the campaign replies ETL stream [intent=etl availability=implemented stream=campaign_replies]
+  - campaigns list - Run the campaigns ETL stream [intent=etl availability=implemented stream=campaigns]
+  - create campaign apply - Plan and execute the create campaign reverse-ETL action [intent=reverse_etl availability=implemented write=create_campaign]; approval: requires plan, preview, approval, and execute; risk: creates a new outbound-email campaign in the target PersistIQ account; approval required; flags: --campaign_name (required), --owner_id (required)
+  - dnc domains list - Run the dnc domains ETL stream [intent=etl availability=implemented stream=dnc_domains]
+  - duplicate campaign apply - Plan and execute the duplicate campaign reverse-ETL action [intent=reverse_etl availability=implemented write=duplicate_campaign]; approval: requires plan, preview, approval, and execute; risk: duplicates an existing campaign (including its steps/sequence) into a new campaign in the target account; approval required; flags: --campaign_id (required), --owner_id (required)
+  - events list - Run the events ETL stream [intent=etl availability=implemented stream=events]
+  - lead fields list - Run the lead fields ETL stream [intent=etl availability=implemented stream=lead_fields]
+  - lead statuses list - Run the lead statuses ETL stream [intent=etl availability=implemented stream=lead_statuses]
+  - leads list - Run the leads ETL stream [intent=etl availability=implemented stream=leads]
+  - mailboxes list - Run the mailboxes ETL stream [intent=etl availability=implemented stream=mailboxes]; notes: discrepancy=present-in-surface-absent-from-artifact
+  - remove lead from campaign apply - Plan and execute the remove lead from campaign reverse-ETL action [intent=reverse_etl availability=implemented write=remove_lead_from_campaign]; approval: requires plan, preview, approval, and execute; risk: removes a lead from a live outbound-email campaign, stopping any further scheduled automated outreach to it in that sequence; approval required; flags: --campaign_id (required), --id (required)
+  - reply to campaign message apply - Plan and execute the reply to campaign message reverse-ETL action [intent=reverse_etl availability=implemented write=reply_to_campaign_message]; approval: requires plan, preview, approval, and execute; risk: sends a real outbound email reply on behalf of the campaign's mailbox owner; irreversible once delivered; approval required; flags: --body (required), --campaign_id (required), --inbox_message_id (required)
+  - tags list - Run the tags ETL stream [intent=etl availability=implemented stream=tags]
+  - update lead apply - Plan and execute the update lead reverse-ETL action [intent=reverse_etl availability=implemented write=update_lead]; approval: requires plan, preview, approval, and execute; risk: external mutation of an existing PersistIQ lead's fields; changing status/status_id/owner_id can move a lead into or out of active outbound-sequence automation depending on the target account's own campaign rules; approval required; flags: --id (required)
+  - users list - Run the users ETL stream [intent=etl availability=implemented stream=users]
+  - webhook plugin list - Run the webhook plugin ETL stream [intent=etl availability=implemented stream=webhook_plugin]
+
 ## Commands
 
 ### Inspect as a manual

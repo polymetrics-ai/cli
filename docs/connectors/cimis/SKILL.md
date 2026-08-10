@@ -53,6 +53,20 @@ Reads California Irrigation Management Information System (CIMIS) weather statio
 - read risk: external CIMIS API read of public weather station metadata
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run CIMIS's declared streams and reverse-ETL actions.
+- Usage: pm cimis <command> [flags]
+- Read streams
+- Other Commands
+  - api get api data - Documented GET /api/data (not implemented) [intent=direct_read availability=not_implemented operation=cimis.get.api-data]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get api spatialzipcode zipcode - Documented GET /api/spatialzipcode/{zipCode} (not implemented) [intent=direct_read availability=not_implemented operation=cimis.get.api-spatialzipcode-zipcode]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get api station stationnumber - Documented GET /api/station/{stationNumber} (not implemented) [intent=direct_read availability=not_implemented operation=cimis.get.api-station-stationnumber]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - api get api stationzipcode zipcode - Documented GET /api/stationzipcode/{zipCode} (not implemented) [intent=direct_read availability=not_implemented operation=cimis.get.api-stationzipcode-zipcode]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+  - spatial zip codes list - Run the spatial zip codes ETL stream [intent=etl availability=implemented stream=spatial_zip_codes]
+  - station zip codes list - Run the station zip codes ETL stream [intent=etl availability=implemented stream=station_zip_codes]
+  - stations list - Run the stations ETL stream [intent=etl availability=implemented stream=stations]
+
 ## Commands
 
 ### Inspect as a manual

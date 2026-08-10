@@ -197,6 +197,57 @@ SECURITY
   approval: reverse ETL writes require plan preview and approval token; destructive product/order/shop/upload/webhook actions are marked destructive
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Printify's declared streams and reverse-ETL actions.
+  Usage: pm printify <command> [flags]
+  Read streams
+  Reverse ETL writes
+  Other Commands
+    api get app oauth accept - Documented GET /app/oauth/accept (not implemented) [intent=direct_read availability=not_implemented operation=printify.get.app-oauth-accept]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api post app oauth tokens - Documented POST /app/oauth/tokens (not implemented) [intent=direct_write availability=not_implemented operation=printify.post.app-oauth-tokens]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+    api post app oauth tokens refresh - Documented POST /app/oauth/tokens/refresh (not implemented) [intent=direct_write availability=not_implemented operation=printify.post.app-oauth-tokens-refresh]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+    api post v1 shops shop-id express-json - Documented POST /v1/shops/{shop_id}/express.json (not implemented) [intent=direct_write availability=not_implemented operation=printify.post.v1-shops-shop-id-express-json]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+    archive uploaded image apply - Plan and execute the archive uploaded image reverse-ETL action [intent=reverse_etl availability=implemented write=archive_uploaded_image]; approval: requires plan, preview, approval, and execute; risk: archives an uploaded image; flags: --image_id (required)
+    blueprint detail list - Run the blueprint detail ETL stream [intent=etl availability=implemented stream=blueprint_detail]
+    blueprint print providers list - Run the blueprint print providers ETL stream [intent=etl availability=implemented stream=blueprint_print_providers]
+    blueprint variants list - Run the blueprint variants ETL stream [intent=etl availability=implemented stream=blueprint_variants]
+    blueprints list - Run the blueprints ETL stream [intent=etl availability=implemented stream=blueprints]
+    calculate order shipping apply - Plan and execute the calculate order shipping reverse-ETL action [intent=reverse_etl availability=not_implemented write=calculate_order_shipping]; approval: requires plan, preview, approval, and execute; risk: calculates shipping costs for a prospective order without submitting it; notes: named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags
+    cancel order apply - Plan and execute the cancel order reverse-ETL action [intent=reverse_etl availability=implemented write=cancel_order]; approval: requires plan, preview, approval, and execute; risk: cancels an unpaid order; flags: --order_id (required)
+    create product apply - Plan and execute the create product reverse-ETL action [intent=reverse_etl availability=implemented write=create_product]; approval: requires plan, preview, approval, and execute; risk: creates a product in the configured shop; flags: --blueprint_id (required), --print_provider_id (required), --title (required)
+    create webhook apply - Plan and execute the create webhook reverse-ETL action [intent=reverse_etl availability=implemented write=create_webhook]; approval: requires plan, preview, approval, and execute; risk: creates a webhook subscription for the configured shop; flags: --topic (required), --url (required)
+    delete product apply - Plan and execute the delete product reverse-ETL action [intent=reverse_etl availability=implemented write=delete_product]; approval: requires plan, preview, approval, and execute; risk: deletes a product from the configured shop; flags: --product_id (required)
+    delete webhook apply - Plan and execute the delete webhook reverse-ETL action [intent=reverse_etl availability=implemented write=delete_webhook]; approval: requires plan, preview, approval, and execute; risk: deletes a webhook subscription after host safeguard matching; flags: --host (required), --webhook_id (required)
+    disconnect shop apply - Plan and execute the disconnect shop reverse-ETL action [intent=reverse_etl availability=implemented write=disconnect_shop]; approval: requires plan, preview, approval, and execute; risk: disconnects the configured shop from the Printify account
+    mark product publishing failed apply - Plan and execute the mark product publishing failed reverse-ETL action [intent=reverse_etl availability=implemented write=mark_product_publishing_failed]; approval: requires plan, preview, approval, and execute; risk: marks product publishing as failed; flags: --product_id (required), --reason (required)
+    mark product publishing succeeded apply - Plan and execute the mark product publishing succeeded reverse-ETL action [intent=reverse_etl availability=not_implemented write=mark_product_publishing_succeeded]; approval: requires plan, preview, approval, and execute; risk: marks product publishing as succeeded and stores an external handle; notes: named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags
+    order detail list - Run the order detail ETL stream [intent=etl availability=implemented stream=order_detail]
+    orders list - Run the orders ETL stream [intent=etl availability=implemented stream=orders]
+    print provider detail list - Run the print provider detail ETL stream [intent=etl availability=implemented stream=print_provider_detail]
+    print providers list - Run the print providers ETL stream [intent=etl availability=implemented stream=print_providers]
+    product detail list - Run the product detail ETL stream [intent=etl availability=implemented stream=product_detail]
+    product gpsr list - Run the product gpsr ETL stream [intent=etl availability=implemented stream=product_gpsr]
+    products list - Run the products ETL stream [intent=etl availability=implemented stream=products]
+    publish product apply - Plan and execute the publish product reverse-ETL action [intent=reverse_etl availability=implemented write=publish_product]; approval: requires plan, preview, approval, and execute; risk: publishes a product to the connected sales channel; flags: --product_id (required)
+    send order to production apply - Plan and execute the send order to production reverse-ETL action [intent=reverse_etl availability=implemented write=send_order_to_production]; approval: requires plan, preview, approval, and execute; risk: sends an existing order to production; flags: --order_id (required)
+    shipping profiles list - Run the shipping profiles ETL stream [intent=etl availability=implemented stream=shipping_profiles]
+    shops list - Run the shops ETL stream [intent=etl availability=implemented stream=shops]
+    simulate webhook apply - Plan and execute the simulate webhook reverse-ETL action [intent=reverse_etl availability=implemented write=simulate_webhook]; approval: requires plan, preview, approval, and execute; risk: sends a webhook simulation event for testing; flags: --webhook_id (required)
+    submit express order apply - Plan and execute the submit express order reverse-ETL action [intent=reverse_etl availability=not_implemented write=submit_express_order]; approval: requires plan, preview, approval, and execute; risk: submits a Printify Express order; notes: named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags
+    submit order apply - Plan and execute the submit order reverse-ETL action [intent=reverse_etl availability=not_implemented write=submit_order]; approval: requires plan, preview, approval, and execute; risk: submits an order to Printify; notes: named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags
+    unpublish product apply - Plan and execute the unpublish product reverse-ETL action [intent=reverse_etl availability=implemented write=unpublish_product]; approval: requires plan, preview, approval, and execute; risk: notifies Printify that a product has been unpublished; flags: --product_id (required)
+    update product apply - Plan and execute the update product reverse-ETL action [intent=reverse_etl availability=implemented write=update_product]; approval: requires plan, preview, approval, and execute; risk: updates an existing product in the configured shop; flags: --product_id (required)
+    update webhook apply - Plan and execute the update webhook reverse-ETL action [intent=reverse_etl availability=implemented write=update_webhook]; approval: requires plan, preview, approval, and execute; risk: updates an existing webhook subscription; flags: --webhook_id (required)
+    upload detail list - Run the upload detail ETL stream [intent=etl availability=implemented stream=upload_detail]
+    upload image apply - Plan and execute the upload image reverse-ETL action [intent=reverse_etl availability=implemented write=upload_image]; approval: requires plan, preview, approval, and execute; risk: uploads an image into the Printify media library; flags: --file_name (required)
+    uploads list - Run the uploads ETL stream [intent=etl availability=implemented stream=uploads]
+    v2 shipping economy list - Run the v2 shipping economy ETL stream [intent=etl availability=implemented stream=v2_shipping_economy]
+    v2 shipping express list - Run the v2 shipping express ETL stream [intent=etl availability=implemented stream=v2_shipping_express]
+    v2 shipping methods list - Run the v2 shipping methods ETL stream [intent=etl availability=implemented stream=v2_shipping_methods]
+    v2 shipping priority list - Run the v2 shipping priority ETL stream [intent=etl availability=implemented stream=v2_shipping_priority]
+    v2 shipping standard list - Run the v2 shipping standard ETL stream [intent=etl availability=implemented stream=v2_shipping_standard]
+    webhooks list - Run the webhooks ETL stream [intent=etl availability=implemented stream=webhooks]
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect printify

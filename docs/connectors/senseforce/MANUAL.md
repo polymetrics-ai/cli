@@ -43,6 +43,15 @@ SECURITY
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Senseforce's declared streams and reverse-ETL actions.
+  Usage: pm senseforce <command> [flags]
+  Read streams
+  Reverse ETL writes
+  Other Commands
+    api post api v1 scripts script-id results - Documented POST /api/v1/scripts/{script_id}/results (not implemented) [intent=direct_write availability=not_implemented operation=senseforce.post.api-v1-scripts-script-id-results]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+    records list - Run the records ETL stream [intent=etl availability=implemented stream=records]
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect senseforce

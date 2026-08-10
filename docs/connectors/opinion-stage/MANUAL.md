@@ -49,6 +49,19 @@ SECURITY
   approval: none; read-only API-key access
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Opinion Stage's declared streams and reverse-ETL actions.
+  Usage: pm opinion-stage <command> [flags]
+  Read streams
+  Other Commands
+    api get api v2 items itemid - Documented GET /api/v2/items/{itemId} (not implemented) [intent=direct_read availability=not_implemented operation=opinion-stage.get.api-v2-items-itemid]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: low; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get api v2 items itemid questions - Documented GET /api/v2/items/{itemId}/questions (not implemented) [intent=direct_read availability=not_implemented operation=opinion-stage.get.api-v2-items-itemid-questions]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: low; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get api v2 items itemid responses - Documented GET /api/v2/items/{itemId}/responses (not implemented) [intent=direct_read availability=not_implemented operation=opinion-stage.get.api-v2-items-itemid-responses]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: low; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get api v2 items itemid responses operation responseid - Documented GET /api/v2/items/{itemId}/responses/#{responseId} (not implemented) [intent=direct_read availability=not_implemented operation=opinion-stage.get.api-v2-items-itemid-responses-responseid]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: low; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    items list - Run the items ETL stream [intent=etl availability=implemented stream=items]
+    questions list - Run the questions ETL stream [intent=etl availability=implemented stream=questions]; notes: discrepancy=present-in-surface-absent-from-artifact
+    responses list - Run the responses ETL stream [intent=etl availability=implemented stream=responses]; notes: discrepancy=present-in-surface-absent-from-artifact
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect opinion-stage

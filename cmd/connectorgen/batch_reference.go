@@ -184,10 +184,6 @@ func parseBatchHTMLReferenceWithBudget(raw []byte, source batchArtifactSource, f
 	return inventory, nil
 }
 
-func parseBatchReferenceArtifact(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
-	return parseBatchReferenceArtifactWithBudget(raw, source, fetch, newBatchArtifactReferenceBudget(raw))
-}
-
 func parseBatchReferenceArtifactWithBudget(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, error) {
 	inventory, isMachine, err := parseBatchReferenceMachineArtifactWithBudget(raw, source, fetch, budget)
 	if err != nil {
@@ -197,10 +193,6 @@ func parseBatchReferenceArtifactWithBudget(raw []byte, source batchArtifactSourc
 		return inventory, nil
 	}
 	return parseBatchHTMLReferenceWithBudget(raw, source, fetch, budget)
-}
-
-func parseBatchReferenceMachineArtifact(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, bool, error) {
-	return parseBatchReferenceMachineArtifactWithBudget(raw, source, fetch, newBatchArtifactReferenceBudget(raw))
 }
 
 func parseBatchReferenceMachineArtifactWithBudget(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, bool, error) {

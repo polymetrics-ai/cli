@@ -65,6 +65,21 @@ SECURITY
   approval: required for write actions; none for read
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Fillout's declared streams and reverse-ETL actions.
+  Usage: pm fillout <command> [flags]
+  Read streams
+  Reverse ETL writes
+  Other Commands
+    api get forms formid submissions submissionid - Documented GET /forms/{formId}/submissions/{submissionId} (not implemented) [intent=direct_read availability=not_implemented operation=fillout.get.forms-formid-submissions-submissionid]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get forms id - Documented GET /forms/{id} (not implemented) [intent=direct_read availability=not_implemented operation=fillout.get.forms-id]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api get forms id submissions - Documented GET /forms/{id}/submissions (not implemented) [intent=direct_read availability=not_implemented operation=fillout.get.forms-id-submissions]; approval: not implemented: the direct-read executor has no non-redacting output policy for this provider operation; risk: medium; notes: named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation; flags: --page, --page-cursor
+    api post forms formid submissions - Documented POST /forms/{formId}/submissions (not implemented) [intent=direct_write availability=not_implemented operation=fillout.post.forms-formid-submissions]; approval: not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract; risk: high; notes: named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract
+    create webhook apply - Plan and execute the create webhook reverse-ETL action [intent=reverse_etl availability=implemented write=create_webhook]; approval: requires plan, preview, approval, and execute; risk: registers a new outbound webhook subscription that will POST live form-submission data to an external URL; external mutation, approval required; flags: --formId (required), --url (required)
+    delete submission by id apply - Plan and execute the delete submission by id reverse-ETL action [intent=reverse_etl availability=implemented write=delete_submission_by_id]; approval: requires plan, preview, approval, and execute; risk: permanently deletes a single form response; irreversible, approval required; flags: --form_id (required), --submission_id (required)
+    forms list - Run the forms ETL stream [intent=etl availability=implemented stream=forms]
+    remove webhook apply - Plan and execute the remove webhook reverse-ETL action [intent=reverse_etl availability=implemented write=remove_webhook]; approval: requires plan, preview, approval, and execute; risk: permanently removes a webhook subscription; event delivery to its target URL stops immediately; flags: --webhookId (required)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect fillout
