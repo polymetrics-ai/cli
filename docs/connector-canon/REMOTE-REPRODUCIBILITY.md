@@ -54,9 +54,10 @@ change checklist.
    are opt-in and require a local Unix Podman endpoint under the documented
    harness rules. Runtime-backed checks need their documented local services;
    they are not part of the default local path.
-4. **Parity lanes are still independent evidence streams.** PostgreSQL (#3972)
-   and GitHub parity must be evaluated on their own reviewed branches. This
-   canon intentionally does not copy their branch-local coverage counts.
+4. **Parity lanes are still independent evidence streams.** PostgreSQL (#3972,
+   including warehouse-flow/mode gate #3987) and GitHub parity must be
+   evaluated on their own reviewed branches. The current GitHub source lock is
+   generated evidence; the archived wrong-branch gap map is not.
 5. **Some archived reports preserve non-portable historical references.** Their
    content is retained for audit, but old absolute worktree paths are not a
    reproducible command interface.

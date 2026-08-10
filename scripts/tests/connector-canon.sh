@@ -37,7 +37,9 @@ for file in \
 	data/cli-database-connector-framework-design-r1/report.md \
 	data/cli-cdc-large-transaction-strategy-r1/report.md \
 	data/cli-cdc-bidirectional-changefeed-design-r1/report.md \
-	data/cli-postgres-parity-issue-tree-r1/report.md \
+	data/cli-postgres-parity-issue-tree-r2/report.md \
+	data/archive/cli-postgres-parity-issue-tree-r1/report.md \
+	data/archive/cli-postgres-parity-issue-tree-r1/SUPERSEDED.md \
 	data/cli-daily-use-top50-connectors-r1/report.md \
 	data/archive/cli-github-etl-reverse-etl-gap-map-r1/report.md \
 	data/archive/cli-github-etl-reverse-etl-gap-map-r1/SUPERSEDED.md \
@@ -54,6 +56,8 @@ done
 	fail 'void GitHub gap map must remain under data/archive/'
 [[ ! -e data/cli-blocked-source-recovery-tiers-r1 ]] || \
 	fail 'superseded blocker brief must remain under data/archive/'
+[[ ! -e data/cli-postgres-parity-issue-tree-r1 ]] || \
+	fail 'superseded PostgreSQL r1 tree must remain under data/archive/'
 
 shasum -a 256 -c data/CANON-MANIFEST.sha256 >/dev/null || \
 	fail 'source-pinned canon report changed; deliberately update the manifest and index'
@@ -68,6 +72,10 @@ require_text docs/connector-canon/IMPLEMENTATION-PROCEDURE.md 'API → warehouse
 require_text docs/connector-canon/IMPLEMENTATION-PROCEDURE.md 'Database → warehouse → API'
 require_text docs/connector-canon/IMPLEMENTATION-PROCEDURE.md 'Database → warehouse → database'
 require_text docs/connector-canon/REMOTE-REPRODUCIBILITY.md 'zero accepted live-certification artifacts'
+require_text data/cli-postgres-parity-issue-tree-r2/report.md '#3987'
+require_text data/cli-postgres-parity-issue-tree-r2/report.md 'API read → warehouse → API write'
+require_text data/cli-postgres-parity-issue-tree-r2/report.md 'incremental_dedupe_history'
+require_text data/archive/cli-postgres-parity-issue-tree-r1/SUPERSEDED.md '11-child count'
 require_text data/archive/cli-github-etl-reverse-etl-gap-map-r1/SUPERSEDED.md 'Every coverage number in the report is wrong'
 require_text data/archive/cli-blocked-source-recovery-tiers-r1/SUPERSEDED.md '195 genuinely blocked'
 require_text data/CURRENT-CORRECTIONS.md 'accepted quarantine list has 15 entries'

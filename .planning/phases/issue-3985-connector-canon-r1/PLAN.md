@@ -33,11 +33,15 @@ make a false `availability: implemented` claim visibly fail local and CI verific
   documentation to link the canon and state zero accepted certifications plainly.
 - Update the stale GSD/planning entry points with archive pointers while preserving their original
   content in `docs/connector-canon/archive/`.
+- Captain addendum: audit the live #3972 PostgreSQL parity tree over REST; correct any direct-route
+  wording, classify all seven `synccontract.Mode` outcomes, and add a child issue where the
+  warehouse-flow/mode conformance foundation is absent. Do not alter active #3974.
 
 ## Explicit exclusions
 
 - No connector bundle, provider operation, runtime executor, database write session, CDC behavior,
-  GitHub parity change, PostgreSQL parity change, live credential, or reverse-ETL execution.
+  GitHub parity implementation, PostgreSQL parity implementation, live credential, or reverse-ETL
+  execution. The captain addendum permits issue-tree/documentation corrections only.
 - No capability/certification status is promoted.
 - No raw generic SQL, HTTP-write, or shell surface is added.
 
@@ -54,6 +58,9 @@ make a false `availability: implemented` claim visibly fail local and CI verific
    run the repository docs check and website test/type checks appropriate to the touched content.
 5. **Review and verification.** Run focused targets, format/diff checks, scoped Go tests and
    non-suite `make verify` gates separately per AGENTS.md, then GSD verify/code-review.
+6. **PostgreSQL tree correction.** Read #3972 and all children through REST, leave active #3974
+   untouched unless it is wrong, add the missing warehouse-flow/mode owner, and record the changed
+   dependency graph in a current r2 report plus the deterministic canon check.
 
 ## Foundation check required by the deliverable
 

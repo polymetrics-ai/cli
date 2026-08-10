@@ -27,7 +27,7 @@ this index or a later captain ruling, the current canon wins.
 | [database connector framework](../../data/cli-database-connector-framework-design-r1/report.md) | Typed database framework; PostgreSQL is the reference driver; no generic SQL executor, second sync-mode enum, or separate repository. |
 | [large-transaction CDC strategy](../../data/cli-cdc-large-transaction-strategy-r1/report.md) | PostgreSQL 14+ streamed `pgoutput` v2; bounded durable stage; receipt before acknowledgement; fail-closed quota; cursor fallback is rejected for CDC. |
 | [bidirectional changefeed design](../../data/cli-cdc-bidirectional-changefeed-design-r1/report.md) | One delivery contract with two honestly different producers; explicit tombstones only. |
-| [PostgreSQL parity issue tree](../../data/cli-postgres-parity-issue-tree-r1/report.md) | Parent issue #3972 and its 11 sub-issues. |
+| [PostgreSQL parity issue tree r2](../../data/cli-postgres-parity-issue-tree-r2/report.md) | Parent issue #3972 and its **12** sub-issues, including #3987: the warehouse-only four-flow/seven-mode conformance gate. The source-pinned [r1 baseline](../../data/archive/cli-postgres-parity-issue-tree-r1/report.md) is archived because its 11-child dependency graph is no longer current. |
 | [daily-use Top 50 targets](../../data/cli-daily-use-top50-connectors-r1/report.md) | The 50 certification targets and the current quarantine evidence. |
 
 The imported reports are source-pinned in
@@ -42,9 +42,10 @@ canon entry points.
   proof and does not make a connector certified.
 - The accepted quarantine list has **15 entries**. Do not repeat the historical
   “195 blocked providers” claim.
-- PostgreSQL parity is tracked by #3972 and its child issues; GitHub parity is
-  tracked separately. Their branch-local coverage numbers must not be imported
-  into this canon until their evidence is reviewed on the relevant branch.
+- PostgreSQL parity is tracked by #3972 and its 12 child issues. #3987 now
+  gates certification on all four warehouse-mediated routes and all seven mode
+  outcomes; it does not alter active #3974. GitHub source-inventory counts are
+  generated from its merged source lock; the archived gap map remains void.
 - A capability is only implemented when its real runtime preflight and the
   required flow foundations execute. A declaration is not a capability.
 
@@ -62,6 +63,7 @@ decision, but must not be used to establish current state.
 | --- | --- |
 | [GitHub ETL/reverse-ETL gap map](../../data/archive/cli-github-etl-reverse-etl-gap-map-r1/report.md) | **SUPERSEDED — ACTIVELY WRONG for every coverage number.** It measured `main` (341 operations) rather than the GitHub parity branch (768). Its architecture observations are historical background only; do not cite its counts. |
 | [blocked-source recovery brief](../../data/archive/cli-blocked-source-recovery-tiers-r1/brief.md) | **SUPERSEDED — ACTIVELY WRONG.** Its “195 genuinely blocked” claim is unsubstantiated and contradicted by the accepted 15-entry quarantine list. |
+| [PostgreSQL parity tree r1](../../data/archive/cli-postgres-parity-issue-tree-r1/report.md) | **SUPERSEDED FOR EXECUTION SCOPE.** Its architecture diagnosis is retained, but its 11-child graph omitted #3987 and allowed certification before the warehouse-mediated four-flow/seven-mode proof. Use r2. |
 | [superseded repository planning](archive/superseded-repository-planning/) | July 2026 orchestration, project, roadmap, and research snapshots. They rely on stale inventories, old orchestration roles, and noncanonical commands. Their original entry points now point here. |
 | [migration handoff](archive/superseded-repository-planning/migration-handoff-codex-2026-07-04.md) | **SUPERSEDED.** It instructed workers to use a stale parallel rollout, obsolete PR state, and stale inventory/quarantine figures. The original handoff now points to this procedure. |
 | [superseded GSD material](archive/superseded-gsd/) | The old universal-programming-loop procedure and prompts. They prescribe an absent `programming-loop` command and role spawning, both contrary to the canonical delivery contract. |
