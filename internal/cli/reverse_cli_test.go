@@ -532,15 +532,16 @@ func TestReverseManualExplainsConnectorCommandContentPolicy(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("reverse manual code = %d stderr = %s", code, stderr.String())
 	}
-	out := stdout.String()
+	manual := stdout.String()
+	normalizedManual := strings.Join(strings.Fields(manual), " ")
 	for _, want := range []string{
 		"The connector command runner does not mask",
 		"This runner policy does not change source-table output or other execution paths.",
 		"does not automatically retry a failed dispatch",
 		"JSON plan and preview output omit tokens",
 	} {
-		if !strings.Contains(out, want) {
-			t.Fatalf("reverse manual missing %q:\n%s", want, out)
+		if !strings.Contains(normalizedManual, want) {
+			t.Fatalf("reverse manual missing %q:\n%s", want, manual)
 		}
 	}
 	for _, obsolete := range []string{
@@ -550,8 +551,8 @@ func TestReverseManualExplainsConnectorCommandContentPolicy(t *testing.T) {
 		"connector-declared fields masked in sample rows",
 		"masks connector-declared sensitive record fields",
 	} {
-		if strings.Contains(out, obsolete) {
-			t.Fatalf("reverse manual retained obsolete masking claim %q:\n%s", obsolete, out)
+		if strings.Contains(normalizedManual, obsolete) {
+			t.Fatalf("reverse manual retained obsolete masking claim %q:\n%s", obsolete, manual)
 		}
 	}
 }
