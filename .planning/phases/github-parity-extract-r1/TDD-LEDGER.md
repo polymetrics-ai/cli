@@ -7,13 +7,9 @@ current `main` rather than inheriting it; the second is the captain's unblock or
 
 ## Current-ref — merged GitHub surface
 
-**Measurement:** 2026-08-10 at ref `9cc25b5c47c01277d77e2b8dcfef08801e8ad0c7`, derived from
-the checked-in GitHub source bundles and generated ledgers.
-
-- 1,571 commands: 1,521 implemented, 23 unsupported-local, and 27 unsupported-api; zero
-  partial, planned, or `unsafe_or_disallowed` commands.
-- 1,225 / 1,225 endpoints covered with zero blocked; 37 streams, 607 write actions, and 768
-  operations.
+The authoritative source-derived count and its provenance are in
+[VERIFICATION.md](VERIFICATION.md). This red/green ledger does not duplicate that
+generated-surface measurement.
 
 The red/green checkpoints below are historical records preserved at base ref
 `4df0b0416e46958d9acb1b02708464570c070e0f` on 2026-08-10. Their then-current transcripts,
