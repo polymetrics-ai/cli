@@ -28,8 +28,8 @@ Reads Recruitee offers, candidates, departments, sources, and tags through the R
 ## Configuration
 
 - base_url
-- company_id
-- api_key (secret)
+- company_id (required)
+- api_key (secret) (required)
 
 ## ETL Streams
 

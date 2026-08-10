@@ -25,7 +25,6 @@ func fixtureConfig() connectors.RuntimeConfig {
 			"username": "reader",
 			"sslmode":  "require",
 		},
-		Secrets: map[string]string{"password": "s3cret"},
 	}
 }
 
@@ -40,6 +39,82 @@ func TestNameAndMetadata(t *testing.T) {
 	}
 	if caps.Write {
 		t.Fatalf("postgres source connector must be read-only, got Write=true")
+	}
+	if connectors.MetadataOf(c).Capabilities.CDC {
+		t.Fatal("PostgreSQL CDC must remain undiscoverable until streamed staging is available")
+	}
+}
+
+func TestManifestProjectsBundleCredentials(t *testing.T) {
+	manifest := connectors.ManifestOf(native.New())
+	configFields := make(map[string]connectors.ConfigField, len(manifest.ConfigFields))
+	for _, field := range manifest.ConfigFields {
+		configFields[field.Name] = field
+	}
+	wantConfigFields := []string{
+		"cdc_publication",
+		"cursor_field",
+		"database",
+		"host",
+		"mode",
+		"port",
+		"read_limit",
+		"schema",
+		"sslmode",
+		"sslrootcert",
+		"sslservername",
+		"username",
+	}
+	if len(configFields) != len(wantConfigFields) {
+		t.Fatalf("manifest config fields = %#v, want %#v", configFields, wantConfigFields)
+	}
+	for _, name := range wantConfigFields {
+		if _, ok := configFields[name]; !ok {
+			t.Fatalf("manifest config fields = %#v, missing %q", configFields, name)
+		}
+	}
+	for _, name := range []string{"database", "host", "username"} {
+		if !configFields[name].Required {
+			t.Fatalf("manifest config field %q = %#v, want required", name, configFields[name])
+		}
+	}
+	if len(manifest.SecretFields) != 1 || manifest.SecretFields[0].Name != "password" {
+		t.Fatalf("manifest secret fields = %#v, want password", manifest.SecretFields)
+	}
+	password := manifest.SecretFields[0]
+	if password.Required || password.RequiredWhen != "mode is not fixture" {
+		t.Fatalf("manifest password requirement = %#v, want conditional fixture exemption", password)
+	}
+	if len(manifest.AuthModes) != 1 || manifest.AuthModes[0].Name != "password" {
+		t.Fatalf("manifest auth modes = %#v, want password authentication", manifest.AuthModes)
+	}
+	if manifest.Metadata.Capabilities.CDC {
+		t.Fatal("PostgreSQL manifest must keep CDC fail-closed")
+	}
+}
+
+func TestGeneratedDocsDescribeAuthenticationRequirements(t *testing.T) {
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller(0) failed")
+	}
+	docsDir := filepath.Join(filepath.Dir(thisFile), "..", "..", "..", "..", "docs", "connectors", "postgres")
+	for _, name := range []string{"MANUAL.md", "SKILL.md"} {
+		raw, err := os.ReadFile(filepath.Join(docsDir, name))
+		if err != nil {
+			t.Fatalf("Read %s: %v", name, err)
+		}
+		for _, want := range []string{
+			"database (required)",
+			"host (required)",
+			"username (required)",
+			"password (secret) (required when mode is not fixture)",
+			"password: Live connections require password authentication; peer/socket and client-certificate modes, including ambient certificates, are unsupported.",
+		} {
+			if !strings.Contains(string(raw), want) {
+				t.Fatalf("%s missing %q:\n%s", name, want, raw)
+			}
+		}
 	}
 }
 
@@ -94,18 +169,16 @@ func TestNoInitRegistration(t *testing.T) {
 }
 
 // TestConnectorSatisfiesCoreInterfaces compile/runtime-asserts the shape
-// required by API-CONTRACT.md / design §B.7 Tier-3: Connector, CDCReader,
-// StatefulReader, DefinitionProvider. ChangefeedExecutor and writer interfaces
-// are deliberately NOT asserted: CDC and writes are unsupported in this
-// read-only source's current migration state.
+// required by API-CONTRACT.md / design §B.7 Tier-3. PostgreSQL CDC is admitted
+// only when the native reader also supplies the exact executor descriptor.
 func TestConnectorSatisfiesCoreInterfaces(t *testing.T) {
 	c := native.New()
 	var _ connectors.Connector = c
 	if _, ok := any(c).(connectors.CDCReader); !ok {
-		t.Fatal("native postgres connector must implement connectors.CDCReader (documented CDC stub)")
+		t.Fatal("native postgres connector must implement connectors.CDCReader")
 	}
-	if _, ok := any(c).(connectors.ChangefeedExecutor); ok {
-		t.Fatal("native postgres connector must not implement ChangefeedExecutor while ReadCDC is an unsupported stub")
+	if _, ok := any(c).(connectors.ChangefeedExecutor); !ok {
+		t.Fatal("native postgres connector must implement ChangefeedExecutor for logical replication")
 	}
 	if _, ok := any(c).(connectors.StatefulReader); !ok {
 		t.Fatal("native postgres connector must implement connectors.StatefulReader")
@@ -242,20 +315,17 @@ func TestInitialStateStatefulReader(t *testing.T) {
 	}
 }
 
-func TestCDCUnsupportedStub(t *testing.T) {
+func TestCDCIsFailClosedUntilStreamedStagingExists(t *testing.T) {
 	c := native.New()
-	cdc, ok := any(c).(connectors.CDCReader)
+	cdc, ok := any(c).(connectors.ChangefeedExecutor)
 	if !ok {
-		t.Fatal("postgres connector must implement CDCReader (documented stub)")
+		t.Fatal("postgres connector must implement a logical-replication ChangefeedExecutor")
 	}
 	err := cdc.ReadCDC(context.Background(), connectors.CDCReadRequest{Stream: "public.users", Config: fixtureConfig()}, func(connectors.CDCEvent) error {
 		return nil
 	})
 	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
-		t.Fatalf("ReadCDC = %v, want ErrUnsupportedOperation", err)
-	}
-	if err == nil || !strings.Contains(err.Error(), "pglogrepl") {
-		t.Fatalf("ReadCDC error %v does not document the pglogrepl CDC plan", err)
+		t.Fatalf("ReadCDC = %v, want fail-closed unsupported result", err)
 	}
 }
 
@@ -277,24 +347,15 @@ func TestCheckConfigValidationTable(t *testing.T) {
 	}{
 		{
 			name: "missing host",
-			cfg: connectors.RuntimeConfig{
-				Config:  map[string]string{"database": "d", "username": "u"},
-				Secrets: map[string]string{"password": "p"},
-			},
+			cfg:  connectors.RuntimeConfig{Config: map[string]string{"database": "d", "username": "u"}},
 		},
 		{
 			name: "missing database",
-			cfg: connectors.RuntimeConfig{
-				Config:  map[string]string{"host": "h", "username": "u"},
-				Secrets: map[string]string{"password": "p"},
-			},
+			cfg:  connectors.RuntimeConfig{Config: map[string]string{"host": "h", "username": "u"}},
 		},
 		{
 			name: "missing username",
-			cfg: connectors.RuntimeConfig{
-				Config:  map[string]string{"host": "h", "database": "d"},
-				Secrets: map[string]string{"password": "p"},
-			},
+			cfg:  connectors.RuntimeConfig{Config: map[string]string{"host": "h", "database": "d"}},
 		},
 		{
 			name: "missing password secret",
@@ -304,38 +365,23 @@ func TestCheckConfigValidationTable(t *testing.T) {
 		},
 		{
 			name: "invalid sslmode",
-			cfg: connectors.RuntimeConfig{
-				Config:  map[string]string{"host": "h", "database": "d", "username": "u", "sslmode": "bananas"},
-				Secrets: map[string]string{"password": "p"},
-			},
+			cfg:  connectors.RuntimeConfig{Config: map[string]string{"host": "h", "database": "d", "username": "u", "sslmode": "bananas"}},
 		},
 		{
 			name: "invalid port (non-numeric)",
-			cfg: connectors.RuntimeConfig{
-				Config:  map[string]string{"host": "h", "database": "d", "username": "u", "port": "not-a-number"},
-				Secrets: map[string]string{"password": "p"},
-			},
+			cfg:  connectors.RuntimeConfig{Config: map[string]string{"host": "h", "database": "d", "username": "u", "port": "not-a-number"}},
 		},
 		{
 			name: "invalid port (out of range)",
-			cfg: connectors.RuntimeConfig{
-				Config:  map[string]string{"host": "h", "database": "d", "username": "u", "port": "70000"},
-				Secrets: map[string]string{"password": "p"},
-			},
+			cfg:  connectors.RuntimeConfig{Config: map[string]string{"host": "h", "database": "d", "username": "u", "port": "70000"}},
 		},
 		{
 			name: "host with scheme (SSRF guard)",
-			cfg: connectors.RuntimeConfig{
-				Config:  map[string]string{"host": "http://evil.example.com", "database": "d", "username": "u"},
-				Secrets: map[string]string{"password": "p"},
-			},
+			cfg:  connectors.RuntimeConfig{Config: map[string]string{"host": "http://evil.example.com", "database": "d", "username": "u"}},
 		},
 		{
 			name: "host with bracketed non-IPv6",
-			cfg: connectors.RuntimeConfig{
-				Config:  map[string]string{"host": "[not-an-ip]", "database": "d", "username": "u"},
-				Secrets: map[string]string{"password": "p"},
-			},
+			cfg:  connectors.RuntimeConfig{Config: map[string]string{"host": "[not-an-ip]", "database": "d", "username": "u"}},
 		},
 	}
 	for _, tc := range cases {
@@ -344,23 +390,5 @@ func TestCheckConfigValidationTable(t *testing.T) {
 				t.Fatalf("Check(%s) = nil, want validation error", tc.name)
 			}
 		})
-	}
-}
-
-// TestCheckNeverLogsPassword is a lightweight secret-safety guard: every
-// rejection's error text (and the accept-path's nil) must never contain the
-// literal password value.
-func TestCheckNeverLogsPassword(t *testing.T) {
-	c := native.New()
-	cfg := connectors.RuntimeConfig{
-		Config:  map[string]string{"host": "h", "database": "d", "username": "u", "sslmode": "bananas"},
-		Secrets: map[string]string{"password": "top-secret-value-should-never-appear"},
-	}
-	err := c.Check(context.Background(), cfg)
-	if err == nil {
-		t.Fatal("expected a validation error for invalid sslmode")
-	}
-	if strings.Contains(err.Error(), "top-secret-value-should-never-appear") {
-		t.Fatalf("Check error leaked the password secret: %v", err)
 	}
 }

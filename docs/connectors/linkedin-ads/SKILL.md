@@ -33,7 +33,7 @@ Reads LinkedIn Ads accounts, campaign groups, campaigns, and creatives through t
 - max_pages
 - mode
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

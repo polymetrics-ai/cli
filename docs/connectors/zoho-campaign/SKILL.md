@@ -38,7 +38,7 @@ Reads Zoho Campaigns lists, campaigns, and contacts through the Zoho Campaigns R
 - max_pages
 - mode
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

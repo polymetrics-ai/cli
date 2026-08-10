@@ -53,7 +53,7 @@ CONFIGURATION
   scorecard_id
   token
   user_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   candidates:

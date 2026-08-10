@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   max_pages
   mode
-  organization_name
+  organization_name (required)
   page_size
   username
   api_key (secret)

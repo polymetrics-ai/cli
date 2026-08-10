@@ -28,10 +28,10 @@ Reads Convex tables and documents through the deployment HTTP API.
 
 ## Configuration
 
-- deployment_url
+- deployment_url (required)
 - mode
 - table
-- access_key (secret)
+- access_key (secret) (required)
 
 ## ETL Streams
 

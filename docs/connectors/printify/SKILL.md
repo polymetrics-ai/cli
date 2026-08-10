@@ -39,7 +39,7 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
 - shop_id
 - show_out_of_stock
 - webhook_id
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

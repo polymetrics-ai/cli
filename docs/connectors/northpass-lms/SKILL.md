@@ -29,7 +29,7 @@ Reads Northpass LMS people, courses, course enrollments, and groups through the 
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

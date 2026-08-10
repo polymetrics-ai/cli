@@ -35,7 +35,7 @@ Reads Adjust report-service report rows for configured dimensions and metrics. R
 - metrics
 - mode
 - start_date
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

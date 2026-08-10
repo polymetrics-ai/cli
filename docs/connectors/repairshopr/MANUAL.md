@@ -27,11 +27,11 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   created_after
   query
   updated_after
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   customers:

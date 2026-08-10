@@ -29,7 +29,7 @@ Reads Sendinblue/Brevo contacts, campaigns, lists, and senders through the Brevo
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

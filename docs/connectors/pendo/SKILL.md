@@ -50,7 +50,7 @@ Reads Pendo Engage visitors, accounts, product objects, guides, reports, metadat
 - tracktype_id
 - visitor_history_starttime
 - visitor_id
-- integration_key (secret)
+- integration_key (secret) (required)
 
 ## ETL Streams
 

@@ -30,7 +30,7 @@ Reads Salesflare accounts, contacts, opportunities, users, tags, tasks, workflow
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

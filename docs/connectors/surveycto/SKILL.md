@@ -28,12 +28,12 @@ Reads SurveyCTO form IDs, submissions, datasets (including case-management datas
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - form_id
 - mode
 - server_name
-- password (secret)
-- username (secret)
+- password (secret) (required)
+- username (secret) (required)
 
 ## ETL Streams
 

@@ -30,7 +30,7 @@ Reads Productboard features, notes, components, and products through the public 
 
 - base_url
 - start_date
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

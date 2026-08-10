@@ -30,8 +30,8 @@ Reads Coassemble courses, screen types, collections, clients, users, learner tra
 
 - base_url
 - mode
-- user_id (secret)
-- user_token (secret)
+- user_id (secret) (required)
+- user_token (secret) (required)
 
 ## ETL Streams
 

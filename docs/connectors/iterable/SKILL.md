@@ -30,7 +30,7 @@ Reads Iterable lists, campaigns, and templates through the Iterable REST API. Re
 
 - base_url
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

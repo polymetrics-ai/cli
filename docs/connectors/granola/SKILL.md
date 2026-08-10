@@ -32,7 +32,7 @@ Reads Granola meeting notes metadata and full note detail (summary, owner, atten
 - mode
 - page_size
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -29,7 +29,7 @@ Reads Microsoft Teams users, groups, channels, and device-usage reports through 
 ## Configuration
 
 - base_url
-- client_id
+- client_id (required)
 - login_base_url
 - max_pages
 - period

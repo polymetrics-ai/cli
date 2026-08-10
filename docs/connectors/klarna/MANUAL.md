@@ -27,14 +27,14 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   mode
   payment_references
   summary_currency_code
   summary_end_date
   summary_start_date
-  password (secret)
-  username (secret)
+  password (secret) (required)
+  username (secret) (required)
 
 ETL STREAMS
   payouts:

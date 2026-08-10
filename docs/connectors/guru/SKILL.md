@@ -32,8 +32,8 @@ Reads Guru collections, groups, members, and teams through the Guru REST API usi
 - max_pages
 - mode
 - page_size
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

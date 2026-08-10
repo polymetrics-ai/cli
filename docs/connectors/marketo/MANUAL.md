@@ -28,7 +28,7 @@ AUTHENTICATION
 
 CONFIGURATION
   activity_type_ids
-  base_url
+  base_url (required)
   max_pages
   mode
   page_size

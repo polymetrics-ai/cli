@@ -34,7 +34,7 @@ Reads YNAB budgets, accounts, categories, payees, months, transactions, and sche
 - mode
 - month
 - since_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -31,13 +31,13 @@ CONFIGURATION
   days_to_forecast
   historic_hours
   hours_to_forecast
-  latitude
-  longitude
+  latitude (required)
+  longitude (required)
   mode
   weather_days_to_forecast
   wildfire_days_from_extinguish
   wildfire_radius_km
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   air_quality_current:

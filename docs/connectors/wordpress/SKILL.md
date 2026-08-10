@@ -34,7 +34,7 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - start_date
 - password (secret)
 - username (secret)

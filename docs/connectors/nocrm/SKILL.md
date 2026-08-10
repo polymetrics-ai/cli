@@ -37,7 +37,7 @@ Reads noCRM.io CRM objects and exposes declarative write actions for supported n
 - team_id
 - user_id
 - webhook_event_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

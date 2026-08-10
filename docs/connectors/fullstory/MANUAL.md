@@ -33,7 +33,7 @@ CONFIGURATION
   page_size
   session_email
   session_uid
-  api_key (secret)
+  api_key (secret) (required)
   uid (secret)
 
 ETL STREAMS

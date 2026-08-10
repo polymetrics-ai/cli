@@ -27,10 +27,10 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  deployment_url
+  deployment_url (required)
   mode
   table
-  access_key (secret)
+  access_key (secret) (required)
 
 ETL STREAMS
   tables:

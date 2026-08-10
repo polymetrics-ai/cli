@@ -33,7 +33,7 @@ Reads Retently customers, survey responses, surveys, and campaigns through the R
 - created_after
 - email
 - updated_after
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

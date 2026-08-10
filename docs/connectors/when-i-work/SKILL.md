@@ -36,8 +36,8 @@ Reads and writes When I Work workforce-scheduling data: users, locations, positi
 
 - base_url
 - mode
-- email (secret)
-- password (secret)
+- email (secret) (required)
+- password (secret) (required)
 
 ## ETL Streams
 

@@ -28,9 +28,9 @@ Reads Deputy locations, employees, departments, timesheets, tasks, leave, roster
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

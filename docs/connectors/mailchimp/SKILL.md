@@ -38,7 +38,7 @@ Reads Mailchimp Marketing API audiences, members, campaigns, reports, automation
 - contact_id
 - conversation_id
 - customer_id
-- data_center
+- data_center (required)
 - domain_name
 - export_id
 - feedback_id

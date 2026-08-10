@@ -33,7 +33,7 @@ Reads OnceHub bookings, contacts, booking pages, users, and event types through 
 - mode
 - page_size
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

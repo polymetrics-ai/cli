@@ -36,7 +36,7 @@ Reads CoinAPI market data: symbols, exchanges, assets, exchange rates, current q
 - period
 - start_date
 - symbol_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

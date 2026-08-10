@@ -43,7 +43,7 @@ Reads and manages Instatus status pages, components, incidents, maintenances, te
 - page_size
 - subscriber_search
 - template_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

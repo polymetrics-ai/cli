@@ -28,11 +28,11 @@ Reads Confluence Cloud spaces, pages, blog posts, labels, attachments, comments,
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - custom_content_type
-- email
+- email (required)
 - mode
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

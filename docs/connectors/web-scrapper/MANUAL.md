@@ -31,7 +31,7 @@ CONFIGURATION
   mode
   scraping_job_ids
   sitemap_id_filter
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   sitemaps:

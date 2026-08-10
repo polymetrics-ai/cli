@@ -53,7 +53,7 @@ Reads and writes SurveyMonkey REST v3 and SCIM v2 resources through the document
 - user_id
 - webhook_id
 - workgroup_id
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

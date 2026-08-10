@@ -31,7 +31,7 @@ Reads DocuSeal templates, submissions, and submitters, and writes submission/sub
 - base_url
 - page_size
 - template_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

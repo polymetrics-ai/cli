@@ -29,8 +29,8 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   start_date
-  api_id (secret)
-  api_token (secret)
+  api_id (secret) (required)
+  api_token (secret) (required)
 
 ETL STREAMS
   calls:

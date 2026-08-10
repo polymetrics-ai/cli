@@ -34,8 +34,8 @@ Reads and writes the full account-scoped Chatwoot Application API support-desk s
 
 ## Configuration
 
-- account_id
-- base_url
+- account_id (required)
+- base_url (required)
 - start_date
 - api_access_token (secret)
 

@@ -28,8 +28,8 @@ Reads a coin's current metadata/market snapshot and exchange tickers from the Co
 
 ## Configuration
 
-- base_url
-- coin_id
+- base_url (required)
+- coin_id (required)
 - mode
 - api_key (secret)
 

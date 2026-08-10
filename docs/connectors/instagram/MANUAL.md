@@ -28,9 +28,9 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  ig_user_id
+  ig_user_id (required)
   page_size
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   users:

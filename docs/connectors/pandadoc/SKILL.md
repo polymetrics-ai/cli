@@ -41,7 +41,7 @@ Reads and writes documented PandaDoc public API resources across documents, temp
 - template_id
 - upload_id
 - user_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

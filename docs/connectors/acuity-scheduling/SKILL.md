@@ -30,8 +30,8 @@ Reads Acuity Scheduling appointments, clients, appointment types, calendars, for
 
 - base_url
 - mode
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

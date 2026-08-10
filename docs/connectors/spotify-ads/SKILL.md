@@ -31,7 +31,7 @@ Reads Spotify Ads ad accounts, campaigns, ad sets, ads, businesses, business-sco
 - ad_account_id
 - base_url
 - mode
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

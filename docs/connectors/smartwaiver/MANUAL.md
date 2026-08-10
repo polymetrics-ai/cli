@@ -31,7 +31,7 @@ CONFIGURATION
   end_date
   page_size
   start_date
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   waivers:

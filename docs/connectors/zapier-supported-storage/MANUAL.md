@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   mode
-  secret (secret)
+  secret (secret) (required)
 
 ETL STREAMS
   records:

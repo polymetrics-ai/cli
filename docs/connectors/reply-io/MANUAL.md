@@ -49,7 +49,7 @@ CONFIGURATION
   tagId
   updated_after
   variant_id
-  api_key (secret)
+  api_key (secret) (required)
   bearer_token (secret)
 
 ETL STREAMS

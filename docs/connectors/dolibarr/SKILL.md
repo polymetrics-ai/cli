@@ -42,7 +42,7 @@ Reads and writes Dolibarr ERP/CRM third parties, contacts, products, customer in
 - page_size
 - product_id
 - thirdparty_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

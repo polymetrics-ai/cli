@@ -29,7 +29,7 @@ Reads GlassFrog circles, roles, people, projects, and assignments through the Gl
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

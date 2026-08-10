@@ -29,7 +29,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   kind
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   contacts:

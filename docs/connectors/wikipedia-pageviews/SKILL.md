@@ -28,16 +28,16 @@ Reads Wikimedia pageview metrics for articles and top-article reports through th
 
 ## Configuration
 
-- access
-- agent
-- article
+- access (required)
+- agent (required)
+- article (required)
 - base_url
 - country
 - day
-- end
+- end (required)
 - month
-- project
-- start
+- project (required)
+- start (required)
 - year
 
 ## ETL Streams

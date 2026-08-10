@@ -28,9 +28,9 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  page_id
+  page_id (required)
   page_size
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   page:

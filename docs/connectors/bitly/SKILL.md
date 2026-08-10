@@ -36,7 +36,7 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
 
 - base_url
 - group_guid
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

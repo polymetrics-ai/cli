@@ -29,8 +29,8 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
 ## Configuration
 
 - base_url
-- api_key (secret)
-- application_key (secret)
+- api_key (secret) (required)
+- application_key (secret) (required)
 
 ## ETL Streams
 

@@ -51,8 +51,8 @@
 //     residue, not a signal that legacy ever implemented writes; see
 //     defs/dynamodb/docs.md's "Known limits").
 //
-// There is no cdc.go: unlike postgres (which documents a genuine
-// pglogrepl-gated CDC stub already recorded as future scope), legacy
+// There is no cdc.go: unlike postgres (which retains a fail-closed
+// logical-replication foundation), legacy
 // dynamodb.go has no CDC concept at all (DynamoDB Streams is a distinct,
 // separate AWS API this connector never touched), so a CDC file is simply
 // omitted rather than padded with an inapplicable stub (mirrors

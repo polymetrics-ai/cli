@@ -30,8 +30,8 @@ CONFIGURATION
   base_url
   linkedin_version
   mode
-  org_id
-  access_token (secret)
+  org_id (required)
+  access_token (secret) (required)
 
 ETL STREAMS
   follower_statistics:

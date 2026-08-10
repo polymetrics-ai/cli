@@ -38,7 +38,7 @@ CONFIGURATION
   mode
   org_id
   page_size
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   tickets:

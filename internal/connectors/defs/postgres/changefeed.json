@@ -1,10 +1,10 @@
 {
-  "status": "unsupported",
+  "status": "planned",
   "mechanism": "logical_replication",
   "source": {
     "artifact_url": "https://www.postgresql.org/docs/current/logicaldecoding-explanation.html",
-    "artifact_version": "current",
-    "retrieved_at": "2026-08-05"
+    "artifact_version": "18",
+    "retrieved_at": "2026-08-10"
   },
-  "reason": "logical replication requires the human-gated pglogrepl dependency, a replication connection and slot lifecycle, source-bound LSN recovery, and conformance proof; the current CDCReader is an unsupported stub"
+  "reason": "Requires PostgreSQL 14+ streamed transaction staging with a whole-transaction durable receipt before execution."
 }

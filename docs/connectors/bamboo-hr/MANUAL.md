@@ -50,7 +50,7 @@ CONFIGURATION
   scheduling_get_schedule_id
   scheduling_get_shift_id
   shift_differential_id
-  subdomain
+  subdomain (required)
   table
   task_id
   time_off_requests_end
@@ -59,7 +59,7 @@ CONFIGURATION
   timesheet_entries_end
   timesheet_entries_start
   webhook_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   employees:

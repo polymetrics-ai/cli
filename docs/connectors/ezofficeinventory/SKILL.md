@@ -29,8 +29,8 @@ Reads and writes EZOfficeInventory assets, inventory items, stock assets, member
 ## Configuration
 
 - mode
-- subdomain
-- api_key (secret)
+- subdomain (required)
+- api_key (secret) (required)
 
 ## ETL Streams
 

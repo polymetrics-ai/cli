@@ -30,7 +30,7 @@ Reads 100ms rooms, sessions, recordings, templates, live streams, external strea
 
 - base_url
 - mode
-- management_token (secret)
+- management_token (secret) (required)
 
 ## ETL Streams
 

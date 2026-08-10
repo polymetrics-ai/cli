@@ -43,7 +43,7 @@ CONFIGURATION
   tag_id
   username
   webhook_id
-  password (secret)
+  password (secret) (required)
 
 ETL STREAMS
   organizations:

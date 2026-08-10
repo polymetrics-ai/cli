@@ -32,7 +32,7 @@ Reads Tempo accounts, customers, worklogs, and workload schemes through the Temp
 - max_pages
 - mode
 - page_size
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

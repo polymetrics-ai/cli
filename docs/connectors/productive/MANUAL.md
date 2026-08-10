@@ -28,8 +28,8 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  organization_id
-  api_key (secret)
+  organization_id (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   projects:

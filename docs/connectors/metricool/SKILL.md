@@ -32,7 +32,7 @@ Reads Metricool brand profiles and per-brand Instagram, Facebook, LinkedIn, and 
 - blog_ids
 - end_date
 - start_date
-- user_id
+- user_id (required)
 - user_token (secret)
 
 ## ETL Streams

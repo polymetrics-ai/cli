@@ -35,7 +35,7 @@ Reads the first Wave 1 set of Crisp REST API conversation resources through HTTP
 - session_id
 - spam_id
 - token_tier
-- website_id
+- website_id (required)
 - identifier (secret)
 - key (secret)
 

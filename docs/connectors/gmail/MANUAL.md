@@ -41,8 +41,8 @@ CONFIGURATION
   start_history_id
   token_url
   user_id
-  client_id (secret)
-  client_refresh_token (secret)
+  client_id (secret) (required)
+  client_refresh_token (secret) (required)
   client_secret (secret)
 
 ETL STREAMS

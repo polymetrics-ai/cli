@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   mode
   project_key
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   projects:

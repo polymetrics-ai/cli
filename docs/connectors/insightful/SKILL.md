@@ -30,7 +30,7 @@ Reads Insightful workforce-analytics employees, teams, projects, and directory e
 
 - base_url
 - mode
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

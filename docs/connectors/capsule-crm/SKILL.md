@@ -30,7 +30,7 @@ Reads Capsule CRM parties, opportunities, cases, tasks, users, tags, custom fiel
 
 - base_url
 - mode
-- bearer_token (secret)
+- bearer_token (secret) (required)
 
 ## ETL Streams
 

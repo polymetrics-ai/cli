@@ -28,8 +28,8 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  query_params
-  query_path
+  query_params (required)
+  query_path (required)
   api_key (secret)
 
 ETL STREAMS

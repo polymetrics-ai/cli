@@ -34,8 +34,8 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  subreddit
-  access_token (secret)
+  subreddit (required)
+  access_token (secret) (required)
 
 ETL STREAMS
   posts:

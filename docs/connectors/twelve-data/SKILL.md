@@ -32,7 +32,7 @@ Reads Twelve Data time series, quotes, stocks, and forex pair reference data.
 - interval
 - output_size
 - symbol
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

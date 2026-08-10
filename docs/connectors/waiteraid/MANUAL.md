@@ -28,9 +28,9 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  restid
+  restid (required)
   start_date
-  auth_hash (secret)
+  auth_hash (secret) (required)
 
 ETL STREAMS
   reservations:

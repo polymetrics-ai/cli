@@ -28,12 +28,12 @@ Reads commercetools customers, orders, and products through the HTTP API.
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
-- project_key
-- token_url
-- client_id (secret)
-- client_secret (secret)
+- project_key (required)
+- token_url (required)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

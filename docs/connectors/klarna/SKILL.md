@@ -28,14 +28,14 @@ Reads Klarna settlement payouts and transactions through the Klarna Settlements 
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - mode
 - payment_references
 - summary_currency_code
 - summary_end_date
 - summary_start_date
-- password (secret)
-- username (secret)
+- password (secret) (required)
+- username (secret) (required)
 
 ## ETL Streams
 

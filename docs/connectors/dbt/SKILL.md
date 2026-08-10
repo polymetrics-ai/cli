@@ -28,10 +28,10 @@ Reads dbt Cloud projects, runs, repositories, users, environments, jobs, invites
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - mode
-- api_key_2 (secret)
+- api_key_2 (secret) (required)
 
 ## ETL Streams
 

@@ -16,6 +16,7 @@ import (
 	"sync"
 	"time"
 
+	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/warehouse"
 )
 
@@ -684,12 +685,17 @@ type WritePreview struct {
 }
 
 type CDCReadRequest struct {
-	Stream string
-	Config RuntimeConfig
-	State  map[string]string
+	Stream     string
+	Config     RuntimeConfig
+	State      map[string]string
+	Checkpoint *synccontract.CheckpointEnvelope
 	// CheckpointCommitter receives the next source state only after its page's
 	// emitted events have been durably accepted by the caller.
 	CheckpointCommitter ChangefeedCheckpointCommitter
+	// DurableCheckpointCommitter persists the product-wide opaque checkpoint
+	// envelope. Native sources that need source identity and protocol positions
+	// use this port instead of serializing a parallel scalar state map.
+	DurableCheckpointCommitter DurableChangefeedCheckpointCommitter
 }
 
 type CDCEvent struct {
@@ -721,6 +727,15 @@ type CDCReader interface {
 // without changing transport or delivery logic.
 type ChangefeedCheckpointCommitter interface {
 	CommitChangefeedCheckpoint(ctx context.Context, state map[string]string) error
+}
+
+// DurableChangefeedCheckpointCommitter receives a fully structured
+// synccontract envelope after the caller has durably accepted the emitted
+// source transaction. Implementations commit through
+// synccontract.CommitAfterDownstreamAcknowledgement; the connector never
+// treats a received record or an unacknowledged candidate as resumable state.
+type DurableChangefeedCheckpointCommitter interface {
+	CommitDurableChangefeedCheckpoint(context.Context, synccontract.CheckpointEnvelope) error
 }
 
 // ChangefeedStatus is the closed lifecycle vocabulary for a declared
@@ -844,10 +859,10 @@ type ChangefeedDescriptor struct {
 	PollingWatermark *PollingWatermarkSpec  `json:"polling_watermark,omitempty"`
 }
 
-// ChangefeedExecutorDescriptor is the runtime half of an implemented
-// changefeed. It intentionally omits provider evidence: that remains in the
-// bundle declaration and the runtime proves only that it implements the same
-// executable contract.
+// ChangefeedExecutorDescriptor is the runtime half of a declared changefeed.
+// It reports the executor lifecycle and mechanism; an implemented declaration
+// also supplies the executor and checkpoint contract needed for promotion.
+// Provider evidence remains bundle-owned.
 type ChangefeedExecutorDescriptor struct {
 	Status     ChangefeedStatus      `json:"status"`
 	Mechanism  ChangefeedMechanism   `json:"mechanism"`
@@ -855,9 +870,10 @@ type ChangefeedExecutorDescriptor struct {
 	Checkpoint ChangefeedCheckpoint  `json:"checkpoint"`
 }
 
-// ChangefeedDescriptorProvider is implemented only by a runnable changefeed
-// executor. It is deliberately separate from CDCReader so a legacy stub
-// cannot advertise capability through method-set coincidence.
+// ChangefeedDescriptorProvider reports the lifecycle and mechanism associated
+// with a CDC reader. It is deliberately separate from CDCReader so method-set
+// coincidence cannot advertise capability; only a matching implemented
+// declaration can do that.
 type ChangefeedDescriptorProvider interface {
 	ChangefeedExecutorDescriptor() ChangefeedExecutorDescriptor
 }

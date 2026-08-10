@@ -37,7 +37,7 @@ Reads Mailjet SMS messages, message counts, and export job status; writes SMS se
 - sms_ids
 - start_date
 - status_code
-- token (secret)
+- token (secret) (required)
 
 ## ETL Streams
 

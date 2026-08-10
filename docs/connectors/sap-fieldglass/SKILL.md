@@ -30,7 +30,7 @@ Reads SAP Fieldglass workers, job postings, and time sheets through the SAP Fiel
 
 - base_url
 - mode
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

@@ -30,7 +30,7 @@ Reads orders, products, customers, warehouses, suppliers, purchase orders, sales
 
 - base_url
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

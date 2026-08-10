@@ -30,7 +30,7 @@ Reads Persona inquiries, accounts, reports, transactions, and cases, and perform
 
 - base_url
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

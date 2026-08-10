@@ -32,7 +32,7 @@ CONFIGURATION
   max_pages
   mode
   page_size
-  query
+  query (required)
   start_date
   api_key (secret)
 

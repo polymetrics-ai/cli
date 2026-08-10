@@ -1,7 +1,10 @@
 package postgres
 
 import (
+	"bytes"
 	"encoding/binary"
+	"encoding/json"
+	"errors"
 	"reflect"
 	"testing"
 
@@ -142,6 +145,127 @@ func TestPGOutputDecoderErrors(t *testing.T) {
 	}
 }
 
+func TestPGOutputDecoderFiltersUnselectedRelation(t *testing.T) {
+	const otherRelationID uint32 = 43
+	decoder := newPGOutputDecoderForRelation("public.users")
+	if _, err := decoder.decode(relationMessage(testRelationID, "public", "users", testColumn{name: "id", typeID: 23}), ""); err != nil {
+		t.Fatalf("decode selected relation: %v", err)
+	}
+	if _, err := decoder.decode(relationMessage(otherRelationID, "public", "noise", testColumn{name: "id", typeID: 23}), ""); err != nil {
+		t.Fatalf("decode unselected relation: %v", err)
+	}
+
+	events, err := decoder.decode(insertMessage(otherRelationID, textField("99")), "0/20")
+	if err != nil {
+		t.Fatalf("decode unselected DML: %v", err)
+	}
+	if len(events) != 0 {
+		t.Fatalf("unselected relation emitted %d event(s), want 0", len(events))
+	}
+
+	events, err = decoder.decode(insertMessage(testRelationID, textField("7")), "0/21")
+	if err != nil {
+		t.Fatalf("decode selected DML: %v", err)
+	}
+	if len(events) != 1 || events[0].Record["id"] != 7 {
+		t.Fatalf("selected relation events = %#v, want only the selected record", events)
+	}
+}
+
+func TestPGOutputDecoderTruncateMapsOnlyTheSelectedRelation(t *testing.T) {
+	const otherRelationID uint32 = 43
+	decoder := newPGOutputDecoderForRelation("public.users")
+	if _, err := decoder.decode(relationMessage(testRelationID, "public", "users", testColumn{name: "id", typeID: 23}), ""); err != nil {
+		t.Fatalf("decode selected relation: %v", err)
+	}
+	if _, err := decoder.decode(relationMessage(otherRelationID, "public", "noise", testColumn{name: "id", typeID: 23}), ""); err != nil {
+		t.Fatalf("decode unselected relation: %v", err)
+	}
+
+	events, err := decoder.truncate([]uint32{otherRelationID, testRelationID}, "0/30")
+	if err != nil {
+		t.Fatalf("decode truncate: %v", err)
+	}
+	if len(events) != 1 || events[0].Operation != "truncate" || len(events[0].Record) != 0 || events[0].State["lsn"] != "0/30" {
+		t.Fatalf("truncate events = %#v, want one selected empty-record truncate", events)
+	}
+}
+
+func TestPGOutputDecoderRoundTripsNonASCIITextExactly(t *testing.T) {
+	const want = "Málaga 東京"
+	decoder := newPGOutputDecoderForRelation("public.users")
+	if _, err := decoder.decode(relationMessage(testRelationID, "public", "users", testColumn{name: "value", typeID: 25}), ""); err != nil {
+		t.Fatalf("decode relation: %v", err)
+	}
+	events, err := decoder.decode(insertMessage(testRelationID, textField(want)), "0/20")
+	if err != nil {
+		t.Fatalf("decode insert: %v", err)
+	}
+	if len(events) != 1 {
+		t.Fatalf("decode emitted %d event(s), want 1", len(events))
+	}
+	got, ok := events[0].Record["value"].(string)
+	if !ok || !bytes.Equal([]byte(got), []byte(want)) {
+		t.Fatalf("decoded value = %q, want byte-exact %q", got, want)
+	}
+	payload, err := json.Marshal(events[0])
+	if err != nil {
+		t.Fatalf("marshal CDC event: %v", err)
+	}
+	var roundTrip connectors.CDCEvent
+	if err := json.Unmarshal(payload, &roundTrip); err != nil {
+		t.Fatalf("unmarshal CDC event: %v", err)
+	}
+	got, ok = roundTrip.Record["value"].(string)
+	if !ok || !bytes.Equal([]byte(got), []byte(want)) {
+		t.Fatalf("round-trip value = %q, want byte-exact %q", got, want)
+	}
+}
+
+func TestPGOutputDecoderRejectsInvalidUTF8BeforeCheckpointBoundary(t *testing.T) {
+	t.Run("tuple text", func(t *testing.T) {
+		decoder := newPGOutputDecoderForRelation("public.users")
+		if _, err := decoder.decode(relationMessage(testRelationID, "public", "users", testColumn{name: "value", typeID: 25}), ""); err != nil {
+			t.Fatalf("decode relation: %v", err)
+		}
+		_, err := decoder.decode(insertMessage(testRelationID, textField(string([]byte{0xff}))), "0/20")
+		if !errors.Is(err, errCDCInvalidUTF8) {
+			t.Fatalf("decode invalid tuple = %v, want invalid UTF-8 rejection", err)
+		}
+	})
+
+	for _, tc := range []struct {
+		name    string
+		message []byte
+	}{
+		{name: "origin metadata", message: originMessage(42, string([]byte{0xff}))},
+		{name: "type metadata", message: typeMessage(23, string([]byte{0xff}), "custom_status")},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			decoder := newPGOutputDecoder()
+			if _, err := decoder.decode(tc.message, ""); !errors.Is(err, errCDCInvalidUTF8) {
+				t.Fatalf("decode invalid metadata = %v, want invalid UTF-8 rejection", err)
+			}
+		})
+	}
+}
+
+func TestDecodeTextValueMakesNonFiniteFloatsJSONSafe(t *testing.T) {
+	for _, tc := range []struct {
+		typeID uint32
+		raw    string
+	}{
+		{typeID: 700, raw: "NaN"},
+		{typeID: 701, raw: "Infinity"},
+		{typeID: 1700, raw: "-Infinity"},
+	} {
+		got := decodeTextValue(tc.typeID, tc.raw)
+		if got != tc.raw {
+			t.Fatalf("decodeTextValue(%d, %q) = %#v, want JSON-safe string", tc.typeID, tc.raw, got)
+		}
+	}
+}
+
 func relationMessage(id uint32, schema, table string, columns ...testColumn) []byte {
 	var b []byte
 	b = append(b, 'R')
@@ -238,4 +362,23 @@ func appendUint32(b []byte, v uint32) []byte {
 	var tmp [4]byte
 	binary.BigEndian.PutUint32(tmp[:], v)
 	return append(b, tmp[:]...)
+}
+
+func appendUint64(b []byte, v uint64) []byte {
+	var tmp [8]byte
+	binary.BigEndian.PutUint64(tmp[:], v)
+	return append(b, tmp[:]...)
+}
+
+func originMessage(originLSN uint64, name string) []byte {
+	b := []byte{'O'}
+	b = appendUint64(b, originLSN)
+	return appendCString(b, name)
+}
+
+func typeMessage(typeID uint32, namespace, name string) []byte {
+	b := []byte{'Y'}
+	b = appendUint32(b, typeID)
+	b = appendCString(b, namespace)
+	return appendCString(b, name)
 }

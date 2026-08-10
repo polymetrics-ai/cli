@@ -58,8 +58,8 @@ CONFIGURATION
   tax_type
   tracking_category_id
   user_id
-  access_token (secret)
-  tenant_id (secret)
+  access_token (secret) (required)
+  tenant_id (secret) (required)
 
 ETL STREAMS
   invoices:

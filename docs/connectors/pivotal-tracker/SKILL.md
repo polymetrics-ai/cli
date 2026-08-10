@@ -29,7 +29,7 @@ Reads Pivotal Tracker projects, stories, iterations, and epics through API v5.
 
 - base_url
 - project_id
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

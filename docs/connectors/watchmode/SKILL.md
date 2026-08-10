@@ -37,7 +37,7 @@ Reads Watchmode title search results, streaming sources, regions, networks, genr
 - start_date
 - title_ids
 - types
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

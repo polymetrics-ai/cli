@@ -30,7 +30,7 @@ Reads Statuspage pages, components, incidents, subscribers, component groups, me
 
 - base_url
 - page_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

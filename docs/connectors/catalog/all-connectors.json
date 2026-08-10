@@ -124537,7 +124537,7 @@
   {
     "name": "postgres",
     "display_name": "PostgreSQL",
-    "description": "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a documented stub pending the gated pglogrepl dependency.",
+    "description": "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source.",
     "integration_type": "database",
     "release_stage": "ga",
     "capabilities": {
@@ -124548,14 +124548,14 @@
       "query": false
     },
     "changefeed": {
-      "status": "unsupported",
+      "status": "planned",
       "mechanism": "logical_replication",
       "source": {
         "artifact_url": "https://www.postgresql.org/docs/current/logicaldecoding-explanation.html",
-        "artifact_version": "current",
-        "retrieved_at": "2026-08-05"
+        "artifact_version": "18",
+        "retrieved_at": "2026-08-10"
       },
-      "reason": "logical replication requires the human-gated pglogrepl dependency, a replication connection and slot lifecycle, source-bound LSN recovery, and conformance proof; the current CDCReader is an unsupported stub"
+      "reason": "Requires PostgreSQL 14+ streamed transaction staging with a whole-transaction durable receipt before execution."
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -124569,7 +124569,7 @@
       "properties": {
         "host": {
           "type": "string",
-          "description": "Bare hostname or IP of the PostgreSQL server (no scheme, path, or credentials — a URL-shaped value is rejected)."
+          "description": "TCP hostname or IP of the PostgreSQL server (no scheme, path, or credentials — a URL-shaped value is rejected). Unix-socket/peer authentication is not supported."
         },
         "port": {
           "type": "string",
@@ -124586,7 +124586,7 @@
         "password": {
           "type": "string",
           "x-secret": true,
-          "description": "Database role password. Never logged."
+          "description": "Required for live password authentication. Fixture mode does not require it. Never logged."
         },
         "sslmode": {
           "type": "string",
@@ -124617,6 +124617,10 @@
         "schema": {
           "type": "string",
           "description": "PostgreSQL schema to discover tables from. Defaults to public."
+        },
+        "cdc_publication": {
+          "type": "string",
+          "description": "Reserved for the planned PostgreSQL logical-replication CDC path; it is not used while change capture is non-executable."
         },
         "cursor_field": {
           "type": "string",

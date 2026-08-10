@@ -35,7 +35,7 @@ CONFIGURATION
   mode
   space_id
   team_id
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   tasks:

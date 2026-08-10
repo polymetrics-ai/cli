@@ -28,11 +28,11 @@ Reads and writes WorkflowMax jobs, clients, and client contacts through the real
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - mode
 - updated_since
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

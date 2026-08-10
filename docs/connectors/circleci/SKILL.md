@@ -41,7 +41,7 @@ Reads and writes CircleCI projects, pipelines, workflows, jobs, contexts, schedu
 - repo
 - vcs_type
 - workflow_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

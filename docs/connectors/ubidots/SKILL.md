@@ -29,7 +29,7 @@ Reads Ubidots devices, variables, variable values, device groups, device types, 
 ## Configuration
 
 - base_url
-- token (secret)
+- token (secret) (required)
 
 ## ETL Streams
 

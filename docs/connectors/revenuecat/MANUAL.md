@@ -47,7 +47,7 @@ CONFIGURATION
   updated_after
   virtual_currency_code
   webhook_integration_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   projects:

@@ -1,8 +1,11 @@
 # Overview
 
 Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and
-supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a
-documented stub pending the gated pglogrepl dependency.
+supports cursor-incremental reads on a configurable cursor column. PostgreSQL logical-replication
+change capture is deliberately planned, not executable: it requires PostgreSQL 14+ `pgoutput`
+protocol-v2 streaming, a bounded crash-recoverable per-transaction stage, `StreamAbort` discard,
+a named `TransactionStageLimitExceeded` outcome with no source acknowledgement, and a durable
+receipt for the complete transaction before any source LSN acknowledgement.
 
 This connector discovers available streams and schemas from the configured service at runtime.
 
@@ -10,8 +13,12 @@ This connector is read-only; no write actions are declared.
 
 ## Auth setup
 
-Configure a bare `host`, `database`, and `username`. `port` defaults to 5432. `password` is a
-secret field and is never logged. Do not put credentials in a host or URL-shaped value.
+Configure a TCP `host`, `database`, and `username`. `port` defaults to 5432. Live connections use
+password authentication: `password` is required, secret, and never logged. `mode=fixture` does
+not open a source connection and does not require a password. Peer/socket and client-certificate
+authentication, including ambient `PGSSLCERT`/`PGSSLKEY` values and the default PostgreSQL client
+certificate pair, are unsupported and rejected during connection validation. Do not put credentials
+in a host or URL-shaped value.
 
 `sslmode` uses the same transport-security shape as the MySQL connector and is honestly enforced
 for both local and remote servers:
@@ -36,11 +43,14 @@ Connection fields:
 
 - `cursor_field` (optional, string); Optional column name used for incremental reads (rows with
   cursor_field greater than the stored cursor are read, ordered by cursor_field ascending).
+- `cdc_publication` (optional, string); Reserved for the planned logical-replication change
+  capture path. It is not invoked while CDC is non-executable.
 - `database` (required, string); Database name to connect to.
-- `host` (required, string); Bare hostname or IP of the PostgreSQL server (no scheme, path, or
-  credentials - a URL-shaped value is rejected).
+- `host` (required, string); TCP hostname or IP of the PostgreSQL server (no scheme, path, or
+  credentials - a URL-shaped value is rejected). Unix-socket/peer authentication is unsupported.
 - `mode` (optional, string); allowed values `fixture`.
-- `password` (optional, secret, string); Database role password. Never logged.
+- `password` (conditionally required, secret, string); Required for live password authentication.
+  Fixture mode does not require it. Never logged.
 - `port` (optional, string); TCP port, 1-65535. Defaults to 5432 when omitted.
 - `read_limit` (optional, string); Maximum rows returned per Read snapshot SELECT. Defaults to
   10000; set to 0, all, or unlimited to disable the bound.
@@ -53,8 +63,6 @@ Connection fields:
 - `sslservername` (optional, string); Server name to verify under verify-identity when it differs
   from host, such as an IP-addressed endpoint fronting a named certificate.
 - `username` (required, string); Database role used to authenticate.
-
-Secret fields are redacted in logs and write previews: `password`.
 
 Provide the secret fields listed above. Authentication is applied by the connector-specific
 implementation for this service.
@@ -71,3 +79,12 @@ This connector is read-only. Read behavior: low.
 ## Known limits
 
 - Schemas and stream availability depend on the configured service at runtime.
+- Logical-replication CDC is planned and fails closed before opening a replication connection,
+  creating/reusing a slot, consuming WAL, or advancing a checkpoint. It will not be advertised
+  until PostgreSQL 14+ `pgoutput` protocol-v2 streaming can stage each transaction privately under
+  a hard byte/record quota, discard `StreamAbort`, return a named
+  `TransactionStageLimitExceeded` outcome without acknowledging the source, and acknowledge the
+  source only after a whole-transaction durable downstream receipt.
+- Cursor or timestamp reconciliation is not a CDC fallback: it cannot faithfully recover hard
+  deletes or transaction history. A stage-limit outcome must require explicit retry or connector-
+  owned teardown/rebootstrap, with source slot health made visible.

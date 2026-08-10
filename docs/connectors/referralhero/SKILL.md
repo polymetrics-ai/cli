@@ -35,7 +35,7 @@ Reads ReferralHero lists, subscribers, referrals, rewards, coupon groups, and ca
 - subscriber_id
 - subscriber_mwr
 - subscriber_name
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

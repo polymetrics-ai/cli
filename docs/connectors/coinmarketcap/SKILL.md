@@ -40,7 +40,7 @@ Reads CoinMarketCap Pro API global market metrics, id/slug/symbol-keyed cryptocu
 - price_conversion_amount
 - price_conversion_id
 - price_conversion_symbol
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

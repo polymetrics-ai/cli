@@ -31,7 +31,7 @@ CONFIGURATION
   limit
   max_pages
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   partnerships:

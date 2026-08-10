@@ -30,8 +30,8 @@ Reads Trello boards, lists, and checklists through the Trello REST API. Cards an
 
 - base_url
 - board_ids
-- key (secret)
-- token (secret)
+- key (secret) (required)
+- token (secret) (required)
 
 ## ETL Streams
 

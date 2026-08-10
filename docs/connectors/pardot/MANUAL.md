@@ -28,9 +28,9 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  business_unit_id
+  business_unit_id (required)
   id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   prospects:

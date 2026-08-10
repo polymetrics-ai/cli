@@ -30,7 +30,7 @@ Reads and writes documented Illumina BaseSpace v1pre3 REST API resources through
 
 - application_id
 - appsession_id
-- base_url
+- base_url (required)
 - biosample_id
 - dataset_id
 - datasettype_id
@@ -45,7 +45,7 @@ Reads and writes documented Illumina BaseSpace v1pre3 REST API resources through
 - user
 - user_id
 - workgroup_id
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

@@ -34,7 +34,7 @@ Reads Wufoo forms, fields, entries, comments, reports, and widgets, and writes e
 - mode
 - page_size
 - report_hash
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

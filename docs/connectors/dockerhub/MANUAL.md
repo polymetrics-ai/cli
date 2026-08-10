@@ -28,7 +28,7 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
-  docker_username
+  docker_username (required)
   page_size
   repository
   tag

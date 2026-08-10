@@ -40,7 +40,7 @@ Reads and writes Concord contract lifecycle management data: agreements (and the
 - organization_id
 - page_size
 - report_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

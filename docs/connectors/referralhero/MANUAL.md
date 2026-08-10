@@ -34,7 +34,7 @@ CONFIGURATION
   subscriber_id
   subscriber_mwr
   subscriber_name
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   lists:

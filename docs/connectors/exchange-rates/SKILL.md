@@ -39,7 +39,7 @@ Reads latest, currency-conversion, time-series, and fluctuation foreign-exchange
 - mode
 - timeseries_end_date
 - timeseries_start_date
-- access_key (secret)
+- access_key (secret) (required)
 
 ## ETL Streams
 

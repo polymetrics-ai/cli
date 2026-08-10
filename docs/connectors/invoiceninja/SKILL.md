@@ -38,7 +38,7 @@ Reads Invoice Ninja clients, invoices, products, payments, and quotes through th
 - max_pages
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

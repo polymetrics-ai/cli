@@ -33,8 +33,8 @@ CONFIGURATION
   max_pages
   mode
   page_size
-  access_token (secret)
-  developer_token (secret)
+  access_token (secret) (required)
+  developer_token (secret) (required)
 
 ETL STREAMS
   accessible_customers:

@@ -40,7 +40,7 @@ CONFIGURATION
   site_url
   site_urls
   start_date
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   sites:

@@ -28,12 +28,12 @@ Reads FreshBooks clients, invoices, expenses, payments, and items through the Fr
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - max_pages
 - mode
 - page_size
-- oauth_access_token (secret)
+- oauth_access_token (secret) (required)
 
 ## ETL Streams
 

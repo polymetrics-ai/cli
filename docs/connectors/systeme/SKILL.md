@@ -29,7 +29,7 @@ Reads Systeme.io contacts, tags, contact fields, funnels, and funnel steps, and 
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

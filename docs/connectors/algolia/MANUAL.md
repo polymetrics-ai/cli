@@ -33,10 +33,10 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  application_id
-  base_url
+  application_id (required)
+  base_url (required)
   index_name
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   indices:

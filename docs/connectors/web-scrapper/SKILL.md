@@ -32,7 +32,7 @@ Reads sitemap, scraping job, account, and problematic-URL metadata, and writes s
 - mode
 - scraping_job_ids
 - sitemap_id_filter
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

@@ -30,7 +30,7 @@ Reads Missive contacts, contact groups, users, teams, and shared labels through 
 
 - base_url
 - kind
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

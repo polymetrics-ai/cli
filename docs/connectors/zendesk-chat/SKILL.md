@@ -28,7 +28,7 @@ Reads Zendesk Chat agents, chats, departments, shortcuts, and triggers through t
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - start_date
 - access_token (secret)
 

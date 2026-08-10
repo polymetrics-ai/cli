@@ -36,9 +36,9 @@ Reads current, historical, forecast, marine, and location-autocomplete weather d
 - latitude
 - longitude
 - mode
-- query
+- query (required)
 - units
-- access_key (secret)
+- access_key (secret) (required)
 
 ## ETL Streams
 

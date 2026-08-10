@@ -32,7 +32,7 @@ CONFIGURATION
   mode
   page_size
   sort
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   customers:

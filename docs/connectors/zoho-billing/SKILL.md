@@ -36,7 +36,7 @@ Reads Zoho Billing customers, subscriptions, and invoices through the Zoho Billi
 
 - base_url
 - organization_id
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

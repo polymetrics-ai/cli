@@ -29,7 +29,7 @@ Reads Opsgenie alerts, incidents, users, teams, and services through the Opsgeni
 ## Configuration
 
 - base_url
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

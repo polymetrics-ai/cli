@@ -30,7 +30,7 @@ Reads GoLogin browser profiles, folders, tags, and account information through t
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

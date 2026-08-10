@@ -29,7 +29,7 @@ Reads Goldcast organizations, events, agenda items, discussion groups, and track
 ## Configuration
 
 - base_url
-- access_key (secret)
+- access_key (secret) (required)
 
 ## ETL Streams
 

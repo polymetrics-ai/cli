@@ -29,7 +29,7 @@ Reads Svix applications, endpoints, event types, messages, message delivery atte
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

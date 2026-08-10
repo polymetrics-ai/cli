@@ -42,7 +42,7 @@ Reads GIFs, stickers, and clips from the Giphy search and trending REST endpoint
 - query_for_gif
 - query_for_stickers
 - rating
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -36,7 +36,7 @@ Reads and writes the documented Luma public API for events, calendars, guests, c
 - mode
 - slug
 - webhook_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

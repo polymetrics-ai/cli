@@ -27,14 +27,14 @@ Reads records from a configured Infor Nexus export dataset through the Infor Nex
 
 ## Configuration
 
-- base_url
-- dataset_name
+- base_url (required)
+- dataset_name (required)
 - mode
 - start_date
-- access_key_id (secret)
-- api_key (secret)
-- secret_key (secret)
-- user_id (secret)
+- access_key_id (secret) (required)
+- api_key (secret) (required)
+- secret_key (secret) (required)
+- user_id (secret) (required)
 
 ## ETL Streams
 

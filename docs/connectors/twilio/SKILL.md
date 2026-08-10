@@ -49,8 +49,8 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
 - reference_sid
 - resource_sid
 - sid
-- account_sid (secret)
-- auth_token (secret)
+- account_sid (secret) (required)
+- auth_token (secret) (required)
 
 ## ETL Streams
 

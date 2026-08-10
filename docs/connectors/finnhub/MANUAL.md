@@ -32,7 +32,7 @@ CONFIGURATION
   market_news_category
   mode
   symbols
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   stock_symbols:

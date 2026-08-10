@@ -30,10 +30,10 @@ Reads the authenticated Strava athlete's profile, activities, lifetime stats, an
 
 - athlete_id
 - base_url
-- client_id
+- client_id (required)
 - token_url
-- client_secret (secret)
-- refresh_token (secret)
+- client_secret (secret) (required)
+- refresh_token (secret) (required)
 
 ## ETL Streams
 

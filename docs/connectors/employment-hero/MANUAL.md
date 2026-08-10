@@ -42,7 +42,7 @@ CONFIGURATION
   rostered_shift_id
   template_id
   unavailability_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   organisations:

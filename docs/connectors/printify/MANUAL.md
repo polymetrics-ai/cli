@@ -38,7 +38,7 @@ CONFIGURATION
   shop_id
   show_out_of_stock
   webhook_id
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   shops:

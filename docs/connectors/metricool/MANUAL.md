@@ -31,7 +31,7 @@ CONFIGURATION
   blog_ids
   end_date
   start_date
-  user_id
+  user_id (required)
   user_token (secret)
 
 ETL STREAMS

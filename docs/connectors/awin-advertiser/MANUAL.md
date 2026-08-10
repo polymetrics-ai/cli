@@ -27,7 +27,7 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  advertiserId
+  advertiserId (required)
   base_url
   mode
   publisher_id
@@ -35,7 +35,7 @@ CONFIGURATION
   report_start_date
   start_date
   transaction_status
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   transactions:

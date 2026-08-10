@@ -35,7 +35,7 @@ AUTHENTICATION
 CONFIGURATION
   api_version
   base_url
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   bookings:

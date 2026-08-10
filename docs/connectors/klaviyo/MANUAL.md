@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   mode
   revision
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   profiles:

@@ -35,7 +35,7 @@ CONFIGURATION
   orientation
   query
   size
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   photos:

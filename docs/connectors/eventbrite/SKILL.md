@@ -32,7 +32,7 @@ Reads Eventbrite organizations, events, attendees, orders, and ticket classes th
 - event_id
 - organization_id
 - start_date
-- private_token (secret)
+- private_token (secret) (required)
 
 ## ETL Streams
 

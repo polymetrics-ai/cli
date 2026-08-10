@@ -43,10 +43,10 @@ Reads CommCare HQ project, application, form, case, user, group, report, locatio
 - lookup_table_item_id
 - mobile_worker_id
 - processing_id
-- project_space
+- project_space (required)
 - report_id
 - web_user_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

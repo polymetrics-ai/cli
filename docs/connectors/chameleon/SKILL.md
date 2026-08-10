@@ -30,7 +30,7 @@ Reads Chameleon surveys, tours, launchers, tooltips, and segments through the Ch
 
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

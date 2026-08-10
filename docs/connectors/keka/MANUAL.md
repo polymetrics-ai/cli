@@ -28,10 +28,10 @@ AUTHENTICATION
 
 CONFIGURATION
   attachment_id
-  base_url
+  base_url (required)
   bgv_id
   candidate_id
-  client_id
+  client_id (required)
   document_id
   document_type_id
   employee_id
@@ -46,7 +46,7 @@ CONFIGURATION
   task_id
   token_url
   api_key (secret)
-  client_secret (secret)
+  client_secret (secret) (required)
 
 ETL STREAMS
   employees:

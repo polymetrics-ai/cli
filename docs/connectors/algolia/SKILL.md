@@ -34,10 +34,10 @@ Reads Algolia indices, API keys, index settings, dictionaries, security sources,
 
 ## Configuration
 
-- application_id
-- base_url
+- application_id (required)
+- base_url (required)
 - index_name
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

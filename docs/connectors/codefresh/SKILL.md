@@ -37,7 +37,7 @@ Reads Codefresh projects, pipelines, builds, runner agents, shared contexts, con
 - account_id
 - base_url
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

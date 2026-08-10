@@ -36,7 +36,7 @@ CONFIGURATION
   account_id
   base_url
   mode
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   projects:

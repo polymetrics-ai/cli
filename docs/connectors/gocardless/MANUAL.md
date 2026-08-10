@@ -31,7 +31,7 @@ CONFIGURATION
   bank_account_detail_id
   bank_account_holder_verification_id
   bank_authorisation_id
-  base_url
+  base_url (required)
   billing_request_id
   billing_request_institutions_country_code
   billing_request_template_id
@@ -67,7 +67,7 @@ CONFIGURATION
   transferred_mandate_id
   verification_details_creditor_id
   webhook_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   payments:

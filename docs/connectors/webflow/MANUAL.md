@@ -30,8 +30,8 @@ CONFIGURATION
   accept_version
   base_url
   mode
-  site_id
-  api_key (secret)
+  site_id (required)
+  api_key (secret) (required)
 
 ETL STREAMS
   collections:

@@ -29,9 +29,9 @@ Reads Instagram Business/Creator account profile, media, and stories through the
 ## Configuration
 
 - base_url
-- ig_user_id
+- ig_user_id (required)
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

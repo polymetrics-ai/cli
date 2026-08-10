@@ -46,7 +46,7 @@ CONFIGURATION
   department_id
   device_id
   display_id
-  domain_name
+  domain_name (required)
   ep_id
   filter_alerts_order_by
   filter_alerts_order_type
@@ -111,7 +111,7 @@ CONFIGURATION
   view_calendar_events_user_end_time
   view_calendar_events_user_start_time
   workspace_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   tickets:

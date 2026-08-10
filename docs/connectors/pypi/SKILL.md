@@ -29,7 +29,7 @@ Reads PyPI project metadata through the PyPI JSON API. Read-only and credential-
 ## Configuration
 
 - base_url
-- project_name
+- project_name (required)
 
 ## ETL Streams
 

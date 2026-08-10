@@ -28,12 +28,12 @@ Reads Sentry projects, issues, error events, and releases through the Sentry RES
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - max_pages
 - organization
 - page_size
 - project
-- auth_token (secret)
+- auth_token (secret) (required)
 
 ## ETL Streams
 

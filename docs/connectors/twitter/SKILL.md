@@ -33,7 +33,7 @@ Reads tweets and their authors matching a search query from the Twitter (X) API 
 - max_pages
 - mode
 - page_size
-- query
+- query (required)
 - start_date
 - api_key (secret)
 

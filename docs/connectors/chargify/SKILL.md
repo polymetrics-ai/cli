@@ -28,7 +28,7 @@ Reads and writes Chargify (Maxio Advanced Billing) customers, subscriptions, pro
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - domain
 - subdomain
 - username

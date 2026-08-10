@@ -30,9 +30,9 @@ CONFIGURATION
   base_url
   mode
   page_size
-  account_id (secret)
-  client_id (secret)
-  client_secret (secret)
+  account_id (secret) (required)
+  client_id (secret) (required)
+  client_secret (secret) (required)
 
 ETL STREAMS
   consumers:

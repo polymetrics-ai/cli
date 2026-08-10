@@ -39,7 +39,7 @@ CONFIGURATION
   price_conversion_amount
   price_conversion_id
   price_conversion_symbol
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   global_metrics:

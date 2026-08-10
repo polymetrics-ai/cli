@@ -28,14 +28,14 @@ Reads Genesys Cloud users, queues, groups, and divisions through the Genesys Clo
 
 ## Configuration
 
-- base_url
+- base_url (required)
 - max_pages
 - mode
 - page_size
 - scope
-- token_url
-- client_id (secret)
-- client_secret (secret)
+- token_url (required)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

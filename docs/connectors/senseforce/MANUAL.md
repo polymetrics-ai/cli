@@ -26,9 +26,9 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  backend_url
-  dataset_id
-  access_token (secret)
+  backend_url (required)
+  dataset_id (required)
+  access_token (secret) (required)
 
 ETL STREAMS
   records:

@@ -34,7 +34,7 @@ Reads RingCentral extensions, call logs, messages, contacts, and devices through
 - direction
 - messageType
 - type
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 

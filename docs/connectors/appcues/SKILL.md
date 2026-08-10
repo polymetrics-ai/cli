@@ -28,13 +28,13 @@ Reads and manages Appcues in-app guidance experiences (flows, Flows 2.0, pins, m
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - max_pages
 - mode
 - page_size
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

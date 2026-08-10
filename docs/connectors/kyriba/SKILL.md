@@ -31,8 +31,8 @@ Reads Kyriba bank accounts, transactions, statements, and payments through tenan
 - base_url
 - scope
 - token_url
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

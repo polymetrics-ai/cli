@@ -40,9 +40,9 @@ CONFIGURATION
   start_time_at_or_after
   start_time_before
   token_url
-  client_id (secret)
+  client_id (secret) (required)
   client_secret (secret)
-  refresh_token (secret)
+  refresh_token (secret) (required)
 
 ETL STREAMS
   jobs:

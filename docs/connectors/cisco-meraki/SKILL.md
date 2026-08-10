@@ -31,7 +31,7 @@ Reads and writes Cisco Meraki organizations, networks, devices, admins, licenses
 - base_url
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

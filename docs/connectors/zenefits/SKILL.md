@@ -29,7 +29,7 @@ Reads Zenefits people, companies, departments, locations, employments, custom fi
 ## Configuration
 
 - base_url
-- token (secret)
+- token (secret) (required)
 
 ## ETL Streams
 

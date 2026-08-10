@@ -28,10 +28,10 @@ Reads Smaily campaigns, segments, contacts, templates, automations, and organiza
 
 ## Configuration
 
-- api_username
-- base_url
+- api_username (required)
+- base_url (required)
 - segment_id
-- api_password (secret)
+- api_password (secret) (required)
 
 ## ETL Streams
 

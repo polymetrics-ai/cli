@@ -28,9 +28,9 @@ Reads HiBob HR data: employee profiles, company named lists, and people field de
 
 ## Configuration
 
-- base_url
-- username
-- password (secret)
+- base_url (required)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

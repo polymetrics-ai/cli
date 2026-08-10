@@ -86,7 +86,7 @@ CONFIGURATION
   url
   user_id
   version_id
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   users:

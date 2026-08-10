@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector postgres [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a documented stub pending the gated pglogrepl dependency.
+  Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source.
 
 ICON
   id: postgresql
@@ -24,15 +24,30 @@ CAPABILITIES
   Integration type: database
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  password: Live connections require password authentication; peer/socket and client-certificate modes, including ambient certificates, are unsupported.
+    config: host, database, username
+    secrets: password
+    supports: read=true write=false
 
 CONFIGURATION
-  No connector-specific config fields.
+  cdc_publication
+  cursor_field
+  database (required)
+  host (required)
+  mode
+  port
+  read_limit
+  schema
+  sslmode
+  sslrootcert
+  sslservername
+  username (required)
+  password (secret) (required when mode is not fixture): Fixture mode does not open a source connection.
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: low
+  write risk: n/a (read-only source)
+  approval: none required for read-only sync
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

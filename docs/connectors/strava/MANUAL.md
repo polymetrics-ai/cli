@@ -29,10 +29,10 @@ AUTHENTICATION
 CONFIGURATION
   athlete_id
   base_url
-  client_id
+  client_id (required)
   token_url
-  client_secret (secret)
-  refresh_token (secret)
+  client_secret (secret) (required)
+  refresh_token (secret) (required)
 
 ETL STREAMS
   activities:

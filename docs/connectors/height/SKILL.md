@@ -29,7 +29,7 @@ Reads Height tasks, lists, field templates, users, and workspace through the Hei
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

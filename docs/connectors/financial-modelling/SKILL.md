@@ -34,7 +34,7 @@ Reads stock and ETF symbol lists, the stock screener, delisted companies, market
 - marketcapmorethan
 - mode
 - symbols
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -30,7 +30,7 @@ Reads Pipedrive deals, persons, organizations, activities, products, users, note
 
 - base_url
 - replication_start_date
-- api_token (secret)
+- api_token (secret) (required)
 
 ## ETL Streams
 

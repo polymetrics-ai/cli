@@ -30,8 +30,8 @@ Reads Imagga account API usage and per-image tags/categories via the Imagga REST
 
 - base_url
 - image_urls
-- api_key (secret)
-- api_secret (secret)
+- api_key (secret) (required)
+- api_secret (secret) (required)
 
 ## ETL Streams
 

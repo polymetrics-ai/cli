@@ -37,7 +37,7 @@ CONFIGURATION
   max_pages
   mode
   page_size
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   lists:

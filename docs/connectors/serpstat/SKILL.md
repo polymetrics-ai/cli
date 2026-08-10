@@ -32,7 +32,7 @@ Reads Serpstat SEO domain keyword, competitor, and top-URL data through the Serp
 - page_size
 - pages_to_fetch
 - region_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

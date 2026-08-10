@@ -46,9 +46,9 @@ Reads and writes Thinkific Admin API v1 courses, bundles, categories, coupons, e
 - promotion_id
 - provider
 - site_script_id
-- subdomain
+- subdomain (required)
 - user_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

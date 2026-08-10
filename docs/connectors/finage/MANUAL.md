@@ -32,7 +32,7 @@ CONFIGURATION
   calendar_to
   mode
   symbols
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   most_active_us_stocks:

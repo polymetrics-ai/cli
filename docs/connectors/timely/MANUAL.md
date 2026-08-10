@@ -27,10 +27,10 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  account_id
+  account_id (required)
   base_url
   start_date
-  bearer_token (secret)
+  bearer_token (secret) (required)
 
 ETL STREAMS
   users:

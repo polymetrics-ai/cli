@@ -30,8 +30,8 @@ CONFIGURATION
   base_url
   mode
   page_size
-  username
-  password (secret)
+  username (required)
+  password (secret) (required)
 
 ETL STREAMS
   customers:

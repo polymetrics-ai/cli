@@ -31,7 +31,7 @@ Reads and writes Vitally customer-success accounts, users, notes, conversations,
 - base_url
 - page_size
 - status
-- basic_auth_header (secret)
+- basic_auth_header (secret) (required)
 
 ## ETL Streams
 

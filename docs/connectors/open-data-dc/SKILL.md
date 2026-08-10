@@ -32,7 +32,7 @@ Reads District of Columbia Master Address Repository (MAR 2) locations, units, a
 - location
 - marid
 - mode
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

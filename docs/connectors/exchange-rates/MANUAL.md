@@ -38,7 +38,7 @@ CONFIGURATION
   mode
   timeseries_end_date
   timeseries_start_date
-  access_key (secret)
+  access_key (secret) (required)
 
 ETL STREAMS
   latest:

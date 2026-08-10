@@ -35,7 +35,7 @@ Reads SonarCloud issues, components, projects, hotspots, rules, metrics, languag
 - organization
 - page_size
 - start_date
-- user_token (secret)
+- user_token (secret) (required)
 
 ## ETL Streams
 

@@ -29,7 +29,7 @@ Reads Opinion Stage items (polls, quizzes, and forms) through the Opinion Stage 
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

@@ -30,7 +30,7 @@ Reads Open Exchange Rates account usage/plan status through the Open Exchange Ra
 
 - base_url
 - mode
-- app_id (secret)
+- app_id (secret) (required)
 
 ## ETL Streams
 

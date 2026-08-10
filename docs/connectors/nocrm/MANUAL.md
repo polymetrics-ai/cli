@@ -36,7 +36,7 @@ CONFIGURATION
   team_id
   user_id
   webhook_event_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   leads:

@@ -29,7 +29,7 @@ Reads DataScope locations, form answers, lists, notifications, task assignments,
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

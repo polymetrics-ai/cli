@@ -36,7 +36,7 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
 
 - api_version
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

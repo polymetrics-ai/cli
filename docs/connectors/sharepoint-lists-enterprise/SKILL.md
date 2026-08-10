@@ -31,11 +31,11 @@ Reads and writes SharePoint lists and list items through Microsoft Graph.
 - list_id
 - login_base_url
 - mode
-- site_id
-- tenant_id
+- site_id (required)
+- tenant_id (required)
 - token_url
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   page_size
   status
-  basic_auth_header (secret)
+  basic_auth_header (secret) (required)
 
 ETL STREAMS
   accounts:

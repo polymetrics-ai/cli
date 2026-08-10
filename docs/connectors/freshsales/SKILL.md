@@ -28,11 +28,11 @@ Reads Freshsales (Freshworks CRM) contacts, sales accounts, deals, and leads thr
 
 ## Configuration
 
-- domain_name
+- domain_name (required)
 - max_pages
 - mode
 - view_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

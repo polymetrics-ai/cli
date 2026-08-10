@@ -31,8 +31,8 @@ Reads Clazar cloud GTM data (buyers, listings, contracts, opportunities, private
 - base_url
 - mode
 - start_date
-- client_id (secret)
-- client_secret (secret)
+- client_id (secret) (required)
+- client_secret (secret) (required)
 
 ## ETL Streams
 

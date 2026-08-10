@@ -30,7 +30,7 @@ CONFIGURATION
   base_url
   mode
   username
-  password (secret)
+  password (secret) (required)
 
 ETL STREAMS
   charges:

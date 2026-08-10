@@ -28,7 +28,7 @@ Reads Awin advertiser transactions, publisher-aggregated performance reports, pu
 
 ## Configuration
 
-- advertiserId
+- advertiserId (required)
 - base_url
 - mode
 - publisher_id
@@ -36,7 +36,7 @@ Reads Awin advertiser transactions, publisher-aggregated performance reports, pu
 - report_start_date
 - start_date
 - transaction_status
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

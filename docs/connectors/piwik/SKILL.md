@@ -41,7 +41,7 @@ Reads Piwik/Matomo sites, recent visits, configured goals, and documented analyt
 - mode
 - period
 - site_id
-- token_auth (secret)
+- token_auth (secret) (required)
 
 ## ETL Streams
 

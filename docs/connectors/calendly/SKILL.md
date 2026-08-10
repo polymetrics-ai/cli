@@ -35,12 +35,12 @@ Reads Calendly scheduled events (and their invitees), event types, organization 
 ## Configuration
 
 - base_url
-- organization_uri
+- organization_uri (required)
 - page_size
 - routing_form_uri
 - start_date
 - user_uri
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

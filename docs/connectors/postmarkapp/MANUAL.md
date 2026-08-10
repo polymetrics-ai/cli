@@ -35,7 +35,7 @@ CONFIGURATION
   mode
   template_id_or_alias
   webhook_id
-  X-Postmark-Server-Token (secret)
+  X-Postmark-Server-Token (secret) (required)
 
 ETL STREAMS
   outbound_messages:

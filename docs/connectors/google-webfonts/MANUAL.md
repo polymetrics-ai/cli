@@ -33,7 +33,7 @@ CONFIGURATION
   family
   pretty_print
   subset
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   webfonts:

@@ -35,9 +35,9 @@ Reads Discord guild, channel, and role data through the Discord REST API using a
 ## Configuration
 
 - base_url
-- guild_id
+- guild_id (required)
 - mode
-- bot_token (secret)
+- bot_token (secret) (required)
 
 ## ETL Streams
 

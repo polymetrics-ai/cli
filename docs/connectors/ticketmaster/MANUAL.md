@@ -31,7 +31,7 @@ CONFIGURATION
   country_code
   keyword
   locale
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   events:

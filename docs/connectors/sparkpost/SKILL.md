@@ -37,7 +37,7 @@ Reads SparkPost recipient lists, templates, sending domains, transmissions, supp
 - base_url
 - end_date
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

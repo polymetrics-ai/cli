@@ -13,9 +13,10 @@ type ConfigField struct {
 }
 
 type SecretField struct {
-	Name        string `json:"name"`
-	Description string `json:"description,omitempty"`
-	Required    bool   `json:"required,omitempty"`
+	Name         string `json:"name"`
+	Description  string `json:"description,omitempty"`
+	Required     bool   `json:"required,omitempty"`
+	RequiredWhen string `json:"required_when,omitempty"`
 }
 
 type PaginationSpec struct {

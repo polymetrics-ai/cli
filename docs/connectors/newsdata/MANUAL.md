@@ -35,7 +35,7 @@ CONFIGURATION
   query
   query_in_title
   size
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   latest:

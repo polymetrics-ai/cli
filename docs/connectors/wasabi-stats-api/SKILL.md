@@ -30,7 +30,7 @@ Reads Wasabi account and bucket storage statistics from the Wasabi Stats API.
 
 - base_url
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

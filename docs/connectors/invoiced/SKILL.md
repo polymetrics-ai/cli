@@ -48,7 +48,7 @@ Reads and writes the documented Invoiced REST API surface for billing, payments,
 - subscription_id
 - task_id
 - tax_rate_id
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

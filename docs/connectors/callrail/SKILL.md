@@ -28,11 +28,11 @@ Reads and writes CallRail call tracking data (calls, companies, users, tags, tra
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - company_id
 - start_date
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

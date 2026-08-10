@@ -28,11 +28,11 @@ Reads Flexmail contacts, custom fields, interests, segments, and sources through
 
 ## Configuration
 
-- account_id
+- account_id (required)
 - base_url
 - mode
 - page_size
-- personal_access_token (secret)
+- personal_access_token (secret) (required)
 
 ## ETL Streams
 

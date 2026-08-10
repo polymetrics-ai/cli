@@ -29,8 +29,8 @@ Reads Lightspeed Retail (X-Series) products, customers, sales, outlets, and regi
 ## Configuration
 
 - mode
-- subdomain
-- api_key (secret)
+- subdomain (required)
+- api_key (secret) (required)
 
 ## ETL Streams
 

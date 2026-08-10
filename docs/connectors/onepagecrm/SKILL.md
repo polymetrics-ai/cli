@@ -56,9 +56,9 @@ Reads the documented OnePageCRM API v3 CRM surface and exposes declarative write
 - status_id
 - tag_name
 - user_id
-- username
+- username (required)
 - webhook_id
-- password (secret)
+- password (secret) (required)
 
 ## ETL Streams
 

@@ -29,7 +29,7 @@ Reads JobNimbus CRM contacts, jobs, tasks, activities, and files through the Job
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

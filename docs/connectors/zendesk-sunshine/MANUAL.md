@@ -27,11 +27,11 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  email
+  base_url (required)
+  email (required)
   object_type
   relationship_type
-  api_token (secret)
+  api_token (secret) (required)
 
 ETL STREAMS
   object_types:

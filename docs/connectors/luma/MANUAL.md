@@ -35,7 +35,7 @@ CONFIGURATION
   mode
   slug
   webhook_id
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   events:

@@ -29,7 +29,7 @@ Reads Secoda catalog metadata (tables, documents, collections, questions) throug
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

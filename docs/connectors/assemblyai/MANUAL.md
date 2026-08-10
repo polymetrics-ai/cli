@@ -32,7 +32,7 @@ CONFIGURATION
   mode
   page_size
   word_search_terms
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   transcript:

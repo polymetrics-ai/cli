@@ -30,8 +30,8 @@ Reads Mux Video assets, live streams, direct uploads, and system signing keys th
 
 - base_url
 - mode
-- username
-- password (secret)
+- username (required)
+- password (secret) (required)
 
 ## ETL Streams
 

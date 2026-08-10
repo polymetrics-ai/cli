@@ -35,7 +35,7 @@ AUTHENTICATION
 CONFIGURATION
   base_url
   group_guid
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   organizations:

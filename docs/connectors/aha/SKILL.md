@@ -29,7 +29,7 @@ Reads Aha! features, products, ideas, releases, initiatives, goals, epics, and u
 ## Configuration
 
 - base_url
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

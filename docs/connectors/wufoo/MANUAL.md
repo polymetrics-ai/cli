@@ -33,7 +33,7 @@ CONFIGURATION
   mode
   page_size
   report_hash
-  api_key (secret)
+  api_key (secret) (required)
 
 ETL STREAMS
   forms:

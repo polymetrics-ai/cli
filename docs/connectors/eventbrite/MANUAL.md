@@ -31,7 +31,7 @@ CONFIGURATION
   event_id
   organization_id
   start_date
-  private_token (secret)
+  private_token (secret) (required)
 
 ETL STREAMS
   organizations:

@@ -29,8 +29,8 @@ Reads ShipStation orders, shipments, products, and customers through the ShipSta
 ## Configuration
 
 - base_url
-- api_key (secret)
-- api_secret (secret)
+- api_key (secret) (required)
+- api_secret (secret) (required)
 
 ## ETL Streams
 

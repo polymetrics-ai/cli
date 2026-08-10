@@ -27,12 +27,12 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  base_url (required)
   max_pages
   page_size
   start_date
-  api_key (secret)
-  api_secret (secret)
+  api_key (secret) (required)
+  api_secret (secret) (required)
 
 ETL STREAMS
   orders:

@@ -28,9 +28,9 @@ AUTHENTICATION
 
 CONFIGURATION
   api_version
-  instance_url
+  instance_url (required)
   mode
-  access_token (secret)
+  access_token (secret) (required)
 
 ETL STREAMS
   sobjects:

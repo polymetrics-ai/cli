@@ -34,7 +34,7 @@ Reads Freshchat account, user, conversation, agent, group, channel, role, outbou
 - agents_is_deactivated
 - agents_sort_by
 - agents_sort_order
-- base_url
+- base_url (required)
 - business_hours_group_id
 - channels_locale
 - conversation_id
@@ -63,7 +63,7 @@ Reads Freshchat account, user, conversation, agent, group, channel, role, outbou
 - users_reference_id
 - users_updated_from
 - users_updated_to
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

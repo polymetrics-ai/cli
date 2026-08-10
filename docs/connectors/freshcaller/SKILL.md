@@ -32,7 +32,7 @@ Reads Freshcaller calls, agents, teams, and phone numbers through the Freshcalle
 - max_pages
 - mode
 - page_size
-- api_key (secret)
+- api_key (secret) (required)
 
 ## ETL Streams
 

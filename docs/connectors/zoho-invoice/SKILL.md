@@ -39,7 +39,7 @@ Reads Zoho Invoice customers, invoices, and payments through the Zoho Invoice RE
 - mode
 - organization_id
 - page_size
-- access_token (secret)
+- access_token (secret) (required)
 
 ## ETL Streams
 
