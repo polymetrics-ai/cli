@@ -8,6 +8,7 @@ import (
 	"errors"
 	"io"
 	"io/fs"
+	"strconv"
 	"strings"
 	"time"
 
@@ -268,6 +269,7 @@ var ErrInvalidDefinition = errors.New("database definition is invalid")
 // malformed manifest cannot exfiltrate a secret-looking value through errors.
 type DefinitionError struct {
 	reason string
+	cause  error
 }
 
 func (e *DefinitionError) Error() string {
@@ -277,9 +279,48 @@ func (e *DefinitionError) Error() string {
 	return ErrInvalidDefinition.Error() + ": " + e.reason
 }
 
-func (e *DefinitionError) Unwrap() error { return ErrInvalidDefinition }
+func (e *DefinitionError) Unwrap() []error {
+	if e == nil || e.cause == nil {
+		return []error{ErrInvalidDefinition}
+	}
+	return []error{ErrInvalidDefinition, e.cause}
+}
 
-func invalidDefinition(reason string) error { return &DefinitionError{reason: reason} }
+func invalidDefinition(reason string, causes ...error) error {
+	var cause error
+	if len(causes) > 0 {
+		cause = causes[0]
+	}
+	return &DefinitionError{reason: reason, cause: cause}
+}
+
+type definitionPathError struct {
+	path   string
+	reason string
+	cause  error
+}
+
+func (e *definitionPathError) Error() string {
+	if e == nil || e.path == "" {
+		return "database.json is invalid"
+	}
+	if e.reason == "" {
+		return e.path
+	}
+	return e.path + ": " + e.reason
+}
+
+func (e *definitionPathError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.cause
+}
+
+func invalidDefinitionAt(path, reason string, cause error) error {
+	pathError := &definitionPathError{path: path, reason: reason, cause: cause}
+	return invalidDefinition(pathError.Error(), pathError)
+}
 
 // Load reads and validates database.json from one connector bundle directory.
 // It checks cancellation before I/O and before it returns an immutable
@@ -291,7 +332,8 @@ func Load(ctx context.Context, fsys fs.FS) (Definition, error) {
 	if err := ctx.Err(); err != nil {
 		return Definition{}, err
 	}
-	if !json.Valid(databaseDefinitionSchema) {
+	schema, err := loadDefinitionSchema()
+	if err != nil {
 		return Definition{}, invalidDefinition("embedded schema is invalid")
 	}
 	raw, err := fs.ReadFile(fsys, "database.json")
@@ -301,58 +343,352 @@ func Load(ctx context.Context, fsys fs.FS) (Definition, error) {
 	if err := ctx.Err(); err != nil {
 		return Definition{}, err
 	}
-	if containsJSONNull(raw) {
-		return Definition{}, invalidDefinition("JSON must match the closed schema")
+	positions, err := validateDefinitionJSON(raw, schema)
+	if err != nil {
+		return Definition{}, invalidDefinition(err.Error(), err)
 	}
 
 	var document definitionDocument
 	decoder := json.NewDecoder(bytes.NewReader(raw))
 	decoder.DisallowUnknownFields()
 	if err := decoder.Decode(&document); err != nil {
-		return Definition{}, invalidDefinition("JSON must match the closed schema")
-	}
-	var trailing any
-	if err := decoder.Decode(&trailing); err != io.EOF {
-		return Definition{}, invalidDefinition("JSON must contain one document")
+		return Definition{}, invalidDefinitionAt(definitionDecodePath(err, schema, positions), "JSON must match the closed schema", err)
 	}
 	if err := ctx.Err(); err != nil {
 		return Definition{}, err
 	}
 	definition, err := document.definition()
 	if err != nil {
-		return Definition{}, invalidDefinition("semantic validation failed")
+		return Definition{}, invalidDefinition("semantic validation failed", err)
 	}
 	return definition.clone(), nil
 }
 
-func containsJSONNull(raw []byte) bool {
-	decoder := json.NewDecoder(bytes.NewReader(raw))
-	decoder.UseNumber()
-	var document any
-	if err := decoder.Decode(&document); err != nil {
-		return false
-	}
-	return hasJSONNull(document)
+type definitionSchemaDocument struct {
+	Type                 string                     `json:"type"`
+	Reference            string                     `json:"$ref"`
+	Properties           map[string]json.RawMessage `json:"properties"`
+	Items                json.RawMessage            `json:"items"`
+	Required             []string                   `json:"required"`
+	AdditionalProperties *bool                      `json:"additionalProperties"`
+	Definitions          map[string]json.RawMessage `json:"definitions"`
 }
 
-func hasJSONNull(value any) bool {
-	switch value := value.(type) {
-	case nil:
-		return true
-	case []any:
-		for _, item := range value {
-			if hasJSONNull(item) {
-				return true
+type definitionSchemaNode struct {
+	valueType  string
+	properties map[string]*definitionSchemaNode
+	required   []string
+	items      *definitionSchemaNode
+}
+
+type definitionJSONPathPosition struct {
+	path   string
+	offset int64
+}
+
+func loadDefinitionSchema() (*definitionSchemaNode, error) {
+	if !json.Valid(databaseDefinitionSchema) {
+		return nil, errors.New("database definition schema is invalid")
+	}
+	var root definitionSchemaDocument
+	if err := json.Unmarshal(databaseDefinitionSchema, &root); err != nil {
+		return nil, err
+	}
+	return buildDefinitionSchemaNode(databaseDefinitionSchema, root.Definitions, make(map[string]*definitionSchemaNode))
+}
+
+func buildDefinitionSchemaNode(raw json.RawMessage, definitions map[string]json.RawMessage, references map[string]*definitionSchemaNode) (*definitionSchemaNode, error) {
+	var document definitionSchemaDocument
+	if err := json.Unmarshal(raw, &document); err != nil {
+		return nil, err
+	}
+	if document.Reference != "" {
+		const prefix = "#/definitions/"
+		if !strings.HasPrefix(document.Reference, prefix) {
+			return nil, errors.New("database definition schema contains an unsupported reference")
+		}
+		name := strings.TrimPrefix(document.Reference, prefix)
+		if name == "" || strings.Contains(name, "/") {
+			return nil, errors.New("database definition schema contains an invalid reference")
+		}
+		if node, exists := references[name]; exists {
+			return node, nil
+		}
+		definition, exists := definitions[name]
+		if !exists {
+			return nil, errors.New("database definition schema references an unavailable definition")
+		}
+		node := &definitionSchemaNode{}
+		references[name] = node
+		if err := populateDefinitionSchemaNode(node, definition, definitions, references); err != nil {
+			return nil, err
+		}
+		return node, nil
+	}
+
+	node := &definitionSchemaNode{}
+	if err := populateDefinitionSchemaNode(node, raw, definitions, references); err != nil {
+		return nil, err
+	}
+	return node, nil
+}
+
+func populateDefinitionSchemaNode(node *definitionSchemaNode, raw json.RawMessage, definitions map[string]json.RawMessage, references map[string]*definitionSchemaNode) error {
+	var document definitionSchemaDocument
+	if err := json.Unmarshal(raw, &document); err != nil {
+		return err
+	}
+	if document.Reference != "" || node == nil || document.Type == "" {
+		return errors.New("database definition schema contains an invalid node")
+	}
+	node.valueType = document.Type
+	switch document.Type {
+	case "object":
+		if document.AdditionalProperties == nil || *document.AdditionalProperties {
+			return errors.New("database definition schema object is not closed")
+		}
+		node.properties = make(map[string]*definitionSchemaNode, len(document.Properties))
+		for name, property := range document.Properties {
+			propertyNode, err := buildDefinitionSchemaNode(property, definitions, references)
+			if err != nil {
+				return err
+			}
+			for existing := range node.properties {
+				if strings.EqualFold(existing, name) {
+					return errors.New("database definition schema contains ambiguous property names")
+				}
+			}
+			node.properties[name] = propertyNode
+		}
+		node.required = append([]string(nil), document.Required...)
+		for _, name := range node.required {
+			if _, exists := node.properties[name]; !exists {
+				return errors.New("database definition schema requires an unavailable property")
 			}
 		}
-	case map[string]any:
-		for _, item := range value {
-			if hasJSONNull(item) {
-				return true
-			}
+	case "array":
+		if len(document.Items) == 0 {
+			return errors.New("database definition schema array has no item contract")
+		}
+		items, err := buildDefinitionSchemaNode(document.Items, definitions, references)
+		if err != nil {
+			return err
+		}
+		node.items = items
+	case "string", "integer", "boolean":
+	default:
+		return errors.New("database definition schema contains an unsupported type")
+	}
+	return nil
+}
+
+func validateDefinitionJSON(raw []byte, schema *definitionSchemaNode) ([]definitionJSONPathPosition, error) {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.UseNumber()
+	positions := make([]definitionJSONPathPosition, 0)
+	if err := validateDefinitionJSONValue(decoder, schema, "$", &positions); err != nil {
+		return nil, err
+	}
+	if _, err := decoder.Token(); err != io.EOF {
+		if err != nil {
+			return nil, &definitionPathError{path: "$", reason: "JSON is malformed", cause: err}
+		}
+		return nil, &definitionPathError{path: "$", reason: "JSON must contain one document"}
+	}
+	return positions, nil
+}
+
+func validateDefinitionJSONValue(decoder *json.Decoder, schema *definitionSchemaNode, path string, positions *[]definitionJSONPathPosition) error {
+	if schema == nil {
+		return &definitionPathError{path: path, reason: "closed schema is invalid"}
+	}
+	token, err := decoder.Token()
+	if err != nil {
+		return &definitionPathError{path: path, reason: "JSON is malformed", cause: err}
+	}
+	if token == nil {
+		return &definitionPathError{path: path, reason: "null is not permitted"}
+	}
+
+	switch schema.valueType {
+	case "object":
+		return validateDefinitionJSONObject(decoder, token, schema, path, positions)
+	case "array":
+		return validateDefinitionJSONArray(decoder, token, schema, path, positions)
+	case "integer", "string", "boolean":
+		if err := consumeDefinitionJSONToken(decoder, token); err != nil {
+			return &definitionPathError{path: path, reason: "JSON is malformed", cause: err}
+		}
+	default:
+		return &definitionPathError{path: path, reason: "closed schema is invalid"}
+	}
+	*positions = append(*positions, definitionJSONPathPosition{path: path, offset: decoder.InputOffset()})
+	return nil
+}
+
+func validateDefinitionJSONObject(decoder *json.Decoder, token json.Token, schema *definitionSchemaNode, path string, positions *[]definitionJSONPathPosition) error {
+	if delimiter, ok := token.(json.Delim); !ok || delimiter != '{' {
+		return &definitionPathError{path: path, reason: "object value is required"}
+	}
+	seen := make(map[string]struct{}, len(schema.properties))
+	for decoder.More() {
+		memberToken, err := decoder.Token()
+		if err != nil {
+			return &definitionPathError{path: path, reason: "JSON is malformed", cause: err}
+		}
+		member, ok := memberToken.(string)
+		if !ok {
+			return &definitionPathError{path: path, reason: "object member name is required"}
+		}
+		canonical, property, exact := definitionSchemaProperty(schema, member)
+		if property == nil {
+			return &definitionPathError{path: path, reason: "unknown member is not permitted"}
+		}
+		memberPath := definitionObjectPath(path, canonical)
+		if !exact {
+			return &definitionPathError{path: memberPath, reason: "case-aliased member is not permitted"}
+		}
+		if _, exists := seen[canonical]; exists {
+			return &definitionPathError{path: memberPath, reason: "duplicate member is not permitted"}
+		}
+		seen[canonical] = struct{}{}
+		if err := validateDefinitionJSONValue(decoder, property, memberPath, positions); err != nil {
+			return err
 		}
 	}
-	return false
+	end, err := decoder.Token()
+	if err != nil {
+		return &definitionPathError{path: path, reason: "JSON is malformed", cause: err}
+	}
+	if delimiter, ok := end.(json.Delim); !ok || delimiter != '}' {
+		return &definitionPathError{path: path, reason: "JSON object is incomplete"}
+	}
+	for _, required := range schema.required {
+		if _, exists := seen[required]; !exists {
+			return &definitionPathError{path: definitionObjectPath(path, required), reason: "required member is missing"}
+		}
+	}
+	return nil
+}
+
+func validateDefinitionJSONArray(decoder *json.Decoder, token json.Token, schema *definitionSchemaNode, path string, positions *[]definitionJSONPathPosition) error {
+	if delimiter, ok := token.(json.Delim); !ok || delimiter != '[' {
+		return &definitionPathError{path: path, reason: "array value is required"}
+	}
+	for index := 0; decoder.More(); index++ {
+		if err := validateDefinitionJSONValue(decoder, schema.items, definitionArrayPath(path, index), positions); err != nil {
+			return err
+		}
+	}
+	end, err := decoder.Token()
+	if err != nil {
+		return &definitionPathError{path: path, reason: "JSON is malformed", cause: err}
+	}
+	if delimiter, ok := end.(json.Delim); !ok || delimiter != ']' {
+		return &definitionPathError{path: path, reason: "JSON array is incomplete"}
+	}
+	return nil
+}
+
+func consumeDefinitionJSONToken(decoder *json.Decoder, token json.Token) error {
+	delimiter, ok := token.(json.Delim)
+	if !ok {
+		return nil
+	}
+	switch delimiter {
+	case '{':
+		for decoder.More() {
+			if _, err := decoder.Token(); err != nil {
+				return err
+			}
+			value, err := decoder.Token()
+			if err != nil {
+				return err
+			}
+			if err := consumeDefinitionJSONToken(decoder, value); err != nil {
+				return err
+			}
+		}
+		end, err := decoder.Token()
+		if err != nil {
+			return err
+		}
+		if end != json.Delim('}') {
+			return errors.New("JSON object is incomplete")
+		}
+	case '[':
+		for decoder.More() {
+			value, err := decoder.Token()
+			if err != nil {
+				return err
+			}
+			if err := consumeDefinitionJSONToken(decoder, value); err != nil {
+				return err
+			}
+		}
+		end, err := decoder.Token()
+		if err != nil {
+			return err
+		}
+		if end != json.Delim(']') {
+			return errors.New("JSON array is incomplete")
+		}
+	default:
+		return errors.New("JSON value is malformed")
+	}
+	return nil
+}
+
+func definitionSchemaProperty(schema *definitionSchemaNode, member string) (string, *definitionSchemaNode, bool) {
+	if schema == nil {
+		return "", nil, false
+	}
+	if property, exists := schema.properties[member]; exists {
+		return member, property, true
+	}
+	for name, property := range schema.properties {
+		if strings.EqualFold(name, member) {
+			return name, property, false
+		}
+	}
+	return "", nil, false
+}
+
+func definitionDecodePath(err error, schema *definitionSchemaNode, positions []definitionJSONPathPosition) string {
+	var typeError *json.UnmarshalTypeError
+	if !errors.As(err, &typeError) {
+		return "$"
+	}
+	for _, position := range positions {
+		if position.offset == typeError.Offset {
+			return position.path
+		}
+	}
+	path := "$"
+	node := schema
+	for _, member := range strings.Split(typeError.Field, ".") {
+		for node != nil && node.valueType == "array" {
+			node = node.items
+		}
+		canonical, property, _ := definitionSchemaProperty(node, member)
+		if property == nil {
+			return path
+		}
+		path = definitionObjectPath(path, canonical)
+		node = property
+	}
+	return path
+}
+
+func definitionObjectPath(path, member string) string {
+	if path == "$" {
+		return "$." + member
+	}
+	return path + "." + member
+}
+
+func definitionArrayPath(path string, index int) string {
+	return path + "[" + strconv.Itoa(index) + "]"
 }
 
 type definitionDocument struct {
