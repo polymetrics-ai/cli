@@ -26,14 +26,18 @@ def each_mapping_entry(node, &block)
   end
 end
 
-def collect_anchors(node, anchors = {})
+def collect_anchors(node, anchors = {}, duplicate_anchors = [])
   if !node.is_a?(Psych::Nodes::Alias) && node.respond_to?(:anchor) && node.anchor
-    anchors[node.anchor] = node
+    if anchors.key?(node.anchor)
+      duplicate_anchors << node
+    else
+      anchors[node.anchor] = node
+    end
   end
 
   case node
   when Psych::Nodes::Mapping, Psych::Nodes::Sequence, Psych::Nodes::Document, Psych::Nodes::Stream
-    node.children.each { |child| collect_anchors(child, anchors) }
+    node.children.each { |child| collect_anchors(child, anchors, duplicate_anchors) }
   end
 
   anchors
@@ -55,10 +59,18 @@ end
 Dir[workflow_glob].sort.each do |path|
   lines = File.readlines(path, chomp: true)
   workflow = Psych.parse_file(path)
-  anchors = collect_anchors(workflow)
   relative_path = Pathname.new(path).relative_path_from(root)
+  duplicate_anchors = []
+  anchors = collect_anchors(workflow, {}, duplicate_anchors)
+  duplicate_anchors.each do |anchor|
+    errors << "#{relative_path}:#{anchor.start_line + 1}: duplicate YAML anchor is not supported: #{anchor.anchor}"
+  end
 
   each_mapping_entry(workflow) do |key, value|
+    if key.is_a?(Psych::Nodes::Alias)
+      errors << "#{relative_path}:#{key.start_line + 1}: workflow mapping keys must not use YAML aliases"
+      next
+    end
     next unless key.is_a?(Psych::Nodes::Scalar)
 
     case key.value
