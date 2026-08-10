@@ -1,18 +1,18 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "connector": "github",
   "source": {
     "cli_surface": {
       "path": "internal/connectors/defs/github/cli_surface.json",
-      "sha256": "c6d58c9f6c79e01cacaf9aa8efc41fb35f92445d9a5be6ee2d8a7f40d726c574"
+      "sha256": "9e749d3ec76e9c6bfd233a8e33b556e5a7c86e985179dee0b4d5de78b65ea6d7"
     },
     "api_surface": {
       "path": "internal/connectors/defs/github/api_surface.json",
-      "sha256": "723af7f63a748760f7ef55a38eb8a80e670421c742894c82876b22bdc8733ce9"
+      "sha256": "6eb941614704eed876e976f6b1675e2e2b7c4116d2adf3e1c6bcac8744a0e86c"
     },
     "live_lab_manifest": {
       "path": ".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-MANIFEST.json",
-      "sha256": "cb4fca843671a7a902400124f66d86ab936005c01c237451df36912c19391372"
+      "sha256": "ce5f9d8148c5b3c5edcef5f62d50edcbcab2b471a2128f133528cffb60752118"
     }
   },
   "policy": {
@@ -21,7 +21,7 @@
     "organization_delete": "not_invoked_without_run_owned_immutable_target_and_cleanup_provenance"
   },
   "organization": {
-    "affected_case_count": 291,
+    "affected_case_count": 308,
     "create_command": null,
     "delete_command": {
       "command": "orgs delete",

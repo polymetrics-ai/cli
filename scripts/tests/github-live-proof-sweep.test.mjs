@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 
 import {
   assertReadEnvelope,
+  executeBarrier,
   enumerateImplementedCommands,
   redactForReport,
   validateProofRecords,
@@ -27,6 +28,23 @@ test("enumerates every and only implemented GitHub command", () => {
     "issue list",
     "repo view",
   ]);
+});
+
+test("releases all applicable operations from one barrier rather than serially", async () => {
+  const events = [];
+  const results = await executeBarrier(["repo view", "issue list", "label list"], async (command) => {
+    events.push(`started:${command}`);
+    await Promise.resolve();
+    events.push(`finished:${command}`);
+    return command;
+  });
+
+  assert.deepEqual(events.slice(0, 3).sort(), [
+    "started:issue list",
+    "started:label list",
+    "started:repo view",
+  ]);
+  assert.deepEqual(results.sort(), ["issue list", "label list", "repo view"]);
 });
 
 test("rejects an omitted command instead of treating a sample as a sweep", () => {
@@ -142,6 +160,7 @@ test("rejects a write case that overrides the dedicated repository owner before 
     const marker = path.join(temp, "pm-was-started");
     const fakePM = path.join(temp, "fake-pm");
     const casesPath = path.join(temp, "cases.json");
+    const boundaryPath = path.join(temp, "boundary.json");
     const reportPath = path.join(temp, "report.json");
     const root = path.join(temp, "project");
     await writeFile(
@@ -150,6 +169,36 @@ test("rejects a write case that overrides the dedicated repository owner before 
       "utf8",
     );
     await chmod(fakePM, 0o755);
+    await writeFile(
+      boundaryPath,
+      JSON.stringify({
+        schema_version: 1,
+        run_id: "github-live-proof-sweep-test",
+        default_deny: true,
+        protected_owners: ["polymetrics-ai"],
+        protected_repositories: [{ owner_slug: "polymetrics-ai", repo_slug: "cli" }],
+        working_repositories: [{ owner_slug: "polymetrics-ai", repo_slug: "cli" }],
+        allowed_targets: [
+          {
+            key: "organization",
+            resource_type: "organization",
+            org_slug: "polymetrics-cert",
+            org_id: "O_certification",
+            run_owned: true,
+          },
+          {
+            key: "repository",
+            resource_type: "repository",
+            owner_slug: "polymetrics-cert",
+            owner_id: "O_certification",
+            repo_slug: "pm-live-lab-test",
+            repo_id: "R_certification",
+            run_owned: true,
+          },
+        ],
+      }),
+      "utf8",
+    );
 
     const surface = JSON.parse(await (await import("node:fs/promises")).readFile(
       path.join(path.dirname(fileURLToPath(import.meta.url)), "../../internal/connectors/defs/github/cli_surface.json"),
@@ -175,7 +224,13 @@ test("rejects a write case that overrides the dedicated repository owner before 
         casesPath,
         JSON.stringify({
           connector: "github",
-          test_repository: { owner: "karthik-sivadas", repo: "pm-live-test-direct-read-20260808081515" },
+          test_repository: {
+            owner: "polymetrics-cert",
+            repo: "pm-live-lab-test",
+            owner_id: "O_certification",
+            repo_id: "R_certification",
+            organization_id: "O_certification",
+          },
           cases,
         }),
         "utf8",
@@ -188,8 +243,9 @@ test("rejects a write case that overrides the dedicated repository owner before 
           "--pm", fakePM,
           "--root", root,
           "--credential", "github-live-proof",
-          "--test-owner", "karthik-sivadas",
-          "--test-repo", "pm-live-test-direct-read-20260808081515",
+          "--boundary", boundaryPath,
+          "--test-owner", "polymetrics-cert",
+          "--test-repo", "pm-live-lab-test",
           "--cases", casesPath,
           "--report", reportPath,
           "--execute-writes",
@@ -201,6 +257,43 @@ test("rejects a write case that overrides the dedicated repository owner before 
       assert.match(`${result.stdout}\n${result.stderr}`, /dedicated repository (owner|repo)/i);
       assert.equal(existsSync(marker), false, "case validation must finish before pm starts");
     }
+
+    const cases = baseCases.map((item) => ({ ...item }));
+    const target = cases.find((item) => item.command === "repos create-using-template");
+    target.untestable_reason = undefined;
+    target.args = ["--owner", "polymetrics-cert", "--repo", "pm-live-lab-test"];
+    await writeFile(
+      casesPath,
+      JSON.stringify({
+        connector: "github",
+        test_repository: {
+          owner: "polymetrics-cert",
+          repo: "pm-live-lab-test",
+          owner_id: "O_certification",
+          repo_id: "R_certification",
+          organization_id: "O_certification",
+        },
+        cases,
+      }),
+      "utf8",
+    );
+    const result = spawnSync(
+      process.execPath,
+      [
+        runner,
+        "--pm", fakePM,
+        "--root", root,
+        "--credential", "github-live-proof",
+        "--boundary", boundaryPath,
+        "--cases", casesPath,
+        "--report", reportPath,
+        "--execute-writes",
+      ],
+      { encoding: "utf8" },
+    );
+    assert.notEqual(result.status, 0);
+    assert.match(`${result.stdout}\n${result.stderr}`, /requires an independent readback/i);
+    assert.equal(existsSync(marker), false, "write cases without a read-back must fail before pm starts");
   } finally {
     await rm(temp, { recursive: true, force: true });
   }

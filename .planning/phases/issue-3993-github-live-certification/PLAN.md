@@ -13,7 +13,7 @@
 - The only live owner is `Polymetrics-Cert`; `polymetrics-ai`, personal accounts, and the historical pinned repository remain denied.
 - The run boundary is supplied as immutable input and must be explicitly run-owned before any provider mutation. Every setup mutation requires independent provider read-back, inverse cleanup, and final residue scan.
 - Authentication uses only a GitHub App installation token minted from the existing private key without printing, logging, or persisting secret material. The revoked fine-grained token is never probed.
-- Applicable cases release together from a barrier inside one real built `pm` process / shared coordinator. Quota exhaustion and admissions are evidence, never retried or hidden.
+- Applicable cases release together from one barrier. Credentialed certification additionally requires the shared REST/GraphQL admission coordinator from #3990; quota exhaustion and admissions are evidence, never retried or hidden.
 - The present warehouse proof ends after GitHub source → flow sync → Parquet warehouse → DuckDB read-back. Warehouse → GitHub is documented as waiting for #3994; no GitHub-specific approval/action implementation belongs here.
 
 ## TDD slices
@@ -39,4 +39,3 @@ Not applicable: this change alters certification tooling and evidence, not the u
 
 - `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`.
 - Manual inline GSD lifecycle because role spawning is prohibited by the dispatch.
-

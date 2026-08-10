@@ -2,7 +2,7 @@
   "schema_version": 1,
   "issue": 3993,
   "connector": "github",
-  "state": "planning",
+  "state": "implementation_complete_live_proof_blocked",
   "gsd": {
     "requested": [
       "scripts/gsd prompt discuss-phase 3993 --auto",
@@ -18,5 +18,17 @@
     "allowed_owner": "Polymetrics-Cert",
     "protected_owner": "polymetrics-ai"
   },
-  "outbound_dependency": [3994, 3992]
+  "outbound_dependency": [3994, 3992],
+  "completed": {
+    "boundary_parameterization": true,
+    "barrier_release": true,
+    "per_write_readback_required": true,
+    "manifest_and_bootstrap_self_checks": true,
+    "local_pm_build": true
+  },
+  "live_proof_blockers": [
+    "#3989 ephemeral credential and proof capture has not landed",
+    "#3990 shared REST and GraphQL admission coordinator has not landed",
+    "captain credential/runbook input is absent from this isolated worktree"
+  ]
 }

@@ -7,9 +7,9 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 
+import { resolveLiveBoundary } from "./github-live-cases.mjs";
+
 const CONNECTOR = "github";
-const APPROVED_TEST_OWNER = "karthik-sivadas";
-const APPROVED_TEST_REPO = "pm-live-test-direct-read-20260808081515";
 const TERMINAL_STATES = new Set(["proven", "untestable", "failed"]);
 const FORBIDDEN_RECORD_FIELDS = new Set([
   "stdout",
@@ -256,6 +256,28 @@ export function summarizeProofRecords(records) {
   return tally;
 }
 
+/**
+ * Queue every applicable operation before permitting any one to start.  The
+ * caller owns the operation body so setup and case validation stay outside the
+ * measured release.  This deliberately has no concurrency cap: provider
+ * admission is part of the run's evidence, not a local policy to silently
+ * serialize around.
+ */
+export async function executeBarrier(items, execute) {
+  if (!Array.isArray(items)) throw new Error("barrier items must be an array");
+  if (typeof execute !== "function") throw new Error("barrier executor must be a function");
+  if (items.length === 0) return [];
+  let ready = 0;
+  let release;
+  const gate = new Promise((resolve) => { release = resolve; });
+  return Promise.all(items.map(async (item) => {
+    ready += 1;
+    if (ready === items.length) release();
+    await gate;
+    return execute(item);
+  }));
+}
+
 function parseOptions(args) {
   const options = { _: [] };
   for (let index = 0; index < args.length; index += 1) {
@@ -353,13 +375,20 @@ function validateWriteRepositoryTarget(command, args, owner, repo) {
   }
 }
 
-function validateCaseFile(caseFile, expected, owner, repo, surfaceCommands) {
+function validateCaseFile(caseFile, expected, boundary, surfaceCommands) {
   if (!caseFile || caseFile.connector !== CONNECTOR) {
     throw new Error("live proof cases must be explicitly GitHub-only");
   }
   const repository = caseFile.test_repository;
-  if (!repository || repository.owner !== owner || repository.repo !== repo) {
-    throw new Error("case file test_repository must exactly match --test-owner and --test-repo");
+  if (
+    !repository ||
+    repository.owner !== boundary.owner ||
+    repository.repo !== boundary.repo ||
+    repository.owner_id !== boundary.owner_id ||
+    repository.repo_id !== boundary.repo_id ||
+    repository.organization_id !== boundary.organization_id
+  ) {
+    throw new Error("case file test_repository must exactly match the immutable run-owned boundary");
   }
   if (!Array.isArray(caseFile.cases)) {
     throw new Error("case file must contain a cases array");
@@ -397,13 +426,16 @@ function validateCaseFile(caseFile, expected, owner, repo, surfaceCommands) {
           command,
           interpolateArguments(item.args, {
             ...context,
-            test_owner: owner,
-            test_repo: repo,
-            test_repository: `${owner}/${repo}`,
+            test_owner: boundary.owner,
+            test_repo: boundary.repo,
+            test_repository: `${boundary.owner}/${boundary.repo}`,
           }),
-          owner,
-          repo,
+          boundary.owner,
+          boundary.repo,
         );
+      }
+      if (isWrite && item.readback === undefined) {
+        throw new Error(`write case for ${JSON.stringify(command)} requires an independent readback`);
       }
       if (item.readback !== undefined) {
         if (!item.readback || typeof item.readback !== "object" || Array.isArray(item.readback)) {
@@ -429,12 +461,12 @@ function validateCaseFile(caseFile, expected, owner, repo, surfaceCommands) {
           `${command} readback`,
           interpolateArguments(item.readback.args, {
             ...context,
-            test_owner: owner,
-            test_repo: repo,
-            test_repository: `${owner}/${repo}`,
+            test_owner: boundary.owner,
+            test_repo: boundary.repo,
+            test_repository: `${boundary.owner}/${boundary.repo}`,
           }),
-          owner,
-          repo,
+          boundary.owner,
+          boundary.repo,
         );
       }
     }
@@ -567,7 +599,7 @@ export function assertReadEnvelope(envelope, command) {
   throw new Error(`unexpected non-write result kind ${JSON.stringify(envelope.kind || "")}`);
 }
 
-async function runWriteLifecycle({ binary, root, credential, command, args, readback, cwd }) {
+async function runWriteLifecycle({ binary, root, credential, command, args, readback, owner, repo, cwd }) {
   const planArgs = [CONNECTOR, ...command.split(" "), ...args, "--credential", credential, "--root", root, "--json"];
   const humanPlanArgs = planArgs.filter((argument) => argument !== "--json");
   const planResult = await runProcess(binary, humanPlanArgs, cwd);
@@ -607,30 +639,27 @@ async function runWriteLifecycle({ binary, root, credential, command, args, read
     throw new Error("write execution did not report one completed provider mutation");
   }
   const operation = run.operation_direct_write;
-  let readbackResult;
-  if (readback) {
-    const readbackArgs = interpolateArguments(readback.args, {
-      test_owner: APPROVED_TEST_OWNER,
-      test_repo: APPROVED_TEST_REPO,
-      test_repository: `${APPROVED_TEST_OWNER}/${APPROVED_TEST_REPO}`,
-    });
-    const readbackEnvelope = parseJSONOutput(
-      await runProcess(
-        binary,
-        [CONNECTOR, ...readback.command.split(" "), ...readbackArgs, "--credential", credential, "--root", root, "--json"],
-        cwd,
-      ),
-      "write readback",
-    );
-    readbackResult = assertReadEnvelope(readbackEnvelope, readback.command);
-  }
+  const readbackArgs = interpolateArguments(readback.args, {
+    test_owner: owner,
+    test_repo: repo,
+    test_repository: `${owner}/${repo}`,
+  });
+  const readbackEnvelope = parseJSONOutput(
+    await runProcess(
+      binary,
+      [CONNECTOR, ...readback.command.split(" "), ...readbackArgs, "--credential", credential, "--root", root, "--json"],
+      cwd,
+    ),
+    "write readback",
+  );
+  const readbackResult = assertReadEnvelope(readbackEnvelope, readback.command);
   return {
     httpStatus: Number.isInteger(operation?.status) ? operation.status : undefined,
     assertion: {
-      kind: readbackResult ? "reverse-write-readback" : "reverse-write-result",
+      kind: "reverse-write-readback",
       subject: command,
       matched: true,
-      ...(readbackResult ? { readback_kind: readbackResult.assertion.kind } : {}),
+      readback_kind: readbackResult.assertion.kind,
     },
   };
 }
@@ -657,13 +686,15 @@ async function executeLive(options) {
   const binary = requiredOption(options, "pm");
   const root = requiredOption(options, "root");
   const credential = requiredOption(options, "credential");
+  const boundaryPath = requiredOption(options, "boundary");
+  const boundary = resolveLiveBoundary(await loadJSON(boundaryPath));
   const suppliedOwner = String(options["test-owner"] || "").trim();
   const suppliedRepo = String(options["test-repo"] || "").trim();
-  if ((suppliedOwner && suppliedOwner !== APPROVED_TEST_OWNER) || (suppliedRepo && suppliedRepo !== APPROVED_TEST_REPO)) {
-    throw new Error("live proof is hard-pinned to the approved private test repository");
+  if ((suppliedOwner && suppliedOwner !== boundary.owner) || (suppliedRepo && suppliedRepo !== boundary.repo)) {
+    throw new Error("live proof --test-owner/--test-repo must match the immutable run-owned boundary");
   }
-  const owner = APPROVED_TEST_OWNER;
-  const repo = APPROVED_TEST_REPO;
+  const owner = boundary.owner;
+  const repo = boundary.repo;
   const casesPath = requiredOption(options, "cases");
   const reportPath = requiredOption(options, "report");
   const surface = await loadJSON(SURFACE_PATH);
@@ -671,10 +702,11 @@ async function executeLive(options) {
   const caseBytes = await readFile(casesPath);
   const expected = enumerateImplementedCommands(surface);
   const surfaceCommands = new Map(surface.commands.map((command) => [command.path, command]));
-  const cases = validateCaseFile(await loadJSON(casesPath), expected, owner, repo, surfaceCommands);
+  const cases = validateCaseFile(await loadJSON(casesPath), expected, boundary, surfaceCommands);
   await validateCredentialScope(binary, root, credential, owner, repo, REPOSITORY_ROOT);
 
   const records = [];
+  const operations = [];
   for (const command of expected) {
     const caseItem = cases.cases.get(command);
     if (caseItem.untestable_reason) {
@@ -692,39 +724,45 @@ async function executeLive(options) {
     if (isWrite && !options["execute-writes"]) {
       throw new Error("--execute-writes is required before this runner will dispatch any GitHub mutation");
     }
+    operations.push({ command, args, isWrite, readback: caseItem.readback });
+  }
+
+  const attempted = await executeBarrier(operations, async ({ command, args, isWrite, readback }) => {
     const invocation = shellSafeInvocation(command, args, credential, root);
     try {
-    const result = isWrite
-        ? await runWriteLifecycle({
-            binary,
-            root,
-            credential,
-            command,
-            args,
-            readback: caseItem.readback,
-            cwd: REPOSITORY_ROOT,
-          })
-        : assertReadEnvelope(
-            parseJSONOutput(
-              await runProcess(
-                binary,
-                [CONNECTOR, ...command.split(" "), ...args, "--credential", credential, "--root", root, "--json"],
-                REPOSITORY_ROOT,
+      const result = isWrite
+          ? await runWriteLifecycle({
+              binary,
+              root,
+              credential,
+              command,
+              args,
+              readback,
+              owner,
+              repo,
+              cwd: REPOSITORY_ROOT,
+            })
+          : assertReadEnvelope(
+              parseJSONOutput(
+                await runProcess(
+                  binary,
+                  [CONNECTOR, ...command.split(" "), ...args, "--credential", credential, "--root", root, "--json"],
+                  REPOSITORY_ROOT,
+                ),
+                "read execution",
               ),
-              "read execution",
-            ),
-            command,
-          );
-      records.push(redactForReport({
+              command,
+            );
+      return redactForReport({
         command,
         state: "proven",
         invocation,
         http_status: result.httpStatus,
         assertion: result.assertion,
-      }));
+      });
     } catch (error) {
       const diagnostic = error instanceof Error ? error.message : "live execution failed without a safe diagnostic";
-      records.push(redactForReport({
+      return redactForReport({
         command,
         state: "failed",
         invocation,
@@ -732,9 +770,10 @@ async function executeLive(options) {
         reason: concreteReason(diagnostic)
           ? diagnostic
           : `${command} live execution failed without a safe provider diagnostic`,
-      }));
+      });
     }
-  }
+  });
+  records.push(...attempted);
 
   const tally = validateProofRecords(expected, records);
   const report = {
@@ -745,7 +784,19 @@ async function executeLive(options) {
     surface_sha256: createHash("sha256").update(JSON.stringify(surface)).digest("hex"),
     binary_sha256: createHash("sha256").update(binaryBytes).digest("hex"),
     case_file_sha256: createHash("sha256").update(caseBytes).digest("hex"),
-    test_repository: "<dedicated-private-test-repository>",
+    test_repository: "<run-owned-boundary-repository>",
+    run_boundary: {
+      run_id: boundary.run_id,
+      owner: boundary.owner,
+      repo: boundary.repo,
+      owner_id: boundary.owner_id,
+      repo_id: boundary.repo_id,
+      organization_id: boundary.organization_id,
+    },
+    launch: {
+      strategy: "single_barrier_release",
+      operations_released: operations.length,
+    },
     implemented_commands: expected.length,
     tally,
     records,

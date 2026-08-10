@@ -77,27 +77,27 @@ async function loadJSON(relativePath) {
   return JSON.parse(await readFile(path.join(root, relativePath), "utf8"));
 }
 
-test("derives exactly the historical 957 pre-skipped cases into mutually exclusive PM-only cohorts", async () => {
+test("derives every current implemented command into mutually exclusive run-owned lab cohorts", async () => {
   const surface = await loadJSON("internal/connectors/defs/github/cli_surface.json");
   const cases = await loadJSON(".planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json");
   const manifest = buildLabManifest({ surface, cases, generatedAt: "2026-08-09T00:00:00.000Z" });
-  const historical = cases.cases
-    .filter((item) => typeof item.untestable_reason === "string")
-    .map((item) => item.command)
+  const implemented = surface.commands
+    .filter((item) => item.availability === "implemented")
+    .map((item) => item.path)
     .sort();
 
-  assert.equal(historical.length, 957);
-  assert.equal(manifest.rows.length, 957);
-  assert.deepEqual(manifest.rows.map((row) => row.command).sort(), historical);
+  assert.equal(manifest.source.implemented_rows, implemented.length);
+  assert.equal(manifest.rows.length, implemented.length);
+  assert.deepEqual(manifest.rows.map((row) => row.command).sort(), implemented);
   assert.deepEqual(
     Object.keys(manifest.class_tally).sort(),
-    ["github_app_or_marketplace", "personal_repo", "sandbox_org_free", "unavailable_entitlement"],
+    ["feature_or_entitlement", "github_app_installation", "run_owned_organization", "run_owned_repository"],
   );
-  assert.equal(Object.values(manifest.class_tally).reduce((sum, count) => sum + count, 0), 957);
+  assert.equal(Object.values(manifest.class_tally).reduce((sum, count) => sum + count, 0), implemented.length);
 
   for (const row of manifest.rows) {
     assert.equal(typeof row.case_id, "string");
-    assert.equal(typeof row.historical_reason, "string");
+    assert.equal(typeof row.baseline_reason, "string");
     assert.equal(typeof row.credential.class, "string");
     assert.equal(typeof row.plan_feature, "string");
     assert.equal(typeof row.target_allowlist_entry, "string");
@@ -120,22 +120,22 @@ test("derives exactly the historical 957 pre-skipped cases into mutually exclusi
   assert.match(issueCreate?.cleanup_pm || "", /^pm github issue close /);
 });
 
-test("classifies personal, sandbox organization, App, and unavailable-entitlement rows by provider requirement", () => {
+test("classifies run-owned repository, organization, App, and feature-entitlement rows by provider requirement", () => {
   assert.equal(
     classifyLabCohort({ path: "issue create", intent: "reverse_etl", api_surface: [{ method: "POST", path: "/repos/{owner}/{repo}/issues" }] }).cohort,
-    "personal_repo",
+    "run_owned_repository",
   );
   assert.equal(
     classifyLabCohort({ path: "orgs create-webhook", intent: "direct_write", api_surface: [{ method: "POST", path: "/orgs/{org}/hooks" }] }).cohort,
-    "sandbox_org_free",
+    "run_owned_organization",
   );
   assert.equal(
     classifyLabCohort({ path: "apps get-authenticated", intent: "direct_read", api_surface: [{ method: "GET", path: "/app" }] }).cohort,
-    "github_app_or_marketplace",
+    "github_app_installation",
   );
   assert.equal(
     classifyLabCohort({ path: "codespaces create", intent: "direct_write", api_surface: [{ method: "POST", path: "/user/codespaces" }] }).cohort,
-    "unavailable_entitlement",
+    "feature_or_entitlement",
   );
 });
 
@@ -421,8 +421,9 @@ test("retains the credential-pinned repo-view control and sanitized owner/repo f
   assert.equal(/pm-live-test-direct-read|github-live-proof|https?:\/\//i.test(JSON.stringify(regression)), false);
 });
 
-test("records personal-repository cohort results only after immutable target binding and independently verified lifecycle state", async () => {
-  const [manifest, boundaryFile, report, probes, entries] = await Promise.all([
+test("keeps archived lab results separate from the regenerated current-surface manifest", async () => {
+  const [surface, manifest, boundaryFile, report, probes, entries] = await Promise.all([
+    loadJSON("internal/connectors/defs/github/cli_surface.json"),
     loadJSON(".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-MANIFEST.json"),
     loadJSON(".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOUNDARY.json"),
     loadJSON(".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-REPORT.json"),
@@ -453,10 +454,12 @@ test("records personal-repository cohort results only after immutable target bin
     "repo deploy-key delete",
   ]) {
     const result = results.get(command);
-    const manifestRow = manifest.rows.find((row) => row.case_id === result?.case_id);
+    const currentCommand = surface.commands.find((item) => item.path === command);
+    const manifestRow = manifest.rows.find((row) => row.command === command);
     const expected = command.startsWith("apps ")
-      ? { command, state: command === "apps get-authenticated" ? "credential_blocker" : "proven", cohort: "github_app_or_marketplace" }
-      : { command, state: command === "repo deploy-key delete" ? "failed" : "proven", cohort: "personal_repo" };
+      ? { command, state: command === "apps get-authenticated" ? "credential_blocker" : "proven", cohort: "github_app_installation" }
+      : { command, state: command === "repo deploy-key delete" ? "failed" : "proven", cohort: "run_owned_repository" };
+    assert.equal(manifestRow?.cohort, classifyLabCohort(currentCommand).cohort);
     assert.deepEqual({ command: result?.command, state: result?.state, cohort: manifestRow?.cohort }, expected);
   }
   assert.match(results.get("apps get-authenticated")?.reason || "", /401|App JWT|installation credential/i);
@@ -1143,11 +1146,14 @@ test("source-derived bootstrap probe inventory proves the organization/App surfa
   const [surface, apiSurface, manifest] = await Promise.all([
     loadJSON("internal/connectors/defs/github/cli_surface.json"),
     loadJSON("internal/connectors/defs/github/api_surface.json"),
-    loadJSON(".planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-MANIFEST.json"),
+    (async () => buildLabManifest({
+      surface: await loadJSON("internal/connectors/defs/github/cli_surface.json"),
+      cases: await loadJSON(".planning/phases/github-parity-extract-r1/LIVE-PROOF-CASES.json"),
+    }))(),
   ]);
   const inventory = buildBootstrapProbeInventory({ surface, apiSurface, manifest });
   assert.deepEqual(inventory.organization, {
-    affected_case_count: 291,
+    affected_case_count: manifest.class_tally.run_owned_organization,
     create_command: null,
     delete_command: {
       command: "orgs delete",
@@ -1158,7 +1164,7 @@ test("source-derived bootstrap probe inventory proves the organization/App surfa
     result: "pm_surface_missing_organization_create",
   });
   assert.deepEqual(inventory.github_app_manifest, {
-    affected_case_count: 33,
+    affected_case_count: manifest.class_tally.github_app_installation,
     conversion_command: {
       command: "apps create-from-manifest",
       method: "POST",

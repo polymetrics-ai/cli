@@ -72,7 +72,8 @@ function manifestCodeIssuerCommands(surface) {
 
 /**
  * Build a response-body-free map of the exact GitHub PM bootstrap surface.
- * This examines only current-head generated artifacts and the 957-row manifest;
+ * This examines only current-head generated artifacts and the complete
+ * implemented-surface manifest;
  * it cannot perform a provider call or resolve a production target.
  */
 export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) {
@@ -107,7 +108,7 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
   }
 
   return {
-    schema_version: 1,
+    schema_version: 2,
     connector: "github",
     source: {
       cli_surface: {
@@ -129,7 +130,7 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
       organization_delete: "not_invoked_without_run_owned_immutable_target_and_cleanup_provenance",
     },
     organization: {
-      affected_case_count: cohortCount(manifest, "sandbox_org_free"),
+      affected_case_count: cohortCount(manifest, "run_owned_organization"),
       create_command: null,
       delete_command: {
         command: orgDelete.path,
@@ -140,7 +141,7 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
       result: "pm_surface_missing_organization_create",
     },
     github_app_manifest: {
-      affected_case_count: cohortCount(manifest, "github_app_or_marketplace"),
+      affected_case_count: cohortCount(manifest, "github_app_installation"),
       conversion_command: {
         command: appConversion.path,
         method: "POST",
@@ -156,7 +157,7 @@ export function buildBootstrapProbeInventory({ surface, apiSurface, manifest }) 
 
 /** Fail closed if a checked-in probe inventory drifts from its source artifacts. */
 export function validateBootstrapProbeInventory({ inventory, surface, apiSurface, manifest }) {
-  if (!isPlainObject(inventory) || inventory.schema_version !== 1 || inventory.connector !== "github") {
+  if (!isPlainObject(inventory) || inventory.schema_version !== 2 || inventory.connector !== "github") {
     throw new Error("bootstrap probe inventory must be a schema-versioned GitHub artifact");
   }
   const expected = buildBootstrapProbeInventory({ surface, apiSurface, manifest });
